@@ -214,14 +214,14 @@ importers:
 
   components/tabs:
     specifiers:
-      '@atrium-ui/select': workspace:^
+      '@atrium-ui/mono': workspace:^
       '@vitejs/plugin-vue': ^2.3.3
       histoire: ^0.7.9
       lit: ^2.2.7
       txtgen: ^3.0.2
       vite: ^2.9.14
     dependencies:
-      '@atrium-ui/select': link:../select
+      '@atrium-ui/mono': link:../..
       lit: 2.5.0
     devDependencies:
       '@vitejs/plugin-vue': 2.3.4_vite@2.9.15+vue@3.2.45
