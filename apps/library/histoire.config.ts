@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [HstVue()],
   setupFile: "src/histoire.setup.ts",
   outDir: "../../public",
+  routerMode: "hash",
   // storyMatch: ["../../components/*/stories/*.story.vue", "docs/**/*.story.vue"],
   theme: {
     title: "Atrium UI",
