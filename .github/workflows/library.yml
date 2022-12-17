@@ -36,6 +36,7 @@ jobs:
         uses: pnpm/action-setup@v2
         with:
           version: 7.9.0
+      - run: cd apps/library
       - run: pnpm i
       - run: pnpm build
       - name: Upload artifact
