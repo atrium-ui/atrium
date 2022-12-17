@@ -1,5 +1,5 @@
 {
-  "name": "@sv-components/accordion",
+  "name": "@atrium-ui/accordion",
   "version": "1.4.0",
   "description": "",
   "main": "lib/accordion.es.js",

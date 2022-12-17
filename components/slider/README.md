@@ -5,7 +5,7 @@ A simple and functional slider. Replacing any slider libraries and includes only
 ## Install
 
 ```bash
-npm i @sv-components/slider
+npm i @atrium-ui/slider
 ```
 
 ## Publish new version

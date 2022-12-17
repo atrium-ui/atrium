@@ -114,6 +114,6 @@ Basic Accordion component.
 ## Install
 
 ```bash
-npm i @sv-components/accordion
+npm i @atrium-ui/accordion
 ```
 </docs>

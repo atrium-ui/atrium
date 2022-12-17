@@ -39,7 +39,7 @@ const accordion = (
 ## Install
 
 ```bash
-npm i @sv-components/accordion
+npm i @atrium-ui/accordion
 ```
 
 ## Publish new version

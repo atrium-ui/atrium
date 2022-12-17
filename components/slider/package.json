@@ -1,5 +1,5 @@
 {
-  "name": "@sv-components/slider",
+  "name": "@atrium-ui/slider",
   "version": "1.0.5",
   "description": "",
   "main": "lib/slider.es.js",

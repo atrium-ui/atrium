@@ -1,35 +1,35 @@
 <script lang="ts" setup>
-import '../src';
+import "../src";
 </script>
 
 <template>
-	<Story>
-		<sv-slider centered>
-			<div class="slide-item">
-				<placeholder></placeholder>
-			</div>
-			<div class="slide-item">
-				<placeholder></placeholder>
-			</div>
-			<div class="slide-item">
-				<placeholder></placeholder>
-			</div>
-		</sv-slider>
-	</Story>
+  <Story>
+    <sv-slider centered>
+      <div class="slide-item">
+        <placeholder></placeholder>
+      </div>
+      <div class="slide-item">
+        <placeholder></placeholder>
+      </div>
+      <div class="slide-item">
+        <placeholder></placeholder>
+      </div>
+    </sv-slider>
+  </Story>
 </template>
 
 <style scoped>
 placeholder {
-	display: block;
-	height: 400px;
-	width: 400px;
-	background: #eee;
-	border-radius: 8px;
-	flex: none;
-	padding: 10px;
+  display: block;
+  height: 400px;
+  width: 400px;
+  background: #eee;
+  border-radius: 8px;
+  flex: none;
+  padding: 10px;
 }
 .slide-item {
-	padding: 10px;
+  padding: 10px;
 }
 </style>
 
@@ -41,6 +41,6 @@ A simple and functional slider. Replacing any slider libraries and includes only
 ## Install
 
 ```bash
-npm i @sv-components/slider
+npm i @atrium-ui/slider
 ```
 </docs>
