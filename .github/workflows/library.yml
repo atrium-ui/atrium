@@ -37,7 +37,7 @@ jobs:
         with:
           version: 7.9.0
       - run: pnpm i
-      - run: cd apps/library && pnpm build
+      - run: pnpm build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:

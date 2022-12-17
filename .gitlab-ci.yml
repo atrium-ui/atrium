@@ -9,7 +9,7 @@ pages:
     - pnpm config set store-dir .pnpm-store
   script:
     - pnpm install # install dependencies
-    - cd apps/library && pnpm build
+    - pnpm build
   cache:
     key:
       files:
