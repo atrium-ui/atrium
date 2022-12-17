@@ -25,4 +25,4 @@ pages:
     url: https://sv-components.pages.s-v.de/
   artifacts:
     paths:
-      - public
+      - apps/library/dist
