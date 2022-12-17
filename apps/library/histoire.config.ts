@@ -39,6 +39,7 @@ export default defineConfig({
     ],
   },
   vite: {
+    base: "",
     plugins: [
       markdown({}),
       vue({
