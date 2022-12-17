@@ -37,12 +37,11 @@ jobs:
         with:
           version: 7.9.0
       - run: pnpm i
-      - run: cd apps/library
-      - run: pnpm build
+      - run: cd apps/library && pnpm build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: 'public'
+          path: 'apps/library/public'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1

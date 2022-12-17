@@ -1,8 +1,9 @@
-<template>
-  <Story group="top" docs-only icon="carbon:notebook" title="Introduction" />
-</template>
+---
+group: 'top'
+icon: 'carbon:notebook'
+title: 'Introduction'
+---
 
-<docs lang="md">
 A collection of framework agnostic and functional web-components.
 
 ## Usage
@@ -23,4 +24,3 @@ Then install components:
   - Namespace
 - Pipeline pushblishes new version tags
 - Component is documented in Histoire
-</docs>

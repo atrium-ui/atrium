@@ -1,8 +1,9 @@
-<template>
-  <Story group="docs" docs-only icon="carbon:template" title="Development" />
-</template>
+---
+group: 'docs'
+icon: 'carbon:template'
+title: 'Development'
+---
 
-<docs lang="md">
 # Development
 
 WIP
@@ -27,4 +28,3 @@ WIP
   - Extending native tags problem: https://github.com/lit/lit-element/issues/661
 - Dependencies are not compiled (like "lorem-ipsum") try:
   - Vite config optimizeDeps
-</docs>

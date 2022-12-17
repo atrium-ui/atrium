@@ -4,9 +4,9 @@ import { HstVue } from "@histoire/plugin-vue";
 export default defineConfig({
   plugins: [HstVue()],
   setupFile: "src/histoire.setup.ts",
-  outDir: "../../public",
+  outDir: "public",
   routerMode: "hash",
-  // storyMatch: ["../../components/*/stories/*.story.vue", "docs/**/*.story.vue"],
+  storyMatch: ["../../components/*/stories/*.story.vue", "../../docs/**/*.story.md"],
   theme: {
     title: "Atrium UI",
     logo: {
@@ -16,7 +16,7 @@ export default defineConfig({
     },
   },
   tree: {
-    order: (a, b) => a.localeCompare(b),
+    order: (a: string, b: string) => a.localeCompare(b),
     groups: [
       {
         id: "top",

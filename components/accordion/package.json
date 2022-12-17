@@ -20,6 +20,7 @@
     "lit": "^2.2.7"
   },
   "devDependencies": {
+    "@atrium-ui/mono": "workspace:^",
     "@vitejs/plugin-vue": "^2.3.3",
     "histoire": "^0.7.9",
     "txtgen": "^3.0.2",
