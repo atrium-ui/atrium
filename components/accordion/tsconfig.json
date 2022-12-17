@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"target": "es2018",
+		"module": "esnext",
+		"lib": ["es2018", "dom", "dom.iterable"],
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"outDir": "./types",
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitReturns": true,
+		"noImplicitAny": false,
+		"noFallthroughCasesInSwitch": true,
+		"moduleResolution": "node",
+		"isolatedModules": true,
+		"importHelpers": true,
+		"allowSyntheticDefaultImports": true,
+		"experimentalDecorators": true,
+		"forceConsistentCasingInFileNames": true,
+		"useDefineForClassFields": false,
+		"skipLibCheck": true
+	},
+	"include": ["src/**/*.ts"]
+}

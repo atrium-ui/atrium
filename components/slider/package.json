@@ -1,0 +1,24 @@
+{
+	"name": "@sv-components/slider",
+	"version": "1.0.5",
+	"description": "",
+	"main": "lib/slider.es.js",
+	"module": "lib/slider.es.js",
+	"types": "src/index.ts",
+	"scripts": {
+		"dev": "histoire dev",
+		"build": "vite build",
+		"lint": "eslint --ext .js,.ts .",
+		"format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"lit": "^2.2.1"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^2.3.3",
+		"histoire": "^0.7.9",
+		"vite": "^2.9.13"
+	}
+}

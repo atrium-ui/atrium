@@ -1,0 +1,29 @@
+{
+	"name": "@atrium-ui/dropdown",
+	"version": "0.3.7",
+	"description": "",
+	"main": "lib/dropdown.cjs.js",
+	"module": "lib/dropdown.es.js",
+	"types": "src/index.ts",
+	"scripts": {
+		"dev": "histoire dev",
+		"build": "vite build",
+		"lint": "eslint --ext .js,.ts .",
+		"format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
+	},
+	"workspaces": [
+		"."
+	],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@atrium-ui/collapsable": "^2.0.3",
+		"lit": "^2.5.0"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^2.3.4",
+		"histoire": "^0.7.9",
+		"txtgen": "^3.0.4",
+		"vite": "^2.9.15"
+	}
+}

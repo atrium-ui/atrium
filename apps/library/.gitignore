@@ -1,0 +1,20 @@
+# Logs
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# mac os
+**/.DS_Store
+
+#histoire
+.histoire
+
+# bundles
+**/*.bundle.js
+**/*.min.js
+dist
+public

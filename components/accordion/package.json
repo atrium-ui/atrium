@@ -1,0 +1,28 @@
+{
+	"name": "@sv-components/accordion",
+	"version": "1.4.0",
+	"description": "",
+	"main": "lib/accordion.es.js",
+	"type": "module",
+	"types": "src/index.ts",
+	"scripts": {
+		"dev": "histoire dev",
+		"build": "vite build",
+		"lint": "eslint --ext .js,.ts .",
+		"format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
+	},
+	"workspaces": [
+		"."
+	],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"lit": "^2.2.7"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^2.3.3",
+		"histoire": "^0.7.9",
+		"txtgen": "^3.0.2",
+		"vite": "^2.9.14"
+	}
+}

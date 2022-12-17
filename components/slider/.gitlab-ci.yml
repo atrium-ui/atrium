@@ -1,0 +1,15 @@
+image: node:latest
+
+stages:
+  - publish
+
+publish:
+  stage: publish
+  only:
+    - tags
+  except:
+    - branches
+  script:
+    - npm ci
+    - npm run build
+    - npm publish
