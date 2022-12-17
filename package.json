@@ -5,9 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "vite build",
-    "lint": "tsc"
+    "lint": "turbo lint",
+    "build": "turbo build"
   },
+  "workspaces": [
+    "apps/*",
+    "components/*"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",

@@ -1,29 +1,20 @@
 {
-  "name": "sv-components",
-  "version": "2.0.8",
+  "name": "library",
+  "version": "1.0.0",
   "description": "",
   "scripts": {
     "dev": "histoire dev",
-    "build": "histoire build"
+    "build": "histoire build",
+    "preview": "histoire preview"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@atrium-ui/animated-riv": "workspace:^",
-    "@atrium-ui/collapsable": "workspace:^",
-    "@atrium-ui/dropdown": "workspace:^",
-    "@atrium-ui/lazymedia": "workspace:^",
-    "@atrium-ui/material-icon": "workspace:^",
-    "@atrium-ui/notifications": "workspace:^",
-    "@atrium-ui/progress-circle": "workspace:^",
-    "@atrium-ui/select": "workspace:^"
-  },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^2.3.4",
-    "histoire": "^0.7.9",
-    "sass": "^1.56.2",
+    "@histoire/plugin-vue": "^0.11.9",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "histoire": "^0.11.9",
     "txtgen": "^3.0.4",
-    "vite": "^2.9.15",
+    "vite": "^4.0.1",
     "vue": "^3.2.45"
   }
 }
