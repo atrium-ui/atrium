@@ -4,7 +4,10 @@ importers:
 
   .:
     specifiers:
+      lit: ^2.5.0
       turbo: ^1.6.3
+    dependencies:
+      lit: 2.5.0
     devDependencies:
       turbo: 1.6.3
 
@@ -143,7 +146,7 @@ importers:
 
   components/notifications:
     specifiers:
-      '@atrium-ui/components': workspace:^0.0.3
+      '@atrium-ui/mono': workspace:^
       '@vitejs/plugin-vue': ^2.3.4
       histoire: ^0.7.9
       lit: ^2.4.1
@@ -151,7 +154,7 @@ importers:
       vite: ^2.9.15
       vue: ^3.2.45
     dependencies:
-      '@atrium-ui/components': link:../..
+      '@atrium-ui/mono': link:../..
       lit: 2.5.0
       vue: 3.2.45
     devDependencies:
