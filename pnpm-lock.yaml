@@ -231,12 +231,12 @@ importers:
 
   components/timeline:
     specifiers:
-      '@atrium-ui/material-icon': workspace:^
+      '@atrium-ui/mono': workspace:^
       lit: ^2.3.1
       redux: ^4.2.0
       vite: ^3.0.9
     dependencies:
-      '@atrium-ui/material-icon': link:../material-icon
+      '@atrium-ui/mono': link:../..
       lit: 2.5.0
       redux: 4.2.0
       vite: 3.2.5
