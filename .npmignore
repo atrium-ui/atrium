@@ -23,10 +23,11 @@ node_modules
 # logs
 npm-debug.log
 
-./public
+public
 
 # configs
 rollup.config.js
+vite.config.ts
 .eslintrc
 .editorconfig
 .prettierrc
