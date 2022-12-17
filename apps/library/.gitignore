@@ -17,4 +17,3 @@ node_modules/
 **/*.bundle.js
 **/*.min.js
 dist
-public

@@ -1,12 +1,14 @@
 import { defineConfig } from "histoire";
 import { HstVue } from "@histoire/plugin-vue";
+import vue from "@vitejs/plugin-vue";
+import markdown from "vite-plugin-markdown";
 
 export default defineConfig({
   plugins: [HstVue()],
   setupFile: "src/histoire.setup.ts",
-  outDir: "public",
+  outDir: "dist",
   routerMode: "hash",
-  storyMatch: ["../../components/*/stories/*.story.vue", "../../docs/**/*.story.md"],
+  storyMatch: ["../../components/*/stories/*.story.vue"],
   theme: {
     title: "Atrium UI",
     logo: {
@@ -35,5 +37,22 @@ export default defineConfig({
         include: (file) => !file.title.includes("Serialize"),
       },
     ],
+  },
+  vite: {
+    plugins: [
+      markdown({}),
+      vue({
+        template: {
+          compilerOptions: {
+            isCustomElement: (tag: string) => tag.startsWith("aui-"),
+          },
+        },
+      }),
+    ],
+    server: {
+      fs: {
+        allow: ["../../"],
+      },
+    },
   },
 });
