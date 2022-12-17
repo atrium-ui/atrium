@@ -13,7 +13,7 @@ export default defineConfig({
       formats: ["es"],
     },
     rollupOptions: {
-      external: /^lit|^@sv-components/,
+      external: /^lit|^@atrium-ui/,
     },
   },
 });
