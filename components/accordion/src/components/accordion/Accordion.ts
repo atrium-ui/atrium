@@ -4,7 +4,7 @@ import { AccordionItem } from "./AccordionItem";
 
 // TODO: Maybe generalize this element with like a child-selector?
 
-@customElement("sv-accordion")
+@customElement("aui-accordion")
 export class Accordion extends LitElement {
   /**
    * Keep only one open at a time

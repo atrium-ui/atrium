@@ -12,11 +12,11 @@ const state = reactive({
 
 <template>
   <Story>
-    <sv-accordion
+    <aui-accordion
       @item-opened-change="hstEvent('Item Toggle', $event)"
       :exclusive="state.exclusive"
     >
-      <sv-accordion-item v-for="(item, i) of 3" :key="i">
+      <aui-accordion-item v-for="(item, i) of 3" :key="i">
         <div slot="title" class="titlebar">
           <div class="headline">Lorem Ipsum</div>
           <div class="collapse-icon">
@@ -39,8 +39,8 @@ const state = reactive({
           </div>
         </div>
         <div class="content">{{ paragraph(4) }}</div>
-      </sv-accordion-item>
-    </sv-accordion>
+      </aui-accordion-item>
+    </aui-accordion>
 
     <template #controls>
       <HstCheckbox title="Exclusive" v-model.number="state.exclusive" />
@@ -49,11 +49,11 @@ const state = reactive({
 </template>
 
 <style scoped>
-sv-accordion {
+aui-accordion {
   font-family: sans-serif;
 }
 
-sv-accordion-item {
+aui-accordion-item {
   margin-top: 2px;
   background: #f0f0f0;
   border-radius: 8px;
@@ -61,13 +61,13 @@ sv-accordion-item {
   font-size: 18px;
 }
 
-sv-accordion-item:not([opened]) .plus-icon {
+aui-accordion-item:not([opened]) .plus-icon {
   transform: rotate(90deg);
 }
-sv-accordion-item:not([opened]) .minus-icon {
+aui-accordion-item:not([opened]) .minus-icon {
   transform: rotate(90deg);
 }
-sv-accordion-item[opened] .plus-icon {
+aui-accordion-item[opened] .plus-icon {
   opacity: 0;
 }
 
@@ -100,7 +100,7 @@ sv-accordion-item[opened] .plus-icon {
 </style>
 
 <docs lang="md">
-# sv-accordion
+# aui-accordion
 
 Basic Accordion component.
 
@@ -108,7 +108,7 @@ Basic Accordion component.
 
 ```typescript
 // Open state of the dropdown
-<sv-accordion opened: Boolean; />
+<aui-accordion opened: Boolean; />
 ```
 
 ## Install

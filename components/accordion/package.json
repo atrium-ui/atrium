@@ -4,7 +4,6 @@
   "description": "",
   "main": "dist/accordion.cjs.js",
   "module": "dist/accordion.es.js",
-  "type": "module",
   "types": "src/index.ts",
   "scripts": {
     "dev": "histoire dev",
@@ -12,9 +11,6 @@
     "lint": "eslint --ext .ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
   },
-  "workspaces": [
-    "."
-  ],
   "author": "",
   "license": "ISC",
   "dependencies": {

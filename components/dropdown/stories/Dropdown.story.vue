@@ -2,7 +2,7 @@
 import "@atrium-ui/mono/components/dropdown";
 import "../styles/default.scss";
 
-import { hstEvent } from "histoire/client";
+import { logEvent } from "histoire/client";
 import { reactive } from "vue";
 
 const state = reactive({
@@ -11,7 +11,7 @@ const state = reactive({
 
 const handleSelect = (e) => {
   state.value = e.option.innerText;
-  hstEvent("Select Option", e);
+  logEvent("Select Option", e);
 };
 
 const exampleOptions = [
@@ -33,8 +33,8 @@ const exampleOptions = [
     <Variant title="Default">
       <aui-dropdown
         @select="handleSelect"
-        @open="hstEvent('Open', e)"
-        @close="hstEvent('Close', e)"
+        @open="logEvent('Open', e)"
+        @close="logEvent('Close', e)"
       >
         <button slot="input">{{ state.value || "Select" }}</button>
 
@@ -54,8 +54,8 @@ const exampleOptions = [
     <Variant title="Flyup">
       <aui-dropdown
         @select="handleSelect"
-        @open="hstEvent('Open', e)"
-        @close="hstEvent('Close', e)"
+        @open="logEvent('Open', e)"
+        @close="logEvent('Close', e)"
         direction="up"
         style="margin-top: 300px"
       >
@@ -75,8 +75,8 @@ const exampleOptions = [
     <Variant title="Text Filter">
       <aui-dropdown
         @select="handleSelect"
-        @open="hstEvent('Open', e)"
-        @close="hstEvent('Close', e)"
+        @open="logEvent('Open', e)"
+        @close="logEvent('Close', e)"
       >
         <input slot="input" v-model="state.value" @input="handleFilter" placeholder="Text" />
 

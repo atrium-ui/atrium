@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import "@atrium-ui/mono/components/collapsable";
 
-// import { hstEvent } from "histoire/client";
-// import { reactive } from "vue";
-// import { paragraph } from "txtgen";
+import { logEvent } from "histoire/client";
+import { reactive } from "vue";
+import { paragraph } from "txtgen";
 
 const toggleOpen = () => {
   state.opened = !state.opened;
@@ -23,7 +23,7 @@ const state = reactive({
         {{ state.p1 }}
       </p>
 
-      <aui-collapsable @item-opened-change="hstEvent('open change', $event)" :opened="state.opened">
+      <aui-collapsable @item-opened-change="logEvent('open change', $event)" :opened="state.opened">
         <p>
           {{ state.p2 }}
         </p>
@@ -44,7 +44,7 @@ const state = reactive({
         <li>Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes</li>
       </ul>
 
-      <aui-collapsable @item-opened-change="hstEvent('open change', $event)" :opened="state.opened">
+      <aui-collapsable @item-opened-change="logEvent('open change', $event)" :opened="state.opened">
         <ul>
           <li>Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes</li>
         </ul>

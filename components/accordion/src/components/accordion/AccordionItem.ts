@@ -1,7 +1,8 @@
+import "@atrium-ui/mono/components/collapsable";
 import { html, css, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-@customElement("sv-accordion-item")
+@customElement("aui-accordion-item")
 export class AccordionItem extends LitElement {
   public static get styles() {
     return [
@@ -81,9 +82,9 @@ export class AccordionItem extends LitElement {
         </slot>
       </div>
 
-      <sv-collapsable ?opened="${this.opened}">
+      <aui-collapsable ?opened="${this.opened}">
         <slot></slot>
-      </sv-collapsable>
+      </aui-collapsable>
     `;
   }
 }
