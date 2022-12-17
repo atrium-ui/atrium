@@ -1,1 +1,1 @@
-export { Collapsable } from './components/Collapsable';
+export { Collapsable } from "./components/Collapsable";

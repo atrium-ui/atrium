@@ -1,9 +1,9 @@
 export class DoropDownSelectEvent extends Event {
-	option?: HTMLElement;
+  option?: HTMLElement;
 
-	constructor(selectedItem) {
-		super('select', { bubbles: true });
+  constructor(selectedItem) {
+    super("select", { bubbles: true });
 
-		this.option = selectedItem;
-	}
+    this.option = selectedItem;
+  }
 }

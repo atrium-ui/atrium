@@ -1,87 +1,87 @@
-import { LitElement, html, css } from 'lit';
-import { property } from 'lit/decorators.js';
+import { LitElement, html, css } from "lit";
+import { property } from "lit/decorators.js";
 
-const TAG = 'progress-circle';
+const TAG = "progress-circle";
 
 declare global {
-	namespace JSX {
-		interface IntrinsicElements {
-			[TAG]: any;
-		}
-	}
+  namespace JSX {
+    interface IntrinsicElements {
+      [TAG]: any;
+    }
+  }
 }
 
 export class ProgressCircle extends LitElement {
-	static get styles() {
-		return css`
-			:host {
-				display: inline-block;
-				position: relative;
+  static get styles() {
+    return css`
+      :host {
+        display: inline-block;
+        position: relative;
 
-				--transition: stroke-dashoffset 0.33s 0s ease;
-			}
-			:host([hidden]) {
-				display: none;
-			}
-			svg {
-				display: block;
-				width: calc(var(--size) * 1px);
-				height: calc(var(--size) * 1px);
+        --transition: stroke-dashoffset 0.33s 0s ease;
+      }
+      :host([hidden]) {
+        display: none;
+      }
+      svg {
+        display: block;
+        width: calc(var(--size) * 1px);
+        height: calc(var(--size) * 1px);
 
-				--radius: calc((var(--size) / 2) - var(--thickness));
-				--circumference: calc(2 * 3.141592653589793 * var(--radius));
-			}
-			circle {
-				r: var(--radius);
-				cx: calc(var(--size) / 2);
-				cy: calc(var(--size) / 2);
-				stroke-width: var(--thickness);
-				fill: transparent;
-				stroke: currentColor;
-				stroke-dasharray: var(--circumference), var(--circumference);
-				stroke-dashoffset: calc(var(--circumference) - var(--progress));
-				transition: var(--transition);
-			}
-			.inner {
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-			}
-		`;
-	}
+        --radius: calc((var(--size) / 2) - var(--thickness));
+        --circumference: calc(2 * 3.141592653589793 * var(--radius));
+      }
+      circle {
+        r: var(--radius);
+        cx: calc(var(--size) / 2);
+        cy: calc(var(--size) / 2);
+        stroke-width: var(--thickness);
+        fill: transparent;
+        stroke: currentColor;
+        stroke-dasharray: var(--circumference), var(--circumference);
+        stroke-dashoffset: calc(var(--circumference) - var(--progress));
+        transition: var(--transition);
+      }
+      .inner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    `;
+  }
 
-	@property({ type: Number, reflect: true })
-	public size: number = 30;
+  @property({ type: Number, reflect: true })
+  public size: number = 30;
 
-	@property({ type: Number, reflect: true })
-	public thickness: number = 2;
+  @property({ type: Number, reflect: true })
+  public thickness: number = 2;
 
-	@property({ type: Number, reflect: true })
-	public progress: number = 0;
+  @property({ type: Number, reflect: true })
+  public progress: number = 0;
 
-	get loadProgress() {
-		return (this.progress / 100) * (2 * Math.PI * (this.size / 2 - this.thickness));
-	}
+  get loadProgress() {
+    return (this.progress / 100) * (2 * Math.PI * (this.size / 2 - this.thickness));
+  }
 
-	render() {
-		return html`
-			<svg style="--size: ${this.size}; --thickness: ${this.thickness}">
-				<circle style="--progress: ${this.loadProgress}" />
-			</svg>
-			<div class="inner">
-				<slot></slot>
-			</div>
-		`;
-	}
+  render() {
+    return html`
+      <svg style="--size: ${this.size}; --thickness: ${this.thickness}">
+        <circle style="--progress: ${this.loadProgress}" />
+      </svg>
+      <div class="inner">
+        <slot></slot>
+      </div>
+    `;
+  }
 }
 
 if (!customElements.get(TAG)) {
-	customElements.define(TAG, ProgressCircle);
+  customElements.define(TAG, ProgressCircle);
 } else {
-	console.warn(`Custom element "${TAG}" already defined.`);
+  console.warn(`Custom element "${TAG}" already defined.`);
 }
