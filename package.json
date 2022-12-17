@@ -1,12 +1,12 @@
 {
-  "name": "atrium-ui-mono",
-  "version": "1.0.0",
+  "name": "@atrium-ui/components",
+  "version": "0.0.1",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "turbo lint",
-    "build": "turbo build"
+    "build": "turbo build",
+    "publish:preview": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz"
   },
   "workspaces": [
     "apps/*",

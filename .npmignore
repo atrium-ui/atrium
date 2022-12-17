@@ -1,0 +1,34 @@
+# git
+.git
+.gitignore
+
+.github
+
+apps/**
+
+# Logs
+npm-debug.log*
+
+# Dependency directories
+node_modules
+
+# Optional npm cache directory
+.npm
+
+# mac os
+**/.DS_Store
+
+.turbo
+
+# logs
+npm-debug.log
+
+./public
+
+# configs
+rollup.config.js
+.eslintrc
+.editorconfig
+.prettierrc
+.npmrc
+
