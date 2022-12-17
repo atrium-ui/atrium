@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "turbo lint",
     "build": "turbo build",
-    "publish:preview": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz"
+    "publish:preview": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
+    "postinstall": "husky install .config/husky"
   },
   "workspaces": [
     "apps/*",
@@ -17,7 +18,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "turbo": "^1.6.3"
+    "turbo": "^1.6.3",
+    "husky": "^8.0.2",
+    "@commitlint/config-conventional": "^17.3.0",
+    "commitlint": "^17.3.0"
   },
   "dependencies": {
     "lit": "^2.5.0"
