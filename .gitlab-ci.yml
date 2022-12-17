@@ -10,6 +10,7 @@ pages:
   script:
     - pnpm install # install dependencies
     - pnpm build
+    - mv apps/library/dist public
   cache:
     key:
       files:
@@ -25,4 +26,4 @@ pages:
     url: https://sv-components.pages.s-v.de/
   artifacts:
     paths:
-      - apps/library/dist
+      - public
