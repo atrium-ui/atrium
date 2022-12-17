@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import "@atrium-ui/mono/components/accordion/src";
+import "@atrium-ui/mono/components/accordion";
 
 import { hstEvent } from "histoire/client";
 import { reactive } from "vue";

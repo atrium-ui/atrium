@@ -1,14 +1,12 @@
 {
-	"compilerOptions": {
-		"target": "ES2020",
-		"module": "ES2020",
-		"strict": true,
-		"moduleResolution": "node",
-		"noImplicitAny": true,
-		"allowSyntheticDefaultImports": true,
-		"experimentalDecorators": true,
-		"sourceMap": true,
-		"baseUrl": "."
-	},
-	"exclude": ["node_modules"]
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ES2020",
+    "strict": true,
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false
+  },
+  "exclude": ["node_modules"]
 }

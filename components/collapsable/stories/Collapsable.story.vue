@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import "@atrium-ui/mono/components/collapsable/src/index";
+import "@atrium-ui/mono/components/collapsable";
 
-import { hstEvent } from "histoire/client";
-import { reactive } from "vue";
-import { paragraph } from "txtgen";
+// import { hstEvent } from "histoire/client";
+// import { reactive } from "vue";
+// import { paragraph } from "txtgen";
 
 const toggleOpen = () => {
   state.opened = !state.opened;

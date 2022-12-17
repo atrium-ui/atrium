@@ -2,7 +2,8 @@
   "name": "@atrium-ui/accordion",
   "version": "1.4.0",
   "description": "",
-  "main": "lib/accordion.es.js",
+  "main": "dist/accordion.cjs.js",
+  "module": "dist/accordion.es.js",
   "type": "module",
   "types": "src/index.ts",
   "scripts": {
@@ -21,9 +22,6 @@
   },
   "devDependencies": {
     "@atrium-ui/mono": "workspace:^",
-    "@vitejs/plugin-vue": "^2.3.3",
-    "histoire": "^0.7.9",
-    "txtgen": "^3.0.2",
     "vite": "^2.9.14"
   }
 }

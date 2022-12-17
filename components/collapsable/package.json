@@ -2,8 +2,8 @@
   "name": "@atrium-ui/collapsable",
   "version": "2.0.3",
   "description": "",
-  "main": "lib/collapsable.cjs.js",
-  "module": "lib/collapsable.es.js",
+  "main": "dist/collapsable.cjs.js",
+  "module": "dist/collapsable.es.js",
   "types": "src/index.ts",
   "scripts": {
     "dev": "histoire dev",
@@ -21,9 +21,6 @@
   },
   "devDependencies": {
     "@atrium-ui/mono": "workspace:^",
-    "@vitejs/plugin-vue": "^2.3.4",
-    "histoire": "^0.7.9",
-    "txtgen": "^3.0.4",
     "vite": "^2.9.15"
   }
 }
