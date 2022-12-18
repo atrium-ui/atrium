@@ -21,6 +21,7 @@ pages:
     - tags
   except:
     - branches
+  when: manual
   environment:
     name: pages
     url: https://sv-components.pages.s-v.de/
