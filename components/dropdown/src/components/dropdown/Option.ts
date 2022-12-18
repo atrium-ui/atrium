@@ -1,7 +1,6 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 
-@customElement("dropdown-option")
 export class OptionElement extends LitElement {
   static get styles() {
     return css`
@@ -18,3 +17,11 @@ export class OptionElement extends LitElement {
     return html`<slot></slot>`;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "dropdown-option": OptionElement;
+  }
+}
+
+customElements.define("dropdown-option", OptionElement);

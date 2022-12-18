@@ -1,7 +1,6 @@
 import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 
-@customElement("sv-slider")
 export class Slider extends LitElement {
   static get styles() {
     return css`
@@ -284,3 +283,11 @@ export class Slider extends LitElement {
     `;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "sv-slider": Slider;
+  }
+}
+
+customElements.define("sv-slider", Slider);

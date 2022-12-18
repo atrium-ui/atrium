@@ -1,7 +1,6 @@
 import { html, css, HTMLTemplateResult, LitElement } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { property, query } from "lit/decorators.js";
 
-@customElement("aui-collapsable")
 export class Collapsable extends LitElement {
   public static get styles() {
     return [
@@ -109,3 +108,11 @@ export class Collapsable extends LitElement {
     `;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "aui-collapsable": Collapsable;
+  }
+}
+
+customElements.define("aui-collapsable", Collapsable);

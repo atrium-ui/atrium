@@ -1,7 +1,6 @@
 import { LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 
-@customElement("aui-select")
 export class Select extends LitElement {
   protected createRenderRoot(): Element | ShadowRoot {
     return this;
@@ -162,3 +161,11 @@ export class Select extends LitElement {
     this.removeEventListener("focusin", this.focusCallback);
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "aui-select": Select;
+  }
+}
+
+customElements.define("aui-select", Select);
