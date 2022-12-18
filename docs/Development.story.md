@@ -6,25 +6,16 @@ title: 'Development'
 
 # Development
 
-WIP
+## Lit
 
-- lit and alternatives
-- VSCode addon
-- Histoire story
-- Versioning
-- Testing
-- default styles
-- SSR
+We use the lit library to simplify development of WebComponents. It provieds fast html template rendering and reactive state.
 
-## Common Problems
+[https://lit.dev/docs/](https://lit.dev/docs/)
 
-- How to handle sub dependencies of primitive components
-  - Import directly as external dependency
-- Double .defines of components
-  - Sub-dependencies should not be built into bundles
-- Vue warning Failed to resolve component
-  - vue compiler options
-- Semantics
-  - Extending native tags problem: https://github.com/lit/lit-element/issues/661
-- Dependencies are not compiled (like "lorem-ipsum") try:
-  - Vite config optimizeDeps
+## Useful VSCode addons
+
+- [eslint](vscode:extension/dbaeumer.vscode-eslint)
+- [prettier](vscode:extension/esbenp.prettier-vscode)
+- [Prettier ESLint](vscode:extension/rvest.vs-code-prettier-eslint)
+- [lit-plugin](vscode:extension/runem.lit-plugin)
+

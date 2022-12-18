@@ -1,11 +1,11 @@
 ---
 group: 'docs'
 icon: 'carbon:share'
-title: 'Primitives'
+title: 'Component Types'
 ---
 
 # Primitives
 
 WIP
 
-- primitive utility components explained
+- primitive utility and ui components explained

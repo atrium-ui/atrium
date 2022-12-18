@@ -4,23 +4,36 @@ icon: 'carbon:notebook'
 title: 'Introduction'
 ---
 
-A collection of framework agnostic and functional web-components.
+# A collection of framework agnostic and functional web-components.
 
 ## Usage
 
-Then install components:
+1. Install the library like this
+```bash
+pnpm i @atrium-ui/mono
+```
 
-1. Install component `npm i @atrium-ui/accordion`
-2. Module import `import '@atrium-ui/accordion';`
+2. Import a component
+```typescript
+import '@atrium-ui/mono/components/<component>';
+```
 
-## New component check-list:
+3. Use it in a React, Solid or Nuxt project:
+```tsx
+<component></<component>
+```
 
-- Correct namespace
-  - package.json package name
-  - customElement tag name
-- Readme documentation
-- .npmrc
-  - Auth token
-  - Namespace
-- Pipeline pushblishes new version tags
-- Component is documented in Histoire
+
+## Support
+
+[Can I use](https://caniuse.com/mdn-api_window_customelements)
+Support for WebComponents exists in major browsers since around 2018.
+![Support table](./images/support.jpg)
+[More information here](https://www.webcomponents.org/)
+
+
+## Examples
+
+WIP
+
+- example website

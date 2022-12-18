@@ -1,8 +1,7 @@
 import "@atrium-ui/mono/components/collapsable";
 import { html, css, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 
-@customElement("aui-accordion-item")
 export class AccordionItem extends LitElement {
   public static get styles() {
     return [
@@ -88,3 +87,11 @@ export class AccordionItem extends LitElement {
     `;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "aui-accordion-item": AccordionItem;
+  }
+}
+
+customElements.define("aui-accordion-item", AccordionItem);

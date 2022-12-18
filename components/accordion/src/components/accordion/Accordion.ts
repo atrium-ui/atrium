@@ -1,10 +1,9 @@
 import { html, HTMLTemplateResult, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 import { AccordionItem } from "./AccordionItem";
 
 // TODO: Maybe generalize this element with like a child-selector?
 
-@customElement("aui-accordion")
 export class Accordion extends LitElement {
   /**
    * Keep only one open at a time
@@ -31,3 +30,11 @@ export class Accordion extends LitElement {
     return html`<slot @item-opened-change="${this.onItemOpened}"></slot>`;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "aui-accordion": Accordion;
+  }
+}
+
+customElements.define("aui-accordion", Accordion);

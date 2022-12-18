@@ -1,9 +1,8 @@
-import { LitElement, html, css, PropertyValueMap } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { LitElement, html, css } from "lit";
+import { property, query } from "lit/decorators.js";
 import { OptionElement } from "./Option";
 import { DoropDownSelectEvent } from "./DoropDownSelectEvent";
 
-@customElement("aui-dropdown")
 export class Dropdown extends LitElement {
   static get styles() {
     return css`
@@ -272,3 +271,11 @@ export class Dropdown extends LitElement {
     `;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "aui-dropdown": Dropdown;
+  }
+}
+
+customElements.define("aui-dropdown", Dropdown);

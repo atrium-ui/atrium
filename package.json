@@ -1,6 +1,6 @@
 {
   "name": "@atrium-ui/mono",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,7 +10,7 @@
     "library:build": "cd apps/library && pnpm build",
     "library:dev": "cd apps/library && pnpm dev",
     "publish:preview": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
-    "postinstall": "husky install .config/husky",
+    "setup": "husky install .config/husky",
     "clean": "git clean -fX .",
     "new": "node new.mjs"
   },

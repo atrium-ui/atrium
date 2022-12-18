@@ -1,15 +1,13 @@
 import { LitElement, html, css } from "lit";
 import { property } from "lit/decorators.js";
 
-const TAG = "progress-circle";
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [TAG]: any;
-    }
-  }
-}
+// declare global {
+//   namespace JSX {
+//     interface IntrinsicElements {
+//       [TAG]: any;
+//     }
+//   }
+// }
 
 export class ProgressCircle extends LitElement {
   static get styles() {
@@ -80,8 +78,10 @@ export class ProgressCircle extends LitElement {
   }
 }
 
-if (!customElements.get(TAG)) {
-  customElements.define(TAG, ProgressCircle);
-} else {
-  console.warn(`Custom element "${TAG}" already defined.`);
+declare global {
+  interface HTMLElementTagNameMap {
+    "progress-circle": ProgressCircle;
+  }
 }
+
+customElements.define("progress-circle", ProgressCircle);
