@@ -1,6 +1,6 @@
 {
   "name": "@atrium-ui/mono",
-  "version": "0.0.9-dev",
+  "version": "0.0.9-dev1",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
