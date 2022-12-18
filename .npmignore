@@ -1,10 +1,28 @@
+# mac os
+**/.DS_Store
+
 # git
 .git
 .gitignore
 
-.github
-
+# app
+**/public
 apps/**
+**/stories
+docs
+
+vite.config.ts
+.turbo
+.eslintrc.json
+.editorconfig
+.prettierrc
+.npmrc
+commitlint.config.js
+.github
+.config
+pnpm-workspace.yaml
+turbo.json
+.gitlab-ci.yml
 
 # Logs
 npm-debug.log*
@@ -15,21 +33,5 @@ node_modules
 # Optional npm cache directory
 .npm
 
-# mac os
-**/.DS_Store
-
-.turbo
-
 # logs
 npm-debug.log
-
-public
-
-# configs
-rollup.config.js
-vite.config.ts
-.eslintrc
-.editorconfig
-.prettierrc
-.npmrc
-
