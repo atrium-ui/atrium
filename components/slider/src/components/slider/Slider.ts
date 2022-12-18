@@ -286,8 +286,8 @@ export class Slider extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "sv-slider": Slider;
+    "aui-slider": Slider;
   }
 }
 
-customElements.define("sv-slider", Slider);
+customElements.define("aui-slider", Slider);
