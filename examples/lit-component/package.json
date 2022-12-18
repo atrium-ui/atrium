@@ -1,0 +1,24 @@
+{
+  "name": "@atrium-ui/example",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "main": "dist/example.cjs.js",
+  "module": "dist/example.es.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "dev": "histoire dev",
+    "build": "vite build",
+    "lint": "eslint --ext .ts .",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lit": "^2.5.0"
+  },
+  "devDependencies": {
+    "@atrium-ui/mono": "workspace:^",
+    "vite": "^2.9.15"
+  }
+}

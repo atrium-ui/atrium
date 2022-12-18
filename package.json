@@ -11,7 +11,8 @@
     "library:dev": "cd apps/library && pnpm dev",
     "publish:preview": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
     "postinstall": "husky install .config/husky",
-    "clean": "rm -R **/.turbo && rm -R **/dist && rm -R **/node_modules"
+    "clean": "git clean -fX .",
+    "create": "echo copy example to create new component."
   },
   "workspaces": [
     "apps/*",
