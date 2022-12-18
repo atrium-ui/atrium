@@ -28,15 +28,16 @@ declare module "solid-js" {
 ### React
 ```typescript
 // declaration.d.ts
-namespace JSX {
+declare namespace JSX {
   type ElementProps<T> = {
     [K in keyof T]: Props<T[K]>;
   };
   type Props<T> = {
-    [K in keyof T & { children: Element[] } as string & K]?: T[K];
-  };
+    [K in keyof Omit<T, "children"> as string & K]?: T[K];
+  } & { children: Element[] };
   interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
 }
+
 ```
 
 ### Nuxt
