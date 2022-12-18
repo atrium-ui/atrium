@@ -47,6 +47,12 @@ export class MaterialIcon extends LitElement {
   }
 }
 
+declare global {
+  interface HTMLElementTagNameMap {
+    [TAG]: MaterialIcon;
+  }
+}
+
 if (!customElements.get(TAG)) {
   customElements.define(TAG, MaterialIcon);
 } else {

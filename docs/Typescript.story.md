@@ -16,16 +16,11 @@ Every WebComponent is written in TypeScript, that means we can autocomplete and 
 ```typescript
 // declaration.d.ts
 import "solid-js";
-// augment custom elements
+import "@atrium-ui/mono";
+
 declare module "solid-js" {
   namespace JSX {
-    type ElementProps<T> = {
-      [K in keyof T]: Props<T[K]> & HTMLAttributes<T[K]>;
-    };
-    type Props<T> = {
-      [K in keyof Omit<T, "children"> as string & K]?: T[K];
-    };
-    interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
+    interface IntrinsicElements extends AtriumElements {}
   }
 }
 ```
