@@ -74,6 +74,17 @@ importers:
       '@atrium-ui/mono': link:../..
       vite: 2.9.15
 
+  components/animated-riv:
+    specifiers:
+      '@rive-app/canvas': ^1.0.95
+      lit: ^2.4.1
+      vite: ^2.9.15
+    dependencies:
+      '@rive-app/canvas': 1.0.97
+      lit: 2.5.0
+    devDependencies:
+      vite: 2.9.15
+
   components/collapsable:
     specifiers:
       '@atrium-ui/mono': workspace:^
@@ -631,6 +642,10 @@ packages:
   /@polka/url/1.0.0-next.21:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
     dev: true
+
+  /@rive-app/canvas/1.0.97:
+    resolution: {integrity: sha512-NpA/z8FW/ktIghJSeZB/ySgG3H+TMhzFC5tnotKuFnxbzhH4qyKk+6FHM7BIjBKhBQ10vHnf45kUrLTRArfQhA==}
+    dev: false
 
   /@tootallnate/once/2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
