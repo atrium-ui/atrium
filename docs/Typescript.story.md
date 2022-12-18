@@ -4,9 +4,15 @@ icon: 'carbon:assembly-reference'
 title: 'TypeScript'
 ---
 
-# Type declarations for different Frameworks
+# TypeScript
 
-## Solid JS
+Every WebComponent is written in TypeScript, that means we can autocomplete and suggest props.
+
+![proptype.jpg](./images/proptype.jpg)
+
+## Type declarations for different Frameworks
+
+### Solid JS
 ```typescript
 // declaration.d.ts
 import "solid-js";
@@ -14,32 +20,29 @@ import "solid-js";
 declare module "solid-js" {
   namespace JSX {
     type ElementProps<T> = {
-      // Add both the element's prefixed properties and the attributes
       [K in keyof T]: Props<T[K]> & HTMLAttributes<T[K]>;
     };
-    // Prefixes all properties with `prop:` to match Solid's property setting syntax
     type Props<T> = {
-      [K in keyof Omit<T, "children"> as `${string & K}`]?: T[K];
+      [K in keyof Omit<T, "children"> as string & K]?: T[K];
     };
     interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
   }
 }
 ```
 
-## React
+### React
 ```typescript
 // declaration.d.ts
-declare global {
-  namespace JSX {
-    type ElementProps<T> = {
-      // Add both the element's prefixed properties and the attributes
-      [K in keyof T]: Props<T[K]> & HTMLAttributes<T[K]>;
-    };
-    // Prefixes all properties with `prop:` to match Solid's property setting syntax
-    type Props<T> = {
-      [K in keyof Omit<T, "children"> as `${string & K}`]?: T[K];
-    };
-    interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
-  }
+namespace JSX {
+  type ElementProps<T> = {
+    [K in keyof T]: Props<T[K]>;
+  };
+  type Props<T> = {
+    [K in keyof T & { children: Element[] } as string & K]?: T[K];
+  };
+  interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
 }
 ```
+
+### Nuxt
+is bad at TypeScript.
