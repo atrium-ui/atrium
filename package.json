@@ -10,7 +10,7 @@
     "library:build": "cd apps/library && pnpm build",
     "library:dev": "cd apps/library && pnpm dev",
     "publish:preview": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
-    "postinstall": "husky install .config/husky",
+    "setup": "husky install .config/husky",
     "clean": "rm -R **/.turbo && rm -R **/dist && rm -R **/node_modules"
   },
   "workspaces": [
