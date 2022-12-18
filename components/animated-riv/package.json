@@ -1,0 +1,24 @@
+{
+  "name": "@atrium-ui/animated-riv",
+  "version": "0.0.4",
+  "description": "",
+  "main": "dist/animated-riv.cjs.js",
+  "module": "dist/animated-riv.es.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "dev": "histoire dev",
+    "build": "vite build",
+    "lint": "eslint --ext .ts .",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@rive-app/canvas": "^1.0.95",
+    "lit": "^2.4.1"
+  },
+  "devDependencies": {
+    "vite": "^2.9.15"
+  }
+}
