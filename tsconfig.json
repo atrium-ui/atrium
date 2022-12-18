@@ -1,12 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ES2020",
+    "target": "ES2018",
+    "module": "ESNext",
     "strict": true,
     "moduleResolution": "node",
     "noImplicitAny": true,
     "experimentalDecorators": true,
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "paths": {
+      "~/*": ["./*"]
+    }
   },
   "exclude": ["node_modules"]
 }

@@ -18,4 +18,3 @@ We use the lit library to simplify development of WebComponents. It provieds fas
 - [prettier](vscode:extension/esbenp.prettier-vscode)
 - [Prettier ESLint](vscode:extension/rvest.vs-code-prettier-eslint)
 - [lit-plugin](vscode:extension/runem.lit-plugin)
-
