@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import "@atrium-ui/mono/components/accordion";
 
-import { hstEvent } from "histoire/client";
+import { logEvent } from "histoire/client";
 import { reactive } from "vue";
 import { paragraph, sentence } from "txtgen";
 
@@ -12,8 +12,9 @@ const state = reactive({
 
 <template>
   <Story>
+    <div class="test"></div>
     <aui-accordion
-      @item-opened-change="hstEvent('Item Toggle', $event)"
+      @item-opened-change="logEvent('Item Toggle', $event)"
       :exclusive="state.exclusive"
     >
       <aui-accordion-item v-for="(item, i) of 3" :key="i">

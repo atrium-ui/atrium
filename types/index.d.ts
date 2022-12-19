@@ -1,23 +1,17 @@
 // solid.js
 type ElementProps<T> = {
-  [K in keyof T]: Props<T[K]>;
+  [K in keyof T]: CustomElementProps<T[K]>;
 };
 
-type Props<T> = {
+type CustomElementChildren = Element | Element[] | JSX.Element | JSX.Element[];
+
+type CustomElementProps<T> = {
   [K in keyof Omit<T, "children"> as string & K]?: T[K];
-} & { children?: any | any[] };
+} & { children?: CustomElementChildren; class?: string };
 
-interface AtriumElements extends ElementProps<HTMLElementTagNameMap> {}
+interface CustomElements extends ElementProps<HTMLElementTagNameMap> {}
 
-// react/next
+// react/next and vue (for some reason)
 declare namespace JSX {
-  type ElementProps<T> = {
-    [K in keyof T]: Props<T[K]>;
-  };
-
-  type Props<T> = {
-    [K in keyof Omit<T, "children"> as string & K]?: T[K];
-  } & { children?: Element | Element[] };
-
   interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
 }
