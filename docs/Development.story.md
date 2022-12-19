@@ -19,6 +19,85 @@ We use the lit library to simplify development of WebComponents. It provieds fas
 - [Prettier ESLint](vscode:extension/rvest.vs-code-prettier-eslint)
 - [lit-plugin](vscode:extension/runem.lit-plugin)
 
+## Use in Frameworks
+
+### Nuxt3
+
+```vue
+// pages/index.vue
+<template>
+  <aui-accordion-item>
+    <div slot="title">Title</div>
+    <div>Content</div>
+  </aui-accordion-item>
+</template>
+```
+```typescript
+import '@atrium-ui/mono/components/accordion';
+```
+
+### NextJS
+
+```json
+// /tsconfig.json
+{
+  "compilerOptions": {
+    "types": ["@atrium-ui/mono"]
+  }
+}
+```
+
+```typescript
+// pages/index.tsx
+if (typeof window !== "undefined") {
+  // only import on client render;
+  // This will not cause hydration errors,
+  //  since the components dont render any html in itself.
+  import("@atrium-ui/mono/components/accordion");
+}
+
+export default function Home() {
+  return (
+    <main>
+      <aui-accordion-item>
+        <div slot="title">Title</div>
+        <div>Content</div>
+      </aui-accordion-item>
+    </main>
+  );
+}
+```
+
+### SolidJS
+
+```typescript
+// /declaration.d.ts
+import "solid-js";
+import "@atrium-ui/mono";
+
+declare module "solid-js" {
+  namespace JSX {
+    interface IntrinsicElements extends AtriumElements {}
+  }
+}
+```
+
+```typescript
+// App.tsx
+import "@atrium-ui/mono/components/accordion";
+
+const App: Component = () => {
+  return (
+    <aui-accordion-item>
+      <div slot="title">Title</div>
+      <div>Contentx</div>
+    </aui-accordion-item>
+  );
+};
+
+export default App;
+```
+
 
 ## Branches
 

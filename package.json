@@ -1,6 +1,7 @@
 {
   "name": "@atrium-ui/mono",
   "version": "0.0.9-dev2",
+  "main": "./index.js",
   "types": "./types/index.d.ts",
   "description": "",
   "scripts": {
