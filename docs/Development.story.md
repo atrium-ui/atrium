@@ -23,6 +23,15 @@ We use the lit library to simplify development of WebComponents. It provieds fas
 
 ### Nuxt3
 
+```json
+// /tsconfig.json
+{
+  "compilerOptions": {
+    "types": ["@atrium-ui/mono"]
+  }
+}
+```
+
 ```vue
 // pages/index.vue
 <template>
@@ -70,10 +79,18 @@ export default function Home() {
 
 ### SolidJS
 
+```json
+// /tsconfig.json
+{
+  "compilerOptions": {
+    "types": ["@atrium-ui/mono"]
+  }
+}
+```
+
 ```typescript
 // /declaration.d.ts
 import "solid-js";
-import "@atrium-ui/mono";
 
 declare module "solid-js" {
   namespace JSX {

@@ -12,33 +12,9 @@ Every WebComponent is written in TypeScript, that means we can autocomplete and 
 
 ## Type declarations for different Frameworks
 
-### Solid JS
-```typescript
-// declaration.d.ts
-import "solid-js";
-import "@atrium-ui/mono";
+For usage check "Development".
 
-declare module "solid-js" {
-  namespace JSX {
-    interface IntrinsicElements extends AtriumElements {}
-  }
-}
-```
+Types for Custom Elements are privded with the `CustomElements` interface of this module.
+By default types for React (Solid.JS, Next.JS) and Vue are provided.
 
-### React
-```typescript
-// declaration.d.ts
-declare namespace JSX {
-  type ElementProps<T> = {
-    [K in keyof T]: Props<T[K]>;
-  };
-  type Props<T> = {
-    [K in keyof Omit<T, "children"> as string & K]?: T[K];
-  } & { children: Element[] };
-  interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
-}
-
-```
-
-### Nuxt
-is bad at TypeScript.
+For more details check the `types/index.d.ts` type declaration file.
