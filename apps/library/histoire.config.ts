@@ -1,4 +1,4 @@
-import { defineConfig } from "histoire";
+import { defaultColors, defineConfig } from "histoire";
 import { HstVue } from "@histoire/plugin-vue";
 import vue from "@vitejs/plugin-vue";
 import markdown from "vite-plugin-markdown";
@@ -15,6 +15,10 @@ export default defineConfig({
       square: "/src/img/logo.svg",
       light: "/src/img/logo.svg",
       dark: "/src/img/logo.svg",
+    },
+    colors: {
+      gray: defaultColors.zinc,
+      primary: defaultColors.amber,
     },
   },
   tree: {
@@ -45,7 +49,9 @@ export default defineConfig({
       vue({
         template: {
           compilerOptions: {
-            isCustomElement: (tag: string) => tag.startsWith("aui-"),
+            isCustomElement: (tag: string) => {
+              return tag.startsWith("aui-") || tag.startsWith("material-");
+            },
           },
         },
       }),

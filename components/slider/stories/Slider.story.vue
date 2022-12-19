@@ -4,7 +4,7 @@ import "../src";
 
 <template>
   <Story>
-    <sv-slider centered>
+    <aui-slider centered>
       <div class="slide-item">
         <placeholder></placeholder>
       </div>
@@ -14,7 +14,7 @@ import "../src";
       <div class="slide-item">
         <placeholder></placeholder>
       </div>
-    </sv-slider>
+    </aui-slider>
   </Story>
 </template>
 
