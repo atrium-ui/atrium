@@ -94,7 +94,7 @@ import "solid-js";
 
 declare module "solid-js" {
   namespace JSX {
-    interface IntrinsicElements extends AtriumElements {}
+    interface IntrinsicElements extends CustomElements {}
   }
 }
 ```
