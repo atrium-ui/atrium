@@ -12,7 +12,7 @@
     "library:build": "cd apps/library && pnpm build",
     "library:dev": "cd apps/library && pnpm dev",
     "publish:preview": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
-    "setup": "husky install .config/husky",
+    "prepare": "husky install .config/husky",
     "clean": "git clean -fX .",
     "new": "node new.mjs"
   },
