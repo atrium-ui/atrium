@@ -9,9 +9,6 @@
     "useDefineForClassFields": false,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "paths": {
-      "~/*": ["./*"]
-    }
   },
   "exclude": ["node_modules"]
 }
