@@ -1,8 +1,9 @@
 stages:
+  - library
   - publish
 
 pages:
-  stage: publish
+  stage: library
   image: node:18-buster
   before_script:
     - curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@7
@@ -27,3 +28,16 @@ pages:
   artifacts:
     paths:
       - public
+
+publish:
+  stage: publish
+  only:
+    - tags
+  except:
+    - branches
+  variables:
+    GITLAB_NPM_REGISTRY_TOKEN: ${CI_JOB_TOKEN}
+  script:
+    - pnpm i
+    - pnpm build
+    - npm publish
