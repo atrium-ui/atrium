@@ -94,4 +94,6 @@ declare global {
   }
 }
 
-customElements.define("aui-accordion-item", AccordionItem);
+if (typeof window !== "undefined") {
+  window.customElements.define("aui-accordion-item", AccordionItem);
+}
