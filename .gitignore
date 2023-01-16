@@ -8,11 +8,15 @@ node_modules
 .npm
 
 # mac os
-**/.DS_Store
+.DS_Store
 
 # bundles
-**/*.bundle.js
-**/*.min.js
+*.bundle.js
+*.min.js
+*.es.js
+*.cjs.js
 dist
 
 .turbo
+
+TODO

@@ -13,6 +13,7 @@ docs
 
 vite.config.ts
 .turbo
+.eslintrc
 .eslintrc.json
 .editorconfig
 .prettierrc
@@ -23,6 +24,7 @@ commitlint.config.js
 pnpm-workspace.yaml
 turbo.json
 .gitlab-ci.yml
+.DS_Store
 
 # Logs
 npm-debug.log*

@@ -1,5 +1,5 @@
 {
-  "name": "@atrium-ui/dropdown",
+  "name": "@sv-components/dropdown",
   "version": "0.3.7",
   "description": "",
   "main": "dist/dropdown.cjs.js",
@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@atrium-ui/mono": "workspace:^",
+    "@sv-components/mono": "workspace:^",
     "lit": "^2.5.0"
   },
   "devDependencies": {

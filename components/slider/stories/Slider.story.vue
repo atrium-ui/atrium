@@ -37,10 +37,4 @@ placeholder {
 # sv-slider
 
 A simple and functional slider. Replacing any slider libraries and includes only the necessary features.
-
-## Install
-
-```bash
-npm i @atrium-ui/slider
-```
 </docs>

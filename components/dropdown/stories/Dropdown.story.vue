@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import "@atrium-ui/mono/components/dropdown";
+import "@sv-components/mono/components/dropdown";
 import "../styles/default.scss";
 
 import { logEvent } from "histoire/client";
@@ -31,28 +31,24 @@ const exampleOptions = [
 <template>
   <Story title="Dropdown" :layout="{ type: 'single', iframe: true }">
     <Variant title="Default">
-      <aui-dropdown
-        @select="handleSelect"
-        @open="logEvent('Open', e)"
-        @close="logEvent('Close', e)"
-      >
+      <sv-dropdown @select="handleSelect" @open="logEvent('Open', e)" @close="logEvent('Close', e)">
         <button slot="input">{{ state.value || "Select" }}</button>
 
-        <aui-option>Option 1</aui-option>
-        <aui-option>Option 2</aui-option>
-        <aui-option>Option 3</aui-option>
-        <aui-option>Option 4</aui-option>
-        <aui-option>Option 5</aui-option>
-        <aui-option>Option 6</aui-option>
-        <aui-option>Option 7</aui-option>
-        <aui-option>Option 8</aui-option>
-        <aui-option>Option 9</aui-option>
-        <aui-option>Option 10</aui-option>
-      </aui-dropdown>
+        <sv-option>Option 1</sv-option>
+        <sv-option>Option 2</sv-option>
+        <sv-option>Option 3</sv-option>
+        <sv-option>Option 4</sv-option>
+        <sv-option>Option 5</sv-option>
+        <sv-option>Option 6</sv-option>
+        <sv-option>Option 7</sv-option>
+        <sv-option>Option 8</sv-option>
+        <sv-option>Option 9</sv-option>
+        <sv-option>Option 10</sv-option>
+      </sv-dropdown>
     </Variant>
 
     <Variant title="Flyup">
-      <aui-dropdown
+      <sv-dropdown
         @select="handleSelect"
         @open="logEvent('Open', e)"
         @close="logEvent('Close', e)"
@@ -61,26 +57,22 @@ const exampleOptions = [
       >
         <button slot="input">{{ state.value || "Select" }}</button>
 
-        <aui-option>Option 1</aui-option>
-        <aui-option>Option 2</aui-option>
-        <aui-option>Option 3</aui-option>
-        <aui-option>Option 4</aui-option>
-        <aui-option>Option 5</aui-option>
-        <aui-option>Option 6</aui-option>
-        <aui-option>Option 7</aui-option>
-        <aui-option>Option 8</aui-option>
-      </aui-dropdown>
+        <sv-option>Option 1</sv-option>
+        <sv-option>Option 2</sv-option>
+        <sv-option>Option 3</sv-option>
+        <sv-option>Option 4</sv-option>
+        <sv-option>Option 5</sv-option>
+        <sv-option>Option 6</sv-option>
+        <sv-option>Option 7</sv-option>
+        <sv-option>Option 8</sv-option>
+      </sv-dropdown>
     </Variant>
 
     <Variant title="Text Filter">
-      <aui-dropdown
-        @select="handleSelect"
-        @open="logEvent('Open', e)"
-        @close="logEvent('Close', e)"
-      >
+      <sv-dropdown @select="handleSelect" @open="logEvent('Open', e)" @close="logEvent('Close', e)">
         <input slot="input" v-model="state.value" @input="handleFilter" placeholder="Text" />
 
-        <aui-option
+        <sv-option
           v-for="option of exampleOptions.filter((opt) =>
             state.value
               ? opt.toLocaleLowerCase().indexOf(state.value.toLocaleLowerCase()) !== -1
@@ -88,9 +80,9 @@ const exampleOptions = [
           )"
           :key="option"
           :value="option"
-          >{{ option }}</aui-option
+          >{{ option }}</sv-option
         >
-      </aui-dropdown>
+      </sv-dropdown>
     </Variant>
 
     <!-- // Vareints of dropdowns  -->
@@ -104,39 +96,39 @@ Universal dropdown component
 
 ```tsx
 // If the dropdown should open upwards or downwards
-<aui-dropdown direction: 'down' | 'up'; />
+<sv-dropdown direction: 'down' | 'up'; />
 ```
 
 ```tsx
 // The value or index of the selected option
 // If the option does not have a 'value' attribute, indexes will be used.
-<aui-dropdown selected: String; />
+<sv-dropdown selected: String; />
 ```
 
 ```tsx
 // Open state of the dropdown
-<aui-dropdown opened: Boolean; />
+<sv-dropdown opened: Boolean; />
 ```
 
 ```tsx
 // Prevents the dropdown from opening
-<aui-dropdown disabled: Boolean; />
+<sv-dropdown disabled: Boolean; />
 ```
 
 ## Events
 
 ```tsx
 // Emitted after the dropdown closed
-<aui-dropdown @close />
+<sv-dropdown @close />
 ```
 
 ```tsx
 // Emitted *before* the dropdown opens
-<aui-dropdown @open />
+<sv-dropdown @open />
 ```
 
 ```tsx
 // Emitted after a option has been slected by Click or Enter key
-<aui-dropdown @select: ({ option: OptionElement; }) => void />
+<sv-dropdown @select: ({ option: OptionElement; }) => void />
 ```
 </docs>

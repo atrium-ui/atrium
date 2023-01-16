@@ -10,17 +10,17 @@ title: 'Introduction'
 
 1. Install the library like this
 ```bash
-pnpm i @atrium-ui/mono
+pnpm i @sv-components/mono
 ```
 
 2. Import a component
 ```typescript
-import '@atrium-ui/mono/components/<component>';
+import '@sv-components/mono/components/[component]';
 ```
 
 3. Use it in a React, Solid or Nuxt project:
 ```tsx
-<component></<component>
+<[component]></<[component]>
 ```
 
 

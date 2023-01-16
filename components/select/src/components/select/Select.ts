@@ -164,8 +164,8 @@ export class Select extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "aui-select": Select;
+    "sv-select": Select;
   }
 }
 
-customElements.define("aui-select", Select);
+customElements.define("sv-select", Select);

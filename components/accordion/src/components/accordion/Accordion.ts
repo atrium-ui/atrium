@@ -1,6 +1,6 @@
 import { html, HTMLTemplateResult, LitElement } from "lit";
 import { property } from "lit/decorators.js";
-import { AccordionItem } from "./AccordionItem";
+import { AccordionItem } from "./AccordionItem.js";
 
 // TODO: Maybe generalize this element with like a child-selector?
 
@@ -11,7 +11,7 @@ export class Accordion extends LitElement {
   @property({ type: Boolean })
   protected exclusive?: boolean;
 
-  protected openExclusive(target): void {
+  protected openExclusive(target: AccordionItem): void {
     for (let i = 0; i < this.children.length; i++) {
       const item = this.children[i] as AccordionItem;
       if (item !== target && item.opened) {
@@ -22,7 +22,7 @@ export class Accordion extends LitElement {
 
   protected onItemOpened(e: Event): void {
     if (this.exclusive) {
-      this.openExclusive(e.target);
+      this.openExclusive(e.target as AccordionItem);
     }
   }
 
@@ -33,8 +33,8 @@ export class Accordion extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "aui-accordion": Accordion;
+    "sv-accordion": Accordion;
   }
 }
 
-customElements.define("aui-accordion", Accordion);
+customElements.define("sv-accordion", Accordion);

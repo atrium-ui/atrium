@@ -6,16 +6,16 @@ A more basic element of an accordion that only includes the animation and scroll
 
 ```typescript
 // Opened or closed (read and write)
-<aui-collapsable opened: Boolean; />
+<sv-collapsable opened: Boolean; />
 ```
 
 ## Example
 
 ```tsx
 const collapsable = (
-	<aui-collapsable opened>
+	<sv-collapsable opened>
 		<div class="content">${lorem.generateParagraphs(6)}</div>
-	</aui-collapsable>
+	</sv-collapsable>
 );
 ```
 

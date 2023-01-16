@@ -1,4 +1,4 @@
-import "@atrium-ui/mono/components/collapsable";
+import "@sv-components/mono/components/collapsable";
 import { html, css, LitElement } from "lit";
 import { property } from "lit/decorators.js";
 
@@ -27,22 +27,10 @@ export class AccordionItem extends LitElement {
             ease;
           position: relative;
           overflow: hidden;
-          background: white;
         }
 
         .item-content {
           position: absolute;
-        }
-
-        .headline {
-          display: flex;
-          justify-content: space-between;
-          font-size: 1.2rem;
-          transition: background 0.2s ease-out;
-        }
-
-        .headline:active {
-          transition: none;
         }
       `,
     ];
@@ -54,7 +42,18 @@ export class AccordionItem extends LitElement {
   @property({ type: String })
   public headline?: string;
 
-  private onItemClick(): void {
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.tabIndex = 0;
+    this.addEventListener("keydown", (e: KeyboardEvent) => {
+      if (e.key === " ") {
+        this.toggleItem();
+      }
+    });
+  }
+
+  private toggleItem(): void {
     if (this.opened) {
       this.close();
     } else {
@@ -73,7 +72,7 @@ export class AccordionItem extends LitElement {
 
   protected render() {
     return html`
-      <div class="accordion-title" @click="${this.onItemClick.bind(this)}">
+      <div class="accordion-title" @click="${this.toggleItem.bind(this)}">
         <slot id="title-element" name="title">
           <div class="headline">
             <span>${this.headline}</span>
@@ -81,19 +80,19 @@ export class AccordionItem extends LitElement {
         </slot>
       </div>
 
-      <aui-collapsable ?opened="${this.opened}">
+      <sv-collapsable ?opened="${this.opened}">
         <slot></slot>
-      </aui-collapsable>
+      </sv-collapsable>
     `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "aui-accordion-item": AccordionItem;
+    "sv-accordion-item": AccordionItem;
   }
 }
 
 if (typeof window !== "undefined") {
-  window.customElements.define("aui-accordion-item", AccordionItem);
+  window.customElements.define("sv-accordion-item", AccordionItem);
 }

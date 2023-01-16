@@ -1,23 +1,23 @@
-aui-dropdown button {
+sv-dropdown button {
 }
 
 button,
 input {
-	padding: 8px 12px;
-	width: 250px;
-	box-sizing: border-box;
+  padding: 8px 12px;
+  width: 250px;
+  box-sizing: border-box;
 }
-aui-option {
-	display: block;
-	background: #eee;
-	border: 2px solid lightgrey;
-	padding: 4px 8px;
-	box-sizing: border-box;
-	cursor: pointer;
+sv-option {
+  display: block;
+  background: #eee;
+  border: 2px solid lightgrey;
+  padding: 4px 8px;
+  box-sizing: border-box;
+  cursor: pointer;
 }
-aui-option:hover {
-	border-color: grey;
+sv-option:hover {
+  border-color: grey;
 }
-aui-option[selected] {
-	border-color: black;
+sv-option[selected] {
+  border-color: black;
 }

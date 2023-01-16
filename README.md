@@ -1,5 +1,3 @@
-# atrium-ui/atrium-ui-mono
-
 ## Development
 
 Install
