@@ -28,6 +28,7 @@ export class Collapsable extends LitElement {
           display: block;
           width: 100%;
           position: absolute;
+          overflow: hidden;
         }
       `,
     ];

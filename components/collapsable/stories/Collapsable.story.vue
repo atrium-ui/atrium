@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import "@sv-components/mono/components/collapsable";
+import "../src/index.js";
 
 import { logEvent } from "histoire/client";
 import { reactive } from "vue";
@@ -48,6 +48,9 @@ const state = reactive({
         <ul>
           <li>Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes</li>
         </ul>
+        <ul>
+          <li>Cum sociis natoque penatibus et magnis dis parturient montes</li>
+        </ul>
       </sv-collapsable>
 
       <div class="foot">
@@ -69,6 +72,11 @@ button {
 .foot {
   display: flex;
   justify-content: center;
+  margin-top: 20px;
+}
+
+ul {
+  margin: 0;
 }
 </style>
 

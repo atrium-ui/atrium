@@ -2,13 +2,12 @@
   "name": "@sv-components/accordion",
   "version": "1.4.0",
   "description": "",
-  "type": "module",
-  "main": "dist/accordion.cjs",
-  "module": "dist/esm/accordion.js",
+  "main": "dist/accordion.js",
+  "module": "dist/accordion.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "histoire dev",
-    "build": "tsup --format esm,cjs --legacy-output --dts src/index.ts",
+    "build": "tsup --format esm,cjs --dts src/index.ts",
     "test": "tsc --noEmit",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
   },

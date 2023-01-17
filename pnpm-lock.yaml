@@ -78,14 +78,18 @@ importers:
 
   components/collapsable:
     specifiers:
-      '@sv-components/mono': workspace:^
+      '@histoire/plugin-vue': ^0.11.9
+      '@vitejs/plugin-vue': ^3.0.0
+      histoire: ^0.11.9
       lit: ^2.5.0
-      vite: ^2.9.15
+      tsup: ^6.5.0
     dependencies:
       lit: 2.5.0
     devDependencies:
-      '@sv-components/mono': link:../..
-      vite: 2.9.15
+      '@histoire/plugin-vue': 0.11.9_vgxee6juai2ux6n5oucjlvgv4a
+      '@vitejs/plugin-vue': 3.2.0_vite@3.2.5+vue@3.2.45
+      histoire: 0.11.9_vite@3.2.5
+      tsup: 6.5.0
 
   components/dropdown:
     specifiers:
