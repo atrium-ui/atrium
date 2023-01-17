@@ -44,7 +44,7 @@ export class Select extends LitElement {
       child.removeAttribute(this.activeAttribute);
 
       if (e.target === child || child.contains(e.target as HTMLElement)) {
-        const value = child.getAttribute("value") || i.toString();
+        const value = Select.getChildValue(child as HTMLElement) || i.toString();
 
         const index = this.activeChildren.indexOf(value);
         if (index !== -1) {
@@ -65,10 +65,14 @@ export class Select extends LitElement {
     e.stopPropagation();
   }
 
+  static getChildValue(child: HTMLElement) {
+    return child.getAttribute("value") || child.dataset.value;
+  }
+
   private updateChildren() {
     let index = 0;
     for (const child of this.children) {
-      const value = child.getAttribute("value") || index.toString();
+      const value = Select.getChildValue(child as HTMLElement) || index.toString();
 
       if (this.activeChildren.indexOf(value) !== -1) {
         child.setAttribute(this.activeAttribute, "");
