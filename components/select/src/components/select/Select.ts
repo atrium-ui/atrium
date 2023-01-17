@@ -13,7 +13,7 @@ export class Select extends LitElement {
   @property({ type: Boolean, reflect: false })
   public multiple: boolean = false;
 
-  public activeChildren!: string[];
+  public activeChildren: string[] = [];
 
   public get value() {
     return this.activeChildren;
