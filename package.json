@@ -2,6 +2,16 @@
   "name": "@sv-components/mono",
   "version": "0.1.1",
   "description": "",
+  "exports": {
+    "./components/accordion": {
+      "import": "./components/accordion/dist/accordion.mjs",
+      "require": "./components/accordion/dist/dist/accordion.js"
+    },
+    "./components/collapsable": {
+      "import": "./components/collapsable/dist/collapsable.mjs",
+      "require": "./components/collapsable/dist/dist/collapsable.js"
+    }
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "turbo lint",
