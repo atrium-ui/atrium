@@ -146,6 +146,8 @@ export class Select extends LitElement {
 
     if (!this.activeChildren) {
       this.activeChildren = [];
+    } else {
+      this.updateChildren();
     }
 
     this.tabIndex = 0;
