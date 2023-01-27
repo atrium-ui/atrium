@@ -13,7 +13,7 @@ export class Select extends LitElement {
   @property({ type: Boolean, reflect: false })
   public multiple: boolean = false;
 
-  public activeChildren!: string[];
+  public activeChildren: string[] = [];
 
   public get value() {
     return this.activeChildren;
@@ -44,7 +44,7 @@ export class Select extends LitElement {
       child.removeAttribute(this.activeAttribute);
 
       if (e.target === child || child.contains(e.target as HTMLElement)) {
-        const value = child.getAttribute("value") || i.toString();
+        const value = Select.getChildValue(child as HTMLElement) || i.toString();
 
         const index = this.activeChildren.indexOf(value);
         if (index !== -1) {
@@ -65,10 +65,14 @@ export class Select extends LitElement {
     e.stopPropagation();
   }
 
+  static getChildValue(child: HTMLElement) {
+    return child.getAttribute("value") || child.dataset.value;
+  }
+
   private updateChildren() {
     let index = 0;
     for (const child of this.children) {
-      const value = child.getAttribute("value") || index.toString();
+      const value = Select.getChildValue(child as HTMLElement) || index.toString();
 
       if (this.activeChildren.indexOf(value) !== -1) {
         child.setAttribute(this.activeAttribute, "");
@@ -142,6 +146,8 @@ export class Select extends LitElement {
 
     if (!this.activeChildren) {
       this.activeChildren = [];
+    } else {
+      this.updateChildren();
     }
 
     this.tabIndex = 0;
@@ -164,8 +170,8 @@ export class Select extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "aui-select": Select;
+    "sv-select": Select;
   }
 }
 
-customElements.define("aui-select", Select);
+customElements.define("sv-select", Select);

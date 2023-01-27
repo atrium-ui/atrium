@@ -1,2 +1,2 @@
-export { Accordion } from "./components/accordion/Accordion";
-export { AccordionItem } from "./components/accordion/AccordionItem";
+export { Accordion } from "./components/accordion/Accordion.js";
+export { AccordionItem } from "./components/accordion/AccordionItem.js";

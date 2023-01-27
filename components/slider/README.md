@@ -2,12 +2,6 @@
 
 A simple and functional slider. Replacing any slider libraries and includes only the necessary features.
 
-## Install
-
-```bash
-npm i @atrium-ui/slider
-```
-
 ## Publish new version
 
 Create a new version:

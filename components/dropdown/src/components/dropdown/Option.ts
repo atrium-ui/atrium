@@ -20,8 +20,8 @@ export class OptionElement extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "dropdown-option": OptionElement;
+    "sv-option": OptionElement;
   }
 }
 
-customElements.define("dropdown-option", OptionElement);
+customElements.define("sv-option", OptionElement);

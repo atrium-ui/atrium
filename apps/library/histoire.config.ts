@@ -10,7 +10,7 @@ export default defineConfig({
   routerMode: "hash",
   storyMatch: ["../../components/*/stories/*.story.vue"],
   theme: {
-    title: "Atrium UI",
+    title: "SV Components",
     logo: {
       square: "/src/img/logo.svg",
       light: "/src/img/logo.svg",
@@ -49,9 +49,7 @@ export default defineConfig({
       vue({
         template: {
           compilerOptions: {
-            isCustomElement: (tag: string) => {
-              return tag.startsWith("aui-") || tag.startsWith("material-");
-            },
+            isCustomElement: (tag: string) => tag.startsWith("sv-"),
           },
         },
       }),

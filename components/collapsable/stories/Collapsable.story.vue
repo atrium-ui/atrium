@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import "@atrium-ui/mono/components/collapsable";
+import "../src/index.js";
 
 import { logEvent } from "histoire/client";
 import { reactive } from "vue";
@@ -23,11 +23,11 @@ const state = reactive({
         {{ state.p1 }}
       </p>
 
-      <aui-collapsable @item-opened-change="logEvent('open change', $event)" :opened="state.opened">
+      <sv-collapsable @item-opened-change="logEvent('open change', $event)" :opened="state.opened">
         <p>
           {{ state.p2 }}
         </p>
-      </aui-collapsable>
+      </sv-collapsable>
 
       <div class="foot">
         <button @click="toggleOpen">{{ state.opened ? "show less" : "show more" }}</button>
@@ -44,11 +44,14 @@ const state = reactive({
         <li>Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes</li>
       </ul>
 
-      <aui-collapsable @item-opened-change="logEvent('open change', $event)" :opened="state.opened">
+      <sv-collapsable @item-opened-change="logEvent('open change', $event)" :opened="state.opened">
         <ul>
           <li>Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes</li>
         </ul>
-      </aui-collapsable>
+        <ul>
+          <li>Cum sociis natoque penatibus et magnis dis parturient montes</li>
+        </ul>
+      </sv-collapsable>
 
       <div class="foot">
         <button @click="toggleOpen">{{ state.opened ? "show less" : "show more" }}</button>
@@ -69,6 +72,11 @@ button {
 .foot {
   display: flex;
   justify-content: center;
+  margin-top: 20px;
+}
+
+ul {
+  margin: 0;
 }
 </style>
 
@@ -81,6 +89,6 @@ A more basic element of an accordion that only includes the animation and scroll
 
 ```typescript
 // Opened or closed (read and write)
-<aui-collapsable opened: Boolean; />
+<sv-collapsable opened: Boolean; />
 ```
 </docs>

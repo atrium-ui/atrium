@@ -1,5 +1,5 @@
 {
-  "name": "@atrium-ui/progress-circle",
+  "name": "@sv-components/progress-circle",
   "version": "1.0.10",
   "description": "",
   "main": "dist/progress-circle.cjs.js",

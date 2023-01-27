@@ -1,9 +1,17 @@
 {
-  "name": "@atrium-ui/mono",
-  "version": "0.0.9-dev2",
-  "main": "./index.js",
-  "types": "./index.d.ts",
+  "name": "@sv-components/mono",
+  "version": "0.1.5",
   "description": "",
+  "exports": {
+    "./components/accordion": {
+      "import": "./components/accordion/dist/accordion.mjs",
+      "require": "./components/accordion/dist/dist/accordion.js"
+    },
+    "./components/collapsable": {
+      "import": "./components/collapsable/dist/collapsable.mjs",
+      "require": "./components/collapsable/dist/dist/collapsable.js"
+    }
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "turbo lint",
@@ -13,8 +21,7 @@
     "library:dev": "cd apps/library && pnpm dev",
     "publish:preview": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
     "prepare": "husky install .config/husky",
-    "clean": "git clean -fX .",
-    "new": "node new.mjs"
+    "clean": "git clean -fX ."
   },
   "workspaces": [
     "apps/*",

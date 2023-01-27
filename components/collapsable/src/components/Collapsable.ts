@@ -28,6 +28,7 @@ export class Collapsable extends LitElement {
           display: block;
           width: 100%;
           position: absolute;
+          overflow: hidden;
         }
       `,
     ];
@@ -111,8 +112,8 @@ export class Collapsable extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "aui-collapsable": Collapsable;
+    "sv-collapsable": Collapsable;
   }
 }
 
-customElements.define("aui-collapsable", Collapsable);
+customElements.define("sv-collapsable", Collapsable);

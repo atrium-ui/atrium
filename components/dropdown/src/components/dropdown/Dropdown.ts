@@ -209,7 +209,7 @@ export class Dropdown extends LitElement {
 
   private onSlotChange() {
     // update dom image
-    this.options = [...this.querySelectorAll("aui-option")] as OptionElement[];
+    this.options = [...this.querySelectorAll("sv-option")] as OptionElement[];
 
     if (this.direction === "up") {
       this.options.reverse();
@@ -262,11 +262,11 @@ export class Dropdown extends LitElement {
     return html`
       <slot name="input" @click=${this.onClick}></slot>
       <div class="dropdown-container" part="dropdown">
-        <aui-collapsable ?opened="${this.opened}">
+        <sv-collapsable ?opened="${this.opened}">
           <div class="dropdown" part="options">
             <slot @click=${this.onOptionsClick} @slotchange=${this.onSlotChange}></slot>
           </div>
-        </aui-collapsable>
+        </sv-collapsable>
       </div>
     `;
   }
@@ -274,8 +274,8 @@ export class Dropdown extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "aui-dropdown": Dropdown;
+    "sv-dropdown": Dropdown;
   }
 }
 
-customElements.define("aui-dropdown", Dropdown);
+customElements.define("sv-dropdown", Dropdown);

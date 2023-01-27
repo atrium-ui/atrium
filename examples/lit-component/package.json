@@ -1,5 +1,5 @@
 {
-  "name": "@atrium-ui/example",
+  "name": "@sv-components/example",
   "version": "0.0.1",
   "description": "",
   "type": "module",
@@ -18,7 +18,7 @@
     "lit": "^2.5.0"
   },
   "devDependencies": {
-    "@atrium-ui/mono": "workspace:^",
+    "@sv-components/mono": "workspace:^",
     "vite": "^2.9.15"
   }
 }

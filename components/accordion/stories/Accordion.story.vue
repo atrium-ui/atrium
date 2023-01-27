@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import "@atrium-ui/mono/components/accordion";
+import "../src/index.js";
 
 import { logEvent } from "histoire/client";
 import { reactive } from "vue";
@@ -12,18 +12,17 @@ const state = reactive({
 
 <template>
   <Story>
-    <div class="test"></div>
-    <aui-accordion
+    <sv-accordion
       @item-opened-change="logEvent('Item Toggle', $event)"
       :exclusive="state.exclusive"
     >
-      <aui-accordion-item v-for="(item, i) of 3" :key="i">
+      <sv-accordion-item v-for="(item, i) of 3" :key="i" :opened="i === 0">
         <div slot="title" class="titlebar">
           <div class="headline">Lorem Ipsum</div>
           <div class="collapse-icon">
             <svg
               class="plus-icon"
-              width="18px"
+              width="16px"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
             >
@@ -31,7 +30,7 @@ const state = reactive({
             </svg>
             <svg
               class="minus-icon"
-              width="18px"
+              width="16px"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
             >
@@ -40,8 +39,8 @@ const state = reactive({
           </div>
         </div>
         <div class="content">{{ paragraph(4) }}</div>
-      </aui-accordion-item>
-    </aui-accordion>
+      </sv-accordion-item>
+    </sv-accordion>
 
     <template #controls>
       <HstCheckbox title="Exclusive" v-model.number="state.exclusive" />
@@ -49,72 +48,16 @@ const state = reactive({
   </Story>
 </template>
 
-<style scoped>
-aui-accordion {
-  font-family: sans-serif;
-}
-
-aui-accordion-item {
-  margin-top: 2px;
-  background: #f0f0f0;
-  border-radius: 8px;
-  overflow: hidden;
-  font-size: 18px;
-}
-
-aui-accordion-item:not([opened]) .plus-icon {
-  transform: rotate(90deg);
-}
-aui-accordion-item:not([opened]) .minus-icon {
-  transform: rotate(90deg);
-}
-aui-accordion-item[opened] .plus-icon {
-  opacity: 0;
-}
-
-.titlebar {
-  padding: 1.5rem 2rem;
-  display: flex;
-  justify-content: space-between;
-}
-
-.collapse-icon {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-}
-
-.minus-icon,
-.plus-icon {
-  position: absolute;
-  transition: opacity 0.2s ease, transform 0.2s ease 0.02s;
-}
-
-.content {
-  font-size: 16px;
-  white-space: pre-line;
-  text-transform: none;
-  padding: 20px;
-}
+<style lang="scss" scoped>
+@import "../styles/default.css";
 </style>
 
 <docs lang="md">
-# aui-accordion
+# sv-accordion
 
 Basic Accordion component.
 
-## Properties
+## Default styles
 
-```typescript
-// Open state of the dropdown
-<aui-accordion opened: Boolean; />
-```
-
-## Install
-
-```bash
-npm i @atrium-ui/accordion
-```
+Basic default styling can be imported from '/styles/default.scss'
 </docs>
