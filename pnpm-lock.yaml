@@ -91,6 +91,25 @@ importers:
     devDependencies:
       vite: 2.9.15
 
+  components/animation:
+    specifiers:
+      '@histoire/plugin-vue': ^0.11.9
+      '@rive-app/canvas': ^1.0.95
+      '@rive-app/canvas-advanced-single': ^1.0.94
+      '@vitejs/plugin-vue': ^3.0.0
+      histoire: ^0.11.9
+      lit: ^2.4.1
+      tsup: ^6.5.0
+    dependencies:
+      '@rive-app/canvas': 1.0.97
+      '@rive-app/canvas-advanced-single': 1.0.94
+      lit: 2.5.0
+    devDependencies:
+      '@histoire/plugin-vue': 0.11.9_vgxee6juai2ux6n5oucjlvgv4a
+      '@vitejs/plugin-vue': 3.2.0_vite@3.2.5+vue@3.2.45
+      histoire: 0.11.9_vite@3.2.5
+      tsup: 6.5.0
+
   components/collapsable:
     specifiers:
       '@histoire/plugin-vue': ^0.11.9
@@ -652,6 +671,10 @@ packages:
   /@polka/url/1.0.0-next.21:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
     dev: true
+
+  /@rive-app/canvas-advanced-single/1.0.94:
+    resolution: {integrity: sha512-qwISAED82I2sg7nGj+8HFltvFIGycNeM93gQEPTjHbeYCO3HXsDIQuRUNu+L23WGMVLZbMSoKHRx7Wke7Z4MsQ==}
+    dev: false
 
   /@rive-app/canvas/1.0.97:
     resolution: {integrity: sha512-NpA/z8FW/ktIghJSeZB/ySgG3H+TMhzFC5tnotKuFnxbzhH4qyKk+6FHM7BIjBKhBQ10vHnf45kUrLTRArfQhA==}

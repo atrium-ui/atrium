@@ -1,9 +1,9 @@
 {
-  "name": "@atrium-ui/animated-riv",
+  "name": "@atrium-ui/animation",
   "version": "0.0.4",
   "description": "",
-  "main": "dist/animated-riv.cjs.js",
-  "module": "dist/animated-riv.es.js",
+  "main": "dist/animation.cjs.js",
+  "module": "dist/animation.es.js",
   "types": "src/index.ts",
   "scripts": {
     "dev": "histoire dev",
@@ -16,9 +16,23 @@
   "license": "ISC",
   "dependencies": {
     "@rive-app/canvas": "^1.0.95",
+    "@rive-app/canvas-advanced-single": "^1.0.94",
     "lit": "^2.4.1"
   },
   "devDependencies": {
-    "vite": "^2.9.15"
+    "@histoire/plugin-vue": "^0.11.9",
+    "@vitejs/plugin-vue": "^3.0.0",
+    "histoire": "^0.11.9",
+    "tsup": "^6.5.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "tsup": {
+    "entry": {
+      "accordion": "src/index.ts"
+    },
+    "sourcemap": true,
+    "clean": true
   }
 }

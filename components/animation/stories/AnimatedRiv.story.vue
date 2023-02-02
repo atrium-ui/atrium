@@ -13,14 +13,11 @@ export default defineComponent({
 
 <template>
   <Story>
-    <template #controls> Progress:<input v-model.number="progress" /> </template>
-
-    <animated-riv :loaded="progress" src="example.riv"></animated-riv>
+    <sv-animation :loaded="progress" src="example.riv"></sv-animation>
   </Story>
 </template>
 
 <style scoped>
-animated-riv {
-  background: black;
+sv-animation {
 }
 </style>
