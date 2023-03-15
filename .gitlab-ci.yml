@@ -24,8 +24,8 @@ pages:
     - branches
   when: manual
   environment:
-    name: pages
-    url: https://sv-components.pages.s-v.de/
+    name: main
+    url: https://sv-components.pages.s-v.de/mono
   artifacts:
     paths:
       - public
