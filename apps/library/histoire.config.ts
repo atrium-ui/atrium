@@ -1,7 +1,6 @@
 import { defaultColors, defineConfig } from "histoire";
 import { HstVue } from "@histoire/plugin-vue";
 import vue from "@vitejs/plugin-vue";
-import markdown from "vite-plugin-markdown";
 
 export default defineConfig({
   plugins: [HstVue()],
@@ -45,7 +44,6 @@ export default defineConfig({
   vite: {
     base: "",
     plugins: [
-      markdown({}),
       vue({
         template: {
           compilerOptions: {
