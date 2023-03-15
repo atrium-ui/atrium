@@ -4,7 +4,7 @@ import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
   plugins: [HstVue()],
-  // setupFile: "src/histoire.setup.ts",
+  setupFile: "src/histoire.setup.ts",
   outDir: "dist",
   routerMode: "hash",
   storyMatch: ["../../components/*/stories/*.story.vue"],
