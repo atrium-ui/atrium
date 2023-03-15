@@ -37,7 +37,7 @@ import "../src";
       <div class="slide-item">
         <placeholder></placeholder>
       </div>
-    </aui-slider>
+    </sv-slider>
   </Story>
 </template>
 

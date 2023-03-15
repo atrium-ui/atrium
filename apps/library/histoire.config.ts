@@ -5,7 +5,7 @@ import markdown from "vite-plugin-markdown";
 
 export default defineConfig({
   plugins: [HstVue()],
-  setupFile: "src/histoire.setup.ts",
+  // setupFile: "src/histoire.setup.ts",
   outDir: "dist",
   routerMode: "hash",
   storyMatch: ["../../components/*/stories/*.story.vue"],

@@ -3,6 +3,10 @@
   "version": "0.1.5",
   "description": "",
   "exports": {
+    "./components/dropdown": {
+      "import": "./components/dropdown/dist/dropdown.es.js",
+      "require": "./components/dropdown/dist/dist/dropdown.cjs.js"
+    },
     "./components/accordion": {
       "import": "./components/accordion/dist/accordion.mjs",
       "require": "./components/accordion/dist/dist/accordion.js"
