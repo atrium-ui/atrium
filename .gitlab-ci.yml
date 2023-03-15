@@ -50,7 +50,7 @@ publish:
 develop:
     environment:
         name: develop
-        url: "https://gitlab.s-v.de/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
+        url: "https://sv-components.pages.s-v.de/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
     stage: library
     image: node:18-buster
     before_script:
