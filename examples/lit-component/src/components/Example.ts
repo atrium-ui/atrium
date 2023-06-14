@@ -1,17 +1,10 @@
-import { html, css, HTMLTemplateResult, LitElement } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { html, HTMLTemplateResult, LitElement, unsafeCSS } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import styles from "./Example.css";
 
 @customElement("sv-example")
 export class Example extends LitElement {
-  public static get styles() {
-    return [
-      css`
-        :host {
-          display: block;
-        }
-      `,
-    ];
-  }
+  public static styles = unsafeCSS(styles);
 
   @property({ type: Boolean, reflect: true })
   public prop?: boolean;

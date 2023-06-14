@@ -13,9 +13,6 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "lit": "^2.5.0"
-  },
   "devDependencies": {
     "vite": "^2.9.15"
   }

@@ -3,12 +3,12 @@
 -->
 
 <script lang="ts" setup>
-import "@sv-components/mono/examples/lit-component";
+import "../src/index.js";
 </script>
 
 <template>
   <Story group="primitives">
-    <sv-example prop="example"></sv-example>
+    <sv-example></sv-example>
   </Story>
 </template>
 
