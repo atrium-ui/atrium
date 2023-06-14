@@ -1,6 +1,6 @@
 {
   "name": "@sv-components/mono",
-  "version": "0.1.6-dev",
+  "version": "0.1.6-dev.0",
   "description": "",
   "exports": {
     "./components/dropdown": {
