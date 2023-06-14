@@ -1,4 +1,5 @@
 stages:
+  - test
   - publish
   - library
 
@@ -52,7 +53,8 @@ publish:
     - npm version patch
     - npm publish
     - git push --tags -o ci.skip
-    - git push origin develop -o ci.skip
+    - git push origin HEAD:main -o ci.skip
+    - git push origin HEAD:develop -o ci.skip
 
 publish-dev:
   stage: publish
@@ -101,3 +103,14 @@ docs-dev:
           - public
     variables:
         PUBLIC_URL: "/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public"
+
+test:
+  stage: test
+  image: node:18-buster
+  before_script:
+    - npm i -g pnpm
+    - pnpm config set store-dir .pnpm-store
+  script:
+    - pnpm i
+    - pnpm build
+    - pnpm test
