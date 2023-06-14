@@ -53,7 +53,8 @@ publish:
     - npm version patch
     - npm publish
     - git push --tags -o ci.skip
-    - git push origin develop -o ci.skip
+    - git push origin HEAD:main -o ci.skip
+    - git push origin HEAD:develop -o ci.skip
 
 publish-dev:
   stage: publish
