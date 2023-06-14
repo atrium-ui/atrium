@@ -1,4 +1,5 @@
 stages:
+  - test
   - publish
   - library
 
@@ -101,3 +102,10 @@ docs-dev:
           - public
     variables:
         PUBLIC_URL: "/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public"
+
+test:
+  stage: test
+  image: node:18-buster
+  script:
+    - pnpm i
+    - pnpm build
