@@ -45,6 +45,7 @@ publish:
     - pnpm config set store-dir .pnpm-store
     - git config user.email "gitlab@s-v.de"
     - git config user.name "CI"
+    - git remote remove gitlab_origin
     - git remote add gitlab_origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
   script:
     - pnpm i
@@ -65,6 +66,7 @@ publish-dev:
     - pnpm config set store-dir .pnpm-store
     - git config user.email "gitlab@s-v.de"
     - git config user.name "CI"
+    - git remote remove gitlab_origin
     - git remote add gitlab_origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
   script:
     - pnpm i
