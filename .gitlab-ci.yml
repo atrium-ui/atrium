@@ -46,7 +46,9 @@ publish:
   script:
     - pnpm i
     - pnpm build
+    - npm version patch
     - npm publish
+    - git push --tags
 
 publish-dev:
   stage: publish
