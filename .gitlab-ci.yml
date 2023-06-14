@@ -109,3 +109,4 @@ test:
   script:
     - pnpm i
     - pnpm build
+    - pnpm test
