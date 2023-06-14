@@ -48,7 +48,7 @@ publish:
     - pnpm build
     - npm version patch
     - npm publish
-    - git push --tags
+    - git push --tags -o ci.skip
 
 publish-dev:
   stage: publish
@@ -60,12 +60,15 @@ publish-dev:
   before_script:
     - npm i -g pnpm
     - pnpm config set store-dir .pnpm-store
+    - git config user.email "gitlab@s-v.de"
+    - git config user.name "CI"
+    - git remote add gitlab_origin https://oauth2:$CI_JOB_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
   script:
     - pnpm i
     - pnpm build
     - npm version prerelease
     - npm publish --tag dev
-    - git push --tags
+    - git push gitlab_origin --tags -o ci.skip
 
 docs-dev:
     environment:
