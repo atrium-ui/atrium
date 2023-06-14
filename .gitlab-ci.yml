@@ -53,6 +53,7 @@ publish:
     - npm version patch
     - npm publish
     - git push --tags -o ci.skip
+    - git push gitlab_origin develop -o ci.skip
 
 publish-dev:
   stage: publish
@@ -74,6 +75,7 @@ publish-dev:
     - npm version prerelease
     - npm publish --tag dev
     - git push gitlab_origin --tags -o ci.skip
+    - git push gitlab_origin develop -o ci.skip
 
 docs-dev:
     environment:
