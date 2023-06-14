@@ -82,22 +82,6 @@ importers:
         specifier: ^3.0.4
         version: 3.0.4
 
-  components/animation:
-    dependencies:
-      '@rive-app/canvas':
-        specifier: ^1.0.95
-        version: 1.0.97
-      '@rive-app/canvas-advanced-single':
-        specifier: ^1.0.94
-        version: 1.0.94
-      lit:
-        specifier: ^2.4.1
-        version: 2.5.0
-    devDependencies:
-      tsup:
-        specifier: ^6.5.0
-        version: 6.5.0(typescript@4.9.4)
-
   components/collapsable:
     dependencies:
       lit:
@@ -127,22 +111,6 @@ importers:
         specifier: ^2.9.15
         version: 2.9.15
 
-  components/input-slider:
-    dependencies:
-      lit:
-        specifier: ^2.2.1
-        version: 2.5.0
-
-  components/lazymedia:
-    dependencies:
-      lit:
-        specifier: ^2.2.7
-        version: 2.5.0
-    devDependencies:
-      vite:
-        specifier: ^2.9.14
-        version: 2.9.15
-
   components/progress-circle:
     dependencies:
       lit:
@@ -152,6 +120,12 @@ importers:
       vite:
         specifier: ^2.9.15
         version: 2.9.15
+
+  components/range:
+    dependencies:
+      lit:
+        specifier: ^2.2.1
+        version: 2.5.0
 
   components/select:
     dependencies:
@@ -172,12 +146,6 @@ importers:
       vite:
         specifier: ^2.9.13
         version: 2.9.15
-
-  components/switch:
-    dependencies:
-      lit:
-        specifier: ^2.5.0
-        version: 2.5.0
 
 packages:
 
@@ -652,14 +620,6 @@ packages:
   /@polka/url@1.0.0-next.21:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
     dev: true
-
-  /@rive-app/canvas-advanced-single@1.0.94:
-    resolution: {integrity: sha512-qwISAED82I2sg7nGj+8HFltvFIGycNeM93gQEPTjHbeYCO3HXsDIQuRUNu+L23WGMVLZbMSoKHRx7Wke7Z4MsQ==}
-    dev: false
-
-  /@rive-app/canvas@1.0.97:
-    resolution: {integrity: sha512-NpA/z8FW/ktIghJSeZB/ySgG3H+TMhzFC5tnotKuFnxbzhH4qyKk+6FHM7BIjBKhBQ10vHnf45kUrLTRArfQhA==}
-    dev: false
 
   /@tootallnate/once@2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
