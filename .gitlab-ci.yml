@@ -30,28 +30,13 @@ docs:
     paths:
       - public
 
-# publish:
-#   stage: publish
-#   image: node:18-buster
-#   only:
-#     - tags
-#   except:
-#     - branches
-#   variables:
-#     GITLAB_NPM_REGISTRY_TOKEN: ${CI_JOB_TOKEN}
-#   before_script:
-#     - npm i -g pnpm
-#     - pnpm config set store-dir .pnpm-store
-#   script:
-#     - pnpm i
-#     - pnpm build
-#     - npm publish
-
-publish-dev:
+publish:
   stage: publish
   image: node:18-buster
   only:
-      - develop
+    - tags
+  except:
+    - branches
   when: manual
   variables:
     GITLAB_NPM_REGISTRY_TOKEN: ${CI_JOB_TOKEN}
@@ -61,7 +46,22 @@ publish-dev:
   script:
     - pnpm i
     - pnpm build
-    - npm version preminor --no-git-tag-version
+    - npm publish
+
+publish-dev:
+  stage: publish
+  image: node:18-buster
+  only:
+      - develop
+  variables:
+    GITLAB_NPM_REGISTRY_TOKEN: ${CI_JOB_TOKEN}
+  before_script:
+    - npm i -g pnpm
+    - pnpm config set store-dir .pnpm-store
+  script:
+    - pnpm i
+    - pnpm build
+    - npm version prerelease
     - npm publish --tag dev
     - git push --tags
 
