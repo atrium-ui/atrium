@@ -106,6 +106,9 @@ docs-dev:
 test:
   stage: test
   image: node:18-buster
+  before_script:
+    - npm i -g pnpm
+    - pnpm config set store-dir .pnpm-store
   script:
     - pnpm i
     - pnpm build
