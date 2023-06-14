@@ -1,6 +1,6 @@
 stages:
-  - library
   - publish
+  - library
 
 docs:
   stage: library
@@ -43,6 +43,9 @@ publish:
   before_script:
     - npm i -g pnpm
     - pnpm config set store-dir .pnpm-store
+    - git config user.email "gitlab@s-v.de"
+    - git config user.name "CI"
+    - git remote add gitlab_origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
   script:
     - pnpm i
     - pnpm build
@@ -62,7 +65,7 @@ publish-dev:
     - pnpm config set store-dir .pnpm-store
     - git config user.email "gitlab@s-v.de"
     - git config user.name "CI"
-    - git remote add gitlab_origin https://oauth2:$CI_JOB_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
+    - git remote add gitlab_origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
   script:
     - pnpm i
     - pnpm build
