@@ -1,8 +1,8 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 
-@customElement("input-slider")
-export class InputSlider extends LitElement {
+@customElement("input-range")
+export class Range extends LitElement {
   static get styles() {
     return css`
       :host {

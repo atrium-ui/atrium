@@ -16,104 +16,13 @@ We use the lit library to simplify development of WebComponents. It provieds fas
 
 - [eslint](vscode:extension/dbaeumer.vscode-eslint)
 - [prettier](vscode:extension/esbenp.prettier-vscode)
-- [Prettier ESLint](vscode:extension/rvest.vs-code-prettier-eslint)
 - [lit-plugin](vscode:extension/runem.lit-plugin)
 
-## Use in Frameworks
 
-### Nuxt3
+## Create a new component
 
-```json
-// /tsconfig.json
-{
-  "compilerOptions": {
-    "types": ["@atrium-ui/mono"]
-  }
-}
-```
+Run `pnpm new` in root to initialise a new component.
 
-```vue
-// pages/index.vue
-<template>
-  <aui-accordion-item>
-    <div slot="title">Title</div>
-    <div>Content</div>
-  </aui-accordion-item>
-</template>
-```
-```typescript
-import '@atrium-ui/mono/components/accordion';
-```
-
-### NextJS
-
-```json
-// /tsconfig.json
-{
-  "compilerOptions": {
-    "types": ["@atrium-ui/mono"]
-  }
-}
-```
-
-```typescript
-// pages/index.tsx
-if (typeof window !== "undefined") {
-  // only import on client render;
-  // This will not cause hydration errors,
-  //  since the components dont render any html in itself.
-  import("@atrium-ui/mono/components/accordion");
-}
-
-export default function Home() {
-  return (
-    <main>
-      <aui-accordion-item>
-        <div slot="title">Title</div>
-        <div>Content</div>
-      </aui-accordion-item>
-    </main>
-  );
-}
-```
-
-### SolidJS
-
-```json
-// /tsconfig.json
-{
-  "compilerOptions": {
-    "types": ["@atrium-ui/mono"]
-  }
-}
-```
-
-```typescript
-// /declaration.d.ts
-import "solid-js";
-
-declare module "solid-js" {
-  namespace JSX {
-    interface IntrinsicElements extends CustomElements {}
-  }
-}
-```
-
-```typescript
-// App.tsx
-import "@atrium-ui/mono/components/accordion";
-
-const App: Component = () => {
-  return (
-    <aui-accordion-item>
-      <div slot="title">Title</div>
-      <div>Contentx</div>
-    </aui-accordion-item>
-  );
-};
-
-export default App;
-```
 
 
 ## Branches
@@ -129,3 +38,4 @@ is a development branch. This branch will be merged into `main` when a new produ
 
 ### `component/<component-id>`
 is a feature branch for a single component. Theses will be merged into `develop`;
+

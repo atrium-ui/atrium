@@ -18,6 +18,7 @@
     "lit": "^2.5.0"
   },
   "devDependencies": {
+    "histoire": "^0.16.2",
     "vite": "^2.9.15"
   }
 }

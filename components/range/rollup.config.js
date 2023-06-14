@@ -4,7 +4,7 @@ export default [
   {
     input: "src/index.ts",
     output: {
-      file: "lib/sv-input-slider.js",
+      file: "lib/input-range.js",
       format: "esm",
     },
     plugins: [typescript()],

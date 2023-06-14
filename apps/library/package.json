@@ -11,12 +11,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@histoire/plugin-vue": "^0.15.8",
-    "@vitejs/plugin-vue": "^3.0.0",
-    "histoire": "^0.15.8",
-    "sass": "^1.57.0",
+    "@histoire/plugin-vue": "^0.16.1",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "histoire": "^0.16.2",
+    "sass": "^1.63.4",
     "txtgen": "^3.0.4",
-    "vite": "^3.0.0",
-    "vue": "^3.2.31"
+    "vue": "^3.3.4"
   }
 }

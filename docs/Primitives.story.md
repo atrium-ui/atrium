@@ -4,8 +4,15 @@ icon: 'carbon:share'
 title: 'Component Types'
 ---
 
-# Primitives
+# Component Types
 
-WIP
+Components fall into two categories.
 
-- primitive utility and ui components explained
+## Primitives
+
+Primitive components are the smallest elements more complex components can be broken down to. Things like the opening and closing mechanic of an accordion, excluding the title, content or style for example.
+
+## Ui
+
+Ui components are build out of primitive components, but dont have to be. Ideally though, the most basic functions of a Ui component are separated into primitive components for other components to utilise.
+

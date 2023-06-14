@@ -4,40 +4,42 @@ import "../src";
 
 <template>
   <Story>
-    <h2>Full width centerd</h2>
-    <sv-slider class="full" centered>
-      <div class="slide-item">
-        <placeholder></placeholder>
-      </div>
-      <div class="slide-item">
-        <placeholder></placeholder>
-      </div>
-      <div class="slide-item">
-        <placeholder></placeholder>
-      </div>
-    </sv-slider>
+    <Variant title="Full width">
+      <sv-slider class="full" centered>
+        <div class="slide-item">
+          <placeholder></placeholder>
+        </div>
+        <div class="slide-item">
+          <placeholder></placeholder>
+        </div>
+        <div class="slide-item">
+          <placeholder></placeholder>
+        </div>
+      </sv-slider>
+    </Variant>
 
-    <h2>Fixed width multiple</h2>
-    <sv-slider class="three">
-      <div class="slide-item">
-        <placeholder></placeholder>
-      </div>
-      <div class="slide-item">
-        <placeholder></placeholder>
-      </div>
-      <div class="slide-item">
-        <placeholder></placeholder>
-      </div>
-      <div class="slide-item">
-        <placeholder></placeholder>
-      </div>
-      <div class="slide-item">
-        <placeholder></placeholder>
-      </div>
-      <div class="slide-item">
-        <placeholder></placeholder>
-      </div>
-    </sv-slider>
+    <Variant title="Fixed width items">
+      <sv-slider class="three">
+        <div class="slide-item">
+          <placeholder></placeholder>
+        </div>
+        <div class="slide-item">
+          <placeholder></placeholder>
+        </div>
+        <div class="slide-item">
+          <placeholder></placeholder>
+        </div>
+        <div class="slide-item">
+          <placeholder></placeholder>
+        </div>
+        <div class="slide-item">
+          <placeholder></placeholder>
+        </div>
+        <div class="slide-item">
+          <placeholder></placeholder>
+        </div>
+      </sv-slider>
+    </Variant>
   </Story>
 </template>
 

@@ -3,7 +3,7 @@
 -->
 
 <script lang="ts" setup>
-import "@sv-components/mono/examples/lit-component";
+import "../src/index.js";
 </script>
 
 <template>

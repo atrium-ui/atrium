@@ -1,9 +1,9 @@
 {
-  "name": "@atrium-ui/input-slider",
+  "name": "@atrium-ui/input-range",
   "version": "1.0.4",
   "description": "",
   "main": "src/index.ts",
-  "module": "dist/input-slider.js",
+  "module": "dist/input-range.js",
   "types": "src/index.ts",
   "scripts": {
     "dev": "start-storybook -p 6005",

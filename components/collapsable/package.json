@@ -17,9 +17,7 @@
     "lit": "^2.5.0"
   },
   "devDependencies": {
-    "@histoire/plugin-vue": "^0.11.9",
-    "@vitejs/plugin-vue": "^3.0.0",
-    "histoire": "^0.11.9",
+    "histoire": "^0.16.2",
     "tsup": "^6.5.0"
   },
   "files": [

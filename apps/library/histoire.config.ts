@@ -7,16 +7,16 @@ export default defineConfig({
   setupFile: "src/histoire.setup.ts",
   outDir: "dist",
   routerMode: "hash",
-  storyMatch: ["../../components/*/stories/*.story.vue"],
+  storyMatch: ["./stories/*.story.vue", "../../components/*/stories/*.story.vue"],
   theme: {
     title: "SV Components",
     logo: {
-      square: "/src/img/logo.svg",
-      light: "/src/img/logo.svg",
-      dark: "/src/img/logo.svg",
+      square: "./src/img/logo.svg",
+      light: "./src/img/logo.svg",
+      dark: "./src/img/logo.svg",
     },
     colors: {
-      gray: defaultColors.zinc,
+      gray: defaultColors.neutral,
       primary: defaultColors.amber,
     },
   },
