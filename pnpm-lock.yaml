@@ -124,6 +124,19 @@ importers:
         specifier: ^6.5.0
         version: 6.5.0(typescript@4.9.4)
 
+  components/pager:
+    dependencies:
+      lit:
+        specifier: ^2.5.0
+        version: 2.7.5
+    devDependencies:
+      histoire:
+        specifier: ^0.16.2
+        version: 0.16.2(sass@1.63.4)(vite@4.3.9)
+      tsup:
+        specifier: ^6.7.0
+        version: 6.7.0(typescript@4.9.4)
+
   components/progress-circle:
     dependencies:
       lit:
