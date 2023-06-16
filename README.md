@@ -8,15 +8,15 @@ Install all dependencies:
 `pnpm i`
 
 Run visual docs:
-`npm library:dev`
+`pnpm library:dev`
 
 ### Other commands
 
 Build all packages:
-`npm run build`
+`pnpm build`
 
 Init new component:
-`npm new`
+`pnpm new`
 
 
 ## Components
