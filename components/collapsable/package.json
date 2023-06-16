@@ -8,8 +8,7 @@
   "scripts": {
     "dev": "histoire dev",
     "build": "tsup --format esm,cjs --dts src/index.ts",
-    "test": "tsc --noEmit",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
+    "test": "vitest run"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +16,7 @@
     "lit": "^2.5.0"
   },
   "devDependencies": {
+    "txtgen": "^3.0.4",
     "histoire": "^0.16.2",
     "tsup": "^6.5.0"
   },
