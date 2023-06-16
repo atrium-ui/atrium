@@ -3,34 +3,6 @@ stages:
   - publish
   - library
 
-docs:
-  stage: library
-  image: node:18-buster
-  before_script:
-    - npm i -g pnpm
-    - pnpm config set store-dir .pnpm-store
-  script:
-    - pnpm install # install dependencies
-    - pnpm build
-    - mv apps/library/dist public
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-    paths:
-      - .pnpm-store
-  only:
-    - tags
-  except:
-    - branches
-  when: manual
-  environment:
-    name: main
-    url: https://sv-components.pages.s-v.de/mono
-  artifacts:
-    paths:
-      - public
-
 publish:
   stage: publish
   image: node:18-buster
@@ -61,6 +33,7 @@ publish-dev:
   image: node:18-buster
   only:
       - develop
+  when: manual
   variables:
     GITLAB_NPM_REGISTRY_TOKEN: ${CI_JOB_TOKEN}
   before_script:
@@ -77,6 +50,35 @@ publish-dev:
     - git push origin --tags -o ci.skip
     - git push origin HEAD:develop -o ci.skip
 
+docs:
+  stage: library
+  image: node:18-buster
+  before_script:
+    - npm i -g pnpm
+    - pnpm config set store-dir .pnpm-store
+  script:
+    - pnpm install # install dependencies
+    - pnpm build
+    - pnpm library:build
+    - mv apps/library/dist public
+  cache:
+    key:
+      files:
+        - pnpm-lock.yaml
+    paths:
+      - .pnpm-store
+  only:
+    - tags
+  except:
+    - branches
+  when: manual
+  environment:
+    name: main
+    url: https://sv-components.pages.s-v.de/mono
+  artifacts:
+    paths:
+      - public
+
 docs-dev:
     environment:
         name: develop
@@ -89,6 +91,7 @@ docs-dev:
     script:
       - pnpm install # install dependencies
       - pnpm build
+      - pnpm library:build
       - mv apps/library/dist public
     only:
       - develop
