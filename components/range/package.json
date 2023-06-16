@@ -7,8 +7,7 @@
   "types": "src/index.ts",
   "scripts": {
     "dev": "start-storybook -p 6005",
-    "lint": "eslint --ext .ts .",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(ts|json)\""
+    "lint": "eslint --ext .ts ."
   },
   "author": "",
   "license": "ISC",

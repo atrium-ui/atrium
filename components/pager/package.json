@@ -7,9 +7,7 @@
   "module": "dist/pager.es.js",
   "types": "src/index.ts",
   "scripts": {
-    "build": "tsup --format esm,cjs --dts src/index.ts",
-    "test": "tsc --noEmit",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
+    "build": "tsup --format esm,cjs --dts src/index.ts"
   },
   "author": "",
   "license": "ISC",

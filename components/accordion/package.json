@@ -7,9 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "histoire dev",
-    "build": "tsup --format esm,cjs --dts src/index.ts",
-    "test": "tsc --noEmit",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
+    "build": "tsup --format esm,cjs --dts src/index.ts"
   },
   "author": "",
   "license": "ISC",

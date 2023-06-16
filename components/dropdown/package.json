@@ -8,8 +8,7 @@
   "scripts": {
     "dev": "histoire dev",
     "build": "vite build",
-    "lint": "eslint --ext .ts .",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
+    "lint": "eslint --ext .ts ."
   },
   "author": "",
   "license": "ISC",

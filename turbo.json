@@ -4,13 +4,13 @@
     "build": {
       "outputs": ["dist/**"]
     },
-    "format": {
-      "outputs": []
-    },
     "dev": {
       "outputs": []
     },
     "lint": {
+      "outputs": []
+    },
+    "test": {
       "outputs": []
     }
   }
