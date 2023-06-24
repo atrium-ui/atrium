@@ -1,4 +1,4 @@
-import "@sv-components/mono/components/collapsable";
+import "@sv-components/mono/components/expandable";
 import { html, css, LitElement } from "lit";
 import { property } from "lit/decorators.js";
 
@@ -19,11 +19,16 @@ export class AccordionItem extends LitElement {
         .item-outer-content {
           --accordion-item-height: 0;
           --accordion-content-height: 0;
-          --accordion-transition-duration: calc((var(--accordion-content-height)) * 0.001s);
+          --accordion-transition-duration: calc(
+            (var(--accordion-content-height)) * 0.001s
+          );
 
           height: calc(var(--accordion-item-height) * 1px);
           transition: height
-            calc(var(--accordion-transition-duration) * var(--accordion-transition-duration-scale))
+            calc(
+              var(--accordion-transition-duration) *
+                var(--accordion-transition-duration-scale)
+            )
             ease;
           position: relative;
           overflow: hidden;
@@ -80,9 +85,9 @@ export class AccordionItem extends LitElement {
         </slot>
       </div>
 
-      <sv-collapsable ?opened="${this.opened}">
+      <sv-expandable ?opened="${this.opened}">
         <slot></slot>
-      </sv-collapsable>
+      </sv-expandable>
     `;
   }
 }

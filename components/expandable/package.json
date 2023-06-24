@@ -1,9 +1,9 @@
 {
-  "name": "@sv-components/collapsable",
+  "name": "@sv-components/expandable",
   "version": "2.0.3",
   "description": "",
-  "main": "dist/collapsable.js",
-  "module": "dist/collapsable.mjs",
+  "main": "dist/expandable.js",
+  "module": "dist/expandable.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "histoire dev",
@@ -24,7 +24,7 @@
   ],
   "tsup": {
     "entry": {
-      "collapsable": "src/index.ts"
+      "expandable": "src/index.ts"
     },
     "sourcemap": true,
     "clean": true

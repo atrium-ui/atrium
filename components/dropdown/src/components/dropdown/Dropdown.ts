@@ -28,7 +28,7 @@ export class Dropdown extends LitElement {
         top: auto;
         width: 100%;
       }
-      sv-collapsable {
+      sv-expandable {
         display: block;
 
         --transition-speed: var(--dropdown-speed);
@@ -230,7 +230,10 @@ export class Dropdown extends LitElement {
   }
 
   private getValueOfOption(optionElement: OptionElement) {
-    return optionElement.getAttribute("value") || this.options.indexOf(optionElement).toString();
+    return (
+      optionElement.getAttribute("value") ||
+      this.options.indexOf(optionElement).toString()
+    );
   }
 
   private getOptionByValue(value: string | undefined) {
@@ -262,11 +265,11 @@ export class Dropdown extends LitElement {
     return html`
       <slot name="input" @click=${this.onClick}></slot>
       <div class="dropdown-container" part="dropdown">
-        <sv-collapsable ?opened="${this.opened}">
+        <sv-expandable ?opened="${this.opened}">
           <div class="dropdown" part="options">
             <slot @click=${this.onOptionsClick} @slotchange=${this.onSlotChange}></slot>
           </div>
-        </sv-collapsable>
+        </sv-expandable>
       </div>
     `;
   }

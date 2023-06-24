@@ -11,9 +11,9 @@
       "import": "./components/accordion/dist/accordion.mjs",
       "require": "./components/accordion/dist/dist/accordion.js"
     },
-    "./components/collapsable": {
-      "import": "./components/collapsable/dist/collapsable.mjs",
-      "require": "./components/collapsable/dist/dist/collapsable.js"
+    "./components/expandable": {
+      "import": "./components/expandable/dist/expandable.mjs",
+      "require": "./components/expandable/dist/dist/expandable.js"
     }
   },
   "scripts": {

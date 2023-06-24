@@ -23,14 +23,19 @@ const state = reactive({
         {{ state.p1 }}
       </p>
 
-      <sv-collapsable @item-opened-change="logEvent('open change', $event)" :opened="state.opened">
+      <sv-expandable
+        @item-opened-change="logEvent('open change', $event)"
+        :opened="state.opened"
+      >
         <p>
           {{ state.p2 }}
         </p>
-      </sv-collapsable>
+      </sv-expandable>
 
       <div class="foot">
-        <button @click="toggleOpen">{{ state.opened ? "show less" : "show more" }}</button>
+        <button @click="toggleOpen">
+          {{ state.opened ? "show less" : "show more" }}
+        </button>
       </div>
 
       <template #controls>
@@ -39,22 +44,35 @@ const state = reactive({
     </Variant>
     <Variant title="list">
       <ul>
-        <li>Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes</li>
-        <li>Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes</li>
-        <li>Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes</li>
+        <li>
+          Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes
+        </li>
+        <li>
+          Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes
+        </li>
+        <li>
+          Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes
+        </li>
       </ul>
 
-      <sv-collapsable @item-opened-change="logEvent('open change', $event)" :opened="state.opened">
+      <sv-expandable
+        @item-opened-change="logEvent('open change', $event)"
+        :opened="state.opened"
+      >
         <ul>
-          <li>Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes</li>
+          <li>
+            Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes
+          </li>
         </ul>
         <ul>
           <li>Cum sociis natoque penatibus et magnis dis parturient montes</li>
         </ul>
-      </sv-collapsable>
+      </sv-expandable>
 
       <div class="foot">
-        <button @click="toggleOpen">{{ state.opened ? "show less" : "show more" }}</button>
+        <button @click="toggleOpen">
+          {{ state.opened ? "show less" : "show more" }}
+        </button>
       </div>
 
       <template #controls>
@@ -81,14 +99,14 @@ ul {
 </style>
 
 <docs lang="md">
-# collapsable
+# expandable
 
-A more basic element of an accordion that only includes the animation and scroll behavios for collapsable content.
+A more basic element of an accordion that only includes the animation and scroll behavios for expandable content.
 
 ## Properties
 
 ```typescript
 // Opened or closed (read and write)
-<sv-collapsable opened: Boolean; />
+<sv-expandable opened: Boolean; />
 ```
 </docs>
