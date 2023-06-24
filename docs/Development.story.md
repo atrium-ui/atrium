@@ -27,14 +27,12 @@ Run `pnpm new` in root to initialise a new component.
 
 ## Branches
 
-### `dev`
-is a published branch for development versions.
-
 ### `main`
 is a publish branch for production versions.
 
 ### `develop`
-is a development branch. This branch will be merged into `main` when a new production version will be published.
+is the main development branch wich also publishes pre-release versions.
+It will be merged into `main` when a new production version will be published.
 
 ### `component/<component-id>`
 is a feature branch for a single component. Theses will be merged into `develop`;
