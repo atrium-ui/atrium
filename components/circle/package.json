@@ -1,5 +1,5 @@
 {
-  "name": "@a-components/circle",
+  "name": "@sv-components/circle",
   "version": "1.0.10",
   "description": "",
   "main": "dist/circle.cjs.js",

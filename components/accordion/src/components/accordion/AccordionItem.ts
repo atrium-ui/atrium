@@ -1,4 +1,4 @@
-import "@a-components/mono/components/expandable";
+import "@sv-components/mono/components/expandable";
 import { html, css, LitElement } from "lit";
 import { property } from "lit/decorators.js";
 

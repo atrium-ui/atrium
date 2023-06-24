@@ -75,7 +75,7 @@ importers:
 
   components/accordion:
     dependencies:
-      '@a-components/mono':
+      '@sv-components/mono':
         specifier: workspace:^
         version: link:../..
       lit:
@@ -91,7 +91,7 @@ importers:
 
   components/dropdown:
     dependencies:
-      '@a-components/mono':
+      '@sv-components/mono':
         specifier: workspace:^
         version: link:../..
       lit:

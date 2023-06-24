@@ -9,7 +9,7 @@ export default defineConfig({
       formats: ["es", "cjs"],
     },
     rollupOptions: {
-      external: /^lit|^@a-components/,
+      external: /^lit|^@sv-components/,
     },
   },
 });

@@ -10,19 +10,19 @@ title: 'Installation'
 
 ```ini
 # .npmrc
-@a-components:registry=https://gitlab.s-v.de/api/v4/packages/npm/
+@sv-components:registry=https://gitlab.s-v.de/api/v4/packages/npm/
 '//gitlab.s-v.de/api/v4/packages/npm/:_authToken'="glpat-FMDSCh9zyLK4vS6kd4JB"
 ```
 
 2. Install the library like this
 ```bash
-pnpm i @a-components/mono
+pnpm i @sv-components/mono
 ```
 
 3. Import a component
 
 ```typescript
-import '@a-components/mono/components/[component]';
+import '@sv-components/mono/components/[component]';
 ```
 
 4. Use it any framework:
