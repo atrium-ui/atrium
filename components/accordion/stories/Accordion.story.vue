@@ -12,11 +12,11 @@ const state = reactive({
 
 <template>
   <Story>
-    <sv-accordion
+    <a-accordion
       @item-opened-change="logEvent('Item Toggle', $event)"
       :exclusive="state.exclusive"
     >
-      <sv-accordion-item v-for="(item, i) of 3" :key="i" :opened="i === 0">
+      <a-accordion-item v-for="(item, i) of 3" :key="i" :opened="i === 0">
         <div slot="title" class="titlebar">
           <div class="headline">Lorem Ipsum</div>
           <div class="collapse-icon">
@@ -39,8 +39,8 @@ const state = reactive({
           </div>
         </div>
         <div class="content">{{ paragraph(4) }}</div>
-      </sv-accordion-item>
-    </sv-accordion>
+      </a-accordion-item>
+    </a-accordion>
 
     <template #controls>
       <HstCheckbox title="Exclusive" v-model.number="state.exclusive" />
@@ -53,7 +53,7 @@ const state = reactive({
 </style>
 
 <docs lang="md">
-# sv-accordion
+# a-accordion
 
 Basic Accordion component.
 

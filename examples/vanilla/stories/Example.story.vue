@@ -8,12 +8,12 @@ import "../src/index.js";
 
 <template>
   <Story group="primitives">
-    <sv-example></sv-example>
+    <a-example></a-example>
   </Story>
 </template>
 
 <style scoped>
-sv-example {
+a-example {
   display: inline;
 }
 </style>

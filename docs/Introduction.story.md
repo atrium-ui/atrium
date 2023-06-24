@@ -4,7 +4,7 @@ icon: 'carbon:notebook'
 title: 'Introduction'
 ---
 
-# SV Components
+# The Atrium Library
 
 A collection of framework agnostic and functional web-components.
 

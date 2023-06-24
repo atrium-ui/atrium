@@ -23,14 +23,14 @@ const state = reactive({
         {{ state.p1 }}
       </p>
 
-      <sv-expandable
+      <a-expandable
         @item-opened-change="logEvent('open change', $event)"
         :opened="state.opened"
       >
         <p>
           {{ state.p2 }}
         </p>
-      </sv-expandable>
+      </a-expandable>
 
       <div class="foot">
         <button @click="toggleOpen">
@@ -55,7 +55,7 @@ const state = reactive({
         </li>
       </ul>
 
-      <sv-expandable
+      <a-expandable
         @item-opened-change="logEvent('open change', $event)"
         :opened="state.opened"
       >
@@ -67,7 +67,7 @@ const state = reactive({
         <ul>
           <li>Cum sociis natoque penatibus et magnis dis parturient montes</li>
         </ul>
-      </sv-expandable>
+      </a-expandable>
 
       <div class="foot">
         <button @click="toggleOpen">
@@ -107,6 +107,6 @@ A more basic element of an accordion that only includes the animation and scroll
 
 ```typescript
 // Opened or closed (read and write)
-<sv-expandable opened: Boolean; />
+<a-expandable opened: Boolean; />
 ```
 </docs>

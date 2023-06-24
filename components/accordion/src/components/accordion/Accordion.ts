@@ -33,8 +33,8 @@ export class Accordion extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "sv-accordion": Accordion;
+    "a-accordion": Accordion;
   }
 }
 
-customElements.define("sv-accordion", Accordion);
+customElements.define("a-accordion", Accordion);

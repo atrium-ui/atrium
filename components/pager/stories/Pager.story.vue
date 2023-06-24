@@ -12,7 +12,7 @@ const state = reactive({
 
 <template>
   <Story>
-    <sv-pager
+    <a-pager
       count="12"
       :current="state.current"
       @page-change="
@@ -20,11 +20,11 @@ const state = reactive({
           state.current = e.detail;
         }
       "
-    ></sv-pager>
+    ></a-pager>
   </Story>
 </template>
 
 <style scoped>
-sv-pager {
+a-pager {
 }
 </style>

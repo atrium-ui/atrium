@@ -1,7 +1,7 @@
 import { css, html, HTMLTemplateResult, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-@customElement("sv-pager")
+@customElement("a-pager")
 export class Pager extends LitElement {
   public static styles = css`
     .pagination {
@@ -128,7 +128,9 @@ export class Pager extends LitElement {
     return html`
       <div class="pagination c4">
         <button
-          class=${`pagination__arrow ${+this.current > 1 ? `pagination__arrow--shown` : ""}`}
+          class=${`pagination__arrow ${
+            +this.current > 1 ? `pagination__arrow--shown` : ""
+          }`}
           @click=${() => this.prevPage()}
         >
           <slot name="arrow-left"> < </slot>
@@ -154,7 +156,10 @@ export class Pager extends LitElement {
           ${this.showSuffix()
             ? html`
                 <span class="pagination__spacer"> ... </span>
-                <span class="pagination__item" @click=${() => this.goToPage(this.lastPageIndex())}>
+                <span
+                  class="pagination__item"
+                  @click=${() => this.goToPage(this.lastPageIndex())}
+                >
                   ${this.count}
                 </span>
               `

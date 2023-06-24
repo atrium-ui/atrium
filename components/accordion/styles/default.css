@@ -1,4 +1,4 @@
-sv-accordion-item {
+a-accordion-item {
   margin-top: 4px;
   background: #eee;
   border-radius: 6px;
@@ -43,12 +43,12 @@ sv-accordion-item {
   transition: opacity 0.2s ease, transform 0.2s ease 0.02s;
 }
 
-sv-accordion-item:not([opened]) .plus-icon {
+a-accordion-item:not([opened]) .plus-icon {
   transform: rotate(90deg);
 }
-sv-accordion-item:not([opened]) .minus-icon {
+a-accordion-item:not([opened]) .minus-icon {
   transform: rotate(90deg);
 }
-sv-accordion-item[opened] .plus-icon {
+a-accordion-item[opened] .plus-icon {
   opacity: 0;
 }

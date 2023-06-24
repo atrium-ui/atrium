@@ -54,7 +54,7 @@ export default defineConfig({
       vue({
         template: {
           compilerOptions: {
-            isCustomElement: (tag: string) => tag.startsWith("sv-"),
+            isCustomElement: (tag: string) => tag.startsWith("a-"),
           },
         },
       }),

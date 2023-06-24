@@ -516,4 +516,4 @@ export class Track extends LitElement {
   }
 }
 
-customElements.define("sv-track", Track);
+customElements.define("a-track", Track);

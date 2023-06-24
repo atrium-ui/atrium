@@ -72,7 +72,7 @@ docs:
   when: manual
   environment:
     name: main
-    url: https://sv-components.pages.s-v.de/mono
+    url: https://a-components.pages.s-v.de/mono
   artifacts:
     paths:
       - public
@@ -80,7 +80,7 @@ docs:
 docs-dev:
     environment:
         name: develop
-        url: "https://sv-components.pages.s-v.de/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
+        url: "https://a-components.pages.s-v.de/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
     stage: library
     image: node:18-buster
     before_script:

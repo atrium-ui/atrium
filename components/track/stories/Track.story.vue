@@ -18,7 +18,7 @@ const centeredSliderIndex = ref([0]);
 <template>
   <Story group="primitives" icon-color="#8B5CF6">
     <Variant title="Default">
-      <sv-track snap class="default">
+      <a-track snap class="default">
         <div tabindex="0" class="cell" style="background: lime">1a</div>
         <div tabindex="0" class="cell">2a</div>
         <div tabindex="0" class="cell">3a</div>
@@ -39,11 +39,11 @@ const centeredSliderIndex = ref([0]);
         <div class="cell ghost">8b</div>
         <div class="cell ghost">9b</div>
         <div class="cell ghost">10b</div>
-      </sv-track>
+      </a-track>
     </Variant>
 
     <Variant title="Infinite">
-      <sv-track loop autorun class="infinite">
+      <a-track loop autorun class="infinite">
         <div tabindex="0" class="cell">1a</div>
         <div tabindex="0" class="cell">2a</div>
         <div tabindex="0" class="cell">3a</div>
@@ -64,12 +64,12 @@ const centeredSliderIndex = ref([0]);
         <div class="cell ghost">8b</div>
         <div class="cell ghost">9b</div>
         <div class="cell ghost">10b</div>
-      </sv-track>
+      </a-track>
     </Variant>
 
     <Variant title="Centered">
       <div class="centered">
-        <sv-track
+        <a-track
           ref="centeredSlider"
           snap
           @change="
@@ -82,9 +82,9 @@ const centeredSliderIndex = ref([0]);
           <div class="cell">Home</div>
           <div class="cell">Not Home</div>
           <div class="cell">Their Home</div>
-        </sv-track>
+        </a-track>
 
-        <sv-select
+        <a-select
           class="dots"
           :value="[centeredSliderIndex]"
           @change="
@@ -97,7 +97,7 @@ const centeredSliderIndex = ref([0]);
           <button></button>
           <button></button>
           <button></button>
-        </sv-select>
+        </a-select>
 
         <div class="arrow arrow-prev" @click="(e) => $refs.centeredSlider.moveBy(-1)">
           &lt;
@@ -109,7 +109,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Overflow">
-      <sv-track snap overflow="full" class="overflow">
+      <a-track snap overflow="full" class="overflow">
         <div class="inner">
           <div class="cell">cell</div>
         </div>
@@ -122,11 +122,11 @@ const centeredSliderIndex = ref([0]);
         <div class="inner">
           <div class="cell">cell</div>
         </div>
-      </sv-track>
+      </a-track>
     </Variant>
 
     <Variant title="Tabs">
-      <sv-track class="tabs">
+      <a-track class="tabs">
         <div class="cell">Home</div>
         <div class="cell">Videos</div>
         <div class="cell">Career</div>
@@ -134,11 +134,11 @@ const centeredSliderIndex = ref([0]);
         <div class="cell">About</div>
         <div class="cell">Lorem</div>
         <div class="cell">Ipsum</div>
-      </sv-track>
+      </a-track>
     </Variant>
 
     <Variant title="Variable item width">
-      <sv-track class="special">
+      <a-track class="special">
         <div class="cell first">1a</div>
         <div class="cell">2a</div>
         <div class="cell">3a</div>
@@ -146,7 +146,7 @@ const centeredSliderIndex = ref([0]);
         <div class="cell">5a</div>
         <div class="cell">6a</div>
         <div class="cell">7a</div>
-      </sv-track>
+      </a-track>
     </Variant>
   </Story>
 </template>
@@ -173,7 +173,7 @@ const centeredSliderIndex = ref([0]);
   }
 }
 
-sv-track {
+a-track {
   padding: 8px;
   box-sizing: border-box;
 }
@@ -222,7 +222,7 @@ sv-track {
 
   --width: 800px;
 
-  sv-track {
+  a-track {
     padding-left: calc(50% - (var(--width) / 2));
   }
 

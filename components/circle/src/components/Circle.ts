@@ -84,4 +84,4 @@ declare global {
   }
 }
 
-customElements.define("sv-circle", Circle);
+customElements.define("a-circle", Circle);

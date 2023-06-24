@@ -1,4 +1,4 @@
-# sv-input-slider
+# a-input-slider
 
 A basic fully custom slider component.
 

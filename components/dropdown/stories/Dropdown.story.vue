@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import "@sv-components/mono/components/dropdown";
+import "@a-components/mono/components/dropdown";
 import "../styles/default.scss";
 
 import { logEvent } from "histoire/client";
@@ -31,7 +31,7 @@ const exampleOptions = [
 <template>
   <Story title="Dropdown">
     <Variant title="Default">
-      <sv-dropdown
+      <a-dropdown
         @select="handleSelect"
         @open="logEvent('Open', e)"
         @close="logEvent('Close', e)"
@@ -39,21 +39,21 @@ const exampleOptions = [
       >
         <button slot="input">{{ state.value || "Select" }}</button>
 
-        <sv-option>Option 1</sv-option>
-        <sv-option>Option 2</sv-option>
-        <sv-option>Option 3</sv-option>
-        <sv-option>Option 4</sv-option>
-        <sv-option>Option 5</sv-option>
-        <sv-option>Option 6</sv-option>
-        <sv-option>Option 7</sv-option>
-        <sv-option>Option 8</sv-option>
-        <sv-option>Option 9</sv-option>
-        <sv-option>Option 10</sv-option>
-      </sv-dropdown>
+        <a-option>Option 1</a-option>
+        <a-option>Option 2</a-option>
+        <a-option>Option 3</a-option>
+        <a-option>Option 4</a-option>
+        <a-option>Option 5</a-option>
+        <a-option>Option 6</a-option>
+        <a-option>Option 7</a-option>
+        <a-option>Option 8</a-option>
+        <a-option>Option 9</a-option>
+        <a-option>Option 10</a-option>
+      </a-dropdown>
     </Variant>
 
     <Variant title="Flyup">
-      <sv-dropdown
+      <a-dropdown
         @select="handleSelect"
         @open="logEvent('Open', e)"
         @close="logEvent('Close', e)"
@@ -62,27 +62,32 @@ const exampleOptions = [
       >
         <button slot="input">{{ state.value || "Select" }}</button>
 
-        <sv-option>Option 1</sv-option>
-        <sv-option>Option 2</sv-option>
-        <sv-option>Option 3</sv-option>
-        <sv-option>Option 4</sv-option>
-        <sv-option>Option 5</sv-option>
-        <sv-option>Option 6</sv-option>
-        <sv-option>Option 7</sv-option>
-        <sv-option>Option 8</sv-option>
-      </sv-dropdown>
+        <a-option>Option 1</a-option>
+        <a-option>Option 2</a-option>
+        <a-option>Option 3</a-option>
+        <a-option>Option 4</a-option>
+        <a-option>Option 5</a-option>
+        <a-option>Option 6</a-option>
+        <a-option>Option 7</a-option>
+        <a-option>Option 8</a-option>
+      </a-dropdown>
     </Variant>
 
     <Variant title="Text Filter">
-      <sv-dropdown
+      <a-dropdown
         @select="handleSelect"
         @open="logEvent('Open', e)"
         @close="logEvent('Close', e)"
         style="margin-bottom: 300px"
       >
-        <input slot="input" v-model="state.value" @input="handleFilter" placeholder="Text" />
+        <input
+          slot="input"
+          v-model="state.value"
+          @input="handleFilter"
+          placeholder="Text"
+        />
 
-        <sv-option
+        <a-option
           v-for="option of exampleOptions.filter((opt) =>
             state.value
               ? opt.toLocaleLowerCase().indexOf(state.value.toLocaleLowerCase()) !== -1
@@ -90,9 +95,9 @@ const exampleOptions = [
           )"
           :key="option"
           :value="option"
-          >{{ option }}</sv-option
+          >{{ option }}</a-option
         >
-      </sv-dropdown>
+      </a-dropdown>
     </Variant>
 
     <!-- // Vareints of dropdowns  -->
@@ -106,39 +111,39 @@ Universal dropdown component
 
 ```tsx
 // If the dropdown should open upwards or downwards
-<sv-dropdown direction: 'down' | 'up'; />
+<a-dropdown direction: 'down' | 'up'; />
 ```
 
 ```tsx
 // The value or index of the selected option
 // If the option does not have a 'value' attribute, indexes will be used.
-<sv-dropdown selected: String; />
+<a-dropdown selected: String; />
 ```
 
 ```tsx
 // Open state of the dropdown
-<sv-dropdown opened: Boolean; />
+<a-dropdown opened: Boolean; />
 ```
 
 ```tsx
 // Prevents the dropdown from opening
-<sv-dropdown disabled: Boolean; />
+<a-dropdown disabled: Boolean; />
 ```
 
 ## Events
 
 ```tsx
 // Emitted after the dropdown closed
-<sv-dropdown @close />
+<a-dropdown @close />
 ```
 
 ```tsx
 // Emitted *before* the dropdown opens
-<sv-dropdown @open />
+<a-dropdown @open />
 ```
 
 ```tsx
 // Emitted after a option has been slected by Click or Enter key
-<sv-dropdown @select: ({ option: OptionElement; }) => void />
+<a-dropdown @select: ({ option: OptionElement; }) => void />
 ```
 </docs>

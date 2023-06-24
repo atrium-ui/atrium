@@ -70,8 +70,8 @@ export class Expandable extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "sv-expandable": Expandable;
+    "a-expandable": Expandable;
   }
 }
 
-customElements.define("sv-expandable", Expandable);
+customElements.define("a-expandable", Expandable);

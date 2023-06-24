@@ -1,4 +1,4 @@
-import "@sv-components/mono/components/expandable";
+import "@a-components/mono/components/expandable";
 import { html, css, LitElement } from "lit";
 import { property } from "lit/decorators.js";
 
@@ -85,19 +85,19 @@ export class AccordionItem extends LitElement {
         </slot>
       </div>
 
-      <sv-expandable ?opened="${this.opened}">
+      <a-expandable ?opened="${this.opened}">
         <slot></slot>
-      </sv-expandable>
+      </a-expandable>
     `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "sv-accordion-item": AccordionItem;
+    "a-accordion-item": AccordionItem;
   }
 }
 
 if (typeof window !== "undefined") {
-  window.customElements.define("sv-accordion-item", AccordionItem);
+  window.customElements.define("a-accordion-item", AccordionItem);
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@sv-components/accordion",
+  "name": "@a-components/accordion",
   "version": "1.4.0",
   "description": "",
   "main": "dist/accordion.js",
@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sv-components/mono": "workspace:^",
+    "@a-components/mono": "workspace:^",
     "lit": "^2.2.7"
   },
   "devDependencies": {

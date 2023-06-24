@@ -1,4 +1,4 @@
-sv-dropdown button {
+a-dropdown button {
 }
 
 button,
@@ -7,7 +7,7 @@ input {
   width: 250px;
   box-sizing: border-box;
 }
-sv-option {
+a-option {
   display: block;
   background: #eee;
   border: 2px solid lightgrey;
@@ -15,9 +15,9 @@ sv-option {
   box-sizing: border-box;
   cursor: pointer;
 }
-sv-option:hover {
+a-option:hover {
   border-color: grey;
 }
-sv-option[selected] {
+a-option[selected] {
   border-color: black;
 }

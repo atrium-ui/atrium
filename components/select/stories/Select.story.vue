@@ -4,22 +4,22 @@ import "../src/index";
 
 <template>
   <Story group="primitives" icon-color="#8B5CF6">
-    <sv-select>
+    <a-select>
       <button>Item 1</button>
       <button>Item 2</button>
       <button>Item 3</button>
       <button>Item 4</button>
-    </sv-select>
+    </a-select>
 
     <br />
     <br />
 
-    <sv-select multiple>
+    <a-select multiple>
       <button style="display: block">Item 1</button>
       <button style="display: block">Item 2</button>
       <button style="display: block">Item 3</button>
       <button style="display: block">Item 4</button>
-    </sv-select>
+    </a-select>
   </Story>
 </template>
 

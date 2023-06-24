@@ -4,14 +4,14 @@ import "../src/index";
 
 <template>
   <Story>
-    <sv-circle :progress="69" :size="70" :thickness="4" style="color: #72e0ff">
+    <a-circle :progress="69" :size="70" :thickness="4" style="color: #72e0ff">
       <span style="font-family: sans-serif">Test</span>
-    </sv-circle>
+    </a-circle>
   </Story>
 </template>
 
 <style scoped>
-sv-tabs {
+a-tabs {
   font-family: sans-serif;
 }
 </style>

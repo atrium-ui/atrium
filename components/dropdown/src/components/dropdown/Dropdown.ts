@@ -28,7 +28,7 @@ export class Dropdown extends LitElement {
         top: auto;
         width: 100%;
       }
-      sv-expandable {
+      a-expandable {
         display: block;
 
         --transition-speed: var(--dropdown-speed);
@@ -209,7 +209,7 @@ export class Dropdown extends LitElement {
 
   private onSlotChange() {
     // update dom image
-    this.options = [...this.querySelectorAll("sv-option")] as OptionElement[];
+    this.options = [...this.querySelectorAll("a-option")] as OptionElement[];
 
     if (this.direction === "up") {
       this.options.reverse();
@@ -265,11 +265,11 @@ export class Dropdown extends LitElement {
     return html`
       <slot name="input" @click=${this.onClick}></slot>
       <div class="dropdown-container" part="dropdown">
-        <sv-expandable ?opened="${this.opened}">
+        <a-expandable ?opened="${this.opened}">
           <div class="dropdown" part="options">
             <slot @click=${this.onOptionsClick} @slotchange=${this.onSlotChange}></slot>
           </div>
-        </sv-expandable>
+        </a-expandable>
       </div>
     `;
   }
@@ -277,8 +277,8 @@ export class Dropdown extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "sv-dropdown": Dropdown;
+    "a-dropdown": Dropdown;
   }
 }
 
-customElements.define("sv-dropdown", Dropdown);
+customElements.define("a-dropdown", Dropdown);

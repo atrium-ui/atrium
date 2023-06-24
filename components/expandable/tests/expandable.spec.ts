@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-const NODE_NAME = "sv-expandable";
+const NODE_NAME = "a-expandable";
 
 describe(NODE_NAME, () => {
   it("import element", async () => {

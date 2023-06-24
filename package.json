@@ -1,5 +1,5 @@
 {
-  "name": "@sv-components/mono",
+  "name": "@a-components/mono",
   "version": "0.1.7-6",
   "description": "",
   "exports": {
@@ -20,9 +20,9 @@
     "publish:preview": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
     "library:build": "turbo build --filter=library",
     "library:dev": "turbo dev --filter=library",
-    "build": "turbo build --filter=@sv-components/*",
-    "lint": "turbo lint --filter=@sv-components/*",
-    "test": "turbo test --filter=@sv-components/*",
+    "build": "turbo build --filter=@a-components/*",
+    "lint": "turbo lint --filter=@a-components/*",
+    "test": "turbo test --filter=@a-components/*",
     "new": "node ./scripts/new.mjs",
     "clean": "git clean -fX ."
   },
