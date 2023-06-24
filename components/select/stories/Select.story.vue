@@ -3,7 +3,7 @@ import "../src/index";
 </script>
 
 <template>
-  <Story group="primitives">
+  <Story group="primitives" icon-color="#8B5CF6">
     <sv-select>
       <button>Item 1</button>
       <button>Item 2</button>

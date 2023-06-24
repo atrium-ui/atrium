@@ -17,7 +17,7 @@ const state = reactive({
 </script>
 
 <template>
-  <Story group="primitives">
+  <Story group="primitives" icon-color="#8B5CF6">
     <Variant title="text">
       <p>
         {{ state.p1 }}

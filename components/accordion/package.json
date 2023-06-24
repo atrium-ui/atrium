@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "histoire": "^0.16.2",
-    "tsup": "^6.5.0",
     "txtgen": "^3.0.4"
   },
   "files": [

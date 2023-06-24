@@ -74,7 +74,7 @@ export class Select extends LitElement {
     for (const child of this.children) {
       const value = Select.getChildValue(child as HTMLElement) || index.toString();
 
-      if (this.activeChildren.indexOf(value) !== -1) {
+      if (this.activeChildren.map((v) => v.toString()).indexOf(value.toString()) !== -1) {
         child.setAttribute(this.activeAttribute, "");
       } else {
         child.removeAttribute(this.activeAttribute);

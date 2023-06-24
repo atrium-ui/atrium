@@ -5,3 +5,17 @@ body,
 .__histoire-sandbox {
   height: 100%;
 }
+
+/* disable vertical center */
+.histoire-story-viewer .htw-m-auto {
+  margin-top: 0;
+}
+
+.histoire-story-list::after {
+  content: var(--version);
+  font-weight: bold;
+  opacity: 0.2;
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+}

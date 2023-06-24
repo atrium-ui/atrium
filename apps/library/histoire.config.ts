@@ -19,6 +19,13 @@ export default defineConfig({
       gray: defaultColors.neutral,
       primary: defaultColors.amber,
     },
+    hideColorSchemeSwitch: true,
+  },
+  defaultStoryProps: {
+    layout: {
+      type: "grid",
+      width: "95%",
+    },
   },
   tree: {
     order: (a: string, b: string) => a.localeCompare(b),

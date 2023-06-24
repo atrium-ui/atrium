@@ -29,9 +29,14 @@ const exampleOptions = [
 </script>
 
 <template>
-  <Story title="Dropdown" :layout="{ type: 'single', iframe: true }">
+  <Story title="Dropdown">
     <Variant title="Default">
-      <sv-dropdown @select="handleSelect" @open="logEvent('Open', e)" @close="logEvent('Close', e)">
+      <sv-dropdown
+        @select="handleSelect"
+        @open="logEvent('Open', e)"
+        @close="logEvent('Close', e)"
+        style="margin-bottom: 300px"
+      >
         <button slot="input">{{ state.value || "Select" }}</button>
 
         <sv-option>Option 1</sv-option>
@@ -69,7 +74,12 @@ const exampleOptions = [
     </Variant>
 
     <Variant title="Text Filter">
-      <sv-dropdown @select="handleSelect" @open="logEvent('Open', e)" @close="logEvent('Close', e)">
+      <sv-dropdown
+        @select="handleSelect"
+        @open="logEvent('Open', e)"
+        @close="logEvent('Close', e)"
+        style="margin-bottom: 300px"
+      >
         <input slot="input" v-model="state.value" @input="handleFilter" placeholder="Text" />
 
         <sv-option
