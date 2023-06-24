@@ -4,9 +4,9 @@ import "../src/index";
 
 <template>
   <Story>
-    <circle :progress="69" :size="70" :thickness="4" style="color: #72e0ff">
+    <sv-circle :progress="69" :size="70" :thickness="4" style="color: #72e0ff">
       <span style="font-family: sans-serif">Test</span>
-    </circle>
+    </sv-circle>
   </Story>
 </template>
 
