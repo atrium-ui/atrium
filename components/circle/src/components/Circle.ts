@@ -9,7 +9,7 @@ import { property } from "lit/decorators.js";
 //   }
 // }
 
-export class ProgressCircle extends LitElement {
+export class Circle extends LitElement {
   static get styles() {
     return css`
       :host {
@@ -80,8 +80,8 @@ export class ProgressCircle extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "progress-circle": ProgressCircle;
+    circle: Circle;
   }
 }
 
-customElements.define("progress-circle", ProgressCircle);
+customElements.define("sv-circle", Circle);

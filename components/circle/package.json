@@ -1,9 +1,9 @@
 {
-  "name": "@sv-components/progress-circle",
+  "name": "@sv-components/circle",
   "version": "1.0.10",
   "description": "",
-  "main": "dist/progress-circle.cjs.js",
-  "module": "dist/progress-circle.es.js",
+  "main": "dist/circle.cjs.js",
+  "module": "dist/circle.es.js",
   "types": "src/index.ts",
   "scripts": {
     "dev": "histoire dev",

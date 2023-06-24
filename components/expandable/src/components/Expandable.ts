@@ -6,16 +6,20 @@ export class Expandable extends LitElement {
     return [
       css`
         :host {
+          display: block;
+
           --transition-speed: 0.33s;
           --animation-easing: ease;
+        }
 
+        .container {
           display: grid;
           grid-template-rows: 0fr;
           overflow: hidden;
           transition: grid-template-rows var(--transition-speed) var(--animation-easing);
         }
 
-        :host([opened]) {
+        :host([opened]) .container {
           grid-template-rows: 1fr;
         }
 
@@ -56,7 +60,11 @@ export class Expandable extends LitElement {
   }
 
   protected render(): HTMLTemplateResult {
-    return html`<slot></slot>`;
+    return html`
+      <div class="container">
+        <slot></slot>
+      </div>
+    `;
   }
 }
 
