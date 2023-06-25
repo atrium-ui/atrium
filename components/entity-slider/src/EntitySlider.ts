@@ -1,27 +1,27 @@
 import { css, html, LitElement, PropertyValueMap } from "lit";
 import { property, query } from "lit/decorators.js";
 import { AutoplayTrait, LoopTrait, AutorunTrait, Trait, PointerTrait } from "./Traits.js";
-import { Ease, isTouch, timer } from "./utils.js";
+import { Ease, timer } from "./utils.js";
 
 export type InputState = {
   grab: {
-    pressed: boolean;
+    value: boolean;
   };
   move: {
-    pressed: boolean;
+    value: boolean;
     detlaX: number;
   };
   release: {
-    pressed: boolean;
+    value: boolean;
   };
   format: {
-    pressed: boolean;
+    value: boolean;
   };
   leave: {
-    pressed: boolean;
+    value: boolean;
   };
   enter: {
-    pressed: boolean;
+    value: boolean;
   };
 };
 
@@ -74,8 +74,11 @@ export class EntitySlider extends LitElement {
   currentItem = 0;
 
   animation;
-  tickRate = 1;
+  tickRate = 1000 / 140;
   lastTick = 0;
+  accumulator = 0;
+  frame = 0;
+  lastTickFrame = 0;
 
   inputForceX = 0;
 
@@ -88,6 +91,8 @@ export class EntitySlider extends LitElement {
   mouseX = 0;
   mouseY = 0;
 
+  mouseGrab = false;
+
   transitionAt = 0;
   transitionTime = this.defaultTransitionTime;
 
@@ -95,93 +100,74 @@ export class EntitySlider extends LitElement {
   scrollTimeout;
 
   traits: Trait[] = [
-    new PointerTrait("pointer", this),
+    new PointerTrait("pointer", this, true),
     new LoopTrait("loop", this),
-    new AutoplayTrait("autoplay", this),
-    new AutorunTrait("autorun", this),
+    // new AutoplayTrait("autoplay", this),
+    // new AutorunTrait("autorun", this),
   ];
 
   inputState: InputState = {
     grab: {
-      pressed: false,
+      value: false,
     },
     release: {
-      pressed: false,
+      value: false,
     },
     move: {
-      pressed: false,
+      value: false,
       detlaX: 0,
     },
     format: {
-      pressed: false,
+      value: false,
     },
     leave: {
-      pressed: false,
+      value: false,
     },
     enter: {
-      pressed: false,
+      value: false,
     },
   };
 
   clearInputState() {
     const state = this.inputState;
-    state.move.pressed = false;
+    state.move.value = false;
     state.move.detlaX = 0;
-    state.grab.pressed = false;
-    state.format.pressed = false;
-    state.leave.pressed = false;
-    state.enter.pressed = false;
-    state.release.pressed = false;
+    state.grab.value = false;
+    state.format.value = false;
+    state.leave.value = false;
+    state.enter.value = false;
+    state.release.value = false;
   }
 
-  protected updated(
-    _changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
-  ): void {
-    for (const [key, value] of _changedProperties) {
-      for (const trait of this.traits) {
-        if (trait.id === key.toString().replace("enable", "").toLocaleUpperCase()) {
-          trait.enabled = !!value;
-        }
+  protected updated(): void {
+    for (const trait of this.traits) {
+      if (trait.id === "loop") {
+        trait.enabled = !!this.loop;
+      }
+      if (trait.id === "autoplay") {
+        trait.enabled = !!this.autoplay;
+      }
+      if (trait.id === "autorun") {
+        trait.enabled = !!this.autorun;
       }
     }
   }
 
   @property({ type: Boolean, reflect: true })
-  enableLoop = false;
+  loop = false;
 
   @property({ type: Boolean, reflect: true })
-  enableAutoplay = false;
+  autoplay = false;
 
   @property({ type: Boolean, reflect: true })
-  enableAutorun = false;
-
-  getTrackWidth() {
-    let width = 0;
-    let index = 0;
-    for (const child of this.children) {
-      if (index >= this.itemCount) break;
-
-      width += child.clientWidth;
-      index++;
-    }
-    return width;
-  }
-
-  format() {
-    this.itemWidth = this.children[0]?.clientWidth || this.itemWidth;
-    this.trackWidth = this.getTrackWidth();
-
-    this.inputState.format.pressed = true;
-
-    this.requestUpdate();
-  }
+  autorun = false;
 
   pointerEnter(e) {
-    this.inputState.enter.pressed = true;
+    this.inputState.enter.value = true;
   }
 
   pointerLeave(e) {
-    this.inputState.leave.pressed = true;
+    this.inputState.leave.value = true;
   }
 
   pointerDown(e) {
@@ -189,8 +175,6 @@ export class EntitySlider extends LitElement {
     this.mouseY = e.y;
     this.setTarget(null);
   }
-
-  mouseGrab = false;
 
   pointerUp(e) {
     this.mouseX = 0;
@@ -200,7 +184,7 @@ export class EntitySlider extends LitElement {
       this.mouseGrab = false;
       e.preventDefault();
 
-      this.inputState.release.pressed = true;
+      this.inputState.release.value = true;
     }
 
     this.requestUpdate();
@@ -214,11 +198,12 @@ export class EntitySlider extends LitElement {
 
     if (!this.mouseGrab && this.mouseX && Math.abs(deltaY) < Math.abs(deltaX)) {
       this.mouseGrab = true;
-      this.inputState.grab.pressed = true;
+      this.inputState.grab.value = true;
     }
 
     if (this.mouseGrab) {
-      this.inputState.move.pressed = true;
+      this.inputState.move.value = true;
+      this.inputState.move.detlaX += -deltaX;
 
       this.mouseX = e.x;
       this.mouseY = e.y;
@@ -238,11 +223,32 @@ export class EntitySlider extends LitElement {
 
   onWheel(e) {
     if (this.canScroll && Math.abs(e.deltaX)) {
-      this.inputState.move.pressed = true;
+      this.inputState.move.value = true;
       this.inputState.move.detlaX += e.deltaX / 2;
 
       e.preventDefault();
     }
+  }
+
+  format() {
+    this.itemWidth = this.children[0]?.clientWidth || this.itemWidth;
+    this.trackWidth = this.getItemPosition(this.itemCount);
+
+    this.inputState.format.value = true;
+
+    this.requestUpdate();
+  }
+
+  getItemPosition(end: number = 0) {
+    let width = 0;
+    let index = 0;
+    for (const child of this.children) {
+      if (index >= end) break;
+
+      width += child.clientWidth;
+      index++;
+    }
+    return width;
   }
 
   setTarget(x, easing = "linear") {
@@ -267,25 +273,40 @@ export class EntitySlider extends LitElement {
 
     if (!this.lastTick) this.lastTick = ms;
 
-    this.tickRate = ms - this.lastTick;
+    const deltaTick = ms - this.lastTick;
     this.lastTick = ms;
 
     // handles inputs synchronously
-    this.checkInputs();
+    this.updateInputs();
     this.clearInputState();
 
-    this.updateTick(this.tickRate * 0.01);
+    this.accumulator += deltaTick;
+
+    let ticks = 0;
+    while (this.accumulator >= this.tickRate && ticks < 10) {
+      ticks++;
+      this.accumulator -= this.tickRate;
+      this.updateTick();
+    }
+
+    this.frame++;
   }
 
-  checkInputs() {
+  updateInputs() {
     for (const trait of this.traits) {
       if (trait && trait.enabled) trait.input(this.inputState);
     }
+
+    this.positionX += this.inputForceX;
   }
 
-  updateTick(deltaTick = 1) {
+  setPos(x) {
+    this.positionX = x;
+  }
+
+  updateTick() {
     for (const trait of this.traits) {
-      if (trait && trait.enabled) trait.update(deltaTick);
+      if (trait && trait.enabled) trait.update();
     }
 
     if (this.targetX != null) {
@@ -301,21 +322,26 @@ export class EntitySlider extends LitElement {
         default:
           {
             const diff = (this.targetX - this.positionX) % -this.trackWidth;
-            this.targetForceX = diff * deltaTick;
+            this.targetForceX = diff;
           }
           break;
       }
     }
 
     // update final position
-    this.positionX = this.positionX + this.targetForceX + this.inputForceX;
-
-    // TODO: this is wrong
-    this.currentItem = Math.abs(
-      Math.round((this.positionX / this.trackWidth) * this.itemCount)
-    );
+    this.positionX += this.targetForceX;
 
     this.targetForceX *= 0;
+
+    this.currentItem = 0;
+    for (let i = 0; i < this.itemCount; i++) {
+      const x = -this.getItemPosition(this.currentItem + 1);
+      if (this.positionX > x) {
+        break;
+      } else {
+        this.currentItem++;
+      }
+    }
   }
 
   connectedCallback(): void {
@@ -331,8 +357,8 @@ export class EntitySlider extends LitElement {
     window.addEventListener("resize", this.format.bind(this));
     window.addEventListener("scroll", this.onScroll.bind(this));
 
-    // TODO: idk; needs markup to exist
     requestAnimationFrame(() => {
+      // needs markup to exist
       this.format();
       this.tick();
     });

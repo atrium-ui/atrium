@@ -13,8 +13,8 @@ import "../src/index.js";
 <template>
   <Story group="primitives" icon-color="#8B5CF6">
     <Variant title="Default">
-      <sv-entity-slider class="default">
-        <div class="cell">1a</div>
+      <sv-entity-slider loop class="default">
+        <div class="cell" style="background: lime">1a</div>
         <div class="cell">2a</div>
         <div class="cell">3a</div>
         <div class="cell">4a</div>
@@ -24,10 +24,26 @@ import "../src/index.js";
         <div class="cell">8a</div>
         <div class="cell">9a</div>
         <div class="cell">10a</div>
+        <div class="cell ghost" style="background: orange">1b</div>
+        <div class="cell ghost">2b</div>
+        <div class="cell ghost">3b</div>
+        <div class="cell ghost">4b</div>
+        <div class="cell ghost">5b</div>
+        <div class="cell ghost">6b</div>
+        <div class="cell ghost">7b</div>
+        <div class="cell ghost">8b</div>
+        <div class="cell ghost">9b</div>
+        <div class="cell ghost">10b</div>
       </sv-entity-slider>
     </Variant>
 
     <Variant title="Infinite">
+      <sv-entity-slider class="tabs">
+        <div class="cell first">Home</div>
+      </sv-entity-slider>
+    </Variant>
+
+    <Variant title="Centered">
       <sv-entity-slider class="tabs">
         <div class="cell first">Home</div>
       </sv-entity-slider>
