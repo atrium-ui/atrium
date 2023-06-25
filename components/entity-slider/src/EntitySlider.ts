@@ -1,47 +1,52 @@
-import { css, html, LitElement } from "lit";
-import { query } from "lit/decorators.js";
-import { AutoplayTrait, LoopTrait, AutorunTrait, Trait } from "./Traits.js";
+import { css, html, LitElement, PropertyValueMap } from "lit";
+import { property, query } from "lit/decorators.js";
+import { AutoplayTrait, LoopTrait, AutorunTrait, Trait, PointerTrait } from "./Traits.js";
 import { Ease, isTouch, timer } from "./utils.js";
 
-type InputReleaseEvent = {
-  type: "release";
+export type InputState = {
+  grab: {
+    pressed: boolean;
+  };
+  move: {
+    pressed: boolean;
+    detlaX: number;
+  };
+  release: {
+    pressed: boolean;
+  };
+  format: {
+    pressed: boolean;
+  };
+  leave: {
+    pressed: boolean;
+  };
+  enter: {
+    pressed: boolean;
+  };
 };
-
-type InputGrabEvent = {
-  type: "grab";
-};
-
-type InputMoveEvent = {
-  type: "move";
-  deltaX: number;
-};
-
-type InputFormatEvent = {
-  type: "format";
-};
-
-type InputLeaveEvent = {
-  type: "leave";
-};
-
-type InputEnterEvent = {
-  type: "enter";
-};
-
-export type InputEvent =
-  | InputReleaseEvent
-  | InputGrabEvent
-  | InputMoveEvent
-  | InputFormatEvent
-  | InputLeaveEvent
-  | InputEnterEvent;
 
 export class EntitySlider extends LitElement {
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+        outline: none;
+        overflow: hidden;
+        touch-action: pan-y;
+      }
+
+      .tile-track {
+        display: flex;
+        will-change: transform;
+      }
+    `;
+  }
+
   render() {
     return html`
       <div
         tabindex="0"
-        class="${`tile-slider ${this.grabbing ? "grabbing" : ""}`}"
+        class="tile-slider"
         style="${`--width: ${this.itemWidth.toFixed(2)}`}"
         @wheel="${(e) => this.onWheel(e)}"
       >
@@ -55,89 +60,128 @@ export class EntitySlider extends LitElement {
   @query(".tile-track")
   private readonly track!: HTMLElement;
 
-  static get styles() {
-    return css`
-      :host {
-        display: block;
-        outline: none;
-        overflow: hidden;
-        touch-action: pan-y;
-      }
-
-      .tile-slider.grabbing {
-        cursor: grabbing;
-      }
-
-      .tile-slider.grabbing .tile-track {
-        pointer-events: none;
-      }
-
-      .tile-track {
-        display: flex;
-        will-change: transform;
-      }
-    `;
-  }
-
   defalutWidth = 7;
   defaultTransitionTime = 669;
 
-  width = this.defalutWidth;
-  itemWidth = 480;
-  acceleration = 0;
+  get itemCount() {
+    return [...this.children]
+      .filter((child) => !child.classList.contains("ghost"))
+      .reduce((curr) => curr + 1, 0);
+  }
+
+  trackWidth = 0;
+  itemWidth = 250;
+  currentItem = 0;
+
+  animation;
+  tickRate = 1;
   lastTick = 0;
+
+  inputForceX = 0;
+
+  targetForceX = 0;
   targetXStart;
   targetX;
   targetEasing = "linear";
+
   positionX = 0;
   mouseX = 0;
   mouseY = 0;
+
   transitionAt = 0;
   transitionTime = this.defaultTransitionTime;
-  currentItem = 0;
-  grabbing = false;
-  scrollTimeout;
+
   canScroll = true;
-  animation;
-  tickRate = 1;
-  inputs: InputEvent[] = [];
-  // prettier-ignore
+  scrollTimeout;
+
   traits: Trait[] = [
-    new LoopTrait(this),
-    new AutoplayTrait(this),
-    new AutorunTrait(this),
+    new PointerTrait("pointer", this),
+    new LoopTrait("loop", this),
+    new AutoplayTrait("autoplay", this),
+    new AutorunTrait("autorun", this),
   ];
 
-  getGridWidth() {
-    return this.itemWidth * this.width;
+  inputState: InputState = {
+    grab: {
+      pressed: false,
+    },
+    release: {
+      pressed: false,
+    },
+    move: {
+      pressed: false,
+      detlaX: 0,
+    },
+    format: {
+      pressed: false,
+    },
+    leave: {
+      pressed: false,
+    },
+    enter: {
+      pressed: false,
+    },
+  };
+
+  clearInputState() {
+    const state = this.inputState;
+    state.move.pressed = false;
+    state.move.detlaX = 0;
+    state.grab.pressed = false;
+    state.format.pressed = false;
+    state.leave.pressed = false;
+    state.enter.pressed = false;
+    state.release.pressed = false;
+  }
+
+  protected updated(
+    _changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
+  ): void {
+    for (const [key, value] of _changedProperties) {
+      for (const trait of this.traits) {
+        if (trait.id === key.toString().replace("enable", "").toLocaleUpperCase()) {
+          trait.enabled = !!value;
+        }
+      }
+    }
+  }
+
+  @property({ type: Boolean, reflect: true })
+  enableLoop = false;
+
+  @property({ type: Boolean, reflect: true })
+  enableAutoplay = false;
+
+  @property({ type: Boolean, reflect: true })
+  enableAutorun = false;
+
+  getTrackWidth() {
+    let width = 0;
+    let index = 0;
+    for (const child of this.children) {
+      if (index >= this.itemCount) break;
+
+      width += child.clientWidth;
+      index++;
+    }
+    return width;
   }
 
   format() {
-    const firstCell = this.shadowRoot?.querySelector(".tile");
-    this.itemWidth = firstCell?.clientWidth || this.itemWidth;
+    this.itemWidth = this.children[0]?.clientWidth || this.itemWidth;
+    this.trackWidth = this.getTrackWidth();
 
-    // TODO: make this modifiable
-    if (globalThis.innerWidth < 900) {
-      this.itemWidth = globalThis.innerWidth / 2;
-    } else if (globalThis.innerWidth < 1800) {
-      this.itemWidth = 370;
-    } else {
-      this.itemWidth = 480;
-    }
-
-    this.inputs.push({ type: "format" });
+    this.inputState.format.pressed = true;
 
     this.requestUpdate();
   }
 
   pointerEnter(e) {
-    this.inputs.push({ type: "enter" });
+    this.inputState.enter.pressed = true;
   }
 
   pointerLeave(e) {
-    this.inputs.push({ type: "leave" });
-
-    this.pointerUp(e);
+    this.inputState.leave.pressed = true;
   }
 
   pointerDown(e) {
@@ -146,16 +190,17 @@ export class EntitySlider extends LitElement {
     this.setTarget(null);
   }
 
+  mouseGrab = false;
+
   pointerUp(e) {
     this.mouseX = 0;
     this.mouseY = 0;
 
-    if (this.grabbing) {
+    if (this.mouseGrab) {
+      this.mouseGrab = false;
       e.preventDefault();
 
-      this.grabbing = false;
-
-      this.inputs.push({ type: "release" });
+      this.inputState.release.pressed = true;
     }
 
     this.requestUpdate();
@@ -167,28 +212,23 @@ export class EntitySlider extends LitElement {
     const deltaX = e.x - this.mouseX;
     const deltaY = e.y - this.mouseY;
 
-    if (!this.grabbing && this.mouseX && Math.abs(deltaY) < Math.abs(deltaX)) {
-      this.grabbing = true;
-
-      this.inputs.push({ type: "grab" });
+    if (!this.mouseGrab && this.mouseX && Math.abs(deltaY) < Math.abs(deltaX)) {
+      this.mouseGrab = true;
+      this.inputState.grab.pressed = true;
     }
 
-    if (this.grabbing) {
-      this.inputs.push({
-        type: "move",
-        deltaX: deltaX,
-      });
+    if (this.mouseGrab) {
+      this.inputState.move.pressed = true;
 
       this.mouseX = e.x;
       this.mouseY = e.y;
     }
-
-    this.requestUpdate();
   }
 
   onScroll() {
     clearTimeout(this.scrollTimeout);
 
+    // TODO: optimise scrolling
     this.canScroll = false;
 
     this.scrollTimeout = setTimeout(() => {
@@ -197,11 +237,9 @@ export class EntitySlider extends LitElement {
   }
 
   onWheel(e) {
-    if (this.canScroll && Math.abs(e.deltaX) > 10) {
-      this.inputs.push({
-        type: "move",
-        deltaX: -e.deltaX / 2,
-      });
+    if (this.canScroll && Math.abs(e.deltaX)) {
+      this.inputState.move.pressed = true;
+      this.inputState.move.detlaX += e.deltaX / 2;
 
       e.preventDefault();
     }
@@ -233,46 +271,23 @@ export class EntitySlider extends LitElement {
     this.lastTick = ms;
 
     // handles inputs synchronously
-    this.updateInputs();
+    this.checkInputs();
+    this.clearInputState();
 
     this.updateTick(this.tickRate * 0.01);
-
-    const track = this.track;
-    if (track) {
-      track.style.transform = `translateX(${this.positionX.toFixed(2)}px)`;
-      if (!isTouch()) {
-        track.style.pointerEvents = this.grabbing ? "none" : "";
-      }
-    }
-    if (!isTouch()) {
-      this.style.cursor = this.grabbing ? "grabbing" : "";
-    }
   }
 
-  updateInputs() {
-    let inputAcceleration = 0;
-
-    for (const input of this.inputs) {
-      if (input.type === "move") {
-        // TODO: doesnt maatch cursor movement
-        inputAcceleration += input.deltaX || 0;
-      }
-
-      for (const trait of this.traits) {
-        trait.input(input);
-      }
+  checkInputs() {
+    for (const trait of this.traits) {
+      if (trait && trait.enabled) trait.input(this.inputState);
     }
-
-    this.inputs.length = 0;
-    if (inputAcceleration) this.acceleration = inputAcceleration;
   }
 
   updateTick(deltaTick = 1) {
     for (const trait of this.traits) {
-      trait.update(deltaTick);
+      if (trait && trait.enabled) trait.update(deltaTick);
     }
 
-    const maxX = -this.getGridWidth();
     if (this.targetX != null) {
       switch (this.targetEasing) {
         case "ease":
@@ -280,63 +295,63 @@ export class EntitySlider extends LitElement {
             const transitionTime = timer(this.transitionAt, this.transitionTime);
             const easedDelta =
               (this.targetX - this.targetXStart) * Ease.easeInOutCirc(transitionTime);
-            this.acceleration = this.targetXStart + easedDelta - this.positionX;
+            this.targetForceX = this.targetXStart + easedDelta - this.positionX;
           }
           break;
         default:
           {
-            const diff = (this.targetX - this.positionX) % maxX;
-            this.acceleration = diff * deltaTick;
+            const diff = (this.targetX - this.positionX) % -this.trackWidth;
+            this.targetForceX = diff * deltaTick;
           }
           break;
       }
     }
 
-    this.positionX = this.positionX + this.acceleration;
-    this.positionX = Math.min(0, this.positionX);
-    this.positionX = Math.max(maxX - 1, this.positionX);
-    this.acceleration *= 0.9; // drag
+    // update final position
+    this.positionX = this.positionX + this.targetForceX + this.inputForceX;
 
-    this.currentItem = Math.abs(Math.round((this.positionX / this.getGridWidth()) * this.width));
+    // TODO: this is wrong
+    this.currentItem = Math.abs(
+      Math.round((this.positionX / this.trackWidth) * this.itemCount)
+    );
+
+    this.targetForceX *= 0;
   }
 
-  onMounted() {
-    this.format();
-    this.tick();
+  connectedCallback(): void {
+    super.connectedCallback();
 
-    this.addEventListener("pointermove", this.pointerMove.bind(this));
+    window.addEventListener("pointermove", this.pointerMove.bind(this));
     this.addEventListener("pointerdown", this.pointerDown.bind(this));
-    this.addEventListener("pointerup", this.pointerUp.bind(this));
-    this.addEventListener("pointercancel", this.pointerUp.bind(this));
+    window.addEventListener("pointerup", this.pointerUp.bind(this));
+    window.addEventListener("pointercancel", this.pointerUp.bind(this));
     this.addEventListener("pointerleave", this.pointerLeave.bind(this));
     this.addEventListener("pointerenter", this.pointerEnter.bind(this));
 
     window.addEventListener("resize", this.format.bind(this));
     window.addEventListener("scroll", this.onScroll.bind(this));
+
+    // TODO: idk; needs markup to exist
+    requestAnimationFrame(() => {
+      this.format();
+      this.tick();
+    });
   }
 
-  onUnmounted() {
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+
     this.stopAnimate();
 
-    this.removeEventListener("pointermove", this.pointerMove.bind(this));
+    window.removeEventListener("pointermove", this.pointerMove.bind(this));
     this.removeEventListener("pointerdown", this.pointerDown.bind(this));
-    this.removeEventListener("pointerup", this.pointerUp.bind(this));
-    this.removeEventListener("pointercancel", this.pointerUp.bind(this));
+    window.removeEventListener("pointerup", this.pointerUp.bind(this));
+    window.removeEventListener("pointercancel", this.pointerUp.bind(this));
     this.removeEventListener("pointerleave", this.pointerLeave.bind(this));
     this.removeEventListener("pointerenter", this.pointerEnter.bind(this));
 
     window.removeEventListener("resize", this.format.bind(this));
     window.removeEventListener("scroll", this.onScroll.bind(this));
-  }
-
-  connectedCallback(): void {
-    super.connectedCallback();
-    this.onMounted();
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback();
-    this.onUnmounted();
   }
 }
 

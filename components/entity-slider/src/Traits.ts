@@ -1,24 +1,92 @@
+import { InputState } from "./EntitySlider.js";
 import { Ease, isTouch, timer } from "./utils.js";
 
 export class Trait {
+  id: string;
+  enabled = false;
+
   entity;
 
-  constructor(entity) {
+  constructor(id, entity) {
+    this.id = id;
     this.entity = entity;
-    this.onCreate();
   }
 
-  onCreate() {
-    //
+  input(inputState: InputState) {
+    // ...
   }
 
-  public update(deltaTick: number) {
-    //
+  update(deltaTick: number) {
+    // ...
+  }
+}
+
+export class PointerTrait extends Trait {
+  enabled = true;
+
+  grabbing = false;
+
+  grabStartX = 0;
+  grabStartMouseX = 0;
+
+  input(inputState: InputState) {
+    const entity = this.entity;
+
+    if (inputState.grab.pressed && !this.grabbing) {
+      this.grabbing = true;
+      this.grabStartX = entity.positionX;
+      this.grabStartMouseX = entity.mouseX;
+    }
+
+    if (inputState.release.pressed) {
+      this.grabbing = false;
+    }
+
+    if (inputState.move.pressed) {
+      if (this.grabbing) {
+        const mouseDiffX = entity.mouseX - this.grabStartMouseX;
+        const posDiffX = this.grabStartX + mouseDiffX;
+        entity.inputForceX = posDiffX - entity.positionX;
+      } else {
+        entity.inputForceX *= 0;
+      }
+
+      entity.inputForceX += -inputState.move.detlaX;
+    } else {
+      if (this.grabbing) {
+        entity.inputForceX = 0;
+      }
+    }
+
+    const track = entity.track;
+    if (track) {
+      track.style.transform = `translateX(${entity.positionX.toFixed(2)}px)`;
+      if (!isTouch()) {
+        track.style.pointerEvents = this.grabbing ? "none" : "";
+      }
+    }
+    if (!isTouch()) {
+      entity.style.cursor = this.grabbing ? "grabbing" : "";
+    }
   }
 
-  public input(input: any) {
-    const handlerName = "on" + input.type[0].toLocaleUpperCase() + input.type.slice(1);
-    if (handlerName in this) this[handlerName](input);
+  update() {
+    const entity = this.entity;
+
+    // clamp input force
+    const newPos = entity.positionX + entity.inputForceX;
+    let clampedPos = newPos;
+    const stopLeft = 0;
+    const stopRight = -entity.trackWidth + entity.clientWidth;
+    clampedPos = Math.min(stopLeft, clampedPos);
+    clampedPos = Math.max(stopRight, clampedPos);
+
+    const diff = newPos - clampedPos;
+    entity.inputForceX -= diff;
+
+    if (!this.grabbing) {
+      entity.inputForceX *= 0.9;
+    }
   }
 }
 
@@ -31,27 +99,32 @@ export class AutoplayTrait extends Trait {
   autoPlayTime = this.defaultAutoplayTime;
   autoPlayTimer;
 
-  onFormat() {
-    const entity = this.entity;
+  input(inputState: InputState) {
+    if (inputState.format.pressed) {
+      const entity = this.entity;
 
-    this.autoPlayTimer = Date.now();
+      this.autoPlayTimer = Date.now();
 
-    if (isTouch()) {
-      this.autoPlay = true;
-      entity.moveBy(0, "linear");
-    } else {
-      this.autoPlay = false;
+      if (isTouch()) {
+        this.autoPlay = true;
+        entity.moveBy(0, "linear");
+      } else {
+        this.autoPlay = false;
+      }
     }
-  }
 
-  onRelease() {
-    if (isTouch()) {
-      this.autoPlay = true;
+    if (inputState.release.pressed) {
+      if (isTouch()) {
+        this.autoPlay = true;
 
-      this.autoPlayTimer = Date.now() + this.autoPlayTimeout;
+        this.autoPlayTimer = Date.now() + this.autoPlayTimeout;
 
-      const ent = this.entity;
-      ent.moveBy(Math.abs(ent.acceleration) > 10 ? -Math.sign(ent.acceleration) : 0, "linear");
+        const ent = this.entity;
+        ent.moveBy(
+          Math.abs(ent.acceleration) > 10 ? -Math.sign(ent.acceleration) : 0,
+          "linear"
+        );
+      }
     }
   }
 
@@ -77,10 +150,6 @@ export class AutorunTrait extends Trait {
   paused = true;
   transitionAt = Date.now();
 
-  onCreate(): void {
-    this.entity.autorun = this;
-  }
-
   pause() {
     this.paused = true;
     this.transitionAt = Date.now();
@@ -92,27 +161,29 @@ export class AutorunTrait extends Trait {
     this.entity.setTarget(null);
   }
 
-  onMove(e) {
-    this.dir = Math.sign(e.deltaX);
-  }
+  input(inputState: InputState) {
+    if (inputState.move.pressed) {
+      this.dir = Math.sign(inputState.move.detlaX);
+    }
 
-  onEnter() {
-    !isTouch() && this.pause();
-  }
+    if (inputState.enter.pressed) {
+      !isTouch() && this.pause();
+    }
 
-  onLeave() {
-    !isTouch() && this.unpause();
-  }
+    if (inputState.leave.pressed) {
+      !isTouch() && this.unpause();
+    }
 
-  onFormat() {
-    if (isTouch()) {
-      !this.paused && this.pause();
-    } else {
-      this.paused && this.unpause();
+    if (inputState.format.pressed) {
+      if (isTouch()) {
+        !this.paused && this.pause();
+      } else {
+        this.paused && this.unpause();
+      }
     }
   }
 
-  update(deltaTick) {
+  public update(deltaTick) {
     const entity = this.entity;
     if (!this.paused) {
       const transitionTime = timer(this.transitionAt, this.pauseTransitionTime);
@@ -123,10 +194,10 @@ export class AutorunTrait extends Trait {
 }
 
 export class LoopTrait extends Trait {
-  update(deltaTick) {
+  update() {
     const entity = this.entity;
     // loop in front and back trait
-    const maxX = -entity.getGridWidth();
+    const maxX = -entity.width;
     entity.positionX = entity.positionX % maxX;
     if (entity.positionX >= 0) {
       entity.positionX = maxX;
