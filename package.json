@@ -1,6 +1,6 @@
 {
   "name": "@sv-components/mono",
-  "version": "0.1.7-6",
+  "version": "0.1.7-7",
   "description": "",
   "exports": {
     "./components/select": {
@@ -15,9 +15,17 @@
       "import": "./components/dropdown/dist/dropdown.es.js",
       "require": "./components/dropdown/dist/dropdown.cjs.js"
     },
-    "./components/accordion": {
-      "import": "./components/accordion/dist/accordion.mjs",
-      "require": "./components/accordion/dist/accordion.js"
+    "./components/circle": {
+      "import": "./components/circle/dist/circle.mjs",
+      "require": "./components/circle/dist/circle.js"
+    },
+    "./components/pager": {
+      "import": "./components/pager/dist/pager.mjs",
+      "require": "./components/pager/dist/pager.js"
+    },
+    "./components/track": {
+      "import": "./components/track/dist/track.mjs",
+      "require": "./components/track/dist/track.js"
     }
   },
   "scripts": {
