@@ -160,7 +160,7 @@ export default class DebugElement extends HTMLElement {
         case "object": {
           const item = this.props[i];
           if (Array.isArray(item)) {
-            this.drawGraph(ctx, item[0], line, item.slice(1) as number[]);
+            this.drawGraph(ctx, item[0] || "", line, item.slice(1) as number[]);
           }
           line += 3;
           break;
