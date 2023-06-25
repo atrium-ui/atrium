@@ -11,23 +11,63 @@ import "../src/index.js";
 </script>
 
 <template>
-  <Story group="primitives">
-    <sv-entity-slider>
-      <div class="cell">1a</div>
-      <div class="cell">2a</div>
-      <div class="cell">3a</div>
-      <div class="cell">4a</div>
-      <div class="cell">5a</div>
-      <div class="cell">6a</div>
-      <div class="cell">7a</div>
-      <div class="cell ghost">1b</div>
-      <div class="cell ghost">2b</div>
-      <div class="cell ghost">3b</div>
-      <div class="cell ghost">4b</div>
-      <div class="cell ghost">5b</div>
-      <div class="cell ghost">6b</div>
-      <div class="cell ghost">7b</div>
-    </sv-entity-slider>
+  <Story group="primitives" icon-color="#8B5CF6">
+    <Variant title="Default">
+      <sv-entity-slider>
+        <div class="cell">1a</div>
+        <div class="cell">2a</div>
+        <div class="cell">3a</div>
+        <div class="cell">4a</div>
+        <div class="cell">5a</div>
+        <div class="cell">6a</div>
+        <div class="cell">7a</div>
+        <div class="cell ghost">1b</div>
+        <div class="cell ghost">2b</div>
+        <div class="cell ghost">3b</div>
+        <div class="cell ghost">4b</div>
+        <div class="cell ghost">5b</div>
+        <div class="cell ghost">6b</div>
+        <div class="cell ghost">7b</div>
+      </sv-entity-slider>
+    </Variant>
+
+    <Variant title="Tabs">
+      <sv-entity-slider>
+        <div class="cell">1a</div>
+        <div class="cell">2a</div>
+        <div class="cell">3a</div>
+        <div class="cell">4a</div>
+        <div class="cell">5a</div>
+        <div class="cell">6a</div>
+        <div class="cell">7a</div>
+        <div class="cell ghost">1b</div>
+        <div class="cell ghost">2b</div>
+        <div class="cell ghost">3b</div>
+        <div class="cell ghost">4b</div>
+        <div class="cell ghost">5b</div>
+        <div class="cell ghost">6b</div>
+        <div class="cell ghost">7b</div>
+      </sv-entity-slider>
+    </Variant>
+
+    <Variant title="Big entry">
+      <sv-entity-slider>
+        <div class="cell">1a</div>
+        <div class="cell">2a</div>
+        <div class="cell">3a</div>
+        <div class="cell">4a</div>
+        <div class="cell">5a</div>
+        <div class="cell">6a</div>
+        <div class="cell">7a</div>
+        <div class="cell ghost">1b</div>
+        <div class="cell ghost">2b</div>
+        <div class="cell ghost">3b</div>
+        <div class="cell ghost">4b</div>
+        <div class="cell ghost">5b</div>
+        <div class="cell ghost">6b</div>
+        <div class="cell ghost">7b</div>
+      </sv-entity-slider>
+    </Variant>
   </Story>
 </template>
 

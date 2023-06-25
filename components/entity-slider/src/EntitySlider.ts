@@ -197,7 +197,7 @@ export class EntitySlider extends LitElement {
   }
 
   onWheel(e) {
-    if (this.canScroll && e.deltaX) {
+    if (this.canScroll && Math.abs(e.deltaX) > 10) {
       this.inputs.push({
         type: "move",
         deltaX: -e.deltaX / 2,
