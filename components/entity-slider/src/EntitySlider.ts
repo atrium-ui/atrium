@@ -1,7 +1,7 @@
 import { css, html, LitElement } from "lit";
 import { query } from "lit/decorators.js";
 import { AutoplayTrait, LoopTrait, AutorunTrait, Trait } from "./Traits.js";
-import { Ease, timer } from "./utils.js";
+import { Ease, isTouch, timer } from "./utils.js";
 
 type InputReleaseEvent = {
   type: "release";
@@ -91,6 +91,7 @@ export class EntitySlider extends LitElement {
   targetEasing = "linear";
   positionX = 0;
   mouseX = 0;
+  mouseY = 0;
   transitionAt = 0;
   transitionTime = this.defaultTransitionTime;
   currentItem = 0;
@@ -115,7 +116,8 @@ export class EntitySlider extends LitElement {
     const firstCell = this.shadowRoot?.querySelector(".tile");
     this.itemWidth = firstCell?.clientWidth || this.itemWidth;
 
-    if (globalThis.innerWidth < 700) {
+    // TODO: make this modifiable
+    if (globalThis.innerWidth < 900) {
       this.itemWidth = globalThis.innerWidth / 2;
     } else if (globalThis.innerWidth < 1800) {
       this.itemWidth = 370;
@@ -140,11 +142,13 @@ export class EntitySlider extends LitElement {
 
   pointerDown(e) {
     this.mouseX = e.x;
+    this.mouseY = e.y;
     this.setTarget(null);
   }
 
   pointerUp(e) {
     this.mouseX = 0;
+    this.mouseY = 0;
 
     if (this.grabbing) {
       e.preventDefault();
@@ -160,7 +164,10 @@ export class EntitySlider extends LitElement {
   pointerMove(e) {
     e.preventDefault();
 
-    if (this.mouseX && !this.grabbing) {
+    const deltaX = e.x - this.mouseX;
+    const deltaY = e.y - this.mouseY;
+
+    if (!this.grabbing && this.mouseX && Math.abs(deltaY) < Math.abs(deltaX)) {
       this.grabbing = true;
 
       this.inputs.push({ type: "grab" });
@@ -169,10 +176,11 @@ export class EntitySlider extends LitElement {
     if (this.grabbing) {
       this.inputs.push({
         type: "move",
-        deltaX: e.x - this.mouseX,
+        deltaX: deltaX,
       });
 
       this.mouseX = e.x;
+      this.mouseY = e.y;
     }
 
     this.requestUpdate();
@@ -232,6 +240,12 @@ export class EntitySlider extends LitElement {
     const track = this.track;
     if (track) {
       track.style.transform = `translateX(${this.positionX.toFixed(2)}px)`;
+      if (!isTouch()) {
+        track.style.pointerEvents = this.grabbing ? "none" : "";
+      }
+    }
+    if (!isTouch()) {
+      this.style.cursor = this.grabbing ? "grabbing" : "";
     }
   }
 

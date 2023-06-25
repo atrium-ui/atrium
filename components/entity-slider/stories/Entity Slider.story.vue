@@ -1,3 +1,11 @@
+<docs lang="md">
+## Use cases:
+
+- image slider
+- Overflowing tabs
+- stepless gallary
+</docs>
+
 <script lang="ts" setup>
 import "../src/index.js";
 </script>
@@ -24,10 +32,8 @@ import "../src/index.js";
 </template>
 
 <style scoped>
-sv-entity-slider {
-}
-
 .cell {
+  user-select: none;
   width: calc(var(--width) * 1px);
   height: calc(var(--width) * 1px);
   box-shadow: inset 0 0 2px currentColor;

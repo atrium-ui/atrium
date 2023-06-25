@@ -23,8 +23,8 @@ export class Trait {
 }
 
 export class AutoplayTrait extends Trait {
-  defaultAutoplayTimeout = 2000;
-  defaultAutoplayTime = 3000;
+  defaultAutoplayTimeout = 4000;
+  defaultAutoplayTime = 5000;
 
   autoPlay = false;
   autoPlayTimeout = this.defaultAutoplayTimeout;
@@ -51,7 +51,7 @@ export class AutoplayTrait extends Trait {
       this.autoPlayTimer = Date.now() + this.autoPlayTimeout;
 
       const ent = this.entity;
-      ent.moveBy(Math.abs(ent.acceleration) > 5 ? -Math.sign(ent.acceleration) : 0, "linear");
+      ent.moveBy(Math.abs(ent.acceleration) > 10 ? -Math.sign(ent.acceleration) : 0, "linear");
     }
   }
 
