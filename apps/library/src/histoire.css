@@ -1,14 +1,10 @@
-#app,
-html,
-body,
-.__histoire-render-story,
-.__histoire-sandbox {
-  height: 100%;
-}
-
 /* disable vertical center */
 .histoire-story-viewer .htw-m-auto {
   margin-top: 0;
+}
+
+.histoire-generic-render-story {
+  overflow: visible !important;
 }
 
 .histoire-story-list::after {
@@ -18,4 +14,22 @@ body,
   position: absolute;
   left: 20px;
   bottom: 20px;
+}
+
+button {
+  border: none;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid grey;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+button[selected] {
+  background: #8ecaec;
+}
+button:hover {
+  filter: brightness(0.9);
+}
+button:active {
+  transform: scale(0.985);
 }

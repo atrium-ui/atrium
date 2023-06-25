@@ -84,10 +84,20 @@ importers:
     devDependencies:
       histoire:
         specifier: ^0.16.2
-        version: 0.16.2(vite@2.9.15)
+        version: 0.16.2(vite@4.3.9)
       txtgen:
         specifier: ^3.0.4
         version: 3.0.4
+
+  components/circle:
+    dependencies:
+      lit:
+        specifier: ^2.5.0
+        version: 2.7.5
+    devDependencies:
+      vite:
+        specifier: ^2.9.15
+        version: 2.9.15
 
   components/dropdown:
     dependencies:
@@ -113,7 +123,7 @@ importers:
     devDependencies:
       histoire:
         specifier: ^0.16.2
-        version: 0.16.2(vite@2.9.15)
+        version: 0.16.2(vite@4.3.9)
       txtgen:
         specifier: ^3.0.4
         version: 3.0.4
@@ -126,20 +136,10 @@ importers:
     devDependencies:
       histoire:
         specifier: ^0.16.2
-        version: 0.16.2(vite@2.9.15)
+        version: 0.16.2(vite@4.3.9)
       tsup:
         specifier: ^6.7.0
         version: 6.7.0(typescript@5.1.3)
-
-  components/circle:
-    dependencies:
-      lit:
-        specifier: ^2.5.0
-        version: 2.5.0
-    devDependencies:
-      vite:
-        specifier: ^2.9.15
-        version: 2.9.15
 
   components/range:
     dependencies:
@@ -157,16 +157,6 @@ importers:
         specifier: ^2.9.15
         version: 2.9.15
 
-  components/slider:
-    dependencies:
-      lit:
-        specifier: ^2.2.1
-        version: 2.5.0
-    devDependencies:
-      vite:
-        specifier: ^2.9.13
-        version: 2.9.15
-
   components/track:
     dependencies:
       lit:
@@ -175,7 +165,7 @@ importers:
     devDependencies:
       histoire:
         specifier: ^0.16.2
-        version: 0.16.2(vite@2.9.15)
+        version: 0.16.2(vite@4.3.9)
 
 packages:
 
@@ -2536,6 +2526,57 @@ packages:
       - utf-8-validate
     dev: true
 
+  /histoire@0.16.2(vite@4.3.9):
+    resolution: {integrity: sha512-7/dErREfXEqAq69KuVMThu+uYzBfIuc6R13z5uylNm+rGO6WX62Y70DeKTxnp4NsYPXBNPcBhWY6UGICCuhHaw==}
+    hasBin: true
+    peerDependencies:
+      vite: ^2.9.0 || ^3.0.0 || ^4.0.0
+    dependencies:
+      '@akryum/tinypool': 0.3.1
+      '@histoire/app': 0.16.1(vite@4.3.9)
+      '@histoire/controls': 0.16.1(vite@4.3.9)
+      '@histoire/shared': 0.16.1(vite@4.3.9)
+      '@histoire/vendors': 0.16.0
+      '@types/flexsearch': 0.7.3
+      '@types/markdown-it': 12.2.3
+      birpc: 0.1.1
+      change-case: 4.1.2
+      chokidar: 3.5.3
+      connect: 3.7.0
+      defu: 6.1.1
+      diacritics: 1.3.0
+      flexsearch: 0.7.21
+      fs-extra: 10.1.0
+      globby: 13.1.3
+      gray-matter: 4.0.3
+      jiti: 1.18.2
+      jsdom: 20.0.3
+      markdown-it: 12.3.2
+      markdown-it-anchor: 8.6.5(@types/markdown-it@12.2.3)(markdown-it@12.3.2)
+      markdown-it-attrs: 4.1.6(markdown-it@12.3.2)
+      markdown-it-emoji: 2.0.2
+      micromatch: 4.0.5
+      mrmime: 1.0.1
+      pathe: 0.2.0
+      picocolors: 1.0.0
+      sade: 1.8.1
+      shiki-es: 0.2.0
+      sirv: 2.0.2
+      vite: 4.3.9
+      vite-node: 0.28.4
+    transitivePeerDependencies:
+      - '@types/node'
+      - bufferutil
+      - canvas
+      - less
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - utf-8-validate
+    dev: true
+
   /html-encoding-sniffer@3.0.0:
     resolution: {integrity: sha512-oWv4T4yJ52iKrufjnyZPkrN0CH3QnrUqdB6In1g5Fe1mia8GmF36gnfNySxoZtxD5+NmYw1EElVXiBk93UeskA==}
     engines: {node: '>=12'}
@@ -3259,15 +3300,6 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       yaml: 2.3.1
-    dev: true
-
-  /postcss@8.4.20:
-    resolution: {integrity: sha512-6Q04AXR1212bXr5fh03u8aAwbLxAQNGQ/Q1LNa0VfOI06ZAlhPHtQvE4OIdpj4kLThXilalPnmDSOD65DcHt+g==}
-    engines: {node: ^10 || ^12 || >=14}
-    dependencies:
-      nanoid: 3.3.4
-      picocolors: 1.0.0
-      source-map-js: 1.0.2
     dev: true
 
   /postcss@8.4.21:
@@ -4028,7 +4060,7 @@ packages:
         optional: true
     dependencies:
       esbuild: 0.14.54
-      postcss: 8.4.20
+      postcss: 8.4.24
       resolve: 1.22.1
       rollup: 2.77.3
     optionalDependencies:

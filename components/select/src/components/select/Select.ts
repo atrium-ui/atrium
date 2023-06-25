@@ -25,38 +25,39 @@ export class Select extends LitElement {
   }
 
   private focusCallback(e) {
-    const childIndex = [...this.children].indexOf(e.target);
-    this.selected = childIndex;
-    this.onSelected();
+    let i = 0;
+    for (const child of this.children) {
+      if (child.contains(e.target)) {
+        this.selected = i;
+        this.onSelected();
+        break;
+      }
+      i++;
+    }
   }
 
-  private clickCallback(e: MouseEvent) {
-    if (![...this.children].includes(e.target as HTMLElement)) {
+  private onPress(e: MouseEvent) {
+    if (![...this.children].find((child) => child.contains(e.target as Node))) {
       return;
-    }
-
-    if (!this.multiple) {
-      this.activeChildren = [];
     }
 
     let i = 0;
     for (const child of this.children) {
-      child.removeAttribute(this.activeAttribute);
-
-      if (e.target === child || child.contains(e.target as HTMLElement)) {
+      if (e.target === child || child.contains(e.target as Node)) {
         const value = Select.getChildValue(child as HTMLElement) || i.toString();
 
-        const index = this.activeChildren.indexOf(value);
-        if (index !== -1) {
-          this.activeChildren.splice(index, 1);
+        if (this.activeChildren.includes(value)) {
+          this.activeChildren.splice(this.activeChildren.indexOf(value), 1);
         } else {
           this.activeChildren.push(value);
         }
-
-        child.setAttribute(this.activeAttribute, "");
       }
 
       i++;
+    }
+
+    if (!this.multiple) {
+      this.activeChildren.splice(0, this.activeChildren.length - 1);
     }
 
     this.updateChildren();
@@ -101,9 +102,10 @@ export class Select extends LitElement {
     if (child) {
       child.focus();
     }
+    this.updateChildren();
   }
 
-  onKeyDown(e) {
+  onKey(e) {
     const selected = document.activeElement;
     if (selected != null) {
       let nextChild = selected.nextElementSibling;
@@ -150,21 +152,19 @@ export class Select extends LitElement {
       this.updateChildren();
     }
 
-    this.tabIndex = 0;
+    this.addEventListener("keyup", this.onKey, { capture: true });
 
-    this.addEventListener("keydown", this.onKeyDown);
-
-    this.addEventListener("click", this.clickCallback);
-    this.addEventListener("focusin", this.focusCallback);
+    this.addEventListener("click", this.onPress);
+    this.addEventListener("focus", this.focusCallback, { capture: true });
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback();
 
-    this.removeEventListener("keydown", this.onKeyDown);
+    this.removeEventListener("keyup", this.onKey, { capture: true });
 
-    this.removeEventListener("click", this.clickCallback);
-    this.removeEventListener("focusin", this.focusCallback);
+    this.removeEventListener("click", this.onPress);
+    this.removeEventListener("focus", this.focusCallback, { capture: true });
   }
 }
 
