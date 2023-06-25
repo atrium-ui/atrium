@@ -1,4 +1,4 @@
-import { css, html, LitElement, PropertyValueMap } from "lit";
+import { css, html, LitElement } from "lit";
 import { property, query } from "lit/decorators.js";
 import { AutoplayTrait, LoopTrait, AutorunTrait, Trait, PointerTrait } from "./Traits.js";
 import { Ease, timer } from "./utils.js";
@@ -222,7 +222,7 @@ export class EntitySlider extends LitElement {
   }
 
   onWheel(e) {
-    if (this.canScroll && Math.abs(e.deltaX)) {
+    if (this.canScroll && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
       this.inputState.move.value = true;
       this.inputState.move.detlaX += e.deltaX / 2;
 
@@ -354,8 +354,8 @@ export class EntitySlider extends LitElement {
     this.addEventListener("pointerleave", this.pointerLeave.bind(this));
     this.addEventListener("pointerenter", this.pointerEnter.bind(this));
 
-    window.addEventListener("resize", this.format.bind(this));
-    window.addEventListener("scroll", this.onScroll.bind(this));
+    window.addEventListener("resize", this.format.bind(this), { passive: true });
+    window.addEventListener("scroll", this.onScroll.bind(this), { capture: true });
 
     requestAnimationFrame(() => {
       // needs markup to exist
