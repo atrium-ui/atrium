@@ -106,9 +106,8 @@ export class Track extends LitElement {
   }
 
   get itemHeights() {
-    // TODO: bad code
     return new Array(this.itemCount).fill(1).map((_, i) => {
-      return this.children[i]?.offsetHeight || 0;
+      return (this.children[i] as HTMLElement)?.offsetHeight || 0;
     });
   }
 
@@ -322,7 +321,6 @@ export class Track extends LitElement {
 
   setTarget(vec: Vec | undefined, easing: Easing = "linear") {
     if (vec !== null) {
-      // TODO: dont restart when animation is in progress
       this.transitionAt = Date.now();
       this.targetStart.set(this.position);
     }
