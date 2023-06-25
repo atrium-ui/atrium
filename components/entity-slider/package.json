@@ -1,9 +1,9 @@
 {
-  "name": "@sv-components/entity-slider",
+  "name": "@sv-components/track",
   "version": "0.1.0",
   "description": "",
-  "main": "dist/entity-slider.js",
-  "module": "dist/entity-slider.mjs",
+  "main": "dist/track.js",
+  "module": "dist/track.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "histoire dev",

@@ -37,7 +37,7 @@ export class PointerTrait extends Trait {
     }
 
     if (inputState.move.value) {
-      e.inputForceX = -inputState.move.detlaX;
+      e.inputForceX = -inputState.move.value;
     } else {
       if (this.grabbing) {
         e.inputForceX = 0;
@@ -80,13 +80,18 @@ export class PointerTrait extends Trait {
   }
 }
 
-export class AutoplayTrait extends Trait {
-  defaultAutoplayTimeout = 4000;
-  defaultAutoplayTime = 5000;
+export class SnapTrait extends Trait {
+  input(inputState: InputState): void {
+    if (inputState.release.value) {
+      const e = this.entity;
+      e.moveBy(Math.abs(e.inputForceX) > 10 ? -Math.sign(e.inputForceX) : 0, "linear");
+    }
+  }
+}
 
-  autoPlay = false;
-  autoPlayTimeout = this.defaultAutoplayTimeout;
-  autoPlayTime = this.defaultAutoplayTime;
+export class AutoplayTrait extends Trait {
+  autoPlayTimeout = 4000;
+  autoPlayTime = 3000;
   autoPlayTimer;
 
   input(inputState: InputState) {
@@ -95,36 +100,19 @@ export class AutoplayTrait extends Trait {
 
       this.autoPlayTimer = Date.now();
 
-      if (isTouch()) {
-        this.autoPlay = true;
-        entity.moveBy(0, "linear");
-      } else {
-        this.autoPlay = false;
-      }
+      entity.moveBy(0, "linear");
     }
 
     if (inputState.release.value) {
-      if (isTouch()) {
-        this.autoPlay = true;
-
-        this.autoPlayTimer = Date.now() + this.autoPlayTimeout;
-
-        const ent = this.entity;
-        ent.moveBy(
-          Math.abs(ent.acceleration) > 10 ? -Math.sign(ent.acceleration) : 0,
-          "linear"
-        );
-      }
+      this.autoPlayTimer = Date.now() + this.autoPlayTimeout;
     }
   }
 
   update() {
-    if (this.autoPlay) {
-      const slideTime = timer(this.autoPlayTimer, this.autoPlayTime);
-      if (slideTime >= 1) {
-        this.entity.moveBy(1, "ease");
-        this.autoPlayTimer = Date.now();
-      }
+    const slideTime = timer(this.autoPlayTimer, this.autoPlayTime);
+    if (slideTime >= 1) {
+      // this.entity.moveBy(1, "ease");
+      // this.autoPlayTimer = Date.now();
     }
   }
 }
@@ -153,7 +141,7 @@ export class AutorunTrait extends Trait {
 
   input(inputState: InputState) {
     if (inputState.move.value) {
-      this.dir = Math.sign(inputState.move.detlaX);
+      this.dir = Math.sign(inputState.move.value);
     }
 
     if (inputState.enter.value) {

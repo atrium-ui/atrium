@@ -13,17 +13,17 @@ import "../src/index.js";
 <template>
   <Story group="primitives" icon-color="#8B5CF6">
     <Variant title="Default">
-      <sv-entity-slider loop class="default">
-        <div class="cell" style="background: lime">1a</div>
-        <div class="cell">2a</div>
-        <div class="cell">3a</div>
-        <div class="cell">4a</div>
-        <div class="cell">5a</div>
-        <div class="cell">6a</div>
-        <div class="cell">7a</div>
-        <div class="cell">8a</div>
-        <div class="cell">9a</div>
-        <div class="cell">10a</div>
+      <sv-track loop snap class="default">
+        <div tabindex="0" class="cell" style="background: lime">1a</div>
+        <div tabindex="0" class="cell">2a</div>
+        <div tabindex="0" class="cell">3a</div>
+        <div tabindex="0" class="cell">4a</div>
+        <div tabindex="0" class="cell">5a</div>
+        <div tabindex="0" class="cell">6a</div>
+        <div tabindex="0" class="cell">7a</div>
+        <div tabindex="0" class="cell">8a</div>
+        <div tabindex="0" class="cell">9a</div>
+        <div tabindex="0" class="cell">10a</div>
         <div class="cell ghost" style="background: orange">1b</div>
         <div class="cell ghost">2b</div>
         <div class="cell ghost">3b</div>
@@ -34,29 +34,38 @@ import "../src/index.js";
         <div class="cell ghost">8b</div>
         <div class="cell ghost">9b</div>
         <div class="cell ghost">10b</div>
-      </sv-entity-slider>
+      </sv-track>
     </Variant>
 
     <Variant title="Infinite">
-      <sv-entity-slider class="tabs">
+      <sv-track class="infinite">
         <div class="cell first">Home</div>
-      </sv-entity-slider>
+      </sv-track>
     </Variant>
 
     <Variant title="Centered">
-      <sv-entity-slider class="tabs">
+      <sv-track class="centered">
         <div class="cell first">Home</div>
-      </sv-entity-slider>
+      </sv-track>
     </Variant>
 
     <Variant title="Stepped">
-      <sv-entity-slider class="tabs">
+      <sv-track class="stepped">
         <div class="cell first">Home</div>
-      </sv-entity-slider>
+      </sv-track>
+
+      <div class="arrow arrow-prev">&lt;</div>
+      <div class="arrow arrow-next">></div>
+    </Variant>
+
+    <Variant title="Overflow">
+      <sv-track class="overflow">
+        <div class="cell first">Home</div>
+      </sv-track>
     </Variant>
 
     <Variant title="Tabs">
-      <sv-entity-slider class="tabs">
+      <sv-track class="tabs">
         <div class="cell first">Home</div>
         <div class="cell">Videos</div>
         <div class="cell">Career</div>
@@ -64,11 +73,11 @@ import "../src/index.js";
         <div class="cell">About</div>
         <div class="cell">Lorem</div>
         <div class="cell">Ipsum</div>
-      </sv-entity-slider>
+      </sv-track>
     </Variant>
 
     <Variant title="Special">
-      <sv-entity-slider class="special">
+      <sv-track class="special">
         <div class="cell first">1a</div>
         <div class="cell">2a</div>
         <div class="cell">3a</div>
@@ -83,12 +92,16 @@ import "../src/index.js";
         <div class="cell ghost">5b</div>
         <div class="cell ghost">6b</div>
         <div class="cell ghost">7b</div>
-      </sv-entity-slider>
+      </sv-track>
     </Variant>
   </Story>
 </template>
 
 <style lang="scss" scoped>
+sv-track {
+  margin: 20px;
+}
+
 .cell {
   box-shadow: inset 0 0 2px currentColor;
 
@@ -99,8 +112,8 @@ import "../src/index.js";
 
 .default .cell {
   user-select: none;
-  width: calc(var(--width) * 1px);
-  height: calc(var(--width) * 1px);
+  width: 320px;
+  height: 320px;
   flex: none;
   display: flex;
   justify-content: center;

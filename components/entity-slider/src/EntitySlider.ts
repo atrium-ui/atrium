@@ -1,6 +1,13 @@
 import { css, html, LitElement } from "lit";
 import { property, query } from "lit/decorators.js";
-import { AutoplayTrait, LoopTrait, AutorunTrait, Trait, PointerTrait } from "./Traits.js";
+import {
+  AutoplayTrait,
+  LoopTrait,
+  AutorunTrait,
+  Trait,
+  PointerTrait,
+  SnapTrait,
+} from "./Traits.js";
 import { Ease, timer } from "./utils.js";
 
 export type InputState = {
@@ -8,8 +15,7 @@ export type InputState = {
     value: boolean;
   };
   move: {
-    value: boolean;
-    detlaX: number;
+    value: number;
   };
   release: {
     value: boolean;
@@ -25,7 +31,9 @@ export type InputState = {
   };
 };
 
-export class EntitySlider extends LitElement {
+type Easing = "ease" | "linear";
+
+export class Track extends LitElement {
   static get styles() {
     return css`
       :host {
@@ -35,7 +43,7 @@ export class EntitySlider extends LitElement {
         touch-action: pan-y;
       }
 
-      .tile-track {
+      .track {
         display: flex;
         will-change: transform;
       }
@@ -44,32 +52,23 @@ export class EntitySlider extends LitElement {
 
   render() {
     return html`
-      <div
-        tabindex="0"
-        class="tile-slider"
-        style="${`--width: ${this.itemWidth.toFixed(2)}`}"
-        @wheel="${(e) => this.onWheel(e)}"
-      >
-        <div class="tile-track">
-          <slot></slot>
-        </div>
+      <div class="track">
+        <slot></slot>
       </div>
     `;
   }
 
-  @query(".tile-track")
+  @query(".track")
   private readonly track!: HTMLElement;
 
-  defalutWidth = 7;
-  defaultTransitionTime = 669;
-
   get itemCount() {
+    // TODO: "..." bad
     return [...this.children]
       .filter((child) => !child.classList.contains("ghost"))
       .reduce((curr) => curr + 1, 0);
   }
 
-  trackWidth = 0;
+  trackWidth = this.itemCount;
   itemWidth = 250;
   currentItem = 0;
 
@@ -85,7 +84,10 @@ export class EntitySlider extends LitElement {
   targetForceX = 0;
   targetXStart;
   targetX;
-  targetEasing = "linear";
+  targetEasing: Easing = "linear";
+
+  transitionAt = 0;
+  transitionTime = 669;
 
   positionX = 0;
   mouseX = 0;
@@ -93,18 +95,8 @@ export class EntitySlider extends LitElement {
 
   mouseGrab = false;
 
-  transitionAt = 0;
-  transitionTime = this.defaultTransitionTime;
-
   canScroll = true;
   scrollTimeout;
-
-  traits: Trait[] = [
-    new PointerTrait("pointer", this, true),
-    new LoopTrait("loop", this),
-    // new AutoplayTrait("autoplay", this),
-    // new AutorunTrait("autorun", this),
-  ];
 
   inputState: InputState = {
     grab: {
@@ -114,8 +106,7 @@ export class EntitySlider extends LitElement {
       value: false,
     },
     move: {
-      value: false,
-      detlaX: 0,
+      value: 0, // deltaX
     },
     format: {
       value: false,
@@ -130,8 +121,7 @@ export class EntitySlider extends LitElement {
 
   clearInputState() {
     const state = this.inputState;
-    state.move.value = false;
-    state.move.detlaX = 0;
+    state.move.value = 0;
     state.grab.value = false;
     state.format.value = false;
     state.leave.value = false;
@@ -139,19 +129,16 @@ export class EntitySlider extends LitElement {
     state.release.value = false;
   }
 
-  protected updated(): void {
-    for (const trait of this.traits) {
-      if (trait.id === "loop") {
-        trait.enabled = !!this.loop;
-      }
-      if (trait.id === "autoplay") {
-        trait.enabled = !!this.autoplay;
-      }
-      if (trait.id === "autorun") {
-        trait.enabled = !!this.autorun;
-      }
-    }
-  }
+  traits: Trait[] = [
+    new PointerTrait("pointer", this, true),
+    new LoopTrait("loop", this),
+    new SnapTrait("snap", this),
+    // new AutoplayTrait("autoplay", this),
+    // new AutorunTrait("autorun", this),
+  ];
+
+  @property({ type: Boolean, reflect: true })
+  snap = false;
 
   @property({ type: Boolean, reflect: true })
   loop = false;
@@ -161,6 +148,14 @@ export class EntitySlider extends LitElement {
 
   @property({ type: Boolean, reflect: true })
   autorun = false;
+
+  protected updated(): void {
+    for (const trait of this.traits) {
+      if (Track.observedAttributes.includes(trait.id)) {
+        trait.enabled = this.hasAttribute(trait.id);
+      }
+    }
+  }
 
   pointerEnter(e) {
     this.inputState.enter.value = true;
@@ -202,8 +197,7 @@ export class EntitySlider extends LitElement {
     }
 
     if (this.mouseGrab) {
-      this.inputState.move.value = true;
-      this.inputState.move.detlaX += -deltaX;
+      this.inputState.move.value += -deltaX;
 
       this.mouseX = e.x;
       this.mouseY = e.y;
@@ -223,20 +217,36 @@ export class EntitySlider extends LitElement {
 
   onWheel(e) {
     if (this.canScroll && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-      this.inputState.move.value = true;
-      this.inputState.move.detlaX += e.deltaX / 2;
+      this.inputState.move.value += e.deltaX / 2;
 
       e.preventDefault();
     }
   }
 
+  onFocus(e) {
+    const pos = this.getItemPosition([...this.children].indexOf(e.target));
+    this.setTarget(-pos);
+  }
+
+  onKeyDown(e) {
+    if (e.key === "ArrowLeft") {
+      this.moveBy(-1);
+    }
+    if (e.key === "ArrowRight") {
+      this.moveBy(1);
+    }
+  }
+
   format() {
-    this.itemWidth = this.children[0]?.clientWidth || this.itemWidth;
     this.trackWidth = this.getItemPosition(this.itemCount);
 
     this.inputState.format.value = true;
 
     this.requestUpdate();
+  }
+
+  getItemWidth(index: number) {
+    return this.children[index].clientWidth;
   }
 
   getItemPosition(end: number = 0) {
@@ -251,7 +261,7 @@ export class EntitySlider extends LitElement {
     return width;
   }
 
-  setTarget(x, easing = "linear") {
+  setTarget(x, easing: Easing = "linear") {
     if (x !== null) {
       this.transitionAt = Date.now();
       this.targetXStart = this.positionX;
@@ -260,8 +270,12 @@ export class EntitySlider extends LitElement {
     this.targetX = x;
   }
 
-  moveBy(columns, easing) {
-    this.setTarget(-this.itemWidth * (this.currentItem + columns), easing);
+  moveBy(items: number, easing: Easing = "linear") {
+    // TODO: fix this
+    const index = this.currentItem + items;
+    const pos = -this.getItemPosition(index);
+    // console.log("to item", this.currentItem + items, pos);
+    this.setTarget(pos, easing);
   }
 
   stopAnimate() {
@@ -322,7 +336,7 @@ export class EntitySlider extends LitElement {
         default:
           {
             const diff = (this.targetX - this.positionX) % -this.trackWidth;
-            this.targetForceX = diff;
+            this.targetForceX = diff * 0.1;
           }
           break;
       }
@@ -336,16 +350,21 @@ export class EntitySlider extends LitElement {
     this.currentItem = 0;
     for (let i = 0; i < this.itemCount; i++) {
       const x = -this.getItemPosition(this.currentItem + 1);
-      if (this.positionX > x) {
+      const width = this.getItemWidth(this.currentItem);
+      if (this.positionX - width / 2 >= x) {
         break;
       } else {
         this.currentItem++;
       }
     }
+
+    window.currentItem = this.currentItem;
   }
 
   connectedCallback(): void {
     super.connectedCallback();
+
+    this.tabIndex = 0;
 
     window.addEventListener("pointermove", this.pointerMove.bind(this));
     this.addEventListener("pointerdown", this.pointerDown.bind(this));
@@ -353,6 +372,9 @@ export class EntitySlider extends LitElement {
     window.addEventListener("pointercancel", this.pointerUp.bind(this));
     this.addEventListener("pointerleave", this.pointerLeave.bind(this));
     this.addEventListener("pointerenter", this.pointerEnter.bind(this));
+    this.addEventListener("keydown", this.onKeyDown.bind(this));
+    this.addEventListener("wheel", this.onWheel.bind(this));
+    this.addEventListener("focus", this.onFocus.bind(this), { capture: true });
 
     window.addEventListener("resize", this.format.bind(this), { passive: true });
     window.addEventListener("scroll", this.onScroll.bind(this), { capture: true });
@@ -375,10 +397,13 @@ export class EntitySlider extends LitElement {
     window.removeEventListener("pointercancel", this.pointerUp.bind(this));
     this.removeEventListener("pointerleave", this.pointerLeave.bind(this));
     this.removeEventListener("pointerenter", this.pointerEnter.bind(this));
+    this.removeEventListener("keydown", this.onKeyDown.bind(this));
+    this.removeEventListener("wheel", this.onWheel.bind(this));
+    this.removeEventListener("focus", this.onFocus.bind(this));
 
     window.removeEventListener("resize", this.format.bind(this));
     window.removeEventListener("scroll", this.onScroll.bind(this));
   }
 }
 
-customElements.define("sv-entity-slider", EntitySlider);
+customElements.define("sv-track", Track);
