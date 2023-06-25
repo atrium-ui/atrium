@@ -116,7 +116,9 @@ import "../../select/src/index.js";
           {{ paragraph(4) }}
         </p>
 
-        <button slot="toggle">toggle</button>
+        <div class="toggle-btn" slot="toggle" aria-label="Toggle">
+          <button aria-hidden="true">toggle</button>
+        </div>
       </sv-expandable>
     </Variant>
 
@@ -158,17 +160,21 @@ import "../../select/src/index.js";
           </li>
         </ul>
 
-        <button slot="toggle">toggle</button>
+        <div class="toggle-btn" slot="toggle" aria-label="Toggle">
+          <button aria-hidden="true">toggle</button>
+        </div>
       </sv-expandable>
     </Variant>
   </Story>
 </template>
 
 <style lang="scss" scoped>
-button {
-  display: block;
+.toggle-btn {
+  display: inline-block;
   text-align: center;
   margin: 10px auto;
+  cursor: pointer;
+  width: 100%;
 }
 
 ul {
