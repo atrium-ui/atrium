@@ -31,8 +31,8 @@ export class Expandable extends LitElement {
     ];
   }
 
-  @property({ type: Boolean, reflect: true })
-  public opened?: boolean;
+  @property({ type: Boolean, reflect: true }) public opened: boolean = false;
+  @property({ type: String, reflect: true }) public direction: string = "down";
 
   public close(): void {
     this.opened = false;
@@ -42,6 +42,10 @@ export class Expandable extends LitElement {
   public open(): void {
     this.opened = true;
     this.onAnimationFrame();
+  }
+
+  public toggle(): void {
+    this.opened ? this.close() : this.open();
   }
 
   @property({ type: Number })
@@ -61,9 +65,15 @@ export class Expandable extends LitElement {
 
   protected render(): HTMLTemplateResult {
     return html`
-      <div class="container">
+      ${this.direction === "down"
+        ? html`<slot name="toggle" @click=${this.toggle}></slot>`
+        : undefined}
+      <div class="container" aria-hidden=${!this.opened && "true"}>
         <slot></slot>
       </div>
+      ${this.direction === "up"
+        ? html`<slot name="toggle" @click=${this.toggle}></slot>`
+        : undefined}
     `;
   }
 }

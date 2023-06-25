@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import "@sv-components/mono/components/dropdown";
+import "../src/index.js";
 import "../styles/default.scss";
 
 import { logEvent } from "histoire/client";
@@ -80,7 +80,12 @@ const exampleOptions = [
         @close="logEvent('Close', e)"
         style="margin-bottom: 300px"
       >
-        <input slot="input" v-model="state.value" @input="handleFilter" placeholder="Text" />
+        <input
+          slot="input"
+          v-model="state.value"
+          @input="handleFilter"
+          placeholder="Text"
+        />
 
         <sv-option
           v-for="option of exampleOptions.filter((opt) =>

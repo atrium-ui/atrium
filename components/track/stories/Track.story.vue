@@ -7,9 +7,8 @@
 </docs>
 
 <script lang="ts" setup>
-import "../../select/src/index.js";
-import "../src/index.js";
 import { ref } from "vue";
+import "../../select/src/index.js";
 import "../src/index.js";
 
 const centeredSliderIndex = ref([0]);
@@ -19,7 +18,7 @@ const centeredSliderIndex = ref([0]);
   <Story group="primitives" icon-color="#8B5CF6">
     <Variant title="Default">
       <sv-track snap class="default">
-        <div tabindex="0" class="cell" style="background: lime">1a</div>
+        <div tabindex="0" class="cell">1a</div>
         <div tabindex="0" class="cell">2a</div>
         <div tabindex="0" class="cell">3a</div>
         <div tabindex="0" class="cell">4a</div>
@@ -29,16 +28,6 @@ const centeredSliderIndex = ref([0]);
         <div tabindex="0" class="cell">8a</div>
         <div tabindex="0" class="cell">9a</div>
         <div tabindex="0" class="cell">10a</div>
-        <div class="cell ghost" style="background: orange">1b</div>
-        <div class="cell ghost">2b</div>
-        <div class="cell ghost">3b</div>
-        <div class="cell ghost">4b</div>
-        <div class="cell ghost">5b</div>
-        <div class="cell ghost">6b</div>
-        <div class="cell ghost">7b</div>
-        <div class="cell ghost">8b</div>
-        <div class="cell ghost">9b</div>
-        <div class="cell ghost">10b</div>
       </sv-track>
     </Variant>
 
