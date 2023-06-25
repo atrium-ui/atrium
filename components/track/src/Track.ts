@@ -127,6 +127,10 @@ export class Track extends LitElement {
     return this.currentItem % this.itemCount;
   }
 
+  get value() {
+    return this.currentItem % this.itemCount;
+  }
+
   animation;
   frameRate = 0;
   tickRate = 1000 / 140;
