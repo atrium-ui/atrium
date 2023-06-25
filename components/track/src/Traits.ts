@@ -201,9 +201,6 @@ export class SnapTrait extends Trait {
         e.moveBy(0, "linear");
       }
     }
-    // if (inputState.swipe.value.abs()) {
-    //   this.entity.moveBy(Math.sign(inputState.swipe.value.x), "linear");
-    // }
   }
 }
 
