@@ -105,12 +105,6 @@ export class Track extends LitElement {
     return this._heights;
   }
 
-  get itemHeights() {
-    return new Array(this.itemCount).fill(1).map((_, i) => {
-      return (this.children[i] as HTMLElement)?.offsetHeight || 0;
-    });
-  }
-
   get trackWidth() {
     return this.itemWidths.reduce((last, curr) => last + curr, 0);
   }
@@ -128,10 +122,6 @@ export class Track extends LitElement {
   }
 
   currentItem;
-
-  get value() {
-    return this.currentItem % this.itemCount;
-  }
 
   get value() {
     return this.currentItem % this.itemCount;
