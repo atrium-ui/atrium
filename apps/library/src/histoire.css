@@ -7,6 +7,15 @@
   overflow: visible !important;
 }
 
+.histoire-story-controls {
+  /* margin: 20px; */
+}
+
+.histoire-story-controls .histoire-generic-render-story {
+  border: none;
+  margin: 1rem;
+}
+
 .histoire-story-list::after {
   content: var(--version);
   font-weight: bold;

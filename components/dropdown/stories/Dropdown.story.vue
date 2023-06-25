@@ -35,7 +35,7 @@ const exampleOptions = [
         @select="handleSelect"
         @open="logEvent('Open', e)"
         @close="logEvent('Close', e)"
-        style="margin-bottom: 300px"
+        style="margin-bottom: 200px"
       >
         <button slot="input">{{ state.value || "Select" }}</button>
 
@@ -58,7 +58,7 @@ const exampleOptions = [
         @open="logEvent('Open', e)"
         @close="logEvent('Close', e)"
         direction="up"
-        style="margin-top: 300px"
+        style="margin-top: 200px"
       >
         <button slot="input">{{ state.value || "Select" }}</button>
 
@@ -78,7 +78,7 @@ const exampleOptions = [
         @select="handleSelect"
         @open="logEvent('Open', e)"
         @close="logEvent('Close', e)"
-        style="margin-bottom: 300px"
+        style="margin-bottom: 200px"
       >
         <input
           slot="input"
