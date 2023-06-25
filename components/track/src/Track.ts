@@ -87,6 +87,13 @@ export class Track extends LitElement {
     return count;
   }
 
+  // TODO: implement
+  getItemRects() {
+    return new Array(this.itemCount)
+      .fill(0)
+      .map((_, i) => new Vec(this.itemWidths[i], this.itemHeights[i]));
+  }
+
   _widths;
   get itemWidths() {
     if (!this._widths) {
