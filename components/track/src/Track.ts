@@ -105,6 +105,13 @@ export class Track extends LitElement {
     return this._heights;
   }
 
+  get itemHeights() {
+    // TODO: bad code
+    return new Array(this.itemCount).fill(1).map((_, i) => {
+      return this.children[i]?.clientHeight || 0;
+    });
+  }
+
   get trackWidth() {
     return this.itemWidths.reduce((last, curr) => last + curr, 0);
   }
