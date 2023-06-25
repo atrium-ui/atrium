@@ -7,6 +7,8 @@ import {
   Trait,
   PointerTrait,
   SnapTrait,
+  AutoFocusTrait,
+  DebugTrait,
 } from "./Traits.js";
 import { Ease, timer } from "./utils.js";
 
@@ -15,6 +17,9 @@ export type InputState = {
     value: boolean;
   };
   move: {
+    value: number;
+  };
+  swipe: {
     value: number;
   };
   release: {
@@ -41,11 +46,21 @@ export class Track extends LitElement {
         outline: none;
         overflow: hidden;
         touch-action: pan-y;
+        position: relative; /* remove this */
       }
 
       .track {
         display: flex;
         will-change: transform;
+      }
+
+      debug-hud {
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.2);
+        z-index: 1000;
       }
     `;
   }
@@ -62,17 +77,28 @@ export class Track extends LitElement {
   private readonly track!: HTMLElement;
 
   get itemCount() {
-    // TODO: "..." bad
+    // TODO: bad code
     return [...this.children]
       .filter((child) => !child.classList.contains("ghost"))
       .reduce((curr) => curr + 1, 0);
   }
 
-  trackWidth = this.itemCount;
+  get itemWidths() {
+    // TODO: bad code
+    return new Array(this.itemCount).fill(1).map((_, i) => {
+      return this.children[i]?.clientWidth || 0;
+    });
+  }
+
+  get trackWidth() {
+    return this.itemWidths.reduce((last, curr) => last + curr, 0);
+  }
+
   itemWidth = 250;
   currentItem = 0;
 
   animation;
+  frameRate = 0;
   tickRate = 1000 / 140;
   lastTick = 0;
   accumulator = 0;
@@ -108,6 +134,9 @@ export class Track extends LitElement {
     move: {
       value: 0, // deltaX
     },
+    swipe: {
+      value: 0, // deltaX
+    },
     format: {
       value: false,
     },
@@ -122,6 +151,7 @@ export class Track extends LitElement {
   clearInputState() {
     const state = this.inputState;
     state.move.value = 0;
+    state.swipe.value = 0;
     state.grab.value = false;
     state.format.value = false;
     state.leave.value = false;
@@ -129,16 +159,13 @@ export class Track extends LitElement {
     state.release.value = false;
   }
 
-  traits: Trait[] = [
-    new PointerTrait("pointer", this, true),
-    new LoopTrait("loop", this),
-    new SnapTrait("snap", this),
-    // new AutoplayTrait("autoplay", this),
-    // new AutorunTrait("autorun", this),
-  ];
+  traits: Trait[] = [];
 
   @property({ type: Boolean, reflect: true })
   snap = false;
+
+  @property({ type: Boolean, reflect: true })
+  debug = false;
 
   @property({ type: Boolean, reflect: true })
   loop = false;
@@ -207,7 +234,6 @@ export class Track extends LitElement {
   onScroll() {
     clearTimeout(this.scrollTimeout);
 
-    // TODO: optimise scrolling
     this.canScroll = false;
 
     this.scrollTimeout = setTimeout(() => {
@@ -217,48 +243,46 @@ export class Track extends LitElement {
 
   onWheel(e) {
     if (this.canScroll && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-      this.inputState.move.value += e.deltaX / 2;
+      this.inputState.swipe.value += e.deltaX / 2;
 
       e.preventDefault();
     }
   }
 
   onFocus(e) {
-    const pos = this.getItemPosition([...this.children].indexOf(e.target));
-    this.setTarget(-pos);
+    // TODO: will set target on click too.
+    // const pos = this.getItemPosition([...this.children].indexOf(e.target));
+    // this.setTarget(-pos);
   }
 
   onKeyDown(e) {
     if (e.key === "ArrowLeft") {
-      this.moveBy(-1);
+      this.moveBy(-1, "ease");
     }
     if (e.key === "ArrowRight") {
-      this.moveBy(1);
+      this.moveBy(1, "ease");
     }
   }
 
   format() {
-    this.trackWidth = this.getItemPosition(this.itemCount);
-
     this.inputState.format.value = true;
 
     this.requestUpdate();
   }
 
-  getItemWidth(index: number) {
-    return this.children[index].clientWidth;
-  }
+  getItemPosition(toIndex: number = 0): number {
+    const toActualPointer = toIndex < 0 ? toIndex + this.itemCount : toIndex;
 
-  getItemPosition(end: number = 0) {
-    let width = 0;
-    let index = 0;
-    for (const child of this.children) {
-      if (index >= end) break;
-
-      width += child.clientWidth;
-      index++;
+    let x = 0;
+    for (let i = 0; i < Math.abs(toActualPointer); i++) {
+      x -= this.itemWidths[i] || 0;
     }
-    return width;
+
+    if (toIndex < 0) {
+      x += this.trackWidth;
+    }
+
+    return x;
   }
 
   setTarget(x, easing: Easing = "linear") {
@@ -270,11 +294,9 @@ export class Track extends LitElement {
     this.targetX = x;
   }
 
-  moveBy(items: number, easing: Easing = "linear") {
-    // TODO: fix this
-    const index = this.currentItem + items;
-    const pos = -this.getItemPosition(index);
-    // console.log("to item", this.currentItem + items, pos);
+  moveBy(byItems: number, easing: Easing = "linear") {
+    const i = this.currentItem + byItems;
+    const pos = this.getItemPosition(i);
     this.setTarget(pos, easing);
   }
 
@@ -288,6 +310,7 @@ export class Track extends LitElement {
     if (!this.lastTick) this.lastTick = ms;
 
     const deltaTick = ms - this.lastTick;
+    this.frameRate = 1000 / deltaTick;
     this.lastTick = ms;
 
     // handles inputs synchronously
@@ -314,10 +337,6 @@ export class Track extends LitElement {
     this.positionX += this.inputForceX;
   }
 
-  setPos(x) {
-    this.positionX = x;
-  }
-
   updateTick() {
     for (const trait of this.traits) {
       if (trait && trait.enabled) trait.update();
@@ -335,7 +354,7 @@ export class Track extends LitElement {
           break;
         default:
           {
-            const diff = (this.targetX - this.positionX) % -this.trackWidth;
+            const diff = (this.targetX - this.positionX - 1) % -this.trackWidth;
             this.targetForceX = diff * 0.1;
           }
           break;
@@ -347,18 +366,17 @@ export class Track extends LitElement {
 
     this.targetForceX *= 0;
 
-    this.currentItem = 0;
-    for (let i = 0; i < this.itemCount; i++) {
-      const x = -this.getItemPosition(this.currentItem + 1);
-      const width = this.getItemWidth(this.currentItem);
-      if (this.positionX - width / 2 >= x) {
+    // determine current item
+    let x = 0;
+    let i = 0;
+    for (const w of this.itemWidths) {
+      x -= w;
+      if (this.positionX > x) {
+        this.currentItem = i;
         break;
-      } else {
-        this.currentItem++;
       }
+      i++;
     }
-
-    window.currentItem = this.currentItem;
   }
 
   connectedCallback(): void {
@@ -382,8 +400,19 @@ export class Track extends LitElement {
     requestAnimationFrame(() => {
       // needs markup to exist
       this.format();
+      this.stopAnimate();
       this.tick();
     });
+
+    this.traits = [
+      new PointerTrait("pointer", this, true),
+      new LoopTrait("loop", this),
+      new SnapTrait("snap", this),
+      new AutoFocusTrait("autofocus", this, true),
+      new DebugTrait("debug", this),
+      // new AutoplayTrait("autoplay", this),
+      // new AutorunTrait("autorun", this),
+    ];
   }
 
   disconnectedCallback(): void {

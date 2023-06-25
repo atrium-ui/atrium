@@ -1,136 +1,114 @@
-let accumulator = 0;
-
-export default class Graph extends Element {
-  set enabled(b) {
-    this._enabled = b;
-
-    if (b === true) {
-      this.show();
-    } else {
-      this.hide();
-    }
-  }
-
-  get enabled() {
-    return this._enabled;
-  }
-
-  constructor() {
-    super();
-
-    this.updaterate = 16;
-    this.scale = 1.5;
-    this.opacity = 0.6;
-
-    this.history = [];
-  }
+export default class DebugElement extends HTMLElement {
+  props: Array<string | number | number[] | (number | string)[]> = [];
+  canvas!: HTMLCanvasElement;
+  context!: CanvasRenderingContext2D | null;
 
   connectedCallback() {
-    const ele = document.createElement("canvas");
-    this.appendChild(ele);
+    if (!this.shadowRoot) this.attachShadow({ mode: "open" });
 
-    this.canvas = ele;
-    this.context = ele.getContext("2d");
-    this.width = this.context.canvas.width;
+    if (this.shadowRoot && !this.canvas) {
+      const ele = document.createElement("canvas");
 
-    Preferences.onchange = (cahnge) => {
-      if (cahnge.developer) {
-        this.enabled = true;
-      } else {
-        this.enabled = false;
-      }
-    };
-
-    this.enabled = Preferences.get("developer");
-  }
-
-  update(game, ms) {
-    if (!this.enabled) return;
-
-    accumulator += ms;
-    if (accumulator > this.updaterate) {
-      this.pushState(game.FPS);
-      accumulator = 0;
+      this.canvas = ele;
+      this.context = this.canvas.getContext("2d");
+      this.shadowRoot.appendChild(ele);
     }
-  }
 
-  pushState(state) {
-    this.history.push(Math.floor(state * 10) / 10);
-    if (this.history.length > this.width / this.scale) {
-      this.history.shift();
-    }
-  }
-
-  hide() {
-    this.style.display = "none";
-  }
-
-  show() {
-    this.style.display = "block";
     this.render();
   }
 
-  render() {
-    const ctx = this.context;
-    const canvas = ctx.canvas;
-
-    const arr = this.history;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.strokeStyle = "white";
-    ctx.fillStyle = "white";
-    ctx.globalAlpha = this.opacity;
-
-    this.drawGrpah(ctx, arr, "red");
-
-    if (this.enabled) {
-      requestAnimationFrame(this.render.bind(this));
+  plot(propIndex: number, title: string, n: number) {
+    let arr = this.props[propIndex];
+    if (!Array.isArray(arr)) {
+      arr = this.props[propIndex] = [];
     }
+    arr.push(n);
+
+    if (arr.length > this.canvas.width - 10) {
+      arr.shift();
+    }
+
+    arr[0] = title;
   }
 
-  drawGrpah(ctx, arr, color = "white") {
-    const canvas = ctx.canvas;
-    const maxValue = Math.max(...arr);
+  add(item: number | number[] | string) {
+    return this.props.push(item);
+  }
+
+  set(index: number, value) {
+    this.props[index] = value;
+  }
+
+  fontSize = 12;
+
+  lineHeight(row: number) {
+    return this.fontSize + this.fontSize * row * 1.2;
+  }
+
+  width = 100;
+
+  drawGraph(
+    ctx: CanvasRenderingContext2D,
+    title: string | number,
+    row: number,
+    arr: number[],
+    color = "red"
+  ) {
+    const params = title.toString().split(";");
+
+    color = params[1] || color;
+
+    ctx.fillStyle = "black";
+
+    const maxValue = Math.max(Math.max(...arr), 1);
 
     ctx.save();
 
-    ctx.translate(0, 10);
+    ctx.translate(0, this.lineHeight(row));
 
-    const height = canvas.height - 30;
+    const height = this.lineHeight(2);
 
     function scaleToCanvas(x) {
-      return height - (x / maxValue) * height;
+      const h = height - 20;
+      return h - (x / maxValue) * h;
     }
+
+    const leftPad = 4.5;
 
     // draw graph
     ctx.beginPath();
     ctx.strokeStyle = color;
-    ctx.moveTo(24.5, 0);
+
+    ctx.globalAlpha = 0.1;
+    ctx.fillRect(leftPad, 0, this.canvas.width - 10, height - 20);
+    ctx.globalAlpha = 1;
 
     for (let index = 0; index < arr.length; index++) {
-      const x = index * this.scale;
+      const x = index;
       const y = scaleToCanvas(arr[index]);
-      ctx.lineTo(x + 24.5, y);
+      if (index === 0) {
+        ctx.moveTo(x + leftPad, y);
+      }
+      ctx.lineTo(x + leftPad, y);
     }
     ctx.stroke();
 
     ctx.strokeStyle = "white";
 
     // draw sepearators
-    ctx.beginPath();
-    ctx.moveTo(24.5, 0);
-    ctx.lineTo(24.5, height - 0.5);
-    ctx.lineTo(this.width, height - 0.5);
-    ctx.stroke();
+    // ctx.beginPath();
+    // ctx.moveTo(leftPad, 0);
+    // ctx.lineTo(leftPad, height - 0.5);
+    // ctx.lineTo(this.width, height - 0.5);
+    // ctx.stroke();
 
     // draw numbers
-    ctx.textAlign = "right";
+    // ctx.textAlign = "right";
 
-    for (let i = 0; i < maxValue; i += 20) {
-      const y = scaleToCanvas(i);
-      ctx.fillText(i, 18, y);
-    }
+    // for (let i = 0; i < maxValue; i += 20) {
+    //   const y = scaleToCanvas(i);
+    //   ctx.fillText(i, 18, y);
+    // }
 
     ctx.restore();
 
@@ -138,115 +116,67 @@ export default class Graph extends Element {
 
     ctx.textAlign = "left";
 
-    if (arr.length > 1) {
-      const sum = arr.reduce((a, b) => a + b);
-      const avg = (sum / arr.length).toFixed(1);
-      ctx.fillText("avg: " + avg, 24.5, height + 24);
+    const y = this.lineHeight(row);
+    let x = leftPad;
+
+    if (params[0]) {
+      ctx.fillText(params[0] + ":", x, y + height);
+      x += params[0].length * 7 + 2;
     }
 
-    ctx.fillText("cur: " + arr[arr.length - 1], 24.5 + 60, height + 24);
-  }
-}
+    // if (arr.length > 1) {
+    //   const sum = arr.reduce((a, b) => a + b);
+    //   const avg = (sum / arr.length).toFixed(1);
+    //   ctx.fillText("avg: " + avg, x, y + height);
+    // }
+    // x += 65;
 
-customElements.define("hud-graph", Graph);
-
-import { Element } from "../Panels";
-import Preferences from "../../../../engine/Misc/Preferences";
-
-export default class Dev extends Element {
-  set enabled(b) {
-    this._enabled = b;
-
-    if (b === true) {
-      this.show();
-    } else {
-      this.hide();
-    }
-  }
-
-  get enabled() {
-    return this._enabled;
-  }
-
-  constructor() {
-    super();
-    this.props = {};
-  }
-
-  connectedCallback() {
-    const ele = document.createElement("canvas");
-    ele.height = 160;
-
-    this.appendChild(ele);
-
-    this.canvas = ele;
-    this.context = this.canvas.getContext("2d");
-
-    Preferences.onchange = (cahnge) => {
-      if (cahnge.developer) {
-        this.enabled = true;
-      } else {
-        this.enabled = false;
-      }
-    };
-
-    this.enabled = Preferences.get("developer");
-  }
-
-  update(game, ms) {
-    if (!this.enabled) return;
-
-    const lvl = game.currentLevel;
-
-    if (!lvl) return;
-
-    this.props = [
-      game.FPS.toFixed(1) + " FPS",
-      "Renderer: " + game.renderer.type,
-      "Level: " + lvl.name,
-      "loaded: " + lvl.loaded,
-      "layers: " + lvl.layers.length,
-      "entities: " + lvl.entities.length,
-      "particles: " + lvl.particleSystem.particles.length,
-      "camera pos: " +
-        "x " +
-        lvl.camera.position.x.toFixed(3) +
-        " y " +
-        lvl.camera.position.y.toFixed(3),
-      "camera scale: " + lvl.camera.scale,
-    ];
-  }
-
-  hide() {
-    this.style.display = "none";
-  }
-
-  show() {
-    this.style.display = "block";
-    this.render();
+    ctx.fillText((arr[arr.length - 1] || "").toString(), x, y + height);
   }
 
   render() {
+    requestAnimationFrame(this.render.bind(this));
+
+    this.canvas.height =
+      this.lineHeight(
+        this.props.reduce((prev: number, next) => {
+          if (Array.isArray(next)) {
+            return prev + 3;
+          }
+          return prev + 1;
+        }, 0) as number
+      ) + 4;
+
+    if (!this.context) return;
     const ctx = this.context;
     const canvas = ctx.canvas;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    for (let i = 0; i < this.props.length; i++) {
-      this.drawRow(ctx, i, this.props[i]);
-    }
+    let line = 0;
 
-    if (this.enabled) {
-      requestAnimationFrame(this.render.bind(this));
+    for (let i = 0; i < this.props.length; i++) {
+      switch (typeof this.props[i]) {
+        case "object": {
+          const item = this.props[i];
+          if (Array.isArray(item)) {
+            this.drawGraph(ctx, item[0], line, item.slice(1) as number[]);
+          }
+          line += 3;
+          break;
+        }
+        default:
+          this.drawRow(ctx, line, this.props[i]);
+      }
+      line++;
     }
   }
 
   drawRow(ctx, row, value) {
-    const fontSize = 14;
-    ctx.fillStyle = "white";
-    ctx.font = fontSize + "px sans-serif";
-    ctx.fillText(value, 5, fontSize + fontSize * row * 1.2);
+    ctx.fillStyle = "black";
+    ctx.font = "300 " + this.fontSize + "px sans-serif";
+    if (value) ctx.fillText(value, 5, this.lineHeight(row));
   }
 }
 
-customElements.define("hud-dev", Dev);
+customElements.define("debug-hud", DebugElement);

@@ -1,3 +1,4 @@
+import DebugElement from "./Debug.js";
 import { InputState } from "./EntitySlider.js";
 import { Ease, isTouch, timer } from "./utils.js";
 
@@ -11,6 +12,12 @@ export class Trait {
     this.id = id;
     this.enabled = defaultEnabled;
     this.entity = entity;
+
+    this.created();
+  }
+
+  created() {
+    // ...
   }
 
   input(inputState: InputState) {
@@ -19,6 +26,76 @@ export class Trait {
 
   update() {
     // ...
+  }
+}
+
+export class DebugTrait extends Trait {
+  debug = new DebugElement();
+
+  created(): void {
+    this.entity.focus();
+
+    if (this.enabled) {
+      this.entity.shadowRoot?.append(this.debug);
+    }
+  }
+
+  _enabled = this.enabled;
+
+  // @ts-ignore
+  set enabled(val) {
+    if (this.debug) {
+      if (val === true && !this.debug.parentElement) {
+        this.entity.shadowRoot?.append(this.debug);
+      } else {
+        if (this.debug) this.debug.remove();
+      }
+    }
+
+    this._enabled = val;
+  }
+
+  get enabled() {
+    return this._enabled;
+  }
+
+  adds: any[] = [];
+
+  display(id: number, f) {
+    this.adds[id] = f;
+  }
+
+  update(): void {
+    const e = this.entity;
+    const arr = [
+      [`fps: ${Math.floor(e.frameRate)}`],
+      [`width: ${e.trackWidth}`],
+      [`items: ${e.itemCount}`],
+      [`current: ${e.currentItem}`],
+      [`currentPos: ${e.getItemPosition(e.currentItem)}`],
+      [`grab: ${e.mouseGrab}`],
+      [`pos: ${e.positionX}`],
+      ["input;red", Math.abs(e.inputForceX)],
+      [`target: ${e.targetX}`],
+      [`transtion: ${e.transitionAt}`],
+      [`items: ${e.itemWidths.join(", ")}`],
+      ...this.adds.map((f) => [f().toString()]),
+    ];
+
+    arr.forEach((item, index) => {
+      if (item.length > 1) {
+        // @ts-ignore
+        this.debug.plot(index, ...item);
+      } else {
+        this.debug.set(index, item[0]);
+      }
+    });
+  }
+}
+
+export class AutoFocusTrait extends Trait {
+  created(): void {
+    this.entity.focus();
   }
 }
 
@@ -84,7 +161,11 @@ export class SnapTrait extends Trait {
   input(inputState: InputState): void {
     if (inputState.release.value) {
       const e = this.entity;
-      e.moveBy(Math.abs(e.inputForceX) > 10 ? -Math.sign(e.inputForceX) : 0, "linear");
+      e.moveBy(Math.abs(e.inputForceX) > 2 ? -Math.sign(e.inputForceX) : 0, "linear");
+    }
+    if (inputState.swipe.value) {
+      const e = this.entity;
+      e.moveBy(Math.sign(inputState.swipe.value), "linear");
     }
   }
 }
