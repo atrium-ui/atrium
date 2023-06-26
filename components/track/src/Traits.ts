@@ -119,7 +119,7 @@ export class PointerTrait extends Trait {
       let clampedPos = newPos;
 
       const stopTop = 0;
-      const stopBottom = -e.trackHeight + e.offsetHeight;
+      const stopBottom = -e.trackHeight + e.itemHeights[e.itemCount - 1];
       const stopLeft = 0;
       const stopRight = -e.trackWidth + e.itemWidths[e.itemCount - 1];
 
@@ -161,7 +161,8 @@ export class PointerTrait extends Trait {
 
     // clamp input force
     const diff = this.getClapmedDiff();
-    if (diff.x) {
+    // TODO: here too, if im not in vertical mode diff.y should be 0.
+    if (e.vertical ? diff.y : diff.x) {
       if (!this.grabbing) {
         e.inputForce.set(diff.mul(-1));
         e.inputForce.mul(1 / 10);
@@ -289,10 +290,19 @@ export class LoopTrait extends Trait {
   update() {
     const e = this.entity;
 
-    const maxX = -e.trackWidth;
-    e.position.x = e.position.x % maxX;
-    if (e.position.x >= 0) {
-      e.position.x = maxX;
+    // TOOD: same, position.y should just be 0 if in not in vertical mode
+    if (e.vertical) {
+      const max = -e.trackHeight;
+      e.position.y = e.position.y % max;
+      if (e.position.y >= 0) {
+        e.position.y = max;
+      }
+    } else {
+      const max = -e.trackWidth;
+      e.position.x = e.position.x % max;
+      if (e.position.x >= 0) {
+        e.position.x = max;
+      }
     }
   }
 }
