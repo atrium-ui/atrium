@@ -110,9 +110,11 @@ export class Track extends LitElement {
 
   _heights;
   get itemHeights() {
-    this._heights = new Array(this.itemCount).fill(1).map((_, i) => {
-      return (this.children[i] as HTMLElement)?.offsetHeight || 0;
-    });
+    if (!this._heights) {
+      this._heights = new Array(this.itemCount).fill(1).map((_, i) => {
+        return (this.children[i] as HTMLElement)?.offsetHeight || 0;
+      });
+    }
     return this._heights;
   }
 
@@ -251,7 +253,7 @@ export class Track extends LitElement {
     const pos = new Vec(e.x, e.y);
     const delta = Vec.sub(pos, this.mousePos);
 
-    if (!this.mouseGrab) {
+    if (!this.mouseGrab && delta.abs() > 3) {
       if (this.vertical && this.mousePos.y && Math.abs(delta.x) < Math.abs(delta.y)) {
         this.mouseGrab = true;
         this.inputState.grab.value = true;
@@ -282,11 +284,14 @@ export class Track extends LitElement {
       ? Math.abs(e.deltaX) < Math.abs(e.deltaY)
       : Math.abs(e.deltaX) > Math.abs(e.deltaY);
 
-    if (this.canScroll && threshold) {
-      const delta = new Vec(e.deltaX / 2, e.deltaY / 2);
-      if (delta.abs() > 2 || this.inputState.swipe.value.abs() < 2) {
-        this.inputState.swipe.value.add(delta);
+    if (this.canScroll) {
+      if (threshold) {
+        const delta = new Vec(e.deltaX / 2, e.deltaY / 2);
+        if (delta.abs() > 2 || this.inputState.swipe.value.abs() < 2) {
+          this.inputState.swipe.value.add(delta);
+        }
       }
+
       e.preventDefault();
     }
   }
@@ -297,20 +302,28 @@ export class Track extends LitElement {
     // this.setTarget(-pos);
   }
 
-  onKeyDown(e) {
+  next() {
     const t = this.transition === 0 || this.transition === 1;
+    this.moveBy(1, t ? "ease" : "linear");
+  }
 
+  prev() {
+    const t = this.transition === 0 || this.transition === 1;
+    this.moveBy(-1, t ? "ease" : "linear");
+  }
+
+  onKeyDown(e) {
     const Key = {
       prev: this.vertical ? "ArrowUp" : "ArrowLeft",
       next: this.vertical ? "ArrowDown" : "ArrowRight",
     };
 
     if (e.key === Key.prev) {
-      this.moveBy(-1, t ? "ease" : "linear");
+      this.prev();
       e.preventDefault();
     }
     if (e.key === Key.next) {
-      this.moveBy(1, t ? "ease" : "linear");
+      this.next();
       e.preventDefault();
     }
   }
