@@ -137,6 +137,26 @@ const centeredSliderIndex = ref([0]);
         <div class="cell">7a</div>
       </sv-track>
     </Variant>
+
+    <Variant title="Vertical">
+      <sv-track class="vertical" snap vertical>
+        <div class="cell first">1a</div>
+        <div class="cell">2a</div>
+        <div class="cell">3a</div>
+        <div class="cell">4a</div>
+        <div class="cell">5a</div>
+        <div class="cell">6a</div>
+        <div class="cell">7a</div>
+        <div class="cell">8a</div>
+        <div class="cell">9a</div>
+        <div class="cell">10a</div>
+        <div class="cell">11a</div>
+        <div class="cell">12a</div>
+        <div class="cell">13a</div>
+        <div class="cell">14a</div>
+        <div class="cell">15a</div>
+      </sv-track>
+    </Variant>
   </Story>
 </template>
 
@@ -209,7 +229,7 @@ sv-track {
   flex-direction: column;
   justify-content: center;
 
-  --width: 800px;
+  --width: 600px;
 
   sv-track {
     padding-left: calc(50% - (var(--width) / 2));
@@ -291,6 +311,14 @@ sv-track {
     &[active] .cell {
       border: 2px solid red;
     }
+  }
+}
+
+.vertical {
+  height: 600px;
+
+  .cell {
+    height: 100px;
   }
 }
 </style>

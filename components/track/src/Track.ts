@@ -54,6 +54,10 @@ export class Track extends LitElement {
         will-change: transform;
       }
 
+      :host([vertical]) .track {
+        flex-direction: column;
+      }
+
       debug-hud {
         display: inline-block;
         position: absolute;
@@ -87,6 +91,13 @@ export class Track extends LitElement {
     return count;
   }
 
+  // TODO: implement
+  getItemRects() {
+    return new Array(this.itemCount)
+      .fill(0)
+      .map((_, i) => new Vec(this.itemWidths[i], this.itemHeights[i]));
+  }
+
   _widths;
   get itemWidths() {
     if (!this._widths) {
@@ -99,9 +110,11 @@ export class Track extends LitElement {
 
   _heights;
   get itemHeights() {
-    this._heights = new Array(this.itemCount).fill(1).map((_, i) => {
-      return (this.children[i] as HTMLElement)?.offsetHeight || 0;
-    });
+    if (!this._heights) {
+      this._heights = new Array(this.itemCount).fill(1).map((_, i) => {
+        return (this.children[i] as HTMLElement)?.offsetHeight || 0;
+      });
+    }
     return this._heights;
   }
 
@@ -190,6 +203,7 @@ export class Track extends LitElement {
 
   traits: Trait[] = [];
 
+  @property({ type: Boolean, reflect: true }) vertical = false;
   @property({ type: Boolean, reflect: true }) snap = false;
   @property({ type: Boolean, reflect: true }) debug = false;
   @property({ type: Boolean, reflect: true }) loop = false;
@@ -239,9 +253,14 @@ export class Track extends LitElement {
     const pos = new Vec(e.x, e.y);
     const delta = Vec.sub(pos, this.mousePos);
 
-    if (!this.mouseGrab && this.mousePos.x && Math.abs(delta.y) < Math.abs(delta.x)) {
-      this.mouseGrab = true;
-      this.inputState.grab.value = true;
+    if (!this.mouseGrab && delta.abs() > 3) {
+      if (this.vertical && this.mousePos.y && Math.abs(delta.x) < Math.abs(delta.y)) {
+        this.mouseGrab = true;
+        this.inputState.grab.value = true;
+      } else if (this.mousePos.x && Math.abs(delta.y) < Math.abs(delta.x)) {
+        this.mouseGrab = true;
+        this.inputState.grab.value = true;
+      }
     }
 
     if (this.mouseGrab) {
@@ -261,11 +280,18 @@ export class Track extends LitElement {
   }
 
   onWheel(e) {
-    if (this.canScroll && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-      const delta = new Vec(e.deltaX / 2, e.deltaY / 2);
-      if (delta.abs() > 2 || this.inputState.swipe.value.abs() < 2) {
-        this.inputState.swipe.value.add(delta);
+    const threshold = this.vertical
+      ? Math.abs(e.deltaX) < Math.abs(e.deltaY)
+      : Math.abs(e.deltaX) > Math.abs(e.deltaY);
+
+    if (this.canScroll) {
+      if (threshold) {
+        const delta = new Vec(e.deltaX / 2, e.deltaY / 2);
+        if (delta.abs() > 2 || this.inputState.swipe.value.abs() < 2) {
+          this.inputState.swipe.value.add(delta);
+        }
       }
+
       e.preventDefault();
     }
   }
@@ -276,13 +302,29 @@ export class Track extends LitElement {
     // this.setTarget(-pos);
   }
 
-  onKeyDown(e) {
+  next() {
     const t = this.transition === 0 || this.transition === 1;
-    if (e.key === "ArrowLeft") {
-      this.moveBy(-1, t ? "ease" : "linear");
+    this.moveBy(1, t ? "ease" : "linear");
+  }
+
+  prev() {
+    const t = this.transition === 0 || this.transition === 1;
+    this.moveBy(-1, t ? "ease" : "linear");
+  }
+
+  onKeyDown(e) {
+    const Key = {
+      prev: this.vertical ? "ArrowUp" : "ArrowLeft",
+      next: this.vertical ? "ArrowDown" : "ArrowRight",
+    };
+
+    if (e.key === Key.prev) {
+      this.prev();
+      e.preventDefault();
     }
-    if (e.key === "ArrowRight") {
-      this.moveBy(1, t ? "ease" : "linear");
+    if (e.key === Key.next) {
+      this.next();
+      e.preventDefault();
     }
   }
 
@@ -413,27 +455,32 @@ export class Track extends LitElement {
     let currItem;
     for (let i = -1; i < this.itemCount + 1; i++) {
       const pos = this.getItemPosition(i);
-      const w = this.itemWidths[Math.abs(i) % this.itemCount];
+      const w = (this.vertical ? this.itemHeights : this.itemWidths)[
+        Math.abs(i) % this.itemCount
+      ];
+      const p = this.vertical ? pos.y : pos.x;
+      const j = this.vertical ? this.position.y : this.position.x;
 
-      if (this.direction.x > 0) {
+      if (this.vertical ? this.direction.x > 0 : this.direction.y > 0) {
         // to right
-        if (pos.x + w / 4 < this.position.x) {
+        if (p + w / 4 < j) {
           currItem = i - 1;
           break;
         }
       } else {
         // to left
-        if (pos.x + w / 1.25 < this.position.x) {
+        if (p + w / 1.25 < j) {
           currItem = i - 1;
           break;
         }
       }
     }
     if (currItem === undefined) {
-      if (this.direction.x > 0) {
+      // TODO: i think there is a bug here when im at the last item and scroll past
+      if (this.direction.abs() > 0) {
         currItem = 0;
       } else {
-        currItem = this.itemCount;
+        currItem = this.itemCount - 1;
       }
     }
 
@@ -454,7 +501,12 @@ export class Track extends LitElement {
 
     const track = this.track;
     if (track) {
-      track.style.transform = `translate(${this.position.x}px, ${0}px)`;
+      if (this.vertical) {
+        // TODO: should be handled automaticly; If im not in verical mode, position.y should be 0.
+        track.style.transform = `translate(${0}px, ${this.position.y}px)`;
+      } else {
+        track.style.transform = `translate(${this.position.x}px, ${0}px)`;
+      }
     }
   }
 
