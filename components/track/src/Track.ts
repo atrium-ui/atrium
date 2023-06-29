@@ -207,7 +207,7 @@ export class Track extends LitElement {
   @property({ type: Boolean, reflect: true }) snap = false;
   @property({ type: Boolean, reflect: true }) debug = false;
   @property({ type: Boolean, reflect: true }) loop = false;
-  @property({ type: Number, reflect: true }) autoplay = 0;
+  @property({ type: Number, reflect: false }) autoplay = 0;
   @property({ type: Boolean, reflect: true }) autorun = false;
   @property({ type: String, reflect: true }) overflow: "item" | "full" = "item";
 
