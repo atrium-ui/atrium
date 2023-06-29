@@ -329,6 +329,8 @@ export class Track extends LitElement {
 
   format() {
     this.inputState.format.value = true;
+    this._widths = undefined;
+    this._heights = undefined;
 
     this.requestUpdate();
   }
