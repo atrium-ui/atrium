@@ -207,15 +207,19 @@ export class SnapTrait extends Trait {
 
 export class AutoplayTrait extends Trait {
   autoPlayTimeout = 4000;
-  autoPlayTime = 3000;
+  defaultAutoPlayTime = 3000;
   autoPlayTimer;
 
+  lastTarget = null;
+
   input(inputState: InputState) {
+    if (this.lastTarget !== this.entity.target) {
+      this.autoPlayTimer = Date.now();
+      this.lastTarget = this.entity.target;
+    }
+
     if (inputState.format.value) {
       const entity = this.entity;
-
-      this.autoPlayTimer = Date.now();
-
       entity.moveBy(0, "linear");
     }
 
@@ -225,10 +229,10 @@ export class AutoplayTrait extends Trait {
   }
 
   update() {
-    const slideTime = timer(this.autoPlayTimer, this.autoPlayTime);
+    const autoplayTime = this.entity.autoplay * 1000 || this.defaultAutoPlayTime;
+    const slideTime = timer(this.autoPlayTimer, autoplayTime);
     if (slideTime >= 1) {
       this.entity.moveBy(1, "ease");
-      this.autoPlayTimer = Date.now();
     }
   }
 }
@@ -292,15 +296,17 @@ export class LoopTrait extends Trait {
 
     // TOOD: same, position.y should just be 0 if in not in vertical mode
     if (e.vertical) {
-      const max = -e.trackHeight;
+      const start = 0;
+      const max = start + -e.trackHeight;
       e.position.y = e.position.y % max;
-      if (e.position.y >= 0) {
+      if (e.position.y >= start) {
         e.position.y = max;
       }
     } else {
-      const max = -e.trackWidth;
+      const start = 0;
+      const max = start + -e.trackWidth;
       e.position.x = e.position.x % max;
-      if (e.position.x >= 0) {
+      if (e.position.x >= start) {
         e.position.x = max;
       }
     }
