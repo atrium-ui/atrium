@@ -134,7 +134,7 @@ export class Track extends LitElement {
     return this.trackHeight - this.offsetHeight;
   }
 
-  currentItem;
+  currentItem = 0;
 
   get value() {
     return this.currentItem % this.itemCount;
@@ -207,7 +207,7 @@ export class Track extends LitElement {
   @property({ type: Boolean, reflect: true }) snap = false;
   @property({ type: Boolean, reflect: true }) debug = false;
   @property({ type: Boolean, reflect: true }) loop = false;
-  @property({ type: Boolean, reflect: true }) autoplay = false;
+  @property({ type: Number, reflect: true }) autoplay = 0;
   @property({ type: Boolean, reflect: true }) autorun = false;
   @property({ type: String, reflect: true }) overflow: "item" | "full" = "item";
 
@@ -289,10 +289,9 @@ export class Track extends LitElement {
         const delta = new Vec(e.deltaX / 2, e.deltaY / 2);
         if (delta.abs() > 2 || this.inputState.swipe.value.abs() < 2) {
           this.inputState.swipe.value.add(delta);
+          e.preventDefault();
         }
       }
-
-      e.preventDefault();
     }
   }
 
