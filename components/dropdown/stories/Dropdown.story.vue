@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import "@sv-components/mono/components/dropdown";
+import "../src/index.js";
 import "../styles/default.scss";
 
 import { logEvent } from "histoire/client";

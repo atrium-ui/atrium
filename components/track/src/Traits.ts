@@ -119,9 +119,14 @@ export class PointerTrait extends Trait {
       let clampedPos = newPos;
 
       const stopTop = 0;
-      const stopBottom = -e.trackHeight + e.offsetHeight;
+      let stopBottom = -e.trackHeight + e.itemHeights[e.itemCount - 1];
       const stopLeft = 0;
-      const stopRight = -e.trackWidth + e.itemWidths[e.itemCount - 1];
+      let stopRight = -e.trackWidth + e.itemWidths[e.itemCount - 1];
+
+      if (e.overflow == "fill") {
+        stopRight = -e.trackWidth + e.offsetWidth;
+        stopBottom = -e.trackHeight + e.offsetHeight;
+      }
 
       clampedPos = new Vec(
         Math.min(stopLeft, clampedPos.x),
@@ -131,6 +136,7 @@ export class PointerTrait extends Trait {
         Math.max(stopRight, clampedPos.x),
         Math.max(stopBottom, clampedPos.y)
       );
+
       return Vec.sub(newPos, clampedPos);
     }
     return new Vec();
@@ -161,12 +167,23 @@ export class PointerTrait extends Trait {
 
     // clamp input force
     const diff = this.getClapmedDiff();
-    if (diff.x) {
+    if (diff.abs()) {
       if (!this.grabbing) {
+        // TODO: diff value is higher than the actual pixel diff
         e.inputForce.set(diff.mul(-1));
         e.inputForce.mul(1 / 10);
       } else {
-        e.inputForce.mul(0.2);
+        if (e.vertical) {
+          e.inputForce.x = 0;
+        } else {
+          e.inputForce.y = 0;
+        }
+
+        if (e.vertical && diff.y) {
+          e.inputForce.mul(0.2);
+        } else if (diff.x) {
+          e.inputForce.mul(0.2);
+        }
       }
     }
 
@@ -182,9 +199,7 @@ export class PointerTrait extends Trait {
   }
 
   update() {
-    const e = this.entity;
-
-    e.inputForce.mul(0.9);
+    this.entity.inputForce.mul(0.9);
   }
 }
 
@@ -206,15 +221,19 @@ export class SnapTrait extends Trait {
 
 export class AutoplayTrait extends Trait {
   autoPlayTimeout = 4000;
-  autoPlayTime = 3000;
+  defaultAutoPlayTime = 3000;
   autoPlayTimer;
 
+  lastTarget = null;
+
   input(inputState: InputState) {
+    if (this.lastTarget !== this.entity.target) {
+      this.autoPlayTimer = Date.now();
+      this.lastTarget = this.entity.target;
+    }
+
     if (inputState.format.value) {
       const entity = this.entity;
-
-      this.autoPlayTimer = Date.now();
-
       entity.moveBy(0, "linear");
     }
 
@@ -224,10 +243,10 @@ export class AutoplayTrait extends Trait {
   }
 
   update() {
-    const slideTime = timer(this.autoPlayTimer, this.autoPlayTime);
+    const autoplayTime = this.entity.autoplay * 1000 || this.defaultAutoPlayTime;
+    const slideTime = timer(this.autoPlayTimer, autoplayTime);
     if (slideTime >= 1) {
       this.entity.moveBy(1, "ease");
-      this.autoPlayTimer = Date.now();
     }
   }
 }
@@ -289,9 +308,17 @@ export class LoopTrait extends Trait {
   update() {
     const e = this.entity;
 
-    const maxX = -e.trackWidth;
+    const startY = 0;
+    const maxY = startY + -e.trackHeight;
+    e.position.y = e.position.y % maxY;
+    if (e.position.y >= startY) {
+      e.position.y = maxY;
+    }
+
+    const startX = 0;
+    const maxX = startX + -e.trackWidth;
     e.position.x = e.position.x % maxX;
-    if (e.position.x >= 0) {
+    if (e.position.x >= startX) {
       e.position.x = maxX;
     }
   }

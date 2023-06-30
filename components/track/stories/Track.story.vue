@@ -7,9 +7,8 @@
 </docs>
 
 <script lang="ts" setup>
-import "../../select/src/index.js";
-import "../src/index.js";
 import { ref } from "vue";
+import "../../select/src/index.js";
 import "../src/index.js";
 
 const centeredSliderIndex = ref([0]);
@@ -18,8 +17,8 @@ const centeredSliderIndex = ref([0]);
 <template>
   <Story group="primitives" icon-color="#8B5CF6">
     <Variant title="Default">
-      <a-track snap class="default">
-        <div tabindex="0" class="cell" style="background: lime">1a</div>
+      <a-track class="default">
+        <div tabindex="0" class="cell">1a</div>
         <div tabindex="0" class="cell">2a</div>
         <div tabindex="0" class="cell">3a</div>
         <div tabindex="0" class="cell">4a</div>
@@ -29,16 +28,6 @@ const centeredSliderIndex = ref([0]);
         <div tabindex="0" class="cell">8a</div>
         <div tabindex="0" class="cell">9a</div>
         <div tabindex="0" class="cell">10a</div>
-        <div class="cell ghost" style="background: orange">1b</div>
-        <div class="cell ghost">2b</div>
-        <div class="cell ghost">3b</div>
-        <div class="cell ghost">4b</div>
-        <div class="cell ghost">5b</div>
-        <div class="cell ghost">6b</div>
-        <div class="cell ghost">7b</div>
-        <div class="cell ghost">8b</div>
-        <div class="cell ghost">9b</div>
-        <div class="cell ghost">10b</div>
       </a-track>
     </Variant>
 
@@ -126,7 +115,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Tabs">
-      <a-track class="tabs">
+      <a-track overflow="fill" class="tabs">
         <div class="cell">Home</div>
         <div class="cell">Videos</div>
         <div class="cell">Career</div>
@@ -148,6 +137,26 @@ const centeredSliderIndex = ref([0]);
         <div class="cell">7a</div>
       </a-track>
     </Variant>
+
+    <Variant title="Vertical">
+      <a-track class="vertical" snap vertical overflow="fill">
+        <div class="cell first">1a</div>
+        <div class="cell">2a</div>
+        <div class="cell">3a</div>
+        <div class="cell">4a</div>
+        <div class="cell">5a</div>
+        <div class="cell">6a</div>
+        <div class="cell">7a</div>
+        <div class="cell">8a</div>
+        <div class="cell">9a</div>
+        <div class="cell">10a</div>
+        <div class="cell">11a</div>
+        <div class="cell">12a</div>
+        <div class="cell">13a</div>
+        <div class="cell">14a</div>
+        <div class="cell">15a</div>
+      </a-track>
+    </Variant>
   </Story>
 </template>
 
@@ -165,17 +174,12 @@ const centeredSliderIndex = ref([0]);
   align-items: center;
 
   &[active] {
-    border: 2px solid red;
+    background: #f7f7f7;
   }
 
   &:hover {
     background: #f7f7f7;
   }
-}
-
-a-track {
-  padding: 8px;
-  box-sizing: border-box;
 }
 
 .arrow {
@@ -220,7 +224,7 @@ a-track {
   flex-direction: column;
   justify-content: center;
 
-  --width: 800px;
+  --width: 600px;
 
   a-track {
     padding-left: calc(50% - (var(--width) / 2));
@@ -302,6 +306,14 @@ a-track {
     &[active] .cell {
       border: 2px solid red;
     }
+  }
+}
+
+.vertical {
+  height: 600px;
+
+  .cell {
+    height: 100px;
   }
 }
 </style>

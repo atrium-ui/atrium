@@ -1,19 +1,31 @@
 {
   "name": "@atrium-ui/mono",
-  "version": "0.1.7-6",
+  "version": "0.1.7-10",
   "description": "",
   "exports": {
-    "./components/dropdown": {
-      "import": "./components/dropdown/dist/dropdown.es.js",
-      "require": "./components/dropdown/dist/dist/dropdown.cjs.js"
-    },
-    "./components/accordion": {
-      "import": "./components/accordion/dist/accordion.mjs",
-      "require": "./components/accordion/dist/dist/accordion.js"
+    "./components/select": {
+      "import": "./components/select/dist/select.es.js",
+      "require": "./components/select/dist/select.cjs.js"
     },
     "./components/expandable": {
       "import": "./components/expandable/dist/expandable.mjs",
-      "require": "./components/expandable/dist/dist/expandable.js"
+      "require": "./components/expandable/dist/expandable.js"
+    },
+    "./components/dropdown": {
+      "import": "./components/dropdown/dist/dropdown.es.js",
+      "require": "./components/dropdown/dist/dropdown.cjs.js"
+    },
+    "./components/circle": {
+      "import": "./components/circle/dist/circle.mjs",
+      "require": "./components/circle/dist/circle.js"
+    },
+    "./components/pager": {
+      "import": "./components/pager/dist/pager.mjs",
+      "require": "./components/pager/dist/pager.js"
+    },
+    "./components/track": {
+      "import": "./components/track/dist/track.mjs",
+      "require": "./components/track/dist/track.js"
     }
   },
   "scripts": {

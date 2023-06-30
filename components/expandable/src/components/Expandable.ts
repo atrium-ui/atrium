@@ -23,16 +23,29 @@ export class Expandable extends LitElement {
           grid-template-rows: 1fr;
         }
 
-        slot {
+        .content {
           display: block;
           min-height: 0;
+        }
+
+        ::slotted(*) {
+          pointer-events: all;
+        }
+
+        button {
+          all: unset;
+          display: block;
+          width: 100%;
+          pointer-events: none;
         }
       `,
     ];
   }
 
-  @property({ type: Boolean, reflect: true })
-  public opened?: boolean;
+  @property({ type: Boolean, reflect: true }) public opened: boolean = false;
+  @property({ type: String, reflect: true }) public direction: string = "down";
+
+  private _id = `expandable_${Math.floor(Math.random() * 100000)}`;
 
   public close(): void {
     this.opened = false;
@@ -42,6 +55,10 @@ export class Expandable extends LitElement {
   public open(): void {
     this.opened = true;
     this.onAnimationFrame();
+  }
+
+  public toggle(): void {
+    this.opened ? this.close() : this.open();
   }
 
   @property({ type: Number })
@@ -59,11 +76,27 @@ export class Expandable extends LitElement {
     }
   }
 
+  private renderButton() {
+    return html`<button
+      tabindex="-1"
+      aria-controls="${this._id}"
+      aria-expanded=${this.opened}
+      @click=${(e) => {
+        console.log(e.target);
+        this.toggle();
+      }}
+    >
+      <slot name="toggle"></slot>
+    </button>`;
+  }
+
   protected render(): HTMLTemplateResult {
     return html`
-      <div class="container">
-        <slot></slot>
+      ${this.direction === "down" ? this.renderButton() : undefined}
+      <div class="container" id="${this._id}" aria-hidden=${!this.opened && "true"}>
+        <slot class="content"></slot>
       </div>
+      ${this.direction === "up" ? this.renderButton() : undefined}
     `;
   }
 }
