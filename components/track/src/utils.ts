@@ -116,6 +116,11 @@ export class Vec extends Array {
     return Math.sqrt(Math.pow(this[0], 2) + Math.pow(this[1], 2));
   }
 
+  precision(precision: number) {
+    this[0] = Math.floor(this[0] / precision) * precision;
+    this[1] = Math.floor(this[1] / precision) * precision;
+  }
+
   clone() {
     return new Vec(...this);
   }

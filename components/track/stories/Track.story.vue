@@ -17,7 +17,7 @@ const centeredSliderIndex = ref([0]);
 <template>
   <Story group="primitives" icon-color="#8B5CF6">
     <Variant title="Default">
-      <sv-track snap class="default">
+      <sv-track class="default">
         <div tabindex="0" class="cell">1a</div>
         <div tabindex="0" class="cell">2a</div>
         <div tabindex="0" class="cell">3a</div>
@@ -115,7 +115,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Tabs">
-      <sv-track class="tabs">
+      <sv-track overflow="fill" class="tabs">
         <div class="cell">Home</div>
         <div class="cell">Videos</div>
         <div class="cell">Career</div>
@@ -139,7 +139,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Vertical">
-      <sv-track class="vertical" snap vertical>
+      <sv-track class="vertical" snap vertical overflow="fill">
         <div class="cell first">1a</div>
         <div class="cell">2a</div>
         <div class="cell">3a</div>
@@ -174,17 +174,12 @@ const centeredSliderIndex = ref([0]);
   align-items: center;
 
   &[active] {
-    border: 2px solid red;
+    background: #f7f7f7;
   }
 
   &:hover {
     background: #f7f7f7;
   }
-}
-
-sv-track {
-  padding: 8px;
-  box-sizing: border-box;
 }
 
 .arrow {
