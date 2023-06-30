@@ -119,9 +119,14 @@ export class PointerTrait extends Trait {
       let clampedPos = newPos;
 
       const stopTop = 0;
-      const stopBottom = -e.trackHeight + e.itemHeights[e.itemCount - 1];
+      let stopBottom = -e.trackHeight + e.itemHeights[e.itemCount - 1];
       const stopLeft = 0;
-      const stopRight = -e.trackWidth + e.itemWidths[e.itemCount - 1];
+      let stopRight = -e.trackWidth + e.itemWidths[e.itemCount - 1];
+
+      if (e.overflow == "fill") {
+        stopRight = -e.trackWidth + e.offsetWidth;
+        stopBottom = -e.trackHeight + e.offsetHeight;
+      }
 
       clampedPos = new Vec(
         Math.min(stopLeft, clampedPos.x),
@@ -131,6 +136,7 @@ export class PointerTrait extends Trait {
         Math.max(stopRight, clampedPos.x),
         Math.max(stopBottom, clampedPos.y)
       );
+
       return Vec.sub(newPos, clampedPos);
     }
     return new Vec();
@@ -161,13 +167,23 @@ export class PointerTrait extends Trait {
 
     // clamp input force
     const diff = this.getClapmedDiff();
-    // TODO: here too, if im not in vertical mode diff.y should be 0.
-    if (e.vertical ? diff.y : diff.x) {
+    if (diff.abs()) {
       if (!this.grabbing) {
+        // TODO: diff value is higher than the actual pixel diff
         e.inputForce.set(diff.mul(-1));
         e.inputForce.mul(1 / 10);
       } else {
-        e.inputForce.mul(0.2);
+        if (e.vertical) {
+          e.inputForce.x = 0;
+        } else {
+          e.inputForce.y = 0;
+        }
+
+        if (e.vertical && diff.y) {
+          e.inputForce.mul(0.2);
+        } else if (diff.x) {
+          e.inputForce.mul(0.2);
+        }
       }
     }
 
@@ -183,9 +199,7 @@ export class PointerTrait extends Trait {
   }
 
   update() {
-    const e = this.entity;
-
-    e.inputForce.mul(0.9);
+    this.entity.inputForce.mul(0.9);
   }
 }
 
@@ -294,21 +308,18 @@ export class LoopTrait extends Trait {
   update() {
     const e = this.entity;
 
-    // TOOD: same, position.y should just be 0 if in not in vertical mode
-    if (e.vertical) {
-      const start = 0;
-      const max = start + -e.trackHeight;
-      e.position.y = e.position.y % max;
-      if (e.position.y >= start) {
-        e.position.y = max;
-      }
-    } else {
-      const start = 0;
-      const max = start + -e.trackWidth;
-      e.position.x = e.position.x % max;
-      if (e.position.x >= start) {
-        e.position.x = max;
-      }
+    const startY = 0;
+    const maxY = startY + -e.trackHeight;
+    e.position.y = e.position.y % maxY;
+    if (e.position.y >= startY) {
+      e.position.y = maxY;
+    }
+
+    const startX = 0;
+    const maxX = startX + -e.trackWidth;
+    e.position.x = e.position.x % maxX;
+    if (e.position.x >= startX) {
+      e.position.x = maxX;
     }
   }
 }

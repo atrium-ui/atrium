@@ -119,11 +119,17 @@ export class Track extends LitElement {
   }
 
   get trackWidth() {
-    return this.itemWidths.reduce((last, curr) => last + curr, 0);
+    if (!this.vertical) {
+      return this.itemWidths.reduce((last, curr) => last + curr, 0);
+    }
+    return this.offsetWidth;
   }
 
   get trackHeight() {
-    return this.itemHeights.reduce((last, curr) => last + curr, 0);
+    if (this.vertical) {
+      return this.itemHeights.reduce((last, curr) => last + curr, 0);
+    }
+    return this.offsetHeight;
   }
 
   get overflowWidth() {
@@ -142,7 +148,7 @@ export class Track extends LitElement {
 
   animation;
   frameRate = 0;
-  tickRate = 1000 / 140;
+  tickRate = 1000 / 145;
   lastTick = 0;
   accumulator = 0;
   frame = 0;
@@ -155,6 +161,7 @@ export class Track extends LitElement {
   scrollTimeout;
 
   position = new Vec();
+  deltaPosition = new Vec();
   direction = new Vec();
 
   targetForce = new Vec();
@@ -373,6 +380,12 @@ export class Track extends LitElement {
     this.moveBy(index - this.currentItem, easing);
   }
 
+  startAnimate() {
+    if (!this.animation) {
+      requestAnimationFrame(this.tick.bind(this));
+    }
+  }
+
   stopAnimate() {
     cancelAnimationFrame(this.animation);
   }
@@ -415,6 +428,8 @@ export class Track extends LitElement {
   }
 
   updateTick() {
+    const lastPosition = this.position.clone();
+
     for (const trait of this.traits) {
       if (trait && trait.enabled) {
         trait.update();
@@ -452,6 +467,8 @@ export class Track extends LitElement {
     this.position.add(this.targetForce);
     this.targetForce.mul(0);
 
+    this.deltaPosition = Vec.sub(this.position, lastPosition);
+
     // determine current item
     let currItem;
     for (let i = -1; i < this.itemCount + 1; i++) {
@@ -463,19 +480,23 @@ export class Track extends LitElement {
       const j = this.vertical ? this.position.y : this.position.x;
 
       if (this.vertical ? this.direction.x > 0 : this.direction.y > 0) {
-        // to right
+        // to end
         if (p + w / 4 < j) {
           currItem = i - 1;
           break;
         }
       } else {
-        // to left
+        // to start
         if (p + w / 1.25 < j) {
           currItem = i - 1;
           break;
         }
       }
     }
+
+    // return early if nothing happened
+    if (this.deltaPosition.abs() <= 0) return;
+
     if (currItem === undefined) {
       // TODO: i think there is a bug here when im at the last item and scroll past
       if (this.direction.abs() > 0) {
@@ -502,12 +523,7 @@ export class Track extends LitElement {
 
     const track = this.track;
     if (track) {
-      if (this.vertical) {
-        // TODO: should be handled automaticly; If im not in verical mode, position.y should be 0.
-        track.style.transform = `translate(${0}px, ${this.position.y}px)`;
-      } else {
-        track.style.transform = `translate(${this.position.x}px, ${0}px)`;
-      }
+      track.style.transform = `translate(${this.position.x}px, ${this.position.y}px)`;
     }
   }
 
@@ -533,7 +549,7 @@ export class Track extends LitElement {
       // needs markup to exist
       this.format();
       this.stopAnimate();
-      this.tick();
+      this.startAnimate();
     });
 
     this.traits = [
