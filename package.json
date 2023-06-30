@@ -1,6 +1,6 @@
 {
   "name": "@sv-components/mono",
-  "version": "0.1.7-9",
+  "version": "0.1.7-10",
   "description": "",
   "exports": {
     "./components/select": {
