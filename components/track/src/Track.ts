@@ -46,11 +46,11 @@ export class Track extends LitElement {
         outline: none;
         overflow: hidden;
         touch-action: pan-y;
-        position: relative; /* remove this */
       }
 
       .track {
         display: flex;
+        overflow: visible;
         will-change: transform;
       }
 
@@ -438,6 +438,8 @@ export class Track extends LitElement {
 
     this.clearInputState();
 
+    this.drawUpdate();
+
     this.frame++;
 
     this.animation = requestAnimationFrame(this.tick.bind(this));
@@ -556,10 +558,49 @@ export class Track extends LitElement {
         i++;
       }
     }
+  }
 
-    const track = this.track;
-    if (track) {
-      track.style.transform = `translate(${this.position.x}px, ${this.position.y}px)`;
+  getItemAtPosition(x: number) {
+    const rects = this.getItemRects();
+    let px = 0;
+    for (const item of rects) {
+      if (px + item.x > x) {
+        return rects.indexOf(item);
+      }
+      px += item.x;
+    }
+    return null;
+  }
+
+  drawUpdate() {
+    if (this.loop) {
+      const visibleItems = [];
+
+      const offset = this.getItemAtPosition(-this.position.x) || 0;
+      let lastItem = null;
+      for (let x = 0; x < this.offsetWidth; x++) {
+        const item = this.getItemAtPosition((x - this.position.x) % this.trackWidth);
+        if (item !== lastItem) {
+          visibleItems.push(item);
+          lastItem = item;
+        }
+      }
+
+      let vi = offset;
+      for (const visible of visibleItems) {
+        const child = this.children[vi];
+        const actualChild = this.children[visible];
+        if (!child && actualChild) {
+          const clone = actualChild.cloneNode(true);
+          clone.classList.add("ghost");
+          this.appendChild(clone);
+        }
+        vi++;
+      }
+    }
+
+    if (this.track) {
+      this.track.style.transform = `translate(${this.position.x}px, ${this.position.y}px)`;
     }
   }
 
