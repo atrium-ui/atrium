@@ -1,5 +1,5 @@
 import DebugElement from "./Debug.js";
-import { InputState } from "./Track.js";
+import { InputState, Track } from "./Track.js";
 import { Ease, Vec, isTouch, timer } from "./utils.js";
 
 export class Trait {
@@ -99,6 +99,7 @@ export class AutoFocusTrait extends Trait {
 
 export class PointerTrait extends Trait {
   grabbing = false;
+  force = new Vec();
 
   updateCursorStyle() {
     const e = this.entity;
@@ -113,39 +114,36 @@ export class PointerTrait extends Trait {
   }
 
   getClapmedDiff() {
-    if (!this.entity.loop) {
-      const e = this.entity;
-      const newPos = Vec.add(e.position, e.inputForce);
-      let clampedPos = newPos;
+    const e = this.entity as Track;
+    const newPos = Vec.add(e.position, e.inputForce);
+    let clampedPos = newPos;
 
-      const stopTop = 0;
-      let stopBottom = -e.trackHeight + e.itemHeights[e.itemCount - 1];
-      const stopLeft = 0;
-      let stopRight = -e.trackWidth + e.itemWidths[e.itemCount - 1];
+    const stopTop = 0;
+    let stopBottom = -e.trackHeight + e.offsetHeight;
+    const stopLeft = 0;
+    let stopRight = -e.trackWidth + e.offsetWidth;
 
-      if (e.overflow == "fill") {
-        stopRight = -e.trackWidth + e.offsetWidth;
-        stopBottom = -e.trackHeight + e.offsetHeight;
-      }
-
-      clampedPos = new Vec(
-        Math.min(stopLeft, clampedPos.x),
-        Math.min(stopTop, clampedPos.y)
-      );
-      clampedPos = new Vec(
-        Math.max(stopRight, clampedPos.x),
-        Math.max(stopBottom, clampedPos.y)
-      );
-
-      return Vec.sub(newPos, clampedPos);
+    if (e.overflow == "item") {
+      stopBottom = -e.trackHeight + e.itemHeights[e.itemCount - 1];
+      stopRight = -e.trackWidth + e.itemWidths[e.itemCount - 1];
     }
-    return new Vec();
+
+    clampedPos = new Vec(
+      Math.min(stopLeft, clampedPos.x),
+      Math.min(stopTop, clampedPos.y)
+    );
+    clampedPos = new Vec(
+      Math.max(stopRight, clampedPos.x),
+      Math.max(stopBottom, clampedPos.y)
+    );
+
+    return Vec.sub(newPos, clampedPos);
   }
 
   input(inputState: InputState) {
     const e = this.entity;
 
-    if (e.overflow == "full" && e.overflowWidth < 0) {
+    if (e.overflowscroll && e.overflowWidth < 0) {
       return;
     }
 
@@ -158,6 +156,7 @@ export class PointerTrait extends Trait {
     }
 
     if (inputState.move.value.abs()) {
+      this.force.set(inputState.move.value);
       e.inputForce.set(Vec.mul(inputState.move.value, -1));
     } else {
       if (this.grabbing) {
@@ -166,23 +165,18 @@ export class PointerTrait extends Trait {
     }
 
     // clamp input force
-    const diff = this.getClapmedDiff();
-    if (diff.abs()) {
-      if (!this.grabbing) {
-        // TODO: diff value is higher than the actual pixel diff
-        e.inputForce.set(diff.mul(-1));
-        e.inputForce.mul(1 / 10);
-      } else {
-        if (e.vertical) {
-          e.inputForce.x = 0;
+    if (!e.loop) {
+      const diff = this.getClapmedDiff();
+      if (diff.abs()) {
+        if (!this.grabbing) {
+          e.inputForce.set(diff.mul(-1));
+          e.inputForce.mul(1 / 10);
         } else {
-          e.inputForce.y = 0;
-        }
-
-        if (e.vertical && diff.y) {
-          e.inputForce.mul(0.2);
-        } else if (diff.x) {
-          e.inputForce.mul(0.2);
+          if (e.vertical && Math.abs(diff.y)) {
+            e.inputForce.mul(0.2);
+          } else if (Math.abs(diff.x)) {
+            e.inputForce.mul(0.2);
+          }
         }
       }
     }
@@ -191,8 +185,31 @@ export class PointerTrait extends Trait {
       e.inputForce.set(inputState.swipe.value.mul(-1));
       e.setTarget(undefined);
 
-      const diff = this.getClapmedDiff();
-      e.inputForce.add(diff.mul(-1));
+      if (!e.loop) {
+        const diff = this.getClapmedDiff();
+        e.inputForce.add(diff.mul(-1));
+      }
+    }
+
+    if (e.snap) {
+      if (inputState.release.value) {
+        if (this.force.abs() > 5) {
+          const sign = this.force.sign();
+          e.moveBy(1 * (sign.x + sign.y), "linear");
+        } else {
+          e.moveBy(0, "linear");
+        }
+      }
+
+      if (inputState.swipe.value.abs() < 5) {
+        e.moveBy(0, "linear");
+      }
+    }
+
+    if (e.vertical) {
+      e.inputForce.x = 0;
+    } else {
+      e.inputForce.y = 0;
     }
 
     this.updateCursorStyle();
@@ -200,22 +217,6 @@ export class PointerTrait extends Trait {
 
   update() {
     this.entity.inputForce.mul(0.9);
-  }
-}
-
-export class SnapTrait extends Trait {
-  input(inputState: InputState): void {
-    const e = this.entity;
-
-    if (inputState.release.value) {
-      e.moveBy(0, "linear");
-    }
-
-    if (inputState.swipe.value.abs()) {
-      if (inputState.swipe.value.abs() < 10) {
-        e.moveBy(0, "linear");
-      }
-    }
   }
 }
 
@@ -299,27 +300,11 @@ export class AutorunTrait extends Trait {
     const entity = this.entity;
     if (!this.paused) {
       const transitionTime = timer(this.transitionAt, this.pauseTransitionTime);
-      entity.inputForce.x = this.speed.x * this.dir.x * Ease.easeOutSine(transitionTime);
-    }
-  }
-}
-
-export class LoopTrait extends Trait {
-  update() {
-    const e = this.entity;
-
-    const startY = 0;
-    const maxY = startY + -e.trackHeight;
-    e.position.y = e.position.y % maxY;
-    if (e.position.y >= startY) {
-      e.position.y = maxY;
-    }
-
-    const startX = 0;
-    const maxX = startX + -e.trackWidth;
-    e.position.x = e.position.x % maxX;
-    if (e.position.x >= startX) {
-      e.position.x = maxX;
+      entity.inputForce
+        .add(this.speed)
+        .mul(this.dir)
+        .mul(Ease.easeOutSine(transitionTime))
+        .mul(entity.normal);
     }
   }
 }

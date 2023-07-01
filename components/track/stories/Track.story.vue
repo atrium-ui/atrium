@@ -32,7 +32,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Infinite">
-      <sv-track loop autorun class="infinite">
+      <sv-track loop snap class="infinite">
         <div tabindex="0" class="cell">1a</div>
         <div tabindex="0" class="cell">2a</div>
         <div tabindex="0" class="cell">3a</div>
@@ -97,8 +97,8 @@ const centeredSliderIndex = ref([0]);
       </div>
     </Variant>
 
-    <Variant title="Overflow">
-      <sv-track snap overflow="full" class="overflow">
+    <Variant title="Overflow Scroll">
+      <sv-track snap overflowscroll class="overflow">
         <div class="inner">
           <div class="cell">cell</div>
         </div>
@@ -115,7 +115,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Tabs">
-      <sv-track overflow="fill" class="tabs">
+      <sv-track class="tabs">
         <div class="cell">Home</div>
         <div class="cell">Videos</div>
         <div class="cell">Career</div>
@@ -139,7 +139,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Vertical">
-      <sv-track class="vertical" snap vertical overflow="fill">
+      <sv-track class="vertical" snap vertical>
         <div class="cell first">1a</div>
         <div class="cell">2a</div>
         <div class="cell">3a</div>

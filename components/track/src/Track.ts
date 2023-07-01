@@ -91,11 +91,14 @@ export class Track extends LitElement {
     return count;
   }
 
-  // TODO: implement
   getItemRects() {
     return new Array(this.itemCount)
       .fill(0)
       .map((_, i) => new Vec(this.itemWidths[i], this.itemHeights[i]));
+  }
+
+  getItemRect(index: number) {
+    return new Vec(this.itemWidths[index], this.itemHeights[index]);
   }
 
   _widths;
@@ -164,6 +167,10 @@ export class Track extends LitElement {
   deltaPosition = new Vec();
   direction = new Vec();
 
+  get normal() {
+    return this.vertical ? new Vec(0, 1) : new Vec(1, 0);
+  }
+
   targetForce = new Vec();
   targetStart = new Vec();
   target?: Vec;
@@ -216,7 +223,18 @@ export class Track extends LitElement {
   @property({ type: Boolean, reflect: true }) loop = false;
   @property({ type: Number, reflect: false }) autoplay = 0;
   @property({ type: Boolean, reflect: true }) autorun = false;
-  @property({ type: String, reflect: true }) overflow: "item" | "full" = "item";
+
+  /**
+   * # overflow
+   * item: scroll until the last item is active
+   * fill (default): scroll until the track reaches the last item visible to fill the width of the track
+   */
+  @property({ type: String }) overflow: "item" | "fill" = "fill";
+
+  /**
+   * only scroll when items are overflown
+   */
+  @property({ type: Boolean, reflect: true }) overflowscroll = false;
 
   protected updated(): void {
     for (const trait of this.traits) {
@@ -345,15 +363,23 @@ export class Track extends LitElement {
   getItemPosition(index: number = 0) {
     const toActualPointer = index < 0 ? index + this.itemCount : index;
 
+    const rects = this.getItemRects();
+
     const pos = new Vec();
     for (let i = 0; i < Math.abs(toActualPointer); i++) {
-      pos.x -= this.itemWidths[i] || 0;
-      pos.y -= this.itemHeights[i] || 0;
+      if (this.vertical) {
+        pos.y -= rects[i]?.y || 0;
+      } else {
+        pos.x -= rects[i]?.x || 0;
+      }
     }
 
-    if (index < 0) {
-      pos.x += this.trackWidth;
-      pos.y += this.trackHeight;
+    if (this.loop && index < 0) {
+      if (this.vertical) {
+        pos.y += this.trackHeight;
+      } else {
+        pos.x += this.trackWidth;
+      }
     }
 
     return pos;
@@ -463,46 +489,56 @@ export class Track extends LitElement {
       }
     }
 
+    // loop
+    if (this.loop) {
+      const start = new Vec();
+      const max = new Vec(start.x + -this.trackWidth, start.y + -this.overflowHeight);
+
+      if (this.position.x < max.x) {
+        this.position.x = start.x;
+      }
+      if (this.position.y < max.y) {
+        this.position.y = start.x;
+      }
+      if (this.position.x > start.x) {
+        this.position.x = max.x;
+      }
+      if (this.position.y > start.y) {
+        this.position.y = max.y;
+      }
+    }
+
     // update final position
     this.position.add(this.targetForce);
     this.targetForce.mul(0);
 
     this.deltaPosition = Vec.sub(this.position, lastPosition);
 
-    // determine current item
-    let currItem;
-    for (let i = -1; i < this.itemCount + 1; i++) {
-      const pos = this.getItemPosition(i);
-      const w = (this.vertical ? this.itemHeights : this.itemWidths)[
-        Math.abs(i) % this.itemCount
-      ];
-      const p = this.vertical ? pos.y : pos.x;
-      const j = this.vertical ? this.position.y : this.position.x;
-
-      if (this.vertical ? this.direction.x > 0 : this.direction.y > 0) {
-        // to end
-        if (p + w / 4 < j) {
-          currItem = i - 1;
-          break;
-        }
-      } else {
-        // to start
-        if (p + w / 1.25 < j) {
-          currItem = i - 1;
-          break;
-        }
-      }
-    }
-
     // return early if nothing happened
     if (this.deltaPosition.abs() <= 0) return;
 
-    if (currItem === undefined) {
-      // TODO: i think there is a bug here when im at the last item and scroll past
-      if (this.direction.abs() > 0) {
-        currItem = 0;
-      } else {
-        currItem = this.itemCount - 1;
+    // determine current item
+    let currItem;
+    let minDist = Infinity;
+    if (this.loop) {
+      for (let i = -1; i < this.itemCount + 1; i++) {
+        const pos = this.getItemPosition(i);
+
+        const dist = pos.dist(this.position);
+        if (dist < minDist) {
+          currItem = i;
+          minDist = dist;
+        }
+      }
+    } else {
+      for (let i = 0; i < this.itemCount; i++) {
+        const pos = this.getItemPosition(i);
+
+        const dist = pos.dist(this.position);
+        if (dist < minDist) {
+          currItem = i;
+          minDist = dist;
+        }
       }
     }
 
@@ -554,12 +590,10 @@ export class Track extends LitElement {
 
     this.traits = [
       new PointerTrait("pointer", this, true),
-      new LoopTrait("loop", this),
-      new SnapTrait("snap", this),
-      new AutoFocusTrait("autofocus", this, true),
-      new DebugTrait("debug", this),
-      new AutoplayTrait("autoplay", this),
-      new AutorunTrait("autorun", this),
+      // new AutoFocusTrait("autofocus", this, true),
+      // new DebugTrait("debug", this),
+      // new AutoplayTrait("autoplay", this),
+      // new AutorunTrait("autorun", this),
     ];
 
     this.dispatchEvent(new CustomEvent("change", { detail: this.value }));
