@@ -32,27 +32,17 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Infinite">
-      <sv-track loop snap class="infinite">
-        <div tabindex="0" class="cell">1a</div>
-        <div tabindex="0" class="cell">2a</div>
-        <div tabindex="0" class="cell">3a</div>
-        <div tabindex="0" class="cell">4a</div>
-        <div tabindex="0" class="cell">5a</div>
-        <div tabindex="0" class="cell">6a</div>
-        <div tabindex="0" class="cell">7a</div>
-        <div tabindex="0" class="cell">8a</div>
-        <div tabindex="0" class="cell">9a</div>
-        <div tabindex="0" class="cell">10a</div>
-        <div class="cell ghost">1b</div>
-        <div class="cell ghost">2b</div>
-        <div class="cell ghost">3b</div>
-        <div class="cell ghost">4b</div>
-        <div class="cell ghost">5b</div>
-        <div class="cell ghost">6b</div>
-        <div class="cell ghost">7b</div>
-        <div class="cell ghost">8b</div>
-        <div class="cell ghost">9b</div>
-        <div class="cell ghost">10b</div>
+      <sv-track loop class="infinite">
+        <div tabindex="0" class="cell">1</div>
+        <div tabindex="0" class="cell">2</div>
+        <div tabindex="0" class="cell">3</div>
+        <div tabindex="0" class="cell">4</div>
+        <div tabindex="0" class="cell">5</div>
+        <div tabindex="0" class="cell">6</div>
+        <div tabindex="0" class="cell">7</div>
+        <div tabindex="0" class="cell">8</div>
+        <div tabindex="0" class="cell">9</div>
+        <div tabindex="0" class="cell">10</div>
       </sv-track>
     </Variant>
 

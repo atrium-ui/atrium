@@ -71,7 +71,7 @@ export class DebugTrait extends Trait {
       [`width: ${e.trackWidth}`],
       [`items: ${e.itemCount}`],
       [`current: ${e.currentItem}`],
-      [`currentPos: ${e.getItemPosition(e.currentItem)}`],
+      [`currentPos: ${e.getToItemPosition(e.currentItem)}`],
       [`pos: ${e.position.x}`],
       ["input;red", Math.abs(e.inputForce.x)],
       [`target: ${e.target?.x}`],
@@ -189,19 +189,23 @@ export class PointerTrait extends Trait {
         const diff = this.getClapmedDiff();
         e.inputForce.add(diff.mul(-1));
       }
+
+      if (e.snap) {
+        if (inputState.swipe.value.abs() < 5) {
+          e.moveBy(0, "linear");
+        }
+      }
     }
 
     if (e.snap) {
       if (inputState.release.value) {
-        if (this.force.abs() > 5) {
-          const sign = this.force.sign();
-          e.moveBy(1 * (sign.x + sign.y), "linear");
-        } else {
-          e.moveBy(0, "linear");
-        }
-      }
-
-      if (inputState.swipe.value.abs() < 5) {
+        // TODO: need to take the size of the single slide into account
+        // if (this.force.abs() > 5) {
+        //   const sign = this.force.sign();
+        //   // e.moveBy(1 * (sign.x + sign.y), "linear");
+        // } else {
+        //   e.moveBy(0, "linear");
+        // }
         e.moveBy(0, "linear");
       }
     }
