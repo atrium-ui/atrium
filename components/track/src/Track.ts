@@ -542,6 +542,11 @@ export class Track extends LitElement {
 
     // update final position
     this.position.add(this.targetForce);
+
+    // TODO: need to self fix positon, sometimes NaN on innital load
+    this.position[0] = this.position[0] || 0;
+    this.position[1] = this.position[1] || 0;
+
     this.targetForce.mul(0);
 
     this.deltaPosition = Vec.sub(this.position, lastPosition);
