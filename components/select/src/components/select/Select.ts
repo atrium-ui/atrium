@@ -37,6 +37,8 @@ export class Select extends LitElement {
   }
 
   private onPress(e: MouseEvent) {
+    e.stopPropagation();
+
     if (![...this.children].find((child) => child.contains(e.target as Node))) {
       return;
     }
@@ -60,10 +62,12 @@ export class Select extends LitElement {
       this.activeChildren.splice(0, this.activeChildren.length - 1);
     }
 
-    this.updateChildren();
+    const ev = new Event("input", { bubbles: true, cancelable: true });
+    this.dispatchEvent(ev);
 
-    this.dispatchEvent(new Event("change", { bubbles: true }));
-    e.stopPropagation();
+    if (ev.defaultPrevented) return;
+
+    this.updateChildren();
   }
 
   static getChildValue(child: HTMLElement) {

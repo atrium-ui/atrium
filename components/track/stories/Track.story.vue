@@ -43,16 +43,6 @@ const centeredSliderIndex = ref([0]);
         <div tabindex="0" class="cell">8a</div>
         <div tabindex="0" class="cell">9a</div>
         <div tabindex="0" class="cell">10a</div>
-        <div class="cell ghost">1b</div>
-        <div class="cell ghost">2b</div>
-        <div class="cell ghost">3b</div>
-        <div class="cell ghost">4b</div>
-        <div class="cell ghost">5b</div>
-        <div class="cell ghost">6b</div>
-        <div class="cell ghost">7b</div>
-        <div class="cell ghost">8b</div>
-        <div class="cell ghost">9b</div>
-        <div class="cell ghost">10b</div>
       </a-track>
     </Variant>
 
@@ -97,8 +87,8 @@ const centeredSliderIndex = ref([0]);
       </div>
     </Variant>
 
-    <Variant title="Overflow">
-      <a-track snap overflow="full" class="overflow">
+    <Variant title="Overflow Scroll">
+      <a-track snap overflowscroll class="overflow">
         <div class="inner">
           <div class="cell">cell</div>
         </div>
@@ -115,7 +105,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Tabs">
-      <a-track overflow="fill" class="tabs">
+      <a-track class="tabs">
         <div class="cell">Home</div>
         <div class="cell">Videos</div>
         <div class="cell">Career</div>
@@ -139,7 +129,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Vertical">
-      <a-track class="vertical" snap vertical overflow="fill">
+      <a-track class="vertical" snap vertical>
         <div class="cell first">1a</div>
         <div class="cell">2a</div>
         <div class="cell">3a</div>

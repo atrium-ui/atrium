@@ -112,8 +112,18 @@ export class Vec extends Array {
     return this;
   }
 
+  dist(vec: Vec) {
+    return Math.sqrt(Math.pow(vec[0] - this[0], 2) + Math.pow(vec[1] - this[1], 2));
+  }
+
   abs() {
     return Math.sqrt(Math.pow(this[0], 2) + Math.pow(this[1], 2));
+  }
+
+  abs2() {
+    this[0] = Math.abs(this[0]);
+    this[1] = Math.abs(this[1]);
+    return this;
   }
 
   precision(precision: number) {

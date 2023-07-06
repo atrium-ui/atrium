@@ -7,8 +7,8 @@ This repository contains a collection of framework agnostic and functional web-c
 Install all dependencies:
 `pnpm i`
 
-Run visual docs:
-`pnpm library:dev`
+Dev watch build of all packages and visual docs:
+`pnpm dev`
 
 ### Other commands
 
