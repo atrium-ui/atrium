@@ -497,11 +497,13 @@ export class Track extends LitElement {
           {
             const prog = Vec.sub(this.position, this.target).abs() / Vec.abs(this.target);
             this.transition = Math.round(prog * 100) / 100 || 0;
-            this.targetForce
-              .set(this.target)
-              .sub(this.position)
-              .mod([-this.trackWidth, -this.trackHeight])
-              .mul(42 / this.transitionTime);
+
+            const delta = Vec.sub(this.targetForce.set(this.target), this.position);
+            this.targetForce.set(
+              delta
+                .mod([-this.trackWidth, -this.trackHeight])
+                .mul(42 / this.transitionTime)
+            );
           }
           break;
       }
@@ -514,19 +516,27 @@ export class Track extends LitElement {
 
       if (this.position.x < max.x) {
         this.position.x = start.x;
-        this.setTarget(undefined);
+        if (this.target) {
+          this.target.x -= max.x;
+        }
       }
       if (this.position.y < max.y) {
-        this.position.y = start.x;
-        this.setTarget(undefined);
+        this.position.y = start.y;
+        if (this.target) {
+          this.target.y -= max.y;
+        }
       }
       if (this.position.x > start.x) {
         this.position.x = max.x;
-        this.setTarget(undefined);
+        if (this.target) {
+          this.target.x += max.x;
+        }
       }
       if (this.position.y > start.y) {
         this.position.y = max.y;
-        this.setTarget(undefined);
+        if (this.target) {
+          this.target.y += max.y;
+        }
       }
     }
 
@@ -664,6 +674,7 @@ export class Track extends LitElement {
 
     window.addEventListener("resize", this.format.bind(this), { passive: true });
     window.addEventListener("scroll", this.onScroll.bind(this), { capture: true });
+    window.addEventListener("load", this.format.bind(this), { capture: true });
 
     requestAnimationFrame(() => {
       // needs markup to exist
