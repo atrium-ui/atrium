@@ -31,7 +31,7 @@
   "scripts": {
     "publish:preview": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
     "library:build": "turbo build --filter=library",
-    "library:dev": "turbo dev --filter=library",
+    "dev": "turbo dev",
     "build": "turbo build --filter=@sv-components/*",
     "lint": "turbo lint --filter=@sv-components/*",
     "test": "turbo test --filter=@sv-components/*",
