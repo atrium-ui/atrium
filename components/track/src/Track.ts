@@ -559,27 +559,33 @@ export class Track extends LitElement {
   }
 
   getCurrentItem(pos: Vec) {
-    let currItem;
     let minDist = Infinity;
 
+    // TODO: Can't split into event slices since items can have variable widths.
     const singleItemAngle = 360 / this.itemCount;
     const currentAngle = (-pos.x / this.trackWidth) * 360;
 
-    for (let i = -1; i < this.itemCount + 1; i++) {
-      // const pos = this.getItemPosition(i);
-      // const dist = pos.dist(pos);
+    let angleToClosest = 0;
+    let angleToClosestIndex = 0;
+
+    for (let i = 0; i < this.itemCount + 1; i++) {
       const index = i % this.itemCount;
+      const offset = Math.floor(i / this.itemCount) * this.itemCount;
 
       const itemAngle = (singleItemAngle * index) % 360;
-      const dist = Math.abs(angleDist(itemAngle, currentAngle));
+      const deltaAngle = angleDist(itemAngle, currentAngle);
 
-      if (dist <= minDist) {
-        currItem = index;
-        minDist = dist;
+      if (Math.abs(deltaAngle) <= minDist) {
+        minDist = Math.abs(deltaAngle);
+        angleToClosestIndex = index;
+        if (currentAngle > 180) {
+          angleToClosestIndex += offset;
+        }
+        angleToClosest = deltaAngle;
       }
     }
 
-    return currItem;
+    return angleToClosestIndex;
   }
 
   getItemAtPosition(x: number) {
