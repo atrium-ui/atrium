@@ -3,11 +3,9 @@ import { property, query } from "lit/decorators.js";
 import { Ease, timer, Vec } from "./utils.js";
 import {
   AutoplayTrait,
-  LoopTrait,
   AutorunTrait,
   Trait,
   PointerTrait,
-  SnapTrait,
   AutoFocusTrait,
   DebugTrait,
 } from "./Traits.js";
@@ -37,6 +35,12 @@ export type InputState = {
 };
 
 type Easing = "ease" | "linear";
+
+const mod = (a, n) => a - Math.floor(a / n) * n;
+
+function angleDist(a, b) {
+  return mod(b - a + 180, 360) - 180;
+}
 
 export class Track extends LitElement {
   static get styles() {
@@ -177,7 +181,7 @@ export class Track extends LitElement {
   targetEasing: Easing = "linear";
 
   transitionAt = 0;
-  transitionTime = 500;
+  transitionTime = 750;
   transition = 0;
 
   inputState: InputState = {
@@ -357,28 +361,37 @@ export class Track extends LitElement {
     this._widths = undefined;
     this._heights = undefined;
 
+    this.moveBy(0);
     this.requestUpdate();
   }
 
-  getItemPosition(index: number = 0) {
-    const toActualPointer = index < 0 ? index + this.itemCount : index;
-
+  getToItemPosition(index: number = 0) {
     const rects = this.getItemRects();
-
     const pos = new Vec();
-    for (let i = 0; i < Math.abs(toActualPointer); i++) {
-      if (this.vertical) {
-        pos.y -= rects[i]?.y || 0;
-      } else {
-        pos.x -= rects[i]?.x || 0;
-      }
-    }
 
-    if (this.loop && index < 0) {
-      if (this.vertical) {
-        pos.y += this.trackHeight;
-      } else {
-        pos.x += this.trackWidth;
+    if (index < 0) {
+      for (let i = 0; i < index; i--) {
+        if (this.vertical) {
+          pos.y += rects[i]?.y || 0;
+        } else {
+          pos.x += rects[i]?.x || 0;
+        }
+      }
+    } else if (index > this.itemCount) {
+      for (let i = 0; i < index; i++) {
+        if (this.vertical) {
+          pos.y -= rects[i % this.itemCount]?.y || 0;
+        } else {
+          pos.x -= rects[i % this.itemCount]?.x || 0;
+        }
+      }
+    } else {
+      for (let i = 0; i < index; i++) {
+        if (this.vertical) {
+          pos.y -= rects[i]?.y || 0;
+        } else {
+          pos.x -= rects[i]?.x || 0;
+        }
       }
     }
 
@@ -399,7 +412,8 @@ export class Track extends LitElement {
     if (!this.loop) {
       i = Math.min(Math.max(0, i), this.itemCount - 1);
     }
-    this.setTarget(this.getItemPosition(i), easing);
+    const pos = this.getToItemPosition(i);
+    this.setTarget(pos, easing);
   }
 
   moveTo(index: number, easing: Easing = "linear") {
@@ -438,7 +452,9 @@ export class Track extends LitElement {
 
     this.clearInputState();
 
-    this.drawUpdate();
+    if (this.deltaPosition.abs() > 0) {
+      this.drawUpdate();
+    }
 
     this.frame++;
 
@@ -498,15 +514,19 @@ export class Track extends LitElement {
 
       if (this.position.x < max.x) {
         this.position.x = start.x;
+        this.setTarget(undefined);
       }
       if (this.position.y < max.y) {
         this.position.y = start.x;
+        this.setTarget(undefined);
       }
       if (this.position.x > start.x) {
         this.position.x = max.x;
+        this.setTarget(undefined);
       }
       if (this.position.y > start.y) {
         this.position.y = max.y;
+        this.setTarget(undefined);
       }
     }
 
@@ -520,29 +540,7 @@ export class Track extends LitElement {
     if (this.deltaPosition.abs() <= 0) return;
 
     // determine current item
-    let currItem;
-    let minDist = Infinity;
-    if (this.loop) {
-      for (let i = -1; i < this.itemCount + 1; i++) {
-        const pos = this.getItemPosition(i);
-
-        const dist = pos.dist(this.position);
-        if (dist < minDist) {
-          currItem = i;
-          minDist = dist;
-        }
-      }
-    } else {
-      for (let i = 0; i < this.itemCount; i++) {
-        const pos = this.getItemPosition(i);
-
-        const dist = pos.dist(this.position);
-        if (dist < minDist) {
-          currItem = i;
-          minDist = dist;
-        }
-      }
-    }
+    const currItem = this.getCurrentItem(this.position);
 
     if (currItem !== this.currentItem) {
       this.currentItem = currItem;
@@ -560,42 +558,81 @@ export class Track extends LitElement {
     }
   }
 
+  getCurrentItem(pos: Vec) {
+    let currItem;
+    let minDist = Infinity;
+
+    const singleItemAngle = 360 / this.itemCount;
+    const currentAngle = (-pos.x / this.trackWidth) * 360;
+
+    for (let i = -1; i < this.itemCount + 1; i++) {
+      // const pos = this.getItemPosition(i);
+      // const dist = pos.dist(pos);
+      const index = i % this.itemCount;
+
+      const itemAngle = (singleItemAngle * index) % 360;
+      const dist = Math.abs(angleDist(itemAngle, currentAngle));
+
+      if (dist <= minDist) {
+        currItem = index;
+        minDist = dist;
+      }
+    }
+
+    return currItem;
+  }
+
   getItemAtPosition(x: number) {
     const rects = this.getItemRects();
     let px = 0;
-    for (const item of rects) {
-      if (px + item.x > x) {
-        return rects.indexOf(item);
+    if (x > 0) {
+      for (const item of rects) {
+        if (px + item.x > x % this.trackWidth) {
+          const offset = Math.floor(x / this.trackWidth) * this.itemCount;
+          return {
+            domIndex: offset + rects.indexOf(item),
+            index: rects.indexOf(item),
+          };
+        }
+        px += item.x;
       }
-      px += item.x;
+    } else {
+      for (const item of [...rects].reverse()) {
+        if (px - item.x < x % -this.trackWidth) {
+          const offset = Math.floor(x / this.trackWidth) * this.itemCount;
+          return {
+            domIndex: offset + rects.indexOf(item),
+            index: rects.indexOf(item),
+          };
+        }
+        px -= item.x;
+      }
     }
     return null;
   }
 
   drawUpdate() {
     if (this.loop) {
-      const visibleItems = [];
+      const visibleItems: number[] = [];
+      let lastItem: number | null = null;
+      for (let x = -this.offsetWidth; x < this.offsetWidth + this.offsetWidth; x++) {
+        const item = this.getItemAtPosition(-this.position.x + x);
+        if (item != null && item.index !== lastItem) {
+          // clone nodes if possible
+          if (item.domIndex > 0) {
+            const child = this.children[item.domIndex];
+            const actualChild = this.children[item.index];
 
-      const offset = this.getItemAtPosition(-this.position.x) || 0;
-      let lastItem = null;
-      for (let x = 0; x < this.offsetWidth; x++) {
-        const item = this.getItemAtPosition((x - this.position.x) % this.trackWidth);
-        if (item !== lastItem) {
-          visibleItems.push(item);
-          lastItem = item;
-        }
-      }
+            if (!child && actualChild) {
+              const clone = actualChild.cloneNode(true) as HTMLElement;
+              clone.classList.add("ghost");
+              this.appendChild(clone);
+            }
+          }
 
-      let vi = offset;
-      for (const visible of visibleItems) {
-        const child = this.children[vi];
-        const actualChild = this.children[visible];
-        if (!child && actualChild) {
-          const clone = actualChild.cloneNode(true);
-          clone.classList.add("ghost");
-          this.appendChild(clone);
+          visibleItems.push(item.index);
+          lastItem = item.index;
         }
-        vi++;
       }
     }
 
@@ -632,8 +669,8 @@ export class Track extends LitElement {
     this.traits = [
       new PointerTrait("pointer", this, true),
       // new AutoFocusTrait("autofocus", this, true),
-      // new DebugTrait("debug", this),
-      // new AutoplayTrait("autoplay", this),
+      new DebugTrait("debug", this),
+      new AutoplayTrait("autoplay", this),
       // new AutorunTrait("autorun", this),
     ];
 

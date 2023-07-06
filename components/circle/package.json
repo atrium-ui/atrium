@@ -6,7 +6,6 @@
   "module": "dist/circle.es.js",
   "types": "src/index.ts",
   "scripts": {
-    "dev": "histoire dev",
     "build": "vite build",
     "lint": "eslint --ext .ts ."
   },
