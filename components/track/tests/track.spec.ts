@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-const NODE_NAME = "sv-track";
+const NODE_NAME = "a-track";
 
 describe(NODE_NAME, () => {
   it("import element", async () => {
