@@ -164,4 +164,8 @@ export class Vec extends Array {
   }
 
   static isVec = Array.isArray;
+
+  toString(): string {
+    return `Vec{${this.join(",")}}`;
+  }
 }

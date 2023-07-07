@@ -154,7 +154,7 @@ export class Track extends LitElement {
 
   animation;
   frameRate = 0;
-  tickRate = 1000 / 145;
+  tickRate = 1000 / 144;
   lastTick = 0;
   accumulator = 0;
   frame = 0;
@@ -167,6 +167,7 @@ export class Track extends LitElement {
   scrollTimeout;
 
   position = new Vec();
+  acceleration = new Vec();
   deltaPosition = new Vec();
   direction = new Vec();
 
@@ -206,17 +207,6 @@ export class Track extends LitElement {
       value: false,
     },
   };
-
-  clearInputState() {
-    const state = this.inputState;
-    state.move.value.mul(0);
-    state.swipe.value.mul(0);
-    state.grab.value = false;
-    state.format.value = false;
-    state.leave.value = false;
-    state.enter.value = false;
-    state.release.value = false;
-  }
 
   traits: Trait[] = [];
 
@@ -301,7 +291,7 @@ export class Track extends LitElement {
     }
 
     if (this.mouseGrab) {
-      this.inputState.move.value.add(delta.clone().mul(-1));
+      this.inputState.move.value.add(delta.clone());
       this.mousePos.set(pos);
     }
   }
@@ -440,19 +430,18 @@ export class Track extends LitElement {
     this.frameRate = 1000 / deltaTick;
     this.lastTick = ms;
 
-    // handles inputs synchronously
     this.updateInputs();
 
     this.accumulator += deltaTick;
 
     let ticks = 0;
-    while (this.accumulator >= this.tickRate && ticks < 10) {
+    const maxTicks = 10;
+    while (this.accumulator >= this.tickRate && ticks < maxTicks) {
       ticks++;
       this.accumulator -= this.tickRate;
+
       this.updateTick();
     }
-
-    this.clearInputState();
 
     if (this.deltaPosition.abs() > 0) {
       this.drawUpdate();
@@ -471,10 +460,23 @@ export class Track extends LitElement {
     }
 
     this.direction.add(this.inputForce).sign();
+
+    // clear
+    const state = this.inputState;
+    state.move.value.mul(0);
+    state.swipe.value.mul(0);
+    state.grab.value = false;
+    state.format.value = false;
+    state.leave.value = false;
+    state.enter.value = false;
+    state.release.value = false;
   }
 
   updateTick() {
     const lastPosition = this.position.clone();
+
+    this.position.add(this.acceleration);
+    this.acceleration.mul(0.9);
 
     for (const trait of this.traits) {
       if (trait && trait.enabled) {
@@ -482,7 +484,8 @@ export class Track extends LitElement {
       }
     }
 
-    this.position.add(this.inputForce);
+    this.acceleration.add(this.inputForce);
+    this.inputForce.mul(0);
 
     if (this.target !== undefined) {
       switch (this.targetEasing) {
@@ -544,12 +547,11 @@ export class Track extends LitElement {
 
     // update final position
     this.position.add(this.targetForce);
+    this.targetForce.mul(0);
 
     // TODO: need to self fix positon, sometimes NaN on innital load
     this.position[0] = this.position[0] || 0;
     this.position[1] = this.position[1] || 0;
-
-    this.targetForce.mul(0);
 
     this.deltaPosition = Vec.sub(this.position, lastPosition);
 

@@ -68,13 +68,14 @@ export class DebugTrait extends Trait {
   update(): void {
     const e = this.entity;
     const arr = [
+      [`pixelRatio: ${devicePixelRatio}`],
       [`width: ${e.trackWidth}`],
       [`items: ${e.itemCount}`],
       [`current: ${e.currentItem}`],
       [`currentPos: ${e.getToItemPosition(e.currentItem)}`],
-      [`pos: ${e.position.x}`],
+      [`pos: ${e.position}`],
       ["input;red", Math.abs(e.inputForce.x)],
-      [`target: ${e.target?.x}`],
+      [`target: ${e.target}`],
       [`transtion: ${e.transition}`],
       [`items: ${e.itemWidths.join(", ")}`],
       ...this.adds.map((f) => [f().toString()]),
@@ -166,7 +167,7 @@ export class PointerTrait extends Trait {
 
     if (inputState.move.value.abs()) {
       this.force.set(inputState.move.value);
-      e.inputForce.set(Vec.mul(inputState.move.value, -1));
+      e.inputForce.set(inputState.move.value);
     } else {
       if (this.grabbing) {
         e.inputForce.mul(0);
@@ -214,7 +215,7 @@ export class PointerTrait extends Trait {
 
         if (power < slideRect[axes] / 2) {
           // short throw
-          e.moveBy(1 * Math.sign(this.force[axes]), "linear");
+          e.moveBy(1 * Math.sign(-this.force[axes]), "linear");
         } else {
           e.moveBy(0, "linear");
         }
@@ -231,7 +232,9 @@ export class PointerTrait extends Trait {
   }
 
   update() {
-    this.entity.inputForce.mul(0.9);
+    if (this.grabbing) {
+      this.entity.acceleration.mul(0);
+    }
   }
 }
 
@@ -291,8 +294,8 @@ export class AutorunTrait extends Trait {
   }
 
   input(inputState: InputState) {
-    if (inputState.move.value.x) {
-      this.dir.x = -Math.sign(inputState.move.value.x);
+    if (inputState.move.value.abs()) {
+      this.dir.set(inputState.move.value).sign();
     }
 
     if (inputState.enter.value) {
