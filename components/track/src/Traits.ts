@@ -68,6 +68,7 @@ export class DebugTrait extends Trait {
   update(): void {
     const e = this.entity;
     const arr = [
+      [`pixelRatio: ${devicePixelRatio}`],
       [`width: ${e.trackWidth}`],
       [`items: ${e.itemCount}`],
       [`current: ${e.currentItem}`],
@@ -166,8 +167,7 @@ export class PointerTrait extends Trait {
 
     if (inputState.move.value.abs()) {
       this.force.set(inputState.move.value);
-      // multiply by 1.1 to cancel the drag of 0.9 in update
-      e.inputForce.set(inputState.move.value).mul(1.1);
+      e.inputForce.set(inputState.move.value);
     } else {
       if (this.grabbing) {
         e.inputForce.mul(0);
@@ -215,7 +215,7 @@ export class PointerTrait extends Trait {
 
         if (power < slideRect[axes] / 2) {
           // short throw
-          e.moveBy(1 * Math.sign(this.force[axes]), "linear");
+          e.moveBy(1 * Math.sign(-this.force[axes]), "linear");
         } else {
           e.moveBy(0, "linear");
         }
@@ -232,7 +232,9 @@ export class PointerTrait extends Trait {
   }
 
   update() {
-    this.entity.inputForce.mul(0.9);
+    if (this.grabbing) {
+      this.entity.acceleration.mul(0);
+    }
   }
 }
 
