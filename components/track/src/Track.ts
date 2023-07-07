@@ -154,7 +154,7 @@ export class Track extends LitElement {
 
   animation;
   frameRate = 0;
-  tickRate = 1000 / 145;
+  tickRate = 1000 / 144;
   lastTick = 0;
   accumulator = 0;
   frame = 0;
@@ -301,7 +301,7 @@ export class Track extends LitElement {
     }
 
     if (this.mouseGrab) {
-      this.inputState.move.value.add(delta.clone().mul(-1));
+      this.inputState.move.value.add(delta.clone());
       this.mousePos.set(pos);
     }
   }
@@ -440,7 +440,6 @@ export class Track extends LitElement {
     this.frameRate = 1000 / deltaTick;
     this.lastTick = ms;
 
-    // handles inputs synchronously
     this.updateInputs();
 
     this.accumulator += deltaTick;
@@ -449,10 +448,10 @@ export class Track extends LitElement {
     while (this.accumulator >= this.tickRate && ticks < 10) {
       ticks++;
       this.accumulator -= this.tickRate;
-      this.updateTick();
-    }
 
-    this.clearInputState();
+      this.updateTick();
+      this.clearInputState();
+    }
 
     if (this.deltaPosition.abs() > 0) {
       this.drawUpdate();

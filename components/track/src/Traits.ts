@@ -72,9 +72,9 @@ export class DebugTrait extends Trait {
       [`items: ${e.itemCount}`],
       [`current: ${e.currentItem}`],
       [`currentPos: ${e.getToItemPosition(e.currentItem)}`],
-      [`pos: ${e.position.x}`],
+      [`pos: ${e.position}`],
       ["input;red", Math.abs(e.inputForce.x)],
-      [`target: ${e.target?.x}`],
+      [`target: ${e.target}`],
       [`transtion: ${e.transition}`],
       [`items: ${e.itemWidths.join(", ")}`],
       ...this.adds.map((f) => [f().toString()]),
@@ -166,7 +166,8 @@ export class PointerTrait extends Trait {
 
     if (inputState.move.value.abs()) {
       this.force.set(inputState.move.value);
-      e.inputForce.set(Vec.mul(inputState.move.value, -1));
+      // multiply by 1.1 to cancel the drag of 0.9 in update
+      e.inputForce.set(inputState.move.value).mul(1.1);
     } else {
       if (this.grabbing) {
         e.inputForce.mul(0);
@@ -291,8 +292,8 @@ export class AutorunTrait extends Trait {
   }
 
   input(inputState: InputState) {
-    if (inputState.move.value.x) {
-      this.dir.x = -Math.sign(inputState.move.value.x);
+    if (inputState.move.value.abs()) {
+      this.dir.set(inputState.move.value).sign();
     }
 
     if (inputState.enter.value) {
