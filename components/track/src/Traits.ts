@@ -6,7 +6,7 @@ export class Trait {
   id: string;
   enabled = false;
 
-  entity;
+  entity: Track;
 
   constructor(id, entity, defaultEnabled = false) {
     this.id = id;
@@ -100,6 +100,8 @@ export class AutoFocusTrait extends Trait {
 export class PointerTrait extends Trait {
   grabbing = false;
   force = new Vec();
+  grabbedStart = new Vec();
+  grabDelta = new Vec();
 
   updateCursorStyle() {
     const e = this.entity;
@@ -149,10 +151,17 @@ export class PointerTrait extends Trait {
 
     if (inputState.grab.value && !this.grabbing) {
       this.grabbing = true;
+      this.grabbedStart.set(e.mousePos);
+      this.entity.dispatchEvent(new Event("pointer:grab"));
+    }
+
+    if (e.mousePos.abs()) {
+      this.grabDelta.set(e.mousePos).sub(this.grabbedStart);
     }
 
     if (inputState.release.value) {
       this.grabbing = false;
+      this.entity.dispatchEvent(new Event("pointer:release"));
     }
 
     if (inputState.move.value.abs()) {
@@ -199,14 +208,16 @@ export class PointerTrait extends Trait {
 
     if (e.snap) {
       if (inputState.release.value) {
-        // TODO: need to take the size of the single slide into account
-        // if (this.force.abs() > 5) {
-        //   const sign = this.force.sign();
-        //   // e.moveBy(1 * (sign.x + sign.y), "linear");
-        // } else {
-        //   e.moveBy(0, "linear");
-        // }
-        e.moveBy(0, "linear");
+        const power = this.grabDelta.abs();
+        const slideRect = e.getCurrentSlideRect();
+        const axes = e.vertical ? 1 : 0;
+
+        if (power < slideRect[axes] / 2) {
+          // short throw
+          e.moveBy(1 * Math.sign(this.force[axes]), "linear");
+        } else {
+          e.moveBy(0, "linear");
+        }
       }
     }
 
@@ -229,7 +240,7 @@ export class AutoplayTrait extends Trait {
   defaultAutoPlayTime = 3000;
   autoPlayTimer;
 
-  lastTarget = null;
+  lastTarget: any = null;
 
   input(inputState: InputState) {
     if (this.lastTarget !== this.entity.target) {
@@ -252,6 +263,7 @@ export class AutoplayTrait extends Trait {
     const slideTime = timer(this.autoPlayTimer, autoplayTime);
     if (slideTime >= 1) {
       this.entity.moveBy(1, "ease");
+      this.entity.dispatchEvent(new Event("autoplay"));
     }
   }
 }

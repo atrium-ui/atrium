@@ -83,16 +83,10 @@ export class Track extends LitElement {
   }
 
   @query(".track")
-  private readonly track!: HTMLElement;
+  public readonly track!: HTMLElement;
 
   get itemCount() {
-    let count = 0;
-    for (const child of this.children) {
-      if (!child.className.includes("ghost")) {
-        count++;
-      }
-    }
-    return count;
+    return this.children.length - this.clones.length;
   }
 
   getItemRects() {
@@ -102,7 +96,12 @@ export class Track extends LitElement {
   }
 
   getItemRect(index: number) {
+    index = index % this.itemCount;
     return new Vec(this.itemWidths[index], this.itemHeights[index]);
+  }
+
+  getCurrentSlideRect() {
+    return this.getItemRect(this.currentItem);
   }
 
   _widths;
@@ -221,6 +220,15 @@ export class Track extends LitElement {
 
   traits: Trait[] = [];
 
+  findTrait(id: string) {
+    for (const trait of this.traits) {
+      if (trait.id === id) {
+        return trait;
+      }
+    }
+    return undefined;
+  }
+
   @property({ type: Boolean, reflect: true }) vertical = false;
   @property({ type: Boolean, reflect: true }) snap = false;
   @property({ type: Boolean, reflect: true }) debug = false;
@@ -322,12 +330,6 @@ export class Track extends LitElement {
         }
       }
     }
-  }
-
-  onFocus(e) {
-    // TODO: will set target on click too.
-    // const pos = this.getItemPosition([...this.children].indexOf(e.target));
-    // this.setTarget(-pos);
   }
 
   next() {
@@ -632,11 +634,13 @@ export class Track extends LitElement {
     return null;
   }
 
+  clones: HTMLElement[] = [];
+
   drawUpdate() {
     if (this.loop) {
-      const visibleItems: number[] = [];
+      // const visibleItems: number[] = [];
       let lastItem: number | null = null;
-      for (let x = -this.offsetWidth; x < this.offsetWidth + this.offsetWidth; x++) {
+      for (let x = -this.offsetWidth; x < this.offsetWidth + this.offsetWidth; x += 100) {
         const item = this.getItemAtPosition(-this.position.x + x);
         if (item != null && item.index !== lastItem) {
           // clone nodes if possible
@@ -646,12 +650,13 @@ export class Track extends LitElement {
 
             if (!child && actualChild) {
               const clone = actualChild.cloneNode(true) as HTMLElement;
+              this.clones.push(clone);
               clone.classList.add("ghost");
               this.appendChild(clone);
             }
           }
 
-          visibleItems.push(item.index);
+          // visibleItems.push(item.index);
           lastItem = item.index;
         }
       }
@@ -675,7 +680,6 @@ export class Track extends LitElement {
     this.addEventListener("pointerenter", this.pointerEnter.bind(this));
     this.addEventListener("keydown", this.onKeyDown.bind(this));
     this.addEventListener("wheel", this.onWheel.bind(this));
-    this.addEventListener("focus", this.onFocus.bind(this), { capture: true });
 
     window.addEventListener("resize", this.format.bind(this), { passive: true });
     window.addEventListener("scroll", this.onScroll.bind(this), { capture: true });
@@ -690,7 +694,7 @@ export class Track extends LitElement {
 
     this.traits = [
       new PointerTrait("pointer", this, true),
-      // new AutoFocusTrait("autofocus", this, true),
+      new AutoFocusTrait("autofocus", this),
       new DebugTrait("debug", this),
       new AutoplayTrait("autoplay", this),
       // new AutorunTrait("autorun", this),
@@ -712,7 +716,6 @@ export class Track extends LitElement {
     this.removeEventListener("pointerenter", this.pointerEnter.bind(this));
     this.removeEventListener("keydown", this.onKeyDown.bind(this));
     this.removeEventListener("wheel", this.onWheel.bind(this));
-    this.removeEventListener("focus", this.onFocus.bind(this));
 
     window.removeEventListener("resize", this.format.bind(this));
     window.removeEventListener("scroll", this.onScroll.bind(this));
