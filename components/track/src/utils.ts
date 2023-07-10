@@ -19,11 +19,16 @@ export function isTouch() {
 type VecOrNumber = Vec | number[] | number;
 
 export class Vec extends Array {
-  constructor(x: number = 0, y: number = 0) {
+  constructor(x: VecOrNumber = 0, y: number = 0) {
     super();
 
-    this[0] = x;
-    this[1] = y;
+    if (Vec.isVec(x)) {
+      this[0] = x[0];
+      this[1] = x[1];
+    } else {
+      this[0] = x;
+      this[1] = y;
+    }
   }
 
   get x() {
@@ -132,7 +137,7 @@ export class Vec extends Array {
   }
 
   clone() {
-    return new Vec(...this);
+    return new Vec(this);
   }
 
   static add(vec1: VecOrNumber, vec2: VecOrNumber) {
