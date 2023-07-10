@@ -1,6 +1,5 @@
-import DebugElement from "./Debug.js";
 import { InputState, Track } from "./Track.js";
-import { Ease, Vec, isTouch, timer } from "./utils.js";
+import { Vec, isTouch, timer } from "./utils.js";
 
 export class Trait {
   id: string;
@@ -20,75 +19,20 @@ export class Trait {
     // ...
   }
 
+  start() {
+    // called on animation start
+  }
+
+  stop() {
+    // called on animation stop
+  }
+
   input(inputState: InputState) {
     // ...
   }
 
   update() {
     // ...
-  }
-}
-
-export class DebugTrait extends Trait {
-  debug = new DebugElement();
-
-  created(): void {
-    this.entity.focus();
-
-    if (this.enabled) {
-      this.entity.shadowRoot?.append(this.debug);
-    }
-  }
-
-  _enabled = this.enabled;
-
-  // @ts-ignore
-  set enabled(val) {
-    if (this.debug) {
-      if (val === true && !this.debug.parentElement) {
-        this.entity.shadowRoot?.append(this.debug);
-      } else {
-        if (this.debug) this.debug.remove();
-      }
-    }
-
-    this._enabled = val;
-  }
-
-  get enabled() {
-    return this._enabled;
-  }
-
-  adds: any[] = [];
-
-  display(id: number, f) {
-    this.adds[id] = f;
-  }
-
-  update(): void {
-    const e = this.entity;
-    const arr = [
-      [`pixelRatio: ${devicePixelRatio}`],
-      [`width: ${e.trackWidth}`],
-      [`items: ${e.itemCount}`],
-      [`current: ${e.currentItem}`],
-      [`currentPos: ${e.getToItemPosition(e.currentItem)}`],
-      [`pos: ${e.position}`],
-      ["input;red", Math.abs(e.inputForce.x)],
-      [`target: ${e.target}`],
-      [`transtion: ${e.transition}`],
-      [`items: ${e.itemWidths.join(", ")}`],
-      ...this.adds.map((f) => [f().toString()]),
-    ];
-
-    arr.forEach((item, index) => {
-      if (item.length > 1) {
-        // @ts-ignore
-        this.debug.plot(index, ...item);
-      } else {
-        this.debug.set(index, item[0]);
-      }
-    });
   }
 }
 
@@ -122,13 +66,13 @@ export class PointerTrait extends Trait {
     let clampedPos = newPos;
 
     const stopTop = 0;
-    let stopBottom = -e.trackHeight + e.offsetHeight;
+    let stopBottom = e.trackHeight - e.offsetHeight;
     const stopLeft = 0;
-    let stopRight = -e.trackWidth + e.offsetWidth;
+    let stopRight = e.trackWidth - e.offsetWidth;
 
     if (e.overflow == "item") {
-      stopBottom = -e.trackHeight + e.itemHeights[e.itemCount - 1];
-      stopRight = -e.trackWidth + e.itemWidths[e.itemCount - 1];
+      stopBottom = e.trackHeight - e.itemHeights[e.itemCount - 1];
+      stopRight = e.trackWidth - e.itemWidths[e.itemCount - 1];
     }
 
     clampedPos = new Vec(
@@ -166,8 +110,8 @@ export class PointerTrait extends Trait {
     }
 
     if (inputState.move.value.abs()) {
-      this.force.set(inputState.move.value);
-      e.inputForce.set(inputState.move.value);
+      this.force.set(inputState.move.value).mul(-1);
+      e.inputForce.set(inputState.move.value).mul(-1);
     } else {
       if (this.grabbing) {
         e.inputForce.mul(0);
@@ -177,9 +121,10 @@ export class PointerTrait extends Trait {
     // clamp input force
     if (!e.loop) {
       const diff = this.getClapmedDiff();
+
       if (diff.abs()) {
         if (!this.grabbing) {
-          e.inputForce.set(diff.mul(-1));
+          e.inputForce.set(diff);
           e.inputForce.mul(1 / 10);
         } else {
           if (e.vertical && Math.abs(diff.y)) {
@@ -192,12 +137,12 @@ export class PointerTrait extends Trait {
     }
 
     if (inputState.swipe.value.abs()) {
-      e.inputForce.set(inputState.swipe.value.mul(-1));
+      e.inputForce.set(inputState.swipe.value);
       e.setTarget(undefined);
 
       if (!e.loop) {
         const diff = this.getClapmedDiff();
-        e.inputForce.add(diff.mul(-1));
+        e.inputForce.add(diff);
       }
 
       if (e.snap) {
@@ -215,7 +160,7 @@ export class PointerTrait extends Trait {
 
         if (power < slideRect[axes] / 2) {
           // short throw
-          e.moveBy(1 * Math.sign(-this.force[axes]), "linear");
+          e.moveBy(1 * Math.sign(this.force[axes]), "linear");
         } else {
           e.moveBy(0, "linear");
         }
@@ -251,11 +196,6 @@ export class AutoplayTrait extends Trait {
       this.lastTarget = this.entity.target;
     }
 
-    if (inputState.format.value) {
-      const entity = this.entity;
-      entity.moveBy(0, "linear");
-    }
-
     if (inputState.release.value) {
       this.autoPlayTimer = Date.now() + this.autoPlayTimeout;
     }
@@ -267,63 +207,6 @@ export class AutoplayTrait extends Trait {
     if (slideTime >= 1) {
       this.entity.moveBy(1, "ease");
       this.entity.dispatchEvent(new Event("autoplay"));
-    }
-  }
-}
-
-export class AutorunTrait extends Trait {
-  defaultSpeed = 1;
-  defaultPauesTransitionTime = 1500;
-
-  speed = new Vec(this.defaultSpeed, this.defaultSpeed);
-  dir = new Vec(-1, -1);
-  pauseTransitionTime = this.defaultPauesTransitionTime;
-
-  paused = false;
-  transitionAt = Date.now();
-
-  pause() {
-    this.paused = true;
-    this.transitionAt = Date.now();
-  }
-
-  unpause() {
-    this.paused = false;
-    this.transitionAt = Date.now();
-    this.entity.setTarget(undefined);
-  }
-
-  input(inputState: InputState) {
-    if (inputState.move.value.abs()) {
-      this.dir.set(inputState.move.value).sign();
-    }
-
-    if (inputState.enter.value) {
-      !isTouch() && this.pause();
-    }
-
-    if (inputState.leave.value) {
-      !isTouch() && this.unpause();
-    }
-
-    if (inputState.format.value) {
-      if (isTouch()) {
-        !this.paused && this.pause();
-      } else {
-        this.paused && this.unpause();
-      }
-    }
-  }
-
-  public update() {
-    const entity = this.entity;
-    if (!this.paused) {
-      const transitionTime = timer(this.transitionAt, this.pauseTransitionTime);
-      entity.inputForce
-        .add(this.speed)
-        .mul(this.dir)
-        .mul(Ease.easeOutSine(transitionTime))
-        .mul(entity.normal);
     }
   }
 }
