@@ -542,7 +542,8 @@ export class Track extends LitElement {
           if (this.target) {
             this.target.y -= max.y - start.y;
           }
-        } else if (this.position.y < start.y) {
+        }
+        if (this.position.y < start.y) {
           this.position.y = max.y;
           if (this.target) {
             this.target.y += max.y - start.y;
@@ -554,7 +555,8 @@ export class Track extends LitElement {
           if (this.target) {
             this.target.x -= max.x - start.x;
           }
-        } else if (this.position.x < start.x) {
+        }
+        if (this.position.x < start.x) {
           this.position.x = max.x;
           if (this.target) {
             this.target.x += max.x - start.x;
@@ -568,8 +570,8 @@ export class Track extends LitElement {
     this.targetForce.mul(0);
 
     // TODO: need to self fix positon, sometimes NaN on innital load and resize
-    // this.position[0] = this.position[0] || 0;
-    // this.position[1] = this.position[1] || 0;
+    this.position[0] = this.position[0] || 0;
+    this.position[1] = this.position[1] || 0;
   }
 
   getCurrentItem(pos: Vec) {
