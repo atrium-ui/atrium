@@ -1,6 +1,18 @@
 import { describe, expect, it } from "vitest";
+import { beforeEach, vi } from "vitest";
 
 const NODE_NAME = "sv-track";
+
+beforeEach(() => {
+  // IntersectionObserver isn't available in test environment
+  const mockIntersectionObserver = vi.fn();
+  mockIntersectionObserver.mockReturnValue({
+    observe: () => null,
+    unobserve: () => null,
+    disconnect: () => null,
+  });
+  window.IntersectionObserver = mockIntersectionObserver;
+});
 
 describe(NODE_NAME, () => {
   it("import element", async () => {
