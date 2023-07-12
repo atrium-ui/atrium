@@ -1,46 +1,6 @@
-import { InputState, Track } from "./Track.js";
-import { Vec, isTouch, timer } from "./utils.js";
-
-export class Trait {
-  id: string;
-  enabled = false;
-
-  entity: Track;
-
-  constructor(id, entity, defaultEnabled = false) {
-    this.id = id;
-    this.enabled = defaultEnabled;
-    this.entity = entity;
-
-    this.created();
-  }
-
-  created() {
-    // ...
-  }
-
-  start() {
-    // called on animation start
-  }
-
-  stop() {
-    // called on animation stop
-  }
-
-  input(inputState: InputState) {
-    // ...
-  }
-
-  update() {
-    // ...
-  }
-}
-
-export class AutoFocusTrait extends Trait {
-  created(): void {
-    this.entity.focus();
-  }
-}
+import { InputState, Track } from "../Track.js";
+import { Trait } from "../Trait.js";
+import { Vec, isTouch } from "../utils.js";
 
 export class PointerTrait extends Trait {
   grabbing = false;
@@ -76,12 +36,12 @@ export class PointerTrait extends Trait {
     }
 
     clampedPos = new Vec(
-      Math.min(stopLeft, clampedPos.x),
-      Math.min(stopTop, clampedPos.y)
+      Math.max(stopLeft, clampedPos.x),
+      Math.max(stopTop, clampedPos.y)
     );
     clampedPos = new Vec(
-      Math.max(stopRight, clampedPos.x),
-      Math.max(stopBottom, clampedPos.y)
+      Math.min(stopRight, clampedPos.x),
+      Math.min(stopBottom, clampedPos.y)
     );
 
     return Vec.sub(newPos, clampedPos);
@@ -124,8 +84,7 @@ export class PointerTrait extends Trait {
 
       if (diff.abs()) {
         if (!this.grabbing) {
-          e.inputForce.set(diff);
-          e.inputForce.mul(1 / 10);
+          e.inputForce.set(diff.mul(-0.1).sub(e.acceleration));
         } else {
           if (e.vertical && Math.abs(diff.y)) {
             e.inputForce.mul(0.2);
@@ -137,12 +96,17 @@ export class PointerTrait extends Trait {
     }
 
     if (inputState.swipe.value.abs()) {
-      e.inputForce.set(inputState.swipe.value);
+      e.inputForce.set(inputState.swipe.value.mul(0.2));
       e.setTarget(undefined);
 
       if (!e.loop) {
         const diff = this.getClapmedDiff();
-        e.inputForce.add(diff);
+
+        if (e.vertical && Math.abs(diff.y)) {
+          e.inputForce.set(diff.mul(0.1).sub(e.acceleration));
+        } else if (Math.abs(diff.x)) {
+          e.inputForce.set(diff.mul(0.1).sub(e.acceleration));
+        }
       }
 
       if (e.snap) {
@@ -179,34 +143,6 @@ export class PointerTrait extends Trait {
   update() {
     if (this.grabbing) {
       this.entity.acceleration.mul(0);
-    }
-  }
-}
-
-export class AutoplayTrait extends Trait {
-  autoPlayTimeout = 4000;
-  defaultAutoPlayTime = 3000;
-  autoPlayTimer;
-
-  lastTarget: any = null;
-
-  input(inputState: InputState) {
-    if (this.lastTarget !== this.entity.target) {
-      this.autoPlayTimer = Date.now();
-      this.lastTarget = this.entity.target;
-    }
-
-    if (inputState.release.value) {
-      this.autoPlayTimer = Date.now() + this.autoPlayTimeout;
-    }
-  }
-
-  update() {
-    const autoplayTime = this.entity.autoplay * 1000 || this.defaultAutoPlayTime;
-    const slideTime = timer(this.autoPlayTimer, autoplayTime);
-    if (slideTime >= 1) {
-      this.entity.moveBy(1, "ease");
-      this.entity.dispatchEvent(new Event("autoplay"));
     }
   }
 }

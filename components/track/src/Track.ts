@@ -1,8 +1,11 @@
 import { css, html, LitElement } from "lit";
 import { property, query } from "lit/decorators.js";
 import { Ease, timer, Vec } from "./utils.js";
-import { AutoplayTrait, Trait, PointerTrait, AutoFocusTrait } from "./Traits.js";
+import { PointerTrait } from "./traits/Pointer.js";
+import { AutoFocusTrait } from "./traits/Autofocus.js";
+import { AutoplayTrait } from "./traits/Autoplay.js";
 import { DebugTrait } from "./traits/Debug.js";
+import { Trait } from "./Trait.js";
 
 export type InputState = {
   grab: {
