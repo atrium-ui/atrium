@@ -66,10 +66,11 @@ const centeredSliderIndex = ref([0]);
         <sv-select
           class="dots"
           :value="[centeredSliderIndex]"
-          @change="
+          @input="
             (e) => {
               const track = $refs.centeredSlider;
               track.moveTo(+e.target.value, 'ease');
+              e.preventDefault();
             }
           "
         >
@@ -105,7 +106,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Tabs">
-      <sv-track class="tabs">
+      <sv-track class="tabs" overflow="fill" overflowscroll>
         <div class="cell">Home</div>
         <div class="cell">Videos</div>
         <div class="cell">Career</div>
@@ -117,7 +118,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Variable item width">
-      <sv-track class="special">
+      <sv-track class="special" overflow="fill">
         <div class="cell first">1a</div>
         <div class="cell">2a</div>
         <div class="cell">3a</div>
@@ -129,7 +130,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Vertical">
-      <sv-track class="vertical" snap vertical>
+      <sv-track class="vertical" vertical>
         <div class="cell first">1a</div>
         <div class="cell">2a</div>
         <div class="cell">3a</div>
@@ -206,6 +207,10 @@ const centeredSliderIndex = ref([0]);
   color: lime;
   font-size: 42px;
   font-weight: 600;
+}
+
+.infinite {
+  padding-left: calc(50% - 100px);
 }
 
 .centered {
