@@ -33,14 +33,14 @@ export class PointerTrait extends Trait {
     let stopLeft = 0;
     let stopRight = 0;
 
-    if (e.overflow == "fill") {
-      stopBottom = e.trackHeight - e.offsetHeight;
-      stopRight = e.trackWidth - e.offsetWidth;
-    }
-
-    if (e.overflow == "item") {
+    if (e.snap) {
+      // overflow item
       stopBottom = e.trackHeight - e.itemHeights[e.itemCount - 1];
       stopRight = e.trackWidth - e.itemWidths[e.itemCount - 1];
+    } else {
+      // overflow fill
+      stopBottom = e.trackHeight - e.offsetHeight;
+      stopRight = e.trackWidth - e.offsetWidth;
     }
 
     clampedPos = new Vec(

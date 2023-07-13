@@ -242,7 +242,7 @@ export class Track extends LitElement {
    * item: scroll until the last item is active
    * fill (default): scroll until the track reaches the last item visible to fill the width of the track
    */
-  @property({ type: String }) overflow: "item" | "fill" = "item";
+  // @property({ type: String }) overflow: "item" | "fill" = "item";
 
   /**
    * only scroll when items are overflown
@@ -590,20 +590,26 @@ export class Track extends LitElement {
     let minDist = Infinity;
     let angleToClosestIndex = 0;
 
+    const rects = this.getItemRects();
+    const axes = this.vertical ? 1 : 0;
+
     for (let i = -1; i < this.itemCount + 1; i++) {
       const itemIndex = i % this.itemCount;
+      const rect = rects[itemIndex];
 
-      const currentItemAngle = (this.itemWidths[itemIndex] / this.trackSize) * 360;
-      const itemAngle = (currentItemAngle * itemIndex) % 360;
-      const deltaAngle = angleDist(itemAngle, currentAngle);
+      if (rect) {
+        const currentItemAngle = (rect[axes] / this.trackSize) * 360;
+        const itemAngle = (currentItemAngle * itemIndex) % 360;
+        const deltaAngle = angleDist(itemAngle, currentAngle);
 
-      const offset = Math.floor(i / this.itemCount) * this.itemCount;
+        const offset = Math.floor(i / this.itemCount) * this.itemCount;
 
-      if (Math.abs(deltaAngle) <= minDist) {
-        minDist = Math.abs(deltaAngle);
-        angleToClosestIndex = itemIndex;
-        if (currentAngle > 180) {
-          angleToClosestIndex += offset;
+        if (Math.abs(deltaAngle) <= minDist) {
+          minDist = Math.abs(deltaAngle);
+          angleToClosestIndex = itemIndex;
+          if (currentAngle > 180) {
+            angleToClosestIndex += offset;
+          }
         }
       }
     }
@@ -725,7 +731,7 @@ export class Track extends LitElement {
     this.traits = [
       new PointerTrait("pointer", this, true),
       new AutoFocusTrait("autofocus", this),
-      new DebugTrait("debug", this),
+      // new DebugTrait("debug", this),
       new AutoplayTrait("autoplay", this),
     ];
 

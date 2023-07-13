@@ -148,6 +148,26 @@ const centeredSliderIndex = ref([0]);
         <div class="cell">15a</div>
       </sv-track>
     </Variant>
+
+    <Variant title="Vertical Snap">
+      <sv-track class="vertical" vertical snap>
+        <div class="cell first">1a</div>
+        <div class="cell">2a</div>
+        <div class="cell">3a</div>
+        <div class="cell">4a</div>
+        <div class="cell">5a</div>
+        <div class="cell">6a</div>
+        <div class="cell">7a</div>
+        <div class="cell">8a</div>
+        <div class="cell">9a</div>
+        <div class="cell">10a</div>
+        <div class="cell">11a</div>
+        <div class="cell">12a</div>
+        <div class="cell">13a</div>
+        <div class="cell">14a</div>
+        <div class="cell">15a</div>
+      </sv-track>
+    </Variant>
   </Story>
 </template>
 
@@ -163,10 +183,6 @@ const centeredSliderIndex = ref([0]);
   display: flex;
   justify-content: center;
   align-items: center;
-
-  &[active] {
-    background: #f7f7f7;
-  }
 
   &:hover {
     background: #f7f7f7;
