@@ -1,3 +1,3 @@
-export * from "./Track";
-export * from "./Traits";
+export { Track } from "./Track";
+export { Trait } from "./Traits";
 export * from "./utils";
