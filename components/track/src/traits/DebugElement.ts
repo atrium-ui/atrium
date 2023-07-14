@@ -1,3 +1,5 @@
+window.HTMLElement = HTMLElement || class {};
+
 export default class DebugElement extends HTMLElement {
   props: Array<string | number | number[] | (number | string)[]> = [];
   canvas!: HTMLCanvasElement;

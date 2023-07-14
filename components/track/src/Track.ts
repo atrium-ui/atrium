@@ -1,8 +1,11 @@
 import { css, html, LitElement } from "lit";
 import { property, query } from "lit/decorators.js";
 import { Ease, timer, Vec } from "./utils.js";
-import { AutoplayTrait, Trait, PointerTrait, AutoFocusTrait } from "./Traits.js";
+import { PointerTrait } from "./traits/Pointer.js";
+import { AutoFocusTrait } from "./traits/Autofocus.js";
+import { AutoplayTrait } from "./traits/Autoplay.js";
 import { DebugTrait } from "./traits/Debug.js";
+import { Trait } from "./Trait.js";
 
 export type InputState = {
   grab: {
@@ -170,6 +173,7 @@ export class Track extends LitElement {
   private scrollTimeout;
   private canScroll = true;
 
+  origin = new Vec();
   position = new Vec();
   acceleration = new Vec();
   direction = new Vec();
@@ -238,7 +242,7 @@ export class Track extends LitElement {
    * item: scroll until the last item is active
    * fill (default): scroll until the track reaches the last item visible to fill the width of the track
    */
-  @property({ type: String }) overflow: "item" | "fill" = "fill";
+  // @property({ type: String }) overflow: "item" | "fill" = "item";
 
   /**
    * only scroll when items are overflown
@@ -348,6 +352,13 @@ export class Track extends LitElement {
     this._widths = undefined;
     this._heights = undefined;
 
+    const bounds = this.getBoundingClientRect();
+    const firstItem = this.children[0]?.getBoundingClientRect();
+    if (firstItem) {
+      this.origin.x = firstItem.x - bounds.x;
+      this.origin.y = firstItem.y - bounds.y;
+    }
+
     this.moveBy(0, "none");
   }
 
@@ -413,8 +424,9 @@ export class Track extends LitElement {
 
   startAnimate() {
     if (!this.animation) {
-      requestAnimationFrame(this.tick.bind(this));
+      this.tick();
       this.trait((t) => t.start());
+      this.drawUpdate();
     }
   }
 
@@ -536,31 +548,29 @@ export class Track extends LitElement {
       const start = new Vec();
       const max = new Vec(start.x + this.trackWidth, start.y + this.trackHeight);
 
-      if (this.vertical) {
-        if (this.position.y >= max.y) {
-          this.position.y = start.y;
-          if (this.target) {
-            this.target.y -= max.y - start.y;
-          }
+      if (this.position.y >= max.y) {
+        this.position.y = start.y;
+        if (this.target) {
+          this.target.y -= max.y - start.y;
         }
-        if (this.position.y < start.y) {
-          this.position.y = max.y;
-          if (this.target) {
-            this.target.y += max.y - start.y;
-          }
+      }
+      if (this.position.y < start.y) {
+        this.position.y = max.y;
+        if (this.target) {
+          this.target.y += max.y - start.y;
         }
-      } else {
-        if (this.position.x >= max.x) {
-          this.position.x = start.x;
-          if (this.target) {
-            this.target.x -= max.x - start.x;
-          }
+      }
+
+      if (this.position.x >= max.x) {
+        this.position.x = start.x;
+        if (this.target) {
+          this.target.x -= max.x - start.x;
         }
-        if (this.position.x < start.x) {
-          this.position.x = max.x;
-          if (this.target) {
-            this.target.x += max.x - start.x;
-          }
+      }
+      if (this.position.x < start.x) {
+        this.position.x = max.x;
+        if (this.target) {
+          this.target.x += max.x - start.x;
         }
       }
     }
@@ -580,20 +590,26 @@ export class Track extends LitElement {
     let minDist = Infinity;
     let angleToClosestIndex = 0;
 
+    const rects = this.getItemRects();
+    const axes = this.vertical ? 1 : 0;
+
     for (let i = -1; i < this.itemCount + 1; i++) {
       const itemIndex = i % this.itemCount;
+      const rect = rects[itemIndex];
 
-      const currentItemAngle = (this.itemWidths[itemIndex] / this.trackSize) * 360;
-      const itemAngle = (currentItemAngle * itemIndex) % 360;
-      const deltaAngle = angleDist(itemAngle, currentAngle);
+      if (rect) {
+        const currentItemAngle = (rect[axes] / this.trackSize) * 360;
+        const itemAngle = (currentItemAngle * itemIndex) % 360;
+        const deltaAngle = angleDist(itemAngle, currentAngle);
 
-      const offset = Math.floor(i / this.itemCount) * this.itemCount;
+        const offset = Math.floor(i / this.itemCount) * this.itemCount;
 
-      if (Math.abs(deltaAngle) <= minDist) {
-        minDist = Math.abs(deltaAngle);
-        angleToClosestIndex = itemIndex;
-        if (currentAngle > 180) {
-          angleToClosestIndex += offset;
+        if (Math.abs(deltaAngle) <= minDist) {
+          minDist = Math.abs(deltaAngle);
+          angleToClosestIndex = itemIndex;
+          if (currentAngle > 180) {
+            angleToClosestIndex += offset;
+          }
         }
       }
     }
@@ -633,31 +649,41 @@ export class Track extends LitElement {
   private clones: HTMLElement[] = [];
 
   drawUpdate() {
-    if (this.track) {
-      this.track.style.transform = `translate(${-this.position.x}px, ${-this.position
-        .y}px)`;
-    }
+    this.track.style.transform = `translate(${-this.position.x}px,${-this.position.y}px)`;
 
     if (this.loop) {
-      // const visibleItems: number[] = [];
+      const visibleItems: number[] = [];
       let lastItem: number | null = null;
       for (let x = -this.offsetWidth; x < this.offsetWidth + this.offsetWidth; x += 100) {
         const item = this.getItemAtPosition(this.position.x + x);
         if (item != null && item.index !== lastItem) {
           // clone nodes if possible
-          if (item.domIndex > 0) {
+          if (item.domIndex >= 0) {
             const child = this.children[item.domIndex];
-            const actualChild = this.children[item.index];
+            const realChild = this.children[item.index];
 
-            if (!child && actualChild) {
-              const clone = actualChild.cloneNode(true) as HTMLElement;
+            if (!child && realChild) {
+              const clone = realChild.cloneNode(true) as HTMLElement;
               this.clones.push(clone);
               clone.classList.add("ghost");
               this.appendChild(clone);
             }
+          } else {
+            // TODO: generate ghots on the left side; need to be position with transforms
+            const child = this.children[item.domIndex];
+            const realChild = this.children[item.index];
+            // console.log(item.index);
+
+            // if (!child && realChild) {
+            //   const clone = realChild.cloneNode(true) as HTMLElement;
+            //   this.clones.push(clone);
+            //   clone.classList.add("ghost");
+            //   this.appendChild(clone);
+            // }
           }
 
-          // visibleItems.push(item.index);
+          visibleItems.push(item.index);
+
           lastItem = item.index;
         }
       }
@@ -705,7 +731,7 @@ export class Track extends LitElement {
     this.traits = [
       new PointerTrait("pointer", this, true),
       new AutoFocusTrait("autofocus", this),
-      new DebugTrait("debug", this),
+      // new DebugTrait("debug", this),
       new AutoplayTrait("autoplay", this),
     ];
 

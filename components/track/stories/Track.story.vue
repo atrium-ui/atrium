@@ -66,10 +66,11 @@ const centeredSliderIndex = ref([0]);
         <a-select
           class="dots"
           :value="[centeredSliderIndex]"
-          @change="
+          @input="
             (e) => {
               const track = $refs.centeredSlider;
               track.moveTo(+e.target.value, 'ease');
+              e.preventDefault();
             }
           "
         >
@@ -105,7 +106,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Tabs">
-      <a-track class="tabs">
+      <a-track class="tabs" overflow="fill" overflowscroll>
         <div class="cell">Home</div>
         <div class="cell">Videos</div>
         <div class="cell">Career</div>
@@ -117,7 +118,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Variable item width">
-      <a-track class="special">
+      <a-track class="special" overflow="fill">
         <div class="cell first">1a</div>
         <div class="cell">2a</div>
         <div class="cell">3a</div>
@@ -129,7 +130,27 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Vertical">
-      <a-track class="vertical" snap vertical>
+      <a-track class="vertical" vertical>
+        <div class="cell first">1a</div>
+        <div class="cell">2a</div>
+        <div class="cell">3a</div>
+        <div class="cell">4a</div>
+        <div class="cell">5a</div>
+        <div class="cell">6a</div>
+        <div class="cell">7a</div>
+        <div class="cell">8a</div>
+        <div class="cell">9a</div>
+        <div class="cell">10a</div>
+        <div class="cell">11a</div>
+        <div class="cell">12a</div>
+        <div class="cell">13a</div>
+        <div class="cell">14a</div>
+        <div class="cell">15a</div>
+      </a-track>
+    </Variant>
+
+    <Variant title="Vertical Snap">
+      <a-track class="vertical" vertical snap>
         <div class="cell first">1a</div>
         <div class="cell">2a</div>
         <div class="cell">3a</div>
@@ -162,10 +183,6 @@ const centeredSliderIndex = ref([0]);
   display: flex;
   justify-content: center;
   align-items: center;
-
-  &[active] {
-    background: #f7f7f7;
-  }
 
   &:hover {
     background: #f7f7f7;
@@ -206,6 +223,10 @@ const centeredSliderIndex = ref([0]);
   color: lime;
   font-size: 42px;
   font-weight: 600;
+}
+
+.infinite {
+  padding-left: calc(50% - 100px);
 }
 
 .centered {

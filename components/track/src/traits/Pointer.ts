@@ -1,52 +1,15 @@
-import { InputState, Track } from "./Track.js";
-import { Vec, isTouch, timer } from "./utils.js";
-
-export class Trait {
-  id: string;
-  enabled = false;
-
-  entity: Track;
-
-  constructor(id, entity, defaultEnabled = false) {
-    this.id = id;
-    this.enabled = defaultEnabled;
-    this.entity = entity;
-
-    this.created();
-  }
-
-  created() {
-    // ...
-  }
-
-  start() {
-    // called on animation start
-  }
-
-  stop() {
-    // called on animation stop
-  }
-
-  input(inputState: InputState) {
-    // ...
-  }
-
-  update() {
-    // ...
-  }
-}
-
-export class AutoFocusTrait extends Trait {
-  created(): void {
-    this.entity.focus();
-  }
-}
+import { InputState, Track } from "../Track.js";
+import { Trait } from "../Trait.js";
+import { Vec, isTouch } from "../utils.js";
 
 export class PointerTrait extends Trait {
   grabbing = false;
   force = new Vec();
   grabbedStart = new Vec();
   grabDelta = new Vec();
+
+  borderBounce = -0.1;
+  borderResistnce = 0.8;
 
   updateCursorStyle() {
     const e = this.entity;
@@ -65,23 +28,28 @@ export class PointerTrait extends Trait {
     const newPos = Vec.add(e.position, e.inputForce);
     let clampedPos = newPos;
 
-    const stopTop = 0;
-    let stopBottom = e.trackHeight - e.offsetHeight;
-    const stopLeft = 0;
-    let stopRight = e.trackWidth - e.offsetWidth;
+    let stopTop = 0;
+    let stopBottom = 0;
+    let stopLeft = 0;
+    let stopRight = 0;
 
-    if (e.overflow == "item") {
+    if (e.snap) {
+      // overflow item
       stopBottom = e.trackHeight - e.itemHeights[e.itemCount - 1];
       stopRight = e.trackWidth - e.itemWidths[e.itemCount - 1];
+    } else {
+      // overflow fill
+      stopBottom = e.trackHeight - e.offsetHeight;
+      stopRight = e.trackWidth - e.offsetWidth;
     }
 
     clampedPos = new Vec(
-      Math.min(stopLeft, clampedPos.x),
-      Math.min(stopTop, clampedPos.y)
+      Math.max(stopLeft, clampedPos.x),
+      Math.max(stopTop, clampedPos.y)
     );
     clampedPos = new Vec(
-      Math.max(stopRight, clampedPos.x),
-      Math.max(stopBottom, clampedPos.y)
+      Math.min(stopRight, clampedPos.x),
+      Math.min(stopBottom, clampedPos.y)
     );
 
     return Vec.sub(newPos, clampedPos);
@@ -118,32 +86,9 @@ export class PointerTrait extends Trait {
       }
     }
 
-    // clamp input force
-    if (!e.loop) {
-      const diff = this.getClapmedDiff();
-
-      if (diff.abs()) {
-        if (!this.grabbing) {
-          e.inputForce.set(diff);
-          e.inputForce.mul(1 / 10);
-        } else {
-          if (e.vertical && Math.abs(diff.y)) {
-            e.inputForce.mul(0.2);
-          } else if (Math.abs(diff.x)) {
-            e.inputForce.mul(0.2);
-          }
-        }
-      }
-    }
-
     if (inputState.swipe.value.abs()) {
-      e.inputForce.set(inputState.swipe.value);
+      e.inputForce.set(inputState.swipe.value.mul(0.2));
       e.setTarget(undefined);
-
-      if (!e.loop) {
-        const diff = this.getClapmedDiff();
-        e.inputForce.add(diff);
-      }
 
       if (e.snap) {
         if (inputState.swipe.value.abs() < 5) {
@@ -177,36 +122,34 @@ export class PointerTrait extends Trait {
   }
 
   update() {
+    const e = this.entity;
+
     if (this.grabbing) {
       this.entity.acceleration.mul(0);
     }
-  }
-}
 
-export class AutoplayTrait extends Trait {
-  autoPlayTimeout = 4000;
-  defaultAutoPlayTime = 3000;
-  autoPlayTimer;
+    const bounce = !e.loop ? this.borderBounce : 0;
+    const resitance = !e.loop ? 1 - this.borderResistnce : 1;
 
-  lastTarget: any = null;
+    // clamp input force
+    const diff = this.getClapmedDiff();
 
-  input(inputState: InputState) {
-    if (this.lastTarget !== this.entity.target) {
-      this.autoPlayTimer = Date.now();
-      this.lastTarget = this.entity.target;
+    if (diff.abs()) {
+      if (this.grabbing) {
+        if (e.vertical && Math.abs(diff.y)) {
+          e.inputForce.mul(resitance);
+        } else if (Math.abs(diff.x)) {
+          e.inputForce.mul(resitance);
+        }
+      }
     }
 
-    if (inputState.release.value) {
-      this.autoPlayTimer = Date.now() + this.autoPlayTimeout;
-    }
-  }
-
-  update() {
-    const autoplayTime = this.entity.autoplay * 1000 || this.defaultAutoPlayTime;
-    const slideTime = timer(this.autoPlayTimer, autoplayTime);
-    if (slideTime >= 1) {
-      this.entity.moveBy(1, "ease");
-      this.entity.dispatchEvent(new Event("autoplay"));
+    if (bounce && diff.abs() && !this.grabbing) {
+      if (e.vertical && Math.abs(diff.y)) {
+        e.inputForce.add(diff.mul(bounce).sub(Vec.add(e.acceleration, e.inputForce)));
+      } else if (Math.abs(diff.x)) {
+        e.inputForce.add(diff.mul(bounce).sub(Vec.add(e.acceleration, e.inputForce)));
+      }
     }
   }
 }
