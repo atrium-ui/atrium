@@ -27,10 +27,10 @@ export class Trait {
   }
 
   input(inputState: InputState) {
-    // ...
+    // input tick
   }
 
   update() {
-    // ...
+    // update tick (fixed tickrate)
   }
 }

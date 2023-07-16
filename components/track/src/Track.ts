@@ -220,10 +220,34 @@ export class Track extends LitElement {
     },
   };
 
-  traits: Trait[] = [];
+  private traits: Trait[] = [
+    new PointerTrait("pointer", this, true),
+    new AutoFocusTrait("autofocus", this),
+    // new DebugTrait("debug", this),
+    new AutoplayTrait("autoplay", this),
+  ];
 
   trait(callback: (t) => void) {
-    this.traits.forEach((t) => t && t.enabled && callback(t));
+    this.traits.forEach((t) => {
+      try {
+        if (t && t.enabled) {
+          callback(t);
+        }
+      } catch (err: any) {
+        console.error(`Error in trait '${t.id}': ${err.message}`);
+      }
+    });
+  }
+
+  addTrait(id, TraitType, defaultEnabled = true) {
+    const trait = new TraitType(id, this, defaultEnabled);
+    if (trait instanceof Trait) {
+      this.traits.unshift(trait);
+    }
+  }
+
+  removeTrait(trait) {
+    this.traits.splice(this.traits.indexOf(trait), 1);
   }
 
   findTrait(id: string) {
@@ -252,7 +276,7 @@ export class Track extends LitElement {
   /**
    * item alignment in the track
    */
-  @property({ type: String }) align: "left" | "center" | "right" = "left";
+  @property({ type: String }) align: "left" | "right" = "left";
 
   /**
    * only scroll when items are overflown
@@ -372,6 +396,8 @@ export class Track extends LitElement {
     if (this.snap) {
       this.moveBy(0, "none");
     }
+
+    this.dispatchEvent(new CustomEvent("format", { bubbles: true }));
   }
 
   getToItemPosition(index: number = 0) {
@@ -407,13 +433,22 @@ export class Track extends LitElement {
     return pos;
   }
 
-  setTarget(vec: Vec | undefined, easing: Easing = "none") {
-    if (vec !== null) {
+  setTarget(vec: Vec | Array<number> | undefined, easing: Easing = "none") {
+    if (vec != undefined) {
       this.transitionAt = Date.now();
       this.targetStart.set(this.position);
     }
     this.targetEasing = easing;
-    this.target = vec;
+
+    if (vec) {
+      if (!this.target) {
+        this.target = new Vec();
+      }
+      this.target.x = vec[0];
+      this.target.y = vec[1];
+    } else {
+      this.target = undefined;
+    }
   }
 
   moveBy(byItems: number, easing?: Easing) {
@@ -481,7 +516,9 @@ export class Track extends LitElement {
 
       if (currItem !== this.currentItem) {
         this.currentItem = currItem;
-        this.dispatchEvent(new CustomEvent<number>("change", { detail: this.value }));
+        this.dispatchEvent(
+          new CustomEvent<number>("change", { detail: this.value, bubbles: true })
+        );
 
         let i = 0;
         for (const child of this.children) {
@@ -741,14 +778,7 @@ export class Track extends LitElement {
       this.format();
     });
 
-    this.traits = [
-      new PointerTrait("pointer", this, true),
-      new AutoFocusTrait("autofocus", this),
-      // new DebugTrait("debug", this),
-      new AutoplayTrait("autoplay", this),
-    ];
-
-    this.dispatchEvent(new CustomEvent("change", { detail: this.value }));
+    this.dispatchEvent(new CustomEvent("change", { detail: this.value, bubbles: true }));
 
     this.observer.observe(this);
   }
