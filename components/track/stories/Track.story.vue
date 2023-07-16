@@ -48,7 +48,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Infinite with offset">
-      <sv-track loop class="infinite" style="padding-left: calc(50% - 100px)">
+      <a-track loop class="infinite" style="padding-left: calc(50% - 100px)">
         <div tabindex="0" class="cell">1</div>
         <div tabindex="0" class="cell">2</div>
         <div tabindex="0" class="cell">3</div>
@@ -59,7 +59,7 @@ const centeredSliderIndex = ref([0]);
         <div tabindex="0" class="cell">8</div>
         <div tabindex="0" class="cell">9</div>
         <div tabindex="0" class="cell">10</div>
-      </sv-track>
+      </a-track>
     </Variant>
 
     <Variant title="Centered">
@@ -106,7 +106,7 @@ const centeredSliderIndex = ref([0]);
 
     <Variant title="Paged">
       <div class="paged">
-        <sv-track-paged>
+        <a-track-paged>
           <div class="cell"></div>
           <div class="cell"></div>
           <div class="cell"></div>
@@ -116,7 +116,7 @@ const centeredSliderIndex = ref([0]);
           <div class="cell"></div>
           <div class="cell"></div>
           <div class="cell"></div>
-        </sv-track-paged>
+        </a-track-paged>
       </div>
     </Variant>
 

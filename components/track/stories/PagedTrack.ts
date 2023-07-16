@@ -64,4 +64,4 @@ class PagedTrack extends Track {
   }
 }
 
-customElements.define("sv-track-paged", PagedTrack);
+customElements.define("a-track-paged", PagedTrack);
