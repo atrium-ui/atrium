@@ -18,7 +18,8 @@ export class PointerTrait extends Trait {
       if (!isTouch()) {
         track.style.pointerEvents = this.grabbing ? "none" : "";
       }
-    } else if (!isTouch()) {
+    }
+    if (!isTouch()) {
       e.style.cursor = this.grabbing ? "grabbing" : "";
     }
   }

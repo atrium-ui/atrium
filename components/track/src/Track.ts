@@ -49,6 +49,7 @@ export class Track extends LitElement {
         outline: none;
         overflow: hidden;
         touch-action: pan-y;
+        scroll-behavior: smooth;
       }
 
       .track {
@@ -57,7 +58,6 @@ export class Track extends LitElement {
         flex-flow: inherit;
         justify-content: inherit;
         align-items: inherit;
-        overflow: visible;
         will-change: transform;
       }
 
