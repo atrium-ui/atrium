@@ -1,17 +1,17 @@
 import { css, html, LitElement } from "lit";
 import { property, query } from "lit/decorators.js";
 import { Ease, timer, Vec } from "./utils.js";
-import { AutoplayTrait, Trait, PointerTrait, AutoFocusTrait } from "./Traits.js";
+import { PointerTrait } from "./traits/Pointer.js";
+import { AutoFocusTrait } from "./traits/Autofocus.js";
+import { AutoplayTrait } from "./traits/Autoplay.js";
 import { DebugTrait } from "./traits/Debug.js";
+import { Trait } from "./Trait.js";
 
 export type InputState = {
   grab: {
     value: boolean;
   };
   move: {
-    value: Vec;
-  };
-  swipe: {
     value: Vec;
   };
   release: {
@@ -42,19 +42,23 @@ export class Track extends LitElement {
   static get styles() {
     return css`
       :host {
-        display: block;
+        display: flex;
         outline: none;
         overflow: hidden;
         touch-action: pan-y;
+        /* scroll-behavior: smooth; */
       }
 
       .track {
-        display: flex;
-        overflow: visible;
+        display: inherit;
+        flex-direction: inherit;
+        flex-flow: inherit;
+        justify-content: inherit;
+        align-items: inherit;
         will-change: transform;
       }
 
-      :host([vertical]) .track {
+      :host([vertical]) {
         flex-direction: column;
       }
 
@@ -169,7 +173,9 @@ export class Track extends LitElement {
   mouseGrab = false;
   private scrollTimeout;
   private canScroll = true;
+  drag = 0.95;
 
+  origin = new Vec();
   position = new Vec();
   acceleration = new Vec();
   direction = new Vec();
@@ -197,9 +203,6 @@ export class Track extends LitElement {
     move: {
       value: new Vec(), // deltaX
     },
-    swipe: {
-      value: new Vec(), // deltaX
-    },
     format: {
       value: false,
     },
@@ -211,16 +214,40 @@ export class Track extends LitElement {
     },
   };
 
-  traits: Trait[] = [];
+  private traits: Trait[] = [
+    new PointerTrait("pointer", this, true),
+    new AutoFocusTrait("autofocus", this),
+    // new DebugTrait("debug", this),
+    new AutoplayTrait("autoplay", this),
+  ];
 
   trait(callback: (t) => void) {
-    this.traits.forEach((t) => t && t.enabled && callback(t));
+    this.traits.forEach((t) => {
+      try {
+        if (t && t.enabled) {
+          callback(t);
+        }
+      } catch (err: any) {
+        console.error(`Error in trait '${t.id}': ${err.message}`);
+      }
+    });
   }
 
-  findTrait(id: string) {
+  addTrait(id, TraitType, defaultEnabled = true) {
+    const trait = new TraitType(id, this, defaultEnabled);
+    if (trait instanceof Trait) {
+      this.traits.unshift(trait);
+    }
+  }
+
+  removeTrait(trait) {
+    this.traits.splice(this.traits.indexOf(trait), 1);
+  }
+
+  findTrait<T>(id: string): T | undefined {
     for (const trait of this.traits) {
       if (trait.id === id) {
-        return trait;
+        return trait as T;
       }
     }
     return undefined;
@@ -238,7 +265,12 @@ export class Track extends LitElement {
    * item: scroll until the last item is active
    * fill (default): scroll until the track reaches the last item visible to fill the width of the track
    */
-  @property({ type: String }) overflow: "item" | "fill" = "fill";
+  // @property({ type: String }) overflow: "item" | "fill" = "item";
+
+  /**
+   * item alignment in the track
+   */
+  @property({ type: String }) align: "left" | "right" = "left";
 
   /**
    * only scroll when items are overflown
@@ -301,29 +333,43 @@ export class Track extends LitElement {
     }
   }
 
-  onScroll() {
-    clearTimeout(this.scrollTimeout);
+  onScroll(e) {
+    if (e.target !== this) {
+      clearTimeout(this.scrollTimeout);
 
-    this.canScroll = false;
-
-    this.scrollTimeout = setTimeout(() => {
-      this.canScroll = true;
-    }, 200);
+      this.canScroll = false;
+      this.scrollTimeout = setTimeout(() => {
+        this.canScroll = true;
+      }, 200);
+    }
   }
 
   onWheel(e) {
+    // wheel and snap dont play together well, maybe future feature
+    if (this.snap) return;
+
     const threshold = this.vertical
       ? Math.abs(e.deltaX) < Math.abs(e.deltaY)
       : Math.abs(e.deltaX) > Math.abs(e.deltaY);
 
-    if (this.canScroll) {
-      if (threshold) {
-        const delta = new Vec(e.deltaX / 2, e.deltaY / 2);
-        if (delta.abs() > 2 || this.inputState.swipe.value.abs() < 2) {
-          this.inputState.swipe.value.add(delta);
-          e.preventDefault();
+    if (this.canScroll && threshold) {
+      this.acceleration.mul(0);
+
+      if (this.loop) {
+        this.inputForce.add(new Vec(e.deltaX, e.deltaY));
+      } else {
+        if (this.vertical) {
+          const pos = this.position.y + e.deltaY;
+          this.inputForce.y =
+            Math.max(Math.min(pos, this.overflowHeight), 0) - this.position.y;
+        } else {
+          const pos = this.position.x + e.deltaX;
+          this.inputForce.x =
+            Math.max(Math.min(pos, this.overflowWidth), 0) - this.position.x;
         }
       }
+
+      e.preventDefault();
     }
   }
 
@@ -348,7 +394,18 @@ export class Track extends LitElement {
     this._widths = undefined;
     this._heights = undefined;
 
-    this.moveBy(0, "none");
+    const bounds = this.getBoundingClientRect();
+    const firstItem = this.children[0]?.getBoundingClientRect();
+    if (firstItem) {
+      this.origin.x = firstItem.x - bounds.x;
+      this.origin.y = firstItem.y - bounds.y;
+    }
+
+    if (this.snap) {
+      this.moveBy(0, "none");
+    }
+
+    this.dispatchEvent(new CustomEvent("format", { bubbles: true }));
   }
 
   getToItemPosition(index: number = 0) {
@@ -384,21 +441,30 @@ export class Track extends LitElement {
     return pos;
   }
 
-  setTarget(vec: Vec | undefined, easing: Easing = "none") {
-    if (vec !== null) {
-      this.transitionAt = Date.now();
-      this.targetStart.set(this.position);
-    }
-    this.targetEasing = easing;
-    this.target = vec;
-  }
-
-  moveBy(byItems: number, easing?: Easing) {
+  setTarget(vec: Vec | Array<number> | undefined, easing?: Easing) {
     if (!easing) {
       // auto easing
       easing = this.transition === 0 || this.transition === 1 ? "ease" : "linear";
     }
 
+    if (vec != undefined) {
+      this.transitionAt = Date.now();
+      this.targetStart.set(this.position);
+    }
+    this.targetEasing = easing;
+
+    if (vec) {
+      if (!this.target) {
+        this.target = new Vec();
+      }
+      this.target.x = vec[0];
+      this.target.y = vec[1];
+    } else {
+      this.target = undefined;
+    }
+  }
+
+  moveBy(byItems: number, easing?: Easing) {
     let i = this.currentItem + byItems;
     if (!this.loop) {
       i = Math.min(Math.max(0, i), this.itemCount - 1);
@@ -413,8 +479,9 @@ export class Track extends LitElement {
 
   startAnimate() {
     if (!this.animation) {
-      requestAnimationFrame(this.tick.bind(this));
+      this.tick();
       this.trait((t) => t.start());
+      this.drawUpdate();
     }
   }
 
@@ -422,6 +489,7 @@ export class Track extends LitElement {
     if (this.animation) {
       cancelAnimationFrame(this.animation);
       this.animation = undefined;
+      this.lastTick = 0;
       this.trait((t) => t.stop());
     }
   }
@@ -456,7 +524,9 @@ export class Track extends LitElement {
 
       if (currItem !== this.currentItem) {
         this.currentItem = currItem;
-        this.dispatchEvent(new CustomEvent<number>("change", { detail: this.value }));
+        this.dispatchEvent(
+          new CustomEvent<number>("change", { detail: this.value, bubbles: true })
+        );
 
         let i = 0;
         for (const child of this.children) {
@@ -485,7 +555,6 @@ export class Track extends LitElement {
     // clear
     const state = this.inputState;
     state.move.value.mul(0);
-    state.swipe.value.mul(0);
     state.grab.value = false;
     state.format.value = false;
     state.leave.value = false;
@@ -494,13 +563,13 @@ export class Track extends LitElement {
   }
 
   updateTick() {
-    this.position.add(this.acceleration);
-    this.acceleration.mul(0.9);
-
     this.trait((t) => t.update());
 
     this.acceleration.add(this.inputForce);
+    this.position.add(this.acceleration);
+
     this.inputForce.mul(0);
+    this.acceleration.mul(this.drag);
 
     if (this.target !== undefined) {
       switch (this.targetEasing) {
@@ -536,31 +605,29 @@ export class Track extends LitElement {
       const start = new Vec();
       const max = new Vec(start.x + this.trackWidth, start.y + this.trackHeight);
 
-      if (this.vertical) {
-        if (this.position.y >= max.y) {
-          this.position.y = start.y;
-          if (this.target) {
-            this.target.y -= max.y - start.y;
-          }
+      if (this.position.y >= max.y) {
+        this.position.y = start.y;
+        if (this.target) {
+          this.target.y -= max.y - start.y;
         }
-        if (this.position.y < start.y) {
-          this.position.y = max.y;
-          if (this.target) {
-            this.target.y += max.y - start.y;
-          }
+      }
+      if (this.position.y < start.y) {
+        this.position.y = max.y;
+        if (this.target) {
+          this.target.y += max.y - start.y;
         }
-      } else {
-        if (this.position.x >= max.x) {
-          this.position.x = start.x;
-          if (this.target) {
-            this.target.x -= max.x - start.x;
-          }
+      }
+
+      if (this.position.x >= max.x) {
+        this.position.x = start.x;
+        if (this.target) {
+          this.target.x -= max.x - start.x;
         }
-        if (this.position.x < start.x) {
-          this.position.x = max.x;
-          if (this.target) {
-            this.target.x += max.x - start.x;
-          }
+      }
+      if (this.position.x < start.x) {
+        this.position.x = max.x;
+        if (this.target) {
+          this.target.x += max.x - start.x;
         }
       }
     }
@@ -570,8 +637,8 @@ export class Track extends LitElement {
     this.targetForce.mul(0);
 
     // TODO: need to self fix positon, sometimes NaN on innital load and resize
-    this.position[0] = this.position[0] || 0;
-    this.position[1] = this.position[1] || 0;
+    // this.position[0] = this.position[0] || 0;
+    // this.position[1] = this.position[1] || 0;
   }
 
   getCurrentItem(pos: Vec) {
@@ -580,20 +647,26 @@ export class Track extends LitElement {
     let minDist = Infinity;
     let angleToClosestIndex = 0;
 
+    const rects = this.getItemRects();
+    const axes = this.vertical ? 1 : 0;
+
     for (let i = -1; i < this.itemCount + 1; i++) {
       const itemIndex = i % this.itemCount;
+      const rect = rects[itemIndex];
 
-      const currentItemAngle = (this.itemWidths[itemIndex] / this.trackSize) * 360;
-      const itemAngle = (currentItemAngle * itemIndex) % 360;
-      const deltaAngle = angleDist(itemAngle, currentAngle);
+      if (rect) {
+        const currentItemAngle = (rect[axes] / this.trackSize) * 360;
+        const itemAngle = (currentItemAngle * itemIndex) % 360;
+        const deltaAngle = angleDist(itemAngle, currentAngle);
 
-      const offset = Math.floor(i / this.itemCount) * this.itemCount;
+        const offset = Math.floor(i / this.itemCount) * this.itemCount;
 
-      if (Math.abs(deltaAngle) <= minDist) {
-        minDist = Math.abs(deltaAngle);
-        angleToClosestIndex = itemIndex;
-        if (currentAngle > 180) {
-          angleToClosestIndex += offset;
+        if (Math.abs(deltaAngle) <= minDist) {
+          minDist = Math.abs(deltaAngle);
+          angleToClosestIndex = itemIndex;
+          if (currentAngle > 180) {
+            angleToClosestIndex += offset;
+          }
         }
       }
     }
@@ -633,31 +706,44 @@ export class Track extends LitElement {
   private clones: HTMLElement[] = [];
 
   drawUpdate() {
-    if (this.track) {
-      this.track.style.transform = `translate(${-this.position.x}px, ${-this.position
-        .y}px)`;
-    }
+    this.scrollLeft = this.position.x;
+    const scrollPos = new Vec(this.scrollLeft, this.scrollTop);
+    const diff = Vec.sub(scrollPos, this.position);
+    this.track.style.transform = `translate(${diff.x}px,${diff.y}px)`;
 
     if (this.loop) {
-      // const visibleItems: number[] = [];
+      const visibleItems: number[] = [];
       let lastItem: number | null = null;
       for (let x = -this.offsetWidth; x < this.offsetWidth + this.offsetWidth; x += 100) {
         const item = this.getItemAtPosition(this.position.x + x);
         if (item != null && item.index !== lastItem) {
           // clone nodes if possible
-          if (item.domIndex > 0) {
+          if (item.domIndex >= 0) {
             const child = this.children[item.domIndex];
-            const actualChild = this.children[item.index];
+            const realChild = this.children[item.index];
 
-            if (!child && actualChild) {
-              const clone = actualChild.cloneNode(true) as HTMLElement;
+            if (!child && realChild) {
+              const clone = realChild.cloneNode(true) as HTMLElement;
               this.clones.push(clone);
               clone.classList.add("ghost");
               this.appendChild(clone);
             }
+          } else {
+            // TODO: generate ghots on the left side; need to be position with transforms
+            const child = this.children[item.domIndex];
+            const realChild = this.children[item.index];
+            // console.log(item.index);
+
+            // if (!child && realChild) {
+            //   const clone = realChild.cloneNode(true) as HTMLElement;
+            //   this.clones.push(clone);
+            //   clone.classList.add("ghost");
+            //   this.appendChild(clone);
+            // }
           }
 
-          // visibleItems.push(item.index);
+          visibleItems.push(item.index);
+
           lastItem = item.index;
         }
       }
@@ -692,6 +778,7 @@ export class Track extends LitElement {
     this.addEventListener("pointerenter", this.pointerEnter.bind(this));
     this.addEventListener("keydown", this.onKeyDown.bind(this));
     this.addEventListener("wheel", this.onWheel.bind(this));
+    this.addEventListener("scroll", this.onScroll.bind(this));
 
     window.addEventListener("resize", this.format.bind(this), { passive: true });
     window.addEventListener("scroll", this.onScroll.bind(this), { capture: true });
@@ -702,14 +789,7 @@ export class Track extends LitElement {
       this.format();
     });
 
-    this.traits = [
-      new PointerTrait("pointer", this, true),
-      new AutoFocusTrait("autofocus", this),
-      new DebugTrait("debug", this),
-      new AutoplayTrait("autoplay", this),
-    ];
-
-    this.dispatchEvent(new CustomEvent("change", { detail: this.value }));
+    this.dispatchEvent(new CustomEvent("change", { detail: this.value, bubbles: true }));
 
     this.observer.observe(this);
   }
@@ -727,6 +807,7 @@ export class Track extends LitElement {
     this.removeEventListener("pointerenter", this.pointerEnter.bind(this));
     this.removeEventListener("keydown", this.onKeyDown.bind(this));
     this.removeEventListener("wheel", this.onWheel.bind(this));
+    this.removeEventListener("scroll", this.onScroll.bind(this));
 
     window.removeEventListener("resize", this.format.bind(this));
     window.removeEventListener("scroll", this.onScroll.bind(this));

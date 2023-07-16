@@ -136,6 +136,12 @@ export class Vec extends Array {
     this[1] = Math.floor(this[1] / precision) * precision;
   }
 
+  floor() {
+    this[0] = Math.floor(this[0]);
+    this[1] = Math.floor(this[1]);
+    return this;
+  }
+
   clone() {
     return new Vec(this);
   }
