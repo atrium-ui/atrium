@@ -6,7 +6,6 @@
   "module": "dist/input-range.js",
   "types": "src/index.ts",
   "scripts": {
-    "dev": "start-storybook -p 6005",
     "lint": "eslint --ext .ts ."
   },
   "author": "",

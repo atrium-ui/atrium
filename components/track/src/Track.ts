@@ -1,25 +1,17 @@
 import { css, html, LitElement } from "lit";
 import { property, query } from "lit/decorators.js";
 import { Ease, timer, Vec } from "./utils.js";
-import {
-  AutoplayTrait,
-  LoopTrait,
-  AutorunTrait,
-  Trait,
-  PointerTrait,
-  SnapTrait,
-  AutoFocusTrait,
-  DebugTrait,
-} from "./Traits.js";
+import { PointerTrait } from "./traits/Pointer.js";
+import { AutoFocusTrait } from "./traits/Autofocus.js";
+import { AutoplayTrait } from "./traits/Autoplay.js";
+import { DebugTrait } from "./traits/Debug.js";
+import { Trait } from "./Trait.js";
 
 export type InputState = {
   grab: {
     value: boolean;
   };
   move: {
-    value: Vec;
-  };
-  swipe: {
     value: Vec;
   };
   release: {
@@ -36,22 +28,38 @@ export type InputState = {
   };
 };
 
-type Easing = "ease" | "linear";
+type Easing = "ease" | "linear" | "none";
+
+function mod(a, n) {
+  return a - Math.floor(a / n) * n;
+}
+
+function angleDist(a, b) {
+  return mod(b - a + 180, 360) - 180;
+}
 
 export class Track extends LitElement {
   static get styles() {
     return css`
       :host {
-        display: block;
+        display: flex;
         outline: none;
         overflow: hidden;
         touch-action: pan-y;
-        position: relative; /* remove this */
+        /* scroll-behavior: smooth; */
       }
 
       .track {
-        display: flex;
+        display: inherit;
+        flex-direction: inherit;
+        flex-flow: inherit;
+        justify-content: inherit;
+        align-items: inherit;
         will-change: transform;
+      }
+
+      :host([vertical]) {
+        flex-direction: column;
       }
 
       debug-hud {
@@ -59,7 +67,7 @@ export class Track extends LitElement {
         position: absolute;
         top: 0;
         right: 0;
-        background: rgba(0, 0, 0, 0.3);
+        background: rgba(0, 0, 0, 0.5);
         z-index: 1000;
         pointer-events: none;
       }
@@ -75,16 +83,25 @@ export class Track extends LitElement {
   }
 
   @query(".track")
-  private readonly track!: HTMLElement;
+  public readonly track!: HTMLElement;
 
   get itemCount() {
-    let count = 0;
-    for (const child of this.children) {
-      if (!child.className.includes("ghost")) {
-        count++;
-      }
-    }
-    return count;
+    return this.children.length - this.clones.length;
+  }
+
+  getItemRects() {
+    return new Array(this.itemCount)
+      .fill(0)
+      .map((_, i) => new Vec(this.itemWidths[i], this.itemHeights[i]));
+  }
+
+  getItemRect(index: number) {
+    index = index % this.itemCount;
+    return new Vec(this.itemWidths[index], this.itemHeights[index]);
+  }
+
+  getCurrentSlideRect() {
+    return this.getItemRect(this.currentItem);
   }
 
   _widths;
@@ -99,18 +116,34 @@ export class Track extends LitElement {
 
   _heights;
   get itemHeights() {
-    this._heights = new Array(this.itemCount).fill(1).map((_, i) => {
-      return (this.children[i] as HTMLElement)?.offsetHeight || 0;
-    });
+    if (!this._heights) {
+      this._heights = new Array(this.itemCount).fill(1).map((_, i) => {
+        return (this.children[i] as HTMLElement)?.offsetHeight || 0;
+      });
+    }
     return this._heights;
   }
 
   get trackWidth() {
-    return this.itemWidths.reduce((last, curr) => last + curr, 0);
+    if (!this.vertical) {
+      return this.itemWidths.reduce((last, curr) => last + curr, 0);
+    }
+    return this.offsetWidth;
   }
 
   get trackHeight() {
-    return this.itemHeights.reduce((last, curr) => last + curr, 0);
+    if (this.vertical) {
+      return this.itemHeights.reduce((last, curr) => last + curr, 0);
+    }
+    return this.offsetHeight;
+  }
+
+  get trackSize() {
+    return this.vertical ? this.trackHeight : this.trackWidth;
+  }
+
+  get currentPosition() {
+    return this.vertical ? this.position.y : this.position.x;
   }
 
   get overflowWidth() {
@@ -121,15 +154,15 @@ export class Track extends LitElement {
     return this.trackHeight - this.offsetHeight;
   }
 
-  currentItem;
+  currentItem = 0;
 
   get value() {
     return this.currentItem % this.itemCount;
   }
 
-  animation;
+  private animation: number | undefined;
   frameRate = 0;
-  tickRate = 1000 / 140;
+  tickRate = 1000 / 144;
   lastTick = 0;
   accumulator = 0;
   frame = 0;
@@ -138,11 +171,18 @@ export class Track extends LitElement {
   mousePos = new Vec();
   inputForce = new Vec();
   mouseGrab = false;
-  canScroll = true;
-  scrollTimeout;
+  private scrollTimeout;
+  private canScroll = true;
+  drag = 0.95;
 
+  origin = new Vec();
   position = new Vec();
+  acceleration = new Vec();
   direction = new Vec();
+
+  get normal() {
+    return this.vertical ? new Vec(0, 1) : new Vec(1, 0);
+  }
 
   targetForce = new Vec();
   targetStart = new Vec();
@@ -150,7 +190,7 @@ export class Track extends LitElement {
   targetEasing: Easing = "linear";
 
   transitionAt = 0;
-  transitionTime = 500;
+  transitionTime = 750;
   transition = 0;
 
   inputState: InputState = {
@@ -161,9 +201,6 @@ export class Track extends LitElement {
       value: false,
     },
     move: {
-      value: new Vec(), // deltaX
-    },
-    swipe: {
       value: new Vec(), // deltaX
     },
     format: {
@@ -177,25 +214,68 @@ export class Track extends LitElement {
     },
   };
 
-  clearInputState() {
-    const state = this.inputState;
-    state.move.value.mul(0);
-    state.swipe.value.mul(0);
-    state.grab.value = false;
-    state.format.value = false;
-    state.leave.value = false;
-    state.enter.value = false;
-    state.release.value = false;
+  private traits: Trait[] = [
+    new PointerTrait("pointer", this, true),
+    new AutoFocusTrait("autofocus", this),
+    // new DebugTrait("debug", this),
+    new AutoplayTrait("autoplay", this),
+  ];
+
+  trait(callback: (t) => void) {
+    this.traits.forEach((t) => {
+      try {
+        if (t && t.enabled) {
+          callback(t);
+        }
+      } catch (err: any) {
+        console.error(`Error in trait '${t.id}': ${err.message}`);
+      }
+    });
   }
 
-  traits: Trait[] = [];
+  addTrait(id, TraitType, defaultEnabled = true) {
+    const trait = new TraitType(id, this, defaultEnabled);
+    if (trait instanceof Trait) {
+      this.traits.unshift(trait);
+    }
+  }
 
+  removeTrait(trait) {
+    this.traits.splice(this.traits.indexOf(trait), 1);
+  }
+
+  findTrait<T>(id: string): T | undefined {
+    for (const trait of this.traits) {
+      if (trait.id === id) {
+        return trait as T;
+      }
+    }
+    return undefined;
+  }
+
+  @property({ type: Boolean, reflect: true }) vertical = false;
   @property({ type: Boolean, reflect: true }) snap = false;
   @property({ type: Boolean, reflect: true }) debug = false;
   @property({ type: Boolean, reflect: true }) loop = false;
-  @property({ type: Boolean, reflect: true }) autoplay = false;
+  @property({ type: Number, reflect: false }) autoplay = 0;
   @property({ type: Boolean, reflect: true }) autorun = false;
-  @property({ type: String, reflect: true }) overflow: "item" | "full" = "item";
+
+  /**
+   * # overflow
+   * item: scroll until the last item is active
+   * fill (default): scroll until the track reaches the last item visible to fill the width of the track
+   */
+  // @property({ type: String }) overflow: "item" | "fill" = "item";
+
+  /**
+   * item alignment in the track
+   */
+  @property({ type: String }) align: "left" | "right" = "left";
+
+  /**
+   * only scroll when items are overflown
+   */
+  @property({ type: Boolean, reflect: true }) overflowscroll = false;
 
   protected updated(): void {
     for (const trait of this.traits) {
@@ -229,8 +309,6 @@ export class Track extends LitElement {
 
       this.inputState.release.value = true;
     }
-
-    this.requestUpdate();
   }
 
   pointerMove(e) {
@@ -239,99 +317,181 @@ export class Track extends LitElement {
     const pos = new Vec(e.x, e.y);
     const delta = Vec.sub(pos, this.mousePos);
 
-    if (!this.mouseGrab && this.mousePos.x && Math.abs(delta.y) < Math.abs(delta.x)) {
-      this.mouseGrab = true;
-      this.inputState.grab.value = true;
+    if (!this.mouseGrab && delta.abs() > 3) {
+      if (this.vertical && this.mousePos.y && Math.abs(delta.x) < Math.abs(delta.y)) {
+        this.mouseGrab = true;
+        this.inputState.grab.value = true;
+      } else if (this.mousePos.x && Math.abs(delta.y) < Math.abs(delta.x)) {
+        this.mouseGrab = true;
+        this.inputState.grab.value = true;
+      }
     }
 
     if (this.mouseGrab) {
-      this.inputState.move.value.add(delta.clone().mul(-1));
+      this.inputState.move.value.add(delta.clone());
       this.mousePos.set(pos);
     }
   }
 
-  onScroll() {
-    clearTimeout(this.scrollTimeout);
+  onScroll(e) {
+    if (e.target !== this) {
+      clearTimeout(this.scrollTimeout);
 
-    this.canScroll = false;
-
-    this.scrollTimeout = setTimeout(() => {
-      this.canScroll = true;
-    }, 200);
+      this.canScroll = false;
+      this.scrollTimeout = setTimeout(() => {
+        this.canScroll = true;
+      }, 200);
+    }
   }
 
   onWheel(e) {
-    if (this.canScroll && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-      const delta = new Vec(e.deltaX / 2, e.deltaY / 2);
-      if (delta.abs() > 2 || this.inputState.swipe.value.abs() < 2) {
-        this.inputState.swipe.value.add(delta);
+    // wheel and snap dont play together well, maybe future feature
+    if (this.snap) return;
+
+    const threshold = this.vertical
+      ? Math.abs(e.deltaX) < Math.abs(e.deltaY)
+      : Math.abs(e.deltaX) > Math.abs(e.deltaY);
+
+    if (this.canScroll && threshold) {
+      this.acceleration.mul(0);
+
+      if (this.loop) {
+        this.inputForce.add(new Vec(e.deltaX, e.deltaY));
+      } else {
+        if (this.vertical) {
+          const pos = this.position.y + e.deltaY;
+          this.inputForce.y =
+            Math.max(Math.min(pos, this.overflowHeight), 0) - this.position.y;
+        } else {
+          const pos = this.position.x + e.deltaX;
+          this.inputForce.x =
+            Math.max(Math.min(pos, this.overflowWidth), 0) - this.position.x;
+        }
       }
+
       e.preventDefault();
     }
   }
 
-  onFocus(e) {
-    // TODO: will set target on click too.
-    // const pos = this.getItemPosition([...this.children].indexOf(e.target));
-    // this.setTarget(-pos);
-  }
-
   onKeyDown(e) {
-    const t = this.transition === 0 || this.transition === 1;
-    if (e.key === "ArrowLeft") {
-      this.moveBy(-1, t ? "ease" : "linear");
+    const Key = {
+      prev: this.vertical ? "ArrowUp" : "ArrowLeft",
+      next: this.vertical ? "ArrowDown" : "ArrowRight",
+    };
+
+    if (e.key === Key.prev) {
+      this.moveBy(-1, "linear");
+      e.preventDefault();
     }
-    if (e.key === "ArrowRight") {
-      this.moveBy(1, t ? "ease" : "linear");
+    if (e.key === Key.next) {
+      this.moveBy(1, "linear");
+      e.preventDefault();
     }
   }
 
   format() {
     this.inputState.format.value = true;
+    this._widths = undefined;
+    this._heights = undefined;
 
-    this.requestUpdate();
-  }
-
-  getItemPosition(index: number = 0) {
-    const toActualPointer = index < 0 ? index + this.itemCount : index;
-
-    const pos = new Vec();
-    for (let i = 0; i < Math.abs(toActualPointer); i++) {
-      pos.x -= this.itemWidths[i] || 0;
-      pos.y -= this.itemHeights[i] || 0;
+    const bounds = this.getBoundingClientRect();
+    const firstItem = this.children[0]?.getBoundingClientRect();
+    if (firstItem) {
+      this.origin.x = firstItem.x - bounds.x;
+      this.origin.y = firstItem.y - bounds.y;
     }
 
+    if (this.snap) {
+      this.moveBy(0, "none");
+    }
+
+    this.dispatchEvent(new CustomEvent("format", { bubbles: true }));
+  }
+
+  getToItemPosition(index: number = 0) {
+    const rects = this.getItemRects();
+    const pos = new Vec();
+
     if (index < 0) {
-      pos.x += this.trackWidth;
-      pos.y += this.trackHeight;
+      for (let i = 0; i > index; i--) {
+        if (this.vertical) {
+          pos.y -= rects[i]?.y || 0;
+        } else {
+          pos.x -= rects[i]?.x || 0;
+        }
+      }
+    } else if (index > this.itemCount) {
+      for (let i = 0; i < index; i++) {
+        if (this.vertical) {
+          pos.y += rects[i % this.itemCount]?.y || 0;
+        } else {
+          pos.x += rects[i % this.itemCount]?.x || 0;
+        }
+      }
+    } else {
+      for (let i = 0; i < index; i++) {
+        if (this.vertical) {
+          pos.y += rects[i]?.y || 0;
+        } else {
+          pos.x += rects[i]?.x || 0;
+        }
+      }
     }
 
     return pos;
   }
 
-  setTarget(vec: Vec | undefined, easing: Easing = "linear") {
-    if (vec !== null) {
+  setTarget(vec: Vec | Array<number> | undefined, easing?: Easing) {
+    if (!easing) {
+      // auto easing
+      easing = this.transition === 0 || this.transition === 1 ? "ease" : "linear";
+    }
+
+    if (vec != undefined) {
       this.transitionAt = Date.now();
       this.targetStart.set(this.position);
     }
     this.targetEasing = easing;
-    this.target = vec;
+
+    if (vec) {
+      if (!this.target) {
+        this.target = new Vec();
+      }
+      this.target.x = vec[0];
+      this.target.y = vec[1];
+    } else {
+      this.target = undefined;
+    }
   }
 
-  moveBy(byItems: number, easing: Easing = "linear") {
+  moveBy(byItems: number, easing?: Easing) {
     let i = this.currentItem + byItems;
     if (!this.loop) {
       i = Math.min(Math.max(0, i), this.itemCount - 1);
     }
-    this.setTarget(this.getItemPosition(i), easing);
+    const pos = this.getToItemPosition(i);
+    this.setTarget(pos, easing);
   }
 
-  moveTo(index: number, easing: Easing = "linear") {
+  moveTo(index: number, easing: Easing) {
     this.moveBy(index - this.currentItem, easing);
   }
 
+  startAnimate() {
+    if (!this.animation) {
+      this.tick();
+      this.trait((t) => t.start());
+      this.drawUpdate();
+    }
+  }
+
   stopAnimate() {
-    cancelAnimationFrame(this.animation);
+    if (this.animation) {
+      cancelAnimationFrame(this.animation);
+      this.animation = undefined;
+      this.lastTick = 0;
+      this.trait((t) => t.stop());
+    }
   }
 
   tick(ms = 0) {
@@ -342,19 +502,45 @@ export class Track extends LitElement {
     this.frameRate = 1000 / deltaTick;
     this.lastTick = ms;
 
-    // handles inputs synchronously
     this.updateInputs();
 
     this.accumulator += deltaTick;
 
+    const lastPosition = this.position.clone();
+
     let ticks = 0;
-    while (this.accumulator >= this.tickRate && ticks < 10) {
+    const maxTicks = 10;
+    while (this.accumulator >= this.tickRate && ticks < maxTicks) {
       ticks++;
       this.accumulator -= this.tickRate;
+
       this.updateTick();
     }
 
-    this.clearInputState();
+    const deltaPosition = Vec.sub(this.position, lastPosition);
+
+    if (deltaPosition.abs() > 0) {
+      const currItem = this.getCurrentItem(this.position);
+
+      if (currItem !== this.currentItem) {
+        this.currentItem = currItem;
+        this.dispatchEvent(
+          new CustomEvent<number>("change", { detail: this.value, bubbles: true })
+        );
+
+        let i = 0;
+        for (const child of this.children) {
+          if (i === this.currentItem) {
+            child.setAttribute("active", "");
+          } else {
+            child.removeAttribute("active");
+          }
+          i++;
+        }
+      }
+
+      this.drawUpdate();
+    }
 
     this.frame++;
 
@@ -362,23 +548,28 @@ export class Track extends LitElement {
   }
 
   updateInputs() {
-    for (const trait of this.traits) {
-      if (trait && trait.enabled) {
-        trait.input(this.inputState);
-      }
-    }
+    this.trait((t) => t.input(this.inputState));
 
     this.direction.add(this.inputForce).sign();
+
+    // clear
+    const state = this.inputState;
+    state.move.value.mul(0);
+    state.grab.value = false;
+    state.format.value = false;
+    state.leave.value = false;
+    state.enter.value = false;
+    state.release.value = false;
   }
 
   updateTick() {
-    for (const trait of this.traits) {
-      if (trait && trait.enabled) {
-        trait.update();
-      }
-    }
+    this.trait((t) => t.update());
 
-    this.position.add(this.inputForce);
+    this.acceleration.add(this.inputForce);
+    this.position.add(this.acceleration);
+
+    this.inputForce.mul(0);
+    this.acceleration.mul(this.drag);
 
     if (this.target !== undefined) {
       switch (this.targetEasing) {
@@ -391,17 +582,53 @@ export class Track extends LitElement {
             this.targetForce.set(this.targetStart).add(easedDelta).sub(this.position);
           }
           break;
-        default:
+        case "linear":
           {
             const prog = Vec.sub(this.position, this.target).abs() / Vec.abs(this.target);
             this.transition = Math.round(prog * 100) / 100 || 0;
-            this.targetForce
-              .set(this.target)
-              .sub(this.position)
-              .mod([-this.trackWidth, -this.trackHeight])
-              .mul(42 / this.transitionTime);
+
+            const delta = Vec.sub(this.targetForce.set(this.target), this.position);
+            this.targetForce.set(
+              delta.mod([this.trackWidth, this.trackHeight]).mul(42 / this.transitionTime)
+            );
           }
           break;
+        case "none":
+        default:
+          this.targetForce.set(Vec.sub(this.targetForce.set(this.target), this.position));
+          break;
+      }
+    }
+
+    // loop
+    if (this.loop) {
+      const start = new Vec();
+      const max = new Vec(start.x + this.trackWidth, start.y + this.trackHeight);
+
+      if (this.position.y >= max.y) {
+        this.position.y = start.y;
+        if (this.target) {
+          this.target.y -= max.y - start.y;
+        }
+      }
+      if (this.position.y < start.y) {
+        this.position.y = max.y;
+        if (this.target) {
+          this.target.y += max.y - start.y;
+        }
+      }
+
+      if (this.position.x >= max.x) {
+        this.position.x = start.x;
+        if (this.target) {
+          this.target.x -= max.x - start.x;
+        }
+      }
+      if (this.position.x < start.x) {
+        this.position.x = max.x;
+        if (this.target) {
+          this.target.x += max.x - start.x;
+        }
       }
     }
 
@@ -409,57 +636,137 @@ export class Track extends LitElement {
     this.position.add(this.targetForce);
     this.targetForce.mul(0);
 
-    // determine current item
-    let currItem;
+    // TODO: need to self fix positon, sometimes NaN on innital load and resize
+    // this.position[0] = this.position[0] || 0;
+    // this.position[1] = this.position[1] || 0;
+  }
+
+  getCurrentItem(pos: Vec) {
+    const currentAngle = (this.currentPosition / this.trackSize) * 360;
+
+    let minDist = Infinity;
+    let angleToClosestIndex = 0;
+
+    const rects = this.getItemRects();
+    const axes = this.vertical ? 1 : 0;
+
     for (let i = -1; i < this.itemCount + 1; i++) {
-      const pos = this.getItemPosition(i);
-      const w = this.itemWidths[Math.abs(i) % this.itemCount];
+      const itemIndex = i % this.itemCount;
+      const rect = rects[itemIndex];
 
-      if (this.direction.x > 0) {
-        // to right
-        if (pos.x + w / 4 < this.position.x) {
-          currItem = i - 1;
-          break;
+      if (rect) {
+        const currentItemAngle = (rect[axes] / this.trackSize) * 360;
+        const itemAngle = (currentItemAngle * itemIndex) % 360;
+        const deltaAngle = angleDist(itemAngle, currentAngle);
+
+        const offset = Math.floor(i / this.itemCount) * this.itemCount;
+
+        if (Math.abs(deltaAngle) <= minDist) {
+          minDist = Math.abs(deltaAngle);
+          angleToClosestIndex = itemIndex;
+          if (currentAngle > 180) {
+            angleToClosestIndex += offset;
+          }
         }
+      }
+    }
+
+    return angleToClosestIndex;
+  }
+
+  getItemAtPosition(x: number) {
+    const rects = this.getItemRects();
+    let px = 0;
+    if (x > 0) {
+      for (const item of rects) {
+        if (px + item.x > x % this.trackWidth) {
+          const offset = Math.floor(x / this.trackWidth) * this.itemCount;
+          return {
+            domIndex: offset + rects.indexOf(item),
+            index: rects.indexOf(item),
+          };
+        }
+        px += item.x;
+      }
+    } else {
+      for (const item of [...rects].reverse()) {
+        if (px - item.x < x % -this.trackWidth) {
+          const offset = Math.floor(x / this.trackWidth) * this.itemCount;
+          return {
+            domIndex: offset + rects.indexOf(item),
+            index: rects.indexOf(item),
+          };
+        }
+        px -= item.x;
+      }
+    }
+    return null;
+  }
+
+  private clones: HTMLElement[] = [];
+
+  drawUpdate() {
+    this.scrollLeft = this.position.x;
+    const scrollPos = new Vec(this.scrollLeft, this.scrollTop);
+    const diff = Vec.sub(scrollPos, this.position);
+    this.track.style.transform = `translate(${diff.x}px,${diff.y}px)`;
+
+    if (this.loop) {
+      const visibleItems: number[] = [];
+      let lastItem: number | null = null;
+      for (let x = -this.offsetWidth; x < this.offsetWidth + this.offsetWidth; x += 100) {
+        const item = this.getItemAtPosition(this.position.x + x);
+        if (item != null && item.index !== lastItem) {
+          // clone nodes if possible
+          if (item.domIndex >= 0) {
+            const child = this.children[item.domIndex];
+            const realChild = this.children[item.index];
+
+            if (!child && realChild) {
+              const clone = realChild.cloneNode(true) as HTMLElement;
+              this.clones.push(clone);
+              clone.classList.add("ghost");
+              this.appendChild(clone);
+            }
+          } else {
+            // TODO: generate ghots on the left side; need to be position with transforms
+            const child = this.children[item.domIndex];
+            const realChild = this.children[item.index];
+            // console.log(item.index);
+
+            // if (!child && realChild) {
+            //   const clone = realChild.cloneNode(true) as HTMLElement;
+            //   this.clones.push(clone);
+            //   clone.classList.add("ghost");
+            //   this.appendChild(clone);
+            // }
+          }
+
+          visibleItems.push(item.index);
+
+          lastItem = item.index;
+        }
+      }
+    }
+  }
+
+  private observer = new IntersectionObserver(this.onIntersect.bind(this), {});
+
+  onIntersect(intersections) {
+    for (const entry of intersections) {
+      if (entry.isIntersecting) {
+        this.startAnimate();
       } else {
-        // to left
-        if (pos.x + w / 1.25 < this.position.x) {
-          currItem = i - 1;
-          break;
-        }
+        this.stopAnimate();
       }
-    }
-    if (currItem === undefined) {
-      if (this.direction.x > 0) {
-        currItem = 0;
-      } else {
-        currItem = this.itemCount;
-      }
-    }
-
-    if (currItem !== this.currentItem) {
-      this.currentItem = currItem;
-      this.dispatchEvent(new CustomEvent<number>("change", { detail: this.value }));
-
-      let i = 0;
-      for (const child of this.children) {
-        if (i === this.currentItem) {
-          child.setAttribute("active", "");
-        } else {
-          child.removeAttribute("active");
-        }
-        i++;
-      }
-    }
-
-    const track = this.track;
-    if (track) {
-      track.style.transform = `translate(${this.position.x}px, ${0}px)`;
     }
   }
 
   connectedCallback(): void {
     super.connectedCallback();
+
+    // stop last animation if there was one
+    this.stopAnimate();
 
     this.tabIndex = 0;
 
@@ -471,29 +778,20 @@ export class Track extends LitElement {
     this.addEventListener("pointerenter", this.pointerEnter.bind(this));
     this.addEventListener("keydown", this.onKeyDown.bind(this));
     this.addEventListener("wheel", this.onWheel.bind(this));
-    this.addEventListener("focus", this.onFocus.bind(this), { capture: true });
+    this.addEventListener("scroll", this.onScroll.bind(this));
 
     window.addEventListener("resize", this.format.bind(this), { passive: true });
     window.addEventListener("scroll", this.onScroll.bind(this), { capture: true });
+    window.addEventListener("load", this.format.bind(this), { capture: true });
 
     requestAnimationFrame(() => {
       // needs markup to exist
       this.format();
-      this.stopAnimate();
-      this.tick();
     });
 
-    this.traits = [
-      new PointerTrait("pointer", this, true),
-      new LoopTrait("loop", this),
-      new SnapTrait("snap", this),
-      new AutoFocusTrait("autofocus", this, true),
-      new DebugTrait("debug", this),
-      new AutoplayTrait("autoplay", this),
-      new AutorunTrait("autorun", this),
-    ];
+    this.dispatchEvent(new CustomEvent("change", { detail: this.value, bubbles: true }));
 
-    this.dispatchEvent(new CustomEvent("change", { detail: this.value }));
+    this.observer.observe(this);
   }
 
   disconnectedCallback(): void {
@@ -509,10 +807,13 @@ export class Track extends LitElement {
     this.removeEventListener("pointerenter", this.pointerEnter.bind(this));
     this.removeEventListener("keydown", this.onKeyDown.bind(this));
     this.removeEventListener("wheel", this.onWheel.bind(this));
-    this.removeEventListener("focus", this.onFocus.bind(this));
+    this.removeEventListener("scroll", this.onScroll.bind(this));
 
     window.removeEventListener("resize", this.format.bind(this));
     window.removeEventListener("scroll", this.onScroll.bind(this));
+    window.removeEventListener("load", this.format.bind(this));
+
+    this.observer.unobserve(this);
   }
 }
 

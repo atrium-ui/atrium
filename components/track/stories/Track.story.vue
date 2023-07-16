@@ -7,9 +7,10 @@
 </docs>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import "../../select/src/index.js";
 import "../src/index.js";
+import "./PagedTrack.js";
 
 const centeredSliderIndex = ref([0]);
 </script>
@@ -17,7 +18,7 @@ const centeredSliderIndex = ref([0]);
 <template>
   <Story group="primitives" icon-color="#8B5CF6">
     <Variant title="Default">
-      <sv-track snap class="default">
+      <sv-track class="default">
         <div tabindex="0" class="cell">1a</div>
         <div tabindex="0" class="cell">2a</div>
         <div tabindex="0" class="cell">3a</div>
@@ -32,27 +33,32 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Infinite">
-      <sv-track loop autorun class="infinite">
-        <div tabindex="0" class="cell">1a</div>
-        <div tabindex="0" class="cell">2a</div>
-        <div tabindex="0" class="cell">3a</div>
-        <div tabindex="0" class="cell">4a</div>
-        <div tabindex="0" class="cell">5a</div>
-        <div tabindex="0" class="cell">6a</div>
-        <div tabindex="0" class="cell">7a</div>
-        <div tabindex="0" class="cell">8a</div>
-        <div tabindex="0" class="cell">9a</div>
-        <div tabindex="0" class="cell">10a</div>
-        <div class="cell ghost">1b</div>
-        <div class="cell ghost">2b</div>
-        <div class="cell ghost">3b</div>
-        <div class="cell ghost">4b</div>
-        <div class="cell ghost">5b</div>
-        <div class="cell ghost">6b</div>
-        <div class="cell ghost">7b</div>
-        <div class="cell ghost">8b</div>
-        <div class="cell ghost">9b</div>
-        <div class="cell ghost">10b</div>
+      <sv-track loop class="infinite">
+        <div tabindex="0" class="cell">1</div>
+        <div tabindex="0" class="cell">2</div>
+        <div tabindex="0" class="cell">3</div>
+        <div tabindex="0" class="cell">4</div>
+        <div tabindex="0" class="cell">5</div>
+        <div tabindex="0" class="cell">6</div>
+        <div tabindex="0" class="cell">7</div>
+        <div tabindex="0" class="cell">8</div>
+        <div tabindex="0" class="cell">9</div>
+        <div tabindex="0" class="cell">10</div>
+      </sv-track>
+    </Variant>
+
+    <Variant title="Infinite with offset">
+      <sv-track loop class="infinite" style="padding-left: calc(50% - 100px)">
+        <div tabindex="0" class="cell">1</div>
+        <div tabindex="0" class="cell">2</div>
+        <div tabindex="0" class="cell">3</div>
+        <div tabindex="0" class="cell">4</div>
+        <div tabindex="0" class="cell">5</div>
+        <div tabindex="0" class="cell">6</div>
+        <div tabindex="0" class="cell">7</div>
+        <div tabindex="0" class="cell">8</div>
+        <div tabindex="0" class="cell">9</div>
+        <div tabindex="0" class="cell">10</div>
       </sv-track>
     </Variant>
 
@@ -76,10 +82,11 @@ const centeredSliderIndex = ref([0]);
         <sv-select
           class="dots"
           :value="[centeredSliderIndex]"
-          @change="
+          @input="
             (e) => {
               const track = $refs.centeredSlider;
               track.moveTo(+e.target.value, 'ease');
+              e.preventDefault();
             }
           "
         >
@@ -97,8 +104,24 @@ const centeredSliderIndex = ref([0]);
       </div>
     </Variant>
 
-    <Variant title="Overflow">
-      <sv-track snap overflow="full" class="overflow">
+    <Variant title="Paged">
+      <div class="paged">
+        <sv-track-paged>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+        </sv-track-paged>
+      </div>
+    </Variant>
+
+    <Variant title="Overflow Scroll">
+      <sv-track snap overflowscroll class="overflow">
         <div class="inner">
           <div class="cell">cell</div>
         </div>
@@ -115,7 +138,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Tabs">
-      <sv-track class="tabs">
+      <sv-track class="tabs" overflow="fill" overflowscroll>
         <div class="cell">Home</div>
         <div class="cell">Videos</div>
         <div class="cell">Career</div>
@@ -127,7 +150,7 @@ const centeredSliderIndex = ref([0]);
     </Variant>
 
     <Variant title="Variable item width">
-      <sv-track class="special">
+      <sv-track class="special" overflow="fill">
         <div class="cell first">1a</div>
         <div class="cell">2a</div>
         <div class="cell">3a</div>
@@ -135,6 +158,46 @@ const centeredSliderIndex = ref([0]);
         <div class="cell">5a</div>
         <div class="cell">6a</div>
         <div class="cell">7a</div>
+      </sv-track>
+    </Variant>
+
+    <Variant title="Vertical">
+      <sv-track class="vertical" vertical>
+        <div class="cell first">1a</div>
+        <div class="cell">2a</div>
+        <div class="cell">3a</div>
+        <div class="cell">4a</div>
+        <div class="cell">5a</div>
+        <div class="cell">6a</div>
+        <div class="cell">7a</div>
+        <div class="cell">8a</div>
+        <div class="cell">9a</div>
+        <div class="cell">10a</div>
+        <div class="cell">11a</div>
+        <div class="cell">12a</div>
+        <div class="cell">13a</div>
+        <div class="cell">14a</div>
+        <div class="cell">15a</div>
+      </sv-track>
+    </Variant>
+
+    <Variant title="Vertical Snap">
+      <sv-track class="vertical" vertical snap>
+        <div class="cell first">1a</div>
+        <div class="cell">2a</div>
+        <div class="cell">3a</div>
+        <div class="cell">4a</div>
+        <div class="cell">5a</div>
+        <div class="cell">6a</div>
+        <div class="cell">7a</div>
+        <div class="cell">8a</div>
+        <div class="cell">9a</div>
+        <div class="cell">10a</div>
+        <div class="cell">11a</div>
+        <div class="cell">12a</div>
+        <div class="cell">13a</div>
+        <div class="cell">14a</div>
+        <div class="cell">15a</div>
       </sv-track>
     </Variant>
   </Story>
@@ -145,32 +208,20 @@ const centeredSliderIndex = ref([0]);
   overflow: hidden;
   width: 200px;
   height: 200px;
-  box-shadow: inset 0 0 2px currentColor;
+  box-shadow: inset 0 0 0 2px white;
   border-radius: 4px;
   padding: 4px;
   flex: none;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  &[active] {
-    border: 2px solid red;
-  }
-
-  &:hover {
-    background: #f7f7f7;
-  }
-}
-
-sv-track {
-  padding: 8px;
-  box-sizing: border-box;
+  background: #eaeaea;
 }
 
 .arrow {
   position: absolute;
   border-radius: 50%;
-  background: #eeeeee47;
+  background: #ffffff;
   border: 1px solid #eee;
   width: 40px;
   height: 40px;
@@ -180,10 +231,6 @@ sv-track {
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-
-  &:hover {
-    background: #eee;
-  }
 
   &.arrow-next {
     right: 15px;
@@ -198,7 +245,6 @@ sv-track {
   user-select: none;
   width: 320px;
   height: 320px;
-  color: lime;
   font-size: 42px;
   font-weight: 600;
 }
@@ -209,7 +255,7 @@ sv-track {
   flex-direction: column;
   justify-content: center;
 
-  --width: 800px;
+  --width: 600px;
 
   sv-track {
     padding-left: calc(50% - (var(--width) / 2));
@@ -244,6 +290,7 @@ sv-track {
       height: 12px;
       cursor: pointer;
       opacity: 0.75;
+      padding: 0;
 
       &[selected] {
         opacity: 1;
@@ -251,6 +298,10 @@ sv-track {
       }
     }
   }
+}
+
+.paged {
+  position: relative;
 }
 
 .tabs {
@@ -291,6 +342,14 @@ sv-track {
     &[active] .cell {
       border: 2px solid red;
     }
+  }
+}
+
+.vertical {
+  height: 600px;
+
+  .cell {
+    height: 100px;
   }
 }
 </style>

@@ -6,7 +6,6 @@
   "module": "dist/select.es.js",
   "types": "src/index.ts",
   "scripts": {
-    "dev": "histoire dev",
     "build": "vite build",
     "lint": "eslint --ext .ts .",
     "publish:patch": "npm run build && npm version patch && git push --tags && git push && npm publish"

@@ -1,3 +1,5 @@
+window.HTMLElement = HTMLElement || class {};
+
 export default class DebugElement extends HTMLElement {
   props: Array<string | number | number[] | (number | string)[]> = [];
   canvas!: HTMLCanvasElement;
@@ -95,24 +97,7 @@ export default class DebugElement extends HTMLElement {
 
     ctx.strokeStyle = "white";
 
-    // draw sepearators
-    // ctx.beginPath();
-    // ctx.moveTo(leftPad, 0);
-    // ctx.lineTo(leftPad, height - 0.5);
-    // ctx.lineTo(this.width, height - 0.5);
-    // ctx.stroke();
-
-    // draw numbers
-    // ctx.textAlign = "right";
-
-    // for (let i = 0; i < maxValue; i += 20) {
-    //   const y = scaleToCanvas(i);
-    //   ctx.fillText(i, 18, y);
-    // }
-
     ctx.restore();
-
-    // draw details
 
     ctx.textAlign = "left";
 
@@ -123,13 +108,6 @@ export default class DebugElement extends HTMLElement {
       ctx.fillText(params[0] + ":", x, y + height);
       x += params[0].length * 7 + 2;
     }
-
-    // if (arr.length > 1) {
-    //   const sum = arr.reduce((a, b) => a + b);
-    //   const avg = (sum / arr.length).toFixed(1);
-    //   ctx.fillText("avg: " + avg, x, y + height);
-    // }
-    // x += 65;
 
     ctx.fillText((arr[arr.length - 1] || "").toString(), x, y + height);
   }

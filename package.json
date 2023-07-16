@@ -1,6 +1,6 @@
 {
   "name": "@sv-components/mono",
-  "version": "0.1.7-7",
+  "version": "0.1.7-14",
   "description": "",
   "exports": {
     "./components/select": {
@@ -31,7 +31,7 @@
   "scripts": {
     "publish:preview": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
     "library:build": "turbo build --filter=library",
-    "library:dev": "turbo dev --filter=library",
+    "dev": "turbo dev",
     "build": "turbo build --filter=@sv-components/*",
     "lint": "turbo lint --filter=@sv-components/*",
     "test": "turbo test --filter=@sv-components/*",

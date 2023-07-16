@@ -6,7 +6,6 @@
   "module": "dist/expandable.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "histoire dev",
     "build": "tsup --format esm,cjs --dts src/index.ts",
     "test": "vitest run"
   },

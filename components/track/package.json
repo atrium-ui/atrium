@@ -6,8 +6,9 @@
   "module": "dist/track.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "histoire dev",
-    "build": "tsup --format esm,cjs --dts src/index.ts"
+    "dev": "npm run build -- --watch",
+    "build": "tsup --format esm,cjs --dts src/index.ts",
+    "test": "vitest run"
   },
   "author": "",
   "license": "ISC",
