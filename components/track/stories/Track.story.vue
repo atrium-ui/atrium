@@ -70,6 +70,21 @@ onMounted(() => {
       </sv-track>
     </Variant>
 
+    <Variant title="Infinite with offset">
+      <sv-track loop class="infinite" style="padding-left: calc(50% - 100px)">
+        <div tabindex="0" class="cell">1</div>
+        <div tabindex="0" class="cell">2</div>
+        <div tabindex="0" class="cell">3</div>
+        <div tabindex="0" class="cell">4</div>
+        <div tabindex="0" class="cell">5</div>
+        <div tabindex="0" class="cell">6</div>
+        <div tabindex="0" class="cell">7</div>
+        <div tabindex="0" class="cell">8</div>
+        <div tabindex="0" class="cell">9</div>
+        <div tabindex="0" class="cell">10</div>
+      </sv-track>
+    </Variant>
+
     <Variant title="Centered">
       <div class="centered">
         <sv-track
@@ -269,10 +284,6 @@ onMounted(() => {
   height: 320px;
   font-size: 42px;
   font-weight: 600;
-}
-
-.infinite {
-  padding-left: calc(50% - 100px);
 }
 
 .centered {

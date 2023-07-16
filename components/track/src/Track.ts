@@ -14,9 +14,6 @@ export type InputState = {
   move: {
     value: Vec;
   };
-  swipe: {
-    value: Vec;
-  };
   release: {
     value: boolean;
   };
@@ -49,7 +46,7 @@ export class Track extends LitElement {
         outline: none;
         overflow: hidden;
         touch-action: pan-y;
-        scroll-behavior: smooth;
+        /* scroll-behavior: smooth; */
       }
 
       .track {
@@ -206,9 +203,6 @@ export class Track extends LitElement {
     move: {
       value: new Vec(), // deltaX
     },
-    swipe: {
-      value: new Vec(), // deltaX
-    },
     format: {
       value: false,
     },
@@ -339,23 +333,41 @@ export class Track extends LitElement {
     }
   }
 
-  onScroll() {
-    clearTimeout(this.scrollTimeout);
+  onScroll(e) {
+    if (e.target !== this) {
+      clearTimeout(this.scrollTimeout);
 
-    this.canScroll = false;
-
-    this.scrollTimeout = setTimeout(() => {
-      this.canScroll = true;
-    }, 200);
+      this.canScroll = false;
+      this.scrollTimeout = setTimeout(() => {
+        this.canScroll = true;
+      }, 200);
+    }
   }
 
   onWheel(e) {
+    // wheel and snap dont play together well, maybe future feature
+    if (this.snap) return;
+
     const threshold = this.vertical
       ? Math.abs(e.deltaX) < Math.abs(e.deltaY)
       : Math.abs(e.deltaX) > Math.abs(e.deltaY);
 
     if (this.canScroll && threshold) {
-      this.inputState.swipe.value.add(new Vec(e.deltaX, e.deltaY));
+      this.acceleration.mul(0);
+
+      if (this.loop) {
+        this.inputForce.add(new Vec(e.deltaX, e.deltaY));
+      } else {
+        if (this.vertical) {
+          const pos = this.position.y + e.deltaY;
+          this.inputForce.y =
+            Math.max(Math.min(pos, this.overflowHeight), 0) - this.position.y;
+        } else {
+          const pos = this.position.x + e.deltaX;
+          this.inputForce.x =
+            Math.max(Math.min(pos, this.overflowWidth), 0) - this.position.x;
+        }
+      }
 
       e.preventDefault();
     }
@@ -543,7 +555,6 @@ export class Track extends LitElement {
     // clear
     const state = this.inputState;
     state.move.value.mul(0);
-    state.swipe.value.mul(0);
     state.grab.value = false;
     state.format.value = false;
     state.leave.value = false;
@@ -695,7 +706,10 @@ export class Track extends LitElement {
   private clones: HTMLElement[] = [];
 
   drawUpdate() {
-    this.track.style.transform = `translate(${-this.position.x}px,${-this.position.y}px)`;
+    this.scrollLeft = this.position.x;
+    const scrollPos = new Vec(this.scrollLeft, this.scrollTop);
+    const diff = Vec.sub(scrollPos, this.position);
+    this.track.style.transform = `translate(${diff.x}px,${diff.y}px)`;
 
     if (this.loop) {
       const visibleItems: number[] = [];
@@ -764,6 +778,7 @@ export class Track extends LitElement {
     this.addEventListener("pointerenter", this.pointerEnter.bind(this));
     this.addEventListener("keydown", this.onKeyDown.bind(this));
     this.addEventListener("wheel", this.onWheel.bind(this));
+    this.addEventListener("scroll", this.onScroll.bind(this));
 
     window.addEventListener("resize", this.format.bind(this), { passive: true });
     window.addEventListener("scroll", this.onScroll.bind(this), { capture: true });
@@ -792,6 +807,7 @@ export class Track extends LitElement {
     this.removeEventListener("pointerenter", this.pointerEnter.bind(this));
     this.removeEventListener("keydown", this.onKeyDown.bind(this));
     this.removeEventListener("wheel", this.onWheel.bind(this));
+    this.removeEventListener("scroll", this.onScroll.bind(this));
 
     window.removeEventListener("resize", this.format.bind(this));
     window.removeEventListener("scroll", this.onScroll.bind(this));

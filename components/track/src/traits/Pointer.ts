@@ -9,7 +9,7 @@ export class PointerTrait extends Trait {
   grabDelta = new Vec();
 
   borderBounce = 0.1;
-  borderResistnce = 0.8;
+  borderResistnce = 0.3;
 
   updateCursorStyle() {
     const e = this.entity;
@@ -52,18 +52,6 @@ export class PointerTrait extends Trait {
     } else {
       if (this.grabbing) {
         e.inputForce.mul(0);
-      }
-    }
-
-    if (inputState.swipe.value.abs()) {
-      // e.inputForce.add(inputState.swipe.value);
-      // e.acceleration.mul(0);
-      e.setTarget(undefined);
-
-      if (e.snap) {
-        if (inputState.swipe.value.abs() < 5) {
-          e.moveBy(0, "linear");
-        }
       }
     }
 
@@ -140,14 +128,17 @@ export class PointerTrait extends Trait {
       this.entity.acceleration.mul(0);
     }
 
-    const bounce = !e.loop ? this.borderBounce : 0;
-    const resitance = !e.loop ? 1 - this.borderResistnce : 1;
+    let bounce = !e.loop ? this.borderBounce : 0;
+    let resitance = !e.loop ? this.borderResistnce : 0;
 
     // clamp input force
-    const clamped = this.getClapmedPosition(Vec.add(e.position, e.inputForce));
-    const diff = Vec.sub(e.position, clamped).add(e.inputForce);
+    const pos = Vec.add(e.position, e.inputForce);
+    const clamped = this.getClapmedPosition(pos);
+    const diff = Vec.sub(pos, clamped);
 
-    if (diff.abs()) {
+    resitance = (1 - Math.abs(diff.x) / 200) * resitance;
+
+    if (resitance && diff.abs()) {
       if (this.grabbing) {
         if (e.vertical && Math.abs(diff.y)) {
           e.inputForce.mul(resitance);
