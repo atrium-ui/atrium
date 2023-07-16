@@ -7,9 +7,10 @@
 </docs>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import "../../select/src/index.js";
 import "../src/index.js";
+import "./PagedTrack.js";
 
 const centeredSliderIndex = ref([0]);
 </script>
@@ -44,6 +45,21 @@ const centeredSliderIndex = ref([0]);
         <div tabindex="0" class="cell">9a</div>
         <div tabindex="0" class="cell">10a</div>
       </a-track>
+    </Variant>
+
+    <Variant title="Infinite with offset">
+      <sv-track loop class="infinite" style="padding-left: calc(50% - 100px)">
+        <div tabindex="0" class="cell">1</div>
+        <div tabindex="0" class="cell">2</div>
+        <div tabindex="0" class="cell">3</div>
+        <div tabindex="0" class="cell">4</div>
+        <div tabindex="0" class="cell">5</div>
+        <div tabindex="0" class="cell">6</div>
+        <div tabindex="0" class="cell">7</div>
+        <div tabindex="0" class="cell">8</div>
+        <div tabindex="0" class="cell">9</div>
+        <div tabindex="0" class="cell">10</div>
+      </sv-track>
     </Variant>
 
     <Variant title="Centered">
@@ -85,6 +101,22 @@ const centeredSliderIndex = ref([0]);
         <div class="arrow arrow-next" @click="(e) => $refs.centeredSlider.moveBy(1)">
           >
         </div>
+      </div>
+    </Variant>
+
+    <Variant title="Paged">
+      <div class="paged">
+        <sv-track-paged>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+        </sv-track-paged>
       </div>
     </Variant>
 
@@ -176,23 +208,20 @@ const centeredSliderIndex = ref([0]);
   overflow: hidden;
   width: 200px;
   height: 200px;
-  box-shadow: inset 0 0 2px currentColor;
+  box-shadow: inset 0 0 0 2px white;
   border-radius: 4px;
   padding: 4px;
   flex: none;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  &:hover {
-    background: #f7f7f7;
-  }
+  background: #eaeaea;
 }
 
 .arrow {
   position: absolute;
   border-radius: 50%;
-  background: #eeeeee47;
+  background: #ffffff;
   border: 1px solid #eee;
   width: 40px;
   height: 40px;
@@ -202,10 +231,6 @@ const centeredSliderIndex = ref([0]);
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-
-  &:hover {
-    background: #eee;
-  }
 
   &.arrow-next {
     right: 15px;
@@ -220,13 +245,8 @@ const centeredSliderIndex = ref([0]);
   user-select: none;
   width: 320px;
   height: 320px;
-  color: lime;
   font-size: 42px;
   font-weight: 600;
-}
-
-.infinite {
-  padding-left: calc(50% - 100px);
 }
 
 .centered {
@@ -270,6 +290,7 @@ const centeredSliderIndex = ref([0]);
       height: 12px;
       cursor: pointer;
       opacity: 0.75;
+      padding: 0;
 
       &[selected] {
         opacity: 1;
@@ -277,6 +298,10 @@ const centeredSliderIndex = ref([0]);
       }
     }
   }
+}
+
+.paged {
+  position: relative;
 }
 
 .tabs {
