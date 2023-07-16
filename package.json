@@ -1,6 +1,6 @@
 {
   "name": "@atrium-ui/mono",
-  "version": "0.1.7-14.2",
+  "version": "0.1.7-15",
   "description": "",
   "exports": {
     "./components/select": {
