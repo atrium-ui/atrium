@@ -41,7 +41,7 @@ import "../../select/src/index.js";
     </Variant>
 
     <Variant title="Accordion (exclusive)">
-      <sv-select activeAttribute="opened">
+      <a-select activeAttribute="opened">
         <a-expandable class="accordion" data-id="three">
           <div slot="toggle">
             <button class="accordion-title">
@@ -103,7 +103,7 @@ import "../../select/src/index.js";
             {{ paragraph(6) }}
           </div>
         </a-expandable>
-      </sv-select>
+      </a-select>
     </Variant>
 
     <Variant title="text">

@@ -2,7 +2,7 @@ import { html, HTMLTemplateResult, LitElement, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { formatTime, formatDate } from "./format.js";
 
-@customElement("sv-time")
+@customElement("a-time")
 export class Time extends LitElement {
   public static styles = css`
     :host {

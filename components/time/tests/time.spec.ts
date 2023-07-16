@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-const NODE_NAME = "sv-time";
+const NODE_NAME = "a-time";
 
 describe(NODE_NAME, () => {
   it("import element", async () => {

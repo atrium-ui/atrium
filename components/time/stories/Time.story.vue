@@ -5,7 +5,7 @@ import "../src/index.js";
 <template>
   <Story>
     <div>
-      This was loaded <sv-time>{{ Date.now() }}</sv-time>
+      This was loaded <a-time>{{ Date.now() }}</a-time>
     </div>
   </Story>
 </template>
@@ -14,7 +14,7 @@ import "../src/index.js";
 div {
   font-family: sans-serif;
 }
-sv-time {
+a-time {
   font-weight: bold;
 }
 </style>
