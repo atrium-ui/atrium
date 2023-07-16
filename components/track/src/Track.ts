@@ -45,19 +45,23 @@ export class Track extends LitElement {
   static get styles() {
     return css`
       :host {
-        display: block;
+        display: flex;
         outline: none;
         overflow: hidden;
         touch-action: pan-y;
       }
 
       .track {
-        display: flex;
+        display: inherit;
+        flex-direction: inherit;
+        flex-flow: inherit;
+        justify-content: inherit;
+        align-items: inherit;
         overflow: visible;
         will-change: transform;
       }
 
-      :host([vertical]) .track {
+      :host([vertical]) {
         flex-direction: column;
       }
 
@@ -172,6 +176,7 @@ export class Track extends LitElement {
   mouseGrab = false;
   private scrollTimeout;
   private canScroll = true;
+  drag = 0.95;
 
   origin = new Vec();
   position = new Vec();
@@ -243,6 +248,11 @@ export class Track extends LitElement {
    * fill (default): scroll until the track reaches the last item visible to fill the width of the track
    */
   // @property({ type: String }) overflow: "item" | "fill" = "item";
+
+  /**
+   * item alignment in the track
+   */
+  @property({ type: String }) align: "left" | "center" | "right" = "left";
 
   /**
    * only scroll when items are overflown
@@ -359,7 +369,9 @@ export class Track extends LitElement {
       this.origin.y = firstItem.y - bounds.y;
     }
 
-    this.moveBy(0, "none");
+    if (this.snap) {
+      this.moveBy(0, "none");
+    }
   }
 
   getToItemPosition(index: number = 0) {
@@ -434,6 +446,7 @@ export class Track extends LitElement {
     if (this.animation) {
       cancelAnimationFrame(this.animation);
       this.animation = undefined;
+      this.lastTick = 0;
       this.trait((t) => t.stop());
     }
   }
@@ -507,7 +520,7 @@ export class Track extends LitElement {
 
   updateTick() {
     this.position.add(this.acceleration);
-    this.acceleration.mul(0.9);
+    this.acceleration.mul(this.drag);
 
     this.trait((t) => t.update());
 
