@@ -8,7 +8,7 @@ export class PointerTrait extends Trait {
   grabbedStart = new Vec();
   grabDelta = new Vec();
 
-  borderBounce = -0.1;
+  borderBounce = 0.1;
   borderResistnce = 0.8;
 
   updateCursorStyle() {
@@ -24,10 +24,76 @@ export class PointerTrait extends Trait {
     }
   }
 
-  getClapmedDiff() {
+  input(inputState: InputState) {
+    const e = this.entity;
+
+    if (e.overflowscroll && e.overflowWidth < 0) {
+      return;
+    }
+
+    if (inputState.grab.value && !this.grabbing) {
+      this.grabbing = true;
+      this.grabbedStart.set(e.mousePos);
+      this.entity.dispatchEvent(new Event("pointer:grab"));
+    }
+
+    if (e.mousePos.abs()) {
+      this.grabDelta.set(e.mousePos).sub(this.grabbedStart);
+    }
+
+    if (inputState.release.value) {
+      this.grabbing = false;
+      this.entity.dispatchEvent(new Event("pointer:release"));
+    }
+
+    if (inputState.move.value.abs()) {
+      this.force.set(inputState.move.value).mul(-1);
+      e.inputForce.set(inputState.move.value).mul(-1);
+    } else {
+      if (this.grabbing) {
+        e.inputForce.mul(0);
+      }
+    }
+
+    if (inputState.swipe.value.abs()) {
+      // e.inputForce.add(inputState.swipe.value);
+      // e.acceleration.mul(0);
+      e.setTarget(undefined);
+
+      if (e.snap) {
+        if (inputState.swipe.value.abs() < 5) {
+          e.moveBy(0, "linear");
+        }
+      }
+    }
+
+    if (e.snap) {
+      if (inputState.release.value) {
+        const power = this.grabDelta.abs();
+        const slideRect = e.getCurrentSlideRect();
+        const axes = e.vertical ? 1 : 0;
+
+        if (power < slideRect[axes] / 2) {
+          // short throw
+          e.moveBy(1 * Math.sign(this.force[axes]), "linear");
+        } else {
+          e.moveBy(0, "linear");
+        }
+      }
+    }
+
+    if (e.vertical) {
+      e.inputForce.x = 0;
+    } else {
+      e.inputForce.y = 0;
+    }
+
+    this.updateCursorStyle();
+  }
+
+  getClapmedPosition(pos: Vec) {
     const e = this.entity as Track;
-    const newPos = Vec.add(e.position, e.inputForce);
-    let clampedPos = newPos;
+    let clampedPos = pos;
 
     let stopTop = 0;
     let stopBottom = 0;
@@ -64,73 +130,7 @@ export class PointerTrait extends Trait {
       );
     }
 
-    return Vec.sub(newPos, clampedPos);
-  }
-
-  input(inputState: InputState) {
-    const e = this.entity;
-
-    if (e.overflowscroll && e.overflowWidth < 0) {
-      return;
-    }
-
-    if (inputState.grab.value && !this.grabbing) {
-      this.grabbing = true;
-      this.grabbedStart.set(e.mousePos);
-      this.entity.dispatchEvent(new Event("pointer:grab"));
-    }
-
-    if (e.mousePos.abs()) {
-      this.grabDelta.set(e.mousePos).sub(this.grabbedStart);
-    }
-
-    if (inputState.release.value) {
-      this.grabbing = false;
-      this.entity.dispatchEvent(new Event("pointer:release"));
-    }
-
-    if (inputState.move.value.abs()) {
-      this.force.set(inputState.move.value).mul(-1);
-      e.inputForce.set(inputState.move.value).mul(-1);
-    } else {
-      if (this.grabbing) {
-        e.inputForce.mul(0);
-      }
-    }
-
-    if (inputState.swipe.value.abs()) {
-      e.inputForce.set(inputState.swipe.value.mul(0.2));
-      e.setTarget(undefined);
-
-      if (e.snap) {
-        if (inputState.swipe.value.abs() < 5) {
-          e.moveBy(0, "linear");
-        }
-      }
-    }
-
-    if (e.snap) {
-      if (inputState.release.value) {
-        const power = this.grabDelta.abs();
-        const slideRect = e.getCurrentSlideRect();
-        const axes = e.vertical ? 1 : 0;
-
-        if (power < slideRect[axes] / 2) {
-          // short throw
-          e.moveBy(1 * Math.sign(this.force[axes]), "linear");
-        } else {
-          e.moveBy(0, "linear");
-        }
-      }
-    }
-
-    if (e.vertical) {
-      e.inputForce.x = 0;
-    } else {
-      e.inputForce.y = 0;
-    }
-
-    this.updateCursorStyle();
+    return clampedPos;
   }
 
   update() {
@@ -144,7 +144,8 @@ export class PointerTrait extends Trait {
     const resitance = !e.loop ? 1 - this.borderResistnce : 1;
 
     // clamp input force
-    const diff = this.getClapmedDiff();
+    const clamped = this.getClapmedPosition(Vec.add(e.position, e.inputForce));
+    const diff = Vec.sub(e.position, clamped).add(e.inputForce);
 
     if (diff.abs()) {
       if (this.grabbing) {
@@ -157,10 +158,9 @@ export class PointerTrait extends Trait {
     }
 
     if (bounce && diff.abs() && !this.grabbing) {
-      if (e.vertical && Math.abs(diff.y)) {
-        e.inputForce.add(diff.mul(bounce).sub(Vec.add(e.acceleration, e.inputForce)));
-      } else if (Math.abs(diff.x)) {
-        e.inputForce.add(diff.mul(bounce).sub(Vec.add(e.acceleration, e.inputForce)));
+      if ((e.vertical && Math.abs(diff.y)) || Math.abs(diff.x)) {
+        e.inputForce.sub(diff.mul(bounce));
+        e.acceleration.mul(0);
       }
     }
   }

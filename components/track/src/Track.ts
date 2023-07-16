@@ -354,14 +354,10 @@ export class Track extends LitElement {
       ? Math.abs(e.deltaX) < Math.abs(e.deltaY)
       : Math.abs(e.deltaX) > Math.abs(e.deltaY);
 
-    if (this.canScroll) {
-      if (threshold) {
-        const delta = new Vec(e.deltaX / 2, e.deltaY / 2);
-        if (delta.abs() > 2 || this.inputState.swipe.value.abs() < 2) {
-          this.inputState.swipe.value.add(delta);
-          e.preventDefault();
-        }
-      }
+    if (this.canScroll && threshold) {
+      this.inputState.swipe.value.add(new Vec(e.deltaX, e.deltaY));
+
+      e.preventDefault();
     }
   }
 
@@ -556,13 +552,13 @@ export class Track extends LitElement {
   }
 
   updateTick() {
-    this.position.add(this.acceleration);
-    this.acceleration.mul(this.drag);
-
     this.trait((t) => t.update());
 
     this.acceleration.add(this.inputForce);
+    this.position.add(this.acceleration);
+
     this.inputForce.mul(0);
+    this.acceleration.mul(this.drag);
 
     if (this.target !== undefined) {
       switch (this.targetEasing) {
@@ -630,8 +626,8 @@ export class Track extends LitElement {
     this.targetForce.mul(0);
 
     // TODO: need to self fix positon, sometimes NaN on innital load and resize
-    this.position[0] = this.position[0] || 0;
-    this.position[1] = this.position[1] || 0;
+    // this.position[0] = this.position[0] || 0;
+    // this.position[1] = this.position[1] || 0;
   }
 
   getCurrentItem(pos: Vec) {
