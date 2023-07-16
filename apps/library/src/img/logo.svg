@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="271" height="164" viewBox="-40 -40 350 200">
-  <g id="Group_1" data-name="Group 1" transform="translate(-512 -433)">
-    <path id="Polygon_1" data-name="Polygon 1" d="M82,0l82,142H0Z" transform="translate(654 433) rotate(90)" fill="gray"/>
-    <circle id="Ellipse_1" data-name="Ellipse 1" cx="82" cy="82" r="82" transform="translate(619 433)" fill="gray"/>
-  </g>
-</svg>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="271"
+  height="164"
+  viewBox="-40 -40 350 200"
+></svg>
