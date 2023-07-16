@@ -10,32 +10,9 @@
 import { ref, onMounted } from "vue";
 import "../../select/src/index.js";
 import "../src/index.js";
-import { Track, Trait } from "../src/index.js";
+import "./PagedTrack.js";
 
 const centeredSliderIndex = ref([0]);
-
-const pagedSliderContainer = ref<HTMLElement>();
-const pagedSlider = ref<Track>();
-
-onMounted(() => {
-  pagedSlider.value.addTrait(
-    "paged",
-    class Paged extends Trait {
-      movePage() {}
-      prev() {
-        const x = Math.max(this.entity.position.x - (this.entity.offsetWidth - 100), 0);
-        this.entity.setTarget([x, 0], "ease");
-      }
-      next() {
-        const x = Math.min(
-          this.entity.position.x + (this.entity.offsetWidth - 100),
-          this.entity.overflowWidth
-        );
-        this.entity.setTarget([x, 0], "ease");
-      }
-    }
-  );
-});
 </script>
 
 <template>
@@ -128,9 +105,8 @@ onMounted(() => {
     </Variant>
 
     <Variant title="Paged">
-      <div class="paged" ref="pagedSliderContainer">
-        <sv-track ref="pagedSlider">
-          <!-- Give these cells a ratio box -->
+      <div class="paged">
+        <sv-track-paged>
           <div class="cell"></div>
           <div class="cell"></div>
           <div class="cell"></div>
@@ -140,20 +116,7 @@ onMounted(() => {
           <div class="cell"></div>
           <div class="cell"></div>
           <div class="cell"></div>
-        </sv-track>
-
-        <div
-          class="arrow arrow-prev"
-          @click="(e) => document.querySelector('sv-track').findTrait('paged').prev()"
-        >
-          &lt;
-        </div>
-        <div
-          class="arrow arrow-next"
-          @click="(e) => document.querySelector('sv-track').findTrait('paged').next()"
-        >
-          >
-        </div>
+        </sv-track-paged>
       </div>
     </Variant>
 
@@ -245,7 +208,7 @@ onMounted(() => {
   overflow: hidden;
   width: 200px;
   height: 200px;
-  box-shadow: inset 0 0 3px white;
+  box-shadow: inset 0 0 0 2px white;
   border-radius: 4px;
   padding: 4px;
   flex: none;

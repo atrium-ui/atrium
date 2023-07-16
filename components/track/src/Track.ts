@@ -244,10 +244,10 @@ export class Track extends LitElement {
     this.traits.splice(this.traits.indexOf(trait), 1);
   }
 
-  findTrait(id: string) {
+  findTrait<T>(id: string): T | undefined {
     for (const trait of this.traits) {
       if (trait.id === id) {
-        return trait;
+        return trait as T;
       }
     }
     return undefined;
@@ -441,7 +441,12 @@ export class Track extends LitElement {
     return pos;
   }
 
-  setTarget(vec: Vec | Array<number> | undefined, easing: Easing = "none") {
+  setTarget(vec: Vec | Array<number> | undefined, easing?: Easing) {
+    if (!easing) {
+      // auto easing
+      easing = this.transition === 0 || this.transition === 1 ? "ease" : "linear";
+    }
+
     if (vec != undefined) {
       this.transitionAt = Date.now();
       this.targetStart.set(this.position);
@@ -460,11 +465,6 @@ export class Track extends LitElement {
   }
 
   moveBy(byItems: number, easing?: Easing) {
-    if (!easing) {
-      // auto easing
-      easing = this.transition === 0 || this.transition === 1 ? "ease" : "linear";
-    }
-
     let i = this.currentItem + byItems;
     if (!this.loop) {
       i = Math.min(Math.max(0, i), this.itemCount - 1);
