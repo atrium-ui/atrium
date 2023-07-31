@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sv-components/mono": "workspace:^",
+    "@atrium-ui/mono": "workspace:^",
     "lit": "^2.5.0"
   },
   "devDependencies": {

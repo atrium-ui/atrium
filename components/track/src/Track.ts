@@ -777,8 +777,8 @@ export class Track extends LitElement {
     this.addEventListener("pointerleave", this.pointerLeave.bind(this));
     this.addEventListener("pointerenter", this.pointerEnter.bind(this));
     this.addEventListener("keydown", this.onKeyDown.bind(this));
-    this.addEventListener("wheel", this.onWheel.bind(this));
-    this.addEventListener("scroll", this.onScroll.bind(this));
+    this.addEventListener("wheel", this.onWheel.bind(this), { passive: true });
+    this.addEventListener("scroll", this.onScroll.bind(this), { passive: true });
 
     window.addEventListener("resize", this.format.bind(this), { passive: true });
     window.addEventListener("scroll", this.onScroll.bind(this), { capture: true });

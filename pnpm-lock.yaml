@@ -73,22 +73,6 @@ importers:
         specifier: ^3.3.4
         version: 3.3.4
 
-  components/accordion:
-    dependencies:
-      '@sv-components/mono':
-        specifier: workspace:^
-        version: link:../..
-      lit:
-        specifier: ^2.2.7
-        version: 2.5.0
-    devDependencies:
-      histoire:
-        specifier: ^0.16.2
-        version: 0.16.2(vite@4.3.9)
-      txtgen:
-        specifier: ^3.0.4
-        version: 3.0.4
-
   components/circle:
     dependencies:
       lit:
@@ -101,7 +85,7 @@ importers:
 
   components/dropdown:
     dependencies:
-      '@sv-components/mono':
+      '@atrium-ui/mono':
         specifier: workspace:^
         version: link:../..
       lit:
@@ -156,6 +140,16 @@ importers:
       vite:
         specifier: ^2.9.15
         version: 2.9.15
+
+  components/time:
+    dependencies:
+      lit:
+        specifier: ^2.5.0
+        version: 2.7.5
+    devDependencies:
+      tsup:
+        specifier: ^6.7.0
+        version: 6.7.0(typescript@5.1.3)
 
   components/track:
     dependencies:
