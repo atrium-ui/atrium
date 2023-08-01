@@ -1,0 +1,50 @@
+# https://taskfile.dev
+version: '3'
+
+# Gitlab CI template:
+#
+# variables:
+#   CI_PUSH_TOKEN: $GIT_PUSH_TOKEN # A Gitlab access token to push to the repo
+#
+# default:
+#   image: node:latest
+#   before_script:
+#     - sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d # install task
+#     - git config user.email "gitlab@s-v.de"
+#     - git config user.name "CI"
+#     - git remote set-url origin https://oauth2:$CI_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
+#     - task setup
+
+# publish:
+#   stage: publish
+#   only: main
+#   when: manual
+#   script: task publish
+
+tasks:
+  default:
+    desc: Publish npm pacakge
+    dir: "{{.TASKFILE_DIR}}"
+    cmds:
+    - npm run build
+    - npm version patch
+    - npm publish
+    - git push --tags -o ci.skip
+    - git push origin HEAD:main -o ci.skip
+    - git push origin HEAD:develop -o ci.skip
+
+  dev:
+    desc: Publish npm package to dev tag
+    dir: "{{.TASKFILE_DIR}}"
+    cmds:
+    - npm run build
+    - npm version prerelease
+    - npm publish --tag dev
+    - git push origin --tags -o ci.skip
+    - git push origin HEAD:develop -o ci.ski
+
+  preview:
+    desc: Pack the pacakge for preview
+    dir: "{{.TASKFILE_DIR}}"
+    cmds:
+    - npm pack && tar -xvzf *.tgz && rm -rf package *.tgz

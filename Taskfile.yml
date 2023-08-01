@@ -1,0 +1,48 @@
+# https://taskfile.dev
+
+version: '3'
+
+includes:
+  publish: tasks/npm-publish.yml
+
+tasks:
+  default: task -l
+
+  setup:
+    desc: Install node dependencies
+    cmds:
+      - pnpm i
+
+  test:
+    desc: Run tests on all components
+    cmds:
+      - npm run build
+      - npx turbo test --filter=@sv-components/*
+
+  lint:
+    desc: Run linter on all components
+    cmds:
+      - npx turbo lint --filter=@sv-components/*
+
+  dev:
+    desc: Run dev server, available under http://localhost:3000/
+    cmds:
+      - npx turbo dev
+
+  build:
+    desc: Build all components
+    cmds:
+      - npx turbo build --filter=@sv-components/*
+
+  library:
+    desc: Builds the library into the public folder
+    cmds:
+      - npm run build
+      - npx turbo build --filter=library
+      - mv apps/library/dist public
+
+  new:
+    desc: Create a new component from templates
+    dir: "{{.TASKFILE_DIR}}/src"
+    cmds:
+      - node ./scripts/new.mjs

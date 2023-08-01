@@ -28,16 +28,6 @@
       "require": "./components/track/dist/track.js"
     }
   },
-  "scripts": {
-    "publish:preview": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
-    "library:build": "turbo build --filter=library",
-    "dev": "turbo dev",
-    "build": "turbo build --filter=@sv-components/*",
-    "lint": "turbo lint --filter=@sv-components/*",
-    "test": "turbo test --filter=@sv-components/*",
-    "new": "node ./scripts/new.mjs",
-    "clean": "git clean -fX ."
-  },
   "workspaces": [
     "apps/*",
     "components/*"
