@@ -5,18 +5,18 @@ This repository contains a collection of framework agnostic and functional web-c
 ## Getting Started
 
 Install all dependencies:
-`pnpm i`
+`task setup`
 
 Dev watch build of all packages and visual docs:
-`pnpm dev`
+`task dev`
 
 ### Other commands
 
 Build all packages:
-`pnpm build`
+`task build`
 
 Init new component:
-`pnpm new`
+`task new`
 
 
 ## Components

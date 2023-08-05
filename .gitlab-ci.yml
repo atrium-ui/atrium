@@ -3,102 +3,63 @@ stages:
   - publish
   - library
 
-publish:
-  stage: publish
-  image: node:18-buster
-  only:
-      - main
-  when: manual
-  variables:
-    GITLAB_NPM_REGISTRY_TOKEN: ${CI_JOB_TOKEN}
-  before_script:
-    - npm i -g pnpm
-    - pnpm config set store-dir .pnpm-store
-    - git config user.email "gitlab@s-v.de"
-    - git config user.name "CI"
-    - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
-  script:
-    - pnpm i
-    - pnpm build
-    - npm version patch
-    - npm publish
-    - git push --tags -o ci.skip
-    - git push origin HEAD:main -o ci.skip
-    - git push origin HEAD:develop -o ci.skip
+variables:
+  GIT_PUSH_TOKEN: $GIT_PUSH_TOKEN # A Gitlab access token to push to the repo
 
-publish-dev:
-  stage: publish
+default:
   image: node:18-buster
-  only:
-      - develop
-  when: manual
-  variables:
-    GITLAB_NPM_REGISTRY_TOKEN: ${CI_JOB_TOKEN}
-  before_script:
-    - npm i -g pnpm
-    - pnpm config set store-dir .pnpm-store
-    - git config user.email "gitlab@s-v.de"
-    - git config user.name "CI"
-    - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
-  script:
-    - pnpm i
-    - pnpm build
-    - npm version prerelease
-    - npm publish --tag dev
-    - git push origin --tags -o ci.skip
-    - git push origin HEAD:develop -o ci.skip
-
-docs:
-  stage: library
-  image: node:18-buster
-  before_script:
-    - npm i -g pnpm
-    - pnpm config set store-dir .pnpm-store
-  script:
-    - pnpm install # install dependencies
-    - pnpm build
-    - pnpm library:build
-    - mv apps/library/dist public
   cache:
     key:
       files:
         - pnpm-lock.yaml
     paths:
       - .pnpm-store
+  before_script:
+    - npm i -g pnpm
+    - sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d
+    - pnpm config set store-dir .pnpm-store
+    - git config user.email "gitlab@s-v.de"
+    - git config user.name "CI"
+    - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
+    - task setup
+
+publish:
+  stage: publish
+  only:
+      - main
+  when: manual
+  script: task publish
+
+publish-dev:
+  stage: publish
+  only:
+      - develop
+  when: manual
+  script: task publish-dev
+
+docs:
+  stage: library
+  script: task build:library
+  environment:
+    name: main
+    url: https://a-components.pages.s-v.de/mono
   only:
     - tags
   except:
     - branches
   when: manual
-  environment:
-    name: main
-    url: https://a-components.pages.s-v.de/mono
   artifacts:
     paths:
       - public
 
 docs-dev:
+    stage: library
+    script: task build:library
     environment:
         name: develop
         url: "https://a-components.pages.s-v.de/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
-    stage: library
-    image: node:18-buster
-    before_script:
-      - npm i -g pnpm
-      - pnpm config set store-dir .pnpm-store
-    script:
-      - pnpm install # install dependencies
-      - pnpm build
-      - pnpm library:build
-      - mv apps/library/dist public
     only:
       - develop
-    cache:
-      key:
-        files:
-          - pnpm-lock.yaml
-      paths:
-        - .pnpm-store
     artifacts:
         paths:
           - public
@@ -107,11 +68,4 @@ docs-dev:
 
 test:
   stage: test
-  image: node:18-buster
-  before_script:
-    - npm i -g pnpm
-    - pnpm config set store-dir .pnpm-store
-  script:
-    - pnpm i
-    - pnpm build
-    - pnpm test
+  script: task test
