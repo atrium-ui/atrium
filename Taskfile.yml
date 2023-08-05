@@ -11,12 +11,14 @@ tasks:
   setup:
     desc: Install node dependencies
     cmds:
+      - rtx install
+      - '[ "$CI" != "" ] && pnpm config set store-dir .pnpm-store || true'
       - pnpm i
 
   test:
     desc: Run tests on all components
     cmds:
-      - npm run build
+      - task: build
       - npx turbo test --filter=@sv-components/*
 
   lint:
@@ -43,6 +45,6 @@ tasks:
 
   new:
     desc: Create a new component from templates
-    dir: "{{.TASKFILE_DIR}}/src"
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
       - node ./scripts/new.mjs

@@ -1,28 +1,27 @@
 {
-  "name": "@sv-components/track",
-  "version": "0.1.0",
+  "name": "@atrium-ui/palette",
+  "version": "0.0.1",
   "description": "",
-  "main": "dist/track.js",
-  "module": "dist/track.mjs",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "main": "dist/palette.cjs.js",
+  "module": "dist/palette.es.js",
+  "types": "src/index.ts",
   "scripts": {
     "build": "tsup --format esm,cjs --dts src/index.ts",
+    "lint": "eslint --ext .ts .",
     "test": "vitest run"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lit": "^2.7.5"
+    "lit": "^2.5.0"
   },
   "devDependencies": {
-    "histoire": "^0.16.2"
+    "tsup": "^6.7.0"
   },
-  "files": [
-    "dist"
-  ],
   "tsup": {
     "entry": {
-      "track": "src/index.ts"
+      "palette": "src/index.ts"
     },
     "sourcemap": true,
     "clean": true

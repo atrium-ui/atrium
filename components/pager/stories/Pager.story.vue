@@ -11,7 +11,7 @@ const state = reactive({
 </script>
 
 <template>
-  <Story>
+  <Story group="input">
     <a-pager
       count="12"
       :current="state.current"

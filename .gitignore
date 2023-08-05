@@ -7,6 +7,10 @@ node_modules
 # Optional npm cache directory
 .npm
 
+# CI
+.pnpm-store
+.rtx
+
 # mac os
 .DS_Store
 

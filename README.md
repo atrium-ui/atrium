@@ -2,6 +2,13 @@
 
 This repository contains a collection of framework agnostic and functional web-components.
 
+### Prerequisites
+
+You can use [this](https://github.com/luckydye/setup) scripts to install all requirements.
+
+- rtx
+- task (can be installed using rtx)
+
 ## Getting Started
 
 Install all dependencies:

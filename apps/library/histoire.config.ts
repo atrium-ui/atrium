@@ -19,7 +19,7 @@ export default defineConfig({
       gray: defaultColors.neutral,
       primary: defaultColors.amber,
     },
-    hideColorSchemeSwitch: true,
+    // hideColorSchemeSwitch: true,
   },
   defaultStoryProps: {
     layout: {
@@ -41,6 +41,10 @@ export default defineConfig({
       {
         id: "primitives",
         title: "Primitives",
+      },
+      {
+        id: "input",
+        title: "Inputs",
       },
       {
         title: "Components",

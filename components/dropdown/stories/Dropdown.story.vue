@@ -29,7 +29,7 @@ const exampleOptions = [
 </script>
 
 <template>
-  <Story title="Dropdown">
+  <Story title="Dropdown" group="input">
     <Variant title="Default">
       <a-dropdown
         @select="handleSelect"

@@ -3,25 +3,30 @@ stages:
   - publish
   - library
 
+image: luckydye/buildapp
+
 variables:
+  RTX_DATA_DIR: $CI_PROJECT_DIR/.rtx
   GIT_PUSH_TOKEN: $GIT_PUSH_TOKEN # A Gitlab access token to push to the repo
 
-default:
-  image: node:18-buster
-  cache:
-    key:
+cache:
+  - key:
       files:
         - pnpm-lock.yaml
     paths:
       - .pnpm-store
-  before_script:
-    - npm i -g pnpm
-    - sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d
-    - pnpm config set store-dir .pnpm-store
-    - git config user.email "gitlab@s-v.de"
-    - git config user.name "CI"
-    - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
-    - task setup
+  - key:
+      files:
+        - .rtx.toml
+    paths:
+      - .rtx
+
+before_script:
+  - export PATH=$RTX_DATA_DIR/shims:$PATH
+  - task setup
+  - git config user.email "gitlab@s-v.de"
+  - git config user.name "CI"
+  - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
 
 publish:
   stage: publish
