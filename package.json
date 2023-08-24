@@ -1,6 +1,6 @@
 {
   "name": "@atrium-ui/mono",
-  "version": "0.1.7-16",
+  "version": "0.2.0-1",
   "description": "Component library",
   "bin": {
     "atrium": "./cli/use.js"
