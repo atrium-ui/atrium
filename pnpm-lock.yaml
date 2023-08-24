@@ -18,9 +18,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^5.60.0
         version: 5.60.0(eslint@8.43.0)(typescript@5.1.3)
-      autoprefixer:
-        specifier: ^10.4.15
-        version: 10.4.15(postcss@8.4.28)
       chalk:
         specifier: ^5.2.0
         version: 5.2.0
@@ -39,30 +36,18 @@ importers:
       happy-dom:
         specifier: ^9.20.3
         version: 9.20.3
-      postcss:
-        specifier: ^8.4.28
-        version: 8.4.28
       prettier:
         specifier: ^2.8.8
         version: 2.8.8
-      solid-js:
-        specifier: ^1.7.11
-        version: 1.7.11
-      tailwindcss:
-        specifier: ^3.3.3
-        version: 3.3.3
       tsup:
         specifier: ^7.0.0
-        version: 7.0.0(postcss@8.4.28)(typescript@5.1.3)
+        version: 7.0.0(typescript@5.1.3)
       turbo:
         specifier: ^1.10.3
         version: 1.10.3
       vite:
         specifier: ^4.3.9
         version: 4.3.9(sass@1.63.4)
-      vite-plugin-solid:
-        specifier: ^2.7.0
-        version: 2.7.0(solid-js@1.7.11)(vite@4.3.9)
       vitest:
         specifier: ^0.32.2
         version: 0.32.2(happy-dom@9.20.3)
@@ -96,7 +81,7 @@ importers:
     devDependencies:
       histoire:
         specifier: ^0.16.2
-        version: 0.16.2(vite@4.3.9)
+        version: 0.16.2(sass@1.63.4)(vite@4.3.9)
       txtgen:
         specifier: ^3.0.4
         version: 3.0.4
@@ -119,7 +104,7 @@ importers:
     devDependencies:
       tsup:
         specifier: ^6.7.0
-        version: 6.7.0(postcss@8.4.28)(typescript@5.1.3)
+        version: 6.7.0(typescript@5.1.3)
 
   packages/dropdown:
     dependencies:
@@ -145,7 +130,7 @@ importers:
     devDependencies:
       histoire:
         specifier: ^0.16.2
-        version: 0.16.2(vite@4.3.9)
+        version: 0.16.2(sass@1.63.4)(vite@4.3.9)
       txtgen:
         specifier: ^3.0.4
         version: 3.0.4
@@ -158,10 +143,10 @@ importers:
     devDependencies:
       histoire:
         specifier: ^0.16.2
-        version: 0.16.2(vite@4.3.9)
+        version: 0.16.2(sass@1.63.4)(vite@4.3.9)
       tsup:
         specifier: ^6.7.0
-        version: 6.7.0(postcss@8.4.28)(typescript@5.1.3)
+        version: 6.7.0(typescript@5.1.3)
 
   packages/slider:
     dependencies:
@@ -177,7 +162,7 @@ importers:
     devDependencies:
       tsup:
         specifier: ^6.7.0
-        version: 6.7.0(postcss@8.4.28)(typescript@5.1.3)
+        version: 6.7.0(typescript@5.1.3)
 
   packages/toggle:
     dependencies:
@@ -197,7 +182,7 @@ importers:
     devDependencies:
       histoire:
         specifier: ^0.16.2
-        version: 0.16.2(vite@4.3.9)
+        version: 0.16.2(sass@1.63.4)(vite@4.3.9)
 
   test:
     dependencies:
@@ -3056,58 +3041,7 @@ packages:
       shiki-es: 0.2.0
       sirv: 2.0.2
       vite: 2.9.15
-      vite-node: 0.28.4
-    transitivePeerDependencies:
-      - '@types/node'
-      - bufferutil
-      - canvas
-      - less
-      - sass
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-      - utf-8-validate
-    dev: true
-
-  /histoire@0.16.2(vite@4.3.9):
-    resolution: {integrity: sha512-7/dErREfXEqAq69KuVMThu+uYzBfIuc6R13z5uylNm+rGO6WX62Y70DeKTxnp4NsYPXBNPcBhWY6UGICCuhHaw==}
-    hasBin: true
-    peerDependencies:
-      vite: ^2.9.0 || ^3.0.0 || ^4.0.0
-    dependencies:
-      '@akryum/tinypool': 0.3.1
-      '@histoire/app': 0.16.1(vite@4.3.9)
-      '@histoire/controls': 0.16.1(vite@4.3.9)
-      '@histoire/shared': 0.16.1(vite@4.3.9)
-      '@histoire/vendors': 0.16.0
-      '@types/flexsearch': 0.7.3
-      '@types/markdown-it': 12.2.3
-      birpc: 0.1.1
-      change-case: 4.1.2
-      chokidar: 3.5.3
-      connect: 3.7.0
-      defu: 6.1.1
-      diacritics: 1.3.0
-      flexsearch: 0.7.21
-      fs-extra: 10.1.0
-      globby: 13.1.3
-      gray-matter: 4.0.3
-      jiti: 1.18.2
-      jsdom: 20.0.3
-      markdown-it: 12.3.2
-      markdown-it-anchor: 8.6.5(@types/markdown-it@12.2.3)(markdown-it@12.3.2)
-      markdown-it-attrs: 4.1.6(markdown-it@12.3.2)
-      markdown-it-emoji: 2.0.2
-      micromatch: 4.0.5
-      mrmime: 1.0.1
-      pathe: 0.2.0
-      picocolors: 1.0.0
-      sade: 1.8.1
-      shiki-es: 0.2.0
-      sirv: 2.0.2
-      vite: 4.3.9
-      vite-node: 0.28.4
+      vite-node: 0.28.4(sass@1.63.4)
     transitivePeerDependencies:
       - '@types/node'
       - bufferutil
@@ -3867,7 +3801,7 @@ packages:
       postcss: 8.4.28
     dev: true
 
-  /postcss-load-config@3.1.4(postcss@8.4.28):
+  /postcss-load-config@3.1.4:
     resolution: {integrity: sha512-6DiM4E7v4coTE4uzA8U//WhtPwyhiim3eyjEMFCnUpzbrkK9wJHgKDT2mR+HbtSrd/NubVaYTOpSpjUl8NQeRg==}
     engines: {node: '>= 10'}
     peerDependencies:
@@ -3880,7 +3814,6 @@ packages:
         optional: true
     dependencies:
       lilconfig: 2.1.0
-      postcss: 8.4.28
       yaml: 1.10.2
     dev: true
 
@@ -4447,7 +4380,7 @@ packages:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
     dev: true
 
-  /tsup@6.7.0(postcss@8.4.28)(typescript@5.1.3):
+  /tsup@6.7.0(typescript@5.1.3):
     resolution: {integrity: sha512-L3o8hGkaHnu5TdJns+mCqFsDBo83bJ44rlK7e6VdanIvpea4ArPcU3swWGsLVbXak1PqQx/V+SSmFPujBK+zEQ==}
     engines: {node: '>=14.18'}
     hasBin: true
@@ -4471,8 +4404,7 @@ packages:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
-      postcss: 8.4.28
-      postcss-load-config: 3.1.4(postcss@8.4.28)
+      postcss-load-config: 3.1.4
       resolve-from: 5.0.0
       rollup: 3.25.1
       source-map: 0.8.0-beta.0
@@ -4484,7 +4416,7 @@ packages:
       - ts-node
     dev: true
 
-  /tsup@7.0.0(postcss@8.4.28)(typescript@5.1.3):
+  /tsup@7.0.0(typescript@5.1.3):
     resolution: {integrity: sha512-yYARDRkPq07mO3YUXTvF12ISwWQG57Odve8aFEgLdHyeGungxuKxb19yf9G0W8y59SZFkLnRj1gkoVk1gd5fbQ==}
     engines: {node: '>=16.14'}
     hasBin: true
@@ -4508,7 +4440,6 @@ packages:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
-      postcss: 8.4.28
       postcss-load-config: 4.0.1(postcss@8.4.28)
       resolve-from: 5.0.0
       rollup: 3.25.1
@@ -4699,29 +4630,6 @@ packages:
     resolution: {integrity: sha512-hGdgQozCsQJMyfK5urgFcWEqsSSrK63Awe0t/IMR0bZ0QMtnuaiHzThW81guu3qx9abLi99NEuiaN6P9gVYsNg==}
     dev: true
 
-  /vite-node@0.28.4:
-    resolution: {integrity: sha512-KM0Q0uSG/xHHKOJvVHc5xDBabgt0l70y7/lWTR7Q0pR5/MrYxadT+y32cJOE65FfjGmJgxpVEEY+69btJgcXOQ==}
-    engines: {node: '>=v14.16.0'}
-    hasBin: true
-    dependencies:
-      cac: 6.7.14
-      debug: 4.3.4
-      mlly: 1.3.0
-      pathe: 1.1.1
-      picocolors: 1.0.0
-      source-map: 0.6.1
-      source-map-support: 0.5.21
-      vite: 4.3.9
-    transitivePeerDependencies:
-      - '@types/node'
-      - less
-      - sass
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-    dev: true
-
   /vite-node@0.28.4(sass@1.63.4):
     resolution: {integrity: sha512-KM0Q0uSG/xHHKOJvVHc5xDBabgt0l70y7/lWTR7Q0pR5/MrYxadT+y32cJOE65FfjGmJgxpVEEY+69btJgcXOQ==}
     engines: {node: '>=v14.16.0'}
@@ -4779,7 +4687,7 @@ packages:
       merge-anything: 5.1.7
       solid-js: 1.7.11
       solid-refresh: 0.5.3(solid-js@1.7.11)
-      vite: 4.3.9
+      vite: 4.3.9(sass@1.63.4)
       vitefu: 0.2.4(vite@4.3.9)
     transitivePeerDependencies:
       - supports-color
@@ -4805,38 +4713,6 @@ packages:
       postcss: 8.4.24
       resolve: 1.22.1
       rollup: 2.77.3
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
-
-  /vite@4.3.9:
-    resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
-    engines: {node: ^14.18.0 || >=16.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': '>= 14'
-      less: '*'
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      esbuild: 0.17.19
-      postcss: 8.4.28
-      rollup: 3.25.1
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
@@ -4915,7 +4791,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.3.9
+      vite: 4.3.9(sass@1.63.4)
     dev: true
 
   /vitest@0.32.2(happy-dom@9.20.3):
