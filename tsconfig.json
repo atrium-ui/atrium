@@ -9,7 +9,8 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "allowSyntheticDefaultImports": true,
-    "allowJs": false
+    "allowJs": false,
+    "jsx": "preserve"
   },
   "exclude": ["node_modules", "dist"]
 }
