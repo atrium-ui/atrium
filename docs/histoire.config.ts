@@ -7,7 +7,7 @@ export default defineConfig({
   setupFile: "src/histoire.setup.ts",
   outDir: "dist",
   routerMode: "hash",
-  storyMatch: ["./stories/*.story.vue", "../../components/*/stories/*.story.vue"],
+  storyMatch: ["./stories/*.story.vue", "../../pacakges/*/stories/*.story.vue"],
   theme: {
     title: "SV Components",
     logo: {
