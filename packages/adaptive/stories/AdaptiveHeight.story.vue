@@ -18,11 +18,11 @@ setInterval(() => {
   <Story group="primitives" icon-color="#8B5CF6">
     <Variant title="adaptive">
       <div class="block"></div>
-      <sv-adaptive-height class="adaptive">
+      <a-adaptive class="adaptive">
         <div class="accordion-content">
           {{ state.text }}
         </div>
-      </sv-adaptive-height>
+      </a-adaptive>
       <div class="block2"></div>
     </Variant>
   </Story>

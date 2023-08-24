@@ -9,13 +9,14 @@ export class AdaptiveHeight extends LitElement {
           display: block;
 
           --transition-speed: 0.33s;
-          --animation-easing: ease;
+          --animation-easing: ease-in-out;
         }
 
         .container {
           display: block;
-          overflow: visible;
-          transition: height var(--transition-speed) var(--animation-easing);
+          overflow: hidden;
+          transition-duration: var(--transition-speed);
+          transition-easing: var(--animation-easing);
         }
 
         .content {
@@ -33,16 +34,50 @@ export class AdaptiveHeight extends LitElement {
     });
 
     observer.observe(this, { subtree: true, childList: true });
+
+    window.addEventListener("resize", () => {
+      this.lastHeight = this.content?.offsetHeight;
+      this.lastWidth = this.content?.offsetWidth;
+    });
   }
+
+  @query(".container")
+  container!: HTMLElement;
 
   @query("slot")
   content!: HTMLElement;
 
+  lastHeight = 0;
+  lastWidth = 0;
+
+  async updated() {
+    const height = this.content?.offsetHeight;
+    const width = this.content?.offsetWidth;
+    if (this.lastHeight && this.lastWidth && height && width) {
+      await this.container.animate(
+        [
+          {
+            height: `${this.lastHeight}px`,
+            width: `${this.lastWidth}px`,
+          },
+          {
+            height: `${height}px`,
+            width: `${width}px`,
+          },
+        ],
+        {
+          duration: 330,
+          easing: "ease",
+        }
+      ).finished;
+    }
+    this.lastHeight = height;
+    this.lastWidth = width;
+  }
+
   protected render(): HTMLTemplateResult {
-    const h = this.content?.offsetHeight || "auto";
-    // use FLIP here
     return html`
-      <div class="container" style=${`height: ${h}px`}>
+      <div class="container">
         <slot class="content"></slot>
       </div>
     `;
@@ -51,8 +86,8 @@ export class AdaptiveHeight extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "sv-adaptive-height": AdaptiveHeight;
+    "a-adaptive": AdaptiveHeight;
   }
 }
 
-customElements.define("sv-adaptive-height", AdaptiveHeight);
+customElements.define("a-adaptive", AdaptiveHeight);
