@@ -199,6 +199,31 @@ importers:
         specifier: ^0.16.2
         version: 0.16.2(vite@4.3.9)
 
+  test:
+    dependencies:
+      lit:
+        specifier: ^2.7.5
+        version: 2.7.5
+    devDependencies:
+      autoprefixer:
+        specifier: ^10.4.15
+        version: 10.4.15(postcss@8.4.28)
+      postcss:
+        specifier: ^8.4.28
+        version: 8.4.28
+      solid-js:
+        specifier: ^1.7.11
+        version: 1.7.11
+      tailwindcss:
+        specifier: ^3.3.3
+        version: 3.3.3
+      vite:
+        specifier: ^4.3.9
+        version: 4.3.9(sass@1.63.4)
+      vite-plugin-solid:
+        specifier: ^2.7.0
+        version: 2.7.0(solid-js@1.7.11)(vite@4.3.9)
+
 packages:
 
   /@akryum/tinypool@0.3.1:
@@ -1293,7 +1318,7 @@ packages:
   /@types/babel__core@7.20.1:
     resolution: {integrity: sha512-aACu/U/omhdk15O4Nfb+fHgH/z3QsfQzpnvRZhYhThms83ZnAOZz7zZAWO7mn2yyNQaA4xTO8GLK3uqFU4bYYw==}
     dependencies:
-      '@babel/parser': 7.22.5
+      '@babel/parser': 7.22.10
       '@babel/types': 7.22.10
       '@types/babel__generator': 7.6.4
       '@types/babel__template': 7.4.1
@@ -1577,7 +1602,7 @@ packages:
       '@vue/shared': 3.3.4
       estree-walker: 2.0.2
       magic-string: 0.30.0
-      postcss: 8.4.24
+      postcss: 8.4.28
       source-map-js: 1.0.2
     dev: true
 

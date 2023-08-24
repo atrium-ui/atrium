@@ -1,7 +1,7 @@
 // main
 import { render } from "solid-js/web";
 import { createSignal } from "solid-js";
-import Button from "./components/button";
+import Button from "../components/button";
 
 const App = () => {
   const [count, setCount] = createSignal(0);
@@ -16,4 +16,5 @@ const App = () => {
     </div>
   );
 };
+
 render(App, document.body);
