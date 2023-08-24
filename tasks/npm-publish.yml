@@ -1,5 +1,5 @@
 # https://taskfile.dev
-version: '3'
+version: "3"
 
 # Gitlab CI template:
 #
@@ -26,25 +26,25 @@ tasks:
     desc: Publish npm pacakge
     dir: "{{.TASKFILE_DIR}}"
     cmds:
-    - npm run build
-    - npm version patch
-    - npm publish
-    - git push --tags -o ci.skip
-    - git push origin HEAD:main -o ci.skip
-    - git push origin HEAD:develop -o ci.skip
+      - task build
+      - npm version patch
+      - npm publish
+      - git push --tags -o ci.skip
+      - git push origin HEAD:main -o ci.skip
+      - git push origin HEAD:develop -o ci.skip
 
   dev:
     desc: Publish npm package to dev tag
     dir: "{{.TASKFILE_DIR}}"
     cmds:
-    - npm run build
-    - npm version prerelease
-    - npm publish --tag dev
-    - git push origin --tags -o ci.skip
-    - git push origin HEAD:develop -o ci.ski
+      - task build
+      - npm version prerelease
+      - npm publish --tag dev
+      - git push origin --tags -o ci.skip
+      - git push origin HEAD:develop -o ci.ski
 
   preview:
     desc: Pack the pacakge for preview
     dir: "{{.TASKFILE_DIR}}"
     cmds:
-    - npm pack && tar -xvzf *.tgz && rm -rf package *.tgz
+      - npm pack && tar -xvzf *.tgz && rm -rf package *.tgz
