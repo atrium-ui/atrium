@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { paragraph } from "txtgen";
 import "../src/index.js";
-import "../../select/src/index.js";
+import "../../toggle/src/index.js";
 </script>
 
 <template>
@@ -14,20 +14,10 @@ import "../../select/src/index.js";
               <span>Toggle</span>
             </div>
             <div class="accordion-collapse-icon">
-              <svg
-                class="plus-icon"
-                width="16px"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
+              <svg class="plus-icon" width="16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                 <path d="M8.6,20v-8.5H0V8.6h8.6V0h2.9v8.6H20v2.9h-8.6V20H8.6z" />
               </svg>
-              <svg
-                class="minus-icon"
-                width="16px"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
+              <svg class="minus-icon" width="16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                 <path d="M0,11.5V8.6h20v2.9H0z" />
               </svg>
             </div>
@@ -49,20 +39,10 @@ import "../../select/src/index.js";
                 <span>Toggle</span>
               </div>
               <div class="accordion-collapse-icon">
-                <svg
-                  class="plus-icon"
-                  width="16px"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
+                <svg class="plus-icon" width="16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                   <path d="M8.6,20v-8.5H0V8.6h8.6V0h2.9v8.6H20v2.9h-8.6V20H8.6z" />
                 </svg>
-                <svg
-                  class="minus-icon"
-                  width="16px"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
+                <svg class="minus-icon" width="16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                   <path d="M0,11.5V8.6h20v2.9H0z" />
                 </svg>
               </div>
@@ -80,20 +60,10 @@ import "../../select/src/index.js";
                 <span>Toggle</span>
               </div>
               <div class="accordion-collapse-icon">
-                <svg
-                  class="plus-icon"
-                  width="16px"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
+                <svg class="plus-icon" width="16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                   <path d="M8.6,20v-8.5H0V8.6h8.6V0h2.9v8.6H20v2.9h-8.6V20H8.6z" />
                 </svg>
-                <svg
-                  class="minus-icon"
-                  width="16px"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
+                <svg class="minus-icon" width="16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                   <path d="M0,11.5V8.6h20v2.9H0z" />
                 </svg>
               </div>
@@ -237,9 +207,11 @@ ul {
   &:not([opened]) .plus-icon {
     transform: rotate(90deg);
   }
+
   &:not([opened]) .minus-icon {
     transform: rotate(90deg);
   }
+
   &[opened] .plus-icon {
     opacity: 0;
   }

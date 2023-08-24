@@ -38,10 +38,11 @@ tasks:
 
   docs:
     desc: Builds the docs into the public folder
+    dir: "{{.TASKFILE_DIR}}/docs"
     cmds:
       - npm run build
       - npx turbo build --filter=docs
-      - mv docs/dist public
+      - mv docs/dist ../public
 
   new:
     desc: Create a new component from templates

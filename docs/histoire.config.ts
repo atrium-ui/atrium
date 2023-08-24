@@ -7,7 +7,7 @@ export default defineConfig({
   setupFile: "src/histoire.setup.ts",
   outDir: "dist",
   routerMode: "hash",
-  storyMatch: ["./stories/*.story.vue", "../../pacakges/*/stories/*.story.vue"],
+  storyMatch: ["./stories/*.story.vue", "../packages/*/stories/*.story.vue"],
   theme: {
     title: "SV Components",
     logo: {
@@ -19,7 +19,6 @@ export default defineConfig({
       gray: defaultColors.neutral,
       primary: defaultColors.amber,
     },
-    // hideColorSchemeSwitch: true,
   },
   defaultStoryProps: {
     layout: {
@@ -65,7 +64,7 @@ export default defineConfig({
     ],
     server: {
       fs: {
-        allow: ["../../"],
+        allow: ["../"],
       },
     },
   },

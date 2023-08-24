@@ -1,6 +1,6 @@
 import "./histoire.css";
 
-import pkg from "../../../package.json";
+import pkg from "../../package.json";
 
 document.body.style.setProperty("--version", `'v${pkg.version}'`);
 

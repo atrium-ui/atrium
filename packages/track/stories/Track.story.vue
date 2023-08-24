@@ -8,7 +8,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import "../../select/src/index.js";
+import "../../toggle/src/index.js";
 import "../src/index.js";
 import "./PagedTrack.js";
 
@@ -64,32 +64,22 @@ const centeredSliderIndex = ref([0]);
 
     <Variant title="Centered">
       <div class="centered">
-        <a-track
-          ref="centeredSlider"
-          snap
-          @change="
-            (e) => {
-              centeredSliderIndex = e.detail;
-            }
-          "
-        >
+        <a-track ref="centeredSlider" snap @change="(e) => {
+            centeredSliderIndex = e.detail;
+          }
+          ">
           <!-- Give these cells a ratio box -->
           <div class="cell">Home</div>
           <div class="cell">Not Home</div>
           <div class="cell">Their Home</div>
         </a-track>
 
-        <a-select
-          class="dots"
-          :value="[centeredSliderIndex]"
-          @input="
-            (e) => {
-              const track = $refs.centeredSlider;
-              track.moveTo(+e.target.value, 'ease');
-              e.preventDefault();
-            }
-          "
-        >
+        <a-select class="dots" :value="[centeredSliderIndex]" @input="(e) => {
+            const track = $refs.centeredSlider;
+            track.moveTo(+e.target.value, 'ease');
+            e.preventDefault();
+          }
+          ">
           <button></button>
           <button></button>
           <button></button>
@@ -266,7 +256,7 @@ const centeredSliderIndex = ref([0]);
     aspect-ratio: 2;
     height: auto;
 
-    & > * {
+    &>* {
       position: absolute;
       top: 0;
       left: 0;
@@ -333,8 +323,7 @@ const centeredSliderIndex = ref([0]);
 }
 
 .overflow {
-  .cell {
-  }
+  .cell {}
 
   .inner {
     padding: 8px;

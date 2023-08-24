@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { paragraph } from "txtgen";
 import "../src/index.js";
-import "../../select/src/index.js";
+import "../../toggle/src/index.js";
 
 import { reactive } from "vue";
 
@@ -32,10 +32,12 @@ setInterval(() => {
 .adaptive {
   background: grey;
 }
+
 .block {
   background: red;
   height: 100px;
 }
+
 .block2 {
   background: green;
   height: 100px;
