@@ -3,7 +3,7 @@
   "version": "0.1.7-16",
   "description": "Component library",
   "bin": {
-    "atrium": "./cli/index.js"
+    "atrium": "./cli/use.js"
   },
   "exports": {
     "./components/select": {

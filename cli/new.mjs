@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import fs from "node:fs";
 import path from "path";
 import cliSelect from "cli-select";
@@ -76,7 +77,11 @@ async function main() {
       "components/" + id
     );
     replaceContent(`${compPath}/stories/${name}.story.md`, "Example", name);
-    replaceContent(`${compPath}/src/index.ts`, "examples/lit-component", "components/" + id);
+    replaceContent(
+      `${compPath}/src/index.ts`,
+      "examples/lit-component",
+      "components/" + id
+    );
     replaceContent(`${compPath}/src/index.ts`, "Example", name);
     replaceContent(`${compPath}/src/components/${name}.ts`, "aui-example", id);
     replaceContent(`${compPath}/src/components/${name}.ts`, "Example", name);

@@ -47,4 +47,4 @@ tasks:
     desc: Create a new component from templates
     dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - node ./tasks/new.mjs
+      - ./cli/new.mjs
