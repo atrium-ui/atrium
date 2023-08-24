@@ -6,27 +6,27 @@
     "atrium": "./cli/use.js"
   },
   "exports": {
-    "./components/select": {
+    "./select": {
       "import": "./packages/select/dist/select.es.js",
       "require": "./packages/select/dist/select.cjs.js"
     },
-    "./components/expandable": {
+    "./expandable": {
       "import": "./packages/expandable/dist/expandable.mjs",
       "require": "./packages/expandable/dist/expandable.js"
     },
-    "./components/dropdown": {
+    "./dropdown": {
       "import": "./packages/dropdown/dist/dropdown.es.js",
       "require": "./packages/dropdown/dist/dropdown.cjs.js"
     },
-    "./components/circle": {
+    "./circle": {
       "import": "./packages/circle/dist/circle.mjs",
       "require": "./packages/circle/dist/circle.js"
     },
-    "./components/pager": {
+    "./pager": {
       "import": "./packages/pager/dist/pager.mjs",
       "require": "./packages/pager/dist/pager.js"
     },
-    "./components/track": {
+    "./track": {
       "import": "./packages/track/dist/track.mjs",
       "require": "./packages/track/dist/track.js"
     }
