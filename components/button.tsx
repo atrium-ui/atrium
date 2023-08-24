@@ -7,11 +7,22 @@ const style = `
   h-10 py-2 px-4
 `;
 
+interface Props {
+  children?: JSX.Element | string;
+}
+
 // adapter pattern to be useable in vue, solid, and react components
-export default function Button({ children }, context) {
+export default function Button({ children }: Props, context) {
+  const slots = {
+    default: () =>
+      children ?? context.slots.default ? (context.slots.default() as JSX.Element) : null,
+  };
+
   return (
     <button class={style}>
-      <div>{children || (context ? context.slots.default() : null)}</div>
+      <div>
+        <slots.default />
+      </div>
     </button>
   );
 }
