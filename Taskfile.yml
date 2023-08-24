@@ -1,6 +1,6 @@
 # https://taskfile.dev
 
-version: '3'
+version: "3"
 
 includes:
   publish: tasks/npm-publish.yml
@@ -36,15 +36,15 @@ tasks:
     cmds:
       - npx turbo build --filter=@sv-components/*
 
-  library:
-    desc: Builds the library into the public folder
+  docs:
+    desc: Builds the docs into the public folder
     cmds:
       - npm run build
-      - npx turbo build --filter=library
-      - mv apps/library/dist public
+      - npx turbo build --filter=docs
+      - mv docs/dist public
 
   new:
     desc: Create a new component from templates
     dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - node ./scripts/new.mjs
+      - node ./tasks/new.mjs

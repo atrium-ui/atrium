@@ -52,7 +52,7 @@ importers:
         specifier: ^0.32.2
         version: 0.32.2(happy-dom@9.20.3)
 
-  apps/library:
+  docs:
     devDependencies:
       '@histoire/plugin-vue':
         specifier: ^0.16.1
@@ -73,7 +73,7 @@ importers:
         specifier: ^3.3.4
         version: 3.3.4
 
-  components/adaptive-height:
+  packages/adaptive:
     dependencies:
       lit:
         specifier: ^2.5.0
@@ -86,7 +86,7 @@ importers:
         specifier: ^3.0.4
         version: 3.0.4
 
-  components/circle:
+  packages/circle:
     dependencies:
       lit:
         specifier: ^2.5.0
@@ -96,14 +96,24 @@ importers:
         specifier: ^2.9.15
         version: 2.9.15
 
-  components/dropdown:
+  packages/command:
+    dependencies:
+      lit:
+        specifier: ^2.5.0
+        version: 2.7.5
+    devDependencies:
+      tsup:
+        specifier: ^6.7.0
+        version: 6.7.0(typescript@5.1.3)
+
+  packages/dropdown:
     dependencies:
       '@atrium-ui/mono':
         specifier: workspace:^
         version: link:../..
       lit:
         specifier: ^2.5.0
-        version: 2.5.0
+        version: 2.7.5
     devDependencies:
       histoire:
         specifier: ^0.16.2
@@ -112,7 +122,7 @@ importers:
         specifier: ^2.9.15
         version: 2.9.15
 
-  components/expandable:
+  packages/expandable:
     dependencies:
       lit:
         specifier: ^2.5.0
@@ -125,7 +135,7 @@ importers:
         specifier: ^3.0.4
         version: 3.0.4
 
-  components/pager:
+  packages/pager:
     dependencies:
       lit:
         specifier: ^2.5.0
@@ -138,7 +148,13 @@ importers:
         specifier: ^6.7.0
         version: 6.7.0(typescript@5.1.3)
 
-  components/palette:
+  packages/slider:
+    dependencies:
+      lit:
+        specifier: ^2.2.1
+        version: 2.7.5
+
+  packages/time:
     dependencies:
       lit:
         specifier: ^2.5.0
@@ -148,33 +164,17 @@ importers:
         specifier: ^6.7.0
         version: 6.7.0(typescript@5.1.3)
 
-  components/range:
-    dependencies:
-      lit:
-        specifier: ^2.2.1
-        version: 2.5.0
-
-  components/select:
+  packages/toggle:
     dependencies:
       lit:
         specifier: ^2.5.0
-        version: 2.5.0
+        version: 2.7.5
     devDependencies:
       vite:
         specifier: ^2.9.15
         version: 2.9.15
 
-  components/time:
-    dependencies:
-      lit:
-        specifier: ^2.5.0
-        version: 2.7.5
-    devDependencies:
-      tsup:
-        specifier: ^6.7.0
-        version: 6.7.0(typescript@5.1.3)
-
-  components/track:
+  packages/track:
     dependencies:
       lit:
         specifier: ^2.7.5
@@ -906,10 +906,6 @@ packages:
     resolution: {integrity: sha512-kXOeFbfCm4fFf2A3WwVEeQj55tMZa8c8/f9AKHMobQMkzNUfUj+antR3fRPaZJawsa1aZiP/Da3ndpZrwEe4rQ==}
     dev: false
 
-  /@lit/reactive-element@1.5.0:
-    resolution: {integrity: sha512-fQh9FDK0LPTwDk+0HhSZEtb8K0LTN1wXerwpGrWA+a8tWulYRDLI4vQDWp4GOIsewn0572KYV/oZ3+492D7osA==}
-    dev: false
-
   /@lit/reactive-element@1.6.2:
     resolution: {integrity: sha512-rDfl+QnCYjuIGf5xI2sVJWdYIi56CTCwWa+nidKYX6oIuBYwUbT/vX4qbUDlHiZKJ/3FRNQ/tWJui44p6/stSA==}
     dependencies:
@@ -1204,7 +1200,7 @@ packages:
       '@vue/shared': 3.3.4
       estree-walker: 2.0.2
       magic-string: 0.30.0
-      postcss: 8.4.21
+      postcss: 8.4.24
       source-map-js: 1.0.2
     dev: true
 
@@ -2844,13 +2840,6 @@ packages:
       uc.micro: 1.0.6
     dev: true
 
-  /lit-element@3.2.2:
-    resolution: {integrity: sha512-6ZgxBR9KNroqKb6+htkyBwD90XGRiqKDHVrW/Eh0EZ+l+iC+u+v+w3/BA5NGi4nizAVHGYvQBHUDuSmLjPp7NQ==}
-    dependencies:
-      '@lit/reactive-element': 1.6.2
-      lit-html: 2.7.4
-    dev: false
-
   /lit-element@3.3.2:
     resolution: {integrity: sha512-xXAeVWKGr4/njq0rGC9dethMnYCq5hpKYrgQZYTzawt9YQhMiXfD+T1RgrdY3NamOxwq2aXlb0vOI6e29CKgVQ==}
     dependencies:
@@ -2859,24 +2848,10 @@ packages:
       lit-html: 2.7.4
     dev: false
 
-  /lit-html@2.5.0:
-    resolution: {integrity: sha512-bLHosg1XL3JRUcKdSVI0sLCs0y1wWrj2sqqAN3cZ7bDDPNgmDHH29RV48x6Wz3ZmkxIupaE+z7uXSZ/pXWAO1g==}
-    dependencies:
-      '@types/trusted-types': 2.0.2
-    dev: false
-
   /lit-html@2.7.4:
     resolution: {integrity: sha512-/Jw+FBpeEN+z8X6PJva5n7+0MzCVAH2yypN99qHYYkq8bI+j7I39GH+68Z/MZD6rGKDK9RpzBw7CocfmHfq6+g==}
     dependencies:
       '@types/trusted-types': 2.0.2
-    dev: false
-
-  /lit@2.5.0:
-    resolution: {integrity: sha512-DtnUP6vR3l4Q8nRPPNBD+UxbAhwJPeky+OVbi3pdgMqm0g57xFSl1Sj64D1rIB+nVNdiVVg8YxB0hqKjvdadZA==}
-    dependencies:
-      '@lit/reactive-element': 1.5.0
-      lit-element: 3.2.2
-      lit-html: 2.5.0
     dev: false
 
   /lit@2.7.5:
@@ -3060,12 +3035,6 @@ packages:
       any-promise: 1.3.0
       object-assign: 4.1.1
       thenify-all: 1.6.0
-    dev: true
-
-  /nanoid@3.3.4:
-    resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
-    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
-    hasBin: true
     dev: true
 
   /nanoid@3.3.6:
@@ -3302,15 +3271,6 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       yaml: 2.3.1
-    dev: true
-
-  /postcss@8.4.21:
-    resolution: {integrity: sha512-tP7u/Sn/dVxK2NnruI4H9BG+x+Wxz6oeZ1cJ8P6G/PZY0IKk4k/63TDsQf2kQq3+qoJeLm2kIBUNlZe3zgb4Zg==}
-    engines: {node: ^10 || ^12 || >=14}
-    dependencies:
-      nanoid: 3.3.4
-      picocolors: 1.0.0
-      source-map-js: 1.0.2
     dev: true
 
   /postcss@8.4.24:
