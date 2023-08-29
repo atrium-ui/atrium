@@ -42,7 +42,7 @@ publish-dev:
   when: manual
   script: task publish-dev
 
-docs:
+pages:
   stage: docs
   script: task docs:build
   environment:
