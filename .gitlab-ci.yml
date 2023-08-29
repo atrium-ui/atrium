@@ -53,19 +53,6 @@ pages:
     paths:
       - public
 
-# docs-dev:
-#   stage: library
-#   script: task docs-v2:build
-#   environment:
-#     name: develop
-#     url: "https://sv-components.pages.s-v.de/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
-#   when: manual
-#   artifacts:
-#     paths:
-#       - public
-#   variables:
-#     PUBLIC_URL: "/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public"
-
 test:
   stage: test
   script: task test

@@ -39,18 +39,18 @@ tasks:
 
   docs:
     desc: Start dev server for docs
-    dir: "{{.TASKFILE_DIR}}/docs-v2"
+    dir: "{{.TASKFILE_DIR}}/docs"
     deps: [setup]
     cmds:
       - npm run dev
 
   docs:build:
     desc: Builds the docs into the public folder
-    dir: "{{.TASKFILE_DIR}}/docs-v2"
+    dir: "{{.TASKFILE_DIR}}/docs"
     deps: [setup]
     cmds:
       - task: build
-      - npx turbo build --filter=docs-v2
+      - npx turbo build --filter=docs
       - mv dist ../public
 
   new:

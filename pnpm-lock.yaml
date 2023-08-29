@@ -52,7 +52,7 @@ importers:
         specifier: ^0.32.2
         version: 0.32.2(happy-dom@9.20.3)
 
-  docs-v2:
+  docs:
     dependencies:
       '@astrojs/lit':
         specifier: ^2.1.1
@@ -1604,7 +1604,7 @@ packages:
       enhanced-resolve: 5.15.0
       lit: 2.8.0
       lit-element: 3.3.2
-      lit-html: 2.7.4
+      lit-html: 2.8.0
       node-fetch: 3.3.2
       parse5: 7.1.2
     dev: false
@@ -2246,7 +2246,7 @@ packages:
       esbuild: 0.17.19
       estree-walker: 3.0.0
       execa: 6.1.0
-      fast-glob: 3.2.12
+      fast-glob: 3.3.1
       github-slugger: 2.0.0
       gray-matter: 4.0.3
       html-escaper: 3.0.3
@@ -3634,6 +3634,7 @@ packages:
       glob-parent: 5.1.2
       merge2: 1.4.1
       micromatch: 4.0.5
+    dev: true
 
   /fast-glob@3.3.1:
     resolution: {integrity: sha512-kNFPyjhh5cKjrUltxs+wFx+ZkbRaxxmZ+X0ZU31SOsxCEtP9VPgtq2teZw1DebupL5GmDaNQ6yKMMVcM41iqDg==}
