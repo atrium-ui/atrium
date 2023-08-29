@@ -1,5 +1,5 @@
 {
-  "name": "@sv-components/adaptive-height",
+  "name": "@atrium-ui/adaptive-height",
   "version": "2.0.3",
   "description": "",
   "main": "dist/adaptive-height.js",

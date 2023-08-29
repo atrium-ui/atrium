@@ -19,33 +19,47 @@ tasks:
     desc: Run tests on all components
     cmds:
       - task: build
-      - npx turbo test --filter=@sv-components/*
+      - npx turbo test --filter=@atrium-ui/*
 
   lint:
     desc: Run linter on all components
     cmds:
-      - npx turbo lint --filter=@sv-components/*
+      - npx turbo lint --filter=@atrium-ui/*
 
   dev:
-    desc: Run dev server, available under http://localhost:3000/
+    desc: Run dev server for component, available under http://localhost:3000/
+    dir: "{{.WORKING_DIR}}"
     cmds:
-      - npx turbo dev
+      - npx vite
 
   build:
     desc: Build all components
     cmds:
-      - npx turbo build --filter=@sv-components/*
+      - npx turbo build --filter=@atrium-ui/*
 
   docs:
-    desc: Builds the docs into the public folder
-    dir: "{{.TASKFILE_DIR}}/docs"
+    desc: Start dev server for docs
+    dir: "{{.TASKFILE_DIR}}/docs-v2"
+    deps: [setup]
     cmds:
-      - npm run build
-      - npx turbo build --filter=docs
-      - mv docs/dist ../public
+      - npm run dev
+
+  docs:build:
+    desc: Builds the docs into the public folder
+    dir: "{{.TASKFILE_DIR}}/docs-v2"
+    deps: [setup]
+    cmds:
+      - task: build
+      - npx turbo build --filter=docs-v2
+      - mv dist ../public
 
   new:
     desc: Create a new component from templates
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - ./cli/new.mjs
+
+  reset:
+    desc: Clean local files
+    cmds:
+      - git clean -xdf

@@ -1,34 +1,33 @@
 ---
-group: 'docs'
-icon: 'carbon:assembly-reference'
-title: 'Installation'
+group: "docs"
+icon: "carbon:assembly-reference"
+title: "Installation"
 ---
-
-# Installation
 
 1. Update or create .npmrc file
 
 ```ini
 # .npmrc
-@sv-components:registry=https://gitlab.s-v.de/api/v4/packages/npm/
+@atrium-ui:registry=https://gitlab.s-v.de/api/v4/packages/npm/
 '//gitlab.s-v.de/api/v4/packages/npm/:_authToken'="glpat-FMDSCh9zyLK4vS6kd4JB"
 ```
 
 2. Install the library like this
+
 ```bash
-pnpm i @sv-components/mono
+pnpm i @atrium-ui/mono
 ```
 
 3. Import a component
 
 ```typescript
-import '@sv-components/mono/components/[component]';
+import "@atrium-ui/mono/components/a-component";
 ```
 
 4. Use it any framework:
 
 ```tsx
-<[component]></[component]>
+<a-component some-prop="some"></a-component>
 ```
 
 # Usage
@@ -46,12 +45,10 @@ By default types for React (Solid.JS, Next.JS) and Vue are provided.
 
 For more details check the `types/index.d.ts` type declaration file.
 
-
 ## Styling
 
 All UI Components come with some default default styling. All Styling works on a opt-in basis.
 So to use the default styling, u need to import the provided `<component>/styles/default.scss` yourself.
-
 
 ## Use in Frameworks
 
@@ -75,8 +72,9 @@ So to use the default styling, u need to import the provided `<component>/styles
   </aui-accordion-item>
 </template>
 ```
+
 ```typescript
-import '@atrium-ui/mono/components/accordion';
+import "@atrium-ui/mono/components/accordion";
 ```
 
 ### NextJS
@@ -155,4 +153,3 @@ export default App;
 Support for WebComponents exists in major browsers since around 2018.
 ![Support table](./images/support.jpg)
 [More information here](https://www.webcomponents.org/)
-

@@ -1,10 +1,10 @@
 {
-  "name": "@atrium-ui/palette",
+  "name": "@atrium-ui/command",
   "version": "0.0.1",
   "description": "",
   "type": "module",
-  "main": "dist/palette.cjs.js",
-  "module": "dist/palette.es.js",
+  "main": "dist/command.cjs.js",
+  "module": "dist/command.es.js",
   "types": "src/index.ts",
   "scripts": {
     "build": "tsup --format esm,cjs --dts src/index.ts",
@@ -21,7 +21,7 @@
   },
   "tsup": {
     "entry": {
-      "palette": "src/index.ts"
+      "command": "src/index.ts"
     },
     "sourcemap": true,
     "clean": true

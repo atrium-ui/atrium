@@ -1,0 +1,24 @@
+{
+  "name": "docs-v2",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/lit": "^2.1.1",
+    "@astrojs/starlight": "^0.8.0",
+    "@astrojs/starlight-tailwind": "^1.0.2",
+    "@astrojs/tailwind": "^4.0.0",
+    "@atrium-ui/mono": "workspace:",
+    "@webcomponents/template-shadowroot": "^0.2.1",
+    "astro": "^2.10.5",
+    "lit": "^2.8.0",
+    "sharp": "^0.32.3",
+    "tailwindcss": "^3.0.24"
+  }
+}

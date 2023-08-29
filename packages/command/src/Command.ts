@@ -1,8 +1,8 @@
-import { html, HTMLTemplateResult, LitElement, css, PropertyValueMap } from "lit";
+import { html, HTMLTemplateResult, LitElement, css } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 
-@customElement("a-palatte")
-export class Palette extends LitElement {
+@customElement("a-command")
+export class Command extends LitElement {
   public static styles = css`
     :host {
       display: block;

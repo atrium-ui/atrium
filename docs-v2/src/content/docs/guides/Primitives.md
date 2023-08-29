@@ -1,10 +1,8 @@
 ---
-group: 'docs'
-icon: 'carbon:share'
-title: 'Component Types'
+group: "docs"
+icon: "carbon:share"
+title: "Component Types"
 ---
-
-# Component Types
 
 Components fall into two categories.
 
@@ -15,4 +13,3 @@ Primitive components are the smallest elements more complex components can be br
 ## Ui
 
 Ui components are build out of primitive components, but dont have to be. Ideally though, the most basic functions of a Ui component are separated into primitive components for other components to utilise.
-

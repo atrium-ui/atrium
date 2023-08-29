@@ -9,7 +9,7 @@ export default defineConfig({
       formats: ["es", "cjs"],
     },
     rollupOptions: {
-      external: /^lit|^@sv-components/,
+      external: /^lit|^@atrium-ui/,
     },
   },
 });

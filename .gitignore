@@ -19,7 +19,9 @@ node_modules
 *.min.js
 *.es.js
 *.cjs.js
+
 dist
+public
 
 .turbo
 

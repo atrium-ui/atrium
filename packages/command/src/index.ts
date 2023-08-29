@@ -1,1 +1,1 @@
-export { Palette } from "./Palette";
+export { Command } from "./Command";

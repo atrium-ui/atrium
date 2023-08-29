@@ -1,5 +1,5 @@
 {
-  "name": "@sv-components/time",
+  "name": "@atrium-ui/time",
   "version": "0.0.1",
   "description": "",
   "main": "dist/time.cjs.js",

@@ -1,5 +1,5 @@
 {
-  "name": "@sv-components/circle",
+  "name": "@atrium-ui/circle",
   "version": "1.0.10",
   "description": "",
   "main": "dist/circle.cjs.js",

@@ -1,9 +1,9 @@
 stages:
   - test
   - publish
-  - library
+  - docs
 
-image: luckydye/buildapp
+image: luckydye/build-utils
 
 variables:
   RTX_DATA_DIR: $CI_PROJECT_DIR/.rtx
@@ -31,45 +31,40 @@ before_script:
 publish:
   stage: publish
   only:
-      - main
+    - main
   when: manual
   script: task publish
 
 publish-dev:
   stage: publish
   only:
-      - develop
+    - develop
   when: manual
   script: task publish-dev
 
 docs:
-  stage: library
-  script: task build:library
+  stage: docs
+  script: task docs:build
   environment:
     name: main
-    url: https://a-components.pages.s-v.de/mono
-  only:
-    - tags
-  except:
-    - branches
+    url: https://sv-components.pages.s-v.de/mono
   when: manual
   artifacts:
     paths:
       - public
 
-docs-dev:
-    stage: library
-    script: task build:library
-    environment:
-        name: develop
-        url: "https://a-components.pages.s-v.de/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
-    only:
-      - develop
-    artifacts:
-        paths:
-          - public
-    variables:
-        PUBLIC_URL: "/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public"
+# docs-dev:
+#   stage: library
+#   script: task docs-v2:build
+#   environment:
+#     name: develop
+#     url: "https://sv-components.pages.s-v.de/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
+#   when: manual
+#   artifacts:
+#     paths:
+#       - public
+#   variables:
+#     PUBLIC_URL: "/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public"
 
 test:
   stage: test

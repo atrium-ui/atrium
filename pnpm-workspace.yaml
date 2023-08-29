@@ -1,5 +1,6 @@
 packages:
   - packages/*
   - docs
+  - docs-v2
   - cli
   - test
