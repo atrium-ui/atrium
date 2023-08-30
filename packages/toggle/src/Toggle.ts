@@ -1,12 +1,8 @@
-import { LitElement } from "lit";
+import { LitElement, html } from "lit";
 import { property } from "lit/decorators.js";
 
-export class Select extends LitElement {
-  protected createRenderRoot(): Element | ShadowRoot {
-    return this;
-  }
-
-  @property({ type: String })
+export class Toggle extends LitElement {
+  @property({ type: String, attribute: "active-attribute" })
   public activeAttribute: string = "selected";
 
   // select multiple options
@@ -46,7 +42,7 @@ export class Select extends LitElement {
     let i = 0;
     for (const child of this.children) {
       if (e.target === child || child.contains(e.target as Node)) {
-        const value = Select.getChildValue(child as HTMLElement) || i.toString();
+        const value = Toggle.getChildValue(child as HTMLElement) || i.toString();
 
         if (this.activeChildren.includes(value)) {
           this.activeChildren.splice(this.activeChildren.indexOf(value), 1);
@@ -77,7 +73,7 @@ export class Select extends LitElement {
   private updateChildren() {
     let index = 0;
     for (const child of this.children) {
-      const value = Select.getChildValue(child as HTMLElement) || index.toString();
+      const value = Toggle.getChildValue(child as HTMLElement) || index.toString();
 
       if (this.activeChildren.map((v) => v.toString()).indexOf(value.toString()) !== -1) {
         child.setAttribute(this.activeAttribute, "");
@@ -147,6 +143,10 @@ export class Select extends LitElement {
     this.updateChildren();
   }
 
+  render() {
+    return html`<slot />`;
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
 
@@ -174,8 +174,8 @@ export class Select extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "a-select": Select;
+    "a-select": Toggle;
   }
 }
 
-customElements.define("a-select", Select);
+customElements.define("a-toggle", Toggle);

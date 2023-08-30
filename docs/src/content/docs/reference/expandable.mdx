@@ -1,0 +1,119 @@
+---
+title: Expandable
+description: A reference page in my new Starlight docs site.
+---
+
+import "./styles/expandable.scss";
+import { Expandable } from "@atrium-ui/mono/expandable";
+import { Toggle } from "@atrium-ui/mono/toggle";
+import { paragraph } from "txtgen";
+import ExpandIcon from "../../../components/ExpandIcon.astro";
+
+(WIP) A basic element of an accordion that only includes the animation and scroll behavios for expandable content.
+
+<div class="not-content">
+  <Expandable client:load class="accordion">
+
+    <div slot="toggle">
+      <button class="accordion-title">
+        <div class="headline">Expand Down</div>
+        <ExpandIcon />
+      </button>
+    </div>
+
+    <div class="accordion-content">{paragraph(4)}</div>
+
+  </Expandable>
+</div>
+
+<div class="not-content">
+  <Expandable client:load class="accordion" direction="up">
+
+    <div slot="toggle">
+      <button class="accordion-title">
+        <div class="headline">Expand up</div>
+        <ExpandIcon />
+      </button>
+    </div>
+
+    <div class="accordion-content">{paragraph(4)}</div>
+
+  </Expandable>
+</div>
+
+### Expand Items Exclusively
+
+<div class="not-content">
+  <Toggle client:load active-attribute="opened">
+    <Expandable class="accordion">
+      <div slot="toggle">
+        <button class="accordion-title">
+          <div class="headline">
+            <span>Toggle</span>
+          </div>
+          <ExpandIcon />
+        </button>
+      </div>
+
+      <div class="accordion-content">{paragraph(4)}</div>
+    </Expandable>
+
+    <Expandable class="accordion">
+      <div slot="toggle">
+        <button class="accordion-title">
+          <div class="headline">Toggle</div>
+          <ExpandIcon />
+        </button>
+      </div>
+
+      <div class="accordion-content">{paragraph(4)}</div>
+    </Expandable>
+
+  </Toggle>
+</div>
+
+### Expand a Paragraph
+
+<div class="not-content">
+  <p>{paragraph(4)}</p>
+
+  <a-expandable class="accordion" direction="up" data-id="one">
+    <p>{paragraph(4)}</p>
+
+    <div slot="toggle" class="flex justify-center cursor-pointer p-6">
+      <ExpandIcon />
+    </div>
+
+  </a-expandable>
+</div>
+
+## Attributes
+
+```tsx
+<a-expandable
+  opened: boolean;
+  direction: "up" | "down";
+/>
+```
+
+### `opened`
+
+Controls the expand state of the element.
+
+Options: true | false
+
+### `direction`
+
+Options: "up" | "down"
+
+Controls the direction the element will expand.
+
+## Component
+
+Copy a ready to use component into your project.
+
+```bash
+npx atrium use expandable
+```
+
+Read more about components [here](/mono/components/components).

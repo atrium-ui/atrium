@@ -1,1 +1,1 @@
-export { Select } from "./components/select/Select";
+export { Toggle } from "./Toggle";

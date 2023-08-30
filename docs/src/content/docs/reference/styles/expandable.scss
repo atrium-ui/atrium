@@ -1,0 +1,73 @@
+.toggle-btn {
+  display: inline-block;
+  text-align: center;
+  margin: 10px auto;
+  cursor: pointer;
+  width: 100%;
+}
+
+ul {
+  margin: 0;
+}
+
+svg {
+  fill: currentColor;
+}
+
+.accordion {
+  margin-top: 4px;
+  border-radius: 6px;
+
+  .accordion-title {
+    all: unset;
+    cursor: pointer;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.125em;
+    transition: background 0.12s ease-out;
+    width: 100%;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: 2px auto black;
+      outline-offset: 1px;
+    }
+
+    &:active {
+      transition: none;
+    }
+  }
+
+  .accordion-content {
+    white-space: pre-line;
+    text-transform: none;
+    padding: 10px 20px 30px 20px;
+  }
+
+  .accordion-collapse-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+  }
+
+  .minus-icon,
+  .plus-icon {
+    position: absolute;
+    transition: opacity 0.2s ease, transform 0.2s ease 0.02s;
+  }
+
+  &:not([opened]) .plus-icon {
+    transform: rotate(90deg);
+  }
+
+  &:not([opened]) .minus-icon {
+    transform: rotate(90deg);
+  }
+
+  &[opened] .plus-icon {
+    opacity: 0;
+  }
+}

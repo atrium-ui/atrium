@@ -1,9 +1,9 @@
 {
-  "name": "@atrium-ui/select",
+  "name": "@atrium-ui/toggle",
   "version": "0.1.2",
   "description": "",
-  "main": "dist/select.cjs.js",
-  "module": "dist/select.es.js",
+  "main": "dist/toggle.cjs.js",
+  "module": "dist/toggle.es.js",
   "types": "src/index.ts",
   "scripts": {
     "build": "vite build",

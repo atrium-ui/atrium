@@ -6,9 +6,9 @@
     "atrium": "./cli/use.js"
   },
   "exports": {
-    "./select": {
-      "import": "./packages/select/dist/select.es.js",
-      "require": "./packages/select/dist/select.cjs.js"
+    "./toggle": {
+      "import": "./packages/toggle/dist/toggle.es.js",
+      "require": "./packages/toggle/dist/toggle.cjs.js"
     },
     "./expandable": {
       "import": "./packages/expandable/dist/expandable.mjs",
