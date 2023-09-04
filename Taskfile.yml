@@ -1,0 +1,65 @@
+# https://taskfile.dev
+
+version: "3"
+
+includes:
+  publish: tasks/npm-publish.yml
+
+tasks:
+  default: task -l
+
+  setup:
+    desc: Install node dependencies
+    cmds:
+      - rtx install
+      - '[ "$CI" != "" ] && pnpm config set store-dir .pnpm-store || true'
+      - pnpm i
+
+  test:
+    desc: Run tests on all components
+    cmds:
+      - task: build
+      - npx turbo test --filter=@atrium-ui/*
+
+  lint:
+    desc: Run linter on all components
+    cmds:
+      - npx turbo lint --filter=@atrium-ui/*
+
+  dev:
+    desc: Run dev server for component, available under http://localhost:3000/
+    dir: "{{.WORKING_DIR}}"
+    cmds:
+      - npx vite
+
+  build:
+    desc: Build all components
+    cmds:
+      - npx turbo build --filter=@atrium-ui/*
+
+  docs:
+    desc: Start dev server for docs
+    dir: "{{.TASKFILE_DIR}}/docs"
+    deps: [setup]
+    cmds:
+      - npm run dev
+
+  docs:build:
+    desc: Builds the docs into the public folder
+    dir: "{{.TASKFILE_DIR}}/docs"
+    deps: [setup]
+    cmds:
+      - task: build
+      - npx turbo build --filter=docs
+      - mv dist ../public
+
+  new:
+    desc: Create a new component from templates
+    dir: "{{.TASKFILE_DIR}}"
+    cmds:
+      - ./cli/new.mjs
+
+  reset:
+    desc: Clean local files
+    cmds:
+      - git clean -xdf

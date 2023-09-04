@@ -1,0 +1,30 @@
+{
+  "name": "@atrium-ui/adaptive-height",
+  "version": "2.0.3",
+  "description": "",
+  "main": "dist/adaptive-height.js",
+  "module": "dist/adaptive-height.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup --format esm,cjs --dts src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lit": "^2.5.0"
+  },
+  "devDependencies": {
+    "txtgen": "^3.0.4",
+    "histoire": "^0.16.2"
+  },
+  "files": [
+    "dist"
+  ],
+  "tsup": {
+    "entry": {
+      "adaptive-height": "src/index.ts"
+    },
+    "sourcemap": true,
+    "clean": true
+  }
+}

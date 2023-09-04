@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-const NODE_NAME = "sv-example";
+const NODE_NAME = "a-example";
 
 describe(NODE_NAME, () => {
   it("import element", async () => {

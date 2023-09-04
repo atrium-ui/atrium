@@ -54,8 +54,8 @@ export class Example extends HTMLElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "sv-example": Example;
+    "a-example": Example;
   }
 }
 
-if ("customElements" in globalThis) customElements.define("sv-example", Example);
+if ("customElements" in globalThis) customElements.define("a-example", Example);

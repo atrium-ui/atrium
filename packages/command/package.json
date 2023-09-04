@@ -1,0 +1,29 @@
+{
+  "name": "@atrium-ui/command",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "main": "dist/command.cjs.js",
+  "module": "dist/command.es.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsup --format esm,cjs --dts src/index.ts",
+    "lint": "eslint --ext .ts .",
+    "test": "vitest run"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lit": "^2.5.0"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0"
+  },
+  "tsup": {
+    "entry": {
+      "command": "src/index.ts"
+    },
+    "sourcemap": true,
+    "clean": true
+  }
+}

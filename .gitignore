@@ -7,6 +7,10 @@ node_modules
 # Optional npm cache directory
 .npm
 
+# CI
+.pnpm-store
+.rtx
+
 # mac os
 .DS_Store
 
@@ -15,8 +19,11 @@ node_modules
 *.min.js
 *.es.js
 *.cjs.js
+
 dist
+public
 
 .turbo
 
-TODO
+# configs
+!.rtx.toml

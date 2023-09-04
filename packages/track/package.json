@@ -1,0 +1,30 @@
+{
+  "name": "@atrium-ui/track",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/track.js",
+  "module": "dist/track.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup --format esm,cjs --dts src/index.ts",
+    "test": "vitest run"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lit": "^2.7.5"
+  },
+  "devDependencies": {
+    "histoire": "^0.16.2"
+  },
+  "files": [
+    "dist"
+  ],
+  "tsup": {
+    "entry": {
+      "track": "src/index.ts"
+    },
+    "sourcemap": true,
+    "clean": true
+  }
+}

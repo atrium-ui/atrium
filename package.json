@@ -1,47 +1,36 @@
 {
-  "name": "@sv-components/mono",
-  "version": "0.1.7-14",
-  "description": "",
+  "name": "@atrium-ui/mono",
+  "version": "0.2.0-2",
+  "description": "Component library",
+  "bin": {
+    "atrium": "./cli/use.js"
+  },
   "exports": {
-    "./components/select": {
-      "import": "./components/select/dist/select.es.js",
-      "require": "./components/select/dist/select.cjs.js"
+    "./toggle": {
+      "import": "./packages/toggle/dist/toggle.es.js",
+      "require": "./packages/toggle/dist/toggle.cjs.js"
     },
-    "./components/expandable": {
-      "import": "./components/expandable/dist/expandable.mjs",
-      "require": "./components/expandable/dist/expandable.js"
+    "./expandable": {
+      "import": "./packages/expandable/dist/expandable.mjs",
+      "require": "./packages/expandable/dist/expandable.js"
     },
-    "./components/dropdown": {
-      "import": "./components/dropdown/dist/dropdown.es.js",
-      "require": "./components/dropdown/dist/dropdown.cjs.js"
+    "./dropdown": {
+      "import": "./packages/dropdown/dist/dropdown.es.js",
+      "require": "./packages/dropdown/dist/dropdown.cjs.js"
     },
-    "./components/circle": {
-      "import": "./components/circle/dist/circle.mjs",
-      "require": "./components/circle/dist/circle.js"
+    "./circle": {
+      "import": "./packages/circle/dist/circle.mjs",
+      "require": "./packages/circle/dist/circle.js"
     },
-    "./components/pager": {
-      "import": "./components/pager/dist/pager.mjs",
-      "require": "./components/pager/dist/pager.js"
+    "./pager": {
+      "import": "./packages/pager/dist/pager.mjs",
+      "require": "./packages/pager/dist/pager.js"
     },
-    "./components/track": {
-      "import": "./components/track/dist/track.mjs",
-      "require": "./components/track/dist/track.js"
+    "./track": {
+      "import": "./packages/track/dist/track.mjs",
+      "require": "./packages/track/dist/track.js"
     }
   },
-  "scripts": {
-    "publish:preview": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
-    "library:build": "turbo build --filter=library",
-    "dev": "turbo dev",
-    "build": "turbo build --filter=@sv-components/*",
-    "lint": "turbo lint --filter=@sv-components/*",
-    "test": "turbo test --filter=@sv-components/*",
-    "new": "node ./scripts/new.mjs",
-    "clean": "git clean -fX ."
-  },
-  "workspaces": [
-    "apps/*",
-    "components/*"
-  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -61,6 +50,6 @@
     "vitest": "^0.32.2"
   },
   "dependencies": {
-    "lit": "^2.7.5"
+    "lit": "^2.8.0"
   }
 }

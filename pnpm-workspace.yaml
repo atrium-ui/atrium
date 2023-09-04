@@ -1,3 +1,5 @@
 packages:
-  - apps/*
-  - components/*
+  - packages/*
+  - docs
+  - cli
+  - test

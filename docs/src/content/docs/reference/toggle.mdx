@@ -1,0 +1,61 @@
+---
+title: Toggle
+description: A reference page in my new Starlight docs site.
+---
+
+import "./styles/toggle.scss";
+import { Toggle } from "@atrium-ui/mono/toggle";
+import { paragraph } from "txtgen";
+
+(WIP) A functional helper element that sets an selected attribute on one or mutliple children by click.
+
+Useful for accordions, tabs or filter selections for example.
+
+<div class="not-content">
+  <Toggle client:load class="default">
+    <button>Item 1</button>
+    <button>Item 2</button>
+    <button>Item 3</button>
+    <button>Item 4</button>
+  </Toggle>
+</div>
+
+### Toggle multiple
+
+<div class="not-content">
+  <Toggle client:load class="multiple" multiple>
+    <button>Item 1</button>
+    <button>Item 2</button>
+    <button>Item 3</button>
+    <button>Item 4</button>
+  </Toggle>
+</div>
+
+### Dots
+
+<div class="not-content">
+  <Toggle client:load class="dots">
+    <button></button>
+    <button></button>
+    <button></button>
+  </Toggle>
+</div>
+
+## Attributes
+
+```tsx
+<a-toggle
+  multiple: boolean;
+  active-attribute: string;
+/>
+```
+
+### `multiple`
+
+Controls wether mutliple children can be selected.
+
+Options: true | false
+
+### `active-attribute`
+
+A string of the attribute that the active child should have.

@@ -1,0 +1,28 @@
+{
+  "name": "@atrium-ui/pager",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "main": "dist/pager.cjs.js",
+  "module": "dist/pager.es.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsup --format esm,cjs --dts src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lit": "^2.5.0"
+  },
+  "devDependencies": {
+    "histoire": "^0.16.2",
+    "tsup": "^6.7.0"
+  },
+  "tsup": {
+    "entry": {
+      "example": "src/index.ts"
+    },
+    "sourcemap": true,
+    "clean": true
+  }
+}
