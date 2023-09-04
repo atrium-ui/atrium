@@ -1,17 +1,5 @@
----
-title: Components
----
-
-Copy-pastable components to get started quickly using Tailwind and JSX.
-
-```bash
-npx atrium use button
-```
-
-Will give you:
-
-```tsx
-import "@atrium-ui/mono/dropdown";
+// copy pasteable ui component
+// import "@atrium-ui/mono/components/dropdown";
 
 const style = `
   inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background
@@ -38,4 +26,3 @@ export default function Button({ children }: Props, context) {
     </button>
   );
 }
-```

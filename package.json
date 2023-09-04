@@ -42,7 +42,8 @@
     "tsup": "^7.0.0",
     "turbo": "^1.10.3",
     "vite": "^4.3.9",
-    "vitest": "^0.32.2"
+    "vitest": "^0.32.2",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "lit": "^2.8.0"

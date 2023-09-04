@@ -1,4 +1,5 @@
 import lit from '@astrojs/lit';
+import solid from '@astrojs/solid-js';
 import starlight from '@astrojs/starlight';
 import tailwind from '@astrojs/tailwind';
 import { defineConfig } from 'astro/config';
@@ -6,10 +7,8 @@ import { defineConfig } from 'astro/config';
 // https://astro.build/config
 export default defineConfig({
   base: '/mono',
-  experimental: {
-    viewTransitions: true,
-  },
   integrations: [
+    solid(),
     lit(),
     tailwind({
       applyBaseStyles: false,
@@ -35,6 +34,10 @@ export default defineConfig({
         {
           label: 'Development',
           link: '/guides/development',
+        },
+        {
+          label: 'Components',
+          link: '/guides/components',
         },
         {
           label: 'Components',
