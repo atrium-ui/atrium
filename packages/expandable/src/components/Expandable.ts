@@ -1,5 +1,5 @@
-import { html, css, HTMLTemplateResult, LitElement } from "lit";
-import { property } from "lit/decorators.js";
+import { HTMLTemplateResult, LitElement, css, html } from 'lit';
+import { property } from 'lit/decorators.js';
 
 export class Expandable extends LitElement {
   public static get styles() {
@@ -42,8 +42,8 @@ export class Expandable extends LitElement {
     ];
   }
 
-  @property({ type: Boolean, reflect: true }) public opened: boolean = false;
-  @property({ type: String, reflect: true }) public direction: string = "down";
+  @property({ type: Boolean, reflect: true }) public opened = false;
+  @property({ type: String, reflect: true }) public direction = 'down';
 
   private _id = `expandable_${Math.floor(Math.random() * 100000)}`;
 
@@ -92,19 +92,19 @@ export class Expandable extends LitElement {
 
   protected render(): HTMLTemplateResult {
     return html`
-      ${this.direction === "down" ? this.renderButton() : undefined}
-      <div class="container" id="${this._id}" aria-hidden=${!this.opened && "true"}>
+      ${this.direction === 'down' ? this.renderButton() : undefined}
+      <div class="container" id="${this._id}" aria-hidden=${!this.opened && 'true'}>
         <slot class="content"></slot>
       </div>
-      ${this.direction === "up" ? this.renderButton() : undefined}
+      ${this.direction === 'up' ? this.renderButton() : undefined}
     `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "a-expandable": Expandable;
+    'a-expandable': Expandable;
   }
 }
 
-customElements.define("a-expandable", Expandable);
+customElements.define('a-expandable', Expandable);

@@ -95,8 +95,8 @@ export class Track extends LitElement {
   }
 
   getItemRect(index: number) {
-    index = index % this.itemCount;
-    return new Vec(this.itemWidths[index], this.itemHeights[index]);
+    const index2 = index % this.itemCount;
+    return new Vec(this.itemWidths[index2], this.itemHeights[index2]);
   }
 
   getCurrentSlideRect() {
@@ -223,11 +223,11 @@ export class Track extends LitElement {
   trait(callback: (t) => void) {
     this.traits.forEach((t) => {
       try {
-        if (t && t.enabled) {
+        if (t?.enabled) {
           callback(t);
         }
-      } catch (err: any) {
-        console.error(`Error in trait '${t.id}': ${err.message}`);
+      } catch (err) {
+        console.error(`Error in trait '${t.id}': ${(err as Error).message}`);
       }
     });
   }
@@ -405,7 +405,7 @@ export class Track extends LitElement {
     this.dispatchEvent(new CustomEvent('format', { bubbles: true }));
   }
 
-  getToItemPosition(index: number = 0) {
+  getToItemPosition(index = 0) {
     const rects = this.getItemRects();
     const pos = new Vec();
 
@@ -438,13 +438,15 @@ export class Track extends LitElement {
     return pos;
   }
 
-  setTarget(vec: Vec | Array<number> | undefined, easing?: Easing) {
+  setTarget(vec: Vec | Array<number> | undefined, ease?: Easing) {
+    let easing = ease;
+
     if (!easing) {
       // auto easing
       easing = this.transition === 0 || this.transition === 1 ? 'ease' : 'linear';
     }
 
-    if (vec != undefined) {
+    if (vec !== undefined) {
       this.transitionAt = Date.now();
       this.targetStart.set(this.position);
     }
@@ -588,7 +590,6 @@ export class Track extends LitElement {
           );
         }
         break;
-        case 'none':
         default:
           this.targetForce.set(Vec.sub(this.targetForce.set(this.target), this.position));
           break;

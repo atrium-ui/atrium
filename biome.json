@@ -20,7 +20,8 @@
     }
   },
   "files": {
-    "ignoreUnknown": true
+    "ignoreUnknown": true,
+    "ignore": ["public/*.*", "**/dist/*.*", "**/.astro/*.*"]
   },
   "linter": {
     "rules": {

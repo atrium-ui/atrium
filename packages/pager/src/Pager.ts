@@ -1,7 +1,7 @@
-import { css, html, HTMLTemplateResult, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { HTMLTemplateResult, LitElement, css, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
-@customElement("a-pager")
+@customElement('a-pager')
 export class Pager extends LitElement {
   public static styles = css`
     .pagination {
@@ -63,10 +63,10 @@ export class Pager extends LitElement {
   `;
 
   @property({ type: Number, reflect: true })
-  public count: number = 1;
+  public count = 1;
 
   @property({ type: Number, reflect: true })
-  public current: number = 1;
+  public current = 1;
 
   pagerChunkSize = 4;
 
@@ -108,19 +108,19 @@ export class Pager extends LitElement {
 
   prevPage() {
     const page = Math.max(1, +this.current - 1);
-    this.dispatchEvent(new CustomEvent("page-change", { detail: page }));
+    this.dispatchEvent(new CustomEvent('page-change', { detail: page }));
     this.requestUpdate();
   }
 
   nextPage() {
     const page = Math.min(+this.current + 1, +this.count);
-    this.dispatchEvent(new CustomEvent("page-change", { detail: page }));
+    this.dispatchEvent(new CustomEvent('page-change', { detail: page }));
     this.requestUpdate();
   }
 
   goToPage(index) {
     const page = index + 1;
-    this.dispatchEvent(new CustomEvent("page-change", { detail: page }));
+    this.dispatchEvent(new CustomEvent('page-change', { detail: page }));
     this.requestUpdate();
   }
 
@@ -128,21 +128,21 @@ export class Pager extends LitElement {
     return html`
       <div class="pagination c4">
         <button
-          class=${`pagination__arrow ${
-            +this.current > 1 ? `pagination__arrow--shown` : ""
-          }`}
+          class=${`pagination__arrow ${+this.current > 1 ? 'pagination__arrow--shown' : ''}`}
           @click=${() => this.prevPage()}
         >
           <slot name="arrow-left"> < </slot>
         </button>
 
         <div class="pagination__pages">
-          ${this.showPrefix()
-            ? html`
+          ${
+            this.showPrefix()
+              ? html`
                 <span class="pagination__item" @click=${() => this.goToPage(0)}> 1 </span>
                 <span class="pagination__spacer"> ... </span>
               `
-            : null}
+              : null
+          }
           ${this.pagesToShow().map((page) => {
             return html`
               <span
@@ -153,8 +153,9 @@ export class Pager extends LitElement {
               </span>
             `;
           })}
-          ${this.showSuffix()
-            ? html`
+          ${
+            this.showSuffix()
+              ? html`
                 <span class="pagination__spacer"> ... </span>
                 <span
                   class="pagination__item"
@@ -163,12 +164,13 @@ export class Pager extends LitElement {
                   ${this.count}
                 </span>
               `
-            : null}
+              : null
+          }
         </div>
 
         <button
           class=${`pagination__arrow ${
-            +this.current < +this.count ? `pagination__arrow--shown` : ""
+            +this.current < +this.count ? 'pagination__arrow--shown' : ''
           }`}
           @click=${() => this.nextPage()}
         >

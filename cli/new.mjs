@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-import fs from "node:fs";
-import path from "path";
-import cliSelect from "cli-select";
-import chalk from "chalk";
-import readline from "readline";
+import fs from 'node:fs';
+import path from 'path';
+import readline from 'readline';
+import chalk from 'chalk';
+import cliSelect from 'cli-select';
 
-const examples = fs.readdirSync("./examples");
+const examples = fs.readdirSync('./examples');
 
 // copyright by ChatGPT
 function copy(src, dest, name) {
@@ -24,15 +24,15 @@ function copy(src, dest, name) {
       copy(srcPath, destPath, capitalize(name));
     });
   } else {
-    fs.copyFileSync(src, dest.replace("Example", capitalize(name)));
+    fs.copyFileSync(src, dest.replace('Example', capitalize(name)));
   }
 }
 
 function capitalize(str) {
   return str
-    .split("-")
+    .split('-')
     .map((s) => s[0].toUpperCase() + s.slice(1))
-    .join("");
+    .join('');
 }
 
 function replaceContent(file, regex, value) {
@@ -43,12 +43,12 @@ function replaceContent(file, regex, value) {
 }
 
 async function main() {
-  console.log("Select a template:");
+  console.log('Select a template:');
 
   const template = await cliSelect({
     values: examples,
-    selected: "➡️",
-    unselected: " ",
+    selected: '➡️',
+    unselected: ' ',
     valueRenderer: (value, selected) => {
       if (selected) {
         return chalk.underline(value);
@@ -57,36 +57,32 @@ async function main() {
     },
   });
 
-  console.log("➡️", template.value);
+  console.log('➡️', template.value);
 
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
   });
 
-  rl.question("Give it a name: \n➡️ ", (id) => {
+  rl.question('Give it a name: \n➡️ ', (id) => {
     const name = capitalize(id);
 
     const compPath = `components/${id}`;
     copy(`examples/${template.value}`, compPath, name);
 
-    replaceContent(compPath + "/package.json", /example/g, id);
+    replaceContent(`${compPath}/package.json`, /example/g, id);
     replaceContent(
       `${compPath}/stories/${name}.story.vue`,
-      "examples/lit-component",
-      "components/" + id
+      'examples/lit-component',
+      `components/${id}`
     );
-    replaceContent(`${compPath}/stories/${name}.story.md`, "Example", name);
-    replaceContent(
-      `${compPath}/src/index.ts`,
-      "examples/lit-component",
-      "components/" + id
-    );
-    replaceContent(`${compPath}/src/index.ts`, "Example", name);
-    replaceContent(`${compPath}/src/components/${name}.ts`, "aui-example", id);
-    replaceContent(`${compPath}/src/components/${name}.ts`, "Example", name);
+    replaceContent(`${compPath}/stories/${name}.story.md`, 'Example', name);
+    replaceContent(`${compPath}/src/index.ts`, 'examples/lit-component', `components/${id}`);
+    replaceContent(`${compPath}/src/index.ts`, 'Example', name);
+    replaceContent(`${compPath}/src/components/${name}.ts`, 'aui-example', id);
+    replaceContent(`${compPath}/src/components/${name}.ts`, 'Example', name);
 
-    console.log(compPath, "created.");
+    console.log(compPath, 'created.');
 
     process.exit();
   });

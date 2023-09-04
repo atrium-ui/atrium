@@ -5,14 +5,14 @@ type ElementProps<T> = {
 type CustomElementChildren = Element | Element[] | JSX.Element | JSX.Element[];
 
 type CustomElementProps<T> = {
-  [K in keyof Omit<T, "children"> as string & K]?: T[K];
+  [K in keyof Omit<T, 'children'> as string & K]?: T[K];
 } & { children?: CustomElementChildren; class?: string };
 
 // global
-interface CustomElements extends ElementProps<HTMLElementTagNameMap> {}
+type CustomElements = ElementProps<HTMLElementTagNameMap>;
 
 declare namespace JSX {
   // react jsx
   // @ts-ignore
-  interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
+  type IntrinsicElements = ElementProps<HTMLElementTagNameMap>;
 }

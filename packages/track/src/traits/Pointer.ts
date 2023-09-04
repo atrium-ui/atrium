@@ -1,6 +1,6 @@
-import { InputState, Track } from "../Track.js";
-import { Trait } from "../Trait.js";
-import { Vec, isTouch } from "../utils.js";
+import { InputState, Track } from '../Track.js';
+import { Trait } from '../Trait.js';
+import { Vec, isTouch } from '../utils.js';
 
 export class PointerTrait extends Trait {
   grabbing = false;
@@ -16,11 +16,11 @@ export class PointerTrait extends Trait {
     const track = e.track;
     if (track) {
       if (!isTouch()) {
-        track.style.pointerEvents = this.grabbing ? "none" : "";
+        track.style.pointerEvents = this.grabbing ? 'none' : '';
       }
     }
     if (!isTouch()) {
-      e.style.cursor = this.grabbing ? "grabbing" : "";
+      e.style.cursor = this.grabbing ? 'grabbing' : '';
     }
   }
 
@@ -34,7 +34,7 @@ export class PointerTrait extends Trait {
     if (inputState.grab.value && !this.grabbing) {
       this.grabbing = true;
       this.grabbedStart.set(e.mousePos);
-      this.entity.dispatchEvent(new Event("pointer:grab"));
+      this.entity.dispatchEvent(new Event('pointer:grab'));
     }
 
     if (e.mousePos.abs()) {
@@ -43,7 +43,7 @@ export class PointerTrait extends Trait {
 
     if (inputState.release.value) {
       this.grabbing = false;
-      this.entity.dispatchEvent(new Event("pointer:release"));
+      this.entity.dispatchEvent(new Event('pointer:release'));
     }
 
     if (inputState.move.value.abs()) {
@@ -63,9 +63,9 @@ export class PointerTrait extends Trait {
 
         if (power < slideRect[axes] / 2) {
           // short throw
-          e.moveBy(1 * Math.sign(this.force[axes]), "linear");
+          e.moveBy(1 * Math.sign(this.force[axes]), 'linear');
         } else {
-          e.moveBy(0, "linear");
+          e.moveBy(0, 'linear');
         }
       }
     }
@@ -83,9 +83,9 @@ export class PointerTrait extends Trait {
     const e = this.entity as Track;
     let clampedPos = pos;
 
-    let stopTop = 0;
+    const stopTop = 0;
     let stopBottom = 0;
-    let stopLeft = 0;
+    const stopLeft = 0;
     let stopRight = 0;
 
     if (e.snap) {
@@ -98,24 +98,12 @@ export class PointerTrait extends Trait {
       stopRight = e.trackWidth - e.offsetWidth;
     }
 
-    if (e.align == "left") {
-      clampedPos = new Vec(
-        Math.min(stopRight, clampedPos.x),
-        Math.min(stopBottom, clampedPos.y)
-      );
-      clampedPos = new Vec(
-        Math.max(stopLeft, clampedPos.x),
-        Math.max(stopTop, clampedPos.y)
-      );
+    if (e.align === 'left') {
+      clampedPos = new Vec(Math.min(stopRight, clampedPos.x), Math.min(stopBottom, clampedPos.y));
+      clampedPos = new Vec(Math.max(stopLeft, clampedPos.x), Math.max(stopTop, clampedPos.y));
     } else {
-      clampedPos = new Vec(
-        Math.max(stopLeft, clampedPos.x),
-        Math.max(stopTop, clampedPos.y)
-      );
-      clampedPos = new Vec(
-        Math.min(stopRight, clampedPos.x),
-        Math.min(stopBottom, clampedPos.y)
-      );
+      clampedPos = new Vec(Math.max(stopLeft, clampedPos.x), Math.max(stopTop, clampedPos.y));
+      clampedPos = new Vec(Math.min(stopRight, clampedPos.x), Math.min(stopBottom, clampedPos.y));
     }
 
     return clampedPos;
@@ -128,7 +116,7 @@ export class PointerTrait extends Trait {
       this.entity.acceleration.mul(0);
     }
 
-    let bounce = !e.loop ? this.borderBounce : 0;
+    const bounce = !e.loop ? this.borderBounce : 0;
     let resitance = !e.loop ? this.borderResistnce : 0;
 
     // clamp input force

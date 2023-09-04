@@ -1,1 +1,1 @@
-export { Expandable } from "./components/Expandable";
+export { Expandable } from './components/Expandable';

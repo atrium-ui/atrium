@@ -1,13 +1,13 @@
-import { LitElement, html } from "lit";
-import { property } from "lit/decorators.js";
+import { LitElement, html } from 'lit';
+import { property } from 'lit/decorators.js';
 
 export class Toggle extends LitElement {
-  @property({ type: String, attribute: "active-attribute" })
-  public activeAttribute: string = "selected";
+  @property({ type: String, attribute: 'active-attribute' })
+  public activeAttribute = 'selected';
 
   // select multiple options
   @property({ type: Boolean, reflect: false })
-  public multiple: boolean = false;
+  public multiple = false;
 
   public activeChildren: string[] = [];
 
@@ -58,7 +58,7 @@ export class Toggle extends LitElement {
       this.activeChildren.splice(0, this.activeChildren.length - 1);
     }
 
-    const ev = new Event("input", { bubbles: true, cancelable: true });
+    const ev = new Event('input', { bubbles: true, cancelable: true });
     this.dispatchEvent(ev);
 
     if (ev.defaultPrevented) return;
@@ -67,7 +67,7 @@ export class Toggle extends LitElement {
   }
 
   static getChildValue(child: HTMLElement) {
-    return child.getAttribute("value") || child.dataset.value;
+    return child.getAttribute('value') || child.dataset.value;
   }
 
   private updateChildren() {
@@ -76,7 +76,7 @@ export class Toggle extends LitElement {
       const value = Toggle.getChildValue(child as HTMLElement) || index.toString();
 
       if (this.activeChildren.map((v) => v.toString()).indexOf(value.toString()) !== -1) {
-        child.setAttribute(this.activeAttribute, "");
+        child.setAttribute(this.activeAttribute, '');
       } else {
         child.removeAttribute(this.activeAttribute);
       }
@@ -85,7 +85,7 @@ export class Toggle extends LitElement {
     }
   }
 
-  public selected: number = -1;
+  public selected = -1;
 
   public selectNext() {
     this.selected = Math.min(this.selected + 1, this.children.length - 1);
@@ -109,7 +109,7 @@ export class Toggle extends LitElement {
     const selected = document.activeElement;
     if (selected != null) {
       let nextChild = selected.nextElementSibling;
-      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
         nextChild = selected.previousElementSibling;
       }
 
@@ -121,17 +121,17 @@ export class Toggle extends LitElement {
         const yd = Math.abs(nextRect.y - currentRect.y);
 
         if (xd > yd) {
-          if (e.key === "ArrowLeft") {
+          if (e.key === 'ArrowLeft') {
             this.selectPrev();
           }
-          if (e.key === "ArrowRight") {
+          if (e.key === 'ArrowRight') {
             this.selectNext();
           }
         } else {
-          if (e.key === "ArrowUp") {
+          if (e.key === 'ArrowUp') {
             this.selectPrev();
           }
-          if (e.key === "ArrowDown") {
+          if (e.key === 'ArrowDown') {
             this.selectNext();
           }
         }
@@ -156,26 +156,26 @@ export class Toggle extends LitElement {
       this.updateChildren();
     }
 
-    this.addEventListener("keyup", this.onKey, { capture: true });
+    this.addEventListener('keyup', this.onKey, { capture: true });
 
-    this.addEventListener("click", this.onPress);
-    this.addEventListener("focus", this.focusCallback, { capture: true });
+    this.addEventListener('click', this.onPress);
+    this.addEventListener('focus', this.focusCallback, { capture: true });
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback();
 
-    this.removeEventListener("keyup", this.onKey, { capture: true });
+    this.removeEventListener('keyup', this.onKey, { capture: true });
 
-    this.removeEventListener("click", this.onPress);
-    this.removeEventListener("focus", this.focusCallback, { capture: true });
+    this.removeEventListener('click', this.onPress);
+    this.removeEventListener('focus', this.focusCallback, { capture: true });
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "a-select": Toggle;
+    'a-select': Toggle;
   }
 }
 
-customElements.define("a-toggle", Toggle);
+customElements.define('a-toggle', Toggle);

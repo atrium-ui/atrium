@@ -1,10 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from 'vitest';
 
-const NODE_NAME = "a-expandable";
+const NODE_NAME = 'a-expandable';
 
 describe(NODE_NAME, () => {
-  it("import element", async () => {
-    const { Expandable } = await import("../dist/expandable.mjs");
+  it('import element', async () => {
+    const { Expandable } = await import('../dist/expandable.mjs');
     expect(Expandable).toBeDefined();
 
     // is defined in custom element registry
@@ -14,7 +14,7 @@ describe(NODE_NAME, () => {
     expect(new Expandable()).toBeInstanceOf(Expandable);
 
     const html = `<${NODE_NAME} />`;
-    const ele = document.createElement("div");
+    const ele = document.createElement('div');
     ele.innerHTML = html;
 
     expect(ele.children[0]).toBeInstanceOf(Expandable);

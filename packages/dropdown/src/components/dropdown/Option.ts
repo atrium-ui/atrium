@@ -1,5 +1,5 @@
-import { LitElement, css, html } from "lit";
-import { property } from "lit/decorators.js";
+import { LitElement, css, html } from 'lit';
+import { property } from 'lit/decorators.js';
 
 export class OptionElement extends LitElement {
   static get styles() {
@@ -20,8 +20,8 @@ export class OptionElement extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "a-option": OptionElement;
+    'a-option': OptionElement;
   }
 }
 
-customElements.define("a-option", OptionElement);
+customElements.define('a-option', OptionElement);

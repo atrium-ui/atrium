@@ -1,5 +1,5 @@
-import { css, html } from 'lit';
 import { Track } from '@atrium-ui/mono/track';
+import { css, html } from 'lit';
 
 class PagedTrack extends Track {
   prev() {

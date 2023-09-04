@@ -1,5 +1,5 @@
-import { html, css, HTMLTemplateResult, LitElement } from "lit";
-import { query } from "lit/decorators.js";
+import { HTMLTemplateResult, LitElement, css, html } from 'lit';
+import { query } from 'lit/decorators.js';
 
 export class AdaptiveHeight extends LitElement {
   public static get styles() {
@@ -35,16 +35,16 @@ export class AdaptiveHeight extends LitElement {
 
     observer.observe(this, { subtree: true, childList: true });
 
-    window.addEventListener("resize", () => {
+    window.addEventListener('resize', () => {
       this.lastHeight = this.content?.offsetHeight;
       this.lastWidth = this.content?.offsetWidth;
     });
   }
 
-  @query(".container")
+  @query('.container')
   container!: HTMLElement;
 
-  @query("slot")
+  @query('slot')
   content!: HTMLElement;
 
   lastHeight = 0;
@@ -67,7 +67,7 @@ export class AdaptiveHeight extends LitElement {
         ],
         {
           duration: 330,
-          easing: "ease",
+          easing: 'ease',
         }
       ).finished;
     }
@@ -86,8 +86,8 @@ export class AdaptiveHeight extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "a-adaptive": AdaptiveHeight;
+    'a-adaptive': AdaptiveHeight;
   }
 }
 
-customElements.define("a-adaptive", AdaptiveHeight);
+customElements.define('a-adaptive', AdaptiveHeight);

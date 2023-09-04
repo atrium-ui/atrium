@@ -1,8 +1,8 @@
-import { html, HTMLTemplateResult, LitElement, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import { formatTime, formatDate } from "./format.js";
+import { HTMLTemplateResult, LitElement, css, html } from 'lit';
+import { customElement } from 'lit/decorators.js';
+import { formatDate, formatTime } from './format.js';
 
-@customElement("a-time")
+@customElement('a-time')
 export class Time extends LitElement {
   public static styles = css`
     :host {
@@ -16,7 +16,7 @@ export class Time extends LitElement {
     return +this.innerHTML;
   }
 
-  private interval: number = 10000;
+  private interval = 10000;
 
   connectedCallback(): void {
     super.connectedCallback();

@@ -30,11 +30,7 @@ tasks:
     desc: Run linter on all components
     deps: [setup]
     cmds:
-      - npx biome check cli
-      - npx biome check components
-      - npx biome check docs
-      - npx biome check examples
-      - npx biome check packages
+      - npx biome check .
 
   dev:
     desc: Run dev server for component, available under http://localhost:3000/

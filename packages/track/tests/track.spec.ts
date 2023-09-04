@@ -1,7 +1,7 @@
-import { describe, expect, it } from "vitest";
-import { beforeEach, vi } from "vitest";
+import { describe, expect, it } from 'vitest';
+import { beforeEach, vi } from 'vitest';
 
-const NODE_NAME = "a-track";
+const NODE_NAME = 'a-track';
 
 beforeEach(() => {
   // IntersectionObserver isn't available in test environment
@@ -15,8 +15,8 @@ beforeEach(() => {
 });
 
 describe(NODE_NAME, () => {
-  it("import element", async () => {
-    const { Track } = await import("../dist/track.mjs");
+  it('import element', async () => {
+    const { Track } = await import('../dist/track.mjs');
     expect(Track).toBeDefined();
 
     // is defined in custom element registry
@@ -26,7 +26,7 @@ describe(NODE_NAME, () => {
     expect(new Track()).toBeInstanceOf(Track);
 
     const html = `<${NODE_NAME} />`;
-    const ele = document.createElement("div");
+    const ele = document.createElement('div');
     ele.innerHTML = html;
 
     expect(ele.children[0]).toBeInstanceOf(Track);

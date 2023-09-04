@@ -1,6 +1,6 @@
-import en from "../locales/en.json";
-import de from "../locales/de.json";
-import kr from "../locales/kr.json";
+import de from '../locales/de.json';
+import en from '../locales/en.json';
+import kr from '../locales/kr.json';
 
 const LOCALES: Record<
   string,
@@ -23,10 +23,10 @@ const LOCALES: Record<
   kr,
 };
 
-const language = navigator.language || "en-US";
+const language = navigator.language || 'en-US';
 export const intl = new Intl.DateTimeFormat(language, {
-  dateStyle: "full",
-  timeStyle: "medium",
+  dateStyle: 'full',
+  timeStyle: 'medium',
 });
 
 export function formatDate(date) {
@@ -34,7 +34,7 @@ export function formatDate(date) {
 }
 
 export function formatTime(time) {
-  const lang = language.split("-")[0];
+  const lang = language.split('-')[0];
   const locales = LOCALES[lang];
 
   const delta = Date.now() - time;
@@ -51,54 +51,54 @@ export function formatTime(time) {
 
   if (d > 1) {
     return locales.format
-      .replace("%v", d.toString())
-      .replace("%u", locales.days)
-      .replace("%t", locales.ago);
+      .replace('%v', d.toString())
+      .replace('%u', locales.days)
+      .replace('%t', locales.ago);
   }
   if (d > 0) {
     return locales.format
-      .replace("%v", d.toString())
-      .replace("%u", locales.day)
-      .replace("%t", locales.ago);
+      .replace('%v', d.toString())
+      .replace('%u', locales.day)
+      .replace('%t', locales.ago);
   }
 
   if (h > 1) {
     return locales.format
-      .replace("%v", h.toString())
-      .replace("%u", locales.hours)
-      .replace("%t", locales.ago);
+      .replace('%v', h.toString())
+      .replace('%u', locales.hours)
+      .replace('%t', locales.ago);
   }
   if (h > 0) {
     return locales.format
-      .replace("%v", h.toString())
-      .replace("%u", locales.hour)
-      .replace("%t", locales.ago);
+      .replace('%v', h.toString())
+      .replace('%u', locales.hour)
+      .replace('%t', locales.ago);
   }
 
   if (m > 1) {
     return locales.format
-      .replace("%v", m.toString())
-      .replace("%u", locales.minutes)
-      .replace("%t", locales.ago);
+      .replace('%v', m.toString())
+      .replace('%u', locales.minutes)
+      .replace('%t', locales.ago);
   }
   if (m > 0) {
     return locales.format
-      .replace("%v", m.toString())
-      .replace("%u", locales.minute)
-      .replace("%t", locales.ago);
+      .replace('%v', m.toString())
+      .replace('%u', locales.minute)
+      .replace('%t', locales.ago);
   }
 
   if (s > 1) {
     return locales.format
-      .replace("%v", s.toString())
-      .replace("%u", locales.seconds)
-      .replace("%t", locales.ago);
+      .replace('%v', s.toString())
+      .replace('%u', locales.seconds)
+      .replace('%t', locales.ago);
   }
   if (s > 0) {
     return locales.format
-      .replace("%v", s.toString())
-      .replace("%u", locales.second)
-      .replace("%t", locales.ago);
+      .replace('%v', s.toString())
+      .replace('%u', locales.second)
+      .replace('%t', locales.ago);
   }
 
   return locales.now;

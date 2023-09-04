@@ -5,7 +5,7 @@ export function timer(start, time) {
 
 export const Ease = {
   easeInOutCirc(x) {
-    return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    return x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2;
   },
   easeOutSine(x) {
     return Math.sin((x * Math.PI) / 2);
@@ -13,13 +13,13 @@ export const Ease = {
 };
 
 export function isTouch() {
-  return !!navigator.maxTouchPoints || "ontouchstart" in window;
+  return !!navigator.maxTouchPoints || 'ontouchstart' in window;
 }
 
 type VecOrNumber = Vec | number[] | number;
 
 export class Vec extends Array {
-  constructor(x: VecOrNumber = 0, y: number = 0) {
+  constructor(x: VecOrNumber = 0, y = 0) {
     super();
 
     if (Vec.isVec(x)) {
@@ -118,11 +118,11 @@ export class Vec extends Array {
   }
 
   dist(vec: Vec) {
-    return Math.sqrt(Math.pow(vec[0] - this[0], 2) + Math.pow(vec[1] - this[1], 2));
+    return Math.sqrt((vec[0] - this[0]) ** 2 + (vec[1] - this[1]) ** 2);
   }
 
   abs() {
-    return Math.sqrt(Math.pow(this[0], 2) + Math.pow(this[1], 2));
+    return Math.sqrt(this[0] ** 2 + this[1] ** 2);
   }
 
   abs2() {
@@ -177,6 +177,6 @@ export class Vec extends Array {
   static isVec = Array.isArray;
 
   toString(): string {
-    return `Vec{${this.join(",")}}`;
+    return `Vec{${this.join(',')}}`;
   }
 }
