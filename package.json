@@ -1,11 +1,15 @@
 {
   "name": "@atrium-ui/mono",
   "version": "0.2.0-2",
-  "description": "Component library",
+  "description": "Atrium Component Library",
+  "type": "module",
   "bin": {
-    "atrium": "./cli/use.js"
+    "atrium": "./cli/main.js"
   },
   "exports": {
+    ".": {
+      "import": "./index.js"
+    },
     "./toggle": {
       "import": "./packages/toggle/dist/toggle.es.js",
       "require": "./packages/toggle/dist/toggle.cjs.js"

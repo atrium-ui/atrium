@@ -15,6 +15,7 @@
     "@astrojs/starlight": "^0.9.0",
     "@astrojs/starlight-tailwind": "^2.0.0",
     "@astrojs/tailwind": "^5.0.0",
+    "@atrium-ui/components": "workspace:",
     "@atrium-ui/mono": "workspace:",
     "@webcomponents/template-shadowroot": "^0.2.1",
     "astro": "^3.0.8",

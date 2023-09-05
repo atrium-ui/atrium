@@ -1,9 +1,9 @@
 #!/usr/bin/env node
+import chalk from 'chalk';
+import cliSelect from 'cli-select';
 import fs from 'node:fs';
 import path from 'path';
 import readline from 'readline';
-import chalk from 'chalk';
-import cliSelect from 'cli-select';
 
 const examples = fs.readdirSync('./examples');
 
@@ -42,7 +42,7 @@ function replaceContent(file, regex, value) {
   fs.writeFileSync(file, content);
 }
 
-async function main() {
+export default async function () {
   console.log('Select a template:');
 
   const template = await cliSelect({
@@ -88,4 +88,3 @@ async function main() {
   });
 }
 
-main();

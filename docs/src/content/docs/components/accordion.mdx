@@ -1,9 +1,26 @@
 ---
 title: Accordion
 ---
+import Accordion from "@atrium-ui/components/accordion.tsx";
 
-Copy-pastable components to get started quickly using Tailwind and JSX.
 
 ```bash
 npx atrium use accordion
 ```
+
+### Default
+```tsx
+  <Accordion />
+```
+<div class="not-content">
+  <Accordion items={[
+    {
+      title: "Item 1",
+      content: "Copy here"
+    },
+    {
+      title: "Item 1",
+      content: "Copy here"
+    },
+  ]} />
+</div>

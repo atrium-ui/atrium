@@ -6,7 +6,7 @@ const args = process.argv.slice(2);
 
 const dist = resolve('./src/components');
 
-if (args[0] === 'use') {
+export default function () {
   if (!args[1]) {
     console.log('Please provide a name for the template.');
     process.exit(1);

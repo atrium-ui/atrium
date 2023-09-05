@@ -16,11 +16,7 @@ interface Props {
 export default function Button({ children, variant }: Props, context) {
   const slots = {
     default: () =>
-      children
-        ? children
-        : context.slots?.default
-        ? (context.slots.default() as JSX.Element)
-        : null,
+      children ? children : context?.slots?.default ? context?.slots.default() : null,
   };
 
   return (
