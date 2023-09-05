@@ -8,12 +8,14 @@ import Accordion from "@atrium-ui/components/accordion.tsx";
 npx atrium use accordion
 ```
 
+An array of expandable elements that close automaticly when another element is expanded.
+
 ### Default
 ```tsx
   <Accordion />
 ```
 <div class="not-content">
-  <Accordion items={[
+  <Accordion client:load items={[
     {
       title: "Item 1",
       content: "Copy here"

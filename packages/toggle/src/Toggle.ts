@@ -174,7 +174,7 @@ export class Toggle extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'a-select': Toggle;
+    'a-toggle': Toggle;
   }
 }
 
