@@ -1,5 +1,5 @@
-import '@atrium-ui/mono/expandable';
-import '@atrium-ui/mono/toggle';
+import "@atrium-ui/mono/expandable";
+import "@atrium-ui/mono/toggle";
 
 interface Props {
   items: { title: string; content: string }[];
@@ -16,10 +16,12 @@ function ExpandIcon() {
 }
 
 // adapter pattern to be useable in vue, solid, and react components
-export default function Button({ items }: Props, context) {
+
+// TODO: shouldnt destruct props because of solid js compat
+export default function Accordion(props: Props) {
   return (
     <a-toggle active-attribute="opened">
-      {items.map((item) => {
+      {props.items.map((item) => {
         return (
           <a-expandable class="accordion">
             <div slot="toggle">

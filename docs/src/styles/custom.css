@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+
 /* Dark mode colors. */
 :root {
 	--sl-color-accent-low: #331e0c;
@@ -40,6 +42,15 @@
   --sl-color-hairline-shade: transparent;
   --sl-sidebar-width: 16rem;
   --sl-sidebar-pad-x: 0.8rem;
+	--sl-color-bg-sidebar: transparent;
+}
+
+body {
+	font-family: 'Lato', sans-serif;
+}
+
+.sidebar .top-level .large {
+	font-weight: normal;
 }
 
 iframe {
@@ -47,6 +58,7 @@ iframe {
 }
 
 .not-content {
+	position: relative;
 	width: 100%;
 	height: auto;
 	padding: 2rem;

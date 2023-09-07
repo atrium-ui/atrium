@@ -1,0 +1,26 @@
+{
+  "name": "@atrium-ui/blur",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "main": "dist/blur.cjs.js",
+  "module": "dist/blur.es.js",
+  "types": "src/index.ts",
+  "scripts": {
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lit": "^2.5.0"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0"
+  },
+  "tsup": {
+    "entry": {
+      "blur": "src/index.ts"
+    },
+    "sourcemap": true,
+    "clean": true
+  }
+}

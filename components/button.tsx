@@ -13,6 +13,8 @@ interface Props {
 }
 
 // adapter pattern to be useable in vue, solid, and react components
+
+// TODO: shouldnt destruct props because of solid js compat
 export default function Button({ children, variant }: Props, context) {
   const slots = {
     default: () =>

@@ -1,10 +1,10 @@
-import { LitElement, css, html } from 'lit';
-import { property, query } from 'lit/decorators.js';
-import { Trait } from './Trait.js';
-import { AutoFocusTrait } from './traits/Autofocus.js';
-import { AutoplayTrait } from './traits/Autoplay.js';
-import { PointerTrait } from './traits/Pointer.js';
-import { Ease, Vec, timer } from './utils.js';
+import { LitElement, css, html } from "lit";
+import { property, query } from "lit/decorators.js";
+import { Trait } from "./Trait.js";
+import { AutoFocusTrait } from "./traits/Autofocus.js";
+import { AutoplayTrait } from "./traits/Autoplay.js";
+import { PointerTrait } from "./traits/Pointer.js";
+import { Ease, Vec, timer } from "./utils.js";
 
 export type InputState = {
   grab: {
@@ -27,7 +27,7 @@ export type InputState = {
   };
 };
 
-type Easing = 'ease' | 'linear' | 'none';
+type Easing = "ease" | "linear" | "none";
 
 function mod(a, n) {
   return a - Math.floor(a / n) * n;
@@ -45,7 +45,6 @@ export class Track extends LitElement {
         outline: none;
         overflow: hidden;
         touch-action: pan-y;
-        /* scroll-behavior: smooth; */
       }
 
       .track {
@@ -55,6 +54,7 @@ export class Track extends LitElement {
         justify-content: inherit;
         align-items: inherit;
         will-change: transform;
+        min-width: 100%;
       }
 
       :host([vertical]) {
@@ -81,7 +81,7 @@ export class Track extends LitElement {
     `;
   }
 
-  @query('.track')
+  @query(".track")
   public readonly track!: HTMLElement;
 
   get itemCount() {
@@ -186,7 +186,7 @@ export class Track extends LitElement {
   targetForce = new Vec();
   targetStart = new Vec();
   target?: Vec;
-  targetEasing: Easing = 'linear';
+  targetEasing: Easing = "linear";
 
   transitionAt = 0;
   transitionTime = 750;
@@ -214,10 +214,10 @@ export class Track extends LitElement {
   };
 
   private traits: Trait[] = [
-    new PointerTrait('pointer', this, true),
-    new AutoFocusTrait('autofocus', this),
+    new PointerTrait("pointer", this, true),
+    new AutoFocusTrait("autofocus", this),
     // new DebugTrait("debug", this),
-    new AutoplayTrait('autoplay', this),
+    new AutoplayTrait("autoplay", this),
   ];
 
   trait(callback: (t) => void) {
@@ -269,7 +269,7 @@ export class Track extends LitElement {
   /**
    * item alignment in the track
    */
-  @property({ type: String }) align: 'left' | 'right' = 'left';
+  @property({ type: String }) align: "left" | "right" = "left";
 
   /**
    * only scroll when items are overflown
@@ -372,16 +372,16 @@ export class Track extends LitElement {
 
   onKeyDown(e) {
     const Key = {
-      prev: this.vertical ? 'ArrowUp' : 'ArrowLeft',
-      next: this.vertical ? 'ArrowDown' : 'ArrowRight',
+      prev: this.vertical ? "ArrowUp" : "ArrowLeft",
+      next: this.vertical ? "ArrowDown" : "ArrowRight",
     };
 
     if (e.key === Key.prev) {
-      this.moveBy(-1, 'linear');
+      this.moveBy(-1, "linear");
       e.preventDefault();
     }
     if (e.key === Key.next) {
-      this.moveBy(1, 'linear');
+      this.moveBy(1, "linear");
       e.preventDefault();
     }
   }
@@ -399,10 +399,10 @@ export class Track extends LitElement {
     }
 
     if (this.snap) {
-      this.moveBy(0, 'none');
+      this.moveBy(0, "none");
     }
 
-    this.dispatchEvent(new CustomEvent('format', { bubbles: true }));
+    this.dispatchEvent(new CustomEvent("format", { bubbles: true }));
   }
 
   getToItemPosition(index = 0) {
@@ -443,7 +443,7 @@ export class Track extends LitElement {
 
     if (!easing) {
       // auto easing
-      easing = this.transition === 0 || this.transition === 1 ? 'ease' : 'linear';
+      easing = this.transition === 0 || this.transition === 1 ? "ease" : "linear";
     }
 
     if (vec !== undefined) {
@@ -524,15 +524,15 @@ export class Track extends LitElement {
       if (currItem !== this.currentItem) {
         this.currentItem = currItem;
         this.dispatchEvent(
-          new CustomEvent<number>('change', { detail: this.value, bubbles: true })
+          new CustomEvent<number>("change", { detail: this.value, bubbles: true })
         );
 
         let i = 0;
         for (const child of this.children) {
           if (i === this.currentItem) {
-            child.setAttribute('active', '');
+            child.setAttribute("active", "");
           } else {
-            child.removeAttribute('active');
+            child.removeAttribute("active");
           }
           i++;
         }
@@ -572,24 +572,26 @@ export class Track extends LitElement {
 
     if (this.target !== undefined) {
       switch (this.targetEasing) {
-        case 'ease': {
-          this.transition = timer(this.transitionAt, this.transitionTime);
-          const easedDelta = Vec.sub(this.target, this.targetStart).mul(
-            Ease.easeInOutCirc(this.transition)
-          );
-          this.targetForce.set(this.targetStart).add(easedDelta).sub(this.position);
-        }
-        break;
-        case 'linear': {
-          const prog = Vec.sub(this.position, this.target).abs() / Vec.abs(this.target);
-          this.transition = Math.round(prog * 100) / 100 || 0;
+        case "ease":
+          {
+            this.transition = timer(this.transitionAt, this.transitionTime);
+            const easedDelta = Vec.sub(this.target, this.targetStart).mul(
+              Ease.easeInOutCirc(this.transition)
+            );
+            this.targetForce.set(this.targetStart).add(easedDelta).sub(this.position);
+          }
+          break;
+        case "linear":
+          {
+            const prog = Vec.sub(this.position, this.target).abs() / Vec.abs(this.target);
+            this.transition = Math.round(prog * 100) / 100 || 0;
 
-          const delta = Vec.sub(this.targetForce.set(this.target), this.position);
-          this.targetForce.set(
-            delta.mod([this.trackWidth, this.trackHeight]).mul(42 / this.transitionTime)
-          );
-        }
-        break;
+            const delta = Vec.sub(this.targetForce.set(this.target), this.position);
+            this.targetForce.set(
+              delta.mod([this.trackWidth, this.trackHeight]).mul(42 / this.transitionTime)
+            );
+          }
+          break;
         default:
           this.targetForce.set(Vec.sub(this.targetForce.set(this.target), this.position));
           break;
@@ -721,7 +723,7 @@ export class Track extends LitElement {
             if (!child && realChild) {
               const clone = realChild.cloneNode(true) as HTMLElement;
               this.clones.push(clone);
-              clone.classList.add('ghost');
+              clone.classList.add("ghost");
               this.appendChild(clone);
             }
           } else {
@@ -768,26 +770,26 @@ export class Track extends LitElement {
 
     this.tabIndex = 0;
 
-    window.addEventListener('pointermove', this.pointerMove.bind(this));
-    this.addEventListener('pointerdown', this.pointerDown.bind(this));
-    window.addEventListener('pointerup', this.pointerUp.bind(this));
-    window.addEventListener('pointercancel', this.pointerUp.bind(this));
-    this.addEventListener('pointerleave', this.pointerLeave.bind(this));
-    this.addEventListener('pointerenter', this.pointerEnter.bind(this));
-    this.addEventListener('keydown', this.onKeyDown.bind(this));
-    this.addEventListener('wheel', this.onWheel.bind(this), { passive: true });
-    this.addEventListener('scroll', this.onScroll.bind(this), { passive: true });
+    window.addEventListener("pointermove", this.pointerMove.bind(this));
+    this.addEventListener("pointerdown", this.pointerDown.bind(this));
+    window.addEventListener("pointerup", this.pointerUp.bind(this));
+    window.addEventListener("pointercancel", this.pointerUp.bind(this));
+    this.addEventListener("pointerleave", this.pointerLeave.bind(this));
+    this.addEventListener("pointerenter", this.pointerEnter.bind(this));
+    this.addEventListener("keydown", this.onKeyDown.bind(this));
+    this.addEventListener("wheel", this.onWheel.bind(this), { passive: true });
+    this.addEventListener("scroll", this.onScroll.bind(this), { passive: true });
 
-    window.addEventListener('resize', this.format.bind(this), { passive: true });
-    window.addEventListener('scroll', this.onScroll.bind(this), { capture: true });
-    window.addEventListener('load', this.format.bind(this), { capture: true });
+    window.addEventListener("resize", this.format.bind(this), { passive: true });
+    window.addEventListener("scroll", this.onScroll.bind(this), { capture: true });
+    window.addEventListener("load", this.format.bind(this), { capture: true });
 
     requestAnimationFrame(() => {
       // needs markup to exist
       this.format();
     });
 
-    this.dispatchEvent(new CustomEvent('change', { detail: this.value, bubbles: true }));
+    this.dispatchEvent(new CustomEvent("change", { detail: this.value, bubbles: true }));
 
     this.observer.observe(this);
   }
@@ -797,22 +799,28 @@ export class Track extends LitElement {
 
     this.stopAnimate();
 
-    window.removeEventListener('pointermove', this.pointerMove.bind(this));
-    this.removeEventListener('pointerdown', this.pointerDown.bind(this));
-    window.removeEventListener('pointerup', this.pointerUp.bind(this));
-    window.removeEventListener('pointercancel', this.pointerUp.bind(this));
-    this.removeEventListener('pointerleave', this.pointerLeave.bind(this));
-    this.removeEventListener('pointerenter', this.pointerEnter.bind(this));
-    this.removeEventListener('keydown', this.onKeyDown.bind(this));
-    this.removeEventListener('wheel', this.onWheel.bind(this));
-    this.removeEventListener('scroll', this.onScroll.bind(this));
+    window.removeEventListener("pointermove", this.pointerMove.bind(this));
+    this.removeEventListener("pointerdown", this.pointerDown.bind(this));
+    window.removeEventListener("pointerup", this.pointerUp.bind(this));
+    window.removeEventListener("pointercancel", this.pointerUp.bind(this));
+    this.removeEventListener("pointerleave", this.pointerLeave.bind(this));
+    this.removeEventListener("pointerenter", this.pointerEnter.bind(this));
+    this.removeEventListener("keydown", this.onKeyDown.bind(this));
+    this.removeEventListener("wheel", this.onWheel.bind(this));
+    this.removeEventListener("scroll", this.onScroll.bind(this));
 
-    window.removeEventListener('resize', this.format.bind(this));
-    window.removeEventListener('scroll', this.onScroll.bind(this));
-    window.removeEventListener('load', this.format.bind(this));
+    window.removeEventListener("resize", this.format.bind(this));
+    window.removeEventListener("scroll", this.onScroll.bind(this));
+    window.removeEventListener("load", this.format.bind(this));
 
     this.observer.unobserve(this);
   }
 }
 
-customElements.define('a-track', Track);
+declare global {
+  interface HTMLElementTagNameMap {
+    "a-track": Track;
+  }
+}
+
+customElements.define("a-track", Track);

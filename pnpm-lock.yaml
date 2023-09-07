@@ -40,6 +40,8 @@ importers:
         specifier: ^0.32.2
         version: 0.32.2(happy-dom@9.20.3)
 
+  cli: {}
+
   components:
     dependencies:
       '@atrium-ui/mono':
@@ -107,6 +109,16 @@ importers:
       txtgen:
         specifier: ^3.0.4
         version: 3.0.4
+
+  packages/blur:
+    dependencies:
+      lit:
+        specifier: ^2.5.0
+        version: 2.8.0
+    devDependencies:
+      tsup:
+        specifier: ^6.7.0
+        version: 6.7.0(typescript@5.2.2)
 
   packages/circle:
     dependencies:
@@ -4352,7 +4364,7 @@ packages:
     dependencies:
       '@lit-labs/ssr-dom-shim': 1.1.1
       '@lit/reactive-element': 1.6.2
-      lit-html: 2.7.4
+      lit-html: 2.8.0
     dev: false
 
   /lit-html@2.7.4:
@@ -6554,7 +6566,7 @@ packages:
       joycon: 3.1.1
       postcss-load-config: 3.1.4
       resolve-from: 5.0.0
-      rollup: 3.25.1
+      rollup: 3.28.1
       source-map: 0.8.0-beta.0
       sucrase: 3.32.0
       tree-kill: 1.2.2

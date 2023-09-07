@@ -33,6 +33,10 @@
     "./track": {
       "import": "./packages/track/dist/track.mjs",
       "require": "./packages/track/dist/track.js"
+    },
+    "./command": {
+      "import": "./packages/command/dist/command.js",
+      "require": "./packages/command/dist/command.cjs"
     }
   },
   "keywords": [],
