@@ -7,6 +7,9 @@
   "module": "dist/blur.es.js",
   "types": "src/index.ts",
   "scripts": {
+    "build": "tsup --format esm,cjs --dts src/Blur.ts",
+    "lint": "eslint --ext .ts .",
+    "_test": "vitest run"
   },
   "author": "",
   "license": "ISC",
@@ -18,7 +21,7 @@
   },
   "tsup": {
     "entry": {
-      "blur": "src/index.ts"
+      "blur": "src/Blur.ts"
     },
     "sourcemap": true,
     "clean": true

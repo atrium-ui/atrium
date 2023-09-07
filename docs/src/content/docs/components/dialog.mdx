@@ -1,21 +1,24 @@
 ---
-title: Sheet
+title: Dialog
 ---
 
-import Sheet from "@atrium-ui/components/sheet.tsx";
+import Dialog from "@atrium-ui/components/dialog.tsx";
 import Button from "@atrium-ui/components/button.tsx";
 
 ```bash
-npx atrium use sheet
+npx atrium use dialog
 ```
 
 A sheet is basically a burger menu. Composed of a-blur.
 
-<Sheet client:load>
+<Dialog client:load>
+  ## Dialog
+  This is a dialog.
+
   <div onclick="document.querySelector('a-blur').enabled = false">
     <Button>Close</Button>
   </div>
-</Sheet>
+</Dialog>
 
 <div class="not-content min-h-[300px] flex items-center justify-center">
   <div onclick="document.querySelector('a-blur').enabled = true">

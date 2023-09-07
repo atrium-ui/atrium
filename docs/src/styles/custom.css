@@ -2,65 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap");
 
 /* Dark mode colors. */
 :root {
-	--sl-color-accent-low: #331e0c;
-	--sl-color-accent: #9b5600;
-	--sl-color-accent-high: #dfc3ac;
-	--sl-color-white: #ffffff;
-	--sl-color-gray-1: #eeeeee;
-	--sl-color-gray-2: #c2c2c2;
-	--sl-color-gray-3: #8b8b8b;
-	--sl-color-gray-4: #585858;
-	--sl-color-gray-5: #383838;
-	--sl-color-gray-6: #272727;
-	--sl-color-black: #181818;
+  --sl-color-accent-low: #331e0c;
+  --sl-color-accent: #9b5600;
+  --sl-color-accent-high: #dfc3ac;
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #eeeeee;
+  --sl-color-gray-2: #c2c2c2;
+  --sl-color-gray-3: #8b8b8b;
+  --sl-color-gray-4: #585858;
+  --sl-color-gray-5: #383838;
+  --sl-color-gray-6: #272727;
+  --sl-color-black: #181818;
 }
 /* Light mode colors. */
-:root[data-theme='light'] {
-	--sl-color-accent-low: #e8d2c1;
-	--sl-color-accent: #9d5800;
-	--sl-color-accent-high: #4a2907;
-	--sl-color-white: #181818;
-	--sl-color-gray-1: #272727;
-	--sl-color-gray-2: #383838;
-	--sl-color-gray-3: #585858;
-	--sl-color-gray-4: #8b8b8b;
-	--sl-color-gray-5: #c2c2c2;
-	--sl-color-gray-6: #eeeeee;
-	--sl-color-gray-7: #f6f6f6;
-	--sl-color-black: #ffffff;
+:root[data-theme="light"] {
+  --sl-color-accent-low: #e8d2c1;
+  --sl-color-accent: #9d5800;
+  --sl-color-accent-high: #4a2907;
+  --sl-color-white: #181818;
+  --sl-color-gray-1: #272727;
+  --sl-color-gray-2: #383838;
+  --sl-color-gray-3: #585858;
+  --sl-color-gray-4: #8b8b8b;
+  --sl-color-gray-5: #c2c2c2;
+  --sl-color-gray-6: #eeeeee;
+  --sl-color-gray-7: #f6f6f6;
+  --sl-color-black: #ffffff;
 }
 
 :root[data-theme="light"],
 :root[data-theme="dark"] {
-	--sl-content-width: 50rem;
-	--sl-text-5xl: 3.5rem;
+  --sl-content-width: 50rem;
+  --sl-text-5xl: 3.5rem;
   --sl-color-bg-nav: transparent;
   --sl-color-hairline-shade: transparent;
   --sl-sidebar-width: 16rem;
   --sl-sidebar-pad-x: 0.8rem;
-	--sl-color-bg-sidebar: transparent;
+  --sl-color-bg-sidebar: transparent;
 }
 
 body {
-	font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .sidebar .top-level .large {
-	font-weight: normal;
+  font-weight: normal;
 }
 
 iframe {
-	width: 100%;
+  width: 100%;
 }
 
 .not-content {
-	position: relative;
-	width: 100%;
-	height: auto;
-	padding: 2rem;
-	border: 1px solid #222;
+  position: relative;
+  width: 100%;
+  height: auto;
+  padding: 2rem;
+  border: 1px solid #222;
+}
+
+button {
+  border-radius: 4px;
+  padding: 4px 12px;
+  cursor: pointer;
+  border: 1px solid #333;
+  transition: filter 0.15s ease;
+}
+
+button:hover {
+  filter: brightness(1.1);
+}
+
+button:active {
+  transition: none;
+  filter: brightness(1);
 }

@@ -71,6 +71,9 @@ importers:
       '@atrium-ui/mono':
         specifier: 'workspace:'
         version: link:..
+      '@rive-app/canvas-single':
+        specifier: ^2.3.1
+        version: 2.3.1
       '@webcomponents/template-shadowroot':
         specifier: ^0.2.1
         version: 0.2.1
@@ -1942,6 +1945,10 @@ packages:
   /@polka/url@1.0.0-next.21:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
     dev: true
+
+  /@rive-app/canvas-single@2.3.1:
+    resolution: {integrity: sha512-ow+PKuoCD4vahA2XsgH6nbTylToqkUOSqjho8yQ9UAdT62h5iRkhrSR3y66j4gIxb3IpxiegPoAOZ6SFv/uong==}
+    dev: false
 
   /@tootallnate/once@2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}

@@ -37,6 +37,10 @@
     "./command": {
       "import": "./packages/command/dist/command.js",
       "require": "./packages/command/dist/command.cjs"
+    },
+    "./blur": {
+      "import": "./packages/blur/dist/blur.js",
+      "require": "./packages/blur/dist/blur.cjs"
     }
   },
   "keywords": [],

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="module" src="./src/Blur.ts"></script>
+
+    <style>
+      a-blur {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: all .2s ease;
+      }
+      a-blur[enabled] {
+        backdrop-filter: blur(12px);
+        background: rgba(0,0,0,0.1);
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .menu {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 100%;
+        width: 400px;
+        background: grey;
+        border: 1px solid #333;
+        height: 100%;
+        transition: transform .15s ease;
+      }
+      [enabled] .menu {
+        transform: translateX(-100%);
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="document.querySelector('a-blur').enabled = true">Open</button>
+
+    <a-blur>
+      <div class="menu">
+        <button onclick="document.querySelector('a-blur').enabled = false">Close</button>
+      </div>
+    </a-blur>
+  </body>
+</html>
