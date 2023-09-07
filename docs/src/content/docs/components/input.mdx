@@ -2,12 +2,22 @@
 title: Input
 ---
 
-import Slider from "@atrium-ui/components/slider.tsx";
+import Input from "@atrium-ui/components/input.tsx";
 
 ```bash
-npx atrium use slider
+npx atrium use input
 ```
 
 A styles input with error states and label.
 
-### TODO
+<div class="not-content">
+  <Input placeholder="Text" label="Input" client:load />
+  <br />
+  <Input placeholder="Text" label="Input" error="Cant be empty" client:load />
+</div>
+
+
+### Default
+```tsx
+  <Input placeholder="Text" label="Input" />
+```

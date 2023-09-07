@@ -2,18 +2,20 @@
 title: Select
 ---
 
-import Combobox from "@atrium-ui/components/combobox.tsx";
+import Select from "@atrium-ui/components/select.tsx";
 
 ```bash
-npx atrium use combobox
+npx atrium use select
 ```
 
 A dropdown with specific options to select.
 
-### Default
-```tsx
-  <Combobox />
-```
 <div class="not-content min-h-[400px]">
-   <Combobox client:load />
+   <Select client:load value="Select" />
 </div>
+
+#### Code
+
+```tsx
+  <Select value="Select" />
+```

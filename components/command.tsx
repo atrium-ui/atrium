@@ -1,4 +1,4 @@
-import "@atrium-ui/mono/command";
+import '@atrium-ui/mono/command';
 
 interface Props {
   children?: JSX.Element | string;
@@ -21,7 +21,7 @@ function Prefix() {
 export default function Command(props: Props, context) {
   return (
     <div class="absolute w-full h-full flex justify-center items-center">
-      <a-command shortcut="Space" placeholder="Search">
+      <a-command placeholder="Search">
         <div class="prefix" slot="before-input">
           <Prefix />
         </div>

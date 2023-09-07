@@ -11,14 +11,28 @@ npx atrium use sheet
 
 A sheet is basically a burger menu. Composed of a-blur.
 
-<Sheet client:load>
+
+<div class="not-content min-h-[300px] flex items-center justify-center">
+  <Sheet client:load>
+    <div onclick="document.querySelector('a-blur').enabled = false">
+      <Button>Close</Button>
+    </div>
+  </Sheet>
+
+  <div onclick="document.querySelector('a-blur').enabled = true">
+    <Button>Open</Button>
+  </div>
+</div>
+
+### Code
+```tsx
+<Sheet>
   <div onclick="document.querySelector('a-blur').enabled = false">
     <Button>Close</Button>
   </div>
 </Sheet>
 
-<div class="not-content min-h-[300px] flex items-center justify-center">
-  <div onclick="document.querySelector('a-blur').enabled = true">
-    <Button>Open</Button>
-  </div>
+<div onclick="document.querySelector('a-blur').enabled = true">
+  <Button>Open</Button>
 </div>
+```

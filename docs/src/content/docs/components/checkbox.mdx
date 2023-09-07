@@ -2,14 +2,35 @@
 title: Checkbox
 ---
 
-import Slider from "@atrium-ui/components/slider.tsx";
+import Checkbox from "@atrium-ui/components/Checkbox.tsx";
 
 ```bash
-npx atrium use slider
+npx atrium use checkbox
 ```
 
-A single toggle element.
+A checkbox.
 
-https://ui.shadcn.com/docs/components/checkbox
+<div class="not-content flex items-center justify-center">
+  <div class="grid grid-cols-[auto_auto] gap-3">
+    <Checkbox id="check" client:load/>
+    <div>
+      <label for="check" class="text-lg cursor-pointer">I agree to use this checkbox</label>
+      <p class="text-base">
+        This is still work in progress.
+      </p>
+    </div>
+  </div>
+</div>
 
-### TODO
+### Code
+```tsx
+<div class="grid grid-cols-[auto_auto] gap-3">
+  <Checkbox id="check" client:load/>
+  <div>
+    <label for="check" class="text-lg cursor-pointer">I agree to use this checkbox</label>
+    <p class="text-base">
+      This is still work in progress.
+    </p>
+  </div>
+</div>
+```

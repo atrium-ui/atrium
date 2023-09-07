@@ -11,6 +11,24 @@ npx atrium use dialog
 
 A sheet is basically a burger menu. Composed of a-blur.
 
+<div class="not-content min-h-[300px] flex items-center justify-center">
+  <Dialog client:load>
+    ## Dialog
+    This is a dialog.
+
+    <div class="mt-4" onclick="document.querySelector('a-blur').enabled = false">
+      <Button>Close</Button>
+    </div>
+  </Dialog>
+
+  <div onclick="document.querySelector('a-blur').enabled = true">
+    <Button>Open</Button>
+  </div>
+</div>
+
+
+### Code
+```tsx
 <Dialog client:load>
   ## Dialog
   This is a dialog.
@@ -20,8 +38,7 @@ A sheet is basically a burger menu. Composed of a-blur.
   </div>
 </Dialog>
 
-<div class="not-content min-h-[300px] flex items-center justify-center">
-  <div onclick="document.querySelector('a-blur').enabled = true">
-    <Button>Open</Button>
-  </div>
+<div onclick="document.querySelector('a-blur').enabled = true">
+  <Button>Open</Button>
 </div>
+```

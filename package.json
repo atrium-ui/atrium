@@ -41,6 +41,10 @@
     "./blur": {
       "import": "./packages/blur/dist/blur.js",
       "require": "./packages/blur/dist/blur.cjs"
+    },
+    "./popover": {
+      "import": "./packages/popover/dist/popover.js",
+      "require": "./packages/popover/dist/popover.cjs"
     }
   },
   "keywords": [],

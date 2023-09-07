@@ -22,7 +22,7 @@ export default function Button(props: Props, context) {
   };
 
   return (
-    <button type="button" class={variants[props.variant ?? 'solid']}>
+    <button type="button" class={`cursor-pointer ${variants[props.variant ?? 'solid']}`}>
       <slots.default />
     </button>
   );

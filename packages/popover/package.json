@@ -1,0 +1,29 @@
+{
+  "name": "@atrium-ui/popover",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "main": "dist/popover.cjs.js",
+  "module": "dist/popover.es.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsup --format esm,cjs --dts src/Popover.ts",
+    "lint": "eslint --ext .ts .",
+    "_test": "vitest run"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lit": "^2.5.0"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0"
+  },
+  "tsup": {
+    "entry": {
+      "popover": "src/Popover.ts"
+    },
+    "sourcemap": true,
+    "clean": true
+  }
+}

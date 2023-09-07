@@ -22,10 +22,6 @@ export class Command extends LitElement {
       padding: 3px;
     }
 
-    :host(:not([active])) {
-      display: none;
-    }
-
     .input {
       display: flex;
       align-items: center;
@@ -51,24 +47,14 @@ export class Command extends LitElement {
     }
   `;
 
-  @property({ type: Boolean, reflect: true })
-  public active?: boolean;
-
   @property({ type: String })
   public placeholder?: string;
-
-  @property({ type: String })
-  public shortcut?: string;
 
   @query('slot[name="input"]')
   private input?: HTMLSlotElement;
 
   @query(".items")
   private items;
-
-  get visibilityState() {
-    return this.active ? "visible" : "hidden";
-  }
 
   current = 0;
 
@@ -77,7 +63,6 @@ export class Command extends LitElement {
     const child = children[this.current];
     if (child) {
       child.click();
-      this.close();
     }
   }
 
@@ -89,25 +74,9 @@ export class Command extends LitElement {
     this.current++;
   }
 
-  public open() {
-    this.active = true;
-    requestAnimationFrame(() => {
-      if (this.input) {
-        const children = [...this.input.children, ...this.input.assignedElements()];
-        children.forEach((child) => (child as HTMLElement).focus());
-      }
-    });
-    this.dispatchEvent(new CustomEvent("visibilitychange"));
-  }
-
-  public close() {
-    this.active = false;
-    this.dispatchEvent(new CustomEvent("visibilitychange"));
-  }
-
   private onBlur() {
     setTimeout(() => {
-      this.close();
+      this.dispatchEvent(new Event("blur"));
     }, 150);
   }
 
@@ -128,9 +97,6 @@ export class Command extends LitElement {
       case "Enter":
         this.enter();
         e.preventDefault();
-        break;
-      case "Escape":
-        this.close();
         break;
       default:
         this.current = 0;
@@ -164,27 +130,6 @@ export class Command extends LitElement {
     }
   }
 
-  constructor() {
-    super();
-
-    const shortcutKV = new Set<string>();
-
-    window.addEventListener("keydown", (e) => {
-      shortcutKV.add(e.code);
-
-      if (this.shortcut) {
-        for (const key of this.shortcut.split("+")) {
-          if (!shortcutKV.has(key)) return;
-        }
-        this.open();
-      }
-    });
-
-    window.addEventListener("keyup", (e) => {
-      shortcutKV.delete(e.code);
-    });
-  }
-
   connectedCallback(): void {
     super.connectedCallback();
 
@@ -209,7 +154,7 @@ export class Command extends LitElement {
 
   protected render(): HTMLTemplateResult {
     return html`
-      <div class="input" ?inert=${!this.active}>
+      <div class="input">
         <slot name="before-input"></slot>
         <slot name="input">
           <input placeholder=${this.placeholder || ""} type="text" />

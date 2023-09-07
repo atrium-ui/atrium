@@ -2,7 +2,7 @@
 title: Popover
 ---
 
-import Button from "@atrium-ui/components/button.tsx";
+import Popover from "@atrium-ui/components/popover.tsx";
 
 ```bash
 npx atrium use popover
@@ -10,4 +10,15 @@ npx atrium use popover
 
 A popover.
 
-### TODO
+<div class="not-content flex items-center justify-center">
+  <Popover client:load label="Click">
+    <span>Some Content</span>
+  </Popover>
+</div>
+
+### Code
+```tsx
+  <Popover label="Click">
+    <span>Some Content</span>
+  </Popover>
+```
