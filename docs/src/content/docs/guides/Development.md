@@ -12,13 +12,12 @@ We use the lit library to simplify development of WebComponents. It provieds fas
 
 ## Useful VSCode addons
 
-- [eslint](vscode:extension/dbaeumer.vscode-eslint)
-- [prettier](vscode:extension/esbenp.prettier-vscode)
+- [biome](vscode:extension/biomejs.biome/esbenp)
 - [lit-plugin](vscode:extension/runem.lit-plugin)
 
-## Create a new component
+## Create a new primitive
 
-Run `pnpm new` in root to initialise a new component.
+Run `task new` in root to initialise a new component.
 
 ## Branches
 

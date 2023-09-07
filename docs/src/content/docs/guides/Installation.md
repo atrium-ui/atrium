@@ -18,16 +18,22 @@ title: "Installation"
 pnpm i @atrium-ui/mono
 ```
 
-3. Import a component
+3.1 Import a component
 
 ```typescript
 import "@atrium-ui/mono/components/a-component";
 ```
 
-4. Use it any framework:
+3.1.2 Use it any framework:
 
 ```tsx
 <a-component some-prop="some"></a-component>
+```
+
+3.2 Or use a ready to use component
+
+```bash
+npx atrium use <component>
 ```
 
 # Usage

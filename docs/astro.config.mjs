@@ -45,8 +45,8 @@ export default defineConfig({
           autogenerate: { directory: 'components' },
         },
         {
-          label: 'Reference',
-          autogenerate: { directory: 'reference' },
+          label: 'Primitives',
+          autogenerate: { directory: 'primitives' },
         },
       ],
     }),
