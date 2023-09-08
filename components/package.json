@@ -1,6 +1,5 @@
 {
-  "name": "@atrium-ui/components",
-  "dependencies": {
-    "@atrium-ui/mono": "workspace:"
-  }
+  "name": "components",
+  "version": "1.0",
+  "dependencies": {}
 }

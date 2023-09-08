@@ -11,46 +11,37 @@ tasks:
     dir: '{{.TASKFILE_DIR}}'
     sources:
       - .rtx.toml
-      - pnpm-lock.yaml
-      - pnpm-workspace.yaml
+      - 'package.json'
       - '**/package.json'
     cmds:
       - rtx install 2> /dev/null || true
-      - '[ "$CI" != "" ] && pnpm config set store-dir .pnpm-store || true'
-      - pnpm i
+      - bun install
 
   test:
     desc: Run tests on all components
     deps: [setup]
     cmds:
       - task: build
-      - npx turbo test --filter=@atrium-ui/*
+      - bun test
 
   lint:
     desc: Run linter on all components
     deps: [setup]
     cmds:
-      - npx biome check .
-
-  dev:
-    desc: Run dev server for component, available under http://localhost:3000/
-    dir: "{{.WORKING_DIR}}"
-    deps: [setup]
-    cmds:
-      - npx vite
+      - bunx biome check .
 
   build:
     desc: Build all components
     deps: [setup]
     cmds:
-      - npx turbo build --filter=@atrium-ui/*
+      - bunx turbo build --filter=packages/**
 
   docs:
     desc: Start dev server for docs
     dir: "{{.TASKFILE_DIR}}/docs"
     deps: [setup]
     cmds:
-      - npm run dev
+      - bun run dev
 
   docs:build:
     desc: Builds the docs into the public folder
@@ -58,14 +49,14 @@ tasks:
     deps: [setup]
     cmds:
       - task: build
-      - npx turbo build --filter=docs
+      - bun run build
       - mv dist ../public
 
   new:
     desc: Create a new component from templates
     dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - npx atrium new
+      - bunx atrium new
 
   reset:
     desc: Clean local files

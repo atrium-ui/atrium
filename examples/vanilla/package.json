@@ -3,27 +3,14 @@
   "version": "0.0.1",
   "description": "",
   "type": "module",
-  "main": "dist/example.cjs.js",
-  "module": "dist/example.es.js",
+  "main": "dist/example.js",
   "types": "src/index.ts",
   "scripts": {
-    "build": "tsup --format esm,cjs --dts src/index.ts",
-    "lint": "eslint --ext .ts .",
-    "test": "vitest run"
+    "build": "bun build src/index.ts --sourcemap --outdir dist --entry-naming expandable.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "lit": "^2.5.0"
-  },
-  "devDependencies": {
-    "tsup": "^6.7.0"
-  },
-  "tsup": {
-    "entry": {
-      "example": "src/index.ts"
-    },
-    "sourcemap": true,
-    "clean": true
   }
 }
