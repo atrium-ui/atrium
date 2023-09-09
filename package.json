@@ -58,6 +58,5 @@
   "dependencies": {
     "lit": "^2.8.0"
   },
-  "packageManager": "pnpm@8.6.12",
   "workspaces": ["components", "packages/*", "docs", "cli"]
 }

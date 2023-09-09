@@ -34,7 +34,7 @@ tasks:
     desc: Build all components
     deps: [setup]
     cmds:
-      - bun x turbo build --filter=packages/**
+      - bun x turbo build
 
   docs:
     desc: Start dev server for docs
