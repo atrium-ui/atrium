@@ -28,20 +28,20 @@ tasks:
     desc: Run linter on all components
     deps: [setup]
     cmds:
-      - bunx biome check .
+      - bun x biome check .
 
   build:
     desc: Build all components
     deps: [setup]
     cmds:
-      - bunx turbo build --filter=packages/**
+      - bun x turbo build --filter=packages/**
 
   docs:
     desc: Start dev server for docs
     dir: "{{.TASKFILE_DIR}}/docs"
     deps: [setup]
     cmds:
-      - bun run dev
+      - bun dev
 
   docs:build:
     desc: Builds the docs into the public folder
@@ -49,7 +49,7 @@ tasks:
     deps: [setup]
     cmds:
       - task: build
-      - bun run build
+      - bun build
       - mv dist ../public
 
   new:

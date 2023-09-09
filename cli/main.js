@@ -1,15 +1,19 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 const args = process.argv.slice(2);
 
-switch(args[0]) {
+switch (args[0]) {
   case 'use': {
-    require("./commands/use.js")();
+    import('./commands/use.js').then((mod) => {
+      mod.default();
+    });
     break;
   }
   case 'new': {
-    require("./commands/new.mjs")();
+    import('./commands/new.mjs').then((mod) => {
+      mod.default();
+    });
     break;
   }
   default:
-    console.log("Usage: new, use <component>");
+    console.log('Usage: new, use <component>');
 }

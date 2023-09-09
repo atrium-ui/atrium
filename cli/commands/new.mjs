@@ -1,6 +1,4 @@
-#!/usr/bin/env node
-import chalk from 'chalk';
-import cliSelect from 'cli-select';
+import prompts from 'prompts';
 import fs from 'node:fs';
 import path from 'path';
 import readline from 'readline';
@@ -45,19 +43,15 @@ function replaceContent(file, regex, value) {
 export default async function () {
   console.log('Select a template:');
 
-  const template = await cliSelect({
-    values: examples,
-    selected: '➡️',
-    unselected: ' ',
-    valueRenderer: (value, selected) => {
-      if (selected) {
-        return chalk.underline(value);
-      }
-      return value;
+  const { template } = await prompts([
+    {
+      type: 'select',
+      name: 'template',
+      message: 'Pick a template',
+      instructions: false,
+      choices: examples,
     },
-  });
-
-  console.log('➡️', template.value);
+  ]);
 
   const rl = readline.createInterface({
     input: process.stdin,
@@ -68,7 +62,7 @@ export default async function () {
     const name = capitalize(id);
 
     const compPath = `components/${id}`;
-    copy(`examples/${template.value}`, compPath, name);
+    copy(`examples/${examples[template].value}`, compPath, name);
 
     replaceContent(`${compPath}/package.json`, /example/g, id);
     replaceContent(
@@ -87,4 +81,3 @@ export default async function () {
     process.exit();
   });
 }
-
