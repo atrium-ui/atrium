@@ -1,4 +1,4 @@
-import '@atrium-ui/mono/dropdown';
+import '@atrium-ui/dropdown';
 
 function Item(props: { value: string }) {
   return (
