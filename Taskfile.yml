@@ -34,7 +34,7 @@ tasks:
     desc: Build all components
     deps: [setup]
     cmds:
-      - bun x turbo build
+      - bun x nx run-many -t build
 
   docs:
     desc: Start dev server for docs

@@ -2,27 +2,14 @@
   "name": "@atrium-ui/time",
   "version": "0.0.1",
   "description": "",
-  "main": "dist/time.cjs.js",
-  "module": "dist/time.es.js",
+  "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
-    "build": "tsup --format esm,cjs --dts src/index.ts",
-    "lint": "eslint --ext .ts .",
-    "test": "vitest run"
+    "build": "bun build src/index.ts --sourcemap --external lit --external @atrium-ui/* --outdir dist"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "lit": "^2.5.0"
-  },
-  "devDependencies": {
-    "tsup": "^6.7.0"
-  },
-  "tsup": {
-    "entry": {
-      "time": "src/index.ts"
-    },
-    "sourcemap": true,
-    "clean": true
   }
 }

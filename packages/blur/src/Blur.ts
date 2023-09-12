@@ -1,13 +1,13 @@
-import { HTMLTemplateResult, LitElement, css, html } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { HTMLTemplateResult, LitElement, css, html } from 'lit';
+import { customElement, property, query } from 'lit/decorators.js';
 
 declare global {
   interface HTMLElementTagNameMap {
-    "a-blur": Blur;
+    'a-blur': Blur;
   }
 }
 
-@customElement("a-blur")
+@customElement('a-blur')
 export class Blur extends LitElement {
   public static styles = css`
     :host {
@@ -24,17 +24,17 @@ export class Blur extends LitElement {
   @property({ type: Boolean, reflect: true })
   public enabled = false;
 
-  @query("slot")
+  @query('slot')
   slot;
 
   protected updated(): void {
     if (this.enabled) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     }
 
-    this.setAttribute("aria-hidden", this.enabled.toString());
+    this.setAttribute('aria-hidden', this.enabled.toString());
   }
 
   shouldBlur(e: MouseEvent) {
@@ -46,7 +46,7 @@ export class Blur extends LitElement {
 
   handleClick = (e: MouseEvent) => {
     if (this.shouldBlur(e)) {
-      this.dispatchEvent(new Event("blur"));
+      this.dispatchEvent(new Event('blur'));
       this.enabled = false;
     }
   };
@@ -66,13 +66,13 @@ export class Blur extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.addEventListener("click", this.handleClick);
-    window.addEventListener("scroll", this.proxyScroll);
+    this.addEventListener('click', this.handleClick);
+    window.addEventListener('scroll', this.proxyScroll);
   }
 
   disconnectedCallback(): void {
-    this.removeEventListener("click", this.handleClick);
-    window.removeEventListener("scroll", this.proxyScroll);
+    this.removeEventListener('click', this.handleClick);
+    window.removeEventListener('scroll', this.proxyScroll);
   }
 
   render(): HTMLTemplateResult {

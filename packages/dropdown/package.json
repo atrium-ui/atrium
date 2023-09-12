@@ -2,12 +2,10 @@
   "name": "@atrium-ui/dropdown",
   "version": "0.3.7",
   "description": "",
-  "main": "dist/dropdown.cjs.js",
-  "module": "dist/dropdown.es.js",
+  "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
-    "build": "vite build",
-    "lint": "eslint --ext .ts ."
+    "build": "bun build src/index.ts --sourcemap --external lit --external @atrium-ui/* --outdir dist"
   },
   "author": "",
   "license": "ISC",

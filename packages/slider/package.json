@@ -2,11 +2,10 @@
   "name": "@atrium-ui/input-range",
   "version": "1.0.4",
   "description": "",
-  "main": "src/index.ts",
-  "module": "dist/input-range.js",
+  "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
-    "lint": "eslint --ext .ts ."
+    "build": "bun build src/index.ts --sourcemap --external lit --external @atrium-ui/* --outdir dist"
   },
   "author": "",
   "license": "ISC",

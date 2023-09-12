@@ -3,13 +3,10 @@
   "version": "0.0.1",
   "description": "",
   "type": "module",
-  "main": "dist/command.cjs.js",
-  "module": "dist/command.es.js",
+  "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
-    "build": "tsup --format esm,cjs --dts src/index.ts",
-    "lint": "eslint --ext .ts .",
-    "test": "vitest run"
+    "build": "bun build src/index.ts --sourcemap --external lit --external @atrium-ui/* --outdir dist"
   },
   "author": "",
   "license": "ISC",
