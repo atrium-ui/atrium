@@ -15,8 +15,7 @@
       "require": "./packages/toggle/dist/toggle.cjs.js"
     },
     "./expandable": {
-      "import": "./packages/expandable/dist/expandable.mjs",
-      "require": "./packages/expandable/dist/expandable.js"
+      "import": "./packages/expandable/dist/expandable.js"
     },
     "./dropdown": {
       "import": "./packages/dropdown/dist/dropdown.es.js",
@@ -53,10 +52,11 @@
   "devDependencies": {
     "@biomejs/biome": "^1.0.0",
     "@happy-dom/global-registrator": "^11.0.2",
-    "turbo": "^1.10.3"
+    "turbo": "^1.10.13"
   },
   "dependencies": {
     "lit": "^2.8.0"
   },
+  "packageManager": "npm@9.6.0",
   "workspaces": ["components", "packages/*", "docs", "cli"]
 }

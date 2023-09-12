@@ -56,7 +56,7 @@ tasks:
     desc: Create a new component from templates
     dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - bunx atrium new
+      - bun x atrium new
 
   reset:
     desc: Clean local files
