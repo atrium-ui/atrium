@@ -31,7 +31,7 @@ tasks:
     desc: Build all components
     deps: [setup]
     cmds:
-      - bun --bun x nx run-many -t build --exclude docs
+      - bun x nx run-many -t build --exclude docs
 
   docs:
     desc: Start dev server for docs
