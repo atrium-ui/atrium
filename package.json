@@ -11,37 +11,41 @@
       "import": "./index.js",
       "types": "./index.d.ts"
     },
+    "./adaptive": {
+      "import": "./packages/adaptive/dist/index.js",
+      "types": "./packages/adaptive/src/index.ts"
+    },
     "./toggle": {
       "import": "./packages/toggle/dist/index.js",
-      "types": "./packages/toggle/dist/index.ts"
+      "types": "./packages/toggle/src/index.ts"
     },
     "./expandable": {
       "import": "./packages/expandable/dist/index.js",
-      "types": "./packages/expandable/dist/index.ts"
+      "types": "./packages/expandable/src/index.ts"
     },
     "./dropdown": {
       "import": "./packages/dropdown/dist/index.js",
-      "types": "./packages/dropdown/dist/index.ts"
+      "types": "./packages/dropdown/src/index.ts"
     },
     "./circle": {
       "import": "./packages/circle/dist/index.js",
-      "types": "./packages/circle/dist/index.ts"
+      "types": "./packages/circle/src/index.ts"
     },
     "./pager": {
       "import": "./packages/pager/dist/index.js",
-      "types": "./packages/pager/dist/index.ts"
+      "types": "./packages/pager/src/index.ts"
     },
     "./track": {
       "import": "./packages/track/dist/index.js",
-      "types": "./packages/track/dist/index.ts"
+      "types": "./packages/track/src/index.ts"
     },
     "./command": {
       "import": "./packages/command/dist/index.js",
-      "types": "./packages/command/dist/index.ts"
+      "types": "./packages/command/src/index.ts"
     },
     "./blur": {
       "import": "./packages/blur/dist/index.js",
-      "types": "./packages/blur/dist/index.ts"
+      "types": "./packages/blur/src/index.ts"
     },
     "./popover": {
       "import": "./packages/popover/dist/index.js",
