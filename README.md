@@ -6,6 +6,12 @@ This repository contains a collection of framework agnostic and functional web-c
 
 Used versions of tools are pinned in [.rtx.toml](.rtx.toml) and can be installed using [rtx](https://github.com/jdxcode/rtx) with `rtx install` in the root directory of this project.
 
+## Instant dev setup thanks to rtx:
+
+```
+git clone git@gitlab.s-v.de:sv-components/mono.git && cd mono && rtx install && task docs
+```
+
 ## Getting Started
 
 Install all dependencies:
