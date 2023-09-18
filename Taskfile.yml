@@ -5,11 +5,11 @@ version: "3"
 tasks:
   setup:
     desc: Install dependencies
-    dir: '{{.TASKFILE_DIR}}'
+    dir: "{{.TASKFILE_DIR}}"
     sources:
       - .rtx.toml
-      - 'package.json'
-      - '**/package.json'
+      - "package.json"
+      - "**/package.json"
     cmds:
       - rtx install 2> /dev/null || true
       - bun install
@@ -31,7 +31,7 @@ tasks:
     desc: Build all components
     deps: [setup]
     cmds:
-      - bun x nx run-many -t build --exclude docs
+      - bash ./cli/build.sh
 
   docs:
     desc: Start dev server for docs

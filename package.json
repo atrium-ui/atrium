@@ -58,16 +58,10 @@
   "devDependencies": {
     "typescript": "^5.2.2",
     "@biomejs/biome": "^1.0.0",
-    "@happy-dom/global-registrator": "^11.0.2",
-    "nx": "16.8.1"
+    "@happy-dom/global-registrator": "^11.0.2"
   },
   "dependencies": {
     "lit": "^2.8.0"
   },
-  "workspaces": [
-    "components",
-    "packages/*",
-    "docs",
-    "cli"
-  ]
+  "workspaces": ["components", "packages/*", "docs", "cli"]
 }
