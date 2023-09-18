@@ -1,4 +1,4 @@
-import '@atrium-ui/mono/toggle';
+import '@atrium-ui/toggle';
 
 function CheckIcon() {
   return (

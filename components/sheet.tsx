@@ -1,4 +1,4 @@
-import '@atrium-ui/mono/blur';
+import '@atrium-ui/blur';
 
 interface Props {
   children?: JSX.Element | string;

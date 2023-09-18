@@ -1,4 +1,4 @@
-import '@atrium-ui/mono/command';
+import '@atrium-ui/command';
 
 interface Props {
   children?: JSX.Element | string;

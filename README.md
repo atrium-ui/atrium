@@ -1,26 +1,26 @@
-# Mono
+# Atrium Mono
 
 This repository contains a collection of framework agnostic and functional web-components.
 
 ### Prerequisites
 
-- rtx
-- task
-
-You can use [this](https://github.com/luckydye/build-utils) scripts to install task with rtx.
+Used versions of tools are pinned in [.rtx.toml](.rtx.toml) and can be installed using [rtx](https://github.com/jdxcode/rtx) with `rtx install` in the root directory of this project.
 
 ## Getting Started
 
 Install all dependencies:
 `task setup`
 
-Dev watch build of all packages and visual docs:
-`task dev`
+Run dev server for docs website:
+`task docs`
 
 ### Other commands
 
 Build all packages:
 `task build`
+
+Build docs:
+`task docs:build`
 
 Init new component:
 `task new`

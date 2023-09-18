@@ -2,30 +2,16 @@
   "name": "@atrium-ui/expandable",
   "version": "2.0.3",
   "description": "",
-  "main": "dist/expandable.js",
-  "module": "dist/expandable.mjs",
-  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "type": "module",
   "scripts": {
-    "build": "tsup --format esm,cjs --dts src/index.ts",
-    "test": "vitest run"
+    "build": "bun build src/index.ts --sourcemap --external lit --external @atrium-ui/* --outdir dist"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "lit": "^2.5.0"
   },
-  "devDependencies": {
-    "txtgen": "^3.0.4",
-    "histoire": "^0.16.2"
-  },
-  "files": [
-    "dist"
-  ],
-  "tsup": {
-    "entry": {
-      "expandable": "src/index.ts"
-    },
-    "sourcemap": true,
-    "clean": true
-  }
+  "files": ["dist"]
 }

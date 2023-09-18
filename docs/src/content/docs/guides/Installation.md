@@ -21,7 +21,7 @@ pnpm i @atrium-ui/mono
 3.1 Import a component
 
 ```typescript
-import "@atrium-ui/mono/components/a-component";
+import "@atrium-ui/mono/a-component";
 ```
 
 3.1.2 Use it any framework:

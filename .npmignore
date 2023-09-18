@@ -8,11 +8,14 @@
 # app
 **/public
 apps/**
-library
-**/stories
 docs
+test
+examples
+**/*.spec.test
 
 vite.config.ts
+.task
+.vscode
 .turbo
 .eslintrc
 .eslintrc.json

@@ -2,12 +2,10 @@
   "name": "@atrium-ui/circle",
   "version": "1.0.10",
   "description": "",
-  "main": "dist/circle.cjs.js",
-  "module": "dist/circle.es.js",
+  "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
-    "build": "vite build",
-    "lint": "eslint --ext .ts ."
+    "build": "bun build src/index.ts --sourcemap --external lit --external @atrium-ui/* --outdir dist"
   },
   "author": "",
   "license": "ISC",
