@@ -6,7 +6,7 @@ run_build() {
   dir="$1"
   cd "$dir" || return
   if [ -f "package.json" ]; then
-    npm run build
+    bun run build
   fi
   cd - >/dev/null || return
 }
