@@ -4,7 +4,7 @@ const NODE_NAME = 'a-command';
 
 describe(NODE_NAME, () => {
   it('import element', async () => {
-    const { Command } = await import('../dist/command.js');
+    const { Command } = await import('../dist/index.js');
     expect(Command).toBeDefined();
 
     // is defined in custom element registry

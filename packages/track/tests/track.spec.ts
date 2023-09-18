@@ -16,7 +16,7 @@ beforeEach(() => {
 
 describe(NODE_NAME, () => {
   it('import element', async () => {
-    const { Track } = await import('../dist/track.mjs');
+    const { Track } = await import('../dist/index.js');
     expect(Track).toBeDefined();
 
     // is defined in custom element registry
