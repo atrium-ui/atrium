@@ -22,8 +22,8 @@ cache:
       - .rtx
 
 before_script:
+  - apt install unzip parallel -y
   - export PATH=$RTX_DATA_DIR/shims:$PATH
-  - apt install unzip -y
   - rtx install
   - task setup
   - git config user.email "gitlab@s-v.de"
