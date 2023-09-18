@@ -3,6 +3,29 @@
 version: "3"
 
 tasks:
+  run-packages:
+    desc: Run a command in all packages
+    internal: true
+    silent: true
+    vars:
+      command: '{{.command | default "echo"}}'
+      dirs:
+        sh: echo $(find ./packages -type f -name "package.json"  -exec dirname {} \;)
+    cmds:
+      - for: { var: dirs, split: " " }
+        cmd: cd {{.ITEM}} && {{.command}}
+
+  run-tasks:
+    desc: Run a task recursivly in all included Taskfiles
+    internal: true
+    silent: true
+    vars:
+      TASK: '{{.TASK | default "help"}}'
+      TASKS:
+        sh: echo $(task --list --json | jq -r '.tasks[] | select(.name | contains(":{{.TASK}}")).name')
+    cmds:
+      - task --parallel {{.TASKS}}
+
   setup:
     desc: Install dependencies
     dir: "{{.TASKFILE_DIR}}"
@@ -31,7 +54,9 @@ tasks:
     desc: Build all components
     deps: [setup]
     cmds:
-      - bash ./cli/build.sh
+      - task: run-packages
+        vars:
+          command: bun run build &
 
   docs:
     desc: Start dev server for docs
