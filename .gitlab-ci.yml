@@ -23,7 +23,7 @@ cache:
 
 before_script:
   - export PATH=$RTX_DATA_DIR/shims:$PATH
-  - apk add unzip
+  - sudo apt install unzip
   - rtx install
   - task setup
   - git config user.email "gitlab@s-v.de"
