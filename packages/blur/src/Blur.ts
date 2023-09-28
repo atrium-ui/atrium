@@ -30,10 +30,10 @@ export class Blur extends LitElement {
   protected updated(): void {
     if (this.enabled) {
       document.body.style.overflow = 'hidden';
-      this.setAttribute('aria-hidden', 'true');
+      this.setAttribute('aria-hidden', 'false');
     } else {
       document.body.style.overflow = '';
-      this.setAttribute('aria-hidden', 'false');
+      this.setAttribute('aria-hidden', 'true');
     }
   }
 
