@@ -1,6 +1,6 @@
 {
   "name": "@atrium-ui/mono",
-  "version": "0.2.0-5",
+  "version": "0.2.0-6",
   "description": "Atrium Component Library",
   "type": "module",
   "bin": {
@@ -63,5 +63,10 @@
   "dependencies": {
     "lit": "^2.8.0"
   },
-  "workspaces": ["components", "packages/*", "docs", "cli"]
+  "workspaces": [
+    "components",
+    "packages/*",
+    "docs",
+    "cli"
+  ]
 }
