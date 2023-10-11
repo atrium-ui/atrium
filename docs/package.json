@@ -7,7 +7,7 @@
     "@astrojs/lit": "^3.0.0",
     "@parse5/tools": "0.3.0",
     "@astrojs/solid-js": "^3.0.0",
-    "@astrojs/starlight": "^0.9.1",
+    "@astrojs/starlight": "^0.11.0",
     "@astrojs/starlight-tailwind": "^2.0.0",
     "@astrojs/tailwind": "^5.0.0",
     "@rive-app/canvas-single": "^2.4.0",

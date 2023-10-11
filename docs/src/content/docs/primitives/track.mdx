@@ -12,30 +12,136 @@ Less concerned with telling a story or addressing a specific use case, they shou
 - image slider
 - Overflowing tabs
 - stepless gallary
-
-### Further reading
-
-- Read [about reference](https://diataxis.fr/reference/) in the Diátaxis framework
+- time selector
 
 <div class="not-content">
-  <Track client:load overflowscroll>
+  <h2>Paged scroll</h2>
+  <Track client:only="lit" loop snap overflowscroll>
+    <div class="flex-none w-full">
+      <canvas width={720} height={480} class="w-full bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none w-full">
+      <canvas width={720} height={480} class="w-full bg-slate-400 m-1" />
+    </div>
+    <div class="flex-none w-full">
+      <canvas width={720} height={480} class="w-full bg-slate-300 m-1" />
+    </div>
+    <div class="flex-none w-full">
+      <canvas width={720} height={480} class="w-full bg-slate-200 m-1" />
+    </div>
+    <div class="flex-none w-full">
+      <canvas width={720} height={480} class="w-full bg-slate-100 m-1" />
+    </div>
+    <div class="flex-none w-full">
+      <canvas width={720} height={480} class="w-full bg-slate-600 m-1" />
+    </div>
+  </Track>
+</div>
+
+<div class="not-content">
+  <h2>Free scroll</h2>
+  <Track client:only="lit" overflowscroll>
     <div>
-      <canvas class="bg-slate-700 m-1" />
+      <canvas class="bg-slate-500 m-1" />
     </div>
     <div>
-      <canvas class="bg-slate-700 m-1" />
+      <canvas class="bg-slate-500 m-1" />
     </div>
     <div>
-      <canvas class="bg-slate-700 m-1" />
+      <canvas class="bg-slate-500 m-1" />
     </div>
     <div>
-      <canvas class="bg-slate-700 m-1" />
+      <canvas class="bg-slate-500 m-1" />
     </div>
     <div>
-      <canvas class="bg-slate-700 m-1" />
+      <canvas class="bg-slate-500 m-1" />
     </div>
     <div>
-      <canvas class="bg-slate-700 m-1" />
+      <canvas class="bg-slate-500 m-1" />
+    </div>
+  </Track>
+</div>
+
+<div class="not-content">
+  <h2>Snap scroll</h2>
+  <Track client:only="lit" value="1" snap class="images max-w-[100vw] pl-[calc(50%-55px)] lg:pl-[calc(50%-140px)]">
+    <div class="flex-none p-2">
+      <canvas width={280} height={280} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none p-2">
+      <canvas width={280} height={280} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none p-2">
+      <canvas width={280} height={280} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none p-2">
+      <canvas width={280} height={280} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none p-2">
+      <canvas width={280} height={280} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none p-2">
+      <canvas width={280} height={280} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none p-2">
+      <canvas width={280} height={280} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none p-2">
+      <canvas width={280} height={280} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none p-2">
+      <canvas width={280} height={280} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none p-2">
+      <canvas width={280} height={280} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none p-2">
+      <canvas width={280} height={280} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none p-2">
+      <canvas width={280} height={280} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none p-2">
+      <canvas width={280} height={280} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none p-2">
+      <canvas width={280} height={280} class="bg-slate-500 m-1" />
+    </div>
+  </Track>
+</div>
+
+<div class="not-content">
+  <h2>Vertical snap scroll</h2>
+  <Track client:only="lit" snap
+                class="flex h-[250px] flex-col overflow-hidden pt-[95px]"
+                value="1"
+                vertical>
+    <div class="flex-none py-2 font-bold opacity-40 [&[active]]:opacity-100">
+      <canvas width={200} height={64} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none py-2 font-bold opacity-40 [&[active]]:opacity-100">
+      <canvas width={200} height={64} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none py-2 font-bold opacity-40 [&[active]]:opacity-100">
+      <canvas width={200} height={64} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none py-2 font-bold opacity-40 [&[active]]:opacity-100">
+      <canvas width={200} height={64} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none py-2 font-bold opacity-40 [&[active]]:opacity-100">
+      <canvas width={200} height={64} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none py-2 font-bold opacity-40 [&[active]]:opacity-100">
+      <canvas width={200} height={64} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none py-2 font-bold opacity-40 [&[active]]:opacity-100">
+      <canvas width={200} height={64} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none py-2 font-bold opacity-40 [&[active]]:opacity-100">
+      <canvas width={200} height={64} class="bg-slate-500 m-1" />
+    </div>
+    <div class="flex-none py-2 font-bold opacity-40 [&[active]]:opacity-100">
+      <canvas width={200} height={64} class="bg-slate-500 m-1" />
     </div>
   </Track>
 </div>

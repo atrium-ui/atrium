@@ -35,6 +35,7 @@ export class PointerTrait extends Trait {
       this.grabbing = true;
       this.grabbedStart.set(e.mousePos);
       this.entity.dispatchEvent(new Event('pointer:grab'));
+      this.entity.setTarget(undefined);
     }
 
     if (e.mousePos.abs()) {
@@ -56,15 +57,17 @@ export class PointerTrait extends Trait {
     }
 
     if (e.snap) {
-      if (inputState.release.value) {
-        const power = this.grabDelta.abs();
-        const slideRect = e.getCurrentSlideRect();
-        const axes = e.vertical ? 1 : 0;
+      const accel = e.acceleration.abs();
 
-        if (power < slideRect[axes] / 2) {
-          // short throw
-          e.moveBy(1 * Math.sign(this.force[axes]), 'linear');
-        } else {
+      const force = this.grabDelta.abs();
+      const slideRect = e.getCurrentSlideRect();
+      const axes = e.vertical ? 1 : 0;
+
+      const forceToSizeRatio = force / slideRect[axes];
+
+      if (!this.grabbing) {
+        // this ration might not be perfect for every size
+        if (accel * forceToSizeRatio < 1) {
           e.moveBy(0, 'linear');
         }
       }
