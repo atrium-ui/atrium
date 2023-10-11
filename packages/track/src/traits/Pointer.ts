@@ -65,7 +65,7 @@ export class PointerTrait extends Trait {
 
       const forceToSizeRatio = force / slideRect[axes];
 
-      if (!this.grabbing) {
+      if (!this.grabbing && !e.target) {
         // this ration might not be perfect for every size
         if (accel * forceToSizeRatio < 1) {
           e.moveBy(0, 'linear');
