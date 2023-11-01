@@ -1,6 +1,6 @@
 # Atrium Mono
 
-This repository contains a collection of framework agnostic and functional web-components.
+This repository contains a collection of framework agnostic and functional web-components for building Websites.
 
 ## Prerequisites
 
