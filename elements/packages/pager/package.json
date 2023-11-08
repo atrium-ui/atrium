@@ -13,10 +13,6 @@
   "dependencies": {
     "lit": "^2.5.0"
   },
-  "devDependencies": {
-    "histoire": "^0.16.2",
-    "tsup": "^6.7.0"
-  },
   "tsup": {
     "entry": [
       "src/index.ts"

@@ -4,15 +4,13 @@ description: A reference page in my new Starlight docs site.
 ---
 
 import "./styles/expandable.scss";
-import { Expandable } from "@atrium-ui/elements/expandable";
-import { Toggle } from "@atrium-ui/elements/toggle";
 import { paragraph } from "txtgen";
 import ExpandIcon from "../../../components/ExpandIcon.astro";
 
 (WIP) A basic element of an accordion that only includes the animation and scroll behavios for expandable content.
 
 <div class="not-content">
-  <Expandable client:load class="accordion">
+  <a-expandable class="accordion">
 
     <div slot="toggle">
       <button class="accordion-title">
@@ -23,11 +21,11 @@ import ExpandIcon from "../../../components/ExpandIcon.astro";
 
     <div class="accordion-content">{paragraph(4)}</div>
 
-  </Expandable>
+  </a-expandable>
 </div>
 
 <div class="not-content">
-  <Expandable client:load class="accordion" direction="up">
+  <a-expandable client:load class="accordion" direction="up">
 
     <div slot="toggle">
       <button class="accordion-title">
@@ -38,14 +36,14 @@ import ExpandIcon from "../../../components/ExpandIcon.astro";
 
     <div class="accordion-content">{paragraph(4)}</div>
 
-  </Expandable>
+  </a-expandable>
 </div>
 
 ### Expand Items Exclusively
 
 <div class="not-content">
-  <Toggle client:load active-attribute="opened">
-    <Expandable class="accordion">
+  <a-toggle client:load active-attribute="opened">
+    <a-expandable class="accordion">
       <div slot="toggle">
         <button class="accordion-title">
           <div class="headline">
@@ -56,9 +54,9 @@ import ExpandIcon from "../../../components/ExpandIcon.astro";
       </div>
 
       <div class="accordion-content">{paragraph(4)}</div>
-    </Expandable>
+    </a-expandable>
 
-    <Expandable class="accordion">
+    <a-expandable class="accordion">
       <div slot="toggle">
         <button class="accordion-title">
           <div class="headline">Toggle</div>
@@ -67,9 +65,9 @@ import ExpandIcon from "../../../components/ExpandIcon.astro";
       </div>
 
       <div class="accordion-content">{paragraph(4)}</div>
-    </Expandable>
+    </a-expandable>
 
-  </Toggle>
+  </a-toggle>
 </div>
 
 ### Expand a Paragraph

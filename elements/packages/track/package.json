@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lit": "^2.7.5"
+    "lit": "^2.5.0"
   },
   "files": [
     "dist"
