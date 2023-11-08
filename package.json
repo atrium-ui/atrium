@@ -57,12 +57,12 @@
   "license": "ISC",
   "devDependencies": {
     "typescript": "^5.2.2",
+    "tsup": "^7.2.0",
     "@biomejs/biome": "^1.0.0",
     "@happy-dom/global-registrator": "^11.0.2"
   },
   "dependencies": {
-    "astro": "latest",
-    "lit": "latest"
+    "lit": "^3.0.2"
   },
   "workspaces": [
     "components",

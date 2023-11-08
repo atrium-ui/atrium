@@ -6,25 +6,13 @@ tasks:
   run-packages:
     desc: Run a command in all packages
     internal: true
-    silent: true
     vars:
       command: '{{.command | default "echo"}}'
       dirs:
-        sh: echo $(find ./packages -type f -name "package.json"  -exec dirname {} \;)
+        sh: echo $(find ./packages -maxdepth 2 -type f -name "package.json" -exec dirname {} \;)
     cmds:
       - for: { var: dirs, split: " " }
         cmd: cd {{.ITEM}} && {{.command}}
-
-  run-tasks:
-    desc: Run a task recursivly in all included Taskfiles
-    internal: true
-    silent: true
-    vars:
-      TASK: '{{.TASK | default "help"}}'
-      TASKS:
-        sh: echo $(task --list --json | jq -r '.tasks[] | select(.name | contains(":{{.TASK}}")).name')
-    cmds:
-      - task --parallel {{.TASKS}}
 
   setup:
     desc: Install dependencies
@@ -55,21 +43,21 @@ tasks:
     cmds:
       - task: run-packages
         vars:
-          command: bun run build &
+          command: bun run build
 
   docs:
     desc: Start dev server for docs
     dir: "{{.TASKFILE_DIR}}/docs"
     deps: [build]
     cmds:
-      - bun --bun x astro dev
+      - bun x astro dev
 
   docs:build:
     desc: Builds the docs into the public folder
     dir: "{{.TASKFILE_DIR}}/docs"
     deps: [build]
     cmds:
-      - bun --bun x astro build
+      - bun x astro build
       - mv dist ../public
 
   new:

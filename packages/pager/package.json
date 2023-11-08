@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
-    "build": "bun build src/index.ts --sourcemap --external lit --external @atrium-ui/* --outdir dist"
+    "build": "tsup"
   },
   "author": "",
   "license": "ISC",
@@ -18,9 +18,15 @@
     "tsup": "^6.7.0"
   },
   "tsup": {
-    "entry": {
-      "example": "src/index.ts"
-    },
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "esm"
+    ],
+    "external": [
+      "@atrium-ui/*"
+    ],
     "sourcemap": true,
     "clean": true
   }

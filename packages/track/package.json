@@ -5,15 +5,27 @@
   "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
-    "build": "bun build src/index.ts --sourcemap --external lit --external @atrium-ui/* --outdir dist"
+    "build": "tsup"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "lit": "^2.7.5"
   },
-  "devDependencies": {
-    "histoire": "^0.16.2"
-  },
-  "files": ["dist"]
+  "files": [
+    "dist"
+  ],
+  "tsup": {
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "esm"
+    ],
+    "external": [
+      "@atrium-ui/*"
+    ],
+    "sourcemap": true,
+    "clean": true
+  }
 }
