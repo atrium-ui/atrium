@@ -39,9 +39,8 @@ tasks:
 
   test:
     desc: Run tests on all components
-    deps: [setup]
+    deps: [build]
     cmds:
-      - task: build
       - bun test
 
   lint:
@@ -68,9 +67,8 @@ tasks:
   docs:build:
     desc: Builds the docs into the public folder
     dir: "{{.TASKFILE_DIR}}/docs"
-    deps: [setup]
+    deps: [build]
     cmds:
-      - task: build
       - bun --bun x astro build
       - mv dist ../public
 
@@ -80,7 +78,7 @@ tasks:
     cmds:
       - bun x atrium new
 
-  reset:
+  clean:
     desc: Clean local files
     cmds:
       - git clean -xdf

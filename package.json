@@ -61,7 +61,8 @@
     "@happy-dom/global-registrator": "^11.0.2"
   },
   "dependencies": {
-    "lit": "^2.8.0"
+    "astro": "latest",
+    "lit": "latest"
   },
   "workspaces": [
     "components",
