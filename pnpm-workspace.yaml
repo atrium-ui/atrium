@@ -1,0 +1,5 @@
+workspaces:
+  - elements
+  - cli
+  - docs
+  - components

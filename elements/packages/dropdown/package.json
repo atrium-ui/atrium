@@ -1,7 +1,8 @@
 {
-  "name": "@atrium-ui/input-range",
-  "version": "1.0.4",
+  "name": "@atrium-ui/dropdown",
+  "version": "0.3.7",
   "description": "",
+  "type": "module",
   "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
@@ -10,7 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lit": "^2.2.1"
+    "lit": "^2.5.0",
+    "@atrium-ui/elements": "workspace:*"
   },
   "tsup": {
     "entry": [

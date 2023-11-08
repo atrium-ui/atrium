@@ -6,52 +6,6 @@
   "bin": {
     "atrium": "./cli/main.js"
   },
-  "exports": {
-    ".": {
-      "import": "./index.js",
-      "types": "./index.d.ts"
-    },
-    "./adaptive": {
-      "import": "./packages/adaptive/dist/index.js",
-      "types": "./packages/adaptive/src/index.ts"
-    },
-    "./toggle": {
-      "import": "./packages/toggle/dist/index.js",
-      "types": "./packages/toggle/src/index.ts"
-    },
-    "./expandable": {
-      "import": "./packages/expandable/dist/index.js",
-      "types": "./packages/expandable/src/index.ts"
-    },
-    "./dropdown": {
-      "import": "./packages/dropdown/dist/index.js",
-      "types": "./packages/dropdown/src/index.ts"
-    },
-    "./circle": {
-      "import": "./packages/circle/dist/index.js",
-      "types": "./packages/circle/src/index.ts"
-    },
-    "./pager": {
-      "import": "./packages/pager/dist/index.js",
-      "types": "./packages/pager/src/index.ts"
-    },
-    "./track": {
-      "import": "./packages/track/dist/index.js",
-      "types": "./packages/track/src/index.ts"
-    },
-    "./command": {
-      "import": "./packages/command/dist/index.js",
-      "types": "./packages/command/src/index.ts"
-    },
-    "./blur": {
-      "import": "./packages/blur/dist/index.js",
-      "types": "./packages/blur/src/index.ts"
-    },
-    "./popover": {
-      "import": "./packages/popover/dist/index.js",
-      "types": "./packages/popover/src/index.ts"
-    }
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -60,9 +14,6 @@
     "tsup": "^7.2.0",
     "@biomejs/biome": "^1.0.0",
     "@happy-dom/global-registrator": "^11.0.2"
-  },
-  "dependencies": {
-    "lit": "^3.0.2"
   },
   "workspaces": [
     "components",

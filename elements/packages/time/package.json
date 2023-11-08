@@ -2,6 +2,7 @@
   "name": "@atrium-ui/time",
   "version": "0.0.1",
   "description": "",
+  "type": "module",
   "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {

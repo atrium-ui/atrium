@@ -1,7 +1,8 @@
 {
-  "name": "@atrium-ui/track",
-  "version": "0.1.0",
+  "name": "@atrium-ui/circle",
+  "version": "1.0.10",
   "description": "",
+  "type": "module",
   "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
@@ -10,11 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lit": "^2.7.5"
+    "lit": "^2.5.0"
   },
-  "files": [
-    "dist"
-  ],
   "tsup": {
     "entry": [
       "src/index.ts"

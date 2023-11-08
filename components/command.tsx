@@ -1,4 +1,4 @@
-import '@atrium-ui/command';
+import '@atrium-ui/elements/command';
 
 interface Props {
   children?: JSX.Element | string;

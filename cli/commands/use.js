@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
-import prompts from 'prompts';
+import en from 'enquirer';
 
 const args = process.argv.slice(2);
 
@@ -24,17 +24,13 @@ export default async function () {
       .filter((file) => file.match('.tsx'))
       .map((file) => file.replace('.tsx', ''));
 
-    const { component } = await prompts([
-      {
-        type: 'multiselect',
-        name: 'component',
-        message: 'Pick components you want to use',
-        instructions: false,
-        min: 1,
-        choices: options,
-      },
-    ]);
+    const prompt = new en.MultiSelect({
+      name: 'component',
+      message: 'Pick components you want to use',
+      choices: options,
+    });
 
+    const component = await prompt.run();
     components.push(...component.map((index) => options[index]));
   }
 

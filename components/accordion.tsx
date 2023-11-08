@@ -1,5 +1,5 @@
-import '@atrium-ui/expandable';
-import '@atrium-ui/toggle';
+import '@atrium-ui/elements/expandable';
+import '@atrium-ui/elements/toggle';
 
 interface Props {
   items: { title: string; content: string }[];

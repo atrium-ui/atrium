@@ -1,7 +1,8 @@
 {
-  "name": "@atrium-ui/toggle",
-  "version": "0.1.2",
+  "name": "@atrium-ui/input-range",
+  "version": "1.0.4",
   "description": "",
+  "type": "module",
   "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
@@ -10,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lit": "^2.5.0"
+    "lit": "^2.2.1"
   },
   "tsup": {
     "entry": [

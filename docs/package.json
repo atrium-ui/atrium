@@ -2,21 +2,28 @@
   "name": "docs",
   "type": "module",
   "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build"
+  },
   "dependencies": {
     "@astrojs/lit": "^3.0.2",
-    "@parse5/tools": "0.3.0",
     "@astrojs/solid-js": "^3.0.2",
     "@astrojs/starlight": "^0.12.0",
     "@astrojs/starlight-tailwind": "^2.0.1",
     "@astrojs/tailwind": "^5.0.2",
+    "@atrium-ui/elements": "workspace:*",
+    "@atrium-ui/components": "workspace:*",
+    "@parse5/tools": "0.3.0",
     "@rive-app/canvas-single": "^2.7.1",
     "@webcomponents/template-shadowroot": "^0.2.1",
     "astro": "^3.4.4",
-    "lit": "^3.0.2",
+    "execa": "8.0.1",
+    "lit": "^2.5.0",
+    "sass": "^1.69.0",
     "sharp": "^0.32.6",
     "solid-js": "^1.8.5",
     "tailwindcss": "^3.3.3",
-    "txtgen": "^3.0.4",
-    "sass": "^1.69.0"
+    "txtgen": "^3.0.4"
   }
 }

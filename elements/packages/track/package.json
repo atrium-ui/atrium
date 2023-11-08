@@ -1,7 +1,8 @@
 {
-  "name": "@atrium-ui/dropdown",
-  "version": "0.3.7",
+  "name": "@atrium-ui/track",
+  "version": "0.1.0",
   "description": "",
+  "type": "module",
   "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
@@ -10,8 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lit": "^2.5.0"
+    "lit": "^2.7.5"
   },
+  "files": [
+    "dist"
+  ],
   "tsup": {
     "entry": [
       "src/index.ts"

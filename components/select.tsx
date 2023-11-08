@@ -1,4 +1,4 @@
-import '@atrium-ui/dropdown';
+import '@atrium-ui/elements/dropdown';
 
 function Item(props: { value: string }) {
   return (

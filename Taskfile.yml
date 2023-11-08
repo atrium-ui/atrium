@@ -9,7 +9,7 @@ tasks:
     vars:
       command: '{{.command | default "echo"}}'
       dirs:
-        sh: echo $(find ./packages -maxdepth 2 -type f -name "package.json" -exec dirname {} \;)
+        sh: echo $(find ./elements/packages -maxdepth 2 -type f -name "package.json" -exec dirname {} \;)
     cmds:
       - for: { var: dirs, split: " " }
         cmd: cd {{.ITEM}} && {{.command}}
@@ -20,10 +20,11 @@ tasks:
     sources:
       - .rtx.toml
       - "package.json"
+      - "pnpm-*.yaml"
       - "**/package.json"
     cmds:
       - rtx install 2> /dev/null || true
-      - bun install
+      - pnpm install
 
   test:
     desc: Run tests on all components
@@ -50,21 +51,21 @@ tasks:
     dir: "{{.TASKFILE_DIR}}/docs"
     deps: [build]
     cmds:
-      - bun x astro dev
+      - bun run dev
 
   docs:build:
     desc: Builds the docs into the public folder
     dir: "{{.TASKFILE_DIR}}/docs"
     deps: [build]
     cmds:
-      - bun x astro build
+      - bun run build
       - mv dist ../public
 
   new:
     desc: Create a new component from templates
     dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - bun x atrium new
+      - bun x @atrium-ui/cli new
 
   clean:
     desc: Clean local files

@@ -58,7 +58,7 @@ export default async function () {
     output: process.stdout,
   });
 
-  rl.question('Give it a name: \n➡️ ', (id) => {
+  rl.question('Give it a name: \n➡� ', (id) => {
     const name = capitalize(id);
 
     const compPath = `components/${id}`;

@@ -1,7 +1,8 @@
 {
-  "name": "@atrium-ui/adaptive-height",
-  "version": "2.0.3",
+  "name": "@atrium-ui/toggle",
+  "version": "0.1.2",
   "description": "",
+  "type": "module",
   "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
@@ -12,13 +13,6 @@
   "dependencies": {
     "lit": "^2.5.0"
   },
-  "devDependencies": {
-    "txtgen": "^3.0.4",
-    "histoire": "^0.16.2"
-  },
-  "files": [
-    "dist"
-  ],
   "tsup": {
     "entry": [
       "src/index.ts"

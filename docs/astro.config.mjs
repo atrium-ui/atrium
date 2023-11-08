@@ -9,8 +9,8 @@ export default defineConfig({
   base: '/mono',
   publicDir: 'static',
   integrations: [
-    solid(),
     lit(),
+    solid(),
     tailwind({
       applyBaseStyles: false,
     }),
