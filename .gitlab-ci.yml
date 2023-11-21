@@ -34,7 +34,6 @@ publish:
   stage: publish
   only:
     - main
-  when: manual
   script: task publish
 
 publish-dev:
