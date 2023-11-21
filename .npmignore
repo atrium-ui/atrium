@@ -29,6 +29,10 @@ pnpm-workspace.yaml
 turbo.json
 .gitlab-ci.yml
 .DS_Store
+biome.json
+bunfig.toml
+Taskfile.yml
+.rtx.toml
 
 # Logs
 npm-debug.log*

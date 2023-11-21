@@ -91,7 +91,7 @@ tasks:
       - npm version prerelease
       - npm publish --tag dev
       - git push origin --tags -o ci.skip
-      - git push origin HEAD:develop -o ci.ski
+      - git push origin HEAD:develop -o ci.skip
 
   publish:preview:
     desc: Pack the pacakge for preview
