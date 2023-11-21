@@ -29,27 +29,23 @@ before_script:
   - git config user.email "gitlab@s-v.de"
   - git config user.name "CI"
   - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
+  - git tag -d $(git tag -l)
+  - echo "@sv-components:registry=https://${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/" > .npmrc
+  - echo "//${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+  - cat .npmrc
 
 publish:
   stage: publish
   only:
     - main
-  script:
-    - echo "@sv-components:registry=https://${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/" > .npmrc
-    - echo "//${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
-    - cat .npmrc
-    - task publish:dev
+  script: task publish:dev
 
 publish-dev:
   stage: publish
   only:
     - develop
   when: manual
-  script:
-    - echo "@sv-components:registry=https://${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/" > .npmrc
-    - echo "//${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
-    - cat .npmrc
-    - task publish:dev
+  script: task publish:dev
 
 pages:
   stage: docs
