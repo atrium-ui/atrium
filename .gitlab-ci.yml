@@ -34,15 +34,21 @@ publish:
   stage: publish
   only:
     - main
-  when: manual
-  script: task publish
+  script:
+    - echo "@sv-components:registry=https://${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/" > .npmrc
+    - echo "//${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/:_authToken=${NPM_PUBLISH_TOKEN}" >> .npmrc
+    - cat .npmrc
+    - task publish:dev
 
 publish-dev:
   stage: publish
   only:
     - develop
   when: manual
-  script: task publish:dev
+  script:
+    - echo "@sv-components:registry=https://${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/" > .npmrc
+    - echo "//${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/:_authToken=${NPM_PUBLISH_TOKEN}" >> .npmrc
+    - task publish:dev
 
 pages:
   stage: docs
