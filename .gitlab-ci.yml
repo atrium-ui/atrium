@@ -46,14 +46,15 @@ publish-dev:
 
 pages:
   stage: docs
-  script: task docs:build
+  only:
+    - main
   environment:
     name: main
     url: https://sv-components.pages.s-v.de/mono
-  when: manual
   artifacts:
     paths:
       - public
+  script: task docs:build
 
 test:
   stage: test
