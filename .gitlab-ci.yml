@@ -42,7 +42,7 @@ publish-dev:
   only:
     - develop
   when: manual
-  script: task publish-dev
+  script: task publish:dev
 
 pages:
   stage: docs
