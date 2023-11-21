@@ -11,19 +11,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lit": "^2.5.0",
-    "@atrium-ui/elements": "workspace:*"
+    "lit": "^2.5.0"
   },
   "tsup": {
-    "entry": [
-      "src/index.ts"
-    ],
-    "format": [
-      "esm"
-    ],
-    "external": [
-      "@atrium-ui/*"
-    ],
+    "entry": ["src/index.ts"],
+    "format": ["esm"],
+    "external": ["@atrium-ui/*"],
     "sourcemap": true,
     "clean": true
   }
