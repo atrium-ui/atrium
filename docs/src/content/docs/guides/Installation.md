@@ -4,6 +4,8 @@ icon: "carbon:assembly-reference"
 title: "Installation"
 ---
 
+https://docs.gitlab.com/ee/user/packages/npm_registry/#install-from-the-instance-level
+
 1. Update or create .npmrc file
 
 ```ini

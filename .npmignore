@@ -14,6 +14,7 @@ examples
 **/*.spec.test
 
 vite.config.ts
+.rtx
 .task
 .vscode
 .turbo
