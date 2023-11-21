@@ -33,6 +33,7 @@ biome.json
 bunfig.toml
 Taskfile.yml
 .rtx.toml
+.rtx
 
 # Logs
 npm-debug.log*

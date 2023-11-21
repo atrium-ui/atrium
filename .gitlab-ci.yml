@@ -22,7 +22,7 @@ cache:
       - .rtx
 
 before_script:
-  - apt install unzip parallel -y
+  - apt install unzip -y
   - export PATH=$RTX_DATA_DIR/shims:$PATH
   - rtx install
   - task setup
