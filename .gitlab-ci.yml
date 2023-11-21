@@ -36,7 +36,7 @@ publish:
     - main
   script:
     - echo "@sv-components:registry=https://${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/" > .npmrc
-    - echo "//${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/:_authToken=${NPM_PUBLISH_TOKEN}" >> .npmrc
+    - echo "//${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
     - cat .npmrc
     - task publish:dev
 
@@ -47,7 +47,7 @@ publish-dev:
   when: manual
   script:
     - echo "@sv-components:registry=https://${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/" > .npmrc
-    - echo "//${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/:_authToken=${NPM_PUBLISH_TOKEN}" >> .npmrc
+    - echo "//${CI_SERVER_HOST}/api/v4/projects/1456/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
     - task publish:dev
 
 pages:
