@@ -1,6 +1,5 @@
 [tools]
 task = "3"
+pnpm = "8.10"
 bun = "1.0.10"
-jq = "1.7"
-pnpm = "latest"
-node = "latest"
+node = "20"
