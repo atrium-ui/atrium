@@ -72,29 +72,47 @@ tasks:
     cmds:
       - git clean -xdf
 
-  publish:
+  version:minor:
+    desc: Publish npm pacakge
+    dir: "{{.TASKFILE_DIR}}"
+    cmds:
+      - task build
+      - npm version minor
+
+  version:patch:
     desc: Publish npm pacakge
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - task build
       - npm version patch
-      - npm publish
-      - git push --tags -o ci.skip
-      - git push origin HEAD:main -o ci.skip
-      - git push origin HEAD:develop -o ci.skip
 
-  publish:dev:
+  version:prerelease:
     desc: Publish npm package to dev tag
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - task build
       - npm version prerelease
-      - npm publish --tag dev
-      - git push origin --tags -o ci.skip
-      - git push origin HEAD:develop -o ci.skip
 
   publish:preview:
     desc: Pack the pacakge for preview
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - npm pack && tar -xvzf *.tgz && rm -rf package *.tgz
+
+  publish:
+    desc: Publish npm pacakge
+    dir: "{{.TASKFILE_DIR}}"
+    cmds:
+      - npm publish
+      - git push --tags -o ci.skip
+      - git push origin HEAD:main -o ci.skip
+      - git push origin HEAD:develop -o ci.skip
+
+  publish:dev:
+    desc: Publish npm pacakge
+    dir: "{{.TASKFILE_DIR}}"
+    cmds:
+      - npm publish --tag dev
+      - git push --tags -o ci.skip
+      - git push origin HEAD:main -o ci.skip
+      - git push origin HEAD:develop -o ci.skip

@@ -34,18 +34,31 @@ before_script:
   - echo "//${CI_SERVER_HOST}/api/v4/projects/1455/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
   - cat .npmrc
 
-publish:
+publish-minor:
   stage: publish
   only:
     - main
-  script: task publish:dev
+  when: manual
+  script:
+    - task version:minor
+    - task publish
+
+publish-patch:
+  stage: publish
+  only:
+    - main
+  when: manual
+  script:
+    - task version:patch
+    - task publish
 
 publish-dev:
   stage: publish
   only:
     - develop
-  when: manual
-  script: task publish:dev
+  script:
+    - task version:prerelease
+    - task publish:dev
 
 pages:
   stage: docs
