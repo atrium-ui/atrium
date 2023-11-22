@@ -6,7 +6,7 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  base: '/mono',
+  base: '/sv-frontend-library/mono',
   publicDir: 'static',
   integrations: [
     lit(),
