@@ -1,6 +1,6 @@
 {
   "name": "@sv/mono",
-  "version": "0.2.2-0",
+  "version": "0.2.2-1",
   "description": "Atrium Component Library",
   "type": "module",
   "bin": {
