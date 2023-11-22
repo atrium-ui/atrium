@@ -114,5 +114,4 @@ tasks:
     cmds:
       - npm publish --tag dev
       - git push --tags -o ci.skip
-      - git push origin HEAD:main -o ci.skip
       - git push origin HEAD:develop -o ci.skip
