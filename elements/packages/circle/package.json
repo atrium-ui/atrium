@@ -1,5 +1,5 @@
 {
-  "name": "@atrium-ui/circle",
+  "name": "@sv/circle",
   "version": "1.0.10",
   "description": "",
   "type": "module",
@@ -14,15 +14,9 @@
     "lit": "^2.5.0"
   },
   "tsup": {
-    "entry": [
-      "src/index.ts"
-    ],
-    "format": [
-      "esm"
-    ],
-    "external": [
-      "@atrium-ui/*"
-    ],
+    "entry": ["src/index.ts"],
+    "format": ["esm"],
+    "external": ["@sv/*"],
     "sourcemap": true,
     "clean": true
   }

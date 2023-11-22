@@ -16,7 +16,7 @@
   "tsup": {
     "entry": ["src/index.ts"],
     "format": ["esm"],
-    "external": ["@atrium-ui/*"],
+    "external": ["@sv/*"],
     "sourcemap": true,
     "clean": true
   }

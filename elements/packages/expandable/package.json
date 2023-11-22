@@ -13,19 +13,11 @@
   "dependencies": {
     "lit": "^2.5.0"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "tsup": {
-    "entry": [
-      "src/index.ts"
-    ],
-    "format": [
-      "esm"
-    ],
-    "external": [
-      "@atrium-ui/*"
-    ],
+    "entry": ["src/index.ts"],
+    "format": ["esm"],
+    "external": ["@sv/*"],
     "sourcemap": true,
     "clean": true
   }

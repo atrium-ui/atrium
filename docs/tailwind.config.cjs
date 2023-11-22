@@ -5,7 +5,7 @@ const starlightPlugin = require('@astrojs/starlight-tailwind');
 module.exports = {
   content: [
     './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
-    './node_modules/@atrium-ui/components/*.tsx',
+    './node_modules/@sv/components/*.tsx',
   ],
   plugins: [starlightPlugin()],
 };

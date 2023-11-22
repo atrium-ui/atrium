@@ -1,4 +1,4 @@
-import '@atrium-ui/elements/popover';
+import '@sv/elements/popover';
 
 export default function Combobox(
   props: {

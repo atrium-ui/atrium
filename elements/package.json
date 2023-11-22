@@ -1,6 +1,6 @@
 {
-  "name": "@atrium-ui/elements",
-  "version": "0.2.0-9",
+  "name": "@sv/elements",
+  "version": "0.2.0-14",
   "description": "Atrium Component Library",
   "type": "module",
   "exports": {

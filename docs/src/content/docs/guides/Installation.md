@@ -10,20 +10,20 @@ https://docs.gitlab.com/ee/user/packages/npm_registry/#install-from-the-instance
 
 ```ini
 # .npmrc
-@atrium-ui:registry=https://gitlab.s-v.de/api/v4/packages/npm/
+@sv:registry=https://gitlab.s-v.de/api/v4/packages/npm/
 '//gitlab.s-v.de/api/v4/packages/npm/:_authToken'="glpat-FMDSCh9zyLK4vS6kd4JB"
 ```
 
 2. Install the library like this
 
 ```bash
-pnpm i @atrium-ui/mono
+pnpm i @sv/mono
 ```
 
 3.1 Import a component
 
 ```typescript
-import "@atrium-ui/mono/a-component";
+import "@sv/elements/a-component";
 ```
 
 3.1.2 Use it any framework:
@@ -66,7 +66,7 @@ So to use the default styling, u need to import the provided `<component>/styles
 // /tsconfig.json
 {
   "compilerOptions": {
-    "types": ["@atrium-ui/mono"]
+    "types": ["@sv/mono"]
   }
 }
 ```
@@ -82,7 +82,7 @@ So to use the default styling, u need to import the provided `<component>/styles
 ```
 
 ```typescript
-import "@atrium-ui/mono/components/accordion";
+import "@sv/mono/components/accordion";
 ```
 
 ### NextJS
@@ -91,7 +91,7 @@ import "@atrium-ui/mono/components/accordion";
 // /tsconfig.json
 {
   "compilerOptions": {
-    "types": ["@atrium-ui/mono"]
+    "types": ["@sv/mono"]
   }
 }
 ```
@@ -102,7 +102,7 @@ if (typeof window !== "undefined") {
   // only import on client render;
   // This will not cause hydration errors,
   //  since the components dont render any html in itself.
-  import("@atrium-ui/mono/components/accordion");
+  import("@sv/mono/components/accordion");
 }
 
 export default function Home() {
@@ -123,7 +123,7 @@ export default function Home() {
 // /tsconfig.json
 {
   "compilerOptions": {
-    "types": ["@atrium-ui/mono"]
+    "types": ["@sv/mono"]
   }
 }
 ```
@@ -141,7 +141,7 @@ declare module "solid-js" {
 
 ```typescript
 // App.tsx
-import "@atrium-ui/mono/components/accordion";
+import "@sv/elements/accordion";
 
 const App: Component = () => {
   return (

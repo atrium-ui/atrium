@@ -1,4 +1,4 @@
-import { Track } from '@atrium-ui/elements/track';
+import { Track } from '@sv/elements/track';
 import { css, html } from 'lit';
 
 class PagedTrack extends Track {

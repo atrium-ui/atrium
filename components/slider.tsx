@@ -1,5 +1,5 @@
-import '@atrium-ui/elements/toggle';
-import '@atrium-ui/elements/track';
+import '@sv/elements/toggle';
+import '@sv/elements/track';
 
 interface Props {
   children?: JSX.Element | string;

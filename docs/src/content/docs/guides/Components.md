@@ -6,11 +6,10 @@ title: "Components"
 
 Copy-pastable components to get started quickly using Tailwind and JSX.
 
-
 After installing the core library with
 
 ```bash
-npm install @atrium-ui/mono
+npm install @sv/mono
 ```
 
 Copy ready to use component with tailwind styling into your project:
@@ -19,4 +18,4 @@ Copy ready to use component with tailwind styling into your project:
 npx atrium use accordion
 ```
 
-Then customize the component yourself in */components/accordion.tsx
+Then customize the component yourself in \*/components/accordion.tsx

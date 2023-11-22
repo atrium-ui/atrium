@@ -1,5 +1,5 @@
-import '@atrium-ui/elements/dropdown';
-import '@atrium-ui/elements/toggle';
+import '@sv/elements/dropdown';
+import '@sv/elements/toggle';
 
 function CheckIcon() {
   return (

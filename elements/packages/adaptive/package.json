@@ -17,19 +17,11 @@
     "txtgen": "^3.0.4",
     "histoire": "^0.16.2"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "tsup": {
-    "entry": [
-      "src/index.ts"
-    ],
-    "format": [
-      "esm"
-    ],
-    "external": [
-      "@atrium-ui/*"
-    ],
+    "entry": ["src/index.ts"],
+    "format": ["esm"],
+    "external": ["@sv/*"],
     "sourcemap": true,
     "clean": true
   }

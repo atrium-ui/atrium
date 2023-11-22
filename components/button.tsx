@@ -1,5 +1,5 @@
 // copy pasteable ui component
-// import "@atrium-ui/components/dropdown";
+// import "@sv/components/dropdown";
 
 const variants = {
   outline: 'rounded-lg border border-[#C09278] px-6 py-2 bg-transparent',
