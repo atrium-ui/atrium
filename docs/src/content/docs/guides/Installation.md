@@ -17,7 +17,7 @@ https://docs.gitlab.com/ee/user/packages/npm_registry/#install-from-the-instance
 2. Install the library like this
 
 ```bash
-pnpm i @sv/mono
+npm i @sv/mono
 ```
 
 3.1 Import a component

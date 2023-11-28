@@ -37,6 +37,12 @@ All elements share the same dependencies from the [elements/package.json](elemen
 
 See [./.rtx.toml](./.rtx.toml) for tools and versions used in this project.
 
+Currently:
+
+- [task](https://taskfile.dev/)
+- [pnpm](https://pnpm.io/)
+- [bun](https://bun.sh/)
+
 They can be installed using [rtx](https://github.com/jdxcode/rtx) with `rtx install` in the root directory of this project.
 This will also happen automatically when running `task docs` for the first time.
 
