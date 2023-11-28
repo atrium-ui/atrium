@@ -13,6 +13,10 @@
   </p>
 </p>
 
+## Use in other projects
+
+See [Installation](https://sv.pages.s-v.de/sv-frontend-library/mono/guides/installation/) in the docs for instructions.
+
 ## Packages
 
 ### @sv/mono
