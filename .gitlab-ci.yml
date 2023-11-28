@@ -37,10 +37,10 @@ publish-minor:
     - main
   when: manual
   script:
-    - task version:minor
     - task version:minor PACKAGE_SCOPE=elements
-    - task publish
     - task publish PACKAGE_SCOPE=elements
+    - task version:minor
+    - task publish
 
 publish-patch:
   stage: publish
@@ -48,20 +48,20 @@ publish-patch:
     - main
   when: manual
   script:
-    - task version:patch
-    - task publish
     - task version:patch PACKAGE_SCOPE=elements
     - task publish PACKAGE_SCOPE=elements
+    - task version:patch
+    - task publish
 
 publish-dev:
   stage: publish
   only:
     - develop
   script:
-    - task version:prerelease
-    - task publish:dev
     - task version:prerelease PACKAGE_SCOPE=elements
     - task publish:dev PACKAGE_SCOPE=elements
+    - task version:prerelease
+    - task publish:dev
 
 pages:
   stage: docs

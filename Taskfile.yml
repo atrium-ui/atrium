@@ -77,24 +77,24 @@ tasks:
       - git clean -xdf
 
   version:minor:
-    desc: Publish npm pacakge
+    desc: Version npm pacakge
     dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
+    deps: [build]
     cmds:
-      - task: build
       - npm version minor
 
   version:patch:
-    desc: Publish npm pacakge
+    desc: Version npm pacakge
     dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
+    deps: [build]
     cmds:
-      - task: build
       - npm version patch
 
   version:prerelease:
-    desc: Publish npm package to dev tag
+    desc: Version npm package to dev tag
     dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
+    deps: [build]
     cmds:
-      - task: build
       - npm version prerelease
 
   publish:preview:
