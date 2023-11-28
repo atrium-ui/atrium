@@ -80,10 +80,11 @@ tasks:
     dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
     deps: [build]
     vars:
+      preid: ""
       type: prerelease
     cmds:
-      - npm version {{.type}} --git-tag-version=false
-      - 'git add . && git commit -m "version: minor version %s"'
+      - npm version {{.type}} --git-tag-version=false --preid={{.preid}}
+      - 'git add . && git commit -m "version: {{.type}} version %s"'
 
   version:minor:
     desc: "Create minor version"
@@ -104,6 +105,7 @@ tasks:
     cmds:
       - task: version
         vars:
+          preid: "rc"
           type: prerelease
 
   publish:preview:
