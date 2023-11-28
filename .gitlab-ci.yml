@@ -49,8 +49,8 @@ publish-patch:
   when: manual
   script:
     - task version:patch
-    - task version:patch PACKAGE_SCOPE=elements
     - task publish
+    - task version:patch PACKAGE_SCOPE=elements
     - task publish PACKAGE_SCOPE=elements
 
 publish-dev:
@@ -59,8 +59,8 @@ publish-dev:
     - develop
   script:
     - task version:prerelease
-    - task version:prerelease PACKAGE_SCOPE=elements
     - task publish:dev
+    - task version:prerelease PACKAGE_SCOPE=elements
     - task publish:dev PACKAGE_SCOPE=elements
 
 pages:
