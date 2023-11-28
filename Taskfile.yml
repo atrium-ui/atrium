@@ -76,26 +76,32 @@ tasks:
     cmds:
       - git clean -xdf
 
-  version:minor:
-    desc: Version npm pacakge
+  version:
     dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
     deps: [build]
+    vars:
+      type: prerelease
     cmds:
-      - npm version minor
+      - npm version {{.type}} --git-tag-version=false
+      - 'git add . && git commit -m "version: minor version %s"'
+
+  version:minor:
+    cmd:
+      - task: version
+        vars:
+          type: minor
 
   version:patch:
-    desc: Version npm pacakge
-    dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
-    deps: [build]
-    cmds:
-      - npm version patch
+    cmd:
+      - task: version
+        vars:
+          type: patch
 
-  version:prerelease:
-    desc: Version npm package to dev tag
-    dir: "{{.TASKFILE_DIR}}"
-    deps: [build]
-    cmds:
-      - npm version prerelease --workspace={{.PACKAGE_SCOPE}}
+  version:patch:
+    cmd:
+      - task: version
+        vars:
+          type: prerelease
 
   publish:preview:
     desc: Pack the pacakge for preview
@@ -108,8 +114,7 @@ tasks:
     dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
     cmds:
       - npm publish
-      - git push --tags -o ci.skip
-      - git push origin HEAD:main -o ci.skip
+      - git push -o ci.skip
       - git push origin HEAD:develop -o ci.skip
 
   publish:dev:
@@ -117,5 +122,5 @@ tasks:
     dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
     cmds:
       - npm publish --tag dev
-      - git push --tags -o ci.skip
+      - git push -o ci.skip
       - git push origin HEAD:develop -o ci.skip
