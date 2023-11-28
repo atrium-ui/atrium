@@ -82,9 +82,11 @@ tasks:
     vars:
       preid: ""
       type: prerelease
+      version:
+        sh: npm version {{.type}} --git-tag-version=false --preid={{.preid}}
     cmds:
-      - npm version {{.type}} --git-tag-version=false --preid={{.preid}}
-      - 'git add . && git commit -m "version: {{.type}} version %s"'
+      - echo "Creating {{.type}} version {{.version}}"
+      - 'git add . && git commit -m "version: {{.type}} version {{.version}}"'
 
   version:minor:
     desc: "Create minor version"
