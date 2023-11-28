@@ -86,18 +86,21 @@ tasks:
       - 'git add . && git commit -m "version: minor version %s"'
 
   version:minor:
+    desc: "Create minor version"
     cmds:
       - task: version
         vars:
           type: minor
 
   version:patch:
+    desc: "Create patch version"
     cmds:
       - task: version
         vars:
           type: patch
 
-  version:patch:
+  version:prerelease:
+    desc: "Create prereleasae version"
     cmds:
       - task: version
         vars:
