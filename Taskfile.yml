@@ -27,7 +27,7 @@ tasks:
       - "**/package.json"
     cmds:
       - rtx install 2> /dev/null || true
-      - bun x pnpm install
+      - pnpm install
 
   test:
     desc: Run tests on all elements
