@@ -30,19 +30,20 @@ tasks:
       - pnpm install
 
   test:
-    desc: Run tests on all components
+    desc: Run tests on all elements
+    dir: "{{.TASKFILE_DIR}}/elements"
     deps: [build]
     cmds:
       - bun test
 
   lint:
-    desc: Run linter on all components
+    desc: Run linter on all packages
     deps: [setup]
     cmds:
       - bun x biome check .
 
   build:
-    desc: Build all components
+    desc: Build all elements
     deps: [setup]
     cmds:
       - task: run-packages

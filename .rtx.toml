@@ -1,5 +1,4 @@
 [tools]
 task = "3"
 pnpm = "8.10"
-bun = "1.0.10"
-node = "20"
+bun = "1.0.14"
