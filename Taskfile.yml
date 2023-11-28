@@ -117,7 +117,6 @@ tasks:
     dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
     cmds:
       - npm publish
-      - git push -o ci.skip
       - git push origin HEAD:develop -o ci.skip
 
   publish:dev:
@@ -125,5 +124,4 @@ tasks:
     dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
     cmds:
       - npm publish --tag dev
-      - git push -o ci.skip
       - git push origin HEAD:develop -o ci.skip
