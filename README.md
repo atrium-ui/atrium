@@ -12,10 +12,13 @@
     <br />
   </p>
 </p>
+<br />
 
 ## Use in other projects
 
 See [Installation](https://sv.pages.s-v.de/sv-frontend-library/mono/guides/installation/) in the docs for instructions.
+
+<br />
 
 ## Packages
 
@@ -34,6 +37,8 @@ This package is **not** published. It contains the cli which is used from the **
 **Dependencies**
 
 All elements share the same dependencies from the [elements/package.json](elements/package.json).
+
+<br />
 
 ## Development
 
