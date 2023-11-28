@@ -81,11 +81,9 @@ tasks:
     deps: [build]
     vars:
       type: prerelease
-      version:
-        sh: npm version {{.type}} --preid=rc --git-tag-version=false
     cmds:
-      - echo "Creating {{.type}} version {{.version}}"
-      - 'git add --all && git commit -m "version: {{.type}} version {{.version}}"'
+      - git add --all
+      - 'git commit -m "version: {{.type}} version $(npm version {{.type}} --preid=rc --git-tag-version=false)"'
 
   version:minor:
     desc: "Create minor version"
