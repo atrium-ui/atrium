@@ -82,8 +82,9 @@ tasks:
     vars:
       type: prerelease
     cmds:
+      - echo $(npm version {{.type}} --preid=rc --git-tag-version=false) > .task/.version
       - git add --all
-      - 'git commit -m "version: {{.type}} version $(npm version {{.type}} --preid=rc --git-tag-version=false)"'
+      - 'git commit -m "version: $(cat .task/.version)"'
 
   version:minor:
     desc: "Create minor version"
