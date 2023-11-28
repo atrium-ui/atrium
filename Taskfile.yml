@@ -3,7 +3,7 @@
 version: "3"
 
 env:
-  PACKAGE_SCOPE: .
+  PACKAGE_SCOPE:
 
 tasks:
   run-packages:
