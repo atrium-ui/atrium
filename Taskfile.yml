@@ -82,7 +82,7 @@ tasks:
     vars:
       type: prerelease
     cmds:
-      - echo $(npm version {{.type}} --preid=rc --git-tag-version=false) > .task/.version
+      - echo $(npm version {{.type}} --preid=rc --git-tag-version=false) > {{.TASKFILE_DIR}}/.task/.version
       - git add --all
       - 'git commit -m "version: $(cat .task/.version)"'
 
