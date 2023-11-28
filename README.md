@@ -1,40 +1,82 @@
-# Atrium Mono
+<p align="center">
+  <p align="center">
+   <img width="150" height="150" src="docs/src/assets/atrium.png" alt="Logo">
+  </p>
+	<h1 align="center"><b>Atrium Mono</b></h1>
+	<p align="center">
+    A collection of framework agnostic and functional web-components and templates for building Websites.
+    <br />
+    <br />
+    <a href="https://sv.pages.s-v.de/sv-frontend-library/mono/">Docs</a> ·
+    <a href="https://gitlab.s-v.de/sv/sv-frontend-library/mono/-/packages">Packages</a>
+    <br />
+  </p>
+</p>
 
-This repository contains a collection of framework agnostic and functional web-components for building Websites.
+## Packages
 
-## Prerequisites
+### @sv/mono
 
-Used versions of tools are pinned in [.rtx.toml](.rtx.toml) and can be installed using [rtx](https://github.com/jdxcode/rtx) with `rtx install` in the root directory of this project.
+This package contains all components and templates. It is also used for tooling and development, for example, the cli is located here.
 
-### Instant dev setup thanks to rtx:
+### @sv/elements
 
-```
-git clone git@gitlab.s-v.de:sv-components/mono.git && cd mono && rtx install && task docs
-```
+The elements package distributes all the custom-elements that are used in the components or external projects.
 
-## Getting Started
+### @sv/cli
 
-Install all dependencies:
-`task setup`
+This package is **not** published. It contains the cli which is used from the **@sv/mono** package and only contains executable JavaScript.
+
+**Dependencies**
+
+All elements share the same dependencies from the [elements/package.json](elements/package.json).
+
+## Development
+
+### Prerequisites
+
+See [./.rtx.toml](./.rtx.toml) for tools and versions used in this project.
+
+They can be installed using [rtx](https://github.com/jdxcode/rtx) with `rtx install` in the root directory of this project.
+This will also happen automatically when running `task docs` for the first time.
+
+### Getting Started
 
 Run dev server for docs website:
-`task docs`
+
+```shell
+task docs
+```
+
+### Quick setup
+
+```
+git clone git@gitlab.s-v.de:sv-components/mono.git && cd mono && task docs
+```
 
 ### Other commands
 
 Build all packages:
-`task build`
+
+```shell
+task build
+```
 
 Build docs:
-`task docs:build`
+
+```shell
+task docs:build
+```
 
 Init new component:
-`task new`
 
-**Dependencies**
+```shell
+task new
+```
 
-Dependencies that are required only in development can be added in each component under _"devDependencies"_. External dependencies that are not bundled into dist files need to be added to the root pacakge.json under _"dependencies"_.
+### Building elements
 
-**Development**
+Since all elements are written in TypeScript, they need to be compiled to JavaScript.
+All the elements share the same build system. We use [tsup](https://tsup.egoist.dev/) to generate light weight bundles.
 
-N/A
+The tsup configuration is located in the package.json of each element.

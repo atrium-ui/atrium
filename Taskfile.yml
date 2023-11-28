@@ -68,7 +68,7 @@ tasks:
     desc: Create a new component from templates
     dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - bun x @sv/a-cli new
+      - bun x @sv/mono new
 
   clean:
     desc: Clean local files

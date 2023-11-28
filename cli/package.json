@@ -1,5 +1,5 @@
 {
-  "name": "@sv/atrium-cli",
+  "name": "@sv/cli",
   "dependencies": {
     "chalk": "^5.2.0",
     "enquirer": "^2.4.1"
