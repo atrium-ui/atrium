@@ -81,7 +81,8 @@ tasks:
     deps: [build]
     vars:
       version_file: "{{.TASKFILE_DIR}}/.task/.version"
-      type: prerelease
+    requires:
+      vars: [type]
     cmds:
       - echo $(npm version {{.type}} --preid=rc --git-tag-version=false) > {{.version_file}}
       - git add --all
