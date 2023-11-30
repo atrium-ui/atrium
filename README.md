@@ -63,30 +63,16 @@ Run dev server for docs website:
 task docs
 ```
 
+See all available commands:
+
+```shell
+task -l
+```
+
 ### Quick setup
 
 ```
 git clone git@gitlab.s-v.de:sv-components/mono.git && cd mono && task docs
-```
-
-### Other commands
-
-Build all packages:
-
-```shell
-task build
-```
-
-Build docs:
-
-```shell
-task docs:build
-```
-
-Init new component:
-
-```shell
-task new
 ```
 
 ### Building elements
