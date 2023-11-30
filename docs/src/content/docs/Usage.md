@@ -9,7 +9,7 @@ title: "Usage"
 Use a component in your project.
 
 ```bash
-npx @sv/mono atrium use <component>
+npx @sv/mono atrium use <a-component>
 ```
 
 Or use elements directly.

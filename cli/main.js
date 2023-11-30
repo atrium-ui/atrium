@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 const args = process.argv.slice(2);
 
-switch (args[0]) {
+switch (args[1]) {
   case 'use': {
     import('./commands/use.js').then((mod) => {
       mod.default();
