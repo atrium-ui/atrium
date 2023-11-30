@@ -95,3 +95,13 @@ Since all elements are written in TypeScript, they need to be compiled to JavaSc
 All the elements share the same build system. We use [tsup](https://tsup.egoist.dev/) to generate light weight bundles.
 
 The tsup configuration is located in the package.json of each element.
+
+
+### Publishing packages
+
+Package publishing is handles by the CI.
+
+The **develop** branch always publishes a prerelease packages. When developing features, it is recommended to work in a feature branch.
+
+When develop is merged into the **main** branch, the docs will be automatically built and deplyed to pages.
+That pipeline will also give the options to publish a *patch* or *minor* release of the packages.
