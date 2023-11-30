@@ -63,30 +63,16 @@ Run dev server for docs website:
 task docs
 ```
 
+See all available commands:
+
+```shell
+task -l
+```
+
 ### Quick setup
 
 ```
 git clone git@gitlab.s-v.de:sv-components/mono.git && cd mono && task docs
-```
-
-### Other commands
-
-Build all packages:
-
-```shell
-task build
-```
-
-Build docs:
-
-```shell
-task docs:build
-```
-
-Init new component:
-
-```shell
-task new
 ```
 
 ### Building elements
@@ -96,12 +82,13 @@ All the elements share the same build system. We use [tsup](https://tsup.egoist.
 
 The tsup configuration is located in the package.json of each element.
 
-
 ### Publishing packages
 
 Package publishing is handles by the CI.
 
 The **develop** branch always publishes a prerelease packages. When developing features, it is recommended to work in a feature branch.
 
-When develop is merged into the **main** branch, the docs will be automatically built and deplyed to pages.
-That pipeline will also give the options to publish a *patch* or *minor* release of the packages.
+Feature branches should be named like this: `feature/<name>`.
+
+When develop is merged into the **main** branch, the docs will be automatically built and deployed to pages.
+That pipeline will also give the options to publish a _patch_ or _minor_ release of the packages.
