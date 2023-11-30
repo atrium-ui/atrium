@@ -1,6 +1,6 @@
 {
   "name": "@sv/mono",
-  "version": "0.2.3-rc.0",
+  "version": "0.2.3-rc.1",
   "description": "Atrium Component Library",
   "type": "module",
   "bin": {
@@ -15,5 +15,10 @@
     "@biomejs/biome": "^1.0.0",
     "@happy-dom/global-registrator": "^11.0.2"
   },
-  "workspaces": ["components", "packages/*", "docs", "cli"]
+  "workspaces": [
+    "components",
+    "packages/*",
+    "docs",
+    "cli"
+  ]
 }
