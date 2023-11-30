@@ -25,28 +25,24 @@ export default defineConfig({
       },
       sidebar: [
         {
+          label: 'Concept',
+          link: '/concept',
+        },
+        {
           label: 'Installation',
-          link: '/guides/installation',
+          link: '/installation',
         },
         {
-          label: 'Primitives',
-          link: '/guides/primitives',
-        },
-        {
-          label: 'Development',
-          link: '/guides/development',
-        },
-        {
-          label: 'Components',
-          link: '/guides/components',
+          label: 'Usage',
+          link: '/usage',
         },
         {
           label: 'Components',
           autogenerate: { directory: 'components' },
         },
         {
-          label: 'Primitives',
-          autogenerate: { directory: 'primitives' },
+          label: 'Elements',
+          autogenerate: { directory: 'elements' },
         },
       ],
     }),

@@ -15,8 +15,8 @@ function component(name) {
 export default async function () {
   const components = [];
 
-  if (args[1]) {
-    components.push(args[1]);
+  if (args[2]) {
+    components.push(args[2]);
   }
 
   if (components.length === 0) {
