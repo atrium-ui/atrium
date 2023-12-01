@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+</head>
+
+<body>
+  <script>
+    import "../src/index.js";
+  </script>
+
+  <div>
+    This was loaded <a-time>{{ Date.now() }}</a-time>
+  </div>
+
+  <style>
+    div {
+      font-family: sans-serif;
+    }
+
+    a-time {
+      font-weight: bold;
+    }
+  </style>
+
+
+  <docs lang="md">
+    # Time
+
+    This small component will render a timestamp into a self updating timer with localised format.
+
+    ## Locales
+
+    If this component does not support the locales you need, please contribute them.
+
+    Supported:
+
+    - English
+    - Deutsch
+    - 한국어
+  </docs>
+
+</body>
+
+</html>
