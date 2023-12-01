@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <script>
+    import "../src/index.js";
+
+    const state = ({
+      current: 3,
+    });
+  </script>
+</head>
+
+<body>
+  <a-pager count="12" :current="state.current" @page-change="
+    (e) => {
+      state.current = e.detail;
+    }
+  "></a-pager>
+</body>
+
+</html>
