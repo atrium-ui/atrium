@@ -1,13 +1,13 @@
 {
-  "format": "%v %u %t",
-  "now": "now",
-  "ago": "ago",
-  "second": "second",
-  "seconds": "seconds",
-  "minute": "minute",
-  "minutes": "minutes",
-  "hour": "hour",
-  "hours": "hours",
-  "day": "day",
-  "days": "days"
+	"format": "%v %u %t",
+	"now": "now",
+	"ago": "ago",
+	"second": "second",
+	"seconds": "seconds",
+	"minute": "minute",
+	"minutes": "minutes",
+	"hour": "hour",
+	"hours": "hours",
+	"day": "day",
+	"days": "days"
 }

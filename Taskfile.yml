@@ -18,30 +18,40 @@ tasks:
       - rtx install 2> /dev/null || true
       - bun install
 
+  build:
+    desc: Build all elements
+    deps: [setup]
+    cmds:
+      - bun x turbo build --filter "./elements/**"
+
   test:
     desc: Run tests on all elements
     dir: "{{.TASKFILE_DIR}}/elements"
     deps: [build]
     cmds:
-      - bun test
+      - bun x turbo test
 
   lint:
     desc: Run linter on all packages
-    deps: [setup]
+    deps: [build]
     cmds:
-      - bun x tsc
-      - bun x biome check .
+      - bun x turbo lint
 
   fix:
     cmds:
-      - bun x biome lint --apply-unsafe .
-      - bun x biome format --write
+      - bun x biome format --write .
+      - bun x biome lint --skip-errors --apply-unsafe .
 
-  build:
-    desc: Build all elements
-    deps: [setup]
+  new:
+    desc: Create a new component from templates
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - bun run turbo build
+      - bun x @sv/mono new
+
+  clean:
+    desc: Clean local files
+    cmds:
+      - git clean -xdf
 
   docs:
     desc: Start dev server for docs
@@ -57,17 +67,6 @@ tasks:
     cmds:
       - bun run build
       - mv dist ../public
-
-  new:
-    desc: Create a new component from templates
-    dir: "{{.TASKFILE_DIR}}"
-    cmds:
-      - bun x @sv/mono new
-
-  clean:
-    desc: Clean local files
-    cmds:
-      - git clean -xdf
 
   version:
     dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"

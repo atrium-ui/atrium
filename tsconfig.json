@@ -1,16 +1,19 @@
 {
 	"compilerOptions": {
-		"target": "ESNext",
+		"target": "ES2022",
+		"module": "ES2022",
+		"lib": ["DOM", "DOM.Iterable"],
 		"strict": true,
 		"resolveJsonModule": true,
-		"moduleResolution": "Node",
+		"moduleResolution": "Bundler",
 		"noImplicitAny": false,
 		"experimentalDecorators": true,
 		"useDefineForClassFields": false,
 		"allowSyntheticDefaultImports": true,
-		"allowJs": false,
+		"checkJs": false,
+		"skipLibCheck": true,
 		"noEmit": true,
-		"jsx": "preserve"
-	},
-	"exclude": ["node_modules", "dist"]
+		"jsx": "preserve",
+		"types": ["bun-types", "web"]
+	}
 }

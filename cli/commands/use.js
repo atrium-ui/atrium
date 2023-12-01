@@ -9,45 +9,46 @@ const dist = resolve('./src/components');
 const componentRoot = resolve(__dirname, '../../components/');
 
 function component(name) {
-  return resolve(componentRoot, `${name}.tsx`);
+	return resolve(componentRoot, `${name}.tsx`);
 }
 
 export default async function () {
-  const components = [];
+	const components = [];
 
-  if (args[2]) {
-    components.push(args[2]);
-  }
+	if (args[2]) {
+		components.push(args[2]);
+	}
 
-  if (components.length === 0) {
-    const options = readdirSync(componentRoot)
-      .filter((file) => file.match('.tsx'))
-      .map((file) => file.replace('.tsx', ''));
+	if (components.length === 0) {
+		const options = readdirSync(componentRoot)
+			.filter((file) => file.match('.tsx'))
+			.map((file) => file.replace('.tsx', ''));
 
-    const prompt = new en.MultiSelect({
-      name: 'component',
-      message: 'Pick components you want to use',
-      choices: options,
-    });
+		// @ts-ignore
+		const prompt = new en.MultiSelect({
+			name: 'component',
+			message: 'Pick components you want to use',
+			choices: options,
+		});
 
-    const component = await prompt.run();
-    components.push(...component.map((index) => options[index]));
-  }
+		const component = await prompt.run();
+		components.push(...component.map((index) => options[index]));
+	}
 
-  if (components.length === 0) {
-    process.exit(1);
-  }
+	if (components.length === 0) {
+		process.exit(1);
+	}
 
-  if (!existsSync(dist)) {
-    mkdirSync(dist, {
-      recursive: true,
-    });
-  }
+	if (!existsSync(dist)) {
+		mkdirSync(dist, {
+			recursive: true,
+		});
+	}
 
-  for (const comp of components) {
-    const template = readFileSync(component(comp), 'utf8');
-    const filename = `${dist}/${comp}.tsx`;
-    writeFileSync(filename, template);
-    console.log('use', comp, filename);
-  }
+	for (const comp of components) {
+		const template = readFileSync(component(comp), 'utf8');
+		const filename = `${dist}/${comp}.tsx`;
+		writeFileSync(filename, template);
+		console.log('use', comp, filename);
+	}
 }
