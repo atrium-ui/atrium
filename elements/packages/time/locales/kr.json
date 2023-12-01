@@ -1,13 +1,13 @@
 {
-  "format": "%v%u%t",
-  "now": "지금",
-  "ago": "전에",
-  "second": "초",
-  "seconds": "초",
-  "minute": "분",
-  "minutes": "분",
-  "hour": "시간",
-  "hours": "시간",
-  "day": "일",
-  "days": "일"
+	"format": "%v%u%t",
+	"now": "지금",
+	"ago": "전에",
+	"second": "초",
+	"seconds": "초",
+	"minute": "분",
+	"minutes": "분",
+	"hour": "시간",
+	"hours": "시간",
+	"day": "일",
+	"days": "일"
 }

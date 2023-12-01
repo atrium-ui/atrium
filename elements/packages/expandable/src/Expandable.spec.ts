@@ -1,22 +1,22 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 
 const NODE_NAME = 'a-expandable';
 
 describe(NODE_NAME, () => {
-  it('import element', async () => {
-    const { Expandable } = await import('../dist/index.js');
-    expect(Expandable).toBeDefined();
+	it('import element', async () => {
+		const { Expandable } = await import('../dist/index.js');
+		expect(Expandable).toBeDefined();
 
-    // is defined in custom element registry
-    expect(customElements.get(NODE_NAME)).toBeDefined();
+		// is defined in custom element registry
+		expect(customElements.get(NODE_NAME)).toBeDefined();
 
-    // is constructable
-    expect(new Expandable()).toBeInstanceOf(Expandable);
+		// is constructable
+		expect(new Expandable()).toBeInstanceOf(Expandable);
 
-    const html = `<${NODE_NAME} />`;
-    const ele = document.createElement('div');
-    ele.innerHTML = html;
+		const html = `<${NODE_NAME} />`;
+		const ele = document.createElement('div');
+		ele.innerHTML = html;
 
-    expect(ele.children[0]).toBeInstanceOf(Expandable);
-  });
+		expect(ele.children[0]).toBeInstanceOf(Expandable);
+	});
 });

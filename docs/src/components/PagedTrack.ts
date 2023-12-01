@@ -2,26 +2,26 @@ import { Track } from '@sv/elements/track';
 import { css, html } from 'lit';
 
 class PagedTrack extends Track {
-  prev() {
-    const x = Math.max(this.position.x - (this.offsetWidth - 10), 0);
-    this.setTarget([x, 0]);
-  }
-  next() {
-    const x = Math.min(this.position.x + (this.offsetWidth - 10), this.overflowWidth);
-    this.setTarget([x, 0]);
-  }
+	prev() {
+		const x = Math.max(this.position.x - (this.offsetWidth - 10), 0);
+		this.setTarget([x, 0]);
+	}
+	next() {
+		const x = Math.min(this.position.x + (this.offsetWidth - 10), this.overflowWidth);
+		this.setTarget([x, 0]);
+	}
 
-  render() {
-    return html`
+	render() {
+		return html`
       ${super.render()}
 
       <div class="arrow arrow-prev" @click=${(e) => this.prev()}>&lt;</div>
       <div class="arrow arrow-next" @click=${(e) => this.next()}>></div>
     `;
-  }
+	}
 
-  static get styles() {
-    return css`
+	static get styles() {
+		return css`
       ${Track.styles}
 
       .cell {
@@ -61,7 +61,7 @@ class PagedTrack extends Track {
         }
       }
     `;
-  }
+	}
 }
 
 customElements.define('a-track-paged', PagedTrack);
