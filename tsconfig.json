@@ -1,18 +1,16 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "strict": true,
-    "resolveJsonModule": true,
-    "moduleResolution": "Node",
-    "noImplicitAny": false,
-    "experimentalDecorators": true,
-    "useDefineForClassFields": false,
-    "allowSyntheticDefaultImports": true,
-    "allowJs": false,
-    "jsx": "preserve"
-  },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+	"compilerOptions": {
+		"target": "ESNext",
+		"strict": true,
+		"resolveJsonModule": true,
+		"moduleResolution": "Node",
+		"noImplicitAny": false,
+		"experimentalDecorators": true,
+		"useDefineForClassFields": false,
+		"allowSyntheticDefaultImports": true,
+		"allowJs": false,
+		"noEmit": true,
+		"jsx": "preserve"
+	},
+	"exclude": ["node_modules", "dist"]
 }
