@@ -1,29 +1,29 @@
 {
-	"name": "@atrium-ui/docs",
-	"type": "module",
-	"version": "0.0.1",
-	"scripts": {
-		"dev": "bun x astro dev",
-		"build": "bun x astro build"
-	},
-	"dependencies": {
-		"@astrojs/lit": "^3.0.2",
-		"@astrojs/solid-js": "^3.0.2",
-		"@astrojs/starlight": "^0.14.0",
-		"@astrojs/starlight-tailwind": "^2.0.1",
-		"@astrojs/tailwind": "^5.0.2",
-		"@sv/elements": "workspace:*",
-		"@sv/components": "workspace:*",
-		"@parse5/tools": "0.3.0",
-		"@rive-app/canvas-single": "^2.7.1",
-		"@webcomponents/template-shadowroot": "^0.2.1",
-		"astro": "^3.6.4",
-		"execa": "8.0.1",
-		"lit": "^2.5.0",
-		"sass": "^1.69.5",
-		"sharp": "^0.32.6",
-		"solid-js": "^1.8.5",
-		"tailwindcss": "^3.3.3",
-		"txtgen": "^3.0.4"
-	}
+  "name": "@atrium-ui/docs",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "bun --bun x astro dev",
+    "build": "bun --bun x astro build"
+  },
+  "dependencies": {
+    "@astrojs/lit": "^3.0.2",
+    "@astrojs/solid-js": "^3.0.2",
+    "@astrojs/starlight": "^0.14.0",
+    "@astrojs/starlight-tailwind": "^2.0.1",
+    "@astrojs/tailwind": "^5.0.2",
+    "@parse5/tools": "0.3.0",
+    "@rive-app/canvas-single": "^2.7.1",
+    "@sv/components": "workspace:",
+    "@sv/elements": "workspace:",
+    "@webcomponents/template-shadowroot": "^0.2.1",
+    "astro": "^3.6.4",
+    "execa": "8.0.1",
+    "lit": "^2.5.0",
+    "sass": "^1.69.5",
+    "sharp": "^0.33.0",
+    "solid-js": "^1.8.5",
+    "tailwindcss": "^3.3.3",
+    "txtgen": "^3.0.4"
+  }
 }
