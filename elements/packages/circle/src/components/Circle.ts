@@ -10,8 +10,8 @@ import { property } from 'lit/decorators.js';
 // }
 
 export class Circle extends LitElement {
-  static get styles() {
-    return css`
+	static get styles() {
+		return css`
       :host {
         display: inline-block;
         position: relative;
@@ -51,23 +51,23 @@ export class Circle extends LitElement {
         align-items: center;
       }
     `;
-  }
+	}
 
-  @property({ type: Number, reflect: true })
-  public size = 30;
+	@property({ type: Number, reflect: true })
+	public size = 30;
 
-  @property({ type: Number, reflect: true })
-  public thickness = 2;
+	@property({ type: Number, reflect: true })
+	public thickness = 2;
 
-  @property({ type: Number, reflect: true })
-  public progress = 0;
+	@property({ type: Number, reflect: true })
+	public progress = 0;
 
-  get loadProgress() {
-    return (this.progress / 100) * (2 * Math.PI * (this.size / 2 - this.thickness));
-  }
+	get loadProgress() {
+		return (this.progress / 100) * (2 * Math.PI * (this.size / 2 - this.thickness));
+	}
 
-  render() {
-    return html`
+	render() {
+		return html`
       <svg style="--size: ${this.size}; --thickness: ${this.thickness}">
         <circle style="--progress: ${this.loadProgress}" />
       </svg>
@@ -75,13 +75,13 @@ export class Circle extends LitElement {
         <slot></slot>
       </div>
     `;
-  }
+	}
 }
 
 declare global {
-  interface HTMLElementTagNameMap {
-    circle: Circle;
-  }
+	interface HTMLElementTagNameMap {
+		circle: Circle;
+	}
 }
 
 customElements.define('a-circle', Circle);

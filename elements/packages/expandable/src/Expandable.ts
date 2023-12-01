@@ -2,9 +2,9 @@ import { HTMLTemplateResult, LitElement, css, html } from 'lit';
 import { property } from 'lit/decorators.js';
 
 export class Expandable extends LitElement {
-  public static get styles() {
-    return [
-      css`
+	public static get styles() {
+		return [
+			css`
         :host {
           display: block;
 
@@ -39,73 +39,73 @@ export class Expandable extends LitElement {
           pointer-events: none;
         }
       `,
-    ];
-  }
+		];
+	}
 
-  @property({ type: Boolean, reflect: true }) public opened = false;
-  @property({ type: String, reflect: true }) public direction = 'down';
+	@property({ type: Boolean, reflect: true }) public opened = false;
+	@property({ type: String, reflect: true }) public direction = 'down';
 
-  private _id = `expandable_${Math.floor(Math.random() * 100000)}`;
+	private _id = `expandable_${Math.floor(Math.random() * 100000)}`;
 
-  public close(): void {
-    this.opened = false;
-    this.onAnimationFrame();
-  }
+	public close(): void {
+		this.opened = false;
+		this.onAnimationFrame();
+	}
 
-  public open(): void {
-    this.opened = true;
-    this.onAnimationFrame();
-  }
+	public open(): void {
+		this.opened = true;
+		this.onAnimationFrame();
+	}
 
-  public toggle(): void {
-    this.opened ? this.close() : this.open();
-  }
+	public toggle(): void {
+		this.opened ? this.close() : this.open();
+	}
 
-  @property({ type: Number })
-  public scrollOffsetY?: number;
+	@property({ type: Number })
+	public scrollOffsetY?: number;
 
-  protected onAnimationFrame() {
-    // scrolls interaction into viewport
-    const rect = this.getClientRects()[0];
-    if (rect) {
-      const elementStartPosY = rect.y;
-      const offsetY = this.scrollOffsetY || 0;
-      if (elementStartPosY <= offsetY) {
-        window.scrollBy(0, (elementStartPosY - offsetY) / 10);
-      }
-    }
-  }
+	protected onAnimationFrame() {
+		// scrolls interaction into viewport
+		const rect = this.getClientRects()[0];
+		if (rect) {
+			const elementStartPosY = rect.y;
+			const offsetY = this.scrollOffsetY || 0;
+			if (elementStartPosY <= offsetY) {
+				window.scrollBy(0, (elementStartPosY - offsetY) / 10);
+			}
+		}
+	}
 
-  private renderButton() {
-    return html`<button
+	private renderButton() {
+		return html`<button
       tabindex="-1"
       aria-controls="${this._id}"
       aria-expanded=${this.opened}
       @click=${(e) => {
-        this.toggle();
-      }}
+				this.toggle();
+			}}
     >
       <slot name="toggle"></slot>
     </button>`;
-  }
+	}
 
-  protected render(): HTMLTemplateResult {
-    return html`
+	protected render(): HTMLTemplateResult {
+		return html`
       ${this.direction === 'down' ? this.renderButton() : undefined}
       <div class="container" id="${this._id}" aria-hidden=${!this.opened && 'true'}>
         <slot class="content"></slot>
       </div>
       ${this.direction === 'up' ? this.renderButton() : undefined}
     `;
-  }
+	}
 }
 
 declare global {
-  interface HTMLElementTagNameMap {
-    'a-expandable': Expandable;
-  }
+	interface HTMLElementTagNameMap {
+		'a-expandable': Expandable;
+	}
 }
 
 if (!customElements.get('a-expandable')) {
-  customElements.define('a-expandable', Expandable);
+	customElements.define('a-expandable', Expandable);
 }

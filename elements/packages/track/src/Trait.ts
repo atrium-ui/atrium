@@ -1,36 +1,36 @@
 import { InputState, Track } from './Track.js';
 
 export class Trait {
-  id: string;
-  enabled = false;
+	id: string;
+	enabled = false;
 
-  entity: Track;
+	entity: Track;
 
-  constructor(id, entity, defaultEnabled = false) {
-    this.id = id;
-    this.enabled = defaultEnabled;
-    this.entity = entity;
+	constructor(id, entity, defaultEnabled = false) {
+		this.id = id;
+		this.enabled = defaultEnabled;
+		this.entity = entity;
 
-    this.created();
-  }
+		this.created();
+	}
 
-  created() {
-    // ...
-  }
+	created() {
+		// ...
+	}
 
-  start() {
-    // called on animation start
-  }
+	start() {
+		// called on animation start
+	}
 
-  stop() {
-    // called on animation stop
-  }
+	stop() {
+		// called on animation stop
+	}
 
-  input(inputState: InputState) {
-    // input tick
-  }
+	input(inputState: InputState) {
+		// input tick
+	}
 
-  update() {
-    // update tick (fixed tickrate)
-  }
+	update() {
+		// update tick (fixed tickrate)
+	}
 }

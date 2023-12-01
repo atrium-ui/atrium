@@ -1,23 +1,23 @@
 {
-  "name": "@sv/circle",
-  "version": "1.0.10",
-  "description": "",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "src/index.ts",
-  "scripts": {
-    "build": "tsup"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "lit": "^2.5.0"
-  },
-  "tsup": {
-    "entry": ["src/index.ts"],
-    "format": ["esm"],
-    "external": ["@sv/*"],
-    "sourcemap": true,
-    "clean": true
-  }
+	"name": "@atrium-ui/circle",
+	"version": "1.0.10",
+	"description": "",
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "src/index.ts",
+	"scripts": {
+		"build": "tsup"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"lit": "^2.5.0"
+	},
+	"tsup": {
+		"entry": ["src/index.ts"],
+		"format": ["esm"],
+		"external": ["@sv/*"],
+		"sourcemap": true,
+		"clean": true
+	}
 }

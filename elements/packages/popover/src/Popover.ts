@@ -1,15 +1,15 @@
-import { HTMLTemplateResult, LitElement, css, html } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { HTMLTemplateResult, LitElement, css, html } from 'lit';
+import { customElement, property, query } from 'lit/decorators.js';
 
 declare global {
-  interface HTMLElementTagNameMap {
-    "a-popover": Popover;
-  }
+	interface HTMLElementTagNameMap {
+		'a-popover': Popover;
+	}
 }
 
-@customElement("a-popover")
+@customElement('a-popover')
 export class Popover extends LitElement {
-  public static styles = css`
+	public static styles = css`
     :host {
       display: flex;
       justify-content: center;
@@ -59,66 +59,66 @@ export class Popover extends LitElement {
     }
   `;
 
-  @property({ type: String, reflect: true })
-  public direction: "down" | "up" = "down";
+	@property({ type: String, reflect: true })
+	public direction: 'down' | 'up' = 'down';
 
-  @property({ type: Boolean, reflect: true })
-  public opened = false;
+	@property({ type: Boolean, reflect: true })
+	public opened = false;
 
-  @query(".content")
-  content;
+	@query('.content')
+	content;
 
-  open() {
-    this.opened = true;
-  }
+	open() {
+		this.opened = true;
+	}
 
-  close() {
-    this.opened = false;
-  }
+	close() {
+		this.opened = false;
+	}
 
-  toggle() {
-    if (this.opened) {
-      this.close();
-    } else {
-      this.open();
-    }
-  }
+	toggle() {
+		if (this.opened) {
+			this.close();
+		} else {
+			this.open();
+		}
+	}
 
-  shouldBlur(e: MouseEvent) {
-    if (this.contains(e.target as HTMLElement)) {
-      return false;
-    }
-    return true;
-  }
+	shouldBlur(e: MouseEvent) {
+		if (this.contains(e.target as HTMLElement)) {
+			return false;
+		}
+		return true;
+	}
 
-  handleClick = (e: MouseEvent) => {
-    if (this.shouldBlur(e)) {
-      this.dispatchEvent(new Event("blur"));
-      this.opened = false;
-    }
-  };
+	handleClick = (e: MouseEvent) => {
+		if (this.shouldBlur(e)) {
+			this.dispatchEvent(new Event('blur'));
+			this.opened = false;
+		}
+	};
 
-  connectedCallback(): void {
-    super.connectedCallback();
+	connectedCallback(): void {
+		super.connectedCallback();
 
-    window.addEventListener("click", this.handleClick);
-  }
+		window.addEventListener('click', this.handleClick);
+	}
 
-  disconnectedCallback(): void {
-    window.removeEventListener("click", this.handleClick);
-  }
+	disconnectedCallback(): void {
+		window.removeEventListener('click', this.handleClick);
+	}
 
-  render(): HTMLTemplateResult {
-    return html`
+	render(): HTMLTemplateResult {
+		return html`
       <slot
         name="input"
         @click=${() => {
-          this.toggle();
-        }}
+					this.toggle();
+				}}
       ></slot>
       <div class="content">
         <slot></slot>
       </div>
     `;
-  }
+	}
 }

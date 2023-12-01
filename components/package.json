@@ -1,7 +1,10 @@
 {
-  "name": "@sv/components",
-  "version": "0.1.0",
-  "dependencies": {
-    "@sv/elements": "workspace:*"
-  }
+	"name": "@sv/components",
+	"version": "0.1.0",
+	"scripts": {
+		"lint": "tsc --pretty && biome check ."
+	},
+	"dependencies": {
+		"@sv/elements": "workspace:*"
+	}
 }

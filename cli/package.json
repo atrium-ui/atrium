@@ -1,7 +1,11 @@
 {
-  "name": "@sv/cli",
-  "dependencies": {
-    "chalk": "^5.2.0",
-    "enquirer": "^2.4.1"
-  }
+	"name": "@sv/cli",
+	"scripts": {
+		"lint": "tsc --pretty && biome check .",
+		"test": "bun test"
+	},
+	"dependencies": {
+		"chalk": "^5.2.0",
+		"enquirer": "^2.4.1"
+	}
 }
