@@ -6,17 +6,6 @@ env:
   PACKAGE_SCOPE:
 
 tasks:
-  run-packages:
-    desc: Run a command in all packages
-    internal: true
-    vars:
-      command: '{{.command | default "echo"}}'
-      dirs:
-        sh: echo $(find ./elements/packages -maxdepth 2 -type f -name "package.json" -exec dirname {} \;)
-    cmds:
-      - for: { var: dirs, split: " " }
-        cmd: cd {{.ITEM}} && {{.command}}
-
   setup:
     desc: Install dependencies
     dir: "{{.TASKFILE_DIR}}"
@@ -27,7 +16,7 @@ tasks:
       - "**/package.json"
     cmds:
       - rtx install 2> /dev/null || true
-      - pnpm install
+      - bun install
 
   test:
     desc: Run tests on all elements
@@ -40,15 +29,19 @@ tasks:
     desc: Run linter on all packages
     deps: [setup]
     cmds:
+      - bun x tsc
       - bun x biome check .
+
+  fix:
+    cmds:
+      - bun x biome lint --apply-unsafe .
+      - bun x biome format --write
 
   build:
     desc: Build all elements
     deps: [setup]
     cmds:
-      - task: run-packages
-        vars:
-          command: bun run build
+      - bun run turbo build
 
   docs:
     desc: Start dev server for docs

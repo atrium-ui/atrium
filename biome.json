@@ -5,9 +5,9 @@
   },
   "formatter": {
     "enabled": true,
-    "indentSize": 2,
+    "indentWidth": 2,
     "lineWidth": 100,
-    "indentStyle": "space",
+    "indentStyle": "tab",
     "formatWithErrors": true
   },
   "javascript": {

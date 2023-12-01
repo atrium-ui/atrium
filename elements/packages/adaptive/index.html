@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <script>
+    setInterval(() => {
+      const text = paragraph(2 + Math.random() * 10);
+      document.querySelector('.content').innerHTML = text;
+    }, 1000);
+  </script>
+
+</head>
+
+<body>
+  <div class="block"></div>
+  <a-adaptive class="adaptive">
+    <div class="content">
+      {{ state.text }}
+    </div>
+  </a-adaptive>
+  <div class="block2"></div>
+
+
+  <style scoped>
+    .adaptive {
+      background: grey;
+    }
+
+    .block {
+      background: red;
+      height: 100px;
+    }
+
+    .block2 {
+      background: green;
+      height: 100px;
+    }
+  </style>
+
+</body>
+
+</html>
