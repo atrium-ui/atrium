@@ -12,13 +12,13 @@
 			"import": "./index.js",
 			"types": "./index.d.ts"
 		},
-		"./adaptive": {
-			"import": "./packages/adaptive/dist/index.js",
-			"types": "./packages/adaptive/src/index.ts"
-		},
 		"./toggle": {
 			"import": "./packages/toggle/dist/index.js",
 			"types": "./packages/toggle/src/index.ts"
+		},
+		"./time": {
+			"import": "./packages/time/dist/index.js",
+			"types": "./packages/time/src/index.ts"
 		},
 		"./expandable": {
 			"import": "./packages/expandable/dist/index.js",
@@ -40,10 +40,6 @@
 			"import": "./packages/track/dist/index.js",
 			"types": "./packages/track/src/index.ts"
 		},
-		"./command": {
-			"import": "./packages/command/dist/index.js",
-			"types": "./packages/command/src/index.ts"
-		},
 		"./blur": {
 			"import": "./packages/blur/dist/index.js",
 			"types": "./packages/blur/src/index.ts"
@@ -51,6 +47,10 @@
 		"./popover": {
 			"import": "./packages/popover/dist/index.js",
 			"types": "./packages/popover/src/index.ts"
+		},
+		"./range": {
+			"import": "./packages/range/dist/index.js",
+			"types": "./packages/range/src/index.ts"
 		}
 	},
 	"keywords": [],

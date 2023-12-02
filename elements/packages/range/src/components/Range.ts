@@ -1,7 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 
-@customElement('input-range')
+@customElement('a-range')
 export class Range extends LitElement {
 	static get styles() {
 		return css`
