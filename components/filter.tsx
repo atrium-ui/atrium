@@ -1,4 +1,5 @@
 import '@sv/elements/dropdown';
+import '@sv/elements/expandable';
 import '@sv/elements/toggle';
 
 function CheckIcon() {

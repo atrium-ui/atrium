@@ -41,7 +41,7 @@ function replaceContent(file, regex, value) {
 	fs.writeFileSync(file, content);
 }
 
-export default async function () {
+export default async function main() {
 	console.log('Select a template:');
 
 	const { template } = await prompts([
@@ -82,3 +82,5 @@ export default async function () {
 		process.exit();
 	});
 }
+
+main();

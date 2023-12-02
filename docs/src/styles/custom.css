@@ -52,6 +52,10 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
+.header {
+    background: #1a1a1a;
+}
+
 .sidebar .top-level .large {
     font-weight: normal;
 }
