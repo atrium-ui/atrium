@@ -16,6 +16,9 @@ export default defineConfig({
 			applyBaseStyles: false,
 		}),
 		starlight({
+			components: {
+				ContentPanel: './src/components/ContentPanel.astro',
+			},
 			title: 'Atrium',
 			customCss: ['./src/styles/custom.css'],
 			logo: {
