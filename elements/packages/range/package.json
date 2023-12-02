@@ -1,0 +1,23 @@
+{
+	"name": "@atrium-ui/range",
+	"version": "1.0.4",
+	"description": "",
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "src/index.ts",
+	"scripts": {
+		"build": "tsup"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"lit": "^2.5.0"
+	},
+	"tsup": {
+		"entry": ["src/index.ts"],
+		"format": ["esm"],
+		"external": ["@sv/*"],
+		"sourcemap": true,
+		"clean": true
+	}
+}
