@@ -74,9 +74,9 @@ publish-dev:
 pages:
   stage: docs
   only:
-    - main
+    - docs
   environment:
-    name: main
+    name: docs
     url: https://sv-components.pages.s-v.de/mono
   artifacts:
     paths:
