@@ -1,4 +1,6 @@
+#!/usr/bin/env node
 import { resolve } from 'path';
+import { fileURLToPath } from 'url';
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import en from 'enquirer';
 
@@ -6,13 +8,13 @@ const args = process.argv.slice(2);
 
 const dist = resolve('./src/components');
 
-const componentRoot = resolve(__dirname, '../../components/');
+const componentRoot = resolve(fileURLToPath(import.meta.url), '../../../components/');
 
 function component(name) {
 	return resolve(componentRoot, `${name}.tsx`);
 }
 
-export default async function () {
+export default async function main() {
 	const components = [];
 
 	if (args[2]) {
@@ -52,3 +54,5 @@ export default async function () {
 		console.log('use', comp, filename);
 	}
 }
+
+main();
