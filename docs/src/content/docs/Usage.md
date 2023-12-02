@@ -28,8 +28,6 @@ import "@sv/elements/a-expandable";
 
 ### Draft - TypeScript
 
-![proptype.jpg](./images/proptype.jpg)
-
 ```json
 // /tsconfig.json
 {
