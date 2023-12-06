@@ -1,6 +1,6 @@
 {
 	"name": "@sv/mono",
-	"version": "0.2.3-rc.4",
+	"version": "0.2.3-rc.5",
 	"description": "Atrium Component Library",
 	"type": "module",
 	"bin": {
@@ -22,5 +22,11 @@
 		"turbo": "^1.10.16",
 		"typescript": "^5.3.2"
 	},
-	"workspaces": ["elements", "components", "elements/packages/*", "docs", "cli"]
+	"workspaces": [
+		"elements",
+		"components",
+		"elements/packages/*",
+		"docs",
+		"cli"
+	]
 }
