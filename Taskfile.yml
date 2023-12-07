@@ -79,6 +79,7 @@ tasks:
       - echo $(npm version {{.type}} --preid=rc --git-tag-version=false) > {{.version_file}}
       - git add --all
       - 'git commit -m "version: $(cat {{.version_file}})"'
+      - echo {{.version_file}}
 
   version:minor:
     desc: "Create minor version"
@@ -120,3 +121,10 @@ tasks:
     cmds:
       - npm publish --tag dev
       - git push origin HEAD:develop -o ci.skip
+
+  webhook:
+    desc: Trigger webhook message
+    requires:
+      vars: [webhook_url, message]
+    cmds:
+      - 'curl -X POST -d "{\"text\": \"{{.message}}\"}" {{.webhook_url}}'

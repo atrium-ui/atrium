@@ -70,10 +70,12 @@ publish-dev:
     - task publish:dev PACKAGE_SCOPE=elements
     - task version:prerelease
     - task publish:dev
+    - task webhook webhook_url=$SLACK_WEBHOOK_URL message=fas
 
 pages:
   stage: docs
   only:
+    - main
     - docs
   environment:
     name: docs

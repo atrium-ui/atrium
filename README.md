@@ -84,11 +84,20 @@ The tsup configuration is located in the package.json of each element.
 
 ### Publishing packages
 
-Package publishing is handles by the CI.
+Package publishing is handled by the CI. Currently, it is not possible to publish packages individually, all packages are published at once.
 
-The **develop** branch always publishes a prerelease packages. When developing features, it is recommended to work in a feature branch.
+The **develop** branch always publishes a prerelease packages. When developing features, it is recommended to work in a feature branch and merge into develop to release prerelease (rc) packages.
 
-Feature branches should be named like this: `feature/<name>`.
+Allowed branch names include:
+
+- `feature/*`
+- `fix/*`
+
+When it is time to release a new version, create a merge request from **develop** into **main**.
 
 When develop is merged into the **main** branch, the docs will be automatically built and deployed to pages.
 That pipeline will also give the options to publish a _patch_ or _minor_ release of the packages.
+
+Requirements:
+
+- `develop` pipeline must be completed before main can publish
