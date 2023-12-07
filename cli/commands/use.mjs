@@ -34,7 +34,7 @@ export default async function main() {
 		});
 
 		const component = await prompt.run();
-		components.push(...component.map((index) => options[index]));
+		components.push(...component);
 	}
 
 	if (components.length === 0) {
