@@ -4,6 +4,10 @@ version: "3"
 
 env:
   PACKAGE_SCOPE:
+  SLACK_WEBHOOK_URL:
+
+vars:
+  version_file: "{{.TASKFILE_DIR}}/.task/.version"
 
 tasks:
   setup:
@@ -42,12 +46,6 @@ tasks:
       - bun x biome format --write .
       - bun x biome lint --skip-errors --apply-unsafe .
 
-  new:
-    desc: Create a new component from templates
-    dir: "{{.TASKFILE_DIR}}"
-    cmds:
-      - bun x @sv/mono new
-
   clean:
     desc: Clean local files
     cmds:
@@ -68,62 +66,71 @@ tasks:
       - bun run build
       - mv dist ../public
 
-  version:
-    dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
-    deps: [build]
-    vars:
-      version_file: "{{.TASKFILE_DIR}}/.task/.version"
-    requires:
-      vars: [type]
-    cmds:
-      - echo $(npm version {{.type}} --preid=rc --git-tag-version=false) > {{.version_file}}
-      - git add --all
-      - 'git commit -m "version: $(cat {{.version_file}})"'
-
-  version:minor:
-    desc: "Create minor version"
-    cmds:
-      - task: version
-        vars:
-          type: minor
-
-  version:patch:
-    desc: "Create patch version"
-    cmds:
-      - task: version
-        vars:
-          type: patch
-
-  version:prerelease:
-    desc: "Create prereleasae version"
-    cmds:
-      - task: version
-        vars:
-          type: prerelease
-
-  publish:preview:
-    desc: Pack the pacakge for preview
-    dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
-    cmds:
-      - npm pack && tar -xvzf *.tgz && rm -rf package *.tgz
-
-  publish:
-    desc: Publish npm pacakge
-    dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
-    cmds:
-      - npm publish
-      - git push origin HEAD:develop -o ci.skip
-
-  publish:dev:
-    desc: Publish npm pacakge
-    dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
-    cmds:
-      - npm publish --tag dev
-      - git push origin HEAD:develop -o ci.skip
-
   webhook:
     desc: Trigger webhook message
     requires:
       vars: [webhook_url, message]
     cmds:
       - 'curl -X POST -d "{\"text\": \"{{.message}}\"}" {{.webhook_url}}'
+
+  version:
+    deps: [build]
+    requires:
+      vars: [type, scope]
+    dir: "{{.TASKFILE_DIR}}/{{.scope}}"
+    cmds:
+      - echo $(npm version {{.type}} --preid=rc --git-tag-version=false) > {{.version_file}}
+      - git add --all
+      - 'git commit -m "version: $(cat {{.version_file}})"'
+
+  publish:
+    desc: Publish npm pacakge
+    requires:
+      vars: [scope]
+    dir: "{{.TASKFILE_DIR}}/{{.scope}}"
+    vars:
+      message:
+        sh: echo "New {{.type}} release of *$(cat {{.version_file}})* published"
+    cmds:
+      # - npm publish
+      # - git push origin HEAD:develop -o ci.skip
+      - task: webhook
+        vars:
+          webhook_url: "{{.SLACK_WEBHOOK_URL}}"
+          message: "{{.message}}"
+
+  publish:dev:
+    desc: Publish npm pacakge witg dev tag
+    requires:
+      vars: [scope]
+    dir: "{{.TASKFILE_DIR}}/{{.scope}}"
+    vars:
+      message:
+        sh: echo "New {{.type}} release of *$(cat {{.version_file}})* published"
+    cmds:
+      # - npm publish --tag dev
+      # - git push origin HEAD:develop -o ci.skip
+      - task: webhook
+        vars:
+          webhook_url: "{{.SLACK_WEBHOOK_URL}}"
+          message: "{{.message}}"
+
+  release:
+    desc: Publish all packages
+    requires:
+      vars: [type]
+    cmds:
+      - task: version
+        vars:
+          type: "{{.type}}"
+          scope: elements
+      - task: publish
+        vars:
+          scope: elements
+      - task: version
+        vars:
+          type: "{{.type}}"
+          scope: .
+      - task: publish
+        vars:
+          scope: .

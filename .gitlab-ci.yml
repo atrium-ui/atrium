@@ -44,35 +44,20 @@ publish-minor:
   only:
     - main
   when: manual
-  script:
-    - task version:minor PACKAGE_SCOPE=elements
-    - task publish PACKAGE_SCOPE=elements
-    - task version:minor
-    - task publish
-    - task webhook webhook_url=$SLACK_WEBHOOK_URL message="New minor release of $(cat .task/.version) published"
+  script: task release type=minor
 
 publish-patch:
   stage: publish
   only:
     - main
   when: manual
-  script:
-    - task version:patch PACKAGE_SCOPE=elements
-    - task publish PACKAGE_SCOPE=elements
-    - task version:patch
-    - task publish
-    - task webhook webhook_url=$SLACK_WEBHOOK_URL message="New patch release of $(cat .task/.version) published"
+  script: task release type=patch
 
 publish-dev:
   stage: publish
   only:
     - develop
-  script:
-    - task version:prerelease PACKAGE_SCOPE=elements
-    - task publish:dev PACKAGE_SCOPE=elements
-    - task version:prerelease
-    - task publish:dev
-    - task webhook webhook_url=$SLACK_WEBHOOK_URL message="New dev release of $(cat .task/.version) published"
+  script: task release type=prerelease
 
 pages:
   stage: docs
