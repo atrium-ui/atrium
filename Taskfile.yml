@@ -71,15 +71,12 @@ tasks:
   version:
     internal: true
     deps: [build]
-    vars:
-      message:
-        sh: "git log -1 --pretty=format:%B"
     requires:
       vars: [type, scope]
     dir: "{{.TASKFILE_DIR}}/{{.scope}}"
     cmds:
       - echo $(npm version {{.type}} --preid=rc --git-tag-version=false) > {{.version_file}}
-      - task webhook webhook_url="{{.SLACK_WEBHOOK_URL}}" message="{{.message}}" version="$(cat {{.version_file}})" type="{{.type}}"
+      - task webhook webhook_url="{{.SLACK_WEBHOOK_URL}}" message="$(git log -1 --pretty=format:%B)" version="$(cat {{.version_file}})" type="{{.type}}"
       - git add --all
       - 'git commit -m "version: $(cat {{.version_file}})"'
 
