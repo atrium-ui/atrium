@@ -68,45 +68,35 @@ tasks:
     cmds:
       - 'curl -X POST -d "{\"message\": \"{{.message}}\", \"version\": \"{{.version}}\", \"type\": \"{{.type}}\"}" {{.webhook_url}}'
 
-  version:
+  publish:
     internal: true
     deps: [build]
+    vars:
+      message:
+        sh: "git log -1 --pretty=format:%B"
     requires:
-      vars: [type, scope]
+      vars: [type, scope, tag]
     dir: "{{.TASKFILE_DIR}}/{{.scope}}"
     cmds:
       - echo $(npm version {{.type}} --preid=rc --git-tag-version=false) > {{.version_file}}
-      - task webhook webhook_url="{{.SLACK_WEBHOOK_URL}}" message="$(git log -1 --pretty=format:%B)" version="$(cat {{.version_file}})" type="{{.type}}"
       - git add --all
       - 'git commit -m "version: $(cat {{.version_file}})"'
-
-  publish:
-    desc: Publish npm pacakge
-    internal: true
-    requires:
-      vars: [scope, tag]
-    dir: "{{.TASKFILE_DIR}}/{{.scope}}"
-    cmds:
       - npm publish --tag={{.tag}}
       - git push origin HEAD:develop -o ci.skip
+      - task webhook webhook_url="{{.SLACK_WEBHOOK_URL}}" message="{{.message}}" version="$(cat {{.version_file}})" type="{{.type}}"
 
   release:
     requires:
       vars: [type, tag]
     cmds:
-      - task: version
+      - task: publish
         vars:
           type: "{{.type}}"
+          tag: "{{.tag}}"
           scope: elements
       - task: publish
         vars:
-          tag: "{{.tag}}"
-          scope: elements
-      - task: version
-        vars:
           type: "{{.type}}"
-          scope: .
-      - task: publish
-        vars:
           tag: "{{.tag}}"
           scope: .
+
