@@ -3,15 +3,11 @@ const args = process.argv.slice(2);
 
 switch (args[1]) {
 	case 'use': {
-		import('./commands/use.js').then((mod) => {
-			mod.default();
-		});
+		import('./commands/use.mjs');
 		break;
 	}
 	case 'new': {
-		import('./commands/new.mjs').then((mod) => {
-			mod.default();
-		});
+		import('./commands/new.mjs');
 		break;
 	}
 	default:

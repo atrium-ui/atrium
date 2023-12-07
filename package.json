@@ -1,28 +1,32 @@
 {
-  "name": "@sv/mono",
-  "version": "0.2.3-rc.3",
-  "description": "Atrium Component Library",
-  "type": "module",
-  "bin": {
-    "atrium": "./cli/main.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@biomejs/biome": "^1.0.0",
-    "@happy-dom/global-registrator": "^11.0.2",
-    "@types/web": "^0.0.123",
-    "bun-types": "^1.0.14",
-    "tsup": "^7.2.0",
-    "turbo": "^1.10.16",
-    "typescript": "^5.3.2"
-  },
-  "workspaces": [
-    "elements",
-    "components",
-    "elements/packages/*",
-    "docs",
-    "cli"
-  ]
+	"name": "@sv/mono",
+	"version": "0.2.3-rc.6",
+	"description": "Atrium Component Library",
+	"type": "module",
+	"bin": {
+		"use": "./cli/commands/use.mjs"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"chalk": "^5.2.0",
+		"enquirer": "^2.4.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.0.0",
+		"@happy-dom/global-registrator": "^11.0.2",
+		"@types/web": "^0.0.123",
+		"bun-types": "^1.0.14",
+		"tsup": "^7.2.0",
+		"turbo": "^1.10.16",
+		"typescript": "^5.3.2"
+	},
+	"workspaces": [
+		"elements",
+		"components",
+		"elements/packages/*",
+		"docs",
+		"cli"
+	]
 }

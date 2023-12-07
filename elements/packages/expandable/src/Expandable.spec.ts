@@ -20,3 +20,5 @@ describe(NODE_NAME, () => {
 		expect(ele.children[0]).toBeInstanceOf(Expandable);
 	});
 });
+
+// TODO: test case with 100% width child element

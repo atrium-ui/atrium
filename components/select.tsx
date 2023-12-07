@@ -1,4 +1,5 @@
 import '@sv/elements/dropdown';
+import '@sv/elements/expandable';
 
 function Item(props: { value: string }) {
 	return (
