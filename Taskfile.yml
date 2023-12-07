@@ -66,16 +66,18 @@ tasks:
     desc: Trigger webhook message
     internal: true
     requires:
-      vars: [webhook_url, message]
+      vars: [webhook_url, message, version, type]
     cmds:
-      - 'curl -X POST -d "{\"text\": \"{{.message}}\"}" {{.webhook_url}}'
+      - 'curl -X POST -d "{\"message\": \"{{.message}}\", \"version\": \"{{.version}}\", \"type\": \"{{.type}}\"}" {{.webhook_url}}'
 
   version:
     internal: true
     deps: [build]
     vars:
       message:
-        sh: echo "Releasing {{.type}} release of *$(cat {{.version_file}})* published\n\n$(git log -1 --pretty=format:%B)"
+        sh: "git log -1 --pretty=format:%B"
+      version:
+        sh: "cat {{.version_file}}"
     requires:
       vars: [type, scope]
     dir: "{{.TASKFILE_DIR}}/{{.scope}}"
@@ -85,6 +87,8 @@ tasks:
         vars:
           webhook_url: "{{.SLACK_WEBHOOK_URL}}"
           message: "{{.message}}"
+          version: "{{.version}}"
+          type: "{{.type}}"
       - git add --all
       - 'git commit -m "version: $(cat {{.version_file}})"'
 
