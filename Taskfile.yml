@@ -79,7 +79,6 @@ tasks:
       - echo $(npm version {{.type}} --preid=rc --git-tag-version=false) > {{.version_file}}
       - git add --all
       - 'git commit -m "version: $(cat {{.version_file}})"'
-      - cat {{.version_file}}
 
   version:minor:
     desc: "Create minor version"
