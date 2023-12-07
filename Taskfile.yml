@@ -76,8 +76,6 @@ tasks:
     vars:
       message:
         sh: "git log -1 --pretty=format:%B"
-      version:
-        sh: "cat {{.version_file}}"
     requires:
       vars: [type, scope]
     dir: "{{.TASKFILE_DIR}}/{{.scope}}"
@@ -87,7 +85,8 @@ tasks:
         vars:
           webhook_url: "{{.SLACK_WEBHOOK_URL}}"
           message: "{{.message}}"
-          version: "{{.version}}"
+          version:
+            sh: "cat {{.version_file}}"
           type: "{{.type}}"
       - git add --all
       - 'git commit -m "version: $(cat {{.version_file}})"'
