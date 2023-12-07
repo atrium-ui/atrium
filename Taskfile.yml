@@ -73,11 +73,18 @@ tasks:
   version:
     internal: true
     deps: [build]
+    vars:
+      message:
+        sh: echo "Releasing {{.type}} release of *$(cat {{.version_file}})* published\n\n$(git log -1 --pretty=format:%B)"
     requires:
       vars: [type, scope]
     dir: "{{.TASKFILE_DIR}}/{{.scope}}"
     cmds:
       - echo $(npm version {{.type}} --preid=rc --git-tag-version=false) > {{.version_file}}
+      - task: webhook
+        vars:
+          webhook_url: "{{.SLACK_WEBHOOK_URL}}"
+          message: "{{.message}}"
       - git add --all
       - 'git commit -m "version: $(cat {{.version_file}})"'
 
@@ -87,16 +94,9 @@ tasks:
     requires:
       vars: [scope, tag]
     dir: "{{.TASKFILE_DIR}}/{{.scope}}"
-    vars:
-      message:
-        sh: echo "New {{.type}} release of *$(cat {{.version_file}})* published\n\n$(git log -1 --pretty=format:%B)"
     cmds:
       - npm publish --tag={{.tag}}
       - git push origin HEAD:develop -o ci.skip
-      - task: webhook
-        vars:
-          webhook_url: "{{.SLACK_WEBHOOK_URL}}"
-          message: "{{.message}}"
 
   release:
     requires:
