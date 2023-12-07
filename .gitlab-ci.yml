@@ -51,13 +51,13 @@ publish-patch:
   only:
     - main
   when: manual
-  script: SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URLtask release type=patch
+  script: SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL task release type=patch
 
 publish-dev:
   stage: publish
   only:
     - develop
-  script: SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URLtask release type=prerelease
+  script: SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL task release type=prerelease
 
 pages:
   stage: docs
