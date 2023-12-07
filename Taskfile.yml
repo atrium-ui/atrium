@@ -81,13 +81,7 @@ tasks:
     dir: "{{.TASKFILE_DIR}}/{{.scope}}"
     cmds:
       - echo $(npm version {{.type}} --preid=rc --git-tag-version=false) > {{.version_file}}
-      - task: webhook
-        vars:
-          webhook_url: "{{.SLACK_WEBHOOK_URL}}"
-          message: "{{.message}}"
-          version:
-            sh: "cat {{.version_file}}"
-          type: "{{.type}}"
+      - task webhook webhook_url="{{.SLACK_WEBHOOK_URL}}" message="{{.message}}" version="$(cat {{.version_file}})" type="{{.type}}"
       - git add --all
       - 'git commit -m "version: $(cat {{.version_file}})"'
 
