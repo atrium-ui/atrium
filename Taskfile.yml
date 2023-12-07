@@ -68,12 +68,14 @@ tasks:
 
   webhook:
     desc: Trigger webhook message
+    internal: true
     requires:
       vars: [webhook_url, message]
     cmds:
       - 'curl -X POST -d "{\"text\": \"{{.message}}\"}" {{.webhook_url}}'
 
   version:
+    internal: true
     deps: [build]
     requires:
       vars: [type, scope]
@@ -85,15 +87,16 @@ tasks:
 
   publish:
     desc: Publish npm pacakge
+    internal: true
     requires:
       vars: [scope]
     dir: "{{.TASKFILE_DIR}}/{{.scope}}"
     vars:
       message:
-        sh: echo "New {{.type}} release of *$(cat {{.version_file}})* published"
+        sh: echo "New {{.type}} release of *$(cat {{.version_file}})* published\n\n$(git log -1 --pretty=format:%B)"
     cmds:
-      # - npm publish
-      # - git push origin HEAD:develop -o ci.skip
+      - npm publish
+      - git push origin HEAD:develop -o ci.skip
       - task: webhook
         vars:
           webhook_url: "{{.SLACK_WEBHOOK_URL}}"
@@ -101,22 +104,22 @@ tasks:
 
   publish:dev:
     desc: Publish npm pacakge witg dev tag
+    internal: true
     requires:
       vars: [scope]
     dir: "{{.TASKFILE_DIR}}/{{.scope}}"
     vars:
       message:
-        sh: echo "New {{.type}} release of *$(cat {{.version_file}})* published"
+        sh: echo "New {{.type}} release of *$(cat {{.version_file}})* published\n\n$(git log -1 --pretty=format:%B)"
     cmds:
-      # - npm publish --tag dev
-      # - git push origin HEAD:develop -o ci.skip
+      - npm publish --tag dev
+      - git push origin HEAD:develop -o ci.skip
       - task: webhook
         vars:
           webhook_url: "{{.SLACK_WEBHOOK_URL}}"
           message: "{{.message}}"
 
   release:
-    desc: Publish all packages
     requires:
       vars: [type]
     cmds:

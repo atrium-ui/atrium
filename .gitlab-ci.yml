@@ -44,20 +44,20 @@ publish-minor:
   only:
     - main
   when: manual
-  script: task release type=minor
+  script: SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL task release type=minor
 
 publish-patch:
   stage: publish
   only:
     - main
   when: manual
-  script: task release type=patch
+  script: SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URLtask release type=patch
 
 publish-dev:
   stage: publish
   only:
     - develop
-  script: task release type=prerelease
+  script: SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URLtask release type=prerelease
 
 pages:
   stage: docs
