@@ -2,10 +2,6 @@
 
 version: "3"
 
-env:
-  PACKAGE_SCOPE:
-  SLACK_WEBHOOK_URL:
-
 vars:
   version_file: "{{.TASKFILE_DIR}}/.task/.version"
 
@@ -89,30 +85,13 @@ tasks:
     desc: Publish npm pacakge
     internal: true
     requires:
-      vars: [scope]
+      vars: [scope, tag]
     dir: "{{.TASKFILE_DIR}}/{{.scope}}"
     vars:
       message:
         sh: echo "New {{.type}} release of *$(cat {{.version_file}})* published\n\n$(git log -1 --pretty=format:%B)"
     cmds:
-      - npm publish
-      - git push origin HEAD:develop -o ci.skip
-      - task: webhook
-        vars:
-          webhook_url: "{{.SLACK_WEBHOOK_URL}}"
-          message: "{{.message}}"
-
-  publish:dev:
-    desc: Publish npm pacakge witg dev tag
-    internal: true
-    requires:
-      vars: [scope]
-    dir: "{{.TASKFILE_DIR}}/{{.scope}}"
-    vars:
-      message:
-        sh: echo "New {{.type}} release of *$(cat {{.version_file}})* published\n\n$(git log -1 --pretty=format:%B)"
-    cmds:
-      - npm publish --tag dev
+      - npm publish --tag={{.tag}}
       - git push origin HEAD:develop -o ci.skip
       - task: webhook
         vars:
@@ -121,7 +100,7 @@ tasks:
 
   release:
     requires:
-      vars: [type]
+      vars: [type, tag]
     cmds:
       - task: version
         vars:
@@ -129,6 +108,7 @@ tasks:
           scope: elements
       - task: publish
         vars:
+          tag: "{{.tag}}"
           scope: elements
       - task: version
         vars:
@@ -136,4 +116,5 @@ tasks:
           scope: .
       - task: publish
         vars:
+          tag: "{{.tag}}"
           scope: .
