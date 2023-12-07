@@ -15,6 +15,7 @@ export class Expandable extends LitElement {
         .container {
           display: grid;
           grid-template-rows: 0fr;
+					grid-template-columns: 100%;
           overflow: hidden;
           transition: grid-template-rows var(--transition-speed) var(--animation-easing);
         }
