@@ -5,6 +5,6 @@
 		"lint": "tsc --pretty && biome check ."
 	},
 	"dependencies": {
-		"@sv/elements": "workspace:*"
+		"@sv/elements": "workspace:"
 	}
 }

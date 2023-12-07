@@ -63,8 +63,6 @@ tasks:
       - mv dist ../public
 
   webhook:
-    desc: Trigger webhook message
-    internal: true
     requires:
       vars: [webhook_url, message, version, type]
     cmds:
