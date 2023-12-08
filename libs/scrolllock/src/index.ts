@@ -4,49 +4,47 @@
  *  @todo: maybe use https://github.com/d4nyll/lethargy to normalize scrollevent in different browsers with different input devices
  */
 
-class VueScrolllock {
-	constructor(Vue, options) {
+export class ScrollLock {
+	installed = false;
+	enabled = false;
+
+	initialClientY = 0;
+	initialScrollX = 0;
+	initialScrollY = 0;
+	hasPassiveEvents = false;
+
+	options = {
+		debug: false,
+		allowElements: ['textarea', 'iframe'],
+	};
+
+	constructor() {
 		if (!this.installed) {
 			this.installed = true;
-
-			this.options = this.merge(
-				{
-					debug: true,
-					allowElements: ['textarea', 'iframe'],
-				},
-				options || {}
-			);
-
-			this.enabled = false;
-
-			this.initialClientY = 0;
-			this.initialScrollX = 0;
-			this.initialScrollY = 0;
-			this.hasPassiveEvents = false;
 
 			this.preventCallback = this.handlePrevent.bind(this);
 			this.scrollCallback = this.handleScroll.bind(this);
 			this.scrollStartCallback = this.handleScrollStart.bind(this);
 
-			this.checkForPassiveEvents();
-
-			return this;
+			if (typeof window !== 'undefined') {
+				this.checkForPassiveEvents();
+			}
 		}
 	}
 
-	checkForPassiveEvents() {
+	private checkForPassiveEvents() {
 		const passiveTestCallback = () => {};
 		const passiveTestOptions = Object.defineProperty({}, 'passive', {
-			get: function () {
+			get: () => {
 				this.hasPassiveEvents = true;
-			}.bind(this),
+			},
 		});
 
 		window.addEventListener('testPassive', passiveTestCallback, passiveTestOptions);
 		window.removeEventListener('testPassive', passiveTestCallback, passiveTestOptions);
 	}
 
-	getDirection(event) {
+	private getDirection(event) {
 		let deltaY = 0;
 
 		if (event.type === 'wheel') {
@@ -58,25 +56,13 @@ class VueScrolllock {
 		return deltaY > 0 ? 'up' : 'down';
 	}
 
-	merge(obj, src) {
-		return Object.keys(obj).reduce((result, next) => {
-			if (Array.isArray(obj[next]) && Array.isArray(src[next])) {
-				result[next] = obj[next].concat(src[next]);
-			} else if (obj[next] && src[next]) {
-				result[next] = src[next];
-			}
-
-			return result;
-		}, {});
-	}
-
-	handleScrollStart(event) {
+	private handleScrollStart(event) {
 		if (event.targetTouches && event.targetTouches.length === 1) {
 			this.initialClientY = event.targetTouches[0].clientY;
 		}
 	}
 
-	handleScroll(event, element) {
+	private handleScroll(event, element) {
 		const e = event || window.event;
 		const direction = this.getDirection(e);
 
@@ -113,7 +99,7 @@ class VueScrolllock {
 		return true;
 	}
 
-	handlePrevent(event) {
+	private handlePrevent(event) {
 		const e = event || window.event;
 		const element = e.target || e.srcElement;
 
@@ -148,7 +134,7 @@ class VueScrolllock {
 		return true;
 	}
 
-	enable() {
+	public enable() {
 		if (!this.enabled) {
 			this.initialScrollX = window.scrollX;
 			this.initialScrollY = window.scrollY;
@@ -223,7 +209,7 @@ class VueScrolllock {
 		}
 	}
 
-	disable() {
+	public disable() {
 		if (this.enabled) {
 			window.removeEventListener('scroll', this.preventCallback); // useless?
 
@@ -243,5 +229,3 @@ class VueScrolllock {
 		}
 	}
 }
-
-export default VueScrolllock;

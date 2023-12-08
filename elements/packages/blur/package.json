@@ -12,7 +12,8 @@
 	},
 	"license": "ISC",
 	"dependencies": {
-		"lit": "^2.5.0"
+		"lit": "^2.5.0",
+		"@sv/scrolllock": "workspace:"
 	},
 	"tsup": {
 		"entry": ["src/index.ts"],

@@ -1,11 +1,14 @@
 import { HTMLTemplateResult, LitElement, css, html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
+import { ScrollLock } from '@sv/scrolllock';
 
 declare global {
 	interface HTMLElementTagNameMap {
 		'a-blur': Blur;
 	}
 }
+
+const scrollLock = new ScrollLock({});
 
 @customElement('a-blur')
 export class Blur extends LitElement {
@@ -24,15 +27,18 @@ export class Blur extends LitElement {
 	@property({ type: Boolean, reflect: true })
 	public enabled = false;
 
+	@property({ type: Boolean, reflect: true })
+	public scrollLock = false;
+
 	@query('slot')
 	slot;
 
 	protected updated(): void {
 		if (this.enabled) {
-			document.body.style.overflow = 'hidden';
+			scrollLock.enable();
 			this.setAttribute('aria-hidden', 'false');
 		} else {
-			document.body.style.overflow = '';
+			scrollLock.disable();
 			this.setAttribute('aria-hidden', 'true');
 		}
 	}
@@ -51,28 +57,13 @@ export class Blur extends LitElement {
 		}
 	};
 
-	proxyScroll = (e: Event) => {
-		if (this.enabled) {
-			e.preventDefault();
-			e.stopImmediatePropagation();
-			e.stopPropagation();
-
-			const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-			const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-			window.scrollTo(scrollLeft, scrollTop);
-		}
-	};
-
 	connectedCallback(): void {
 		super.connectedCallback();
-
 		this.addEventListener('click', this.handleClick);
-		window.addEventListener('scroll', this.proxyScroll);
 	}
 
 	disconnectedCallback(): void {
 		this.removeEventListener('click', this.handleClick);
-		window.removeEventListener('scroll', this.proxyScroll);
 	}
 
 	render(): HTMLTemplateResult {

@@ -22,7 +22,7 @@ tasks:
     desc: Build all elements
     deps: [setup]
     cmds:
-      - bun x turbo build --filter "./elements/**"
+      - bun x turbo build --filter "./elements/**" --filter "./libs/**"
 
   test:
     desc: Run tests on all elements
@@ -98,4 +98,3 @@ tasks:
           type: "{{.type}}"
           tag: "{{.tag}}"
           scope: .
-
