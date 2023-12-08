@@ -1,7 +1,7 @@
 {
-	"name": "@sv/scrolllock",
+	"name": "@sv/scroll-lock",
 	"version": "0.1.0",
-	"description": "universal scrolllock",
+	"description": "universal scroll-lock",
 	"main": "dist/index.js",
 	"type": "module",
 	"types": "src/index.ts",

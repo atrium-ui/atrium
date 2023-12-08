@@ -19,13 +19,13 @@ tasks:
       - bun install
 
   build:
-    desc: Build all elements
+    desc: Build all libraries
     deps: [setup]
     cmds:
-      - bun x turbo build --filter "./elements/**" --filter "./libs/**"
+      - bun x turbo build --filter "./libs/**"
 
   test:
-    desc: Run tests on all elements
+    desc: Run tests on all packages
     dir: "{{.TASKFILE_DIR}}"
     deps: [build]
     cmds:
@@ -38,11 +38,12 @@ tasks:
       - bun x turbo lint
 
   fix:
+    desc: Apply all (unsafe) autofixes
     cmds:
       - bun x biome check --apply-unsafe .
 
   clean:
-    desc: Clean local files
+    desc: Clean untracked files
     cmds:
       - git clean -xdf
 
@@ -92,7 +93,7 @@ tasks:
         vars:
           type: "{{.type}}"
           tag: "{{.tag}}"
-          scope: elements
+          scope: libs/elements
       - task: publish
         vars:
           type: "{{.type}}"

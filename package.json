@@ -3,7 +3,7 @@
 	"version": "0.2.4-rc.8",
 	"description": "Atrium Component Library",
 	"author": "t.havlicek@s-v.de",
-	"contributors": [],
+	"contributors": ["f.kretschmer@s-v.de"],
 	"type": "module",
 	"bin": {
 		"use": "./cli/commands/use.mjs"
@@ -23,5 +23,5 @@
 		"turbo": "^1.10.16",
 		"typescript": "^5.3.2"
 	},
-	"workspaces": ["elements", "components", "elements/packages/*", "libs/*", "docs", "cli"]
+	"workspaces": ["libs/elements/packages/*", "libs/*", "components", "docs", "cli"]
 }

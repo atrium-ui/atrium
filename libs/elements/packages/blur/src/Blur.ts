@@ -1,6 +1,6 @@
 import { HTMLTemplateResult, LitElement, css, html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
-import { ScrollLock } from '@sv/scrolllock';
+import { ScrollLock } from '@sv/scroll-lock';
 
 declare global {
 	interface HTMLElementTagNameMap {
