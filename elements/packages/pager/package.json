@@ -1,23 +1,24 @@
 {
-  "name": "@atrium-ui/pager",
-  "version": "0.0.1",
-  "description": "",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "src/index.ts",
-  "scripts": {
-    "build": "tsup"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "lit": "^2.5.0"
-  },
-  "tsup": {
-    "entry": ["src/index.ts"],
-    "format": ["esm"],
-    "external": ["@sv/*"],
-    "sourcemap": true,
-    "clean": true
-  }
+	"name": "@atrium-ui/pager",
+	"author": "t.havlicek@s-v.de",
+	"contributors": [],
+	"version": "0.0.1",
+	"description": "",
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "src/index.ts",
+	"scripts": {
+		"build": "tsup"
+	},
+	"license": "ISC",
+	"dependencies": {
+		"lit": "^2.5.0"
+	},
+	"tsup": {
+		"entry": ["src/index.ts"],
+		"format": ["esm"],
+		"external": ["@sv/*"],
+		"sourcemap": true,
+		"clean": true
+	}
 }

@@ -1,24 +1,25 @@
 {
-  "name": "@atrium-ui/expandable",
-  "version": "2.0.3",
-  "description": "",
-  "main": "dist/index.js",
-  "types": "src/index.ts",
-  "type": "module",
-  "scripts": {
-    "build": "tsup"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "lit": "^2.5.0"
-  },
-  "files": ["dist"],
-  "tsup": {
-    "entry": ["src/index.ts"],
-    "format": ["esm"],
-    "external": ["@sv/*"],
-    "sourcemap": true,
-    "clean": true
-  }
+	"name": "@atrium-ui/expandable",
+	"author": "t.havlicek@s-v.de",
+	"contributors": [],
+	"version": "2.0.3",
+	"description": "",
+	"main": "dist/index.js",
+	"types": "src/index.ts",
+	"type": "module",
+	"scripts": {
+		"build": "tsup"
+	},
+	"license": "ISC",
+	"dependencies": {
+		"lit": "^2.5.0"
+	},
+	"files": ["dist"],
+	"tsup": {
+		"entry": ["src/index.ts"],
+		"format": ["esm"],
+		"external": ["@sv/*"],
+		"sourcemap": true,
+		"clean": true
+	}
 }

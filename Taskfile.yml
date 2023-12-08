@@ -1,4 +1,4 @@
-# https://taskfile.dev
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
 
 version: "3"
 
@@ -39,8 +39,7 @@ tasks:
 
   fix:
     cmds:
-      - bun x biome format --write .
-      - bun x biome lint --skip-errors --apply-unsafe .
+      - bun x biome check --apply-unsafe .
 
   clean:
     desc: Clean local files

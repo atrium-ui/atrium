@@ -1,5 +1,7 @@
 {
 	"name": "@atrium-ui/range",
+	"author": "t.havlicek@s-v.de",
+	"contributors": [],
 	"version": "1.0.4",
 	"description": "",
 	"type": "module",
@@ -8,7 +10,6 @@
 	"scripts": {
 		"build": "tsup"
 	},
-	"author": "",
 	"license": "ISC",
 	"dependencies": {
 		"lit": "^2.5.0"

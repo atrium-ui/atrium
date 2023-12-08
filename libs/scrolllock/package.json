@@ -1,25 +1,20 @@
 {
-	"name": "@atrium-ui/track",
-	"author": "t.havlicek@s-v.de",
-	"contributors": [],
+	"name": "@sv/scrolllock",
 	"version": "0.1.0",
-	"description": "",
+	"description": "universal scrolllock",
+	"main": "dist/index.mjs",
 	"type": "module",
-	"main": "dist/index.js",
 	"types": "src/index.ts",
 	"scripts": {
 		"build": "tsup"
 	},
-	"license": "ISC",
-	"dependencies": {
-		"lit": "^2.5.0"
-	},
-	"files": ["dist"],
+	"author": "f.kretschmer@s-v.de",
 	"tsup": {
 		"entry": ["src/index.ts"],
 		"format": ["esm"],
 		"external": ["@sv/*"],
 		"sourcemap": true,
 		"clean": true
-	}
+	},
+	"license": "ISC"
 }

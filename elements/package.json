@@ -1,5 +1,7 @@
 {
 	"name": "@sv/elements",
+	"author": "t.havlicek@s-v.de",
+	"contributors": [],
 	"version": "0.2.4-rc.6",
 	"description": "Atrium Component Library",
 	"type": "module",
@@ -54,7 +56,6 @@
 		}
 	},
 	"keywords": [],
-	"author": "",
 	"license": "ISC",
 	"dependencies": {
 		"lit": "^2.5.0"
