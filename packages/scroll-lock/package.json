@@ -1,6 +1,6 @@
 {
 	"name": "@sv/scroll-lock",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "universal scroll-lock",
 	"main": "dist/index.js",
 	"type": "module",
@@ -10,9 +10,15 @@
 	},
 	"author": "f.kretschmer@s-v.de",
 	"tsup": {
-		"entry": ["src/index.ts"],
-		"format": ["esm"],
-		"external": ["@sv/*"],
+		"entry": [
+			"src/index.ts"
+		],
+		"format": [
+			"esm"
+		],
+		"external": [
+			"@sv/*"
+		],
 		"sourcemap": true,
 		"clean": true
 	},
