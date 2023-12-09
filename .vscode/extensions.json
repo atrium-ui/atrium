@@ -1,3 +1,7 @@
 {
-	"recommendations": ["runem.lit-plugin", "redhat.vscode-yaml", "biomejs.biome"]
+	"recommendations": [
+		"runem.lit-plugin",
+		"redhat.vscode-yaml",
+		"biomejs.biome"
+	]
 }

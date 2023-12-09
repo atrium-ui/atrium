@@ -1,5 +1,4 @@
 stages:
-  - lint
   - test
   - publish
   - docs
@@ -25,34 +24,37 @@ cache:
 before_script:
   - apt install unzip -y
   - export PATH=$RTX_DATA_DIR/shims:$PATH
-  - rtx install
   - task setup
   - git config user.email "gitlab@s-v.de"
   - git config user.name "CI"
   - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
 
-test:
-  stage: test
-  except:
-    - tags
-  script: task test
-
 lint:
-  stage: lint
+  stage: test
   except:
     - tags
   script: task lint
 
+test:
+  stage: test
+  artifacts:
+    untracked: true
+  except:
+    - tags
+  script: task test
+
 format:
+  only:
+    - merge_requests
   script:
     - task fix
     - 'git commit -a "ci: format"'
     - "git push origin HEAD:$CI_COMMIT_REF_NAME"
-  only:
-    - merge_requests
 
 publish:
   stage: publish
+  dependencies:
+    - test
   only:
     - develop
   script:

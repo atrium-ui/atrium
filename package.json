@@ -17,11 +17,12 @@
 		"enquirer": "^2.4.1"
 	},
 	"devDependencies": {
-		"@changesets/cli": "^2.27.1",
 		"@biomejs/biome": "^1.0.0",
+		"@changesets/cli": "^2.27.1",
 		"@happy-dom/global-registrator": "^11.0.2",
 		"@types/web": "^0.0.123",
 		"bun-types": "^1.0.14",
+		"fast-glob": "^3.3.2",
 		"tsup": "^7.2.0",
 		"turbo": "^1.10.16",
 		"typescript": "^5.3.2"

@@ -24,19 +24,23 @@ See [Installation](https://sv.pages.s-v.de/sv-frontend-library/mono/guides/insta
 
 ### @sv/mono
 
-This package contains all components and templates. It is also used for tooling and development, for example, the cli is located here.
+This package contains all elements and components. It is also used for tooling and development, for example, the cli run from here.
 
 ### @sv/elements
 
 The elements package distributes all the custom-elements that are used in the components or external projects.
 
-### @sv/cli
-
-This package is **not** published. It contains the cli which is used from the **@sv/mono** package and only contains executable JavaScript.
-
 **Dependencies**
 
 All elements share the same dependencies from the [elements/package.json](elements/package.json).
+
+### @sv/cli
+
+This package is **not** published. It contains the cli which is used by the **@sv/mono** package and only contains executable JavaScript.
+
+### @sv/components
+
+This package is **not** published. It contains all the component templates that will be copied by the cli.
 
 <br />
 
@@ -82,22 +86,14 @@ All the elements share the same build system. We use [tsup](https://tsup.egoist.
 
 The tsup configuration is located in the package.json of each element.
 
-### Publishing packages
+<br/>
 
-Package publishing is handled by the CI. Currently, it is not possible to publish packages individually, all packages are published at once.
+## Publishing packages
 
-The **develop** branch always publishes a prerelease packages. When developing features, it is recommended to work in a feature branch and merge into develop to release prerelease (rc) packages.
+New versions should always be created from the **develop** branch.
 
-Allowed branch names include:
+To create a new version of a package, run `task version` and follow the instructions of the cli.
 
-- `feature/*`
-- `fix/*`
-
-When it is time to release a new version, create a merge request from **develop** into **main**.
+After the changes done by the cli are committed and pushed, the CI will automatically publish the package(s).
 
 When develop is merged into the **main** branch, the docs will be automatically built and deployed to pages.
-That pipeline will also give the options to publish a _patch_ or _minor_ release of the packages.
-
-Requirements:
-
-- `develop` pipeline must be completed before main can publish
