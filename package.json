@@ -1,19 +1,23 @@
 {
 	"name": "@sv/mono",
-	"version": "0.2.3-rc.7",
+	"version": "0.2.4-rc.16",
 	"description": "Atrium Component Library",
+	"author": "t.havlicek@s-v.de",
+	"contributors": [
+		"f.kretschmer@s-v.de"
+	],
 	"type": "module",
 	"bin": {
 		"use": "./cli/commands/use.mjs"
 	},
 	"keywords": [],
-	"author": "",
 	"license": "ISC",
 	"dependencies": {
 		"chalk": "^5.2.0",
 		"enquirer": "^2.4.1"
 	},
 	"devDependencies": {
+		"@changesets/cli": "^2.27.1",
 		"@biomejs/biome": "^1.0.0",
 		"@happy-dom/global-registrator": "^11.0.2",
 		"@types/web": "^0.0.123",
@@ -23,9 +27,9 @@
 		"typescript": "^5.3.2"
 	},
 	"workspaces": [
-		"elements",
+		"packages/elements/packages/*",
+		"packages/*",
 		"components",
-		"elements/packages/*",
 		"docs",
 		"cli"
 	]

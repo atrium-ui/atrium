@@ -1,9 +1,6 @@
-# https://taskfile.dev
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
 
 version: "3"
-
-env:
-  PACKAGE_SCOPE:
 
 tasks:
   setup:
@@ -19,13 +16,13 @@ tasks:
       - bun install
 
   build:
-    desc: Build all elements
+    desc: Build all packages
     deps: [setup]
     cmds:
-      - bun x turbo build --filter "./elements/**"
+      - bun x turbo build --filter "./packages/**"
 
   test:
-    desc: Run tests on all elements
+    desc: Run tests on all packages
     dir: "{{.TASKFILE_DIR}}"
     deps: [build]
     cmds:
@@ -38,20 +35,15 @@ tasks:
       - bun x turbo lint
 
   fix:
+    desc: Apply all (unsafe) autofixes
     cmds:
-      - bun x biome format --write .
-      - bun x biome lint --skip-errors --apply-unsafe .
-
-  new:
-    desc: Create a new component from templates
-    dir: "{{.TASKFILE_DIR}}"
-    cmds:
-      - bun x @sv/mono new
+      - bun x biome check --apply-unsafe .
 
   clean:
-    desc: Clean local files
+    desc: Clean untracked files
     cmds:
       - git clean -xdf
+      - git tag -d $(git tag -l)
 
   docs:
     desc: Start dev server for docs
@@ -68,55 +60,43 @@ tasks:
       - bun run build
       - mv dist ../public
 
-  version:
-    dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
-    deps: [build]
-    vars:
-      version_file: "{{.TASKFILE_DIR}}/.task/.version"
+  webhook:
     requires:
-      vars: [type]
+      vars: [message, version, type]
     cmds:
-      - echo $(npm version {{.type}} --preid=rc --git-tag-version=false) > {{.version_file}}
+      - 'curl -X POST -d "{\"message\": \"{{.message}}\", \"version\": \"{{.version}}\", \"type\": \"{{.type}}\"}" {{.SLACK_WEBHOOK_URL}}'
+
+  version:
+    desc: Create a package version
+    dir: "{{.TASKFILE_DIR}}"
+    cmds:
+      - bun x changeset
       - git add --all
-      - 'git commit -m "version: $(cat {{.version_file}})"'
+      - bun x changeset status --output status.json
+      - 'git commit -m "version: $(cat status.json | jq -r ".changesets[0].summary")"'
+      - rm status.json
+      - git push
 
-  version:minor:
-    desc: "Create minor version"
+  version:dev:
+    desc: Enter pre-release mode
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
+      - bun x changeset pre enter dev
       - task: version
-        vars:
-          type: minor
-
-  version:patch:
-    desc: "Create patch version"
-    cmds:
-      - task: version
-        vars:
-          type: patch
-
-  version:prerelease:
-    desc: "Create prereleasae version"
-    cmds:
-      - task: version
-        vars:
-          type: prerelease
-
-  publish:preview:
-    desc: Pack the pacakge for preview
-    dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
-    cmds:
-      - npm pack && tar -xvzf *.tgz && rm -rf package *.tgz
 
   publish:
-    desc: Publish npm pacakge
-    dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
+    deps: [build]
+    vars:
+      message:
+        sh: "git log -1 --pretty=format:%B"
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - npm publish
+      - bun x changeset version
+      - bun x changeset publish --tag > .task/publish.txt
+      - git add --all
+      - 'git commit -m "version: publish"'
       - git push origin HEAD:develop -o ci.skip
-
-  publish:dev:
-    desc: Publish npm pacakge
-    dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
-    cmds:
-      - npm publish --tag dev
-      - git push origin HEAD:develop -o ci.skip
+      - git push origin HEAD:develop --follow-tags
+      - echo $(bun ./scripts/generate-notify.js)
+      - rm .task/publish.txt
+      # - task webhook message="$(bun ./scripts/generate-notify.js)"

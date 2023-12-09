@@ -1,5 +1,8 @@
 {
 	"name": "@sv/cli",
+	"author": "t.havlicek@s-v.de",
+	"private": "true",
+	"contributors": [],
 	"scripts": {
 		"lint": "tsc --pretty && biome check .",
 		"test": "bun test"
