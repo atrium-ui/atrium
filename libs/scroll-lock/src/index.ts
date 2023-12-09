@@ -22,10 +22,6 @@ export class ScrollLock {
 		if (!this.installed) {
 			this.installed = true;
 
-			this.preventCallback = this.handlePrevent.bind(this);
-			this.scrollCallback = this.handleScroll.bind(this);
-			this.scrollStartCallback = this.handleScrollStart.bind(this);
-
 			if (typeof window !== 'undefined') {
 				this.checkForPassiveEvents();
 			}
@@ -56,13 +52,13 @@ export class ScrollLock {
 		return deltaY > 0 ? 'up' : 'down';
 	}
 
-	private handleScrollStart(event) {
+	private handleScrollStart = (event) => {
 		if (event.targetTouches && event.targetTouches.length === 1) {
 			this.initialClientY = event.targetTouches[0].clientY;
 		}
-	}
+	};
 
-	private handleScroll(event, element) {
+	private handleScroll = (event, element) => {
 		const e = event || window.event;
 		const direction = this.getDirection(e);
 
@@ -97,14 +93,15 @@ export class ScrollLock {
 		e.stopPropagation();
 
 		return true;
-	}
+	};
 
-	private handlePrevent(event) {
+	private handlePrevent = (event) => {
 		const e = event || window.event;
 		const element = e.target || e.srcElement;
 
 		if (this.enabled) {
 			// if target is allowed to scroll do so
+			// biome-ignore lint/complexity/noForEach: <explanation>
 			this.options.allowElements.forEach((allowElement) => {
 				if (element.matches && e.target.matches(allowElement)) {
 					return true;
@@ -132,7 +129,7 @@ export class ScrollLock {
 		}
 
 		return true;
-	}
+	};
 
 	public enable() {
 		if (!this.enabled) {
@@ -141,7 +138,7 @@ export class ScrollLock {
 
 			window.addEventListener(
 				'scroll',
-				this.preventCallback,
+				this.handlePrevent,
 				this.hasPassiveEvents
 					? {
 							passive: false,
@@ -151,7 +148,7 @@ export class ScrollLock {
 
 			window.addEventListener(
 				'wheel',
-				this.preventCallback,
+				this.handlePrevent,
 				this.hasPassiveEvents
 					? {
 							passive: false,
@@ -160,7 +157,7 @@ export class ScrollLock {
 			);
 			document.addEventListener(
 				'touchmove',
-				this.preventCallback,
+				this.handlePrevent,
 				this.hasPassiveEvents
 					? {
 							passive: false,
@@ -168,12 +165,13 @@ export class ScrollLock {
 					: undefined
 			);
 
+			// biome-ignore lint/complexity/noForEach: <explanation>
 			this.options.allowElements.forEach((elementSelector) => {
-				[].forEach.call(document.querySelectorAll(elementSelector), (elementNode) => {
+				[].forEach.call(document.querySelectorAll(elementSelector), (elementNode: HTMLElement) => {
 					elementNode.addEventListener(
 						'wheel',
 						(event) => {
-							this.scrollCallback(event, elementNode);
+							this.handleScroll(event, elementNode);
 						},
 						this.hasPassiveEvents
 							? {
@@ -184,7 +182,7 @@ export class ScrollLock {
 					elementNode.addEventListener(
 						'touchmove',
 						(event) => {
-							this.scrollCallback(event, elementNode);
+							this.handleScroll(event, elementNode);
 						},
 						this.hasPassiveEvents
 							? {
@@ -195,7 +193,7 @@ export class ScrollLock {
 
 					elementNode.addEventListener(
 						'touchstart',
-						this.scrollStartCallback,
+						this.handleScrollStart,
 						this.hasPassiveEvents
 							? {
 									passive: false,
@@ -211,17 +209,20 @@ export class ScrollLock {
 
 	public disable() {
 		if (this.enabled) {
-			window.removeEventListener('scroll', this.preventCallback); // useless?
+			window.removeEventListener('scroll', this.handlePrevent); // useless?
 
-			window.removeEventListener('wheel', this.preventCallback);
-			document.removeEventListener('touchmove', this.preventCallback);
+			window.removeEventListener('wheel', this.handlePrevent);
+			document.removeEventListener('touchmove', this.handlePrevent);
 
+			// biome-ignore lint/complexity/noForEach: <explanation>
 			this.options.allowElements.forEach((elementSelector) => {
-				[].forEach.call(document.querySelectorAll(elementSelector), (elementNode) => {
-					elementNode.removeEventListener('wheel', this.scrollCallback);
-					elementNode.removeEventListener('touchmove', this.scrollCallback);
+				[].forEach.call(document.querySelectorAll(elementSelector), (elementNode: HTMLElement) => {
+					// @ts-ignore
+					elementNode.removeEventListener('wheel', this.handleScroll); // doesn't do anything?
+					// @ts-ignore
+					elementNode.removeEventListener('touchmove', this.handleScroll); // doesn't do anything?
 
-					elementNode.removeEventListener('touchstart', this.scrollStartCallback);
+					elementNode.removeEventListener('touchstart', this.handleScrollStart);
 				});
 			});
 

@@ -8,7 +8,7 @@ declare global {
 	}
 }
 
-const scrollLock = new ScrollLock({});
+const scrollLock = new ScrollLock();
 
 @customElement('a-blur')
 export class Blur extends LitElement {
