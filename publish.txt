@@ -1,2 +1,10 @@
 🦋  info npm info @sv/elements
 🦋  info npm info @sv/scroll-lock
+🦋  info @sv/scroll-lock is being published because our local version (0.1.3) has not been published on npm
+🦋  info Publishing "@sv/scroll-lock" at "0.1.3"
+🦋  info This operation requires a one-time password from your authenticator.
+[?25l[36m🦋 [39m [1mEnter one-time password:[22m [2m›[22m [46m[30m[30m [39m[30m[39m[49m[1D[2K[1G[32m🦋 [39m [1mEnter one-time password:[22m [2m·[22m 
+[?25h🦋  success packages published successfully:
+🦋  @sv/scroll-lock@0.1.3
+🦋  Creating git tag...
+🦋  New tag:  @sv/scroll-lock@0.1.3
