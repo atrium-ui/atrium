@@ -88,7 +88,7 @@ tasks:
     cmds:
       - bun x changeset version
       - git push origin HEAD:develop -o ci.skip
-      - git push origin HEAD:develop --follow-tags
+      - git push origin HEAD:develop --tags
       - bun x changeset publish --tag > .task/publish.txt
       - task notify || true
       - rm .task/publish.txt
