@@ -71,4 +71,3 @@ pages:
     paths:
       - public
   script: task docs:build
-

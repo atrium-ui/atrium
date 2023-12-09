@@ -1,0 +1,25 @@
+{
+	"name": "@atrium-ui/blur",
+	"author": "t.havlicek@s-v.de",
+	"contributors": [],
+	"version": "0.0.1",
+	"description": "",
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "src/index.ts",
+	"scripts": {
+		"build": "tsup"
+	},
+	"license": "ISC",
+	"dependencies": {
+		"lit": "^2.5.0",
+		"@sv/scroll-lock": "workspace:"
+	},
+	"tsup": {
+		"entry": ["src/index.ts"],
+		"format": ["esm"],
+		"external": ["@sv/*"],
+		"sourcemap": true,
+		"clean": true
+	}
+}
