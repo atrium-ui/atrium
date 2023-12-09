@@ -2,9 +2,6 @@
 
 version: "3"
 
-vars:
-  version_file: "{{.TASKFILE_DIR}}/.task/.version"
-
 tasks:
   setup:
     desc: Install dependencies
@@ -85,8 +82,7 @@ tasks:
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - bun x changeset version
-      - echo $(cat package.json | jq -r .version) > {{.version_file}}
       - git push origin HEAD:develop -o ci.skip
-      - git push origin --tags
       - bun x changeset publish --tag={{.tag}}
-      # - task webhook message="{{.message}}" type="{{.type}}" version="$(cat {{.version_file}})"
+      - git push origin --tags
+      # - task webhook message="{{.message}}" type="{{.type}}" version="$(cat package.json | jq -r .version)"
