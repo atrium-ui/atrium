@@ -94,6 +94,7 @@ tasks:
       - bun x changeset version
       - bun x changeset publish --tag > publish.txt
       - git add --all
+      - 'git commit -m "version: publish"'
       - git push origin HEAD:develop -o ci.skip
       - git push origin HEAD:develop --follow-tags
       - echo $(cat publish.txt)
