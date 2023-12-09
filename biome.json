@@ -21,7 +21,11 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"ignore": ["public/*.*", "**/dist/*.*", "**/.astro/*.*"]
+		"ignore": [
+			"public/*.*",
+			"**/dist/*.*",
+			"**/.astro/*.*"
+		]
 	},
 	"linter": {
 		"rules": {
@@ -29,6 +33,11 @@
 			"a11y": {
 				"useKeyWithClickEvents": "off"
 			}
+		}
+	},
+	"json": {
+		"formatter": {
+			"lineWidth": 30
 		}
 	}
 }

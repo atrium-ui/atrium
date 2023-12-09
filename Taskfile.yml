@@ -60,27 +60,17 @@ tasks:
       - bun run build
       - mv dist ../public
 
-  webhook:
-    requires:
-      vars: [message, version, type]
-    cmds:
-      - 'curl -X POST -d "{\"message\": \"{{.message}}\", \"version\": \"{{.version}}\", \"type\": \"{{.type}}\"}" {{.SLACK_WEBHOOK_URL}}'
-
   version:
+    silent: true
     desc: Create a package version
     dir: "{{.TASKFILE_DIR}}"
     preconditions:
       - sh: git diff --exit-code
         msg: "Git working tree is must be clean."
-      - sh: "[ $(git rev-parse --abbrev-ref HEAD) = de2velop ] && exit 1"
+      - sh: "[ $(git rev-parse --abbrev-ref HEAD) = develop ] || exit 1"
         msg: "Must be on develop branch."
     cmds:
-      - bun x changeset
-      - git add --all
-      - bun x changeset status --output status.json
-      - 'git commit -m "version: $(cat status.json | jq -r ".changesets[0].summary")"'
-      - rm status.json
-      - git push
+      - bun x changeset add
 
   version:dev:
     desc: Enter pre-release mode
@@ -97,11 +87,16 @@ tasks:
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - bun x changeset version
-      - bun x changeset publish --tag > .task/publish.txt
-      - git add --all
-      - 'git commit -m "version: publish"'
       - git push origin HEAD:develop -o ci.skip
       - git push origin HEAD:develop --follow-tags
-      - echo $(bun ./scripts/generate-notify.js)
+      - bun x changeset publish --tag > .task/publish.txt
+      - task notify || true
       - rm .task/publish.txt
-      # - task webhook message="$(bun ./scripts/generate-notify.js)"
+
+  notify:
+    silent: true
+    cmds:
+      - bun ./scripts/generate-notify.mjs > .task/notify.txt
+      - cat .task/notify.txt
+      - 'curl -X POST -d "{\"message\": \"$(cat .task/notify.txt)\"}" $SLACK_WEBHOOK_URL'
+      - rm .task/notify.txt
