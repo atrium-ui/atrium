@@ -71,11 +71,11 @@ tasks:
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - bun x changeset
-      # - git add --all
-      # - bun x changeset status --output status.json
-      # - 'git commit -m "version: $(cat status.json | jq -r ".changesets[0].summary")"'
-      # - rm status.json
-      # - git push
+      - git add --all
+      - bun x changeset status --output status.json
+      - 'git commit -m "version: $(cat status.json | jq -r ".changesets[0].summary")"'
+      - rm status.json
+      - git push
 
   version:dev:
     desc: Enter pre-release mode
