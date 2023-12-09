@@ -97,5 +97,5 @@ tasks:
       - 'git commit -m "version: publish"'
       - git push origin HEAD:develop -o ci.skip
       - git push origin HEAD:develop --follow-tags
-      - bun x changeset status --output status.json
-      # - task webhook message="{{.message}}" version="$(cat package.json | jq -r .version)"
+      - echo $(bun ./scripts/generate-notify.js)
+      # - task webhook message="$(bun ./scripts/generate-notify.js)"

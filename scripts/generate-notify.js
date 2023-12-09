@@ -1,6 +1,7 @@
-export default function () {
-	return {
-		version: '',
-		message: '',
-	};
+function generateMesssage() {
+	const message = 'X';
+
+	return message;
 }
+
+console.log(generateMesssage());
