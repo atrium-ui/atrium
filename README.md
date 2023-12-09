@@ -90,21 +90,10 @@ The tsup configuration is located in the package.json of each element.
 
 ## Publishing packages
 
-Package publishing is handled by the CI. Currently, it is not possible to publish packages individually, all packages are published at once.
+New versions should always be created from the **develop** branch.
 
-The **develop** branch always publishes a prerelease packages (v0.0.0-rc.0).
-When developing features, it is recommended to work in a feature branch and merge into develop to release prerelease packages.
+To create a new version of a package, run `task version` and follow the instructions of the cli.
 
-Allowed branch names include:
-
-- `feature/[-a-z0-9]`
-- `fix/[-a-z0-9]`
-
-When it is time to release a new version, create a merge request from **develop** into **main**.
+After the changes done by the cli are committed and pushed, the CI will automatically publish the package(s).
 
 When develop is merged into the **main** branch, the docs will be automatically built and deployed to pages.
-That pipeline will also give the options to publish a _patch_ or _minor_ release of the packages.
-
-Requirements:
-
-- `develop` pipeline must be completed before main can publish

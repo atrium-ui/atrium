@@ -69,6 +69,11 @@ tasks:
   version:
     desc: Create a package version
     dir: "{{.TASKFILE_DIR}}"
+    preconditions:
+      - sh: git diff --exit-code
+        msg: "Git working tree is must be clean."
+      - sh: "[ $(git rev-parse --abbrev-ref HEAD) = de2velop ] && exit 1"
+        msg: "Must be on develop branch."
     cmds:
       - bun x changeset
       - git add --all
