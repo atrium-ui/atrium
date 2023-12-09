@@ -1,9 +1,11 @@
 {
 	"name": "@sv/mono",
-	"version": "0.2.4-rc.8",
+	"version": "0.2.4-rc.16",
 	"description": "Atrium Component Library",
 	"author": "t.havlicek@s-v.de",
-	"contributors": ["f.kretschmer@s-v.de"],
+	"contributors": [
+		"f.kretschmer@s-v.de"
+	],
 	"type": "module",
 	"bin": {
 		"use": "./cli/commands/use.mjs"
@@ -24,5 +26,11 @@
 		"turbo": "^1.10.16",
 		"typescript": "^5.3.2"
 	},
-	"workspaces": ["libs/elements/packages/*", "libs/*", "components", "docs", "cli"]
+	"workspaces": [
+		"packages/elements/packages/*",
+		"packages/*",
+		"components",
+		"docs",
+		"cli"
+	]
 }

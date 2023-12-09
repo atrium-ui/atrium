@@ -19,10 +19,10 @@ tasks:
       - bun install
 
   build:
-    desc: Build all libraries
+    desc: Build all packages
     deps: [setup]
     cmds:
-      - bun x turbo build --filter "./libs/**"
+      - bun x turbo build --filter "./packages/**"
 
   test:
     desc: Run tests on all packages
@@ -46,6 +46,7 @@ tasks:
     desc: Clean untracked files
     cmds:
       - git clean -xdf
+      - git tag -d $(git tag -l)
 
   docs:
     desc: Start dev server for docs
@@ -74,9 +75,12 @@ tasks:
       vars: [type, scope]
     dir: "{{.TASKFILE_DIR}}/{{.scope}}"
     cmds:
-      - echo $(npm version {{.type}} --preid=rc) > {{.version_file}}
+      - echo "Bumping {{.scope}} by {{.type}}"
+      - npm version {{.type}} --preid=rc
+      - echo Versioned - $(cat package.json | jq -r .version)
+      - echo $(cat package.json | jq -r .version) > {{.version_file}}
       - git push origin HEAD:develop -o ci.skip
-      - git push origin --tags -o ci.skip
+      - git push origin --tags
 
   publish:
     internal: true
@@ -109,10 +113,10 @@ tasks:
         vars:
           type: "{{.type}}"
           tag: "{{.tag}}"
-          scope: libs/elements
+          scope: packages/scroll-lock
 
       - task: publish
         vars:
           type: "{{.type}}"
           tag: "{{.tag}}"
-          scope: libs/scroll-lock # should be within the elements package
+          scope: packages/elements

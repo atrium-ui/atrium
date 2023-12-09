@@ -16,8 +16,6 @@
 		"@astrojs/tailwind": "^5.0.2",
 		"@parse5/tools": "0.3.0",
 		"@rive-app/canvas-single": "^2.7.1",
-		"@sv/components": "workspace:",
-		"@sv/elements": "workspace:",
 		"@webcomponents/template-shadowroot": "^0.2.1",
 		"astro": "^3.6.4",
 		"execa": "8.0.1",

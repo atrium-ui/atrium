@@ -33,11 +33,23 @@ before_script:
 
 test:
   stage: test
+  except:
+    - tags
   script: task test
 
 lint:
   stage: lint
+  except:
+    - tags
   script: task lint
+
+format:
+  script:
+    - task fix
+    - 'git commit -a "ci: format"'
+    - "git push origin HEAD:$CI_COMMIT_REF_NAME"
+  only:
+    - merge_requests
 
 publish-minor:
   stage: publish
