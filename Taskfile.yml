@@ -76,7 +76,6 @@ tasks:
       - bun x changeset
 
   publish:
-    internal: true
     deps: [build]
     vars:
       message:
