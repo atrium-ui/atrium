@@ -2,7 +2,7 @@
 	"name": "@atrium-ui/circle",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
-	"version": "1.0.10",
+	"private": true,
 	"description": "",
 	"type": "module",
 	"main": "dist/index.js",

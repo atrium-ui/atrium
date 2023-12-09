@@ -70,15 +70,10 @@ tasks:
       - 'curl -X POST -d "{\"message\": \"{{.message}}\", \"version\": \"{{.version}}\", \"type\": \"{{.type}}\"}" {{.SLACK_WEBHOOK_URL}}'
 
   version:
-    desc: Bump version of package
-    requires:
-      vars: [type, scope]
+    desc: Create package version
     dir: "{{.TASKFILE_DIR}}/{{.scope}}"
     cmds:
-      - npm version {{.type}} --preid=rc
-      - echo $(cat package.json | jq -r .version) > {{.version_file}}
-      - git push origin HEAD:develop -o ci.skip
-      - git push origin --tags
+      - bun x changeset
 
   publish:
     internal: true
@@ -90,9 +85,6 @@ tasks:
       vars: [type, scope, tag]
     dir: "{{.TASKFILE_DIR}}/{{.scope}}"
     cmds:
-      - task: version
-        vars:
-          type: "{{.type}}"
-          scope: "{{.scope}}"
-      - npm publish --tag={{.tag}}
+      - bun x changeset version
+      - bun x changeset publish --tag={{.tag}}
       # - task webhook message="{{.message}}" type="{{.type}}" version="$(cat {{.version_file}})"

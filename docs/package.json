@@ -3,7 +3,7 @@
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
 	"type": "module",
-	"version": "0.0.1",
+	"private": "true",
 	"scripts": {
 		"dev": "bun --bun x astro dev",
 		"build": "bun --bun x astro build"

@@ -2,7 +2,7 @@
 	"name": "@atrium-ui/toggle",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
-	"version": "0.1.2",
+	"private": true,
 	"description": "",
 	"type": "module",
 	"main": "dist/index.js",

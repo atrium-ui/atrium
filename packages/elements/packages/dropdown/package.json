@@ -2,7 +2,7 @@
 	"name": "@atrium-ui/dropdown",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
-	"version": "0.3.7",
+	"private": true,
 	"description": "",
 	"type": "module",
 	"main": "dist/index.js",

@@ -2,7 +2,7 @@
 	"name": "@atrium-ui/adaptive-height",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
-	"version": "2.0.3",
+	"private": true,
 	"description": "",
 	"type": "module",
 	"main": "dist/index.js",

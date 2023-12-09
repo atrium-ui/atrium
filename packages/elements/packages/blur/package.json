@@ -2,7 +2,7 @@
 	"name": "@atrium-ui/blur",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
-	"version": "0.0.1",
+	"private": true,
 	"description": "",
 	"type": "module",
 	"main": "dist/index.js",

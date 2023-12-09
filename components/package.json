@@ -2,7 +2,7 @@
 	"name": "@sv/components",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
-	"version": "0.1.0",
+	"private": "true",
 	"scripts": {
 		"lint": "tsc --pretty && biome check ."
 	}

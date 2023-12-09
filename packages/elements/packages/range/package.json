@@ -2,7 +2,7 @@
 	"name": "@atrium-ui/range",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
-	"version": "1.0.4",
+	"private": true,
 	"description": "",
 	"type": "module",
 	"main": "dist/index.js",
