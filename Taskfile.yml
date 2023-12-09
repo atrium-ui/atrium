@@ -75,6 +75,7 @@ tasks:
       - bun x changeset status --output status.json
       - 'git commit -m "version: $(cat status.json | jq -r ".changesets[0].summary")"'
       - rm status.json
+      - git push
 
   version:dev:
     desc: Enter pre-release mode
