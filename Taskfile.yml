@@ -82,6 +82,7 @@ tasks:
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - bun x changeset pre enter dev
+      - task: version
 
   publish:
     deps: [build]
