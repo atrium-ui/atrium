@@ -92,12 +92,10 @@ tasks:
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - bun x changeset version
-      - bun x changeset publish --tag > publish.txt
+      - bun x changeset publish --tag
       - git add --all
       - 'git commit -m "version: publish"'
       - git push origin HEAD:develop -o ci.skip
       - git push origin HEAD:develop --follow-tags
       - bun x changeset status --output status.json
-      - echo $(cat publish.txt)
       # - task webhook message="{{.message}}" version="$(cat package.json | jq -r .version)"
-      - rm publish.txt
