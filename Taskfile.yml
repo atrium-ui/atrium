@@ -75,9 +75,7 @@ tasks:
       vars: [type, scope]
     dir: "{{.TASKFILE_DIR}}/{{.scope}}"
     cmds:
-      - echo "Bumping {{.scope}} by {{.type}}"
       - npm version {{.type}} --preid=rc
-      - echo Versioned - $(cat package.json | jq -r .version)
       - echo $(cat package.json | jq -r .version) > {{.version_file}}
       - git push origin HEAD:develop -o ci.skip
       - git push origin --tags
@@ -98,25 +96,3 @@ tasks:
           scope: "{{.scope}}"
       - npm publish --tag={{.tag}}
       # - task webhook message="{{.message}}" type="{{.type}}" version="$(cat {{.version_file}})"
-
-  release:
-    requires:
-      vars: [type, tag]
-    cmds:
-      - task: publish
-        vars:
-          type: "{{.type}}"
-          tag: "{{.tag}}"
-          scope: .
-
-      - task: publish
-        vars:
-          type: "{{.type}}"
-          tag: "{{.tag}}"
-          scope: packages/scroll-lock
-
-      - task: publish
-        vars:
-          type: "{{.type}}"
-          tag: "{{.tag}}"
-          scope: packages/elements

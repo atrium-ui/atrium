@@ -56,20 +56,29 @@ publish-minor:
   only:
     - main
   when: manual
-  script: task release type=minor tag=latest
+  script:
+    - task release type=minor tag=latest scope="."
+    - task release type=minor tag=latest scope="packages/scroll-lock"
+    - task release type=minor tag=latest scope="packages/elements"
 
 publish-patch:
   stage: publish
   only:
     - main
   when: manual
-  script: task release type=patch tag=latest
+  script:
+    - task release type=patch tag=latest scope="."
+    - task release type=patch tag=latest scope="packages/scroll-lock"
+    - task release type=patch tag=latest scope="packages/elements"
 
 publish-dev:
   stage: publish
   only:
     - develop
-  script: task release type=prerelease tag=dev
+  script:
+    - task publish type=prerelease tag=dev scope="."
+    - task publish type=prerelease tag=dev scope="packages/scroll-lock"
+    - task publish type=prerelease tag=dev scope="packages/elements"
 
 pages:
   stage: docs
