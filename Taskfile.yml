@@ -78,11 +78,11 @@ tasks:
       message:
         sh: "git log -1 --pretty=format:%B"
     requires:
-      vars: [type, tag]
+      vars: [tag]
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - bun x changeset version
       - git push origin HEAD:develop -o ci.skip
       - bun x changeset publish --tag={{.tag}}
       - git push origin --tags
-      # - task webhook message="{{.message}}" type="{{.type}}" version="$(cat package.json | jq -r .version)"
+      # - task webhook message="{{.message}}" version="$(cat package.json | jq -r .version)"

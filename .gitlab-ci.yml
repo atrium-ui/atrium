@@ -51,28 +51,12 @@ format:
   only:
     - merge_requests
 
-publish-minor:
-  stage: publish
-  only:
-    - main
-  when: manual
-  script:
-    - task publish type=minor tag=latest
-
-publish-patch:
-  stage: publish
-  only:
-    - main
-  when: manual
-  script:
-    - task publish type=patch tag=latest
-
-publish-dev:
+publish:
   stage: publish
   only:
     - develop
   script:
-    - task publish type=prerelease tag=dev
+    - task publish
 
 pages:
   stage: docs
