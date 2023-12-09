@@ -92,10 +92,11 @@ tasks:
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - bun x changeset version
-      - bun x changeset publish --tag
+      - bun x changeset publish --tag > .task/publish.txt
       - git add --all
       - 'git commit -m "version: publish"'
       - git push origin HEAD:develop -o ci.skip
       - git push origin HEAD:develop --follow-tags
       - echo $(bun ./scripts/generate-notify.js)
+      - rm .task/publish.txt
       # - task webhook message="$(bun ./scripts/generate-notify.js)"
