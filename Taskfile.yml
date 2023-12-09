@@ -70,8 +70,8 @@ tasks:
       - 'curl -X POST -d "{\"message\": \"{{.message}}\", \"version\": \"{{.version}}\", \"type\": \"{{.type}}\"}" {{.SLACK_WEBHOOK_URL}}'
 
   version:
-    desc: Create package version
-    dir: "{{.TASKFILE_DIR}}/{{.scope}}"
+    desc: Create a package version
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
       - bun x changeset
 
@@ -82,9 +82,12 @@ tasks:
       message:
         sh: "git log -1 --pretty=format:%B"
     requires:
-      vars: [type, scope, tag]
-    dir: "{{.TASKFILE_DIR}}/{{.scope}}"
+      vars: [type, tag]
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
       - bun x changeset version
+      - echo $(cat package.json | jq -r .version) > {{.version_file}}
+      - git push origin HEAD:develop -o ci.skip
+      - git push origin --tags
       - bun x changeset publish --tag={{.tag}}
       # - task webhook message="{{.message}}" type="{{.type}}" version="$(cat {{.version_file}})"
