@@ -64,9 +64,9 @@ tasks:
 
   webhook:
     requires:
-      vars: [webhook_url, message, version, type]
+      vars: [message, version, type]
     cmds:
-      - 'curl -X POST -d "{\"message\": \"{{.message}}\", \"version\": \"{{.version}}\", \"type\": \"{{.type}}\"}" {{.webhook_url}}'
+      - 'curl -X POST -d "{\"message\": \"{{.message}}\", \"version\": \"{{.version}}\", \"type\": \"{{.type}}\"}" {{.SLACK_WEBHOOK_URL}}'
 
   version:
     desc: Bump version of package
@@ -93,7 +93,7 @@ tasks:
           type: "{{.type}}"
           scope: "{{.scope}}"
       - npm publish --tag={{.tag}}
-      - task webhook webhook_url="{{.SLACK_WEBHOOK_URL}}" message="{{.message}}" type="{{.type}}" version="$(cat {{.version_file}})"
+      # - task webhook message="{{.message}}" type="{{.type}}" version="$(cat {{.version_file}})"
 
   release:
     requires:
