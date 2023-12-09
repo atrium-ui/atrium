@@ -84,8 +84,8 @@ function generateMesssage() {
 	for (const [_, pkg, version] of publishedPackages) {
 		const changes = versionChanges(pkg, version);
 
-		message += `\n 🚀 Published ${pkg}@${version}\n`;
-		message += changes;
+		message += `\n🚀 Published ${pkg}@${version}\n`;
+		message += `\n${changes}`;
 	}
 
 	return `${message}\n`;
