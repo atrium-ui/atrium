@@ -88,5 +88,5 @@ tasks:
       - bun x changeset version
       - git push origin HEAD:develop -o ci.skip
       - bun x changeset publish
-      - git push origin --follow-tags
+      - git push origin HEAD:develop --follow-tags
       # - task webhook message="{{.message}}" version="$(cat package.json | jq -r .version)"
