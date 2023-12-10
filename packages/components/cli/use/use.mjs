@@ -8,7 +8,7 @@ const args = process.argv.slice(2);
 
 const dist = resolve('./src/components');
 
-const componentRoot = resolve(fileURLToPath(import.meta.url), '../../../components/');
+const componentRoot = resolve(fileURLToPath(import.meta.url), '../../../components/templates/');
 
 function component(name) {
 	return resolve(componentRoot, `${name}.tsx`);
