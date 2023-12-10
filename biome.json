@@ -1,5 +1,14 @@
 {
 	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"files": {
+		"ignoreUnknown": true,
+		"ignore": [
+			".rtx",
+			"public",
+			"**/dist",
+			"**/.astro"
+		]
+	},
 	"organizeImports": {
 		"enabled": false
 	},
@@ -10,6 +19,14 @@
 		"indentStyle": "tab",
 		"formatWithErrors": true
 	},
+	"linter": {
+		"rules": {
+			"recommended": true,
+			"a11y": {
+				"useKeyWithClickEvents": "off"
+			}
+		}
+	},
 	"javascript": {
 		"formatter": {
 			"quoteStyle": "single",
@@ -17,22 +34,6 @@
 			"trailingComma": "es5",
 			"quoteProperties": "asNeeded",
 			"jsxQuoteStyle": "double"
-		}
-	},
-	"files": {
-		"ignoreUnknown": true,
-		"ignore": [
-			"public/*.*",
-			"**/dist/*.*",
-			"**/.astro/*.*"
-		]
-	},
-	"linter": {
-		"rules": {
-			"recommended": true,
-			"a11y": {
-				"useKeyWithClickEvents": "off"
-			}
 		}
 	},
 	"json": {
