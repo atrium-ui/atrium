@@ -32,7 +32,7 @@ tasks:
     desc: Run linter on all packages
     deps: [build]
     cmds:
-      - bun x biome check .
+      - bun x turbo lint
 
   fix:
     desc: Apply all (unsafe) autofixes

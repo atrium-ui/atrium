@@ -2,18 +2,25 @@
 	"compilerOptions": {
 		"target": "ES2022",
 		"module": "ES2022",
-		"lib": ["DOM", "DOM.Iterable"],
+		"lib": [
+			"DOM",
+			"DOM.Iterable"
+		],
 		"strict": true,
 		"resolveJsonModule": true,
 		"moduleResolution": "Bundler",
 		"noImplicitAny": false,
 		"experimentalDecorators": true,
 		"useDefineForClassFields": false,
+		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"checkJs": false,
 		"skipLibCheck": true,
 		"noEmit": true,
 		"jsx": "preserve",
-		"types": ["bun-types", "web"]
+		"types": [
+			"bun-types",
+			"web"
+		]
 	}
 }

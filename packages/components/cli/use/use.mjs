@@ -4,22 +4,16 @@ import { fileURLToPath } from 'url';
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import en from 'enquirer';
 
-const args = process.argv.slice(2);
-
 const dist = resolve('./src/components');
 
-const componentRoot = resolve(fileURLToPath(import.meta.url), '../../../components/templates/');
+const componentRoot = resolve(fileURLToPath(import.meta.url), '../../../templates/');
 
-function component(name) {
+export function component(name) {
 	return resolve(componentRoot, `${name}.tsx`);
 }
 
-export default async function main() {
+export async function use() {
 	const components = [];
-
-	if (args[2]) {
-		components.push(args[2]);
-	}
 
 	if (components.length === 0) {
 		const options = readdirSync(componentRoot)
@@ -54,5 +48,3 @@ export default async function main() {
 		console.log('use', comp, filename);
 	}
 }
-
-main();

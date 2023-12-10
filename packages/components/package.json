@@ -4,7 +4,7 @@
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
 	"bin": {
-		"use": "./cli/use/use.mjs"
+		"use": "./cli/main.mjs"
 	},
 	"scripts": {
 		"lint": "tsc --pretty && biome check .",
