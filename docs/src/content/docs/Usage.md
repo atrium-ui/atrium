@@ -9,7 +9,7 @@ title: "Usage"
 Use a component in your project.
 
 ```bash
-npx @sv/mono atrium use <a-component>
+npx @sv/components use <a-component>
 ```
 
 Or use elements directly.
@@ -32,7 +32,7 @@ import "@sv/elements/a-expandable";
 // /tsconfig.json
 {
   "compilerOptions": {
-    "types": ["@sv/mono"]
+    "types": ["@sv/elements"]
   }
 }
 ```

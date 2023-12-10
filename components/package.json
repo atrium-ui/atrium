@@ -1,9 +1,0 @@
-{
-	"name": "@sv/components",
-	"author": "t.havlicek@s-v.de",
-	"contributors": [],
-	"private": "true",
-	"scripts": {
-		"lint": "tsc --pretty && biome check ."
-	}
-}

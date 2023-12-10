@@ -1,15 +1,12 @@
 {
-	"name": "@sv/mono",
-	"version": "0.2.4-rc.16",
+	"name": "atrium",
+	"version": "1.0.0",
 	"description": "Atrium Component Library",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [
 		"f.kretschmer@s-v.de"
 	],
 	"type": "module",
-	"bin": {
-		"use": "./cli/commands/use.mjs"
-	},
 	"keywords": [],
 	"license": "ISC",
 	"dependencies": {
@@ -30,8 +27,6 @@
 	"workspaces": [
 		"packages/elements/packages/*",
 		"packages/*",
-		"components",
-		"docs",
-		"cli"
+		"docs"
 	]
 }

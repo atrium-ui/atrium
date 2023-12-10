@@ -22,9 +22,9 @@ See [Installation](https://sv.pages.s-v.de/sv-frontend-library/mono/guides/insta
 
 ## Packages
 
-### @sv/mono
+### @sv/components
 
-This package contains all elements and components. It is also used for tooling and development, for example, the cli run from here.
+This package contains all component templates and the cli for use.
 
 ### @sv/elements
 
@@ -33,14 +33,6 @@ The elements package distributes all the custom-elements that are used in the co
 **Dependencies**
 
 All elements share the same dependencies from the [elements/package.json](elements/package.json).
-
-### @sv/cli
-
-This package is **not** published. It contains the cli which is used by the **@sv/mono** package and only contains executable JavaScript.
-
-### @sv/components
-
-This package is **not** published. It contains all the component templates that will be copied by the cli.
 
 <br />
 
