@@ -16,7 +16,7 @@
 
 ## Use in other projects
 
-See [Installation](https://sv.pages.s-v.de/sv-frontend-library/mono/guides/installation/) in the docs for instructions.
+See [Installation](https://sv.pages.s-v.de/sv-frontend-library/mono/installation/) in the docs for instructions.
 
 <br />
 
@@ -29,10 +29,7 @@ This package contains all component templates and the cli for use.
 ### @sv/elements
 
 The elements package distributes all the custom-elements that are used in the components or external projects.
-
-**Dependencies**
-
-All elements share the same dependencies from the [elements/package.json](elements/package.json).
+All elements share the same dependencies from the packages/elements/package.json.
 
 <br />
 
