@@ -1,5 +1,6 @@
 {
 	"name": "@sv/components",
+	"version": "0.1.0",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
 	"private": "true",
