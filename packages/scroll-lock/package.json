@@ -6,19 +6,14 @@
 	"type": "module",
 	"types": "src/index.ts",
 	"scripts": {
+		"lint": "tsc --pretty && biome check .",
 		"build": "tsup"
 	},
 	"author": "f.kretschmer@s-v.de",
 	"tsup": {
-		"entry": [
-			"src/index.ts"
-		],
-		"format": [
-			"esm"
-		],
-		"external": [
-			"@sv/*"
-		],
+		"entry": ["src/index.ts"],
+		"format": ["esm"],
+		"external": ["@sv/*"],
 		"sourcemap": true,
 		"clean": true
 	},
