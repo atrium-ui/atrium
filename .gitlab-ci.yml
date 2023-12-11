@@ -61,7 +61,7 @@ pages:
   stage: docs
   only:
     - main
-    - docs
+    - feature/docs
   environment:
     name: docs
     url: https://sv-components.pages.s-v.de/mono
