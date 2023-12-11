@@ -11,7 +11,7 @@ This library includes web components and templates designed to be independent of
 Components serve as a **template** for a specific use case including styling and behavior.
 They are styled using [TailwindCSS](https://tailwindcss.com/). This allows us to build components that are highly customizable and compact without keeping a dependency on external CSS files.
 
-Components can have dependencies on other packages, though when "using" a component you do not import the component itself, but a copy of it. This copy can be freely changed and styled.
+Components can have dependencies on other packages, though when "using" a component you do not import the component itself, but a copy of it. This copy can be freely changed and styled. In the same way, that makes it possible to update or change the component without breaking the websites that use it.
 
 Inspired by https://ui.shadcn.com/.
 
