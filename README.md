@@ -42,7 +42,6 @@ See [./.rtx.toml](./.rtx.toml) for tools and versions used in this project.
 Currently:
 
 - [task](https://taskfile.dev/)
-- [pnpm](https://pnpm.io/)
 - [bun](https://bun.sh/)
 
 They can be installed using [rtx](https://github.com/jdxcode/rtx) with `rtx install` in the root directory of this project.
