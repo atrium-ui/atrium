@@ -93,6 +93,12 @@ tasks:
       - defer: rm .task/publish.txt
       - task notify || true
 
+  format:
+    cmds:
+      - task: fix
+      - 'git diff --exit-code && git commit -m "ci: format" || true'
+      - "git push origin HEAD:{{.CI_COMMIT_REF_NAME}}"
+
   notify:
     silent: true
     cmds:
