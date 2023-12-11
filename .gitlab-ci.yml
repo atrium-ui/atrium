@@ -1,5 +1,4 @@
 stages:
-  - lint
   - test
   - publish
   - docs
@@ -25,55 +24,43 @@ cache:
 before_script:
   - apt install unzip -y
   - export PATH=$RTX_DATA_DIR/shims:$PATH
-  - rtx install
   - task setup
   - git config user.email "gitlab@s-v.de"
   - git config user.name "CI"
   - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
+  - git tag -d $(git tag -l) # delete all local tags
+
+lint:
+  stage: test
+  except:
+    - tags
+  script: task lint
 
 test:
   stage: test
+  artifacts:
+    untracked: true
+  except:
+    - tags
   script: task test
 
-lint:
-  stage: lint
-  script: task lint
+format:
+  only:
+    - merge_requests
+  script: task format
 
-publish-minor:
+publish:
   stage: publish
+  dependencies:
+    - test
   only:
     - main
-  when: manual
-  script:
-    - task version:minor PACKAGE_SCOPE=elements
-    - task publish PACKAGE_SCOPE=elements
-    - task version:minor
-    - task publish
-
-publish-patch:
-  stage: publish
-  only:
-    - main
-  when: manual
-  script:
-    - task version:patch PACKAGE_SCOPE=elements
-    - task publish PACKAGE_SCOPE=elements
-    - task version:patch
-    - task publish
-
-publish-dev:
-  stage: publish
-  only:
-    - develop
-  script:
-    - task version:prerelease PACKAGE_SCOPE=elements
-    - task publish:dev PACKAGE_SCOPE=elements
-    - task version:prerelease
-    - task publish:dev
+  script: task publish
 
 pages:
   stage: docs
   only:
+    - main
     - docs
   environment:
     name: docs
@@ -82,4 +69,3 @@ pages:
     paths:
       - public
   script: task docs:build
-

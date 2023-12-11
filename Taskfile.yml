@@ -1,9 +1,6 @@
-# https://taskfile.dev
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
 
 version: "3"
-
-env:
-  PACKAGE_SCOPE:
 
 tasks:
   setup:
@@ -19,13 +16,13 @@ tasks:
       - bun install
 
   build:
-    desc: Build all elements
+    desc: Build all packages
     deps: [setup]
     cmds:
-      - bun x turbo build --filter "./elements/**"
+      - bun x turbo build --filter "./packages/**"
 
   test:
-    desc: Run tests on all elements
+    desc: Run tests on all packages
     dir: "{{.TASKFILE_DIR}}"
     deps: [build]
     cmds:
@@ -38,20 +35,15 @@ tasks:
       - bun x turbo lint
 
   fix:
+    desc: Apply all (unsafe) autofixes
     cmds:
-      - bun x biome format --write .
-      - bun x biome lint --skip-errors --apply-unsafe .
-
-  new:
-    desc: Create a new component from templates
-    dir: "{{.TASKFILE_DIR}}"
-    cmds:
-      - bun x @sv/mono new
+      - bun x biome check --apply-unsafe .
 
   clean:
-    desc: Clean local files
+    desc: Clean untracked files
     cmds:
       - git clean -xdf
+      - git tag -d $(git tag -l)
 
   docs:
     desc: Start dev server for docs
@@ -69,54 +61,48 @@ tasks:
       - mv dist ../public
 
   version:
-    dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
-    deps: [build]
-    vars:
-      version_file: "{{.TASKFILE_DIR}}/.task/.version"
-    requires:
-      vars: [type]
+    silent: true
+    desc: Create a package version
+    dir: "{{.TASKFILE_DIR}}"
+    preconditions:
+      - sh: git diff --exit-code
+        msg: "Git working tree is must be clean."
+      - sh: "[ $(git rev-parse --abbrev-ref HEAD) = develop ] || exit 1"
+        msg: "Must be on develop branch."
     cmds:
-      - echo $(npm version {{.type}} --preid=rc --git-tag-version=false) > {{.version_file}}
-      - git add --all
-      - 'git commit -m "version: $(cat {{.version_file}})"'
+      - bun x changeset add
 
-  version:minor:
-    desc: "Create minor version"
+  version:dev:
+    desc: Enter pre-release mode
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
+      - bun x changeset pre enter dev
       - task: version
-        vars:
-          type: minor
-
-  version:patch:
-    desc: "Create patch version"
-    cmds:
-      - task: version
-        vars:
-          type: patch
-
-  version:prerelease:
-    desc: "Create prereleasae version"
-    cmds:
-      - task: version
-        vars:
-          type: prerelease
-
-  publish:preview:
-    desc: Pack the pacakge for preview
-    dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
-    cmds:
-      - npm pack && tar -xvzf *.tgz && rm -rf package *.tgz
 
   publish:
-    desc: Publish npm pacakge
-    dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
+    deps: [build]
+    vars:
+      message:
+        sh: "git log -1 --pretty=format:%B"
+    dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - npm publish
-      - git push origin HEAD:develop -o ci.skip
+      - bun x changeset version
+      - git push origin HEAD:main -o ci.skip
+      - git push origin --tags
+      - bun x changeset publish --tag > .task/publish.txt
+      - defer: rm .task/publish.txt
+      - task notify || true
 
-  publish:dev:
-    desc: Publish npm pacakge
-    dir: "{{.TASKFILE_DIR}}/{{.PACKAGE_SCOPE}}"
+  format:
     cmds:
-      - npm publish --tag dev
-      - git push origin HEAD:develop -o ci.skip
+      - task: fix
+      - 'git diff --exit-code && git commit -m "ci: format" || true'
+      - "git push origin HEAD:{{.CI_COMMIT_REF_NAME}}"
+
+  notify:
+    silent: true
+    cmds:
+      - bun ./scripts/generate-notify.mjs > .task/notify.txt
+      - defer: rm .task/notify.txt
+      - 'echo "{\"message\": \"$(cat .task/notify.txt)\"}"'
+      - 'curl -X POST -d "{\"message\": \"$(cat .task/notify.txt)\"}" $SLACK_WEBHOOK_URL'

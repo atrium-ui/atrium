@@ -19,5 +19,5 @@ More information about the Gitlab Package Registry can be found [here](https://d
 ### Install packages
 
 ```bash
-npm i @sv/mono @sv/elements
+npm i @sv/components @sv/elements
 ```

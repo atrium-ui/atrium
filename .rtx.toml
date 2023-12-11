@@ -1,4 +1,4 @@
 [tools]
-task = "3"
-bun = "1.0.14"
-node = "20"    # still need node for npm
+task = "3.32"
+bun = "1.0.15"
+node = "20"    # still need node for "npm version"

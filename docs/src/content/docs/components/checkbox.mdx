@@ -2,35 +2,19 @@
 title: Checkbox
 ---
 
-import Checkbox from "@sv/components/checkbox.tsx";
+import Checkbox from "@sv/components/templates/checkbox.tsx";
 
 ```bash
-npx @sv/mono use checkbox
+npx @sv/components use checkbox
 ```
 
 A checkbox.
 
 <div class="not-content flex items-center justify-center">
-  <div class="grid grid-cols-[auto_auto] gap-3">
-    <Checkbox id="check" client:load/>
-    <div>
-      <label for="check" class="text-lg cursor-pointer">I agree to use this checkbox</label>
-      <p class="text-base">
-        This is still work in progress.
-      </p>
-    </div>
-  </div>
+  <Checkbox id="check" client:load/>
 </div>
 
 ### Code
 ```tsx
-<div class="grid grid-cols-[auto_auto] gap-3">
-  <Checkbox id="check" client:load/>
-  <div>
-    <label for="check" class="text-lg cursor-pointer">I agree to use this checkbox</label>
-    <p class="text-base">
-      This is still work in progress.
-    </p>
-  </div>
-</div>
+<Checkbox id="check" />
 ```

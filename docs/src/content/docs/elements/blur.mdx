@@ -1,6 +1,32 @@
 ---
 title: a-blur
-description: A reference page in my new Starlight docs site.
+description: A Blur is a wrapper element which can show and hide its children.
 ---
 
-## TODO
+Implemented with [Sheet](/sv-frontend-library/mono/components/sheet) and [Dialog](/sv-frontend-library/mono/components/dialog).
+
+## Summary
+
+- A Blur is a wrapper element which can show and hide its children.
+- It will automatically "blur" (hide) the content, when clicked outside of its children.
+- Optionally, when the content is shown, scrolling will be locked.
+
+## Props
+
+- `enabled` (boolean: default = false)
+
+  Whether the blur is enabled or not.
+
+- `scrollLock` (boolean: default = true)
+
+  Whether the blur should lock scrolling when shown.
+
+## Examples
+
+```tsx
+<a-blur enabled>
+  <div>
+    <h2>Content</h2>
+  </div>
+</a-blur>
+```

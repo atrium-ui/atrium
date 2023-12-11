@@ -7,7 +7,43 @@ import "./styles/expandable.scss";
 import { paragraph } from "txtgen";
 import ExpandIcon from "../../../components/ExpandIcon.astro";
 
-(WIP) A basic element of an accordion that only includes the animation and scroll behavios for expandable content.
+Implemented with [Accordion](/sv-frontend-library/mono/components/accordion), [Combobox](/sv-frontend-library/mono/components/combobox), [Filter](/sv-frontend-library/mono/components/filter) and [Select](/sv-frontend-library/mono/components/select).
+
+## Summary
+
+- A wrapper element, that can collapse and expand its content with an animation.
+- It can include a trigger elemeent which is always visible.
+
+## Props
+
+- `opened` (boolean: default = false)
+
+  Controls the expand state of the element.
+
+- `direction` ("up" | "down": default = "down")
+
+  Controls the direction the element will expand.
+
+## Slots
+
+- `toggle`
+
+  The element that will trigger the expand state.
+
+## Examples
+
+
+```tsx
+<a-expandable opened class="accordion">
+  <div slot="toggle">
+    <button type="button">
+      <div class="headline">Title</div>
+    </button>
+  </div>
+
+  <div>Content</div>
+</a-expandable>
+```
 
 <div class="not-content">
   <a-expandable class="accordion">
@@ -84,34 +120,3 @@ import ExpandIcon from "../../../components/ExpandIcon.astro";
 
   </a-expandable>
 </div>
-
-## Attributes
-
-```tsx
-<a-expandable
-  opened: boolean;
-  direction: "up" | "down";
-/>
-```
-
-### `opened`
-
-Controls the expand state of the element.
-
-Options: true | false
-
-### `direction`
-
-Options: "up" | "down"
-
-Controls the direction the element will expand.
-
-## Component
-
-Copy a ready to use component into your project.
-
-```bash
-npx @sv/mono use expandable
-```
-
-Read more about components [here](/mono/components/components).

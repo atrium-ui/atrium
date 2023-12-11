@@ -31,6 +31,6 @@ We use the lit library to simplify development of WebComponents. It provides fas
 
 [Can I use](https://caniuse.com/mdn-api_window_customelements) Support for WebComponents exists in major browsers since around 2018.
 
-![Support table](./images/support.jpg)
+![Support table](../../assets/support.jpg)
 
 [More information here](https://www.webcomponents.org/)

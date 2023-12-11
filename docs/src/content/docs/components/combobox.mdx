@@ -2,19 +2,27 @@
 title: Combobox
 ---
 
-import Combobox from "@sv/components/combobox.tsx";
+import Combobox from "@sv/components/templates/combobox.tsx";
 
 ```bash
-npx @sv/mono use combobox
+npx @sv/components use combobox
 ```
 
 A combobox dropdown
 
 <div class="not-content min-h-[400px]">
-   <Combobox value="Select" client:load />
+  <Combobox value="Select">
+    <Combobox.Item value="Item 1" />
+    <Combobox.Item value="Item 2" />
+    <Combobox.Item value="Item 3" />
+  </Combobox>
 </div>
 
 ### Default
 ```tsx
-  <Combobox />
+<Combobox value="Select">
+  <Combobox.Item value="Item 1" />
+  <Combobox.Item value="Item 2" />
+  <Combobox.Item value="Item 3" />
+</Combobox>
 ```

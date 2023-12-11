@@ -1,0 +1,21 @@
+{
+	"name": "@sv/scroll-lock",
+	"version": "0.1.6",
+	"description": "universal scroll-lock",
+	"main": "dist/index.js",
+	"type": "module",
+	"types": "src/index.ts",
+	"scripts": {
+		"lint": "tsc --pretty && biome check .",
+		"build": "tsup"
+	},
+	"author": "f.kretschmer@s-v.de",
+	"tsup": {
+		"entry": ["src/index.ts"],
+		"format": ["esm"],
+		"external": ["@sv/*"],
+		"sourcemap": true,
+		"clean": true
+	},
+	"license": "ISC"
+}

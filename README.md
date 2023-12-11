@@ -16,27 +16,20 @@
 
 ## Use in other projects
 
-See [Installation](https://sv.pages.s-v.de/sv-frontend-library/mono/guides/installation/) in the docs for instructions.
+See [Installation](https://sv.pages.s-v.de/sv-frontend-library/mono/installation/) in the docs for instructions.
 
 <br />
 
 ## Packages
 
-### @sv/mono
+### @sv/components
 
-This package contains all components and templates. It is also used for tooling and development, for example, the cli is located here.
+This package contains all component templates and the cli for use.
 
 ### @sv/elements
 
 The elements package distributes all the custom-elements that are used in the components or external projects.
-
-### @sv/cli
-
-This package is **not** published. It contains the cli which is used from the **@sv/mono** package and only contains executable JavaScript.
-
-**Dependencies**
-
-All elements share the same dependencies from the [elements/package.json](elements/package.json).
+All elements share the same dependencies from the packages/elements/package.json.
 
 <br />
 
@@ -82,13 +75,12 @@ All the elements share the same build system. We use [tsup](https://tsup.egoist.
 
 The tsup configuration is located in the package.json of each element.
 
-### Publishing packages
+<br/>
 
-Package publishing is handles by the CI.
+## Publishing packages
 
-The **develop** branch always publishes a prerelease packages. When developing features, it is recommended to work in a feature branch.
+To create a new version of a package, run `task version` and follow the instructions of the cli.
 
-Feature branches should be named like this: `feature/<name>`.
+After the changes done by the cli are committed and pushed, the CI will automatically publish the package(s) when merged into main.
 
 When develop is merged into the **main** branch, the docs will be automatically built and deployed to pages.
-That pipeline will also give the options to publish a _patch_ or _minor_ release of the packages.
