@@ -4,7 +4,9 @@ icon: "carbon:share"
 title: "Concept"
 ---
 
-This library includes web components and templates designed to be independent of any specific framework for use in website creation. We make a distinction between Components and Elements:
+This library serves as a place to collect and share code between projects and developers.
+
+It includes libraries, web-components and component templates designed to be independent of any specific framework for use in website creation and provides tooling to build and publish packages.
 
 ## Components
 
@@ -19,11 +21,11 @@ Inspired by https://ui.shadcn.com/.
 
 Elements are the smallest elements more complex components can be broken down to. Things like the opening and closing mechanic of an accordion, excluding the title, content or any styling.
 
-They are built as WebComponents and can be used in any Framework or just a HTML file.
+They are built as web-components and can be used in any framework or just a HTML file.
 
 #### Lit
 
-We use the lit library to simplify development of WebComponents. It provides fast html template rendering and some reactive state.
+We use the lit library to simplify development of web-components. It provides fast html template rendering and some reactive state.
 
 [https://lit.dev/docs/](https://lit.dev/docs/)
 
