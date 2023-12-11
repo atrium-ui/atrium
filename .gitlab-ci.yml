@@ -47,10 +47,7 @@ test:
 format:
   only:
     - merge_requests
-  script:
-    - task fix
-    - 'git diff --exit-code && git commit -m "ci: format" || true'
-    - "git push origin HEAD:{{.CI_COMMIT_REF_NAME}}"
+  script: task format
 
 publish:
   stage: publish
@@ -58,8 +55,7 @@ publish:
     - test
   only:
     - main
-  script:
-    - task publish
+  script: task publish
 
 pages:
   stage: docs
