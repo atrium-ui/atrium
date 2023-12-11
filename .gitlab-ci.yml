@@ -50,7 +50,7 @@ format:
   script:
     - task fix
     - 'git diff --exit-code && git commit -m "ci: format" || true'
-    - "git push origin HEAD:$CI_COMMIT_REF_NAME"
+    - "git push origin HEAD:{{.CI_COMMIT_REF_NAME}}"
 
 publish:
   stage: publish
