@@ -94,7 +94,6 @@ tasks:
       - task notify || true
 
   format:
-    desc: Format all files
     cmds:
       - task: fix
       - 'git diff --exit-code && git commit -m "ci: format" || true'
