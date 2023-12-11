@@ -11,11 +11,19 @@ npx @sv/components use select
 A dropdown with specific options to select.
 
 <div class="not-content min-h-[400px]">
-   <Select client:load value="Select" />
+  <Select value="Select">
+    <Select.Item value="Item 1"/>
+    <Select.Item value="Item 2"/>
+    <Select.Item value="Item 3"/>
+  </Select>
 </div>
 
 #### Code
 
 ```tsx
-  <Select value="Select" />
+  <Select value="Select">
+    <Select.Item value="Item 1"/>
+    <Select.Item value="Item 2"/>
+    <Select.Item value="Item 3"/>
+  </Select>
 ```

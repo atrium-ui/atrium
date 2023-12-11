@@ -27,18 +27,27 @@ interface Props {
 
 export default function Accordion(props: Props) {
 	return (
-		<a-toggle active-attribute="data-selected">
-			<button
-				type="button"
-				class="group w-7 h-7 p-0 bg-transparent rounded-md cursor-pointer
+		<div class="grid grid-cols-[auto_auto] gap-3">
+			<a-toggle active-attribute="data-selected">
+				<button
+					type="button"
+					class="group w-7 h-7 p-0 bg-transparent rounded-md cursor-pointer
               border border-zinc-700 hover:border-zinc-600"
-				id={props.id}
-				data-selected={props.checked}
-			>
-				<div class="items-center justify-center hidden group-[&[data-selected]]:flex">
-					<CheckIcon />
-				</div>
-			</button>
-		</a-toggle>
+					id={props.id}
+					data-selected={props.checked}
+				>
+					<div class="items-center justify-center hidden group-[&[data-selected]]:flex">
+						<CheckIcon />
+					</div>
+				</button>
+			</a-toggle>
+
+			<div>
+				<label for={props.id} class="text-lg cursor-pointer">
+					I agree to use this checkbox
+				</label>
+				<p class="text-base">This is still work in progress.</p>
+			</div>
+		</div>
 	);
 }

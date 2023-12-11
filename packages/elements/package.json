@@ -10,6 +10,9 @@
 		"test": "bun test --preload ./test/preload.ts"
 	},
 	"exports": {
+		"./CHNAGELOG.md": {
+			"import": "./CHANGELOG.md"
+		},
 		".": {
 			"import": "./index.js",
 			"types": "./index.d.ts"
