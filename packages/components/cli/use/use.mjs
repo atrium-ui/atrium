@@ -5,15 +5,23 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import en from 'enquirer';
 
 const dist = resolve('./src/components');
-
 const componentRoot = resolve(fileURLToPath(import.meta.url), '../../../templates/');
+const availableComponents = readdirSync(componentRoot).map((file) => file.replace('.tsx', ''));
 
 export function component(name) {
 	return resolve(componentRoot, `${name}.tsx`);
 }
 
+const args = process.argv.slice(1);
+
 export async function use() {
 	const components = [];
+
+	const arg = args.filter((arg) => {
+		return availableComponents.includes(arg);
+	});
+
+	components.push(...arg);
 
 	if (components.length === 0) {
 		const options = readdirSync(componentRoot)
