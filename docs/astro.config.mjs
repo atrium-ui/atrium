@@ -18,6 +18,8 @@ export default defineConfig({
 		starlight({
 			components: {
 				ContentPanel: './src/components/ContentPanel.astro',
+				Head: './src/components/Head.astro',
+				Sidebar: './src/components/Sidebar.astro',
 			},
 			title: 'Atrium',
 			customCss: ['./src/styles/custom.css'],

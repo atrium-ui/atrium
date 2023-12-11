@@ -1,0 +1,29 @@
+---
+import Default from '@astrojs/starlight/components/Sidebar.astro';
+---
+
+<style is:global>
+#custom-sidebar [href] * {
+  pointer-events: none;
+}
+</style>
+
+<div id="custom-sidebar" transition:persist>
+  <script>
+    const sidebar = document.querySelector('#custom-sidebar');
+    sidebar?.addEventListener('click', (e) => {
+      const sidebar = document.querySelector('#custom-sidebar');
+      const current = sidebar?.querySelector('[aria-current="page"]');
+      current?.removeAttribute('aria-current');
+      // console.log(current);
+      const target = e.target as HTMLElement;
+      console.log(target);
+      if(target?.tagName === 'A') {
+        target?.setAttribute('aria-current', 'page');
+      }
+    });
+  </script>
+
+
+  <Default {...Astro.props}><slot /></Default>
+</div>

@@ -4,7 +4,7 @@ icon: "carbon:share"
 title: "Concept"
 ---
 
-We differentiate between Elements and Components.
+This library includes web components and templates designed to be independent of any specific framework for use in website creation. We make a distinction between Components and Elements:
 
 ## Components
 
