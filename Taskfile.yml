@@ -90,13 +90,13 @@ tasks:
       - git push origin HEAD:develop -o ci.skip
       - git push origin HEAD:develop --tags
       - bun x changeset publish --tag > .task/publish.txt
+      - defer: rm .task/publish.txt
       - task notify || true
-      - rm .task/publish.txt
 
   notify:
     silent: true
     cmds:
       - bun ./scripts/generate-notify.mjs > .task/notify.txt
+      - defer: rm .task/notify.txt
       - 'echo "{\"message\": \"$(cat .task/notify.txt)\"}"'
       - 'curl -X POST -d "{\"message\": \"$(cat .task/notify.txt)\"}" $SLACK_WEBHOOK_URL'
-      - rm .task/notify.txt

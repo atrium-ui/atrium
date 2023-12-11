@@ -9,10 +9,6 @@
 	"type": "module",
 	"keywords": [],
 	"license": "ISC",
-	"dependencies": {
-		"chalk": "^5.2.0",
-		"enquirer": "^2.4.1"
-	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.0.0",
 		"@changesets/cli": "^2.27.1",
