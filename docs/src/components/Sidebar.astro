@@ -8,22 +8,24 @@ import Default from '@astrojs/starlight/components/Sidebar.astro';
 }
 </style>
 
-<div id="custom-sidebar" transition:persist>
-  <script>
+<script>
+  window?.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+
+    if(!target.hasAttribute('href')) return;
+
+    const current = document?.querySelector('[aria-current="page"]');
+    current?.removeAttribute('aria-current');
+
     const sidebar = document.querySelector('#custom-sidebar');
-    sidebar?.addEventListener('click', (e) => {
-      const sidebar = document.querySelector('#custom-sidebar');
-      const current = sidebar?.querySelector('[aria-current="page"]');
-      current?.removeAttribute('aria-current');
-      // console.log(current);
-      const target = e.target as HTMLElement;
-      console.log(target);
-      if(target?.tagName === 'A') {
-        target?.setAttribute('aria-current', 'page');
-      }
-    });
-  </script>
+    if(!sidebar?.contains(target)) return;
 
+    if(target?.tagName === 'A') {
+      target?.setAttribute('aria-current', 'page');
+    }
+  });
+</script>
 
+<div id="custom-sidebar" transition:persist>
   <Default {...Astro.props}><slot /></Default>
 </div>
