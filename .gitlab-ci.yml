@@ -49,7 +49,7 @@ format:
     - merge_requests
   script:
     - task fix
-    - 'git commit -a "ci: format"'
+    - 'git commit -m "ci: format"'
     - "git push origin HEAD:$CI_COMMIT_REF_NAME"
 
 publish:
