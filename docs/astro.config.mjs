@@ -46,7 +46,13 @@ export default defineConfig({
 				},
 				{
 					label: 'Elements',
+					collapsed: true,
 					autogenerate: { directory: 'elements' },
+				},
+				{
+					label: 'Packages',
+					collapsed: true,
+					autogenerate: { directory: 'packages' },
 				},
 			],
 		}),

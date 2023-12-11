@@ -57,7 +57,7 @@ publish:
   dependencies:
     - test
   only:
-    - develop
+    - main
   script:
     - task publish
 

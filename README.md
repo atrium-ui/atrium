@@ -79,10 +79,8 @@ The tsup configuration is located in the package.json of each element.
 
 ## Publishing packages
 
-New versions should always be created from the **develop** branch.
-
 To create a new version of a package, run `task version` and follow the instructions of the cli.
 
-After the changes done by the cli are committed and pushed, the CI will automatically publish the package(s).
+After the changes done by the cli are committed and pushed, the CI will automatically publish the package(s) when merged into main.
 
 When develop is merged into the **main** branch, the docs will be automatically built and deployed to pages.
