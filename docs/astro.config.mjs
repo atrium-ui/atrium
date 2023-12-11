@@ -31,12 +31,12 @@ export default defineConfig({
 			},
 			sidebar: [
 				{
-					label: 'Concept',
-					link: '/concept',
-				},
-				{
 					label: 'Installation',
 					link: '/installation',
+				},
+				{
+					label: 'Concept',
+					link: '/concept',
 				},
 				{
 					label: 'Usage',

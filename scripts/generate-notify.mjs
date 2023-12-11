@@ -84,8 +84,12 @@ function generateMesssage() {
 	for (const [_, pkg, version] of publishedPackages) {
 		const changes = versionChanges(pkg, version);
 
+		const pkgWithoutScope = pkg.replace('@sv/', '');
+		const changelogUrl = `https://sv.pages.s-v.de/sv-frontend-library/mono/packages/${pkgWithoutScope}/#changelog`;
+
 		message += `\n🚀 Published ${pkg}@${version}\n`;
 		message += `\n${changes}`;
+		message += `\nFull changelog: ${changelogUrl}\n`;
 	}
 
 	return `${message}\n`;
