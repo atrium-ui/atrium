@@ -28,11 +28,3 @@ They are built as web-components and can be used in any framework or just a HTML
 We use the lit library to simplify development of web-components. It provides fast html template rendering and some reactive state.
 
 [https://lit.dev/docs/](https://lit.dev/docs/)
-
-#### Support
-
-[Can I use](https://caniuse.com/mdn-api_window_customelements) Support for WebComponents exists in major browsers since around 2018.
-
-![Support table](../../assets/support.jpg)
-
-[More information here](https://www.webcomponents.org/)

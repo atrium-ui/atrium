@@ -23,7 +23,15 @@ import "@sv/elements/a-expandable";
 ```
 
 <br/>
-<br/>
+
+#### Support
+
+[Can I use](https://caniuse.com/mdn-api_window_customelements) Support for WebComponents exists in major browsers since around 2018.
+
+![Support table](../../assets/support.jpg)
+
+[More information here](https://www.webcomponents.org/)
+
 <br/>
 
 ### Draft - TypeScript
