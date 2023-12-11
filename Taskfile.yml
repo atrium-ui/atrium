@@ -89,9 +89,6 @@ tasks:
       - bun x changeset version
       - git push origin HEAD:main -o ci.skip
       - git push origin --tags
-      - git checkout develop
-      - git merge main
-      - git push origin HEAD:develop -o ci.skip
       - bun x changeset publish --tag > .task/publish.txt
       - defer: rm .task/publish.txt
       - task notify || true
