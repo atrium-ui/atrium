@@ -4,22 +4,36 @@ icon: "carbon:template"
 title: "Usage"
 ---
 
-### Usage
-
-Use a component in your project.
+### 1. Install the packages.
 
 ```bash
-npx @sv/components use <a-component>
+npm i @sv/elements @sv/components
 ```
 
-Or use elements directly.
+### 2. Use a component in your project.
 
-```typescript
-import "@sv/elements/a-expandable";
+```bash
+npx @sv/components use button
 ```
+
+This **copies** a component template into your project.
+
+### 3. Change styling or behavior of the component in the copy inside your project.
+
+### 4. Import and use the components anywhere in your project.
 
 ```tsx
-<a-expandable opened></a-expandable>
+import "~/components/Button";
+
+<Button variant="outline">Click me</Button>;
+```
+
+### 5. Use elements directly anywhere in your project.
+
+```tsx
+import "@sv/elements/a-expandable";
+
+<a-expandable opened></a-expandable>;
 ```
 
 <br/>

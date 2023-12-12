@@ -77,3 +77,8 @@ iframe {
     z-index: 1;
     position: relative;
 }
+
+strong {
+    font-weight: bolder;
+    color: white;
+}
