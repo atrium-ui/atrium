@@ -43,7 +43,7 @@ export default defineConfig({
 					link: '/usage',
 				},
 				{
-					label: 'Components',
+					label: 'Component Templates',
 					autogenerate: { directory: 'components' },
 				},
 				{
