@@ -6,6 +6,27 @@ tableOfContents: false
 
 import Changelog from "@sv/scroll-lock/CHANGELOG.md";
 
+Used in [a-blur](/sv-frontend-library/mono/elements/blur/).
+
+## Installation
+
+```bash
+npm i @sv/scroll-lock
+```
+
+## Usage
+
+```ts
+import { ScrollLock } from '@sv/scroll-lock';
+
+const scrollLock = new ScrollLock();
+
+// lock page scrolling
+scrollLock.enable();
+// unlock page scrolling
+scrollLock.disable();
+```
+
 ## Changelog
 
 <Changelog />
