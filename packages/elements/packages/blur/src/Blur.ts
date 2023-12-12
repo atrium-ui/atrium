@@ -64,6 +64,10 @@ export class Blur extends LitElement {
 
 	disconnectedCallback(): void {
 		this.removeEventListener('click', this.handleClick);
+
+		// TODO: This call should be on a stack.
+		//				So that if multiple blur elements are enabled, it only disables when all are disabled.
+		scrollLock.disable();
 	}
 
 	render(): HTMLTemplateResult {
