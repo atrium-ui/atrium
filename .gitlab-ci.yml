@@ -64,7 +64,7 @@ pages:
     - feature/docs
   environment:
     name: docs
-    url: https://sv-components.pages.s-v.de/mono
+    url: https://sv.pages.s-v.de/sv-frontend-library/mono
   artifacts:
     paths:
       - public
