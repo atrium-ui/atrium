@@ -3,6 +3,7 @@ group: "docs"
 icon: "carbon:assembly-reference"
 title: "Installation"
 ---
+import Command from "~/components/Command.astro"
 
 ### Configure package registry
 
@@ -18,6 +19,21 @@ More information about the Gitlab Package Registry can be found [here](https://d
 
 ### Install packages
 
-```bash
-npm i @sv/components @sv/elements
-```
+<Command>
+  <div slot="pnpm">
+    ```sh
+    pnpm add @sv/components @sv/elements
+    ```
+  </div>
+  <div slot="npm">
+    ```sh
+    npm install @sv/components @sv/elements
+    ```
+  </div>
+  <div slot="bun">
+    ```sh
+    bun add @sv/components @sv/elements
+    ```
+  </div>
+</Command>
+

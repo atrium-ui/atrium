@@ -1,0 +1,25 @@
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+---
+
+<div class="terminal-command">
+  <Tabs>
+    <TabItem label="pnpm">
+      <slot name="pnpm"/>
+    </TabItem>
+    <TabItem label="npm">
+      <slot name="npm"/>
+    </TabItem>
+    <TabItem label="bun">
+      <slot name="bun"/>
+    </TabItem>
+  </Tabs>
+</div>
+
+<style is:global>
+  .terminal-command .not-content {
+    padding: 0;
+    border: none;
+    min-height: 0;
+  }
+</style>

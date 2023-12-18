@@ -9,6 +9,13 @@ export default defineConfig({
 	base: '/sv-frontend-library/mono',
 	site: 'https://sv.pages.s-v.de',
 	publicDir: 'static',
+	vite: {
+		resolve: {
+			alias: {
+				'~/': '/src/',
+			},
+		},
+	},
 	integrations: [
 		lit(),
 		solid(),

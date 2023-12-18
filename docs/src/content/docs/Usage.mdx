@@ -4,6 +4,8 @@ icon: "carbon:template"
 title: "Usage"
 ---
 
+import Command from "~/components/Command.astro"
+
 ## Requirements
 
 Components require **tailwindcss** to be installed in the project.
@@ -14,9 +16,23 @@ Here links for [NuxtJS](https://www.npmjs.com/package/@nuxtjs/tailwindcss), [Vit
 
 ### 1. Install the packages.
 
-```bash
-npm i @sv/elements @sv/components
-```
+<Command>
+  <div slot="pnpm">
+    ```sh
+    pnpm add @sv/components @sv/elements
+    ```
+  </div>
+  <div slot="npm">
+    ```sh
+    npm install @sv/components @sv/elements
+    ```
+  </div>
+  <div slot="bun">
+    ```sh
+    bun add @sv/components @sv/elements
+    ```
+  </div>
+</Command>
 
 ### 2. Use a component in your project.
 
