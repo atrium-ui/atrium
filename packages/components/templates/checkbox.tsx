@@ -25,7 +25,7 @@ interface Props {
 	checked: boolean;
 }
 
-export default function Accordion(props: Props) {
+export function Checkbox(props: Props) {
 	return (
 		<div class="grid grid-cols-[auto_auto] gap-3">
 			<a-toggle active-attribute="data-selected">

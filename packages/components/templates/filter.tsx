@@ -37,7 +37,7 @@ function Item(props: { value: string }) {
 	);
 }
 
-export default function Combobox(props: {
+export function Combobox(props: {
 	value: string;
 }) {
 	return (

@@ -21,7 +21,7 @@ function CheckIcon() {
 	);
 }
 
-export default function Combobox(
+export function Combobox(
 	props: {
 		children?: JSX.Element | string;
 		value: string;

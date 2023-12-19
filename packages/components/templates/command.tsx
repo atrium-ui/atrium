@@ -19,7 +19,7 @@ function Prefix() {
 	);
 }
 
-export default function Command(props: Props, context) {
+export function Command(props: Props, context) {
 	return (
 		<div class="absolute w-full h-full flex justify-center items-center">
 			<a-command placeholder="Search">
