@@ -8,6 +8,7 @@ const variants = {
 };
 
 interface Props {
+	type?: 'button' | 'submit';
 	children?: JSX.Element | string;
 	variant?: keyof typeof variants;
 }
@@ -15,14 +16,17 @@ interface Props {
 // adapter pattern to be useable in vue, solid, and react components
 
 // TODO: shouldnt destruct props because of solid js compat
-export default function Button(props: Props, context) {
+export function Button(props: Props, context) {
 	const slots = {
 		default: () =>
 			props.children ? props.children : context?.slots?.default ? context?.slots.default() : null,
 	};
 
 	return (
-		<button type="button" class={`cursor-pointer ${variants[props.variant ?? 'solid']}`}>
+		<button
+			type={props.type || 'button'}
+			class={`cursor-pointer ${variants[props.variant ?? 'solid']}`}
+		>
 			<slots.default />
 		</button>
 	);

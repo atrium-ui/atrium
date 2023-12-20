@@ -1,7 +1,7 @@
 import '@sv/elements/dropdown';
 import '@sv/elements/expandable';
 
-export default function Select(
+export function Select(
 	props: {
 		children?: JSX.Element | string;
 		value: string;
