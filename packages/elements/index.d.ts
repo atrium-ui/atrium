@@ -11,8 +11,18 @@ type CustomElementProps<T> = {
 // global
 type CustomElements = ElementProps<HTMLElementTagNameMap>;
 
-declare namespace JSX {
-	// react jsx
-	// @ts-ignore
-	type IntrinsicElements = ElementProps<HTMLElementTagNameMap>;
+declare global {
+	namespace JSX {
+		namespace JSX {
+			// biome-ignore lint/suspicious/noEmptyInterface: <explanation>
+			interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
+		}
+	}
+
+	declare module 'solid-js' {
+		namespace JSX {
+			// biome-ignore lint/suspicious/noEmptyInterface: <explanation>
+			interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
+		}
+	}
 }
