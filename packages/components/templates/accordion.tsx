@@ -14,7 +14,7 @@ function ExpandIcon() {
 	);
 }
 
-export default function Accordion(props: Props) {
+export function Accordion(props: Props) {
 	return (
 		<a-toggle active-attribute="opened">
 			{props.items.map((item) => {

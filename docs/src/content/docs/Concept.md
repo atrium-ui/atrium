@@ -8,25 +8,27 @@ This library serves as a place to collect and share code between projects and de
 
 It includes libraries, web-components and component templates designed to be independent of any specific framework for use in website creation and provides tooling to build and publish packages.
 
+The components in this library are composed of two layers:
+
+- The first layer is the **Elements** layer. Elements are "Headless" components that only implement behavior and no styling.
+
+- The second layer is the **Components** layer. Components are pre-styled and implement Elements to provide a more specific use case.
+
+![Component Layers](../../assets/component-layers.png)
+
+This approach gives the given project ownership over the components design. We start with sensible defaults, then change the design for the projects needs.
+
+## Elements
+
+Elements are built as web-components using [Lit](https://lit.dev/docs/) which make them framework agnostic. They can be used in any framework or even without a framework.
+
+These web-components are imported from node_modules, they do not use tailwind, their minimal styles are defined in regular css inside the element itself.
+
 ## Component Templates
 
-Components serve as a **template** for a specific use case including styling and behavior.
+Components are copy-paste templates for a specific use case including styling and behavior.
 They are styled using [TailwindCSS](https://tailwindcss.com/) and written as JSX functional components. This allows us to build components that are highly customizable and compact without keeping a dependency on external CSS files.
 
 Components can have dependencies on other packages, though when "using" a component you do not import the component itself, but a copy of it. This copy can be freely changed and styled. In the same way, that makes it possible to update or change the component without breaking the websites that use it.
 
 Inspired by https://ui.shadcn.com/.
-
-## Elements
-
-Elements are the smallest elements more complex components can be broken down to. Things like the opening and closing mechanic of an accordion, excluding the title, content or any styling.
-
-They are built as web-components using Lit and can be used in any framework or just a HTML file.
-
-Elements are imported from node_modules, they do not use tailwind, their minimal styles are defined in regular css inside the element itself.
-
-#### Lit
-
-We use the lit library to simplify development of web-components. It provides fast html template rendering and some reactive state.
-
-[https://lit.dev/docs/](https://lit.dev/docs/)

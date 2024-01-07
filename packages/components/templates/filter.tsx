@@ -37,7 +37,8 @@ function Item(props: { value: string }) {
 	);
 }
 
-export default function Combobox(props: {
+// TODO: should work similar to cmd+k
+export function Filter(props: {
 	value: string;
 }) {
 	return (

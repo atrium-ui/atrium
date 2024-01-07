@@ -19,7 +19,8 @@ function Prefix() {
 	);
 }
 
-export default function Command(props: Props, context) {
+// TODO: is same as filter, dont need it
+export function Command(props: Props, context) {
 	return (
 		<div class="absolute w-full h-full flex justify-center items-center">
 			<a-command placeholder="Search">

@@ -1,0 +1,53 @@
+---
+import dependents from "../../static/dependents.json";
+// This file comes from https://tihav.pages.s-v.de/gitlab-dependency-analysis/dependents.json.
+// It scrapes the GitLab API for all projects once every month.
+
+const project = dependents["1455"];
+---
+
+<div class="dependents">
+  {project.dependents.map((dep: any) => {
+    const url = dep.project.web_url;
+    const name = dep.project.name;
+    const title = dep.project.name_with_namespace;
+    const image = dep.project.avatar_url;
+
+    return (
+      <div>
+        <a href={url} class="avatar" title={title}>
+          {image ? <img src={image} /> : name[0]}
+        </a>
+      </div>
+    );
+  })}
+</div>
+
+<style>
+  .dependents {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+  }
+
+  .avatar {
+    --size: 60px;
+    overflow: hidden;
+    border-radius: 6px;
+    color: black;
+    font-size: var(--size);
+    font-weight: bold;
+    width: var(--size);
+    height: var(--size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .avatar img {
+    display: block;
+    width: 100%;
+  }
+</style>
