@@ -27,6 +27,7 @@ before_script:
   - export PATH="/root/.local/share/mise/shims:${PATH}"
   - export PATH=$MISE_DATA_DIR/shims:$PATH
   - sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
+  - mise install
   - task setup
   - git config user.email "gitlab@s-v.de"
   - git config user.name "CI"
