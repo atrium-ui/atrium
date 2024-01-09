@@ -14,7 +14,7 @@ examples
 **/*.spec.test
 
 vite.config.ts
-.rtx
+.mise
 .task
 .vscode
 .turbo
@@ -33,8 +33,8 @@ turbo.json
 biome.json
 bunfig.toml
 Taskfile.yml
-.rtx.toml
-.rtx
+.mise.toml
+.mise
 
 # Logs
 npm-debug.log*

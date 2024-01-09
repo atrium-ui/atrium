@@ -37,14 +37,12 @@ All elements share the same dependencies from the packages/elements/package.json
 
 ### Prerequisites
 
-See [./.rtx.toml](./.rtx.toml) for tools and versions used in this project.
-
-Currently:
+See [./.mise.toml](./.mise.toml) for tools and versions used in this project.
 
 - [task](https://taskfile.dev/)
 - [bun](https://bun.sh/)
 
-They can be installed using [rtx](https://github.com/jdxcode/rtx) with `rtx install` in the root directory of this project.
+They can be installed using [mise (formerly rtx)](https://github.com/jdxcode/mise) with `mise install` in the root directory of this project.
 This will also happen automatically when running `task docs` for the first time.
 
 ### Getting Started

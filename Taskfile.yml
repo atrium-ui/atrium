@@ -7,12 +7,12 @@ tasks:
     desc: Install dependencies
     dir: "{{.TASKFILE_DIR}}"
     sources:
-      - .rtx.toml
+      - .mise.toml
       - "package.json"
       - "pnpm-*.yaml"
       - "**/package.json"
     cmds:
-      - rtx install 2> /dev/null || true
+      - mise install 2> /dev/null || true
       - bun install
 
   build:

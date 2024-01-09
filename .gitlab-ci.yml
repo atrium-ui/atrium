@@ -6,7 +6,7 @@ stages:
 image: luckydye/build-utils
 
 variables:
-  RTX_DATA_DIR: $CI_PROJECT_DIR/.rtx
+  MISE_DATA_DIR: $CI_PROJECT_DIR/.mise
   GIT_PUSH_TOKEN: $GIT_PUSH_TOKEN # A Gitlab access token to push to the repo
 
 cache:
@@ -17,13 +17,13 @@ cache:
       - .pnpm-store
   - key:
       files:
-        - .rtx.toml
+        - .mise.toml
     paths:
-      - .rtx
+      - .mise
 
 before_script:
   - apt install unzip -y
-  - export PATH=$RTX_DATA_DIR/shims:$PATH
+  - export PATH=$MISE_DATA_DIR/shims:$PATH
   - task setup
   - git config user.email "gitlab@s-v.de"
   - git config user.name "CI"
