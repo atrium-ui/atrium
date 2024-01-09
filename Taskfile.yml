@@ -15,6 +15,16 @@ tasks:
       - mise install 2> /dev/null || true
       - bun install
 
+  setup:ci:
+    dir: "{{.TASKFILE_DIR}}"
+    cmds:
+      - mise install
+      - task: setup
+      - git config user.email "gitlab@s-v.de"
+      - git config user.name "CI"
+      - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
+      - git tag -d $(git tag -l) # delete all local tags
+
   build:
     desc: Build all packages
     deps: [setup]

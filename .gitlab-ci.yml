@@ -24,15 +24,9 @@ cache:
 before_script:
   - apt update -y && apt install curl git unzip -y
   - curl https://mise.jdx.dev/install.sh | MISE_INSTALL_PATH=/usr/local/bin/mise sh
-  - export PATH="/root/.local/share/mise/shims:${PATH}"
   - export PATH=$MISE_DATA_DIR/shims:$PATH
   - sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
-  - mise install
-  - task setup
-  - git config user.email "gitlab@s-v.de"
-  - git config user.name "CI"
-  - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
-  - git tag -d $(git tag -l) # delete all local tags
+  - task setup:ci
 
 check:
   stage: test
