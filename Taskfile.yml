@@ -28,11 +28,11 @@ tasks:
     cmds:
       - bun x turbo test
 
-  lint:
-    desc: Run linter on all packages
+  check:
+    desc: Run checks on all packages
     deps: [build]
     cmds:
-      - bun x turbo lint
+      - bun x turbo check
 
   fix:
     desc: Apply all (unsafe) autofixes

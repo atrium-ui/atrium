@@ -6,7 +6,7 @@
 	"description": "Atrium Component Library",
 	"type": "module",
 	"scripts": {
-		"lint": "tsc --pretty && biome check .",
+		"check": "tsc --pretty && biome check .",
 		"test": "bun test --preload ./test/preload.ts"
 	},
 	"exports": {

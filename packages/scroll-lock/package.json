@@ -6,7 +6,7 @@
 	"type": "module",
 	"types": "src/index.ts",
 	"scripts": {
-		"lint": "tsc --pretty && biome check .",
+		"check": "tsc --pretty && biome check .",
 		"build": "tsup"
 	},
 	"author": "f.kretschmer@s-v.de",
