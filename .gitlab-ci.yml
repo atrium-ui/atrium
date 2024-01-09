@@ -22,7 +22,7 @@ cache:
       - .mise
 
 before_script:
-  - apt install unzip -y
+  - apt update -y && apt install unzip -y
   - export PATH=$MISE_DATA_DIR/shims:$PATH
   - task setup
   - git config user.email "gitlab@s-v.de"
