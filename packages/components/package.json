@@ -11,7 +11,7 @@
 		"enquirer": "^2.4.1"
 	},
 	"scripts": {
-		"lint": "tsc --pretty && biome check .",
+		"check": "tsc --pretty && biome check .",
 		"test": "bun test"
 	}
 }

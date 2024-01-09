@@ -13,7 +13,7 @@ customElements.define(
 		}
 
 		connectedCallback() {
-			Rive.new();
+			// Rive.new();
 		}
 	}
 );

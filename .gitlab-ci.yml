@@ -30,11 +30,11 @@ before_script:
   - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
   - git tag -d $(git tag -l) # delete all local tags
 
-lint:
+check:
   stage: test
   except:
     - tags
-  script: task lint
+  script: task check
 
 test:
   stage: test
