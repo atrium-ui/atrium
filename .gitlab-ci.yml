@@ -1,4 +1,5 @@
 stages:
+  - check
   - test
   - publish
   - docs
@@ -29,7 +30,7 @@ before_script:
   - task setup:ci
 
 check:
-  stage: test
+  stage: check
   except:
     - tags
   script: task check
