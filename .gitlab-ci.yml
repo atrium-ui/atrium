@@ -22,7 +22,7 @@ cache:
       - .mise
 
 before_script:
-  - apt update -y && apt install curl unzip -y
+  - apt update -y && apt install curl git unzip -y
   - curl https://mise.jdx.dev/install.sh | MISE_INSTALL_PATH=/usr/local/bin/mise sh
   - export PATH="/root/.local/share/mise/shims:${PATH}"
   - export PATH=$MISE_DATA_DIR/shims:$PATH
