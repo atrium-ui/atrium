@@ -17,7 +17,7 @@
 	"files": ["dist"],
 	"tsup": {
 		"entry": ["src/index.ts"],
-		"format": ["esm"],
+		"format": ["esm", "cjs"],
 		"external": ["@sv/*"],
 		"sourcemap": true,
 		"clean": true
