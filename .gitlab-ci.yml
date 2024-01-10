@@ -60,7 +60,7 @@ pages:
   stage: docs
   only:
     - main
-    - feature/docs
+    - develop # for preview
   environment:
     name: docs
     url: https://sv.pages.s-v.de/sv-frontend-library/mono
