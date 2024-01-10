@@ -1,6 +1,12 @@
 import { HTMLTemplateResult, LitElement, css, html } from 'lit';
 import { query } from 'lit/decorators.js';
 
+declare global {
+	interface HTMLElementTagNameMap {
+		'a-adaptive': AdaptiveHeight;
+	}
+}
+
 export class AdaptiveHeight extends LitElement {
 	public static get styles() {
 		return [
@@ -81,12 +87,6 @@ export class AdaptiveHeight extends LitElement {
         <slot class="content"></slot>
       </div>
     `;
-	}
-}
-
-declare global {
-	interface HTMLElementTagNameMap {
-		'a-adaptive': AdaptiveHeight;
 	}
 }
 

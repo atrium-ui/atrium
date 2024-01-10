@@ -1,6 +1,12 @@
 import { HTMLTemplateResult, LitElement, css, html } from 'lit';
 import { property } from 'lit/decorators.js';
 
+declare global {
+	interface HTMLElementTagNameMap {
+		'a-expandable': Expandable;
+	}
+}
+
 export class Expandable extends LitElement {
 	public static get styles() {
 		return [
@@ -98,12 +104,6 @@ export class Expandable extends LitElement {
       </div>
       ${this.direction === 'up' ? this.renderButton() : undefined}
     `;
-	}
-}
-
-declare global {
-	interface HTMLElementTagNameMap {
-		'a-expandable': Expandable;
 	}
 }
 

@@ -1,6 +1,12 @@
 import { HTMLTemplateResult, LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
+declare global {
+	interface HTMLElementTagNameMap {
+		'a-pager': Pager;
+	}
+}
+
 @customElement('a-pager')
 export class Pager extends LitElement {
 	public static styles = css`

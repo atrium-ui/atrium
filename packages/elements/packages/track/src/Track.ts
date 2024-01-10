@@ -37,6 +37,12 @@ function angleDist(a, b) {
 	return mod(b - a + 180, 360) - 180;
 }
 
+declare global {
+	interface HTMLElementTagNameMap {
+		'a-track': Track;
+	}
+}
+
 export class Track extends LitElement {
 	static get styles() {
 		return css`
@@ -823,12 +829,6 @@ export class Track extends LitElement {
 		window.removeEventListener('load', this.format.bind(this));
 
 		this.observer.unobserve(this);
-	}
-}
-
-declare global {
-	interface HTMLElementTagNameMap {
-		'a-track': Track;
 	}
 }
 

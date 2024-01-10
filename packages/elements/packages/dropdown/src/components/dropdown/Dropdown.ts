@@ -3,6 +3,12 @@ import { property, query } from 'lit/decorators.js';
 import { DoropDownSelectEvent } from './DoropDownSelectEvent';
 import { OptionElement } from './Option';
 
+declare global {
+	interface HTMLElementTagNameMap {
+		'a-dropdown': Dropdown;
+	}
+}
+
 export class Dropdown extends LitElement {
 	static get styles() {
 		return css`
@@ -269,12 +275,6 @@ export class Dropdown extends LitElement {
         </a-expandable>
       </div>
     `;
-	}
-}
-
-declare global {
-	interface HTMLElementTagNameMap {
-		'a-dropdown': Dropdown;
 	}
 }
 

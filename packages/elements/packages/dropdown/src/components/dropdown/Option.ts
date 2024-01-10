@@ -1,6 +1,12 @@
 import { LitElement, css, html } from 'lit';
 import { property } from 'lit/decorators.js';
 
+declare global {
+	interface HTMLElementTagNameMap {
+		'a-option': OptionElement;
+	}
+}
+
 export class OptionElement extends LitElement {
 	static get styles() {
 		return css`
@@ -15,12 +21,6 @@ export class OptionElement extends LitElement {
 
 	render() {
 		return html`<slot></slot>`;
-	}
-}
-
-declare global {
-	interface HTMLElementTagNameMap {
-		'a-option': OptionElement;
 	}
 }
 

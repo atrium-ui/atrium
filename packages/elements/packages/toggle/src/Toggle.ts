@@ -1,6 +1,12 @@
 import { LitElement, html } from 'lit';
 import { property } from 'lit/decorators.js';
 
+declare global {
+	interface HTMLElementTagNameMap {
+		'a-toggle': Toggle;
+	}
+}
+
 export class Toggle extends LitElement {
 	@property({ type: String, attribute: 'active-attribute' })
 	public activeAttribute = 'selected';
@@ -169,12 +175,6 @@ export class Toggle extends LitElement {
 
 		this.removeEventListener('click', this.onPress);
 		this.removeEventListener('focus', this.focusCallback, { capture: true });
-	}
-}
-
-declare global {
-	interface HTMLElementTagNameMap {
-		'a-toggle': Toggle;
 	}
 }
 

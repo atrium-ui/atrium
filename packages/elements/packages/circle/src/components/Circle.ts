@@ -1,6 +1,12 @@
 import { LitElement, css, html } from 'lit';
 import { property } from 'lit/decorators.js';
 
+declare global {
+	interface HTMLElementTagNameMap {
+		'a-circle': Circle;
+	}
+}
+
 export class Circle extends LitElement {
 	static get styles() {
 		return css`
@@ -67,12 +73,6 @@ export class Circle extends LitElement {
         <slot></slot>
       </div>
     `;
-	}
-}
-
-declare global {
-	interface HTMLElementTagNameMap {
-		'a-circle': Circle;
 	}
 }
 
