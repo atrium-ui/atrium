@@ -1,7 +1,7 @@
 ---
 title: Input
 ---
-
+import Example from "../../../components/Example.astro";
 import { Input } from "@sv/components/templates/input.tsx";
 
 ```bash
@@ -10,14 +10,17 @@ npx @sv/components use input
 
 A styles input with error states and label.
 
-<div class="not-content">
-  <Input placeholder="Text" label="Input" client:load />
-  <br />
-  <Input placeholder="Text" label="Input" error="Cant be empty" client:load />
-</div>
-
-
-### Default
-```tsx
-  <Input placeholder="Text" label="Input" />
-```
+<Example title="Example">
+  <div slot="preview">
+    <Input placeholder="Text" label="Input" client:load />
+    <br />
+    <Input placeholder="Text" label="Input" error="Cant be empty" client:load />
+  </div>
+  <div slot="code">
+    ```tsx
+      <Input placeholder="Text" label="Input" client:load />
+      <br />
+      <Input placeholder="Text" label="Input" error="Cant be empty" client:load />
+    ```
+  </div>
+</Example>

@@ -1,8 +1,8 @@
 ---
 title: Form
 ---
-
-import Form from "@sv/components/templates/Form.tsx";
+import Example from "../../../components/Example.astro";
+import { Form } from "@sv/components/templates/form.tsx";
 
 ```bash
 npx @sv/components use form
@@ -10,11 +10,13 @@ npx @sv/components use form
 
 A styles input with error states and label.
 
-<div class="not-content">
-  <Form client:load />
-</div>
-
-### Default
-```tsx
-  <Form client:load />
-```
+<Example title="Example">
+  <div slot="preview">
+    <Form />
+  </div>
+  <div slot="code">
+    ```tsx
+      <Form />
+    ```
+  </div>
+</Example>

@@ -1,7 +1,7 @@
 ---
 title: Select
 ---
-
+import Example from "../../../components/Example.astro";
 import { Select } from "@sv/components/templates/select.tsx";
 
 ```bash
@@ -10,20 +10,21 @@ npx @sv/components use select
 
 A dropdown with specific options to select.
 
-<div class="not-content min-h-[400px]">
-  <Select value="Select">
-    <Select.Item value="Item 1"/>
-    <Select.Item value="Item 2"/>
-    <Select.Item value="Item 3"/>
-  </Select>
-</div>
-
-#### Code
-
-```tsx
-  <Select value="Select">
-    <Select.Item value="Item 1"/>
-    <Select.Item value="Item 2"/>
-    <Select.Item value="Item 3"/>
-  </Select>
-```
+<Example title="Example">
+  <div slot="preview">
+    <Select value="Select">
+      <Select.Item value="Item 1"/>
+      <Select.Item value="Item 2"/>
+      <Select.Item value="Item 3"/>
+    </Select>
+  </div>
+  <div slot="code">
+    ```tsx
+      <Select value="Select">
+        <Select.Item value="Item 1"/>
+        <Select.Item value="Item 2"/>
+        <Select.Item value="Item 3"/>
+      </Select>
+    ```
+  </div>
+</Example>

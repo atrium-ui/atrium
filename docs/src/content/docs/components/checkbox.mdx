@@ -1,7 +1,7 @@
 ---
 title: Checkbox
 ---
-
+import Example from "../../../components/Example.astro";
 import { Checkbox } from "@sv/components/templates/checkbox.tsx";
 
 ```bash
@@ -10,11 +10,13 @@ npx @sv/components use checkbox
 
 A checkbox.
 
-<div class="not-content flex items-center justify-center">
-  <Checkbox id="check" client:load/>
-</div>
-
-### Code
-```tsx
-<Checkbox id="check" />
-```
+<Example title="Example">
+  <div slot="preview">
+    <Checkbox id="check"/>
+  </div>
+  <div slot="code">
+    ```tsx
+      <Checkbox id="check"/>
+    ```
+  </div>
+</Example>

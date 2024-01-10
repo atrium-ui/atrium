@@ -1,6 +1,6 @@
 import '@sv/elements/popover';
 
-export function Combobox(
+export function Popover(
 	props: {
 		children?: JSX.Element | string;
 		label: string;

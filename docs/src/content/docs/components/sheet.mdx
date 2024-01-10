@@ -1,7 +1,7 @@
 ---
 title: Sheet
 ---
-
+import Example from "../../../components/Example.astro";
 import { Sheet } from "@sv/components/templates/sheet.tsx";
 import { Button } from "@sv/components/templates/button.tsx";
 
@@ -12,27 +12,30 @@ npx @sv/components use sheet
 A sheet is basically a burger menu. Composed of a-blur.
 
 
-<div class="not-content min-h-[300px] flex items-center justify-center">
-  <Sheet client:load>
-    <div onclick="document.querySelector('a-blur').enabled = false">
-      <Button>Close</Button>
+<Example title="Example">
+  <div slot="preview">
+    <Sheet>
+      <div onclick="document.querySelector('a-blur').enabled = false">
+        <Button>Close</Button>
+      </div>
+    </Sheet>
+
+    <div onclick="document.querySelector('a-blur').enabled = true">
+      <Button>Open</Button>
     </div>
-  </Sheet>
-
-  <div onclick="document.querySelector('a-blur').enabled = true">
-    <Button>Open</Button>
   </div>
-</div>
+  <div slot="code">
+    ```tsx
+      <Sheet>
+        <div onclick="document.querySelector('a-blur').enabled = false">
+          <Button>Close</Button>
+        </div>
+      </Sheet>
 
-### Code
-```tsx
-<Sheet>
-  <div onclick="document.querySelector('a-blur').enabled = false">
-    <Button>Close</Button>
+      <div onclick="document.querySelector('a-blur').enabled = true">
+        <Button>Open</Button>
+      </div>
+    ```
   </div>
-</Sheet>
+</Example>
 
-<div onclick="document.querySelector('a-blur').enabled = true">
-  <Button>Open</Button>
-</div>
-```

@@ -7,15 +7,16 @@ const variants = {
 	ghost: 'p-2 flex items-center gap-2 text-2xl hover:text-[#C09278]',
 };
 
+// TODO: disabled state
+// TODO: onClick
+// TODO: css variables for border width and radius
+
 interface Props {
 	type?: 'button' | 'submit';
 	children?: JSX.Element | string;
 	variant?: keyof typeof variants;
 }
 
-// adapter pattern to be useable in vue, solid, and react components
-
-// TODO: shouldnt destruct props because of solid js compat
 export function Button(props: Props, context) {
 	const slots = {
 		default: () =>

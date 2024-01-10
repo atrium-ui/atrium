@@ -43,14 +43,21 @@ export function Filter(props: {
 }) {
 	return (
 		<div onInput={(e) => console.log(e.target.value)}>
-			<a-dropdown onSelect="handleSelect">
-				<input slot="input" v-model="state.value" onInput="handleFilter" placeholder="Text" />
+			<a-dropdown class="relative inline-block">
+				<input
+					slot="input"
+					class="cursor-pointer rounded-lg px-4 py-1 text-left min-w-[150px]"
+					onInput="handleFilter"
+					placeholder="Text"
+				/>
 
-				<a-toggle>
-					<Item value="Item1" />
-					<Item value="Item2" />
-					<Item value="Item3" />
-				</a-toggle>
+				<div class="rounded-md bg-zinc-800 border border-zinc-700 p-1 mt-1">
+					<a-toggle>
+						<Item value="Item1" />
+						<Item value="Item2" />
+						<Item value="Item3" />
+					</a-toggle>
+				</div>
 			</a-dropdown>
 		</div>
 	);

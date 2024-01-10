@@ -1,9 +1,7 @@
 import { Input } from './input.jsx';
 import { Button } from './button.jsx';
 
-interface Props {
-	d;
-}
+interface Props {}
 
 export function Form(props: Props) {
 	return (

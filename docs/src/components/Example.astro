@@ -1,0 +1,13 @@
+---
+export interface Props {
+  title: string
+}
+---
+
+<h2>{Astro.props.title}</h2>
+
+<div class="not-content w-full flex items-center justify-center">
+  <slot name="preview"></slot>
+</div>
+
+<slot name="code"></slot>

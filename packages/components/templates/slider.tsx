@@ -22,7 +22,7 @@ export function Slider(props: Props, context) {
 
 	return (
 		<div>
-			<a-track class="flex w-full">
+			<a-track snap class="flex w-full">
 				<slots.default />
 			</a-track>
 

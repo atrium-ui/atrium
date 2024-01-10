@@ -2,9 +2,10 @@ import '@sv/elements/blur';
 
 interface Props {
 	children?: JSX.Element | string;
+	enabled: boolean;
 }
 
-export function Button(props: Props, context) {
+export function Dialog(props: Props, context) {
 	const slots = {
 		default: () =>
 			props.children ? props.children : context?.slots?.default ? context?.slots.default() : null,
@@ -12,6 +13,7 @@ export function Button(props: Props, context) {
 
 	return (
 		<a-blur
+			enabled={props.enabled || undefined}
 			class="group/blur block fixed z-50 top-0 left-0 w-full h-full transition-all
            [&[enabled]]:bg-[#33333333] [&[enabled]]:backdrop-blur-md"
 		>

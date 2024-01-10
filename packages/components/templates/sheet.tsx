@@ -4,7 +4,7 @@ interface Props {
 	children?: JSX.Element | string;
 }
 
-export function Button(props: Props, context) {
+export function Sheet(props: Props, context) {
 	const slots = {
 		default: () =>
 			props.children ? props.children : context?.slots?.default ? context?.slots.default() : null,

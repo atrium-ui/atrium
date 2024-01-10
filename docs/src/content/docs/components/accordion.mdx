@@ -1,6 +1,8 @@
 ---
 title: Accordion
 ---
+
+import Example from "../../../components/Example.astro";
 import { Accordion } from "@sv/components/templates/accordion.tsx";
 
 ```bash
@@ -9,20 +11,31 @@ npx @sv/components use accordion
 
 An array of expandable elements that close automaticly when another element is expanded.
 
-<div class="not-content">
-  <Accordion client:load items={[
-    {
-      title: "Item 1",
-      content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. "
-    },
-    {
-      title: "Item 1",
-      content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. "
-    },
-  ]} />
-</div>
-
-#### Code
-```tsx
-  <Accordion />
-```
+<Example title="Example">
+  <div slot="preview">
+    <Accordion items={[
+      {
+        title: "Item 1",
+        content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. "
+      },
+      {
+        title: "Item 1",
+        content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. "
+      },
+    ]} />
+  </div>
+  <div slot="code">
+    ```tsx
+      <Accordion items={[
+        {
+          title: "Item 1",
+          content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. "
+        },
+        {
+          title: "Item 1",
+          content: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. "
+        },
+      ]} />
+    ```
+  </div>
+</Example>
