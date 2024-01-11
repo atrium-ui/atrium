@@ -85,7 +85,6 @@ export class Expandable extends LitElement {
 
 	private renderButton() {
 		return html`<button
-      tabindex="-1"
       aria-controls="${this._id}"
       aria-expanded=${this.opened}
       @click=${(e) => {

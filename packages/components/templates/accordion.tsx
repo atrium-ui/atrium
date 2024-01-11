@@ -2,40 +2,93 @@ import '@sv/elements/expandable';
 import '@sv/elements/toggle';
 
 interface Props {
-	items: { title: string; content: string }[];
+	children?: JSX.Element | string;
 }
 
-function ExpandIcon() {
+function CollapseIcon() {
 	return (
-		<svg class="fill-current" width="16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-			<title>Expand</title>
-			<path d="M8.6,20v-8.5H0V8.6h8.6V0h2.9v8.6H20v2.9h-8.6V20H8.6z" />
+		<svg
+			width="18"
+			height="18"
+			viewBox="0 0 165 165"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+			class="align-middle"
+		>
+			<title>Collapse</title>
+			<path
+				d="M150 116L82 48L14 116"
+				stroke="white"
+				stroke-width="12"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			/>
 		</svg>
 	);
 }
 
-export function Accordion(props: Props) {
+function ExpandIcon() {
 	return (
-		<a-toggle active-attribute="opened">
-			{props.items.map((item) => {
-				return (
-					<a-expandable class="accordion">
-						<div slot="toggle">
-							<button
-								type="button"
-								class="p-2 w-full bg-transparent flex justify-between items-center cursor-pointer"
-							>
-								<div class="headline">
-									<span>{item.title}</span>
-								</div>
-								<ExpandIcon />
-							</button>
-						</div>
-
-						<div class="p-2">{item.content}</div>
-					</a-expandable>
-				);
-			})}
-		</a-toggle>
+		<svg
+			width="18"
+			height="18"
+			viewBox="0 0 165 165"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+			class="align-middle"
+		>
+			<title>Expand</title>
+			<path
+				d="M15 49L83 117L151 49"
+				stroke="white"
+				stroke-width="12"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			/>
+		</svg>
 	);
 }
+
+export function Accordion(props: Props, context) {
+	const slots = {
+		default: () =>
+			props.children ? props.children : context?.slots?.default ? context?.slots.default() : null,
+	};
+
+	return (
+		<div>
+			<slots.default />
+		</div>
+	);
+}
+
+Accordion.Item = function AccordionItem(
+	props: { title: string; children?: JSX.Element | string },
+	context
+) {
+	const slots = {
+		default: () =>
+			props.children ? props.children : context?.slots?.default ? context?.slots.default() : null,
+	};
+
+	return (
+		<a-expandable class="group rounded-lg border border-[#C09278] mb-2">
+			<div slot="toggle" class="px-6 py-2 flex justify-between items-center cursor-pointer">
+				<div class="text-white">
+					<span>{props.title}</span>
+				</div>
+
+				<div class="block group-[[opened]]:hidden">
+					<ExpandIcon />
+				</div>
+				<div class="hidden group-[[opened]]:block">
+					<CollapseIcon />
+				</div>
+			</div>
+
+			<div class="px-6 py-2">
+				<slots.default />
+			</div>
+		</a-expandable>
+	);
+};

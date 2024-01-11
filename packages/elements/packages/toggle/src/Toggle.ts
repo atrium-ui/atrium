@@ -8,6 +8,10 @@ declare global {
 }
 
 export class Toggle extends LitElement {
+	static getChildValue(child: HTMLElement) {
+		return child.getAttribute('value') || child.dataset.value;
+	}
+
 	@property({ type: String, attribute: 'active-attribute' })
 	public activeAttribute = 'selected';
 
@@ -41,13 +45,13 @@ export class Toggle extends LitElement {
 	private onPress(e: MouseEvent) {
 		e.stopPropagation();
 
-		if (![...this.children].find((child) => child.contains(e.target as Node))) {
-			return;
-		}
+		let contained = false;
 
 		let i = 0;
 		for (const child of this.children) {
-			if (e.target === child || child.contains(e.target as Node)) {
+			if (e.target === child || child.contains(e.target as HTMLElement)) {
+				contained = true;
+
 				const value = Toggle.getChildValue(child as HTMLElement) || i.toString();
 
 				if (this.activeChildren.includes(value)) {
@@ -60,6 +64,8 @@ export class Toggle extends LitElement {
 			i++;
 		}
 
+		if (!contained) return;
+
 		if (!this.multiple) {
 			this.activeChildren.splice(0, this.activeChildren.length - 1);
 		}
@@ -70,10 +76,6 @@ export class Toggle extends LitElement {
 		if (ev.defaultPrevented) return;
 
 		this.updateChildren();
-	}
-
-	static getChildValue(child: HTMLElement) {
-		return child.getAttribute('value') || child.dataset.value;
 	}
 
 	private updateChildren() {
