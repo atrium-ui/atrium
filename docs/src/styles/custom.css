@@ -70,7 +70,6 @@ iframe {
     height: auto;
     padding: 2rem;
     border: 1px solid #222;
-    min-height: 200px;
 }
 
 .main-pane {

@@ -13,7 +13,7 @@ export function Popover(
 	};
 
 	return (
-		<a-popover class="group">
+		<a-popover class="group relative z-10">
 			<button
 				type="button"
 				slot="input"
