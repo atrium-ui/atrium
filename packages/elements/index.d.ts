@@ -15,16 +15,18 @@ type CustomElementProps<T> = {
 
 type CustomElements = ElementProps<HTMLElementTagNameMap>;
 
-namespace JSX {
+declare global {
 	namespace JSX {
-		// biome-ignore lint/suspicious/noEmptyInterface: <explanation>
-		interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
+		namespace JSX {
+			// biome-ignore lint/suspicious/noEmptyInterface: <explanation>
+			interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
+		}
 	}
-}
 
-declare module 'solid-js' {
-	namespace JSX {
-		// biome-ignore lint/suspicious/noEmptyInterface: <explanation>
-		interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
+	declare module 'solid-js' {
+		namespace JSX {
+			// biome-ignore lint/suspicious/noEmptyInterface: <explanation>
+			interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
+		}
 	}
 }

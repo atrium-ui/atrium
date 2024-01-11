@@ -2,7 +2,6 @@
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"checkJs": true,
-		"jsx": "preserve",
-		"types": ["@sv/elements"]
+		"jsx": "preserve"
 	}
 }
