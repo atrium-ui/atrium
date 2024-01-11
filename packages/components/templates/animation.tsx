@@ -1,27 +1,15 @@
-// a jsx rive component, might need a custom element
-import { Rive } from '@rive-app/canvas-single';
+import '@sv/elements/animation';
 
-customElements.define(
-	'a-animation',
-	class extends HTMLElement {
-		static get observedAttributes() {
-			return ['src'];
-		}
+type AnimationProps = {
+	src: string;
+	width?: number;
+	height?: number;
+};
 
-		attributeChangedCallback(name, oldValue, newValue) {
-			console.log('attributeChangedCallback', name, oldValue, newValue);
-		}
-
-		connectedCallback() {
-			// Rive.new();
-		}
-	}
-);
-
-export function Animation() {
+export function Animation(props: AnimationProps) {
 	return (
 		<div>
-			<a-animation src="./animation.riv" />
+			<a-animation height={props.height || 200} width={props.width || 200} src={props.src} />
 		</div>
 	);
 }

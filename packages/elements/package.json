@@ -66,6 +66,11 @@
 			"import": "./packages/range/dist/index.js",
 			"require": "./packages/range/dist/index.cjs",
 			"types": "./packages/range/src/index.ts"
+		},
+		"./animation": {
+			"import": "./packages/animation/dist/index.js",
+			"require": "./packages/animation/dist/index.cjs",
+			"types": "./packages/animation/src/index.ts"
 		}
 	},
 	"keywords": [],

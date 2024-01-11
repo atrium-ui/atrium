@@ -3,5 +3,6 @@
 	"compilerOptions": {
 		"checkJs": true,
 		"jsx": "preserve",
+		"types": ["@sv/elements"]
 	}
 }

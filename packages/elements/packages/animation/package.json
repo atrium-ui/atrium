@@ -1,0 +1,29 @@
+{
+	"name": "@atrium-ui/animation",
+	"author": "t.havlicek@s-v.de",
+	"contributors": [],
+	"private": true,
+	"description": "",
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "src/index.ts",
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch"
+	},
+	"license": "ISC",
+	"dependencies": {
+		"lit": "^2.5.0"
+	},
+	"files": ["dist"],
+	"tsup": {
+		"entry": ["src/index.ts"],
+		"format": ["esm", "cjs"],
+		"external": [
+			"@sv/*",
+			"@rive-app/canvas-single"
+		],
+		"sourcemap": true,
+		"clean": true
+	}
+}

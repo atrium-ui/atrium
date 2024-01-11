@@ -31,6 +31,12 @@ tasks:
     cmds:
       - bun x turbo build --filter "./packages/**"
 
+  dev:
+    desc: Build all packages
+    deps: [setup]
+    cmds:
+      - bun x turbo dev --filter "./packages/**"
+
   test:
     desc: Run tests on all packages
     dir: "{{.TASKFILE_DIR}}"
