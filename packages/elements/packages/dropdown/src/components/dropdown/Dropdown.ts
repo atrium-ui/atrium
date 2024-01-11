@@ -19,12 +19,13 @@ export class Dropdown extends LitElement {
 
         --dropdown-max-height: 200px;
         --dropdown-speed: 0.15s;
+				--dropdown-position: absolute;
       }
       :host([opened]) {
         z-index: 10;
       }
       .dropdown-container {
-        position: absolute;
+        position: var(--dropdown-position);
         top: 100%;
         width: 100%;
         background: inherit;

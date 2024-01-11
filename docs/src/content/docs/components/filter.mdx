@@ -11,12 +11,26 @@ npx @sv/components use filter
 A dropdowm with text filter
 
 <Example title="Example">
-  <div slot="preview">
-    <Filter value="Value" />
+  <div slot="preview" class="min-h-[250px]">
+    <Filter>
+      <Filter.Item value="Item1" />
+      <Filter.Item value="Item2" />
+      <Filter.Item value="Item3" />
+      <hr class="w-full h-[1px] bg-white opacity-20 my-1 mx-1" />
+      <Filter.Item value="Item4" />
+      <Filter.Item value="Item5" />
+    </Filter>
   </div>
   <div slot="code">
     ```tsx
-      <Filter value="Value" />
+      <Filter>
+        <Filter.Item value="Item1" />
+        <Filter.Item value="Item2" />
+        <Filter.Item value="Item3" />
+        <hr class="w-full h-[1px] bg-white opacity-20 my-1 mx-1" />
+        <Filter.Item value="Item4" />
+        <Filter.Item value="Item5" />
+      </Filter>
     ```
   </div>
 </Example>

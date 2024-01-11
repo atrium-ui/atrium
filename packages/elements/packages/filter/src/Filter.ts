@@ -3,12 +3,12 @@ import { customElement, property, query } from 'lit/decorators.js';
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'a-command': Command;
+		'a-command': Filter;
 	}
 }
 
-@customElement('a-command')
-export class Command extends LitElement {
+@customElement('a-filter')
+export class Filter extends LitElement {
 	public static styles = css`
     :host {
       display: block;
