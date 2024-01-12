@@ -3,6 +3,7 @@
 	"compilerOptions": {
 		"moduleResolution": "Bundler",
 		"skipLibCheck": true,
+		"jsx": "preserve",
 		"jsxImportSource": "solid-js",
 	},
 	"exclude": [

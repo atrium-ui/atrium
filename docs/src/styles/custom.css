@@ -37,7 +37,7 @@
 
 :root[data-theme="light"],
 :root[data-theme="dark"] {
-    --sl-content-width: 50rem;
+    --sl-content-width: 60rem;
     --sl-text-5xl: 3.5rem;
     --sl-color-bg-nav: transparent;
     --sl-color-hairline-shade: transparent;
