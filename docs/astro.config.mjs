@@ -51,16 +51,17 @@ export default defineConfig({
 				},
 				{
 					label: 'Component Templates',
+					collapsed: false,
 					autogenerate: { directory: 'components' },
 				},
 				{
 					label: 'Elements',
-					collapsed: true,
+					collapsed: false,
 					autogenerate: { directory: 'elements' },
 				},
 				{
 					label: 'Packages',
-					collapsed: true,
+					collapsed: false,
 					autogenerate: { directory: 'packages' },
 				},
 			],
