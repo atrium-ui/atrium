@@ -1,6 +1,8 @@
 import '@sv/elements/dropdown';
 import '@sv/elements/expandable';
 
+import { Button } from './button.jsx';
+
 export function Select(
 	props: {
 		children?: JSX.Element | string;
@@ -16,14 +18,9 @@ export function Select(
 	return (
 		<div onSelect={(e) => console.log(e.option.value)}>
 			<a-dropdown class="relative inline-block">
-				<button
-					type="button"
-					slot="input"
-					class="cursor-pointer rounded-lg bg-[#C09278] px-4 py-1
-              active:bg-[rgba(158,118,96,1)] text-left min-w-[150px]"
-				>
+				<Button slot="input" class="w-[150px]">
 					{props.value}
-				</button>
+				</Button>
 
 				<div class="rounded-md bg-zinc-800 border border-zinc-700 p-1 mt-1">
 					<slots.default />

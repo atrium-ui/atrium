@@ -1,5 +1,7 @@
 import '@sv/elements/popover';
 
+import { Button } from './button.jsx';
+
 export function Popover(
 	props: {
 		children?: JSX.Element | string;
@@ -14,14 +16,7 @@ export function Popover(
 
 	return (
 		<a-popover class="group relative z-10">
-			<button
-				type="button"
-				slot="input"
-				class="cursor-pointer rounded-lg bg-[#C09278] px-4 py-1
-              active:bg-[rgba(158,118,96,1)] text-left"
-			>
-				{props.label}
-			</button>
+			<Button slot="input">{props.label}</Button>
 
 			<div
 				class="rounded-md bg-zinc-800 border border-zinc-700 p-4 mt-1 w-80

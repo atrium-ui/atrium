@@ -3,36 +3,68 @@ title: Button
 ---
 
 import Example from "../../../components/Example.astro";
+import Icon from "../../../components/Icon.astro";
 import { Button } from "@sv/components/templates/button.tsx";
 
 ```bash
 npx @sv/components use button
 ```
 
-Copy-pastable components to get started quickly using Tailwind and JSX.
+A button.
 
 <Example title="Example">
-  <div slot="preview">
+  <div slot="preview" class="flex gap-10">
+    <Button>Button</Button>
+    <Button disabled>Disabled</Button>
     <Button>
-      Button
+      <Icon /><span>with icon</span>
     </Button>
   </div>
   <div slot="code">
     ```tsx
-      <Button />
+    <Button>Button</Button>
+    <Button disabled>Disabled</Button>
+    <Button>
+      <Icon /><span>with icon</span>
+    </Button>
     ```
   </div>
 </Example>
 
 <Example title="Outline">
-  <div slot="preview">
+  <div slot="preview" class="flex gap-10">
+    <Button variant="outline">Button</Button>
+    <Button variant="outline" disabled>Disabled</Button>
     <Button variant="outline">
-      Button
+      <span>with icon</span><Icon />
     </Button>
   </div>
   <div slot="code">
     ```tsx
-      <Button variant="outline"/>
+    <Button variant="outline">Button</Button>
+    <Button variant="outline" disabled>Disabled</Button>
+    <Button variant="outline">
+      <span>with icon</span><Icon />
+    </Button>
+    ```
+  </div>
+</Example>
+
+<Example title="Ghost">
+  <div slot="preview" class="flex gap-10">
+    <Button variant="ghost">Button</Button>
+    <Button variant="ghost" disabled>Disabled</Button>
+    <Button variant="ghost">
+      <Icon /><span>with icon</span>
+    </Button>
+  </div>
+  <div slot="code">
+    ```tsx
+    <Button variant="ghost">Button</Button>
+    <Button variant="ghost" disabled>Disabled</Button>
+    <Button variant="ghost">
+      <Icon /><span>with icon</span>
+    </Button>
     ```
   </div>
 </Example>
