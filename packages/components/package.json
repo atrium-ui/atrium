@@ -3,11 +3,9 @@
 	"version": "0.3.0",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
-	"bin": {
-		"use": "./bin/use"
-	},
+	"bin": "./bin/use",
 	"scripts": {
-		"postinstall": "./install.js",
+		"preinstall": "./install.js",
 		"build:mac:amd": "cd cli && GOOS=darwin GOARCH=amd64 go build -o ../dist/use_darwin_amd64 ./use.go",
 		"build:mac:arm": "cd cli && GOOS=darwin GOARCH=arm64 go build -o ../dist/use_darwin_arm64 ./use.go",
 		"build:linux:amd": "cd cli && GOOS=linux GOARCH=amd64 go build -o ../dist/use_linux_amd64 ./use.go",
