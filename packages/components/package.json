@@ -3,7 +3,7 @@
 	"version": "0.3.0",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
-	"bin": "./cli/use.js",
+	"bin": "./cli.js",
 	"scripts": {
 		"build:mac:amd": "cd cli && GOOS=darwin GOARCH=amd64 go build -o ../dist/use_darwin_amd64 ./use.go",
 		"build:mac:arm": "cd cli && GOOS=darwin GOARCH=arm64 go build -o ../dist/use_darwin_arm64 ./use.go",
@@ -14,6 +14,6 @@
 	"files": [
 		"dist",
 		"templates",
-		"./install.js"
+		"./use.js"
 	]
 }
