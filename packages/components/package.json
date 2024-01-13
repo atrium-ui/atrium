@@ -8,11 +8,11 @@
 	},
 	"scripts": {
 		"postinstall": "./install.js",
-		"build:mac:amd": "GOOS=darwin GOARCH=amd64 go build -o ./dist/use_darwin_amd64 ./cli/use.go",
-		"build:mac:arm": "GOOS=darwin GOARCH=arm64 go build -o ./dist/use_darwin_arm64 ./cli/use.go",
-		"build:linux:amd": "GOOS=linux GOARCH=amd64 go build -o ./dist/use_linux_amd64 ./cli/use.go",
+		"build:mac:amd": "cd cli && GOOS=darwin GOARCH=amd64 go build -o ../dist/use_darwin_amd64 ./use.go",
+		"build:mac:arm": "cd cli && GOOS=darwin GOARCH=arm64 go build -o ../dist/use_darwin_arm64 ./use.go",
+		"build:linux:amd": "cd cli && GOOS=linux GOARCH=amd64 go build -o ../dist/use_linux_amd64 ./use.go",
 		"build": "bun run build:linux:amd && bun run build:mac:amd && bun run build:mac:arm",
-		"test": "go test cli/use.go"
+		"test": "cd cli && go test ./use.go"
 	},
 	"files": [
 		"dist",
