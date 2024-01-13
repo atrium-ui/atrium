@@ -1,18 +1,22 @@
 {
 	"name": "@sv/components",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
 	"bin": {
-		"use": "./cli/main.mjs"
-	},
-	"dependencies": {
-		"chalk": "^5.2.0",
-		"enquirer": "^2.4.1",
-		"@sv/elements": "^0.2.4"
+		"use": "./bin/use"
 	},
 	"scripts": {
-		"check": "tsc --pretty && biome check .",
-		"test": "bun test"
-	}
+		"postinstall": "./install.js",
+		"build:mac:amd": "GOOS=darwin GOARCH=amd64 go build -o ./dist/use_darwin_amd64 ./cli/use.go",
+		"build:mac:arm": "GOOS=darwin GOARCH=arm64 go build -o ./dist/use_darwin_arm64 ./cli/use.go",
+		"build:linux:amd": "GOOS=linux GOARCH=amd64 go build -o ./dist/use_linux_amd64 ./cli/use.go",
+		"build": "bun run build:linux:amd && bun run build:mac:amd && bun run build:mac:arm",
+		"test": "go test cli/use.go"
+	},
+	"files": [
+		"dist",
+		"templates",
+		"./install.js"
+	]
 }

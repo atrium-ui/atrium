@@ -38,7 +38,7 @@ function versionChanges(pkg, version) {
 	const tree = getPackageTree();
 	const info = tree.get(pkg);
 
-	const changes = [];
+	const changes: string[] = [];
 
 	if (!info) {
 		return changes;
@@ -62,7 +62,7 @@ function versionChanges(pkg, version) {
 	return changes.join('\n');
 }
 
-function generateMesssage() {
+function generateMessage() {
 	if (!fs.existsSync(publishOutputLog)) {
 		console.warn('No publish output log found');
 		return process.exit(1);
@@ -95,4 +95,4 @@ function generateMesssage() {
 	return `${message}\n`;
 }
 
-console.log(generateMesssage());
+console.log(generateMessage());
