@@ -3,73 +3,135 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
-	"github.com/charmbracelet/bubbles/key"
-	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 )
-
-type errMsg error
 
 type model struct {
-	spinner  spinner.Model
-	quitting bool
-	err      error
-}
-
-var quitKeys = key.NewBinding(
-	key.WithKeys("q", "esc", "ctrl+c"),
-	key.WithHelp("", "press q to quit"),
-)
-
-func initialModel() model {
-	s := spinner.New()
-	s.Spinner = spinner.Dot
-	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
-	return model{spinner: s}
+	choices  []string         // items on the to-do list
+	cursor   int              // which to-do list item our cursor is pointing at
+	selected map[int]struct{} // which to-do items are selected
+	submit   bool             // are we submitting?
 }
 
 func (m model) Init() tea.Cmd {
-	return m.spinner.Tick
+	return nil
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 
 	case tea.KeyMsg:
-		if key.Matches(msg, quitKeys) {
-			m.quitting = true
+		switch msg.String() {
+
+		case "ctrl+c", "q":
 			return m, tea.Quit
 
-		}
-		return m, nil
-	case errMsg:
-		m.err = msg
-		return m, nil
+		case "up", "k":
+			if m.cursor > 0 {
+				m.cursor--
+			}
+		case "down", "j":
+			if m.cursor < len(m.choices)-1 {
+				m.cursor++
+			}
 
-	default:
-		var cmd tea.Cmd
-		m.spinner, cmd = m.spinner.Update(msg)
-		return m, cmd
+		case " ":
+			_, ok := m.selected[m.cursor]
+			if ok {
+				delete(m.selected, m.cursor)
+			} else {
+				m.selected[m.cursor] = struct{}{}
+			}
+
+		case "enter":
+			m.submit = true
+			return m, tea.Quit
+		}
 	}
+
+	return m, nil
 }
 
 func (m model) View() string {
-	if m.err != nil {
-		return m.err.Error()
+	if m.submit {
+		return ""
 	}
-	str := fmt.Sprintf("\n\n   %s Loading forever... %s\n\n", m.spinner.View(), quitKeys.Help().Desc)
-	if m.quitting {
-		return str + "\n"
+
+	s := "Select components to use:\n\n"
+
+	for i, choice := range m.choices {
+		cursor := " "
+		if m.cursor == i {
+			cursor = "|"
+		}
+
+		checked := " "
+		if _, ok := m.selected[i]; ok {
+			checked = "✔︎"
+		}
+
+		s += fmt.Sprintf("%s %s %s\n", cursor, checked, choice)
 	}
-	return str
+
+	return s
+}
+
+func initialModel() model {
+	return model{
+		choices: func() []string {
+			templates, err := getTemplates()
+			if err != nil {
+				fmt.Println("✘", err)
+				os.Exit(1)
+			}
+
+			var choices []string
+			for _, template := range templates {
+				choices = append(choices, strings.Split(template.Name(), ".")[0])
+			}
+			return choices
+		}(),
+
+		selected: make(map[int]struct{}),
+	}
 }
 
 func main() {
-	p := tea.NewProgram(initialModel())
+	args := os.Args[1:]
+
+	if len(args) > 0 {
+		for _, arg := range args {
+			n, err := useTemplate(arg)
+			_ = n
+
+			if err != nil {
+				fmt.Println("✘", err)
+				os.Exit(1)
+			}
+		}
+		return
+	}
+
+	m := initialModel()
+	p := tea.NewProgram(m)
+
 	if _, err := p.Run(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
+	}
+
+	for i := range m.selected {
+		name := m.choices[i]
+		n, err := useTemplate(name)
+		_ = n
+
+		if err != nil {
+			fmt.Println("✘", err)
+			os.Exit(1)
+		}
+
+		fmt.Println("✔︎ Used", name)
 	}
 }
