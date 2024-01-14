@@ -1,4 +1,13 @@
 #!/usr/bin/env node
-require('child_process').execSync(`${__dirname}/dist/use_${process.platform}_${process.arch}`, {
+
+import childProcess from 'child_process';
+import { arch, platform } from 'os';
+
+const plat = platform();
+
+let arc = arch();
+if (arc === 'x64') arc = 'amd64';
+
+export default childProcess.spawnSync(`./dist/use_${plat}_${arc}`, ['button'], {
 	stdio: 'inherit',
 });

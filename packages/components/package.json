@@ -2,6 +2,7 @@
 	"name": "@sv/components",
 	"version": "0.3.0",
 	"author": "t.havlicek@s-v.de",
+	"type": "module",
 	"contributors": [],
 	"bin": "./cli.js",
 	"scripts": {
