@@ -587,24 +587,26 @@ export class Track extends LitElement {
 
 		if (this.target !== undefined) {
 			switch (this.targetEasing) {
-				case 'ease': {
-					this.transition = timer(this.transitionAt, this.transitionTime);
-					const easedDelta = Vec.sub(this.target, this.targetStart).mul(
-						Ease.easeInOutCirc(this.transition)
-					);
-					this.targetForce.set(this.targetStart).add(easedDelta).sub(this.position);
-				}
-				break;
-				case 'linear': {
-					const prog = Vec.sub(this.position, this.target).abs() / Vec.abs(this.target);
-					this.transition = Math.round(prog * 100) / 100 || 0;
+				case 'ease':
+					{
+						this.transition = timer(this.transitionAt, this.transitionTime);
+						const easedDelta = Vec.sub(this.target, this.targetStart).mul(
+							Ease.easeInOutCirc(this.transition)
+						);
+						this.targetForce.set(this.targetStart).add(easedDelta).sub(this.position);
+					}
+					break;
+				case 'linear':
+					{
+						const prog = Vec.sub(this.position, this.target).abs() / Vec.abs(this.target);
+						this.transition = Math.round(prog * 100) / 100 || 0;
 
-					const delta = Vec.sub(this.targetForce.set(this.target), this.position);
-					this.targetForce.set(
-						delta.mod([this.trackWidth, this.trackHeight]).mul(42 / this.transitionTime)
-					);
-				}
-				break;
+						const delta = Vec.sub(this.targetForce.set(this.target), this.position);
+						this.targetForce.set(
+							delta.mod([this.trackWidth, this.trackHeight]).mul(42 / this.transitionTime)
+						);
+					}
+					break;
 				default:
 					this.targetForce.set(Vec.sub(this.targetForce.set(this.target), this.position));
 					break;
