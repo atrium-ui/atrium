@@ -15,10 +15,6 @@ export class AdaptiveElement extends LitElement {
           display: block;
         }
 
-        .container {
-          display: block;
-        }
-
         .content {
           display: block;
         }
@@ -29,20 +25,17 @@ export class AdaptiveElement extends LitElement {
 	constructor() {
 		super();
 
-		const observer = new MutationObserver(() => {
+		const observer = new MutationObserver((cahgnes) => {
 			this.requestUpdate();
 		});
 
-		observer.observe(this, { subtree: true, childList: true });
+		observer.observe(this, { subtree: true, childList: true, characterData: true });
 
 		window.addEventListener('resize', () => {
 			this.lastHeight = this.content?.offsetHeight;
 			this.lastWidth = this.content?.offsetWidth;
 		});
 	}
-
-	@query('.container')
-	container!: HTMLElement;
 
 	@query('slot')
 	content!: HTMLElement;
@@ -54,7 +47,7 @@ export class AdaptiveElement extends LitElement {
 		const height = this.content?.offsetHeight;
 		const width = this.content?.offsetWidth;
 		if (height && width) {
-			await this.container.animate(
+			await this.animate(
 				[
 					{
 						height: `${this.lastHeight}px`,
@@ -76,11 +69,7 @@ export class AdaptiveElement extends LitElement {
 	}
 
 	protected render(): HTMLTemplateResult {
-		return html`
-      <div class="container">
-        <slot class="content"></slot>
-      </div>
-    `;
+		return html`<slot class="content"></slot>`;
 	}
 }
 
