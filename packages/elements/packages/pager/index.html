@@ -7,20 +7,12 @@
   <title>Document</title>
 
   <script>
-    import "../src/index.js";
-
-    const state = ({
-      current: 3,
-    });
+    import "./src/index.js";
   </script>
 </head>
 
 <body>
-  <a-pager count="12" :current="state.current" @page-change="
-    (e) => {
-      state.current = e.detail;
-    }
-  "></a-pager>
+  <a-pager count="12" current="3"></a-pager>
 </body>
 
 </html>

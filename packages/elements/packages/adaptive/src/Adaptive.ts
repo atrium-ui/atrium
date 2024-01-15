@@ -3,26 +3,20 @@ import { query } from 'lit/decorators.js';
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'a-adaptive': AdaptiveHeight;
+		'a-adaptive': AdaptiveElement;
 	}
 }
 
-export class AdaptiveHeight extends LitElement {
+export class AdaptiveElement extends LitElement {
 	public static get styles() {
 		return [
 			css`
         :host {
           display: block;
-
-          --transition-speed: 0.33s;
-          --animation-easing: ease-in-out;
         }
 
         .container {
           display: block;
-          overflow: hidden;
-          transition-duration: var(--transition-speed);
-          transition-easing: var(--animation-easing);
         }
 
         .content {
@@ -59,7 +53,7 @@ export class AdaptiveHeight extends LitElement {
 	async updated() {
 		const height = this.content?.offsetHeight;
 		const width = this.content?.offsetWidth;
-		if (this.lastHeight && this.lastWidth && height && width) {
+		if (height && width) {
 			await this.container.animate(
 				[
 					{
@@ -90,4 +84,4 @@ export class AdaptiveHeight extends LitElement {
 	}
 }
 
-customElements.define('a-adaptive', AdaptiveHeight);
+customElements.define('a-adaptive', AdaptiveElement);

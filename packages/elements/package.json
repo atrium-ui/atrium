@@ -37,11 +37,6 @@
 			"require": "./packages/dropdown/dist/index.cjs",
 			"types": "./packages/dropdown/src/index.ts"
 		},
-		"./circle": {
-			"import": "./packages/circle/dist/index.js",
-			"require": "./packages/circle/dist/index.cjs",
-			"types": "./packages/circle/src/index.ts"
-		},
 		"./pager": {
 			"import": "./packages/pager/dist/index.js",
 			"require": "./packages/pager/dist/index.cjs",
@@ -71,6 +66,11 @@
 			"import": "./packages/animation/dist/index.js",
 			"require": "./packages/animation/dist/index.cjs",
 			"types": "./packages/animation/src/index.ts"
+		},
+		"./adaptive": {
+			"import": "./packages/adaptive/dist/index.js",
+			"require": "./packages/adaptive/dist/index.cjs",
+			"types": "./packages/adaptive/src/index.ts"
 		}
 	},
 	"keywords": [],
