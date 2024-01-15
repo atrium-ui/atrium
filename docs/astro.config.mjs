@@ -64,6 +64,12 @@ export default defineConfig({
 					collapsed: false,
 					autogenerate: { directory: 'packages' },
 				},
+				{
+					label: 'Experimental',
+					badge: 'new',
+					collapsed: true,
+					autogenerate: { directory: 'experimental' },
+				},
 			],
 		}),
 	],

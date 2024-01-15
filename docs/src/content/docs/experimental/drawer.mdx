@@ -1,0 +1,49 @@
+---
+title: Drawer
+---
+import Example from "../../../components/Example.astro";
+import { Drawer } from "@sv/components/templates/drawer.tsx";
+import { Button } from "@sv/components/templates/button.tsx";
+
+```bash
+npx @sv/components use dialog
+```
+
+A sheet is basically a burger menu. Composed of an a-blur.
+
+<Example title="Example">
+  <div slot="preview">
+    <Drawer client:load>
+      ## Drawer
+      This is a dialog.
+
+      <br />
+      <br />
+      <br />
+      <br />
+
+    </Drawer>
+
+    <div onclick="document.querySelector('a-blur').enabled = true">
+      <Button>Open</Button>
+    </div>
+  </div>
+  <div slot="code">
+    ```tsx
+    <Drawer>
+      ## Drawer
+      This is a dialog.
+
+      <br />
+      <br />
+      <br />
+      <br />
+
+    </Drawer>
+
+    <div onclick="document.querySelector('a-blur').enabled = true">
+      <Button>Open</Button>
+    </div>
+    ```
+  </div>
+</Example>

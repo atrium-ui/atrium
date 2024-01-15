@@ -1,0 +1,17 @@
+---
+title: a-time
+description: A reference page in my new Starlight docs site.
+---
+
+import Example from "../../../components/Example.astro";
+
+<Example title="Example">
+  <div slot="preview">
+    <div>This was loaded <a-time>{ Date.now() }</a-time></div>
+  </div>
+  <div slot="code">
+    ```tsx
+      <div>This was loaded <a-time>{ Date.now() }</a-time></div>
+    ```
+  </div>
+</Example>

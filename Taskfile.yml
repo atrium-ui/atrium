@@ -83,8 +83,6 @@ tasks:
     preconditions:
       - sh: git diff --exit-code
         msg: "Git working tree is must be clean."
-      - sh: "[ $(git rev-parse --abbrev-ref HEAD) = develop ] || exit 1"
-        msg: "Must be on develop branch."
     cmds:
       - bun x changeset add
 
