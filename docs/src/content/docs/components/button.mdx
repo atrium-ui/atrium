@@ -4,7 +4,7 @@ title: Button
 
 import Example from "../../../components/Example.astro";
 import Icon from "../../../components/Icon.astro";
-import { Button } from "@sv/components/templates/button.tsx";
+import { Button, Link } from "@sv/components/templates/button.tsx";
 
 ```bash
 npx @sv/components use button
@@ -65,6 +65,28 @@ A button.
     <Button variant="ghost">
       <Icon /><span>with icon</span>
     </Button>
+    ```
+  </div>
+</Example>
+
+<br/>
+<br/>
+
+## Links
+
+Links are not buttons and buttons are not links. Links have hrefs and buttons do not, so having props that apply only in a certain variation is confusing.
+
+But sometimes you need a link that looks like a button. So we have a separate Link component with a button variant. Feel free to replace the a tag inside this component with a framework specific router link.
+
+<Example>
+  <div slot="preview" class="flex gap-10">
+    <Link variant="button" href="https://google.com" target="_blank">To somewhere</Link>
+    <Link variant="button-outline" href="https://bing.com" target="_blank">To somewhere else</Link>
+  </div>
+  <div slot="code">
+    ```tsx
+    <Link variant="button" href="https://google.com" target="_blank">To somewhere</Link>
+    <Link variant="button-outline" href="https://bing.com" target="_blank">To somewhere else</Link>
     ```
   </div>
 </Example>
