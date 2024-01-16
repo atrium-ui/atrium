@@ -101,7 +101,7 @@ tasks:
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - bun x changeset version
-      - git push origin HEAD:main -o ci.skip
+      - git push origin HEAD:main
       - git push origin --tags
       - bun x changeset publish --tag > .task/publish.txt
       - defer: rm .task/publish.txt

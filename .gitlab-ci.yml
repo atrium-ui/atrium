@@ -54,6 +54,9 @@ publish:
     - test
   only:
     - main
+  rules:
+    - if: $CI_COMMIT_REF_NAME =~ "/^release/"
+      when: never
   script: task publish
 
 pages:

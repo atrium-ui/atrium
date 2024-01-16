@@ -84,6 +84,7 @@ export class Expandable extends LitElement {
 	}
 
 	private renderButton() {
+		// TODO: don't render button if no child in toggle slot
 		return html`<button
       aria-controls="${this._id}"
       aria-expanded=${this.opened}
