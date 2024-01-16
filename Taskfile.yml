@@ -83,8 +83,6 @@ tasks:
     preconditions:
       - sh: git diff --exit-code
         msg: "Git working tree is must be clean."
-      - sh: "[ $(git rev-parse --abbrev-ref HEAD) = develop ] || exit 1"
-        msg: "Must be on develop branch."
     cmds:
       - bun x changeset add
 
@@ -104,9 +102,9 @@ tasks:
     cmds:
       - bun x changeset version
       - git push origin HEAD:main -o ci.skip
-      - git push origin --tags
       - bun x changeset publish --tag > .task/publish.txt
       - defer: rm .task/publish.txt
+      - git push origin HEAD:main --tags
       - task notify || true
 
   format:

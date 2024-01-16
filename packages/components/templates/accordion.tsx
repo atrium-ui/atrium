@@ -56,9 +56,9 @@ export function Accordion(props: Props, context) {
 	};
 
 	return (
-		<div>
+		<ul class="list-none p-0 m-0">
 			<slots.default />
-		</div>
+		</ul>
 	);
 }
 
@@ -72,23 +72,25 @@ Accordion.Item = function AccordionItem(
 	};
 
 	return (
-		<a-expandable class="group rounded-lg border border-[#C09278] mb-2">
-			<div slot="toggle" class="px-6 py-2 flex justify-between items-center cursor-pointer">
-				<div class="text-white">
-					<span>{props.title}</span>
+		<li class="list-none">
+			<a-expandable class="group rounded-lg border border-[#C09278] mb-2">
+				<div slot="toggle" class="px-6 py-2 flex justify-between items-center cursor-pointer">
+					<div class="text-white">
+						<span>{props.title}</span>
+					</div>
+
+					<div class="block group-[[opened]]:hidden">
+						<ExpandIcon />
+					</div>
+					<div class="hidden group-[[opened]]:block">
+						<CollapseIcon />
+					</div>
 				</div>
 
-				<div class="block group-[[opened]]:hidden">
-					<ExpandIcon />
+				<div class="px-6 py-2">
+					<slots.default />
 				</div>
-				<div class="hidden group-[[opened]]:block">
-					<CollapseIcon />
-				</div>
-			</div>
-
-			<div class="px-6 py-2">
-				<slots.default />
-			</div>
-		</a-expandable>
+			</a-expandable>
+		</li>
 	);
 };

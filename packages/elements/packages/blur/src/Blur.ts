@@ -57,13 +57,19 @@ export class Blur extends LitElement {
 		}
 	};
 
+	handleCloseEvent = (e: Event) => {
+		this.enabled = false;
+	};
+
 	connectedCallback(): void {
 		super.connectedCallback();
-		this.addEventListener('click', this.handleClick);
+		this.addEventListener('mousedown', this.handleClick);
+		this.addEventListener('close', this.handleCloseEvent, { capture: true });
 	}
 
 	disconnectedCallback(): void {
-		this.removeEventListener('click', this.handleClick);
+		this.removeEventListener('mousedown', this.handleClick);
+		this.removeEventListener('close', this.handleCloseEvent, { capture: true });
 
 		// TODO: This call should be on a stack.
 		//				So that if multiple blur elements are enabled, it only disables when all are disabled.

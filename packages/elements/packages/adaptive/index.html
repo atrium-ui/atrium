@@ -6,7 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 
-  <script>
+  <script type="module">
+    import "./src/index.ts";
+    import { paragraph } from "txtgen";
+
     setInterval(() => {
       const text = paragraph(2 + Math.random() * 10);
       document.querySelector('.content').innerHTML = text;
@@ -17,26 +20,15 @@
 
 <body>
   <div class="block"></div>
-  <a-adaptive class="adaptive">
-    <div class="content">
-      {{ state.text }}
-    </div>
+  <a-adaptive>
+    <div class="content"></div>
   </a-adaptive>
-  <div class="block2"></div>
+  <div class="block"></div>
 
 
   <style scoped>
-    .adaptive {
-      background: grey;
-    }
-
     .block {
-      background: red;
-      height: 100px;
-    }
-
-    .block2 {
-      background: green;
+      background: black;
       height: 100px;
     }
   </style>

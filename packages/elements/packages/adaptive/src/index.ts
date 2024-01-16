@@ -1,1 +1,1 @@
-export { AdaptiveHeight } from './components/AdaptiveHeight.js';
+export { AdaptiveElement } from './Adaptive.js';

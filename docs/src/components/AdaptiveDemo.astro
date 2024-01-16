@@ -1,0 +1,19 @@
+---
+---
+
+<script>
+  import "@sv/elements/adaptive";
+  import { paragraph } from "txtgen";
+
+  setInterval(() => {
+    const text = paragraph(2 + Math.random() * 8);
+    document.querySelector('.content').innerHTML = text;
+  }, 1000);
+</script>
+
+<div class="border border-color-white"></div>
+<a-adaptive class="overflow-hidden">
+  <div class="content"></div>
+</a-adaptive>
+<div class="border border-color-white"></div>
+

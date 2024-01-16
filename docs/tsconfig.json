@@ -3,11 +3,8 @@
 	"compilerOptions": {
 		"moduleResolution": "Bundler",
 		"skipLibCheck": true,
+		"checkJs": true,
 		"jsx": "preserve",
 		"jsxImportSource": "solid-js",
-	},
-	"exclude": [
-		"**/node_modules/**",
-		"**/dist/**"
-	]
+	}
 }
