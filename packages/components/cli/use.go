@@ -9,10 +9,11 @@ import (
 )
 
 type model struct {
-	choices  []string         // items on the to-do list
-	cursor   int              // which to-do list item our cursor is pointing at
-	selected map[int]struct{} // which to-do items are selected
-	submit   bool             // are we submitting?
+	choices  []string
+	cursor   int
+	selected map[int]struct{}
+	submit   bool
+	cancel   bool
 }
 
 func (m model) Init() tea.Cmd {
@@ -26,6 +27,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 
 		case "ctrl+c", "q":
+			m.cancel = true
 			return m, tea.Quit
 
 		case "up", "k":
@@ -55,7 +57,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	if m.submit {
+	if m.submit || m.cancel {
 		return ""
 	}
 
@@ -95,6 +97,9 @@ func initialModel() model {
 		}(),
 
 		selected: make(map[int]struct{}),
+
+		cancel: false,
+		submit: false,
 	}
 }
 
@@ -110,28 +115,37 @@ func main() {
 				fmt.Println("✘", err)
 				os.Exit(1)
 			}
+
+			fmt.Println("✔︎ Used", arg)
 		}
 		return
 	}
 
-	m := initialModel()
-	p := tea.NewProgram(m)
+	p := tea.NewProgram(initialModel())
 
-	if _, err := p.Run(); err != nil {
+	if m, err := p.Run(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
-	}
+	} else {
+		m := m.(model)
 
-	for i := range m.selected {
-		name := m.choices[i]
-		n, err := useTemplate(name)
-		_ = n
-
-		if err != nil {
-			fmt.Println("✘", err)
-			os.Exit(1)
+		if m.cancel {
+			fmt.Println("Canceled")
+			return
 		}
 
-		fmt.Println("✔︎ Used", name)
+		for i := range m.selected {
+			name := m.choices[i]
+			n, err := useTemplate(name)
+			_ = n
+
+			if err != nil {
+				fmt.Println("✘", err)
+				os.Exit(1)
+				break
+			}
+
+			fmt.Println("✔︎ Used", name)
+		}
 	}
 }
