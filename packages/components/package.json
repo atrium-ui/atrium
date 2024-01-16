@@ -1,6 +1,6 @@
 {
 	"name": "@sv/components",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
 	"bin": {
@@ -9,7 +9,7 @@
 	"dependencies": {
 		"chalk": "^5.2.0",
 		"enquirer": "^2.4.1",
-		"@sv/elements": "^0.2.4"
+		"@sv/elements": "^0.3.0"
 	},
 	"scripts": {
 		"check": "tsc --pretty && biome check .",
