@@ -6,9 +6,9 @@
 	"contributors": [],
 	"bin": "./cli.js",
 	"scripts": {
-		"build:mac:amd": "cd cli && GOOS=darwin GOARCH=amd64 go build -o ../dist/use_darwin_amd64",
-		"build:mac:arm": "cd cli && GOOS=darwin GOARCH=arm64 go build -o ../dist/use_darwin_arm64",
-		"build:linux:amd": "cd cli && GOOS=linux GOARCH=amd64 go build -o ../dist/use_linux_amd64",
+		"build:mac:amd": "cd cli && GOOS=darwin GOARCH=amd64 go build -ldflags='-s -w' -o ../dist/use_darwin_amd64",
+		"build:mac:arm": "cd cli && GOOS=darwin GOARCH=arm64 go build -ldflags='-s -w' -o ../dist/use_darwin_arm64",
+		"build:linux:amd": "cd cli && GOOS=linux GOARCH=amd64 go build -ldflags='-s -w' -o ../dist/use_linux_amd64",
 		"build": "bun run build:linux:amd && bun run build:mac:amd && bun run build:mac:arm",
 		"test": "bun test"
 	},
