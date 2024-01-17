@@ -5,19 +5,25 @@ import path from 'path';
 import { arch, platform } from 'os';
 import url from 'url';
 
-const plat = platform();
+function getExecutable() {
+	const plat = platform();
 
-let arc = arch();
-if (arc === 'x64') arc = 'amd64';
+	let arc = arch();
+	if (arc === 'arm64') arc = 'aarch64';
 
-const executable = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), `./dist/use_${plat}_${arc}`);
+	return path.resolve(
+		path.dirname(url.fileURLToPath(import.meta.url)),
+		`./dist/${arc}-${plat}/components`
+	);
+}
 
 export function main(args) {
-	return childProcess.spawnSync(executable, args, {
+	const result = childProcess.spawnSync(getExecutable(), args, {
 		stdio: 'inherit',
 	});
+
+	if (result.status !== 0) throw new Error(result.error);
+	return result;
 }
 
-if(process.stdout.isTTY) {
-	main(process.argv.slice(2));
-}
+if (process.stdout.isTTY) main(process.argv.slice(2));
