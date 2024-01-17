@@ -76,6 +76,10 @@
 	"keywords": [],
 	"license": "ISC",
 	"dependencies": {
+		"@sv/scroll-lock": "^0.1.7",
 		"lit": "^2.5.0"
+	},
+	"peerDependencies": {
+		"@rive-app/canvas-single": "^2.7.1"
 	}
 }

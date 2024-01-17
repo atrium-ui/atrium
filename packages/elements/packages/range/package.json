@@ -10,10 +10,6 @@
 	"scripts": {
 		"build": "tsup"
 	},
-	"license": "ISC",
-	"dependencies": {
-		"lit": "^2.5.0"
-	},
 	"tsup": {
 		"entry": ["src/index.ts"],
 		"format": ["esm", "cjs"],

@@ -11,11 +11,6 @@
 		"build": "tsup",
 		"dev": "tsup --watch"
 	},
-	"license": "ISC",
-	"dependencies": {
-		"@sv/scroll-lock": "^0.1.6",
-		"lit": "^2.5.0"
-	},
 	"tsup": {
 		"entry": ["src/index.ts"],
 		"format": ["esm", "cjs"],
