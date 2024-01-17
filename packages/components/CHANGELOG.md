@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.3.1
+
+### Patch Changes
+
+- ec7474d: Rewrite cli in go
+
 ## 0.2.1
 
 ### Patch Changes
