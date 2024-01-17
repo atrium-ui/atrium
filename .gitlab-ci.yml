@@ -53,7 +53,7 @@ publish:
   dependencies:
     - test
   rules:
-    - if: $CI_COMMIT_MESSAGE =~ "/^version:/"
+    - if: $CI_COMMIT_MESSAGE =~ "/^publish:/"
       when: never
     - if: $CI_COMMIT_REF_NAME == "main"
       when: on_success
