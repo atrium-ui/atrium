@@ -22,26 +22,38 @@ export class AdaptiveElement extends LitElement {
 		];
 	}
 
-	constructor() {
-		super();
+	observer!: MutationObserver;
 
-		const observer = new MutationObserver((cahgnes) => {
-			this.requestUpdate();
-		});
+	connectedCallback() {
+		super.connectedCallback();
 
-		observer.observe(this, { subtree: true, childList: true, characterData: true });
+		if (typeof MutationObserver !== 'undefined') {
+			this.observer = new MutationObserver((cahgnes) => {
+				this.requestUpdate();
+			});
+			this.observer.observe(this, { subtree: true, childList: true, characterData: true });
+		}
 
-		window.addEventListener('resize', () => {
-			this.lastHeight = this.content?.offsetHeight;
-			this.lastWidth = this.content?.offsetWidth;
-		});
+		window.addEventListener('resize', this.onResize);
 	}
+
+	disconnectedCallback(): void {
+		super.disconnectedCallback();
+		window.removeEventListener('resize', this.onResize);
+
+		if (this.observer) this.observer.disconnect();
+	}
+
+	onResize = () => {
+		this.lastHeight = this.content?.offsetHeight;
+		this.lastWidth = this.content?.offsetWidth;
+	};
 
 	@query('slot')
 	content!: HTMLElement;
 
-	lastHeight = 0;
-	lastWidth = 0;
+	lastHeight = this.offsetHeight;
+	lastWidth = this.offsetWidth;
 
 	async updated() {
 		const height = this.content?.offsetHeight;
@@ -60,7 +72,7 @@ export class AdaptiveElement extends LitElement {
 				],
 				{
 					duration: 330,
-					easing: 'ease',
+					easing: 'ease-out',
 				}
 			).finished;
 		}
