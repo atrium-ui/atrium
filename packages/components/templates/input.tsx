@@ -24,10 +24,10 @@ export function Input(props: Props) {
 					type="text"
 					required={props.required || undefined}
 					placeholder={props.placeholder}
-					class={`group px-3 py-1 bg-transparent rounded-md outline-none border
-					hover:border-zinc-600 focus:border-zinc-500 ${
-						props.error ? 'border-red-600' : 'border-zinc-700'
-					}`}
+					class={[
+						'group px-3 py-1 bg-transparent rounded-md outline-none border hover:border-zinc-600 focus:border-zinc-500 resize-y w-full',
+						props.error ? 'border-red-600' : 'border-zinc-700',
+					].join(' ')}
 					onChange={(e) => {
 						props.onChange?.(e);
 					}}
@@ -44,10 +44,10 @@ export function Input(props: Props) {
 					type="text"
 					required={props.required || undefined}
 					placeholder={props.placeholder}
-					class={`group px-3 py-1 bg-transparent rounded-md outline-none border
-					hover:border-zinc-600 focus:border-zinc-500 ${
-						props.error ? 'border-red-600' : 'border-zinc-700'
-					}`}
+					class={[
+						'group px-3 py-1 bg-transparent rounded-md outline-none border hover:border-zinc-600 focus:border-zinc-500 min-w-0 w-full',
+						props.error ? 'border-red-600' : 'border-zinc-700',
+					].join(' ')}
 					onChange={(e) => {
 						props.onChange?.(e);
 					}}

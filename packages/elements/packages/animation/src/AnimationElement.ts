@@ -2,6 +2,12 @@ import { css, html, HTMLTemplateResult, LitElement, PropertyValueMap } from 'lit
 import { property, query } from 'lit/decorators.js';
 import { Rive } from '@rive-app/canvas-single';
 
+declare global {
+	interface HTMLElementTagNameMap {
+		'a-animation': AnimationElement;
+	}
+}
+
 export class AnimationElement extends LitElement {
 	public static styles = css`
     canvas {

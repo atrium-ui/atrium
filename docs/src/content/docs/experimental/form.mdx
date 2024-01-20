@@ -12,11 +12,73 @@ A styles input with error states and label.
 
 <Example title="Example">
   <div slot="preview">
-    <Form />
+    <Form client:load form={{
+      rows: [
+        {
+          rowFields: [
+            {
+              defaultValue: "",
+              displayName: "Name",
+              name: "Name",
+              errorMessage: "",
+              handle: "name",
+              instructions: "",
+              placeholder: "",
+              required: true,
+              typeName: "Field_SingleLineText"
+            },
+            {
+              defaultValue: "",
+              displayName: "Name 2",
+              name: "Name 2",
+              errorMessage: "",
+              handle: "name2",
+              instructions: "",
+              placeholder: "",
+              required: true,
+              typeName: "Field_SingleLineText"
+            },
+          ]
+        },
+        {
+          rowFields: [
+            {
+              defaultValue: "",
+              displayName: "Text",
+              name: "Text",
+              errorMessage: "",
+              handle: "text",
+              instructions: "",
+              placeholder: "",
+              typeName: "Field_MultiLineText"
+            },
+          ]
+        }
+      ]
+    }} />
   </div>
   <div slot="code">
     ```tsx
-      <Form />
+    <Form form={{
+      rows: [
+        {
+          rowFields: [
+            {
+              defaultValue: "",
+              displayName: "Name",
+              name: "Name",
+              errorMessage: "",
+              handle: "name",
+              instructions: "",
+              name: "name",
+              placeholder: "",
+              required: true,
+              typeName: "Field_SingleLineText"
+            }
+          ]
+        }
+      ]
+    }} />
     ```
   </div>
 </Example>
