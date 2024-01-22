@@ -3,6 +3,7 @@ title: Form
 ---
 import Example from "../../../components/Example.astro";
 import { SomeForm } from "../../../components/SomeForm.jsx";
+import SomeFormExample from "../../../components/SomeForm.jsx?raw";
 
 ```bash
 npx @sv/components use form
@@ -15,27 +16,8 @@ A styles input with error states and label.
     <SomeForm client:load />
   </div>
   <div slot="code">
-    ```tsx
-    <Form form={{
-      rows: [
-        {
-          rowFields: [
-            {
-              defaultValue: "",
-              displayName: "Name",
-              name: "Name",
-              errorMessage: "",
-              handle: "name",
-              instructions: "",
-              name: "name",
-              placeholder: "",
-              required: true,
-              typeName: "Field_SingleLineText"
-            }
-          ]
-        }
-      ]
-    }} />
-    ```
+    <pre>
+    {SomeFormExample}
+    </pre>
   </div>
 </Example>

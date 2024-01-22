@@ -103,9 +103,13 @@ export function SomeForm() {
 					})}
 
 					<div>
-						<Button type="submit" disabled={!!loading()}>
-							<span>{'Submit'}</span>
-							{loading() ? <span class="loading-indicator" /> : ''}
+						<Button type="submit" disabled={!!loading()} class="overflow-hidden">
+							<a-adaptive>
+								<div class="flex gap-2 items-center">
+									<span>{'Submit'}</span>
+									{loading() ? <span class="loading-indicator flex-none" /> : ''}
+								</div>
+							</a-adaptive>
 						</Button>
 					</div>
 				</form>

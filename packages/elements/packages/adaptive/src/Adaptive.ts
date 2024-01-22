@@ -71,7 +71,7 @@ export class AdaptiveElement extends LitElement {
 					},
 				],
 				{
-					duration: 330,
+					duration: 200,
 					easing: 'ease-out',
 				}
 			).finished;
