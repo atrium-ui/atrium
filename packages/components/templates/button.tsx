@@ -30,11 +30,6 @@ export function Button(
 	},
 	context
 ) {
-	const slots = {
-		default: () =>
-			props.children ? props.children : context?.slots?.default ? context?.slots.default() : null,
-	};
-
 	const classes = [
 		'flex gap-2 items-center cursor-pointer disabled:cursor-not-allowed',
 		'px-5 py-1 rounded-lg transition-all active:transition-none',
@@ -50,7 +45,7 @@ export function Button(
 			class={classes}
 			onClick={props.onClick}
 		>
-			<slots.default />
+			{props.children}
 		</button>
 	);
 }

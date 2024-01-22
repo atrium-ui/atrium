@@ -81,3 +81,19 @@ strong {
     font-weight: bolder;
     color: white;
 }
+
+.loading-indicator {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 100%;
+    border: 2px solid currentColor;
+    border-bottom-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -1,5 +1,164 @@
 import { Input } from './input.jsx';
-import { Button } from './button.jsx';
+
+export function FormField(props: {
+	field: {
+		type: string;
+		description?: string;
+		label: string;
+		error?: string;
+		placeholder: string;
+		name: string;
+		required?: boolean;
+		value: string | boolean;
+	};
+}) {
+	const InputField = (props) => {
+		switch (props.type) {
+			case 'text':
+			case 'name':
+				return <Input {...props} />;
+			case 'email':
+				return <Input type="email" {...props} />;
+			case 'textarea':
+				return <Input multiline {...props} />;
+			case 'checkbox':
+				return <Input type="checkbox" {...props} />;
+			case 'date':
+				return <Input type="date" {...props} />;
+			default:
+				return <Input {...props} />;
+		}
+	};
+
+	return (
+		<form-field>
+			<div class={`form-field-${props.field.type}`}>
+				<InputField
+					{...props.field}
+					label={
+						!props.field.description
+							? `${props.field.label} ${props.field.required ? '' : '(optional)'}`
+							: null
+					}
+					id={props.field.name}
+					class={`form-field-input-${props.field.type}`}
+				/>
+
+				{props.field.description ? (
+					<div class="form-field-description">
+						<label for={props.field.name}>{props.field.description}</label>
+					</div>
+				) : null}
+			</div>
+
+			<div class="form-field-error">
+				<form-field-error />
+			</div>
+		</form-field>
+	);
+}
+
+// Elements
+
+declare global {
+	interface HTMLElementTagNameMap {
+		'form-field': FormFieldElement;
+		'form-field-error': FormFieldErrorElement;
+	}
+}
+
+const HTMLElement = globalThis.HTMLElement || class {};
+
+class FormFieldErrorElement extends HTMLElement {
+	onState = (e) => {
+		const field = e.detail as FormFieldElement;
+		const input = field.getInput();
+
+		if (input && field.valid === false) {
+			this.textContent = input.validationMessage;
+		} else {
+			this.textContent = '';
+		}
+	};
+
+	connectedCallback() {
+		const formField = this.closest('form-field');
+		formField?.addEventListener('field-state', this.onState);
+	}
+
+	disconnectedCallback() {
+		const formField = this.closest('form-field');
+		formField?.removeEventListener('field-state', this.onState);
+	}
+}
+
+class FormFieldElement extends HTMLElement {
+	valid = true;
+
+	getInput() {
+		return this.querySelector('input, textarea') as
+			| HTMLInputElement
+			| HTMLTextAreaElement
+			| undefined;
+	}
+
+	getForm() {
+		return this.getInput()?.form;
+	}
+
+	connectedCallback() {
+		this.getForm()?.addEventListener('error', this.handleError as EventListener, true);
+
+		this.addEventListener('invalid', this.invalid, { capture: true });
+		this.addEventListener('change', this.input, { capture: true });
+		this.addEventListener('input', this.input, { capture: true });
+	}
+
+	disconnectedCallback() {
+		this.getForm()?.removeEventListener('error', this.handleError as EventListener, true);
+
+		this.removeEventListener('invalid', this.invalid, { capture: true });
+		this.removeEventListener('change', this.input, { capture: true });
+		this.removeEventListener('input', this.input, { capture: true });
+	}
+
+	invalid = (e: Event) => {
+		e.preventDefault();
+		(e?.target as HTMLInputElement)?.focus();
+
+		this.valid = false;
+
+		this.dispatchEvent(new CustomEvent('field-state', { detail: this }));
+	};
+
+	input = (e: Event) => {
+		const input = this.getInput();
+		input?.setCustomValidity('');
+
+		this.valid = (e?.target as HTMLInputElement)?.reportValidity();
+
+		this.dispatchEvent(new CustomEvent('field-state', { detail: this }));
+	};
+
+	handleError = (e: CustomEvent) => {
+		const input = this.getInput();
+
+		if (input && e.detail.name === input.name) {
+			input.setCustomValidity(e.detail.message[0]);
+			input.focus();
+		}
+
+		this.dispatchEvent(new CustomEvent('field-state', { detail: this }));
+	};
+}
+
+if (customElements.get('form-field-error') === undefined) {
+	customElements.define('form-field-error', FormFieldErrorElement);
+}
+
+if (customElements.get('form-field') === undefined) {
+	customElements.define('form-field', FormFieldElement);
+}
 
 type FormField = {
 	defaultValue: string;
@@ -23,228 +182,6 @@ type FormSpec = {
 	}[];
 	pages: any[];
 };
-
-export function Form(props: {
-	form: FormSpec;
-}) {
-	const renderer = new FormRenderer();
-
-	const state = {
-		error: null,
-		message: null,
-		loading: false,
-	};
-
-	function submit(e) {
-		e.preventDefault();
-		const [fields, variables] = renderer.variables(props.form, new FormData(e.currentTarget));
-		console.log('FORM -> SUBMIT', props.form, fields, variables);
-	}
-
-	return (
-		<div class="form-container">
-			{state.message ? (
-				<FormSuccess />
-			) : (
-				<form class="flex flex-col gap-8" onSubmit={submit}>
-					{renderer.renderRows(props.form.rows).map((row, rowIndex) => {
-						return (
-							<div key={`form_row_${rowIndex}`} class="flex gap-8">
-								{row.map((field, fieldIndex) => {
-									if (field)
-										return (
-											<div key={`form_row_${rowIndex}_field_${fieldIndex}`} class="flex-1">
-												{field.type === 'heading' ? (
-													<div>
-														<h2>{field.label}</h2>
-													</div>
-												) : (
-													<FormField field={field} />
-												)}
-											</div>
-										);
-								})}
-							</div>
-						);
-					})}
-
-					<div>
-						<Button type="submit" disabled={!!state.loading}>
-							<div>
-								<span>{'Submit'}</span>
-								{state.loading ? <span class="loading-indicator" /> : ''}
-							</div>
-						</Button>
-
-						{state.error ? <FormError error={state.error} /> : null}
-					</div>
-				</form>
-			)}
-		</div>
-	);
-}
-
-export function FormSuccess(props) {
-	return (
-		<div>
-			<h2>Geschafft</h2>
-		</div>
-	);
-}
-
-export function FormError(props: { error: Error }) {
-	return (
-		<div>
-			<p>{props.error}</p>
-		</div>
-	);
-}
-
-type FormFieldProps = {
-	type: string;
-	description?: string;
-	label: string;
-	error?: string;
-	placeholder: string;
-	name: string;
-	required?: boolean;
-	value: string | boolean;
-};
-
-export function FormField(props: {
-	field: FormFieldProps;
-}) {
-	const state = {
-		valid: true,
-		error: null,
-	};
-
-	function validationErrorMessage() {
-		if (props.field.required) {
-			const input = this.getInput();
-			if (input.value === '') {
-				return 'Das Feld ist erforderlich.';
-			}
-		}
-
-		return state.error || props.field.error || 'Das Feld ist ungültig.';
-	}
-
-	const InputField = (props) => {
-		switch (props.type) {
-			case 'text':
-			case 'name':
-				return <Input {...props} />;
-			case 'email':
-				return <Input type="email" {...props} />;
-			case 'textarea':
-				return <Input multiline {...props} />;
-			case 'checkbox':
-				return <Input type="checkbox" {...props} />;
-			case 'date':
-				return <Input type="date" {...props} />;
-			default:
-				return <Input {...props} />;
-		}
-	};
-
-	return (
-		<a-form-field>
-			<div class={`form-field-${props.field.type}`}>
-				<InputField
-					{...props.field}
-					label={
-						!props.field.description
-							? `${props.field.label} ${props.field.required ? '' : '(optional)'}`
-							: null
-					}
-					error={'error'}
-					id={props.field.name}
-					class={`form-field-input-${props.field.type}`}
-				/>
-
-				{props.field.description ? (
-					<div class="form-field-description">
-						<label for={props.field.name}>{props.field.description}</label>
-					</div>
-				) : null}
-			</div>
-
-			<div class="form-field-error">
-				{!state.valid ? <span>{validationErrorMessage()}</span> : null}
-			</div>
-		</a-form-field>
-	);
-}
-
-declare global {
-	interface HTMLElementTagNameMap {
-		'a-form-field': FormFieldElement;
-	}
-}
-
-const HTMLElement = globalThis.HTMLElement || class {};
-
-class FormFieldElement extends HTMLElement {
-	valid = true;
-	error = null;
-
-	getInput() {
-		return this.querySelector('input, textarea') as
-			| HTMLInputElement
-			| HTMLTextAreaElement
-			| undefined;
-	}
-
-	getForm() {
-		return this.getInput()?.form;
-	}
-
-	connectedCallback() {
-		this.getForm()?.addEventListener('error', this.handleError as EventListener, true);
-
-		this.addEventListener('invalid', this.invalid, { capture: true });
-		this.addEventListener('change', this.invalid, { capture: true });
-		this.addEventListener('input', this.invalid, { capture: true });
-	}
-
-	disconnectedCallback() {
-		this.getForm()?.removeEventListener('error', this.handleError as EventListener, true);
-
-		this.removeEventListener('invalid', this.invalid, { capture: true });
-		this.removeEventListener('change', this.invalid, { capture: true });
-		this.removeEventListener('input', this.invalid, { capture: true });
-	}
-
-	invalid = (e: Event) => {
-		if (!e.defaultPrevented) {
-			this.valid = false;
-			(e?.target as HTMLInputElement)?.focus();
-		}
-		e.preventDefault();
-	};
-
-	input = (e: Event) => {
-		this.valid = true;
-		this.error = null;
-		(e?.target as HTMLInputElement)?.reportValidity();
-	};
-
-	handleError = (e: CustomEvent) => {
-		const input = this.getInput();
-
-		if (input && e.detail.name === input.name) {
-			this.error = e.detail.message[0];
-			this.valid = false;
-
-			input.focus();
-		}
-	};
-}
-
-if (customElements.get('a-form-field') === undefined) {
-	customElements.define('a-form-field', FormFieldElement);
-}
 
 export class FormRenderer {
 	defaultFieldTypeMap = {
