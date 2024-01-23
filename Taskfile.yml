@@ -2,6 +2,15 @@
 
 version: "3"
 
+includes:
+  docs:
+    taskfile: docs/Taskfile.yml
+    dir: docs
+
+  cli:
+    taskfile: packages/components/Taskfile.yml
+    dir: packages/components
+
 tasks:
   default:
     desc: List available tasks
@@ -10,18 +19,20 @@ tasks:
       - task -l --sort none
 
   setup:
-    desc: Install dependencies
+    desc: Install tools and dependencies
+    run: once
     dir: "{{.TASKFILE_DIR}}"
     sources:
-      - .mise.toml
+      - .rtx.toml
       - "package.json"
       - "pnpm-*.yaml"
       - "**/package.json"
     cmds:
       - mise install 2> /dev/null || true
       - bun install
+      - task: build
 
-  setup:ci:
+  ci:setup:
     dir: "{{.TASKFILE_DIR}}"
     cmds:
       - mise install
@@ -46,7 +57,7 @@ tasks:
   test:
     desc: Run tests on all packages
     dir: "{{.TASKFILE_DIR}}"
-    deps: [build]
+    deps: [cli:build, build]
     cmds:
       - bun x turbo test
 
@@ -67,21 +78,6 @@ tasks:
       - git clean -xdf
       - git tag -d $(git tag -l)
 
-  docs:
-    desc: Start dev server for docs
-    dir: "{{.TASKFILE_DIR}}/docs"
-    deps: [build]
-    cmds:
-      - bun run dev
-
-  docs:build:
-    desc: Builds the docs into the public folder
-    dir: "{{.TASKFILE_DIR}}/docs"
-    deps: [build]
-    cmds:
-      - bun run build
-      - mv dist ../public
-
   version:
     silent: true
     desc: Create a package version
@@ -100,7 +96,7 @@ tasks:
       - task: version
 
   publish:
-    deps: [build]
+    deps: [cli:build, build]
     vars:
       message:
         sh: "git log -1 --pretty=format:%B"

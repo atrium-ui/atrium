@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+tasks:
+  default:
+    desc: Start dev server for docs
+    dir: ./
+    cmds:
+      - bun --bun x astro dev
+
+  build:
+    desc: Builds the docs into the public folder
+    dir: ./
+    cmds:
+      - bun --bun x astro build
+      - mv dist ../public

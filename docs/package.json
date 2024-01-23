@@ -4,10 +4,6 @@
 	"contributors": [],
 	"type": "module",
 	"private": "true",
-	"scripts": {
-		"dev": "bun --bun x astro dev",
-		"build": "bun --bun x astro build"
-	},
 	"dependencies": {
 		"@astrojs/lit": "^3.0.2",
 		"@astrojs/solid-js": "^3.0.2",

@@ -8,6 +8,7 @@
 	"files": {
 		"ignoreUnknown": true,
 		"ignore": [
+			".astro",
 			".mise",
 			"public",
 			"**/dist",

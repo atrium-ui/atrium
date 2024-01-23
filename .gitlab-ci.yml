@@ -27,7 +27,7 @@ before_script:
   - curl https://mise.jdx.dev/install.sh | MISE_INSTALL_PATH=/usr/local/bin/mise sh
   - export PATH=$MISE_DATA_DIR/shims:$PATH
   - sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
-  - task setup:ci
+  - task ci:setup
 
 check:
   stage: check
