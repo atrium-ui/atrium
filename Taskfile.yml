@@ -20,7 +20,7 @@ tasks:
 
   setup:
     desc: Install tools and dependencies
-    run: once
+    run: when_changed
     dir: "{{.TASKFILE_DIR}}"
     sources:
       - .rtx.toml
@@ -30,7 +30,7 @@ tasks:
     cmds:
       - mise install 2> /dev/null || true
       - bun install
-      - task: build
+      - task build
 
   ci:setup:
     dir: "{{.TASKFILE_DIR}}"
