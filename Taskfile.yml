@@ -3,6 +3,12 @@
 version: "3"
 
 tasks:
+  default:
+    desc: List available tasks
+    silent: true
+    cmds:
+      - task -l --sort none
+
   setup:
     desc: Install dependencies
     dir: "{{.TASKFILE_DIR}}"
@@ -32,7 +38,7 @@ tasks:
       - bun x turbo build --filter "./packages/**"
 
   dev:
-    desc: Build all packages
+    desc: Watch-build packages for development
     deps: [setup]
     cmds:
       - bun x turbo dev --filter "./packages/**"

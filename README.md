@@ -37,7 +37,7 @@ All elements share the same dependencies from the packages/elements/package.json
 
 ### Prerequisites
 
-See [./.mise.toml](./.mise.toml) for tools and versions used in this project.
+See [./.rtx.toml](./.rtx.toml) for tools and versions used in this project.
 
 - [task](https://taskfile.dev/)
 - [bun](https://bun.sh/)
@@ -45,7 +45,19 @@ See [./.mise.toml](./.mise.toml) for tools and versions used in this project.
 They can be installed using [mise (formerly rtx)](https://github.com/jdxcode/mise) with `mise install` in the root directory of this project.
 This will also happen automatically when running `task docs` for the first time.
 
+### Quick setup (optional)
+
+```shell
+git clone git@gitlab.s-v.de:sv/sv-frontend-library/mono.git && cd mono && task docs
+```
+
 ### Getting Started
+
+See all available commands:
+
+```shell
+task
+```
 
 Run dev server for docs website:
 
@@ -53,16 +65,19 @@ Run dev server for docs website:
 task docs
 ```
 
-See all available commands:
+### Development with external projects
+
+Watch and build packages:
 
 ```shell
-task -l
+task dev
 ```
 
-### Quick setup
+Install packages from local directory in external project:
 
-```
-git clone git@gitlab.s-v.de:sv-components/mono.git && cd mono && task docs
+```shell
+cd <external_project>
+npm install --save <local_path>/mono/packages/<package_name>
 ```
 
 ### Building elements
