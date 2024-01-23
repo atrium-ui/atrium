@@ -73,7 +73,7 @@ Watch and build packages:
 task dev
 ```
 
-Install packages from local directory in external project:
+Install packages from local mono in external project:
 
 ```shell
 cd <external_project>
