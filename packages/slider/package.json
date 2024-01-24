@@ -1,0 +1,40 @@
+{
+  "name": "@sv/slider",
+  "version": "1.0.14",
+  "description": "slider description",
+  "author": "f.kretschmer@s-v.de",
+  "scripts": {
+    "dev": "vite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.s-v.de:sv/sv-frontend-library/javascripts/plain/slider.git"
+  },
+  "publishConfig": {
+    "@sv:registry": "https://gitlab.s-v.de/api/v4/projects/1443/packages/npm/"
+  },
+  "type": "module",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/plugin-transform-runtime": "^7.23.2",
+    "@babel/preset-env": "^7.23.2",
+    "@babel/runtime": "^7.23.2",
+    "@rollup/plugin-babel": "^6.0.4",
+    "core-js": "^3.33.1",
+    "gsap": "^3.12.2",
+    "lodash-es": "^4.17.21",
+    "rollup-plugin-visualizer": "^5.9.2",
+    "sass": "^1.69.4",
+    "vite": "^4.5.0",
+    "vite-plugin-remove-console": "^2.1.1",
+    "vue-template-compiler": "^2.7.15"
+  },
+  "browserslist": [
+    "defaults",
+    "not dead"
+  ]
+}
