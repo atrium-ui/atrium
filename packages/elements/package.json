@@ -71,6 +71,11 @@
 			"import": "./packages/adaptive/dist/index.js",
 			"require": "./packages/adaptive/dist/index.cjs",
 			"types": "./packages/adaptive/src/index.ts"
+		},
+		"./filter": {
+			"import": "./packages/filter/dist/index.js",
+			"require": "./packages/filter/dist/index.cjs",
+			"types": "./packages/filter/src/index.ts"
 		}
 	},
 	"keywords": [],
