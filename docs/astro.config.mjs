@@ -3,7 +3,6 @@ import solid from '@astrojs/solid-js';
 import starlight from '@astrojs/starlight';
 import tailwind from '@astrojs/tailwind';
 import { defineConfig } from 'astro/config';
-import path from 'path';
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,12 +10,6 @@ export default defineConfig({
 	site: 'https://sv.pages.s-v.de',
 	publicDir: 'static',
 	vite: {
-		resolve: {
-			alias: {
-				'~/': path.resolve(import.meta.dir, './src/'),
-				'@elements/': path.resolve(import.meta.dir, '../packages/elements/packages/'),
-			},
-		},
 		server: {
 			fs: {
 				allow: ['..'],
