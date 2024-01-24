@@ -63,7 +63,7 @@ tasks:
 
   check:
     desc: Run checks on all packages
-    deps: [build]
+    deps: [setup]
     cmds:
       - bun x turbo check
 
