@@ -1,7 +1,17 @@
 ---
+/**
+ * @see https://tsdoc.org/
+ * @see https://github.com/microsoft/tsdoc/blob/26c4bab8efb04bc5d1619585e1f071bcc10cf16a/playground/src/DocHtmlView.tsx#L140
+ */
+
 import { TSDocParser, ParserContext, TSDocTagSyntaxKind, Standardization, TSDocConfiguration } from '@microsoft/tsdoc';
 import jsdocExtractor from "jsdoc-extractor";
 import fs from 'fs';
+import * as tsdoc from '@microsoft/tsdoc';
+import { remark } from 'remark';
+import remarkHtml from 'remark-html';
+import shiki from 'shiki';
+
 
 export interface Props {
   source: string
@@ -12,33 +22,30 @@ const buffer = fs.readFileSync(`../packages/${Astro.props.source}`);
 
 const config = new TSDocConfiguration();
 
-// config.addTagDefinitions([
-// 	{
-// 		tagName: '@example',
-// 		syntaxKind: TSDocTagSyntaxKind.BlockTag,
-// 		standardization: Standardization.None,
-// 	},
-// ]);
+config.addTagDefinitions([
+	{
+		tagName: '@attribute',
+		syntaxKind: TSDocTagSyntaxKind.BlockTag,
+		standardization: Standardization.None,
+		tagNameWithUpperCase: '@ATTRIBUTE',
+		allowMultiple: true,
+	},
+]);
 
-for (const [doc] of jsdocExtractor(buffer)) {
+for (const [doc, start ,end] of jsdocExtractor(buffer)) {
   const tsdocParser: TSDocParser = new TSDocParser(config);
   const parserContext: ParserContext = tsdocParser.parseString(doc.toString());
 
   // Check for any syntax errors
   if (parserContext.log.messages.length > 0) {
-    throw new Error('Syntax error: ' + parserContext.log.messages[0].text);
-  } else {
-    html.push(await _renderDocComment(parserContext.docComment));
+    console.warn('Syntax error: ' + parserContext.log.messages[0].text);
   }
+
+	html.push(await _renderDocComment(parserContext.docComment));
+
+	// Only render the first comment in the file
 	break;
 }
-
-import * as tsdoc from '@microsoft/tsdoc';
-import { remark } from 'remark';
-import remarkHtml from 'remark-html';
-
-// Render code Copyright by Microsoft
-// https://github.com/microsoft/tsdoc/blob/26c4bab8efb04bc5d1619585e1f071bcc10cf16a/playground/src/DocHtmlView.tsx#L140
 
 async function _renderDocComment(docComment: tsdoc.DocComment) {
 	const outputElements = [];
@@ -46,7 +53,6 @@ async function _renderDocComment(docComment: tsdoc.DocComment) {
 	// Summary
 	if (docComment.summarySection) {
 		outputElements.push(`
-			<h2>Summary</h2>
 			${await _renderContainer(docComment.summarySection)}
 		`);
 	}
@@ -76,6 +82,23 @@ async function _renderDocComment(docComment: tsdoc.DocComment) {
 		`);
 	}
 
+	// Attributes
+	const attributesBlocks: tsdoc.DocBlock[] = docComment.customBlocks.filter(
+		(x) => x.blockTag.tagNameWithUpperCase === "@ATTRIBUTE"
+	);
+	for (const block of attributesBlocks) {
+		const txt = (await _renderContainer(block.content)).replace("<p>", "").replace("</p>", "");
+		const preface = txt.split(" ")[0];
+		outputElements.push(`
+			<ul>
+				<li>
+					<code>${preface}</code><span>${txt.split("-")[0].replace(preface, "")}</span>
+					<p>${txt.split("-").slice(1).join(" ")}</p>
+				</li>
+			</ul>
+		`);
+	}
+
 	// Returns
 	if (docComment.returnsBlock) {
 		outputElements.push(`
@@ -97,10 +120,16 @@ async function _renderDocComment(docComment: tsdoc.DocComment) {
 
 	let exampleNumber = 1;
 	for (const exampleBlock of exampleBlocks) {
+		console.log(exampleBlock.content);
+
 		outputElements.push(`
 			<h3 class="doc-heading">${exampleBlocks.length > 1 ? `Example ${exampleNumber}` : 'Example'}</h3>
-			${await _renderContainer(exampleBlock.content)}
 		`);
+
+		for (const node of exampleBlock.content.nodes) {
+			outputElements.push(await _renderDocNode(node, true));
+		}
+
 		++exampleNumber;
 	}
 
@@ -143,7 +172,7 @@ async function _renderContainer(section: tsdoc.DocNodeContainer) {
 	return elements.join('\n');
 }
 
-async function _renderDocNode(node: tsdoc.DocNode) {
+async function _renderDocNode(node: tsdoc.DocNode, escape = false) {
 	switch (node.kind) {
 		case 'CodeSpan':
 			return `<code class="doc-code-span">${(node as tsdoc.DocCodeSpan).code}</code>`;
@@ -151,12 +180,18 @@ async function _renderDocNode(node: tsdoc.DocNode) {
 			return (node as tsdoc.DocErrorText).text;
 		case 'EscapedText':
 			return (node as tsdoc.DocEscapedText).decodedText;
-		case 'FencedCode':
+		case 'FencedCode': {
+			const code = (node as tsdoc.DocFencedCode).code;
 			return `
-				<pre class="doc-fenced-code">
-					<code>${(node as tsdoc.DocFencedCode).code}</code>
-				</pre>
+				<div class="doc-fenced-code">
+					${await shiki
+						.getHighlighter({
+							theme: 'nord'
+						})
+						.then(highlighter => highlighter.codeToHtml(code, { lang: 'js' }))}
+				</div>
 			`;
+		}
 		case 'LinkTag': {
 			const linkTag: tsdoc.DocLinkTag = node as tsdoc.DocLinkTag;
 			if (linkTag.urlDestination) {
@@ -183,7 +218,7 @@ async function _renderDocNode(node: tsdoc.DocNode) {
 		}
 		case 'PlainText': {
 			const text = (node as tsdoc.DocPlainText).text;
-			if (text.startsWith('#')) return;
+			if (text.startsWith('# ')) return;
 			return text;
 		}
 		case 'SoftBreak':

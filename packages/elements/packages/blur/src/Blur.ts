@@ -16,6 +16,23 @@ const scrollLock = new ScrollLock();
  * - A Blur is a wrapper element which can show and hide its children.
  * - It will automatically "blur" (hide) the content, when clicked outside of its children.
  * - Optionally, when the content is shown, scrolling will be locked.
+ *
+ * ## Props
+ *
+ * @attribute enabled (default: false) - Whether the blur is enabled or not.
+ * @attribute scrollLock (default: false) - Whether the blur should lock scrolling when shown.
+ *
+ * @example
+ * ```html
+ * <a-blur>
+ * 	<div>
+ * 		<h1>Modal</h1>
+ * 		<p>Click outside of this modal to close it.</p>
+ * 	</div>
+ * </a-blur>
+ * ```
+ *
+ * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-blur/
  */
 @customElement('a-blur')
 export class Blur extends LitElement {
@@ -32,15 +49,17 @@ export class Blur extends LitElement {
   `;
 
 	/**
+	 * ### enabled
 	 * Whether the blur is enabled or not.
-	 * @default false
+	 * @defaultValue false
 	 */
 	@property({ type: Boolean, reflect: true })
 	public enabled = false;
 
 	/**
+	 * ### scrollLock
 	 * Whether the blur should lock scrolling when shown.
-	 * @default false
+	 * @defaultValue false
 	 */
 	@property({ type: Boolean, reflect: true })
 	public scrollLock = false;
