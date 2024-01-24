@@ -9,7 +9,7 @@ tasks:
     sources:
       - .rtx.toml
     cmds:
-      - mise install 2> /dev/null || true
+      - mise install
 
   build:
     desc: Build all packages

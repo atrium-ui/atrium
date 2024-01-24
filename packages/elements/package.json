@@ -71,15 +71,20 @@
 			"import": "./packages/adaptive/dist/index.js",
 			"require": "./packages/adaptive/dist/index.cjs",
 			"types": "./packages/adaptive/src/index.ts"
+		},
+		"./filter": {
+			"import": "./packages/filter/dist/index.js",
+			"require": "./packages/filter/dist/index.cjs",
+			"types": "./packages/filter/src/index.ts"
 		}
 	},
 	"keywords": [],
 	"license": "ISC",
 	"dependencies": {
-		"@sv/scroll-lock": "^0.1.7",
 		"lit": "^2.5.0"
 	},
 	"peerDependencies": {
+		"@sv/scroll-lock": "^0.1.7",
 		"@rive-app/canvas-single": "^2.7.1"
 	}
 }

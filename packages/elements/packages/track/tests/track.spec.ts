@@ -4,7 +4,7 @@ const NODE_NAME = 'a-track';
 
 describe(NODE_NAME, () => {
 	it('import element', async () => {
-		const { Track } = await import('../dist/index.js');
+		const { Track } = await import('@sv/elements/track');
 		expect(Track).toBeDefined();
 
 		// is defined in custom element registry

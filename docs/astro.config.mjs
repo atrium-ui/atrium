@@ -10,9 +10,9 @@ export default defineConfig({
 	site: 'https://sv.pages.s-v.de',
 	publicDir: 'static',
 	vite: {
-		resolve: {
-			alias: {
-				'~/': '/src/',
+		server: {
+			fs: {
+				allow: ['..'],
 			},
 		},
 	},

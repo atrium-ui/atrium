@@ -1,5 +1,6 @@
 stages:
   - check
+  - build
   - test
   - publish
   - docs
@@ -9,18 +10,6 @@ image: debian:stable
 variables:
   MISE_DATA_DIR: $CI_PROJECT_DIR/.mise
   GIT_PUSH_TOKEN: $GIT_PUSH_TOKEN # A Gitlab access token to push to the repo
-
-cache:
-  - key:
-      files:
-        - pnpm-lock.yaml
-    paths:
-      - .pnpm-store
-  - key:
-      files:
-        - .mise.toml
-    paths:
-      - .mise
 
 before_script:
   - apt update -y && apt install curl git unzip -y
@@ -35,10 +24,18 @@ check:
     - tags
   script: task check
 
-test:
-  stage: test
+build:
+  stage: build
   artifacts:
     untracked: true
+  except:
+    - tags
+  script: task build
+
+test:
+  stage: test
+  dependencies:
+    - build
   except:
     - tags
   script: task test
@@ -51,7 +48,7 @@ format:
 publish:
   stage: publish
   dependencies:
-    - test
+    - build
   rules:
     - if: $CI_COMMIT_MESSAGE =~ "/^publish:/"
       when: never
@@ -62,6 +59,8 @@ publish:
 
 pages:
   stage: docs
+  dependencies:
+    - build
   only:
     - main
     - develop # for preview

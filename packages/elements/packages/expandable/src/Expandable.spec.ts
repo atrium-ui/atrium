@@ -4,7 +4,7 @@ const NODE_NAME = 'a-expandable';
 
 describe(NODE_NAME, () => {
 	it('import element', async () => {
-		const { Expandable } = await import('../dist/index.js');
+		const { Expandable } = await import('@sv/elements/expandable');
 		expect(Expandable).toBeDefined();
 
 		// is defined in custom element registry
