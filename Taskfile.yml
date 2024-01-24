@@ -23,19 +23,17 @@ tasks:
     run: when_changed
     dir: "{{.TASKFILE_DIR}}"
     sources:
-      - .rtx.toml
+      - .mise.toml
       - "package.json"
-      - "pnpm-*.yaml"
       - "**/package.json"
     cmds:
       - mise install
       - bun install
-      - task build
+      - sleep 0.5
 
   ci:setup:
     dir: "{{.TASKFILE_DIR}}"
     cmds:
-      - mise install
       - task: setup
       - git config user.email "gitlab@s-v.de"
       - git config user.name "CI"
