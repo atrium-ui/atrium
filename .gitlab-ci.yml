@@ -11,18 +11,6 @@ variables:
   MISE_DATA_DIR: $CI_PROJECT_DIR/.mise
   GIT_PUSH_TOKEN: $GIT_PUSH_TOKEN # A Gitlab access token to push to the repo
 
-cache:
-  - key:
-      files:
-        - pnpm-lock.yaml
-    paths:
-      - .pnpm-store
-  - key:
-      files:
-        - .mise.toml
-    paths:
-      - .mise
-
 before_script:
   - apt update -y && apt install curl git unzip -y
   - curl https://mise.jdx.dev/install.sh | MISE_INSTALL_PATH=/usr/local/bin/mise sh
