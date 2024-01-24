@@ -1,0 +1,31 @@
+---
+import { TSDocParser, ParserContext } from '@microsoft/tsdoc';
+import jsdocExtractor from "jsdoc-extractor";
+import { _renderDocComment } from "./TSDocView.tsx";
+import fs from 'fs';
+
+export interface Props {
+  title: string
+}
+
+const html: JSX.Element[] = [];
+
+const buffer = fs.readFileSync("../packages/elements/packages/adaptive/src/Adaptive.ts");
+for (const [doc, start, end] of jsdocExtractor(buffer)) {
+  const tsdocParser: TSDocParser = new TSDocParser();
+  const parserContext: ParserContext = tsdocParser.parseString(doc.toString());
+
+  // Check for any syntax errors
+  if (parserContext.log.messages.length > 0) {
+    throw new Error('Syntax error: ' + parserContext.log.messages[0].text);
+  }
+
+  html.push(_renderDocComment(parserContext.docComment));
+}
+---
+
+<div class="ts-docs">
+  {html.map(block => {
+    return <div set:html={block.t} />;
+  })}
+</div>

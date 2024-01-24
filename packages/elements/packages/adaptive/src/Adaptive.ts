@@ -11,6 +11,7 @@ declare global {
  * # a-adaptive
  *
  * Summary
+ *
  * - Inherits the size of its child
  * - Automatically reacts to changes in the child’s size
  * - Animated by default
