@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plain Example</title>
+  </head>
+  <body>
+    <h1>Plain Example</h1>
+
+    <div class="slider" slidesToShow="5" slidesToScroll="3" style="padding: 100px 0; height: 600px;">
+      <div class="slider__region" role="region" aria-label="Image slider" tabindex="0">
+        <ol class="slider__list" role="list">
+          <li class="slider__list-item" data-index="1">
+            <figure><img src="https://via.placeholder.com/250x50"></figure>
+          </li>
+          <li class="slider__list-item" data-index="2">
+            <figure><img src="https://via.placeholder.com/250x75"></figure>
+          </li>
+          <li class="slider__list-item" data-index="3">
+            <figure><img src="https://via.placeholder.com/250x100"></figure>
+          </li>
+          <li class="slider__list-item" data-index="4">
+            <figure><img src="https://via.placeholder.com/250x50"></figure>
+          </li>
+          <li class="slider__list-item" data-index="5">
+            <figure><img src="https://via.placeholder.com/250x50"></figure>
+          </li>
+          <li class="slider__list-item" data-index="6">
+            <figure><img src="https://via.placeholder.com/250x50"></figure>
+          </li>
+          <li class="slider__list-item" data-index="7">
+            <figure><img src="https://via.placeholder.com/250x50"></figure>
+          </li>
+          <li class="slider__list-item" data-index="8">
+            <figure><img src="https://via.placeholder.com/250x50"></figure>
+          </li>
+          <li class="slider__list-item" data-index="9">
+            <figure><img src="https://via.placeholder.com/250x50"></figure>
+          </li>
+        </ol>
+      </div>
+      <div class="slider__arrows">
+        <div class="slider__arrows-item slider__arrows-item--prev">Prev</div>
+        <div class="slider__arrows-item slider__arrows-item--next">Next</div>
+      </div>
+    </div>
+    
+    <script type="module" src="main.js"></script>
+
+    <script>
+      window.addEventListener('load', () => {
+        Array.from(document.getElementsByClassName('slider')).forEach(sliderElement => {
+          const slidesToShow = sliderElement.getAttribute('slidesToShow')
+          const slidesToScroll = sliderElement.getAttribute('slidesToScroll')
+
+          new Slider(sliderElement.getElementsByClassName('slider__list')[0], {
+            arrows: true,
+            autoResize: true,
+            // center: false,
+            // dots: 'dragger',
+            container: sliderElement.getElementsByClassName('slider__region')[0],
+            containerDots: sliderElement.getElementsByClassName('slider__dots')[0],
+            lock: {
+              x: true,
+              y: false,
+            },
+            slidesToScroll: 3, // slidesToScroll,
+            slidesToShow: slidesToShow,
+            overflowScrolling: true,
+            snap: true,
+            variableWidth: false,
+            variableHeight: true,
+            rtl: false,
+            mode: 'vertical',
+            wheel: true,
+
+            responsive: [
+              // {
+              //   breakpoint: 767,
+              //   options: {
+              //     slidesToShow: 2
+              //   }
+              // },
+              {
+                breakpoint: 1440,
+                options: 'disable',
+                type: 'min', // min or max
+              }
+            ],
+
+            //
+
+            onInit: (slider) => {
+              console.log('slider:onInit')
+            },
+            onMove: (event, slider) => {
+              console.log('slider:onMove', event, slider)
+            },
+            onChange: (slider, oldIndex, newIndex) => {
+              console.log('slider:onChange', slider, oldIndex, newIndex)
+            },
+            onComplete: () => {
+              console.log('slider:onComplete')
+            },
+            onStart: (event, slider) => {
+              console.log('slider:onStart', event, slider)
+            },
+            onEnd: (event, slider) => {
+              console.log('slider:onEnd', event, slider)
+            },
+            onTranslate: (x, y, slider) => {
+              console.log('slider:onTranslate', slider.currentIndex, slider)
+            },
+            prevent(event) {
+              return Math.abs(event.deltaY) > 0
+            },
+          })
+        })
+      })
+    </script>
+  </body>
+</html>
