@@ -16,7 +16,7 @@
 
 ## Use in other projects
 
-See [Installation](https://sv.pages.s-v.de/sv-frontend-library/mono/installation/) in the docs for instructions.
+See [Usage](https://sv.pages.s-v.de/sv-frontend-library/mono/usage/) in the docs for instructions.
 
 <br />
 

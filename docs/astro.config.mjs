@@ -36,10 +36,6 @@ export default defineConfig({
 			},
 			sidebar: [
 				{
-					label: 'Installation',
-					link: '/installation',
-				},
-				{
 					label: 'Concept',
 					link: '/concept',
 				},

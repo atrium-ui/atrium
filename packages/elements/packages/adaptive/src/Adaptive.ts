@@ -7,6 +7,16 @@ declare global {
 	}
 }
 
+/**
+ * # a-adaptive
+ *
+ * Summary
+ * - Inherits the size of its child
+ * - Automatically reacts to changes in the child’s size
+ * - Animated by default
+ *
+ * https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-adaptive/
+ */
 export class AdaptiveElement extends LitElement {
 	public static get styles() {
 		return [
