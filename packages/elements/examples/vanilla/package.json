@@ -5,18 +5,19 @@
 	"type": "module",
 	"main": "dist/example.js",
 	"types": "src/index.ts",
-	"scripts": {
-		"build": "tsup"
-	},
 	"author": "",
 	"license": "ISC",
-	"dependencies": {
-		"lit": "^2.5.0"
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch"
 	},
 	"tsup": {
 		"entry": ["src/index.ts"],
-		"format": ["esm"],
-		"external": ["@sv/*"],
+		"format": ["esm", "cjs"],
+		"external": [
+			"@sv/*",
+			"@rive-app/canvas-single"
+		],
 		"sourcemap": true,
 		"clean": true
 	}

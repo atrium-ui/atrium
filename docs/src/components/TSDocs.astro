@@ -1,31 +1,207 @@
 ---
-import { TSDocParser, ParserContext } from '@microsoft/tsdoc';
+import { TSDocParser, ParserContext, TSDocTagSyntaxKind, Standardization, TSDocConfiguration } from '@microsoft/tsdoc';
 import jsdocExtractor from "jsdoc-extractor";
-import { _renderDocComment } from "./TSDocView.tsx";
 import fs from 'fs';
 
 export interface Props {
-  title: string
+  source: string
 }
 
-const html: JSX.Element[] = [];
+const html: any[] = [];
+const buffer = fs.readFileSync(`../packages/${Astro.props.source}`);
 
-const buffer = fs.readFileSync("../packages/elements/packages/adaptive/src/Adaptive.ts");
-for (const [doc, start, end] of jsdocExtractor(buffer)) {
-  const tsdocParser: TSDocParser = new TSDocParser();
+const config = new TSDocConfiguration();
+
+// config.addTagDefinitions([
+// 	{
+// 		tagName: '@example',
+// 		syntaxKind: TSDocTagSyntaxKind.BlockTag,
+// 		standardization: Standardization.None,
+// 	},
+// ]);
+
+for (const [doc] of jsdocExtractor(buffer)) {
+  const tsdocParser: TSDocParser = new TSDocParser(config);
   const parserContext: ParserContext = tsdocParser.parseString(doc.toString());
 
   // Check for any syntax errors
   if (parserContext.log.messages.length > 0) {
     throw new Error('Syntax error: ' + parserContext.log.messages[0].text);
+  } else {
+    html.push(await _renderDocComment(parserContext.docComment));
   }
+	break;
+}
 
-  html.push(_renderDocComment(parserContext.docComment));
+import * as tsdoc from '@microsoft/tsdoc';
+import { remark } from 'remark';
+import remarkHtml from 'remark-html';
+
+// Render code Copyright by Microsoft
+// https://github.com/microsoft/tsdoc/blob/26c4bab8efb04bc5d1619585e1f071bcc10cf16a/playground/src/DocHtmlView.tsx#L140
+
+async function _renderDocComment(docComment: tsdoc.DocComment) {
+	const outputElements = [];
+
+	// Summary
+	if (docComment.summarySection) {
+		outputElements.push(`
+			<h2>Summary</h2>
+			${await _renderContainer(docComment.summarySection)}
+		`);
+	}
+
+	// Parameters
+	if (docComment.params.count > 0) {
+		const rows = [];
+		for (const paramBlock of docComment.params.blocks) {
+			rows.push(`
+				<tr>
+					<td>${paramBlock.parameterName}</td>
+					<td>${await _renderContainer(paramBlock.content)}</td>
+				</tr>
+			`);
+		}
+		outputElements.push(`
+			<h3 class="doc-heading">Parameters</h3>
+				<table class="doc-table">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>${rows}</tbody>
+				</table>
+		`);
+	}
+
+	// Returns
+	if (docComment.returnsBlock) {
+		outputElements.push(`
+			<h3 class="doc-heading">Return Value</h3>
+			${await _renderContainer(docComment.returnsBlock.content)}
+		`);
+	}
+
+	if (docComment.remarksBlock) {
+		outputElements.push(`
+			<h3 class="doc-heading">Remarks</h3>
+			${await _renderContainer(docComment.remarksBlock.content)}
+		`);
+	}
+
+	const exampleBlocks: tsdoc.DocBlock[] = docComment.customBlocks.filter(
+		(x) => x.blockTag.tagNameWithUpperCase === tsdoc.StandardTags.example.tagNameWithUpperCase
+	);
+
+	let exampleNumber = 1;
+	for (const exampleBlock of exampleBlocks) {
+		outputElements.push(`
+			<h3 class="doc-heading">${exampleBlocks.length > 1 ? `Example ${exampleNumber}` : 'Example'}</h3>
+			${await _renderContainer(exampleBlock.content)}
+		`);
+		++exampleNumber;
+	}
+
+  // Ignore see blocks to not render the link to the same doc page again
+  // Example: @see http://localhost:4321/sv-frontend-library/mono/elements/a-adaptive/
+  //               ^ Current page
+  //
+	// if (docComment.seeBlocks.length > 0) {
+	// 	const listItems = [];
+	// 	for (const seeBlock of docComment.seeBlocks) {
+	// 		listItems.push(`<li>${await _renderContainer(seeBlock.content)}</li>`);
+	// 	}
+	// 	outputElements.push(`
+	// 		<h3 class="doc-heading">References</h3>
+	// 		<ul>${listItems.join('')}</ul>
+	// 	`);
+	// }
+
+	const modifierTags: ReadonlyArray<tsdoc.DocBlockTag> = docComment.modifierTagSet.nodes;
+
+	if (modifierTags.length > 0) {
+		const modifierElements = [];
+		for (const modifierTag of modifierTags) {
+			modifierElements.push(`<code class="doc-code-span">${modifierTag.tagName}</code>`);
+		}
+		outputElements.push(`
+			<h3 class="doc-heading">Modifiers</h3>
+			${modifierElements}
+		`);
+	}
+
+	return outputElements.join('\n');
+}
+
+async function _renderContainer(section: tsdoc.DocNodeContainer) {
+	const elements = [];
+	for (const node of section.nodes) {
+		elements.push(await _renderDocNode(node));
+	}
+	return elements.join('\n');
+}
+
+async function _renderDocNode(node: tsdoc.DocNode) {
+	switch (node.kind) {
+		case 'CodeSpan':
+			return `<code class="doc-code-span">${(node as tsdoc.DocCodeSpan).code}</code>`;
+		case 'ErrorText':
+			return (node as tsdoc.DocErrorText).text;
+		case 'EscapedText':
+			return (node as tsdoc.DocEscapedText).decodedText;
+		case 'FencedCode':
+			return `
+				<pre class="doc-fenced-code">
+					<code>${(node as tsdoc.DocFencedCode).code}</code>
+				</pre>
+			`;
+		case 'LinkTag': {
+			const linkTag: tsdoc.DocLinkTag = node as tsdoc.DocLinkTag;
+			if (linkTag.urlDestination) {
+				return `<a href="/">${linkTag.linkText || linkTag.urlDestination}</a>`;
+			}
+			let identifier = '';
+			if (linkTag.codeDestination) {
+				const memberReferences: ReadonlyArray<tsdoc.DocMemberReference> =
+					linkTag.codeDestination.memberReferences;
+				if (memberReferences.length > 0) {
+					const memberIdentifier: tsdoc.DocMemberIdentifier | undefined =
+						memberReferences[memberReferences.length - 1].memberIdentifier;
+					if (memberIdentifier) {
+						identifier = memberIdentifier.identifier;
+					}
+				}
+			}
+			return `<a href="/">${linkTag.linkText || identifier || '???'}</a>`;
+		}
+		case 'Paragraph': {
+			const text: string = await _renderContainer(node as tsdoc.DocParagraph);
+			const html = await remark().use(remarkHtml).process(text);
+			return html.toString();
+		}
+		case 'PlainText': {
+			const text = (node as tsdoc.DocPlainText).text;
+			if (text.startsWith('#')) return;
+			return text;
+		}
+		case 'SoftBreak':
+			return '\n';
+	}
+	return undefined;
 }
 ---
 
-<div class="ts-docs">
-  {html.map(block => {
-    return <div set:html={block.t} />;
-  })}
-</div>
+<div class="ts-docs" set:html={html.join("\n")} />
+
+<style is:global>
+  .ts-docs .doc-heading {
+    font-size: var(--sl-text-h2);
+    font-weight: bold;
+  }
+
+  .ts-docs li p {
+    margin-bottom: 0 !important;
+  }
+</style>

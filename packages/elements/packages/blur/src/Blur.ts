@@ -10,6 +10,13 @@ declare global {
 
 const scrollLock = new ScrollLock();
 
+/**
+ * # a-blur
+ *
+ * - A Blur is a wrapper element which can show and hide its children.
+ * - It will automatically "blur" (hide) the content, when clicked outside of its children.
+ * - Optionally, when the content is shown, scrolling will be locked.
+ */
 @customElement('a-blur')
 export class Blur extends LitElement {
 	public static styles = css`
@@ -24,9 +31,17 @@ export class Blur extends LitElement {
     }
   `;
 
+	/**
+	 * Whether the blur is enabled or not.
+	 * @default false
+	 */
 	@property({ type: Boolean, reflect: true })
 	public enabled = false;
 
+	/**
+	 * Whether the blur should lock scrolling when shown.
+	 * @default false
+	 */
 	@property({ type: Boolean, reflect: true })
 	public scrollLock = false;
 
