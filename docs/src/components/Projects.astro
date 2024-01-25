@@ -4,17 +4,24 @@ import dependents from "../../static/dependents.json";
 // It scrapes the GitLab API for all projects once every month.
 
 const project = dependents["1455"];
+const projects = new Set();
+
+for (const dep of project.dependents) {
+  projects.add(dep.project.gitlabId);
+}
 ---
 
-<div class="dependents">
-  {project.dependents.map((dep: any) => {
+<div class="not-content dependents">
+  {[...projects].map(id => {
+    return project.dependents.find(dep => dep.project.gitlabId === id);
+  }).map((dep: any) => {
     const url = dep.project.web_url;
     const name = dep.project.name;
     const title = dep.project.name_with_namespace;
     const image = dep.project.avatar_url;
 
     return (
-      <div>
+      <div class="project">
         <a href={url} class="avatar" title={title}>
           {image ? <img src={image} /> : name[0]}
         </a>

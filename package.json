@@ -23,9 +23,9 @@
 		"typescript": "^5.3.2"
 	},
 	"workspaces": [
+		"packages/*",
 		"packages/elements/packages/*",
 		"packages/slider/packages/*",
-		"packages/*",
 		"docs"
 	]
 }
