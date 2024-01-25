@@ -5,7 +5,7 @@ stages:
   - publish
   - docs
 
-image: ubuntu:20.04
+image: luckydye/mise:latest
 
 variables:
   MISE_DATA_DIR: $CI_PROJECT_DIR/.mise
@@ -13,8 +13,6 @@ variables:
   GIT_PUSH_TOKEN: $GIT_PUSH_TOKEN # A Gitlab access token to push to the repo
 
 before_script:
-  - apt update -y && apt install -y git curl
-  - curl https://mise.jdx.dev/install.sh | MISE_INSTALL_PATH=/usr/local/bin/mise sh
   - export PATH=$MISE_DATA_DIR/shims:$PATH
   - mise install
   - git config user.email "gitlab@s-v.de"
