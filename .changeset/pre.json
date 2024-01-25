@@ -1,14 +1,11 @@
 {
-  "mode": "pre",
-  "tag": "dev",
-  "initialVersions": {
-    "@sv/components": "0.3.1",
-    "@sv/elements": "0.3.0",
-    "@sv/scroll-lock": "0.1.7",
-    "@sv/slider": "1.0.15",
-    "plain": "1.0.0",
-    "vue2": "1.0.0",
-    "vue3": "1.0.0"
-  },
-  "changesets": []
+	"mode": "pre",
+	"tag": "dev",
+	"initialVersions": {
+		"@sv/components": "0.3.1",
+		"@sv/elements": "0.3.0",
+		"@sv/scroll-lock": "0.1.7",
+		"@sv/slider": "1.0.15"
+	},
+	"changesets": []
 }
