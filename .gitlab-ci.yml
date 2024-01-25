@@ -1,6 +1,6 @@
 stages:
-  - check
   - build
+  - check
   - test
   - publish
   - docs
@@ -21,12 +21,6 @@ before_script:
   - git config user.name "CI"
   - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
 
-check:
-  stage: check
-  except:
-    - tags
-  script: task check
-
 build:
   stage: build
   artifacts:
@@ -34,6 +28,14 @@ build:
   except:
     - tags
   script: task build
+
+check:
+  stage: check
+  dependencies:
+    - build
+  except:
+    - tags
+  script: task check
 
 test:
   stage: test
