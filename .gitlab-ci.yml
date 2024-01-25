@@ -43,6 +43,7 @@ test:
   script: task test
 
 format:
+  stage: check
   only:
     - merge_requests
   script: task format
