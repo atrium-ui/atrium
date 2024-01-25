@@ -1,7 +1,6 @@
 stages:
   - build
   - check
-  - test
   - publish
   - docs
 
@@ -36,7 +35,7 @@ check:
   script: task check
 
 test:
-  stage: test
+  stage: check
   dependencies:
     - build
   except:
