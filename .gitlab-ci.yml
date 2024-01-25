@@ -5,17 +5,14 @@ stages:
   - publish
   - docs
 
-image: debian:stable
+image: jdxcode/mise
 
 variables:
   MISE_DATA_DIR: $CI_PROJECT_DIR/.mise
   GIT_PUSH_TOKEN: $GIT_PUSH_TOKEN # A Gitlab access token to push to the repo
 
 before_script:
-  - apt update -y && apt install curl git unzip -y
-  - curl https://mise.jdx.dev/install.sh | MISE_INSTALL_PATH=/usr/local/bin/mise sh
-  - export PATH=$MISE_DATA_DIR/shims:$PATH
-  - sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
+  - mise install
   - task ci:setup
 
 check:
