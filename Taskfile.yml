@@ -31,15 +31,6 @@ tasks:
       - bun install
       - sleep 0.5
 
-  ci:setup:
-    dir: "{{.TASKFILE_DIR}}"
-    cmds:
-      - task: setup
-      - git config user.email "gitlab@s-v.de"
-      - git config user.name "CI"
-      - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
-      - git tag -d $(git tag -l) # delete all local tags
-
   build:
     desc: Build all packages
     deps: [setup]

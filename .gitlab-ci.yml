@@ -5,15 +5,21 @@ stages:
   - publish
   - docs
 
-image: jdxcode/mise
+image: ubuntu:20.04
 
 variables:
   MISE_DATA_DIR: $CI_PROJECT_DIR/.mise
+  MISE_VERBOSE: 1
   GIT_PUSH_TOKEN: $GIT_PUSH_TOKEN # A Gitlab access token to push to the repo
 
 before_script:
+  - apt update -y && apt install -y git curl
+  - curl https://mise.jdx.dev/install.sh | MISE_INSTALL_PATH=/usr/local/bin/mise sh
+  - export PATH=$MISE_DATA_DIR/shims:$PATH
   - mise install
-  - task ci:setup
+  - git config user.email "gitlab@s-v.de"
+  - git config user.name "CI"
+  - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
 
 check:
   stage: check
