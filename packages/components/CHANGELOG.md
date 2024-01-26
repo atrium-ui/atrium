@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.5.2
+
+### Patch Changes
+
+- 9546326: Dependencies test
+
 ## 0.5.1
 
 ### Patch Changes
