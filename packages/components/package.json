@@ -5,7 +5,8 @@
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
 	"scripts": {
-		"test": "bun test"
+		"test": "bun test",
+		"postinstall": "./install.js"
 	},
 	"bin": "./cli.js",
 	"files": [
