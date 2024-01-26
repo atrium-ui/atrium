@@ -10,7 +10,7 @@
 		},
 		"test": {
 			"cache": true,
-			"outputMode": "errors-only"
+			"outputMode": "new-only"
 		},
 		"check": {
 			"cache": false
