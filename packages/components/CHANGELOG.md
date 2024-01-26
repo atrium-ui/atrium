@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.5.4
+
+### Patch Changes
+
+- 6492a96: Depend on all platforms
+
 ## 0.5.3
 
 ### Patch Changes
