@@ -29,32 +29,31 @@ tasks:
     cmds:
       - mise install
       - bun install
-      - sleep 0.5
 
   build:
     desc: Build all packages
     deps: [setup]
     cmds:
-      - bun x turbo build --filter "./packages/**"
+      - bun x turbo --no-daemon build --filter "./packages/**"
 
   dev:
     desc: Watch-build packages for development
     deps: [setup]
     cmds:
-      - bun x turbo dev --filter "./packages/**"
+      - bun x turbo --no-daemon dev --filter "./packages/**"
 
   test:
     desc: Run tests on all packages
     dir: "{{.TASKFILE_DIR}}"
     deps: [cli:build, build]
     cmds:
-      - bun x turbo test
+      - bun x turbo --no-daemon test
 
   check:
     desc: Run checks on all packages
     deps: [setup]
     cmds:
-      - bun x turbo check
+      - bun x turbo --no-daemon check
 
   fix:
     desc: Apply all (unsafe) autofixes
