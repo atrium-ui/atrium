@@ -1,5 +1,11 @@
 # @sv/components-darwin-x64
 
+## 0.6.1
+
+### Patch Changes
+
+- b650ff0: versions
+
 ## 0.6.0
 
 ### Minor Changes
