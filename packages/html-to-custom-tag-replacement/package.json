@@ -1,6 +1,6 @@
 {
   "name": "@sv/html-to-custom-tag-replacement",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "",
   "author": {
     "name": "f.kretschmer@s-v.de"
@@ -9,14 +9,19 @@
   "module": "dist/index.mjs",
   "scripts": {
     "test": "bun test",
-		"build": "tsup",
-		"dev": "tsup --watch"
-	},
-	"tsup": {
-		"entry": ["src/index.ts"],
-		"format": ["esm", "cjs"],
-		"external": [],
-		"sourcemap": true,
-		"clean": true
-	}
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "tsup": {
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "esm",
+      "cjs"
+    ],
+    "external": [],
+    "sourcemap": true,
+    "clean": true
+  }
 }
