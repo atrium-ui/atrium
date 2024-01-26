@@ -12,7 +12,7 @@ function getExecutable() {
 	return `@sv/components-${plat}-${arc}`;
 }
 
-export function main(args) {
+function main(args) {
 	const binPath = require.resolve(getExecutable());
 	const result = childProcess.spawnSync(binPath, args, {
 		stdio: 'inherit',
@@ -26,3 +26,5 @@ export function main(args) {
 }
 
 if (process.stdout.isTTY) main(process.argv.slice(2));
+
+module.exports = { main };
