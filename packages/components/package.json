@@ -1,7 +1,7 @@
 {
 	"$schema": "https://json.schemastore.org/package",
 	"name": "@sv/components",
-	"version": "0.5.5",
+	"version": "0.6.0",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
 	"scripts": {
@@ -9,16 +9,16 @@
 	},
 	"bin": "./cli.js",
 	"files": [
-    "templates",
-    "./cli.js"
+		"templates",
+		"./cli.js"
 	],
 	"engines": {
 		"node": ">=16"
 	},
-  "optionalDependencies": {
-   	"@sv/components-darwin-arm64": "workspace:0.5.0",
-   	"@sv/components-darwin-x64": "workspace:0.5.0",
-   	"@sv/components-linux-x64": "workspace:0.5.0",
-    "@sv/components-linux-arm64": "workspace:0.5.0"
-   }
+	"optionalDependencies": {
+		"@sv/components-darwin-arm64": "workspace:0.6.0",
+		"@sv/components-darwin-x64": "workspace:0.6.0",
+		"@sv/components-linux-x64": "workspace:0.6.0",
+		"@sv/components-linux-arm64": "workspace:0.6.0"
+	}
 }

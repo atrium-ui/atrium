@@ -1,5 +1,11 @@
 # @sv/components-darwin-arm64
 
+## 0.6.0
+
+### Minor Changes
+
+- 1a0708c: optional dependencies
+
 ## 0.5.0
 
 ### Minor Changes
