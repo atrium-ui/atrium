@@ -18,8 +18,6 @@ const args = process.argv.slice(1);
 async function main() {
 	const components: string[] = [];
 
-	console.error(args);
-
 	const arg = args.filter((arg) => {
 		return availableComponents.includes(arg);
 	});
