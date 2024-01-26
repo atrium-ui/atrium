@@ -1,4 +1,4 @@
-# @sv/components-darwin-aarch64
+# @sv/components-darwin-arm64
 
 ## 0.4.0
 
