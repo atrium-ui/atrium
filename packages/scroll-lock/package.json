@@ -6,6 +6,7 @@
 	"type": "module",
 	"types": "src/index.ts",
 	"scripts": {
+	  "test": "bun test",
 		"check": "tsc --pretty && biome check .",
 		"build": "tsup"
 	},
