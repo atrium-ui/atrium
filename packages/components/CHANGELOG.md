@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.4.2
+
+### Patch Changes
+
+- 88e1b78: Fix cli entrypoint
+
 ## 0.4.1
 
 ### Patch Changes
