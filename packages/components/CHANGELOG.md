@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.5.5
+
+### Patch Changes
+
+- d38663c: Fix typo
+
 ## 0.5.4
 
 ### Patch Changes
