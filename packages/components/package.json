@@ -1,6 +1,6 @@
 {
   "name": "@sv/components",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "author": "t.havlicek@s-v.de",
   "contributors": [],
   "scripts": {
@@ -17,9 +17,15 @@
     "node": ">=16"
   },
   "tsup": {
-    "entry": ["src/cli.ts"],
-    "format": ["esm"],
-    "external": ["@sv/*"],
+    "entry": [
+      "src/cli.ts"
+    ],
+    "format": [
+      "esm"
+    ],
+    "external": [
+      "@sv/*"
+    ],
     "sourcemap": true,
     "clean": true
   },
