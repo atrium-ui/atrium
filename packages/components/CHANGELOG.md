@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.4.1
+
+### Patch Changes
+
+- 867a078: Fix cjs entry
+
 ## 0.4.0
 
 ### Minor Changes
