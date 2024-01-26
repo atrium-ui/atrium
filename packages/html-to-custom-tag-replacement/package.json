@@ -1,0 +1,19 @@
+{
+  "name": "@sv/html-to-custom-tag-replacement",
+  "version": "0.0.6",
+  "description": "",
+  "author": {
+    "name": "f.kretschmer@s-v.de"
+  },
+  "main": "dist/sv-html-to-custom-tag-replacement.cjs.js",
+  "scripts": {
+    "build": "rollit"
+  },
+  "devDependencies": {
+    "rollit": "0.0.9"
+  },
+  "module": "dist/sv-html-to-custom-tag-replacement.es.js",
+  "unpkg": "dist/sv-html-to-custom-tag-replacement.js",
+  "browser": "dist/sv-html-to-custom-tag-replacement.es.js",
+  "license": "ISC"
+}
