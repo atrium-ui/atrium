@@ -1,25 +1,29 @@
 {
-	"$schema": "https://json.schemastore.org/package",
-	"name": "@sv/components",
-	"version": "0.6.1",
-	"author": "t.havlicek@s-v.de",
-	"contributors": [],
-	"scripts": {
-		"test": "bun test",
-		"postinstall": "./install.js"
-	},
-	"bin": "./cli.js",
-	"files": [
-		"templates",
-		"./cli.js"
-	],
-	"engines": {
-		"node": ">=16"
-	},
-	"optionalDependencies": {
-		"@sv/components-darwin-arm64": "0.6.1",
-		"@sv/components-darwin-x64": "0.6.1",
-		"@sv/components-linux-x64": "0.6.1",
-		"@sv/components-linux-arm64": "0.6.1"
-	}
+  "name": "@sv/components",
+  "version": "0.6.1",
+  "author": "t.havlicek@s-v.de",
+  "contributors": [],
+  "scripts": {
+    "test": "bun test"
+  },
+  "type": "module",
+  "main": "./dist/cli.js",
+  "bin": "./dist/cli.js",
+  "files": [
+    "templates",
+    "./dist"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "tsup": {
+    "entry": ["src/cli.ts"],
+    "format": ["esm"],
+    "external": ["@sv/*"],
+    "sourcemap": true,
+    "clean": true
+  },
+  "dependencies": {
+    "enquirer": "^2.4.1"
+  }
 }

@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'bun:test';
+import { $ } from 'bun';
 import fs from 'fs';
 
 describe('cli', () => {
 	it('use button template', async () => {
-		const out = await import('../cli.js').then((m) => m.main(['button']));
-		expect(out.status).toBe(0);
+		const binPath = require.resolve(`@sv/components`);
+
+		const out = await $`${binPath} button`;
+		expect(out.exitCode).toBe(0);
 
 		const dir = fs.readdirSync('./src/components/ui/');
 		expect(dir).toContain('button.tsx');

@@ -1,6 +1,7 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"jsx": "preserve"
+    "target": "ES2022",
+    "jsx": "preserve"
 	}
 }

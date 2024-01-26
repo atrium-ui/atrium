@@ -26,7 +26,6 @@
     "packages/*",
     "packages/elements/packages/*",
     "packages/slider/packages/*",
-    "packages/components/packages/*",
     "docs"
   ]
 }
