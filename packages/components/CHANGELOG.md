@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.5.1
+
+### Patch Changes
+
+- 7ff7562: Add engines to component package.json
+
 ## 0.5.0
 
 ### Minor Changes
