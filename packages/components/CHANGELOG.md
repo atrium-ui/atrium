@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.5.3
+
+### Patch Changes
+
+- b897c76: Put optional dependencies as dependencies
+
 ## 0.5.2
 
 ### Patch Changes
