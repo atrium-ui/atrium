@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.4.0
+
+### Minor Changes
+
+- a3302cd: CLI platform packages
+
 ## 0.3.1
 
 ### Patch Changes
