@@ -13,7 +13,8 @@ function getExecutable() {
 }
 
 export function main(args) {
-	const result = childProcess.spawnSync(require.resolve(getExecutable()), args, {
+	const binPath = require.resolve(getExecutable());
+	const result = childProcess.spawnSync(binPath, args, {
 		stdio: 'inherit',
 		env: {
 			...process.env,

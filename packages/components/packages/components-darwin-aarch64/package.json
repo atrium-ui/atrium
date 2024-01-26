@@ -4,5 +4,8 @@
   "os": ["darwin"],
   "cpu": ["aarch64"],
   "main": "./components-darwin-aarch64",
+  "bin": {
+    "components": "./components-darwin-aarch64"
+  },
   "files": ["./components-darwin-aarch64"]
 }
