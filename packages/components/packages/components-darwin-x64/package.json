@@ -1,6 +1,9 @@
 {
   "name": "@sv/components-darwin-x64",
   "version": "0.5.0",
+  "engines": {
+		"node": ">=16"
+	},
   "os": [
     "darwin"
   ],
@@ -8,9 +11,6 @@
     "x64"
   ],
   "main": "./components-darwin-x64",
-  "bin": {
-    "components": "./components-darwin-x64"
-  },
   "files": [
     "./components-darwin-x64"
   ]

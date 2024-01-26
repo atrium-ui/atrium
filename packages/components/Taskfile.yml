@@ -17,4 +17,5 @@ tasks:
     cmds:
       - GOOS=darwin GOARCH=arm64 go build -ldflags='-s -w' -o ./packages/components-darwin-arm64/components-darwin-arm64 ./src/cli
       - GOOS=darwin GOARCH=amd64 go build -ldflags='-s -w' -o ./packages/components-darwin-x64/components-darwin-x64 ./src/cli
+      - GOOS=linux GOARCH=arm64 go build -ldflags='-s -w' -o ./packages/components-linux-arm64/components-linux-arm64 ./src/cli
       - GOOS=linux GOARCH=amd64 go build -ldflags='-s -w' -o ./packages/components-linux-x64/components-linux-x64 ./src/cli

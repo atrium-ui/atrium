@@ -1,5 +1,5 @@
 {
-  "name": "@sv/components-linux-x64",
+  "name": "@sv/components-linux-arm64",
   "version": "0.5.0",
   "engines": {
 		"node": ">=16"
@@ -8,10 +8,10 @@
     "linux"
   ],
   "cpu": [
-    "x64"
+    "arm64"
   ],
-  "main": "./components-linux-x64",
+  "main": "./components-linux-arm64",
   "files": [
-    "./components-linux-x64"
+    "./components-linux-arm64"
   ]
 }
