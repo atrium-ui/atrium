@@ -5,15 +5,18 @@
   "author": {
     "name": "f.kretschmer@s-v.de"
   },
-  "main": "dist/sv-html-to-custom-tag-replacement.cjs.js",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "scripts": {
-    "build": "rollit"
-  },
-  "devDependencies": {
-    "rollit": "0.0.9"
-  },
-  "module": "dist/sv-html-to-custom-tag-replacement.es.js",
-  "unpkg": "dist/sv-html-to-custom-tag-replacement.js",
-  "browser": "dist/sv-html-to-custom-tag-replacement.es.js",
-  "license": "ISC"
+    "test": "bun test",
+		"build": "tsup",
+		"dev": "tsup --watch"
+	},
+	"tsup": {
+		"entry": ["src/index.ts"],
+		"format": ["esm", "cjs"],
+		"external": [],
+		"sourcemap": true,
+		"clean": true
+	}
 }
