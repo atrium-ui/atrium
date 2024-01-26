@@ -1,6 +1,6 @@
 {
 	"name": "@sv/components",
-	"version": "0.4.2",
+	"version": "0.5.0",
 	"author": "t.havlicek@s-v.de",
 	"contributors": [],
 	"scripts": {
@@ -12,8 +12,8 @@
 		"./cli.js"
 	],
 	"optionalDependencies": {
-		"@sv/components-darwin-arm64": "0.4.0",
-		"@sv/components-darwin-x64": "0.4.0",
-		"@sv/components-linux-x64": "0.4.0"
+		"@sv/components-darwin-arm64": "0.5.0",
+		"@sv/components-darwin-x64": "0.5.0",
+		"@sv/components-linux-x64": "0.5.0"
 	}
 }
