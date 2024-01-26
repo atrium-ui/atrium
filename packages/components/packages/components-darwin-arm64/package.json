@@ -1,0 +1,17 @@
+{
+  "name": "@sv/components-darwin-arm64",
+  "version": "0.4.0",
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "main": "./components-darwin-arm64",
+  "bin": {
+    "components": "./components-darwin-arm64"
+  },
+  "files": [
+    "./components-darwin-arm64"
+  ]
+}
