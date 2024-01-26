@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import childProcess from 'child_process';
-import { arch, platform } from 'os';
+const childProcess = require('child_process');
+const { arch, platform } = require('os');
 
 function getExecutable() {
 	const plat = platform();
