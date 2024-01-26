@@ -1,0 +1,8 @@
+{
+  "name": "@sv/components-darwin-x64",
+  "version": "0.3.1",
+  "os": ["darwin"],
+  "cpu": ["x64"],
+  "main": "./components-darwin-x64",
+  "files": ["./components-darwin-x64"]
+}

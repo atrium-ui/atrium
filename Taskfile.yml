@@ -29,7 +29,6 @@ tasks:
     cmds:
       - mise install
       - bun install
-      - sleep 0.5
 
   build:
     desc: Build all packages

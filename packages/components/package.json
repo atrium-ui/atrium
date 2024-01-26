@@ -4,13 +4,17 @@
 	"author": "t.havlicek@s-v.de",
 	"type": "module",
 	"contributors": [],
-	"bin": "./cli.js",
 	"scripts": {
 		"test": "bun test"
 	},
+	"bin": "./cli.js",
 	"files": [
-		"dist",
 		"templates",
-		"./use.js"
-	]
+		"./cli.js"
+	],
+	"optionalDependencies": {
+    "@sv/components-darwin-aarch64": "0.3.1",
+    "@sv/components-darwin-x64": "0.3.1",
+    "@sv/components-linux-x64": "0.3.1"
+	}
 }

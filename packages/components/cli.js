@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
 import childProcess from 'child_process';
-import path from 'path';
 import { arch, platform } from 'os';
-import url from 'url';
 
 function getExecutable() {
 	const plat = platform();
@@ -11,15 +9,15 @@ function getExecutable() {
 	let arc = arch();
 	if (arc === 'arm64') arc = 'aarch64';
 
-	return path.resolve(
-		path.dirname(url.fileURLToPath(import.meta.url)),
-		`./dist/${arc}-${plat}/components`
-	);
+	return `@sv/components-${plat}-${arc}`;
 }
 
 export function main(args) {
-	const result = childProcess.spawnSync(getExecutable(), args, {
+	const result = childProcess.spawnSync(require.resolve(getExecutable()), args, {
 		stdio: 'inherit',
+		env: {
+			...process.env,
+		},
 	});
 
 	if (result.status !== 0) throw new Error(result.error);

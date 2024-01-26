@@ -1,0 +1,8 @@
+{
+  "name": "@sv/components-linux-x64",
+  "version": "0.3.1",
+  "os": ["linux"],
+  "cpu": ["x64"],
+  "main": "./components-linux-x64",
+  "files": ["./components-linux-x64"]
+}
