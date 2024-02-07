@@ -13,17 +13,15 @@ A sheet is basically a burger menu. Composed of a-blur.
 
 <Example title="Example">
   <div slot="preview">
-      <div onclick="document.querySelector('a-blur').enabled = false">
-        <Button>Close</Button>
-      </div>
-
-    <div onclick="document.querySelector('a-blur').enabled = true">
-      <Button>Open</Button>
+    <div onclick="document.querySelector('a-blur').enabled = false">
+      <Button>Click</Button>
     </div>
   </div>
   <div slot="code">
     ```tsx
-
+      <div onclick="document.querySelector('a-blur').enabled = false">
+        <Button>Click</Button>
+      </div>
     ```
   </div>
 </Example>
