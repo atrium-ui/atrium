@@ -1,0 +1,30 @@
+---
+title: Toast
+---
+import Example from "../../../components/Example.astro";
+import { Button } from "@sv/components/templates/button.tsx";
+
+```bash
+npx @sv/components toast
+```
+
+A sheet is basically a burger menu. Composed of a-blur.
+
+
+<Example title="Example">
+  <div slot="preview">
+      <div onclick="document.querySelector('a-blur').enabled = false">
+        <Button>Close</Button>
+      </div>
+
+    <div onclick="document.querySelector('a-blur').enabled = true">
+      <Button>Open</Button>
+    </div>
+  </div>
+  <div slot="code">
+    ```tsx
+
+    ```
+  </div>
+</Example>
+

@@ -120,7 +120,6 @@ async function _renderDocComment(docComment: tsdoc.DocComment) {
 
 	let exampleNumber = 1;
 	for (const exampleBlock of exampleBlocks) {
-		console.log(exampleBlock.content);
 
 		outputElements.push(`
 			<h3 class="doc-heading">${exampleBlocks.length > 1 ? `Example ${exampleNumber}` : 'Example'}</h3>
