@@ -57,7 +57,7 @@ export class ToastFeed extends LitElement {
 
 const log: Toast[] = [];
 
-export class Notifications {
+export class Toasts {
 	private static push(notification: Toast) {
 		const feed = ToastFeed.getInstance();
 		if (feed) {
@@ -68,7 +68,7 @@ export class Notifications {
 	}
 
 	static info(message: string) {
-		Notifications.push(
+		Toasts.push(
 			new Toast({
 				message: `${message}`,
 				time: 3000,
@@ -77,7 +77,7 @@ export class Notifications {
 	}
 
 	static error(message: string) {
-		Notifications.push(
+		Toasts.push(
 			new ToastError({
 				message: `Error: ${message}`,
 				time: 3000,
