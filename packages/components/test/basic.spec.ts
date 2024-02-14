@@ -4,7 +4,7 @@ import fs from 'fs';
 
 describe('cli', () => {
 	it('use button template', async () => {
-		const binPath = require.resolve(`@sv/components`);
+		const binPath = require.resolve('@sv/components');
 
 		const out = await $`${binPath} button`;
 		expect(out.exitCode).toBe(0);

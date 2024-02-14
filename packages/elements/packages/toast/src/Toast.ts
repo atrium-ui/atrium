@@ -57,6 +57,7 @@ export class ToastFeed extends LitElement {
 
 const log: Toast[] = [];
 
+// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 export class Notifications {
 	private static push(notification: Toast) {
 		const feed = ToastFeed.getInstance();

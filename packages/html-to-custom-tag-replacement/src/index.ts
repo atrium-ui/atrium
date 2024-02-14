@@ -21,7 +21,7 @@ class HtmlToCustomTagReplacement {
 
 		// fix self closing elements with missing closing tag (slash)
 		let result = string.replace(
-			new RegExp('(<([h|b]r|img|link).*?)\\s*[\\/]?>', 'gmi'), // eslint-disable-line
+			/(<([h|b]r|img|link).*?)\s*[\/]?>/gim, // eslint-disable-line
 			'$1 />'
 		);
 
@@ -36,19 +36,19 @@ class HtmlToCustomTagReplacement {
 					: `<${fromTag[0]}(\\/)?.*?>(?:.*<\\/${fromTag[0]}>)?`,
 				'gmi'
 			), // eslint-disable-line
-			function (match) {
+			(match) => {
 				// replace tag
 				let resultTag = match.replace(
 					new RegExp(`<(\/)?${fromTag[0]}(>)?`, 'gi'), // eslint-disable-line
-					function (_match, slash, bracket) {
+					(_match, slash, bracket) => {
 						return `<${slash || ''}${toTag}${bracket || ''}`; // <TAG... or <TAG> or </TAG>
 					}
 				);
 
 				// add additional attributes
 				resultTag = resultTag.replace(
-					new RegExp('(<?(?:<.*?).*?)\\s*([\\/]?>(?:.*>)?)', 'gi'), // eslint-disable-line
-					function (_match, openingTag, closingTag) {
+					/(<?(?:<.*?).*?)\s*([\/]?>(?:.*>)?)/gi, // eslint-disable-line
+					(_match, openingTag, closingTag) => {
 						const additionalAttributesString = Object.keys(additionalAttributes).map(
 							(additionalAttribute) => {
 								return `${additionalAttribute}="${additionalAttributes[additionalAttribute]}"`;
