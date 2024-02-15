@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.2.1
+
+### Patch Changes
+
+- dcab714: Ignore .nuxt directories
+
 ## 0.2.0
 
 ### Minor Changes
