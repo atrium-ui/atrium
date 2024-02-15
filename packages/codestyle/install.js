@@ -15,6 +15,8 @@ if (!root_package) {
 
 	root_package = path.resolve('../../package.json');
 
+	if (DEBUG) console.debug('ENV:', process.env);
+	if (DEBUG) console.debug('CWD:', process.cwd());
 	if (DEBUG) console.debug('Parent package:', root_package);
 
 	if (!fs.existsSync(root_package)) {
