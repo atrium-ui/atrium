@@ -9,9 +9,9 @@ export function ImageText(props: Props) {
 			<div class="col-span-10 md:col-span-6 lg:col-span-7 xl:col-span-5">
 				<h3 class="text-4xl pb-6">Image Text</h3>
 				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas asperiores, quisquam,
-					voluptates, voluptatum quibusdam accusantium quos voluptatem quia doloribus quidem
-					provident. Quisquam, voluptatem. Quisquam, voluptatem.
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas asperiores,
+					quisquam, voluptates, voluptatum quibusdam accusantium quos voluptatem quia
+					doloribus quidem provident. Quisquam, voluptatem. Quisquam, voluptatem.
 				</p>
 
 				<div class="pt-10">

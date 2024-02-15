@@ -46,7 +46,9 @@ const scale = (number, inMin, inMax, outMin, outMax) =>
 	((number - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 
 const closest = (arr, num) =>
-	arr.reduce((prev, current) => (Math.abs(current - num) <= Math.abs(prev - num) ? current : prev));
+	arr.reduce((prev, current) =>
+		Math.abs(current - num) <= Math.abs(prev - num) ? current : prev
+	);
 
 const closestPrevNext = (array, currentValue) => {
 	if (array.length === 0) return null;

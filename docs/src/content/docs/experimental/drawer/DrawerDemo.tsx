@@ -1,5 +1,5 @@
-import { Button } from '@sv/components/templates/button.tsx';
-import { Drawer } from '@sv/components/templates/drawer.tsx';
+import { Button } from '@sv/components/templates/button.jsx';
+import { Drawer } from '@sv/components/templates/drawer.jsx';
 import { createSignal } from 'solid-js';
 import { paragraph } from 'txtgen';
 import '@sv/elements/adaptive';

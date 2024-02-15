@@ -375,10 +375,12 @@ export class Track extends LitElement {
 			} else {
 				if (this.vertical) {
 					const pos = this.position.y + e.deltaY;
-					this.inputForce.y = Math.max(Math.min(pos, this.overflowHeight), 0) - this.position.y;
+					this.inputForce.y =
+						Math.max(Math.min(pos, this.overflowHeight), 0) - this.position.y;
 				} else {
 					const pos = this.position.x + e.deltaX;
-					this.inputForce.x = Math.max(Math.min(pos, this.overflowWidth), 0) - this.position.x;
+					this.inputForce.x =
+						Math.max(Math.min(pos, this.overflowWidth), 0) - this.position.x;
 				}
 			}
 
@@ -539,7 +541,10 @@ export class Track extends LitElement {
 			if (currItem !== this.currentItem) {
 				this.currentItem = currItem;
 				this.dispatchEvent(
-					new CustomEvent<number | string>('change', { detail: this.value, bubbles: true })
+					new CustomEvent<number | string>('change', {
+						detail: this.value,
+						bubbles: true,
+					})
 				);
 
 				let i = 0;

@@ -1,50 +1,12 @@
 {
 	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-	"vcs": {
-		"clientKind": "git",
-		"enabled": true,
-		"defaultBranch": "develop"
-	},
+	"extends": [
+		"./packages/codestyle/biome.json"
+	],
 	"files": {
-		"ignoreUnknown": true,
 		"ignore": [
-			".astro",
-			".mise",
-			"public",
-			"**/dist",
-			"**/.astro"
+			"./packages/slider/src",
+			"./packages/html-to-custom-tag-replacement/src"
 		]
-	},
-	"organizeImports": {
-		"enabled": false
-	},
-	"formatter": {
-		"enabled": true,
-		"indentWidth": 2,
-		"lineWidth": 100,
-		"indentStyle": "tab",
-		"formatWithErrors": true
-	},
-	"linter": {
-		"rules": {
-			"recommended": true,
-			"a11y": {
-				"useKeyWithClickEvents": "off"
-			}
-		}
-	},
-	"javascript": {
-		"formatter": {
-			"quoteStyle": "single",
-			"semicolons": "always",
-			"trailingComma": "es5",
-			"quoteProperties": "asNeeded",
-			"jsxQuoteStyle": "double"
-		}
-	},
-	"json": {
-		"formatter": {
-			"lineWidth": 30
-		}
 	}
 }

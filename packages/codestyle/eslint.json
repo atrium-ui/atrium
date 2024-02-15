@@ -1,0 +1,91 @@
+{
+	"parser": "@babel/eslint-parser",
+	"extends": "eslint:recommended",
+	"env": {
+		"browser": true,
+		"es6": true,
+		"node": true
+	},
+	"parserOptions": {
+		"requireConfigFile": false,
+		"babelOptions": {
+			"configFile": "./.babelrc"
+		},
+		"ecmaVersion": 2020,
+		"sourceType": "module"
+	},
+	"rules": {
+		"indent": [
+			"error",
+			4,
+			{
+				"SwitchCase": 1
+			}
+		],
+		"eqeqeq": [
+			"error",
+			"always"
+		],
+		"no-trailing-spaces": "error",
+		"no-multiple-empty-lines": [
+			"error",
+			{
+				"max": 1,
+				"maxEOF": 1
+			}
+		],
+		"keyword-spacing": [
+			"error",
+			{
+				"before": true,
+				"after": true
+			}
+		],
+		"arrow-spacing": [
+			"error",
+			{
+				"before": true,
+				"after": true
+			}
+		],
+		"brace-style": [
+			"error",
+			"1tbs",
+			{
+				"allowSingleLine": true
+			}
+		],
+		"space-in-parens": [
+			"error",
+			"never"
+		],
+		"array-bracket-spacing": [
+			"error",
+			"never"
+		],
+		"space-before-blocks": [
+			"error",
+			"always"
+		],
+		"no-var": "warn",
+		"prefer-const": "warn",
+		"prefer-arrow-callback": "warn",
+		"curly": ["error", "all"],
+		"linebreak-style": [
+			"error",
+			"unix"
+		],
+		"quotes": [
+			"error",
+			"single"
+		],
+		"semi": [
+			"error",
+			"never"
+		],
+		"no-unused-vars": [
+			"warn"
+		],
+		"no-console": ["warn"]
+	}
+}

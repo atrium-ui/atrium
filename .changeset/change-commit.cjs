@@ -5,7 +5,9 @@ module.exports = {
 	async getVersionMessage(releasePlan) {
 		return `publish: ${releasePlan.releases.length} packages
 
-${releasePlan.releases.map((release) => `- ${release.name}@${release.newVersion}`).join('\n')}
+${releasePlan.releases
+	.map((release) => `- ${release.name}@${release.newVersion}`)
+	.join('\n')}
 `;
 	},
 };

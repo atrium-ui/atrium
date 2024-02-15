@@ -51,7 +51,9 @@ export function Button(
 }
 
 const linkVariants = {
-	default: ['filter hover:brightness-110 active:brightness-90 active:contrast-125'].join(' '),
+	default: ['filter hover:brightness-110 active:brightness-90 active:contrast-125'].join(
+		' '
+	),
 	button: [
 		'text-white no-underline px-5 py-1 rounded-lg',
 		'bg-[var(--button-color,#C09278)]',
@@ -79,7 +81,11 @@ export function Link(
 ) {
 	const slots = {
 		default: () =>
-			props.children ? props.children : context?.slots?.default ? context?.slots.default() : null,
+			props.children
+				? props.children
+				: context?.slots?.default
+				  ? context?.slots.default()
+				  : null,
 	};
 
 	const classes = [

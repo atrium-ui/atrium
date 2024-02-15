@@ -237,7 +237,10 @@ export class Dropdown extends LitElement {
 	}
 
 	private getValueOfOption(optionElement: OptionElement) {
-		return optionElement.getAttribute('value') || this.options.indexOf(optionElement).toString();
+		return (
+			optionElement.getAttribute('value') ||
+			this.options.indexOf(optionElement).toString()
+		);
 	}
 
 	private getOptionByValue(value: string | undefined) {

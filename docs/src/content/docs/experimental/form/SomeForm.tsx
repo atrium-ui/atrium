@@ -1,5 +1,5 @@
-import { Button } from '@sv/components/templates/button.tsx';
-import { FormField, FormRenderer } from '@sv/components/templates/form.tsx';
+import { Button } from '@sv/components/templates/button.jsx';
+import { FormField, FormRenderer } from '@sv/components/templates/form.jsx';
 import { createSignal } from 'solid-js';
 import '@sv/elements/adaptive';
 
@@ -69,7 +69,10 @@ export function SomeForm() {
 					onSubmit={(e) => {
 						e.preventDefault();
 
-						const [fields, variables] = renderer.variables(formSpec, new FormData(e.currentTarget));
+						const [fields, variables] = renderer.variables(
+							formSpec,
+							new FormData(e.currentTarget)
+						);
 
 						console.log('FORM -> SUBMIT', fields, variables);
 
@@ -87,7 +90,10 @@ export function SomeForm() {
 								{row.map((field, fieldIndex) => {
 									if (field)
 										return (
-											<div key={`form_row_${rowIndex}_field_${fieldIndex}`} class="flex-1">
+											<div
+												key={`form_row_${rowIndex}_field_${fieldIndex}`}
+												class="flex-1"
+											>
 												{field.type === 'heading' ? (
 													<div>
 														<h2>{field.label}</h2>

@@ -123,7 +123,8 @@ export class Range extends LitElement {
 	protected onMouseMove(e: MouseEvent): void {
 		if (this.dragging) {
 			const deltaPixels = (e.x - this.dragStartPosition) / window.devicePixelRatio;
-			const deltaProgress = (deltaPixels / this.progressElement.clientWidth) * devicePixelRatio;
+			const deltaProgress =
+				(deltaPixels / this.progressElement.clientWidth) * devicePixelRatio;
 
 			const progress = Math.min(1, Math.max(this.lastProgress + deltaProgress, 0));
 

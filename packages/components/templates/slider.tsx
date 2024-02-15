@@ -17,7 +17,11 @@ function Dot() {
 export function Slider(props: Props, context) {
 	const slots = {
 		default: () =>
-			props.children ? props.children : context?.slots?.default ? context?.slots.default() : null,
+			props.children
+				? props.children
+				: context?.slots?.default
+				  ? context?.slots.default()
+				  : null,
 	};
 
 	return (

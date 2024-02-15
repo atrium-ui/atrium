@@ -80,7 +80,10 @@ class SliderDots {
 				this.container.parentNode.appendChild(this.containerDots);
 			}
 
-			if (this.containerDots.children.length - 1 !== this.children.length - slidesToShow) {
+			if (
+				this.containerDots.children.length - 1 !==
+				this.children.length - slidesToShow
+			) {
 				this.containerDots.innerHTML = '';
 
 				if (this.children.length - slidesToShow > 0) {
@@ -92,7 +95,8 @@ class SliderDots {
 									dot.classList.add('slider__dots-item');
 									dot.innerHTML = index + 1;
 									dot.addEventListener('click', () => this.goToIndex(index), false);
-									if (index === this.currentIndex) dot.classList.add('slider__dots-item--current');
+									if (index === this.currentIndex)
+										dot.classList.add('slider__dots-item--current');
 
 									this.containerDots.append(dot);
 								}
