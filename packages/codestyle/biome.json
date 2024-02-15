@@ -1,5 +1,5 @@
 {
-	"$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
 	"vcs": {
 		"clientKind": "git",
 		"enabled": true,
@@ -42,9 +42,9 @@
 	},
 	"javascript": {
 		"formatter": {
-			"quoteStyle": "single",
+			"quoteStyle": "double",
 			"semicolons": "always",
-			"trailingComma": "es5",
+			"trailingComma": "all",
 			"quoteProperties": "asNeeded",
 			"jsxQuoteStyle": "double"
 		}
