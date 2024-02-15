@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.2.0
+
+### Minor Changes
+
+- 0bede82: JavaScript style double quotes
+
 ## 0.1.8
 
 ### Patch Changes
