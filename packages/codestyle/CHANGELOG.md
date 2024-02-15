@@ -1,5 +1,12 @@
 # @sv/codestyle
 
+## 0.1.2
+
+### Patch Changes
+
+- e90dcd5: useIgnoreFile set to true
+- 4a1ab70: added postinstall script to copy editorconfig
+
 ## 0.1.1
 
 ### Patch Changes
