@@ -72,9 +72,6 @@ tasks:
     silent: true
     desc: Create a package version
     dir: "{{.TASKFILE_DIR}}"
-    preconditions:
-      - sh: git diff --exit-code
-        msg: "Git working tree is must be clean."
     cmds:
       - bun x changeset add
 
