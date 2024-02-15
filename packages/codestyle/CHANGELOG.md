@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.1.8
+
+### Patch Changes
+
+- af61215: Fix install script errors
+
 ## 0.1.7
 
 ### Patch Changes
