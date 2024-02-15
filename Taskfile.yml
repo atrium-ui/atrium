@@ -104,6 +104,7 @@ tasks:
 
   notify:
     silent: true
+    dir: "./"
     cmds:
       - bun ./scripts/generate-notify > .task/notify.txt
       - defer: rm .task/notify.txt
