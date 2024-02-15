@@ -16,6 +16,9 @@
 			"dist"
 		]
 	},
+	"organizeImports": {
+		"enabled": false
+	},
 	"formatter": {
 		"enabled": true,
 		"indentWidth": 2,
@@ -24,10 +27,8 @@
 		"formatWithErrors": true,
 		"lineEnding": "lf"
 	},
-	"organizeImports": {
-		"enabled": false
-	},
 	"linter": {
+		"enabled": true,
 		"rules": {
 			"recommended": true,
 			"a11y": {

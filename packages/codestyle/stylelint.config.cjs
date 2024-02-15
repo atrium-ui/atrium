@@ -1,10 +1,5 @@
 module.exports = {
-	extends: [
-		'stylelint-config-standard-scss',
-		'stylelint-config-recommended-vue',
-		'stylelint-config-prettier',
-	],
-	// processors: ['stylelint-processor-arbitrary-tags'],
+	extends: ['stylelint-config-standard-scss', 'stylelint-config-prettier'],
 	rules: {
 		'at-rule-no-unknown': null,
 		'block-closing-brace-newline-after': 'always-single-line',
@@ -18,9 +13,7 @@ module.exports = {
 		'no-empty-source': null,
 		'no-eol-whitespace': true,
 		'no-extra-semicolons': true,
-		// 'no-invalid-double-slash-comments': null,
 		'no-missing-end-of-source-newline': true,
-		// 'rule-empty-line-before': 'always',
 		'scss/at-rule-no-unknown': true,
 		'scss/double-slash-comment-empty-line-before': null,
 		'selector-class-pattern': null,
