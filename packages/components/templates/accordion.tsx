@@ -52,7 +52,11 @@ function ExpandIcon() {
 export function Accordion(props: Props, context) {
 	const slots = {
 		default: () =>
-			props.children ? props.children : context?.slots?.default ? context?.slots.default() : null,
+			props.children
+				? props.children
+				: context?.slots?.default
+				  ? context?.slots.default()
+				  : null,
 	};
 
 	return (
@@ -68,13 +72,20 @@ Accordion.Item = function AccordionItem(
 ) {
 	const slots = {
 		default: () =>
-			props.children ? props.children : context?.slots?.default ? context?.slots.default() : null,
+			props.children
+				? props.children
+				: context?.slots?.default
+				  ? context?.slots.default()
+				  : null,
 	};
 
 	return (
 		<li class="list-none">
 			<a-expandable class="group rounded-lg border border-[#C09278] mb-2">
-				<div slot="toggle" class="px-6 py-2 flex justify-between items-center cursor-pointer">
+				<div
+					slot="toggle"
+					class="px-6 py-2 flex justify-between items-center cursor-pointer"
+				>
 					<div class="text-white">
 						<span>{props.title}</span>
 					</div>

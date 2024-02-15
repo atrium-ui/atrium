@@ -134,7 +134,9 @@ export class Pager extends LitElement {
 		return html`
       <div class="pagination c4">
         <button
-          class=${`pagination__arrow ${+this.current > 1 ? 'pagination__arrow--shown' : ''}`}
+          class=${`pagination__arrow ${
+						+this.current > 1 ? 'pagination__arrow--shown' : ''
+					}`}
           @click=${() => this.prevPage()}
         >
           <slot name="arrow-left"> < </slot>

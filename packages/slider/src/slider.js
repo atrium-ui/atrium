@@ -123,16 +123,19 @@ class Slider extends Dragger {
 				if (!this.containerArrows) {
 					const containerArrowsPlaceholder =
 						this.options.container.parentNode.querySelectorAll('.slider__arrows')[0];
-					this.containerArrows = containerArrowsPlaceholder || document.createElement('div');
+					this.containerArrows =
+						containerArrowsPlaceholder || document.createElement('div');
 					if (!containerArrowsPlaceholder) {
 						this.containerArrows.classList.add('slider__arrows');
 						this.options.container.appendChild(this.containerArrows);
 					}
 
-					const containerArrowPrevPlaceholder = this.options.container.parentNode.querySelectorAll(
-						'.slider__arrows-item--prev'
-					)[0];
-					this.containerArrowPrev = containerArrowPrevPlaceholder || document.createElement('div');
+					const containerArrowPrevPlaceholder =
+						this.options.container.parentNode.querySelectorAll(
+							'.slider__arrows-item--prev'
+						)[0];
+					this.containerArrowPrev =
+						containerArrowPrevPlaceholder || document.createElement('div');
 					this.containerArrowPrev.addEventListener('click', () => this.goToPrev(), false);
 					if (this.currentIndex === 0)
 						this.containerArrowPrev.classList.add('slider__arrows-item--disabled');
@@ -143,10 +146,12 @@ class Slider extends Dragger {
 						this.containerArrows.append(this.containerArrowPrev);
 					}
 
-					const containerArrowNextPlaceholder = this.options.container.parentNode.querySelectorAll(
-						'.slider__arrows-item--next'
-					)[0];
-					this.containerArrowNext = containerArrowNextPlaceholder || document.createElement('div');
+					const containerArrowNextPlaceholder =
+						this.options.container.parentNode.querySelectorAll(
+							'.slider__arrows-item--next'
+						)[0];
+					this.containerArrowNext =
+						containerArrowNextPlaceholder || document.createElement('div');
 					this.containerArrowNext.addEventListener('click', () => this.goToNext(), false);
 					if (this.currentIndex === this.children.length - this.calcSlidesToShow())
 						this.containerArrowNext.classList.add('slider__arrows-item--disabled');
@@ -238,7 +243,8 @@ class Slider extends Dragger {
 										if (
 											this.options.center ||
 											(this.options.goByView && index % slidesToShow === 0) ||
-											(!this.options.goByView && index <= this.children.length - slidesToShow)
+											(!this.options.goByView &&
+												index <= this.children.length - slidesToShow)
 										) {
 											const dot = document.createElement('div');
 											dot.classList.add('slider__dots-item');
@@ -262,7 +268,8 @@ class Slider extends Dragger {
 										if (
 											this.options.center ||
 											(this.options.goByView && index % slidesToShow === 0) ||
-											(!this.options.goByView && index <= this.children.length - slidesToShow)
+											(!this.options.goByView &&
+												index <= this.children.length - slidesToShow)
 										) {
 											const dot = document.createElement('div');
 											dot.classList.add('slider__dots-item');
@@ -283,7 +290,8 @@ class Slider extends Dragger {
 									const barDragger = document.createElement('div');
 									barDragger.classList.add('slider__dots-bar-dragger');
 									barDragger.style.width = `${
-										this.options.container.clientWidth / (this.children.length - slidesToShow + 1)
+										this.options.container.clientWidth /
+										(this.children.length - slidesToShow + 1)
 									}px`;
 
 									bar.append(barDragger);
@@ -391,13 +399,16 @@ class Slider extends Dragger {
 
 		// set arrows
 		if (this.containerArrows) {
-			const prevAction = this.containerArrowPrev && this.currentIndex === 0 ? 'add' : 'remove';
+			const prevAction =
+				this.containerArrowPrev && this.currentIndex === 0 ? 'add' : 'remove';
 			this.containerArrowPrev.classList[prevAction]('slider__arrows-item--disabled');
 
 			const nextAction =
 				this.containerArrowNext &&
 				this.currentIndex >=
-					this.children.length - slidesToShow + (this.options.center ? slidesToShow - 1 : 0)
+					this.children.length -
+						slidesToShow +
+						(this.options.center ? slidesToShow - 1 : 0)
 					? 'add'
 					: 'remove';
 			this.containerArrowNext.classList[nextAction]('slider__arrows-item--disabled');
@@ -416,7 +427,9 @@ class Slider extends Dragger {
 					: this.options.goByView
 					  ? currentDots[currentDots.length - 1]
 					  : this.containerDotsItems[this.currentIndex];
-			const otherDots = this.containerDotsItems.filter((dotsItem) => dotsItem !== currentDot);
+			const otherDots = this.containerDotsItems.filter(
+				(dotsItem) => dotsItem !== currentDot
+			);
 
 			otherDots.forEach((child) => child.classList.remove('slider__dots-item--current'));
 			if (currentDot && !currentDot.classList.contains('slider__dots-item--current'))
@@ -469,7 +482,8 @@ class Slider extends Dragger {
 						  this.element.firstElementChild.clientWidth / 2
 						: 0, // breaks slider when node is #text so use firstElementChild
 					right: this.options.center
-						? this.options.container.clientWidth / 2 - this.element.lastElementChild.clientWidth / 2
+						? this.options.container.clientWidth / 2 -
+						  this.element.lastElementChild.clientWidth / 2
 						: 0, // breaks slider when node is #text so use lastElementChild
 				},
 			});
@@ -500,8 +514,16 @@ class Slider extends Dragger {
 		);
 
 		this.options.container.addEventListener('keyup', this.boundedOnKeyupFn, false);
-		this.options.container.addEventListener('mouseenter', this.boundedOnMouseenterFn, false);
-		this.options.container.addEventListener('mouseleave', this.boundedOnMouseleaveFn, false);
+		this.options.container.addEventListener(
+			'mouseenter',
+			this.boundedOnMouseenterFn,
+			false
+		);
+		this.options.container.addEventListener(
+			'mouseleave',
+			this.boundedOnMouseleaveFn,
+			false
+		);
 	}
 
 	unbindEvents() {
@@ -529,7 +551,9 @@ class Slider extends Dragger {
 
 			if (this.options.rtl) {
 				const offsetX =
-					this.element.clientWidth - this.options.container.clientWidth - child.offsetLeft;
+					this.element.clientWidth -
+					this.options.container.clientWidth -
+					child.offsetLeft;
 				offsetY = -child.offsetTop;
 
 				if (this.options.center) {
@@ -587,7 +611,9 @@ class Slider extends Dragger {
 	goToIndex(index, duration) {
 		if (index !== undefined && !Number.isNaN(index)) {
 			// TODO catch NaN values with vue3
-			const indexFound = this.children.findIndex((child, childIndex) => childIndex === index);
+			const indexFound = this.children.findIndex(
+				(child, childIndex) => childIndex === index
+			);
 
 			if (indexFound > -1) {
 				this.goTo(this.children[indexFound], duration, true);
@@ -700,7 +726,10 @@ class Slider extends Dragger {
 		if (!element)
 			console.warn('Slider:getClosestElementByCoords: No closest element found.', bound);
 
-		return { element, index: element && this.children.findIndex((child) => child === element) };
+		return {
+			element,
+			index: element && this.children.findIndex((child) => child === element),
+		};
 	}
 
 	onClick(event) {
@@ -733,8 +762,10 @@ class Slider extends Dragger {
 	onMouseenter() {
 		const isInteractable =
 			this.options.mode === 'horizontal'
-				? this.options.center || this.element.clientWidth > this.options.container.clientWidth
-				: this.options.center || this.element.clientHeight > this.options.container.clientHeight;
+				? this.options.center ||
+				  this.element.clientWidth > this.options.container.clientWidth
+				: this.options.center ||
+				  this.element.clientHeight > this.options.container.clientHeight;
 
 		if (isInteractable) {
 			this.options.container.focus({ preventScroll: true });
@@ -744,8 +775,10 @@ class Slider extends Dragger {
 	onMouseleave() {
 		const isInteractable =
 			this.options.mode === 'horizontal'
-				? this.options.center || this.element.clientWidth > this.options.container.clientWidth
-				: this.options.center || this.element.clientHeight > this.options.container.clientHeight;
+				? this.options.center ||
+				  this.element.clientWidth > this.options.container.clientWidth
+				: this.options.center ||
+				  this.element.clientHeight > this.options.container.clientHeight;
 
 		if (isInteractable) {
 			this.options.container.blur();
@@ -764,8 +797,10 @@ class Slider extends Dragger {
 	onMove(event) {
 		const isInteractable =
 			this.options.mode === 'horizontal'
-				? this.options.center || this.element.clientWidth > this.options.container.clientWidth
-				: this.options.center || this.element.clientHeight > this.options.container.clientHeight;
+				? this.options.center ||
+				  this.element.clientWidth > this.options.container.clientWidth
+				: this.options.center ||
+				  this.element.clientHeight > this.options.container.clientHeight;
 
 		if (this.isInteracting && isInteractable) {
 			super.onMove.call(this, event, false);
@@ -778,8 +813,10 @@ class Slider extends Dragger {
 	onEnd(event) {
 		const isInteractable =
 			this.options.mode === 'horizontal'
-				? this.options.center || this.element.clientWidth > this.options.container.clientWidth
-				: this.options.center || this.element.clientHeight > this.options.container.clientHeight;
+				? this.options.center ||
+				  this.element.clientWidth > this.options.container.clientWidth
+				: this.options.center ||
+				  this.element.clientHeight > this.options.container.clientHeight;
 
 		if (this.isInteracting && isInteractable) {
 			super.onEnd.call(this, event, false);
@@ -816,7 +853,10 @@ class Slider extends Dragger {
 					this.bindEvents();
 				}
 
-				this.options = _.merge(this.options, this.options.responsive[breakpointTestIndex].options);
+				this.options = _.merge(
+					this.options,
+					this.options.responsive[breakpointTestIndex].options
+				);
 			}
 		} else {
 			if (this.options.container.parentNode.classList.contains('slider--disabled')) {
@@ -831,7 +871,9 @@ class Slider extends Dragger {
 	onResize(event) {
 		this.isResizing = true;
 		this.currentIndexBeforeResize =
-			this.currentIndexBeforeResize !== null ? this.currentIndexBeforeResize : this.currentIndex;
+			this.currentIndexBeforeResize !== null
+				? this.currentIndexBeforeResize
+				: this.currentIndex;
 		// this.element.style.setProperty('opacity', 0)
 
 		this.checkBreakpoints();
@@ -874,7 +916,10 @@ class Slider extends Dragger {
 	}
 
 	onWheel(event) {
-		if (this.options.center || this.element.clientWidth > this.options.container.clientWidth) {
+		if (
+			this.options.center ||
+			this.element.clientWidth > this.options.container.clientWidth
+		) {
 			super.onWheel.call(this, event);
 
 			this.maxDistX = Math.max(Math.abs(this.dist.x), this.maxDistX || 0);
@@ -919,7 +964,8 @@ class Slider extends Dragger {
 			// if forced by mousewheel or threshold is reached
 			if (
 				force ||
-				Math.abs(this.dist.x) / this.options.container.clientWidth > this.options.threshold
+				Math.abs(this.dist.x) / this.options.container.clientWidth >
+					this.options.threshold
 			) {
 				if (this.options.mode === 'horizontal') {
 					// if same index on start or current index is not in snap indecies go to next/prev slide/page
@@ -981,7 +1027,9 @@ class Slider extends Dragger {
 
 		// update current index
 		if (!this.isResizing)
-			this.setCurrentIndex(this.getClosestElementByCoords(this.drag.x, this.drag.y).index);
+			this.setCurrentIndex(
+				this.getClosestElementByCoords(this.drag.x, this.drag.y).index
+			);
 
 		// update dots dragger
 		if (this.dotsDragger) {
@@ -1042,13 +1090,19 @@ class Slider extends Dragger {
 						(acc, child) => (acc += child.getBoundingClientRect().width),
 						0
 					);
-					this.options.container.parentNode.style.setProperty('--trackWidth', `${trackWidth}px`);
+					this.options.container.parentNode.style.setProperty(
+						'--trackWidth',
+						`${trackWidth}px`
+					);
 				} else {
 					const trackHeight = this.children.reduce(
 						(acc, child) => (acc += child.getBoundingClientRect().height),
 						0
 					);
-					this.options.container.parentNode.style.setProperty('--trackHeight', `${trackHeight}px`);
+					this.options.container.parentNode.style.setProperty(
+						'--trackHeight',
+						`${trackHeight}px`
+					);
 				}
 			});
 		});

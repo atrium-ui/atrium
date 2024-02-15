@@ -7,7 +7,9 @@ import en from 'enquirer';
 
 const dist = resolve('./src/components/ui');
 const componentRoot = resolve(fileURLToPath(import.meta.url), '../../templates/');
-const availableComponents = readdirSync(componentRoot).map((file) => file.replace('.tsx', ''));
+const availableComponents = readdirSync(componentRoot).map((file) =>
+	file.replace('.tsx', '')
+);
 
 export function component(name: string) {
 	return resolve(componentRoot, `${name}.tsx`);

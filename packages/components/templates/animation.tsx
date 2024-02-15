@@ -9,7 +9,11 @@ type AnimationProps = {
 export function Animation(props: AnimationProps) {
 	return (
 		<div>
-			<a-animation height={props.height || 200} width={props.width || 200} src={props.src} />
+			<a-animation
+				height={props.height || 200}
+				width={props.width || 200}
+				src={props.src}
+			/>
 		</div>
 	);
 }

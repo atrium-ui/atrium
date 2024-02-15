@@ -16,7 +16,13 @@ class HtmlToCustomTagReplacement {
 		return this;
 	}
 
-	replaceTags(string = '', fromTagIn = '', toTag = '', attributes = {}, additionalAttributes = {}) {
+	replaceTags(
+		string = '',
+		fromTagIn = '',
+		toTag = '',
+		attributes = {},
+		additionalAttributes = {}
+	) {
 		const fromTag = fromTagIn.split('.'); // support classes
 
 		// fix self closing elements with missing closing tag (slash)

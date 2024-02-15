@@ -64,7 +64,10 @@ export class ScrollLock {
 
 		if (e.targetTouches && e.targetTouches.length > 1) {
 			if (this.options.debug) {
-				console.warn('Scrolllock: prevent scrolling because it seems to be multi touch', e);
+				console.warn(
+					'Scrolllock: prevent scrolling because it seems to be multi touch',
+					e
+				);
 			}
 
 			return this.handlePrevent(e);
@@ -167,40 +170,43 @@ export class ScrollLock {
 
 			// biome-ignore lint/complexity/noForEach: <explanation>
 			this.options.allowElements.forEach((elementSelector) => {
-				[].forEach.call(document.querySelectorAll(elementSelector), (elementNode: HTMLElement) => {
-					elementNode.addEventListener(
-						'wheel',
-						(event) => {
-							this.handleScroll(event, elementNode);
-						},
-						this.hasPassiveEvents
-							? {
-									passive: false,
-							  }
-							: undefined
-					);
-					elementNode.addEventListener(
-						'touchmove',
-						(event) => {
-							this.handleScroll(event, elementNode);
-						},
-						this.hasPassiveEvents
-							? {
-									passive: false,
-							  }
-							: undefined
-					);
+				[].forEach.call(
+					document.querySelectorAll(elementSelector),
+					(elementNode: HTMLElement) => {
+						elementNode.addEventListener(
+							'wheel',
+							(event) => {
+								this.handleScroll(event, elementNode);
+							},
+							this.hasPassiveEvents
+								? {
+										passive: false,
+								  }
+								: undefined
+						);
+						elementNode.addEventListener(
+							'touchmove',
+							(event) => {
+								this.handleScroll(event, elementNode);
+							},
+							this.hasPassiveEvents
+								? {
+										passive: false,
+								  }
+								: undefined
+						);
 
-					elementNode.addEventListener(
-						'touchstart',
-						this.handleScrollStart,
-						this.hasPassiveEvents
-							? {
-									passive: false,
-							  }
-							: undefined
-					);
-				});
+						elementNode.addEventListener(
+							'touchstart',
+							this.handleScrollStart,
+							this.hasPassiveEvents
+								? {
+										passive: false,
+								  }
+								: undefined
+						);
+					}
+				);
 			});
 
 			this.enabled = true;
@@ -216,14 +222,17 @@ export class ScrollLock {
 
 			// biome-ignore lint/complexity/noForEach: <explanation>
 			this.options.allowElements.forEach((elementSelector) => {
-				[].forEach.call(document.querySelectorAll(elementSelector), (elementNode: HTMLElement) => {
-					// @ts-ignore
-					elementNode.removeEventListener('wheel', this.handleScroll); // doesn't do anything?
-					// @ts-ignore
-					elementNode.removeEventListener('touchmove', this.handleScroll); // doesn't do anything?
+				[].forEach.call(
+					document.querySelectorAll(elementSelector),
+					(elementNode: HTMLElement) => {
+						// @ts-ignore
+						elementNode.removeEventListener('wheel', this.handleScroll); // doesn't do anything?
+						// @ts-ignore
+						elementNode.removeEventListener('touchmove', this.handleScroll); // doesn't do anything?
 
-					elementNode.removeEventListener('touchstart', this.handleScrollStart);
-				});
+						elementNode.removeEventListener('touchstart', this.handleScrollStart);
+					}
+				);
 			});
 
 			this.enabled = false;

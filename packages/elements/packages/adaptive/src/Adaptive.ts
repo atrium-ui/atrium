@@ -40,7 +40,11 @@ export class AdaptiveElement extends LitElement {
 			this.observer = new MutationObserver((cahgnes) => {
 				this.requestUpdate();
 			});
-			this.observer.observe(this, { subtree: true, childList: true, characterData: true });
+			this.observer.observe(this, {
+				subtree: true,
+				childList: true,
+				characterData: true,
+			});
 		}
 
 		window.addEventListener('resize', this.onResize);

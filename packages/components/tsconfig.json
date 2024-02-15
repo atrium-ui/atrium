@@ -1,5 +1,5 @@
 {
-	"extends": "../../tsconfig.json",
+	"extends": "@sv/codestyle/tsconfig.json",
 	"compilerOptions": {
     "target": "ES2022",
     "jsx": "preserve"

@@ -32,7 +32,11 @@ export function Combobox(
 ) {
 	const slots = {
 		default: () =>
-			props.children ? props.children : context?.slots?.default ? context?.slots.default() : null,
+			props.children
+				? props.children
+				: context?.slots?.default
+				  ? context?.slots.default()
+				  : null,
 	};
 
 	return (

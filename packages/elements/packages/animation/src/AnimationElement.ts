@@ -50,8 +50,9 @@ export class AnimationElement extends LitElement {
 		this.format();
 	}
 
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	protected updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+	protected updated(
+		_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
+	): void {
 		if (_changedProperties.has('src')) {
 			this.dispose(0);
 			this.createAnimation(this.src, this.autoplay, this.stateMachine);

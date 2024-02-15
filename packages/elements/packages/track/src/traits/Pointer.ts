@@ -102,11 +102,23 @@ export class PointerTrait extends Trait {
 		}
 
 		if (e.align === 'left') {
-			clampedPos = new Vec(Math.min(stopRight, clampedPos.x), Math.min(stopBottom, clampedPos.y));
-			clampedPos = new Vec(Math.max(stopLeft, clampedPos.x), Math.max(stopTop, clampedPos.y));
+			clampedPos = new Vec(
+				Math.min(stopRight, clampedPos.x),
+				Math.min(stopBottom, clampedPos.y)
+			);
+			clampedPos = new Vec(
+				Math.max(stopLeft, clampedPos.x),
+				Math.max(stopTop, clampedPos.y)
+			);
 		} else {
-			clampedPos = new Vec(Math.max(stopLeft, clampedPos.x), Math.max(stopTop, clampedPos.y));
-			clampedPos = new Vec(Math.min(stopRight, clampedPos.x), Math.min(stopBottom, clampedPos.y));
+			clampedPos = new Vec(
+				Math.max(stopLeft, clampedPos.x),
+				Math.max(stopTop, clampedPos.y)
+			);
+			clampedPos = new Vec(
+				Math.min(stopRight, clampedPos.x),
+				Math.min(stopBottom, clampedPos.y)
+			);
 		}
 
 		return clampedPos;

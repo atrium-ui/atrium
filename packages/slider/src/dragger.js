@@ -72,8 +72,12 @@ class Dragger {
 				alignX: 'inner', // 'inner' || 'outer'
 				alignY: 'inner', // 'inner' || 'outer'
 				bounds: {
-					minX: options.rtl ? this.element.clientWidth - this.element.parentNode.clientWidth : 0,
-					maxX: options.rtl ? 0 : -this.element.clientWidth + this.element.parentNode.clientWidth,
+					minX: options.rtl
+						? this.element.clientWidth - this.element.parentNode.clientWidth
+						: 0,
+					maxX: options.rtl
+						? 0
+						: -this.element.clientWidth + this.element.parentNode.clientWidth,
 					minY: 0,
 					maxY: -this.element.clientHeight + this.element.parentNode.clientHeight,
 				},
@@ -119,7 +123,10 @@ class Dragger {
 			if (this.options.rtl) this.options.container.parentNode.setAttribute('dir', 'rtl');
 
 			// jump to start offset
-			const bounds = this.checkBounds(this.options.offsets.left, this.options.offsets.top);
+			const bounds = this.checkBounds(
+				this.options.offsets.left,
+				this.options.offsets.top
+			);
 			this.drag.x = bounds.boundLeft;
 			this.drag.y = bounds.boundTop;
 			this.element.style.setProperty(
@@ -147,7 +154,10 @@ class Dragger {
 		this.destroy();
 
 		if (this.options.autoResize)
-			this.resizeObserver = new resizeObserver(this.boundedResizeFn, this.options.container);
+			this.resizeObserver = new resizeObserver(
+				this.boundedResizeFn,
+				this.options.container
+			);
 		if (this.options.wheel)
 			this.options.container.addEventListener('wheel', this.boundedWheelFn, false);
 
@@ -201,13 +211,19 @@ class Dragger {
 
 	checkBounds(x = this.drag.x, y = this.drag.y) {
 		const offsetDistanceX =
-			this.options.container.clientWidth - this.options.offsets.left - this.options.offsets.right;
+			this.options.container.clientWidth -
+			this.options.offsets.left -
+			this.options.offsets.right;
 		const offsetDistanceY =
-			this.options.container.clientHeight - this.options.offsets.top - this.options.offsets.bottom;
+			this.options.container.clientHeight -
+			this.options.offsets.top -
+			this.options.offsets.bottom;
 		const isOverlappingOffsetX =
-			this.options.offsets.left > this.options.container.clientWidth - this.options.offsets.right;
+			this.options.offsets.left >
+			this.options.container.clientWidth - this.options.offsets.right;
 		const isOverlappingOffsetY =
-			this.options.offsets.top > this.options.container.clientHeight - this.options.offsets.bottom;
+			this.options.offsets.top >
+			this.options.container.clientHeight - this.options.offsets.bottom;
 		const isSmallerThenDistanceX = Math.abs(offsetDistanceX) < this.element.clientWidth;
 		const isSmallerThenDistanceY = Math.abs(offsetDistanceY) < this.element.clientHeight;
 
@@ -343,8 +359,12 @@ class Dragger {
 	onEnd(event, triggerCallback = true) {
 		// eslint-disable-line
 		if (this.isInteracting) {
-			const velocityX = this.velocity ? this.velocity.distX * this.velocity.directionX : 0;
-			const velocityY = this.velocity ? this.velocity.distY * this.velocity.directionY : 0;
+			const velocityX = this.velocity
+				? this.velocity.distX * this.velocity.directionX
+				: 0;
+			const velocityY = this.velocity
+				? this.velocity.distY * this.velocity.directionY
+				: 0;
 			const acceleratedX = this.drag.x + velocityX;
 			const acceleratedY = this.drag.y + velocityY;
 			const bound = this.checkBounds(acceleratedX, acceleratedY);
@@ -401,8 +421,10 @@ class Dragger {
 
 			this.isMoving = true;
 
-			if (!this.options.lock.x) this.dist.x = normalizeEvent(event).clientX - this.point.x;
-			if (!this.options.lock.y) this.dist.y = normalizeEvent(event).clientY - this.point.y;
+			if (!this.options.lock.x)
+				this.dist.x = normalizeEvent(event).clientX - this.point.x;
+			if (!this.options.lock.y)
+				this.dist.y = normalizeEvent(event).clientY - this.point.y;
 
 			const bound = this.checkBounds();
 
@@ -420,12 +442,18 @@ class Dragger {
 				: 0;
 			if (!this.options.lock.x)
 				this.drag.x = Math.max(
-					Math.min(this.start.x + this.dist.x, bound.boundRight + overflowScrollingOffset),
+					Math.min(
+						this.start.x + this.dist.x,
+						bound.boundRight + overflowScrollingOffset
+					),
 					bound.boundLeft - overflowScrollingOffset
 				); // * (-2 + (this.dist.x / this.options.container.clientWidth))
 			if (!this.options.lock.y)
 				this.drag.y = Math.max(
-					Math.min(this.start.y + this.dist.y, bound.boundBottom + overflowScrollingOffset),
+					Math.min(
+						this.start.y + this.dist.y,
+						bound.boundBottom + overflowScrollingOffset
+					),
 					bound.boundTop - overflowScrollingOffset
 				); // * (1 + (this.dist.y / this.options.container.clientHeight))
 
@@ -448,7 +476,10 @@ class Dragger {
 			this.dist.x = event.deltaX * 1.35;
 			this.dist.y = event.deltaY * 1.35;
 
-			const bound = this.checkBounds(this.drag.x + this.dist.x, this.drag.y + this.dist.y);
+			const bound = this.checkBounds(
+				this.drag.x + this.dist.x,
+				this.drag.y + this.dist.y
+			);
 			if (!this.options.lock.x) this.drag.x = bound.x;
 			if (!this.options.lock.y) this.drag.y = bound.y;
 
@@ -538,8 +569,12 @@ class Dragger {
 	updateBounds() {
 		this.options = _.merge(this.options, {
 			bounds: {
-				minX: this.options.rtl ? this.element.clientWidth - this.options.container.clientWidth : 0,
-				maxX: this.options.rtl ? 0 : -this.element.clientWidth + this.options.container.clientWidth,
+				minX: this.options.rtl
+					? this.element.clientWidth - this.options.container.clientWidth
+					: 0,
+				maxX: this.options.rtl
+					? 0
+					: -this.element.clientWidth + this.options.container.clientWidth,
 				minY: 0,
 				maxY: -this.element.clientHeight + this.options.container.clientHeight,
 			},
