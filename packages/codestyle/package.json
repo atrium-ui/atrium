@@ -5,7 +5,9 @@
   "version": "0.1.1",
   "description": "Codestyle and configuration for all projects",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "postinstall": "./install.js"
+  },
   "keywords": [],
   "license": "ISC",
   "devDependencies": {
