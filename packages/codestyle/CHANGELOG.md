@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.1.5
+
+### Patch Changes
+
+- 2864246: Debug logging for install script
+
 ## 0.1.4
 
 ### Patch Changes
