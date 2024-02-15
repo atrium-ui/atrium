@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.1.7
+
+### Patch Changes
+
+- 42834f6: Fix install script for pnpm
+
 ## 0.1.3
 
 ### Patch Changes
