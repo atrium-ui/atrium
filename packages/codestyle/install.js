@@ -4,20 +4,19 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-let root_package = process.env.npm_package_json;
+let root_package = process.env.npm_package_json || process.env.npm_config_dir /* pnpm */;
 
 const DEBUG = process.env.NODE_DEBUG === 'true';
 
 if (!root_package) {
 	// Fallback to parent package
 	if (DEBUG)
-		console.debug('$npm_package_json is not set, falling back to parent package');
+		console.debug(
+			'root_package could not be resolved from env, falling back to parent package'
+		);
 
 	root_package = path.resolve('../../package.json');
-
-	if (DEBUG) console.debug('ENV:', process.env);
-	if (DEBUG) console.debug('CWD:', process.cwd());
-	if (DEBUG) console.debug('Parent package:', root_package);
+	if (DEBUG) console.debug('root_package:', root_package);
 
 	if (!fs.existsSync(root_package)) {
 		console.error('This script must be run with npm');
