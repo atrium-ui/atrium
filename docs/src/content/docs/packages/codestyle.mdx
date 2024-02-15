@@ -1,0 +1,62 @@
+---
+title: "@sv/codestyle"
+description: Codestyle and configuration for all projects.
+tableOfContents: false
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Command from "../../../components/Command.astro"
+import File from "../../../components/File.astro"
+import Changelog from "@sv/codestyle/CHANGELOG.md";
+
+## Installation
+
+Make sure your project is set up with access to the registry as described in [Usage](/sv-frontend-library/mono/usage#configure-package-registry).
+
+<Command>
+  <div slot="pnpm">
+    ```sh
+    pnpm add @sv/codestyle
+    ```
+  </div>
+  <div slot="npm">
+    ```sh
+    npm i @sv/codestyle
+    ```
+  </div>
+  <div slot="bun">
+    ```sh
+    bun add @sv/codestyle
+    ```
+  </div>
+</Command>
+
+## Usage
+
+<Tabs>
+  <TabItem label=".editorconfig">
+    <File file="../packages/codestyle/.editorconfig" />
+  </TabItem>
+  <TabItem label="biome.json">
+    <File file="../packages/codestyle/biome.json" />
+  </TabItem>
+  <TabItem label=".prettierrc.json">
+    <File file="../packages/codestyle/.prettierrc.json" />
+  </TabItem>
+  <TabItem label="commitlint.cjs">
+    <File file="../packages/codestyle/commitlint.cjs" />
+  </TabItem>
+  <TabItem label="eslint.json">
+    <File file="../packages/codestyle/eslint.json" />
+  </TabItem>
+  <TabItem label="stylelint.config.cjs">
+    <File file="../packages/codestyle/stylelint.config.cjs" />
+  </TabItem>
+  <TabItem label="tsconfig.json">
+    <File file="../packages/codestyle/tsconfig.json" />
+  </TabItem>
+</Tabs>
+
+## Changelog
+
+<Changelog />

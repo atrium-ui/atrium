@@ -11,7 +11,7 @@ for (const dep of project.dependents) {
 }
 ---
 
-<div class="not-content dependents">
+<div class="not-content box dependents">
   {[...projects].map(id => {
     return project.dependents.find(dep => dep.project.gitlabId === id);
   }).map((dep: any) => {
