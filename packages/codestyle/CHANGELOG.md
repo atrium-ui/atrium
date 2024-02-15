@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.1.6
+
+### Patch Changes
+
+- 941ecfc: More debug logging
+
 ## 0.1.5
 
 ### Patch Changes
