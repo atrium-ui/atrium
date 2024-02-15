@@ -109,6 +109,7 @@ export class ScrollLock {
 				if (element.matches && e.target.matches(allowElement)) {
 					return true;
 				}
+				return false;
 			});
 
 			// prevent scroll on multi touch

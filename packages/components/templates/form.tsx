@@ -234,7 +234,7 @@ export class FormRenderer {
 
 		if (field.availableDaysOfWeek) {
 			try {
-				const arr = JSON.parse(field.availableDaysOfWeek);
+				const arr = JSON.parse(field.availableDaysOfWeek) as string[];
 				disabledWeekDays = alleWochenTage
 					.filter((item) => !arr.includes(item))
 					.map((str) => alleWochenTage.indexOf(str));

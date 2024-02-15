@@ -6,7 +6,7 @@
 	"type": "module",
 	"types": "src/index.ts",
 	"scripts": {
-	  "test": "bun test",
+		"test": "bun test",
 		"build": "tsup"
 	},
 	"author": "f.kretschmer@s-v.de",

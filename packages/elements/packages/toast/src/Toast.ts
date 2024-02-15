@@ -66,6 +66,8 @@ export class Notifications {
 			log.unshift(notification);
 			return notification;
 		}
+
+		return;
 	}
 
 	static info(message: string) {

@@ -33,9 +33,15 @@ export function formatDate(date) {
 	return intl.format(date);
 }
 
+/**
+ * Format a time to a human-readable string. Return its input if the language is not supported.
+ */
 export function formatTime(time) {
 	const lang = language.split('-')[0];
+	if (!lang) return time;
+
 	const locales = LOCALES[lang];
+	if (!locales) return time;
 
 	const delta = Date.now() - time;
 	const s = Math.floor((delta / 1000) % 60);

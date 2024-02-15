@@ -1,17 +1,18 @@
 {
-  "name": "@sv/codestyle",
-  "author": "t.havlicek@s-v.de",
-  "contributors": [],
-  "version": "0.1.3",
-  "description": "Codestyle and configuration for all projects",
-  "type": "module",
-  "scripts": {
-    "postinstall": "./install.js"
-  },
-  "keywords": [],
-  "license": "ISC",
-  "devDependencies": {
-    "@biomejs/biome": "^1.5.3",
-    "@total-typescript/ts-reset": "^0.5.1"
-  }
+	"name": "@sv/codestyle",
+	"author": "t.havlicek@s-v.de",
+	"contributors": [],
+	"version": "0.1.3",
+	"description": "Codestyle and configuration for all projects",
+	"type": "module",
+	"scripts": {
+		"check": "tsc --pretty",
+		"postinstall": "./install.js"
+	},
+	"keywords": [],
+	"license": "ISC",
+	"devDependencies": {
+		"@biomejs/biome": "^1.5.3",
+		"@total-typescript/ts-reset": "^0.5.1"
+	}
 }

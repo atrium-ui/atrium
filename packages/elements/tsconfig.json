@@ -1,3 +1,10 @@
 {
-	"extends": "@sv/codestyle/tsconfig.json"
+	"extends": "@sv/codestyle/tsconfig.json",
+	"compilerOptions": {
+		"types": ["bun-types"]
+	},
+	"exclude": [
+    "node_modules",
+    "**/dist",
+  ]
 }

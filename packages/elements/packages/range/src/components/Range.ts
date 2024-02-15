@@ -134,6 +134,9 @@ export class Range extends LitElement {
 
 	protected onProgressClick(e: MouseEvent): void {
 		const rect = this.progressElement.getClientRects()[0];
+
+		if (!rect) return;
+
 		const progress = (e.x - rect.x) / this.progressElement.clientWidth;
 		this.updateProgress(progress);
 

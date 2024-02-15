@@ -55,7 +55,6 @@ tasks:
     cmds:
       - bun x turbo --no-daemon check
       - bun x biome check .
-      - bun x tsc --pretty
 
   fix:
     desc: Apply all (unsafe) autofixes

@@ -1,7 +1,11 @@
 {
 	"extends": "@sv/codestyle/tsconfig.json",
 	"compilerOptions": {
-    "target": "ES2022",
-    "jsx": "preserve"
-	}
+		"jsx": "preserve",
+		"types": ["bun-types"]
+	},
+	"exclude": [
+    "node_modules",
+    "**/dist",
+  ]
 }

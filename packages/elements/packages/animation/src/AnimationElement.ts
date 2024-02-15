@@ -62,7 +62,7 @@ export class AnimationElement extends LitElement {
 
 	protected dispose(index: number) {
 		if (this.animations.length > 0) {
-			this.animations[index].cleanup();
+			this.animations[index]?.cleanup();
 			this.animations.splice(index, 1);
 		}
 	}
@@ -98,7 +98,8 @@ export class AnimationElement extends LitElement {
 
 	public transition(source: string, trigger?: string, duration?: number, offset = 0) {
 		if (this.stateMachine) {
-			if (trigger) this.trigger(this.animations[0], this.stateMachine, trigger);
+			const anim = this.animations[0];
+			if (trigger && anim) this.trigger(anim, this.stateMachine, trigger);
 			this.createAnimation(source, true);
 		}
 	}

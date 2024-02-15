@@ -6,6 +6,7 @@
 	"description": "Atrium Component Library",
 	"type": "module",
 	"scripts": {
+		"check": "tsc --pretty",
 		"test": "bun test --preload ./test/preload.ts"
 	},
 	"exports": {

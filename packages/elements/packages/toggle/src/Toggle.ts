@@ -125,6 +125,8 @@ export class Toggle extends LitElement {
 				const currentRect = selected.getClientRects()[0];
 				const nextRect = nextChild.getClientRects()[0];
 
+				if (!currentRect || !nextRect) return;
+
 				const xd = Math.abs(nextRect.x - currentRect.x);
 				const yd = Math.abs(nextRect.y - currentRect.y);
 

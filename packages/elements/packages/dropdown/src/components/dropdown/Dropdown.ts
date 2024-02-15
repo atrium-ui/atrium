@@ -85,16 +85,22 @@ export class Dropdown extends LitElement {
 		const selectedElement = this.getOptionByValue(this.selected);
 		const index = selectedElement ? this.options.indexOf(selectedElement) : -1;
 		const nextIndex = Math.max(index - 1, 0);
-		this.selected = this.getValueOfOption(this.options[nextIndex]);
-		this.updateOptionSelection();
+		const opt = this.options[nextIndex];
+		if (opt) {
+			this.selected = this.getValueOfOption(opt);
+			this.updateOptionSelection();
+		}
 	}
 
 	public selectPrev() {
 		const selectedElement = this.getOptionByValue(this.selected);
 		const index = selectedElement ? this.options.indexOf(selectedElement) : -1;
 		const nextIndex = Math.min(index + 1, this.options.length - 1);
-		this.selected = this.getValueOfOption(this.options[nextIndex]);
-		this.updateOptionSelection();
+		const opt = this.options[nextIndex];
+		if (opt) {
+			this.selected = this.getValueOfOption(opt);
+			this.updateOptionSelection();
+		}
 	}
 
 	public reset() {
@@ -250,6 +256,8 @@ export class Dropdown extends LitElement {
 			const optionValue = this.getValueOfOption(option);
 			if (optionValue === value) return option;
 		}
+
+		return;
 	}
 
 	protected updated(): void {
