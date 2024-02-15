@@ -1,5 +1,5 @@
-import { Trait } from '../index.js';
-import DebugElement from './DebugElement.js';
+import { Trait } from "../index.js";
+import DebugElement from "./DebugElement.js";
 
 export class DebugTrait extends Trait {
 	debug = new DebugElement();
@@ -46,10 +46,10 @@ export class DebugTrait extends Trait {
 			[`current: ${e.currentItem}`],
 			[`currentPos: ${e.getToItemPosition(e.currentItem)}`],
 			[`pos: ${e.position}`],
-			['input;red', e.inputForce.abs()],
+			["input;red", e.inputForce.abs()],
 			[`target: ${e.targetForce}`],
 			[`transtion: ${e.transition}`],
-			[`items: ${e.itemWidths.join(', ')}`],
+			[`items: ${e.itemWidths.join(", ")}`],
 			...this.adds.map((f) => [f().toString()]),
 		];
 

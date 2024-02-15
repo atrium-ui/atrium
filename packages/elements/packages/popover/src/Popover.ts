@@ -1,13 +1,13 @@
-import { HTMLTemplateResult, LitElement, css, html } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { HTMLTemplateResult, LitElement, css, html } from "lit";
+import { customElement, property, query } from "lit/decorators.js";
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'a-popover': Popover;
+		"a-popover": Popover;
 	}
 }
 
-@customElement('a-popover')
+@customElement("a-popover")
 export class Popover extends LitElement {
 	public static styles = css`
     :host {
@@ -60,12 +60,12 @@ export class Popover extends LitElement {
   `;
 
 	@property({ type: String, reflect: true })
-	public direction: 'down' | 'up' = 'down';
+	public direction: "down" | "up" = "down";
 
 	@property({ type: Boolean, reflect: true })
 	public opened = false;
 
-	@query('.content')
+	@query(".content")
 	content;
 
 	open() {
@@ -93,7 +93,7 @@ export class Popover extends LitElement {
 
 	handleClick = (e: MouseEvent) => {
 		if (this.shouldBlur(e)) {
-			this.dispatchEvent(new Event('blur'));
+			this.dispatchEvent(new Event("blur"));
 			this.opened = false;
 		}
 	};
@@ -101,11 +101,11 @@ export class Popover extends LitElement {
 	connectedCallback(): void {
 		super.connectedCallback();
 
-		window.addEventListener('click', this.handleClick);
+		window.addEventListener("click", this.handleClick);
 	}
 
 	disconnectedCallback(): void {
-		window.removeEventListener('click', this.handleClick);
+		window.removeEventListener("click", this.handleClick);
 	}
 
 	render(): HTMLTemplateResult {

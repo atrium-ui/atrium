@@ -15,14 +15,14 @@ export class ScrollLock {
 
 	options = {
 		debug: false,
-		allowElements: ['textarea', 'iframe'],
+		allowElements: ["textarea", "iframe"],
 	};
 
 	constructor() {
 		if (!this.installed) {
 			this.installed = true;
 
-			if (typeof window !== 'undefined') {
+			if (typeof window !== "undefined") {
 				this.checkForPassiveEvents();
 			}
 		}
@@ -30,26 +30,26 @@ export class ScrollLock {
 
 	private checkForPassiveEvents() {
 		const passiveTestCallback = () => {};
-		const passiveTestOptions = Object.defineProperty({}, 'passive', {
+		const passiveTestOptions = Object.defineProperty({}, "passive", {
 			get: () => {
 				this.hasPassiveEvents = true;
 			},
 		});
 
-		window.addEventListener('testPassive', passiveTestCallback, passiveTestOptions);
-		window.removeEventListener('testPassive', passiveTestCallback, passiveTestOptions);
+		window.addEventListener("testPassive", passiveTestCallback, passiveTestOptions);
+		window.removeEventListener("testPassive", passiveTestCallback, passiveTestOptions);
 	}
 
 	private getDirection(event) {
 		let deltaY = 0;
 
-		if (event.type === 'wheel') {
+		if (event.type === "wheel") {
 			deltaY = event.wheelDelta || event.deltaY * -1 || event.detail * -1;
-		} else if (event.type === 'touchmove') {
+		} else if (event.type === "touchmove") {
 			deltaY = (this.initialClientY - event.targetTouches[0].clientY) * -1;
 		}
 
-		return deltaY > 0 ? 'up' : 'down';
+		return deltaY > 0 ? "up" : "down";
 	}
 
 	private handleScrollStart = (event) => {
@@ -65,17 +65,17 @@ export class ScrollLock {
 		if (e.targetTouches && e.targetTouches.length > 1) {
 			if (this.options.debug) {
 				console.warn(
-					'Scrolllock: prevent scrolling because it seems to be multi touch',
-					e
+					"Scrolllock: prevent scrolling because it seems to be multi touch",
+					e,
 				);
 			}
 
 			return this.handlePrevent(e);
 		}
 
-		if (element && element.scrollTop === 0 && direction === 'up') {
+		if (element && element.scrollTop === 0 && direction === "up") {
 			if (this.options.debug) {
-				console.warn('Scrolllock: prevent scrolling because scrollTop is reached', e);
+				console.warn("Scrolllock: prevent scrolling because scrollTop is reached", e);
 			}
 
 			return this.handlePrevent(e);
@@ -84,10 +84,10 @@ export class ScrollLock {
 		if (
 			element &&
 			element.scrollHeight - element.scrollTop <= element.clientHeight &&
-			direction === 'down'
+			direction === "down"
 		) {
 			if (this.options.debug) {
-				console.warn('Scrolllock: prevent scrolling because scrollBottom is reached', e);
+				console.warn("Scrolllock: prevent scrolling because scrollBottom is reached", e);
 			}
 
 			return this.handlePrevent(e);
@@ -118,7 +118,7 @@ export class ScrollLock {
 			}
 
 			// magic mouse occurs scroll event even if window was leaving so scroll back to inital scroll position. it works but opera seams to be flickering sometimes.
-			if (e.type === 'scroll') {
+			if (e.type === "scroll") {
 				window.scrollTo(this.initialScrollX, this.initialScrollY);
 			}
 
@@ -141,32 +141,32 @@ export class ScrollLock {
 			this.initialScrollY = window.scrollY;
 
 			window.addEventListener(
-				'scroll',
+				"scroll",
 				this.handlePrevent,
 				this.hasPassiveEvents
 					? {
 							passive: false,
 					  }
-					: undefined
+					: undefined,
 			); // useless?
 
 			window.addEventListener(
-				'wheel',
+				"wheel",
 				this.handlePrevent,
 				this.hasPassiveEvents
 					? {
 							passive: false,
 					  }
-					: undefined
+					: undefined,
 			);
 			document.addEventListener(
-				'touchmove',
+				"touchmove",
 				this.handlePrevent,
 				this.hasPassiveEvents
 					? {
 							passive: false,
 					  }
-					: undefined
+					: undefined,
 			);
 
 			// biome-ignore lint/complexity/noForEach: <explanation>
@@ -175,7 +175,7 @@ export class ScrollLock {
 					document.querySelectorAll(elementSelector),
 					(elementNode: HTMLElement) => {
 						elementNode.addEventListener(
-							'wheel',
+							"wheel",
 							(event) => {
 								this.handleScroll(event, elementNode);
 							},
@@ -183,10 +183,10 @@ export class ScrollLock {
 								? {
 										passive: false,
 								  }
-								: undefined
+								: undefined,
 						);
 						elementNode.addEventListener(
-							'touchmove',
+							"touchmove",
 							(event) => {
 								this.handleScroll(event, elementNode);
 							},
@@ -194,19 +194,19 @@ export class ScrollLock {
 								? {
 										passive: false,
 								  }
-								: undefined
+								: undefined,
 						);
 
 						elementNode.addEventListener(
-							'touchstart',
+							"touchstart",
 							this.handleScrollStart,
 							this.hasPassiveEvents
 								? {
 										passive: false,
 								  }
-								: undefined
+								: undefined,
 						);
-					}
+					},
 				);
 			});
 
@@ -216,10 +216,10 @@ export class ScrollLock {
 
 	public disable() {
 		if (this.enabled) {
-			window.removeEventListener('scroll', this.handlePrevent); // useless?
+			window.removeEventListener("scroll", this.handlePrevent); // useless?
 
-			window.removeEventListener('wheel', this.handlePrevent);
-			document.removeEventListener('touchmove', this.handlePrevent);
+			window.removeEventListener("wheel", this.handlePrevent);
+			document.removeEventListener("touchmove", this.handlePrevent);
 
 			// biome-ignore lint/complexity/noForEach: <explanation>
 			this.options.allowElements.forEach((elementSelector) => {
@@ -227,12 +227,12 @@ export class ScrollLock {
 					document.querySelectorAll(elementSelector),
 					(elementNode: HTMLElement) => {
 						// @ts-ignore
-						elementNode.removeEventListener('wheel', this.handleScroll); // doesn't do anything?
+						elementNode.removeEventListener("wheel", this.handleScroll); // doesn't do anything?
 						// @ts-ignore
-						elementNode.removeEventListener('touchmove', this.handleScroll); // doesn't do anything?
+						elementNode.removeEventListener("touchmove", this.handleScroll); // doesn't do anything?
 
-						elementNode.removeEventListener('touchstart', this.handleScrollStart);
-					}
+						elementNode.removeEventListener("touchstart", this.handleScrollStart);
+					},
 				);
 			});
 

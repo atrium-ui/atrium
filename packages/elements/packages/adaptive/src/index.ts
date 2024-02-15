@@ -1,1 +1,1 @@
-export { AdaptiveElement } from './Adaptive.js';
+export { AdaptiveElement } from "./Adaptive.js";

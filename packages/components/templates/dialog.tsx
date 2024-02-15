@@ -1,4 +1,4 @@
-import '@sv/elements/blur';
+import "@sv/elements/blur";
 
 interface Props {
 	children?: JSX.Element | string;

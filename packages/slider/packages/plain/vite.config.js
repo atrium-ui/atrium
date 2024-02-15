@@ -1,29 +1,29 @@
-import { resolve } from 'path';
-import { defineConfig } from 'vite';
+import { resolve } from "path";
+import { defineConfig } from "vite";
 // import legacy from '@vitejs/plugin-legacy' // not working with lib mode: https://github.com/vitejs/vite/issues/1639
-import { babel } from '@rollup/plugin-babel';
-import { visualizer } from 'rollup-plugin-visualizer';
-import removeConsole from 'vite-plugin-remove-console';
+import { babel } from "@rollup/plugin-babel";
+import { visualizer } from "rollup-plugin-visualizer";
+import removeConsole from "vite-plugin-remove-console";
 
 export default defineConfig({
 	build: {
-		outDir: resolve(__dirname, '../../dist/plain'),
+		outDir: resolve(__dirname, "../../dist/plain"),
 		lib: {
-			entry: resolve(__dirname, '../../src/index.plain.js'),
-			name: '@sv/slider',
-			fileName: 'sv-slider',
+			entry: resolve(__dirname, "../../src/index.plain.js"),
+			name: "@sv/slider",
+			fileName: "sv-slider",
 			// formats: ['es', 'amd', 'umd', 'cjs']
-			formats: ['es', 'umd', 'cjs'],
+			formats: ["es", "umd", "cjs"],
 		},
 		rollupOptions: {
-			external: ['vue', 'gsap'],
+			external: ["vue", "gsap"],
 			output: {
 				assetFileNames: (assetInfo) => {
-					return assetInfo.name === 'style.css' ? 'sv-slider.css' : assetInfo.name;
+					return assetInfo.name === "style.css" ? "sv-slider.css" : assetInfo.name;
 				},
 				globals: {
-					vue: 'Vue',
-					gsap: 'gsap',
+					vue: "Vue",
+					gsap: "gsap",
 				},
 			},
 		},
@@ -34,14 +34,14 @@ export default defineConfig({
 	},
 	plugins: [
 		babel({
-			babelHelpers: 'runtime',
-			extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', 'ts'],
-			plugins: ['@babel/plugin-transform-runtime'],
+			babelHelpers: "runtime",
+			extensions: [".js", ".jsx", ".es6", ".es", ".mjs", "ts"],
+			plugins: ["@babel/plugin-transform-runtime"],
 			presets: [
 				[
-					'@babel/preset-env',
+					"@babel/preset-env",
 					{
-						useBuiltIns: 'usage',
+						useBuiltIns: "usage",
 						corejs: 3,
 					},
 				],

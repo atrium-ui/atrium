@@ -1,13 +1,13 @@
-import '@sv/elements/popover';
+import "@sv/elements/popover";
 
-import { Button } from './button.jsx';
+import { Button } from "./button.jsx";
 
 export function Popover(
 	props: {
 		children?: JSX.Element | string;
 		label: string;
 	},
-	context
+	context,
 ) {
 	const slots = {
 		default: () =>

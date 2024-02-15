@@ -1,9 +1,9 @@
-import { HTMLTemplateResult, LitElement, css, html } from 'lit';
-import { query } from 'lit/decorators.js';
+import { HTMLTemplateResult, LitElement, css, html } from "lit";
+import { query } from "lit/decorators.js";
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'a-adaptive': AdaptiveElement;
+		"a-adaptive": AdaptiveElement;
 	}
 }
 
@@ -36,7 +36,7 @@ export class AdaptiveElement extends LitElement {
 	connectedCallback() {
 		super.connectedCallback();
 
-		if (typeof MutationObserver !== 'undefined') {
+		if (typeof MutationObserver !== "undefined") {
 			this.observer = new MutationObserver((cahgnes) => {
 				this.requestUpdate();
 			});
@@ -47,12 +47,12 @@ export class AdaptiveElement extends LitElement {
 			});
 		}
 
-		window.addEventListener('resize', this.onResize);
+		window.addEventListener("resize", this.onResize);
 	}
 
 	disconnectedCallback(): void {
 		super.disconnectedCallback();
-		window.removeEventListener('resize', this.onResize);
+		window.removeEventListener("resize", this.onResize);
 
 		if (this.observer) this.observer.disconnect();
 	}
@@ -62,7 +62,7 @@ export class AdaptiveElement extends LitElement {
 		this.lastWidth = this.content?.offsetWidth;
 	};
 
-	@query('slot')
+	@query("slot")
 	content!: HTMLElement;
 
 	lastHeight = this.offsetHeight;
@@ -85,8 +85,8 @@ export class AdaptiveElement extends LitElement {
 				],
 				{
 					duration: 200,
-					easing: 'ease-out',
-				}
+					easing: "ease-out",
+				},
 			).finished;
 		}
 		this.lastHeight = height;
@@ -98,4 +98,4 @@ export class AdaptiveElement extends LitElement {
 	}
 }
 
-customElements.define('a-adaptive', AdaptiveElement);
+customElements.define("a-adaptive", AdaptiveElement);

@@ -1,8 +1,8 @@
-import '@sv/elements/dropdown';
-import '@sv/elements/toggle';
-import '@sv/elements/expandable';
+import "@sv/elements/dropdown";
+import "@sv/elements/toggle";
+import "@sv/elements/expandable";
 
-import { Button } from './button.jsx';
+import { Button } from "./button.jsx";
 
 function CheckIcon() {
 	return (
@@ -28,7 +28,7 @@ export function Combobox(
 		children?: JSX.Element | string;
 		value: string;
 	},
-	context
+	context,
 ) {
 	const slots = {
 		default: () =>

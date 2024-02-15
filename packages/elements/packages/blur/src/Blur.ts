@@ -1,10 +1,10 @@
-import { HTMLTemplateResult, LitElement, css, html } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
-import { ScrollLock } from '@sv/scroll-lock';
+import { HTMLTemplateResult, LitElement, css, html } from "lit";
+import { customElement, property, query } from "lit/decorators.js";
+import { ScrollLock } from "@sv/scroll-lock";
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'a-blur': Blur;
+		"a-blur": Blur;
 	}
 }
 
@@ -34,7 +34,7 @@ const scrollLock = new ScrollLock();
  *
  * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-blur/
  */
-@customElement('a-blur')
+@customElement("a-blur")
 export class Blur extends LitElement {
 	public static styles = css`
     :host {
@@ -64,16 +64,16 @@ export class Blur extends LitElement {
 	@property({ type: Boolean, reflect: true })
 	public scrollLock = false;
 
-	@query('slot')
+	@query("slot")
 	slot;
 
 	protected updated(): void {
 		if (this.enabled) {
 			scrollLock.enable();
-			this.setAttribute('aria-hidden', 'false');
+			this.setAttribute("aria-hidden", "false");
 		} else {
 			scrollLock.disable();
-			this.setAttribute('aria-hidden', 'true');
+			this.setAttribute("aria-hidden", "true");
 		}
 	}
 
@@ -86,7 +86,7 @@ export class Blur extends LitElement {
 
 	handleClick = (e: MouseEvent) => {
 		if (this.shouldBlur(e)) {
-			this.dispatchEvent(new Event('blur'));
+			this.dispatchEvent(new Event("blur"));
 			this.enabled = false;
 		}
 	};
@@ -97,13 +97,13 @@ export class Blur extends LitElement {
 
 	connectedCallback(): void {
 		super.connectedCallback();
-		this.addEventListener('mousedown', this.handleClick);
-		this.addEventListener('close', this.handleCloseEvent, { capture: true });
+		this.addEventListener("mousedown", this.handleClick);
+		this.addEventListener("close", this.handleCloseEvent, { capture: true });
 	}
 
 	disconnectedCallback(): void {
-		this.removeEventListener('mousedown', this.handleClick);
-		this.removeEventListener('close', this.handleCloseEvent, { capture: true });
+		this.removeEventListener("mousedown", this.handleClick);
+		this.removeEventListener("close", this.handleCloseEvent, { capture: true });
 
 		// TODO: This call should be on a stack.
 		//				So that if multiple blur elements are enabled, it only disables when all are disabled.

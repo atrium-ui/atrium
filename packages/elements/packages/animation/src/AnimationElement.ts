@@ -1,10 +1,10 @@
-import { css, html, HTMLTemplateResult, LitElement, PropertyValueMap } from 'lit';
-import { property, query } from 'lit/decorators.js';
-import { Rive } from '@rive-app/canvas-single';
+import { css, html, HTMLTemplateResult, LitElement, PropertyValueMap } from "lit";
+import { property, query } from "lit/decorators.js";
+import { Rive } from "@rive-app/canvas-single";
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'a-animation': AnimationElement;
+		"a-animation": AnimationElement;
 	}
 }
 
@@ -27,11 +27,11 @@ export class AnimationElement extends LitElement {
 	@property({ type: String, reflect: true }) public stateMachine?: string;
 	@property({ type: Boolean, reflect: true }) public autoplay = true;
 
-	@query('canvas')
+	@query("canvas")
 	private container!: HTMLElement;
 
-	protected canvas: HTMLCanvasElement = document.createElement('canvas');
-	protected bufferCanvas: HTMLCanvasElement = document.createElement('canvas');
+	protected canvas: HTMLCanvasElement = document.createElement("canvas");
+	protected bufferCanvas: HTMLCanvasElement = document.createElement("canvas");
 
 	protected animations: Rive[] = [];
 
@@ -42,8 +42,8 @@ export class AnimationElement extends LitElement {
 	public format() {
 		this.canvas.width = this.width * this.pixelRatio;
 		this.canvas.height = this.height * this.pixelRatio;
-		this.container.style.setProperty('--w', `${this.width}px`);
-		this.container.style.setProperty('--h', `${this.height}px`);
+		this.container.style.setProperty("--w", `${this.width}px`);
+		this.container.style.setProperty("--h", `${this.height}px`);
 	}
 
 	protected firstUpdated(): void {
@@ -51,9 +51,9 @@ export class AnimationElement extends LitElement {
 	}
 
 	protected updated(
-		_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
+		_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
 	): void {
-		if (_changedProperties.has('src')) {
+		if (_changedProperties.has("src")) {
 			this.dispose(0);
 			this.createAnimation(this.src, this.autoplay, this.stateMachine);
 			this.format();
@@ -105,4 +105,4 @@ export class AnimationElement extends LitElement {
 	}
 }
 
-customElements.define('a-animation', AnimationElement);
+customElements.define("a-animation", AnimationElement);

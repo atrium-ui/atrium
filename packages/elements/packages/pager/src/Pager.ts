@@ -1,13 +1,13 @@
-import { HTMLTemplateResult, LitElement, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { HTMLTemplateResult, LitElement, css, html } from "lit";
+import { customElement, property } from "lit/decorators.js";
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'a-pager': Pager;
+		"a-pager": Pager;
 	}
 }
 
-@customElement('a-pager')
+@customElement("a-pager")
 export class Pager extends LitElement {
 	public static styles = css`
     .pagination {
@@ -114,19 +114,19 @@ export class Pager extends LitElement {
 
 	prevPage() {
 		const page = Math.max(1, +this.current - 1);
-		this.dispatchEvent(new CustomEvent('page-change', { detail: page }));
+		this.dispatchEvent(new CustomEvent("page-change", { detail: page }));
 		this.requestUpdate();
 	}
 
 	nextPage() {
 		const page = Math.min(+this.current + 1, +this.count);
-		this.dispatchEvent(new CustomEvent('page-change', { detail: page }));
+		this.dispatchEvent(new CustomEvent("page-change", { detail: page }));
 		this.requestUpdate();
 	}
 
 	goToPage(index) {
 		const page = index + 1;
-		this.dispatchEvent(new CustomEvent('page-change', { detail: page }));
+		this.dispatchEvent(new CustomEvent("page-change", { detail: page }));
 		this.requestUpdate();
 	}
 
@@ -135,7 +135,7 @@ export class Pager extends LitElement {
       <div class="pagination c4">
         <button
           class=${`pagination__arrow ${
-						+this.current > 1 ? 'pagination__arrow--shown' : ''
+						+this.current > 1 ? "pagination__arrow--shown" : ""
 					}`}
           @click=${() => this.prevPage()}
         >
@@ -178,7 +178,7 @@ export class Pager extends LitElement {
 
         <button
           class=${`pagination__arrow ${
-						+this.current < +this.count ? 'pagination__arrow--shown' : ''
+						+this.current < +this.count ? "pagination__arrow--shown" : ""
 					}`}
           @click=${() => this.nextPage()}
         >

@@ -1,14 +1,14 @@
-import { HTMLTemplateResult, LitElement, css, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
-import { formatDate, formatTime } from './format.js';
+import { HTMLTemplateResult, LitElement, css, html } from "lit";
+import { customElement } from "lit/decorators.js";
+import { formatDate, formatTime } from "./format.js";
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'a-time': Time;
+		"a-time": Time;
 	}
 }
 
-@customElement('a-time')
+@customElement("a-time")
 export class Time extends LitElement {
 	public static styles = css`
     :host {

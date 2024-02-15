@@ -1,4 +1,4 @@
-import { Input } from './input.jsx';
+import { Input } from "./input.jsx";
 
 export function FormField(props: {
 	field: {
@@ -14,16 +14,16 @@ export function FormField(props: {
 }) {
 	const InputField = (props) => {
 		switch (props.type) {
-			case 'text':
-			case 'name':
+			case "text":
+			case "name":
 				return <Input {...props} />;
-			case 'email':
+			case "email":
 				return <Input type="email" {...props} />;
-			case 'textarea':
+			case "textarea":
 				return <Input multiline {...props} />;
-			case 'checkbox':
+			case "checkbox":
 				return <Input type="checkbox" {...props} />;
-			case 'date':
+			case "date":
 				return <Input type="date" {...props} />;
 			default:
 				return <Input {...props} />;
@@ -37,7 +37,7 @@ export function FormField(props: {
 					{...props.field}
 					label={
 						!props.field.description
-							? `${props.field.label} ${props.field.required ? '' : '(optional)'}`
+							? `${props.field.label} ${props.field.required ? "" : "(optional)"}`
 							: null
 					}
 					id={props.field.name}
@@ -62,8 +62,8 @@ export function FormField(props: {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'form-field': FormFieldElement;
-		'form-field-error': FormFieldErrorElement;
+		"form-field": FormFieldElement;
+		"form-field-error": FormFieldErrorElement;
 	}
 }
 
@@ -77,18 +77,18 @@ class FormFieldErrorElement extends HTMLElement {
 		if (input && field.valid === false) {
 			this.textContent = input.validationMessage;
 		} else {
-			this.textContent = '';
+			this.textContent = "";
 		}
 	};
 
 	connectedCallback() {
-		const formField = this.closest('form-field');
-		formField?.addEventListener('field-state', this.onState);
+		const formField = this.closest("form-field");
+		formField?.addEventListener("field-state", this.onState);
 	}
 
 	disconnectedCallback() {
-		const formField = this.closest('form-field');
-		formField?.removeEventListener('field-state', this.onState);
+		const formField = this.closest("form-field");
+		formField?.removeEventListener("field-state", this.onState);
 	}
 }
 
@@ -96,7 +96,7 @@ class FormFieldElement extends HTMLElement {
 	valid = true;
 
 	getInput() {
-		return this.querySelector('input, textarea') as
+		return this.querySelector("input, textarea") as
 			| HTMLInputElement
 			| HTMLTextAreaElement
 			| undefined;
@@ -107,19 +107,19 @@ class FormFieldElement extends HTMLElement {
 	}
 
 	connectedCallback() {
-		this.getForm()?.addEventListener('error', this.handleError as EventListener, true);
+		this.getForm()?.addEventListener("error", this.handleError as EventListener, true);
 
-		this.addEventListener('invalid', this.invalid, { capture: true });
-		this.addEventListener('change', this.input, { capture: true });
-		this.addEventListener('input', this.input, { capture: true });
+		this.addEventListener("invalid", this.invalid, { capture: true });
+		this.addEventListener("change", this.input, { capture: true });
+		this.addEventListener("input", this.input, { capture: true });
 	}
 
 	disconnectedCallback() {
-		this.getForm()?.removeEventListener('error', this.handleError as EventListener, true);
+		this.getForm()?.removeEventListener("error", this.handleError as EventListener, true);
 
-		this.removeEventListener('invalid', this.invalid, { capture: true });
-		this.removeEventListener('change', this.input, { capture: true });
-		this.removeEventListener('input', this.input, { capture: true });
+		this.removeEventListener("invalid", this.invalid, { capture: true });
+		this.removeEventListener("change", this.input, { capture: true });
+		this.removeEventListener("input", this.input, { capture: true });
 	}
 
 	invalid = (e: Event) => {
@@ -128,16 +128,16 @@ class FormFieldElement extends HTMLElement {
 
 		this.valid = false;
 
-		this.dispatchEvent(new CustomEvent('field-state', { detail: this }));
+		this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
 	};
 
 	input = (e: Event) => {
 		const input = this.getInput();
-		input?.setCustomValidity('');
+		input?.setCustomValidity("");
 
 		this.valid = (e?.target as HTMLInputElement)?.reportValidity();
 
-		this.dispatchEvent(new CustomEvent('field-state', { detail: this }));
+		this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
 	};
 
 	handleError = (e: CustomEvent) => {
@@ -148,16 +148,16 @@ class FormFieldElement extends HTMLElement {
 			input.focus();
 		}
 
-		this.dispatchEvent(new CustomEvent('field-state', { detail: this }));
+		this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
 	};
 }
 
-if (customElements.get('form-field-error') === undefined) {
-	customElements.define('form-field-error', FormFieldErrorElement);
+if (customElements.get("form-field-error") === undefined) {
+	customElements.define("form-field-error", FormFieldErrorElement);
 }
 
-if (customElements.get('form-field') === undefined) {
-	customElements.define('form-field', FormFieldElement);
+if (customElements.get("form-field") === undefined) {
+	customElements.define("form-field", FormFieldElement);
 }
 
 type FormField = {
@@ -185,13 +185,13 @@ type FormSpec = {
 
 export class FormRenderer {
 	defaultFieldTypeMap = {
-		Field_Heading: 'heading',
-		Field_Name: 'name',
-		Field_Email: 'email',
-		Field_SingleLineText: 'text',
-		Field_MultiLineText: 'textarea',
-		Field_Agree: 'checkbox',
-		Field_Date: 'date',
+		Field_Heading: "heading",
+		Field_Name: "name",
+		Field_Email: "email",
+		Field_SingleLineText: "text",
+		Field_MultiLineText: "textarea",
+		Field_Agree: "checkbox",
+		Field_Date: "date",
 	};
 
 	/**
@@ -207,8 +207,8 @@ export class FormRenderer {
 	getFieldValue(field: FormField) {
 		const type = this.getFieldType(field);
 
-		if (type === 'checkbox') {
-			return field.defaultValue === '1' || false;
+		if (type === "checkbox") {
+			return field.defaultValue === "1" || false;
 		}
 
 		return field.defaultValue;
@@ -222,13 +222,13 @@ export class FormRenderer {
 		if (!type) return undefined;
 
 		const alleWochenTage = [
-			'Sonntag',
-			'Montag',
-			'Dienstag',
-			'Mittwoch',
-			'Donnerstag',
-			'Freitag',
-			'Samstag',
+			"Sonntag",
+			"Montag",
+			"Dienstag",
+			"Mittwoch",
+			"Donnerstag",
+			"Freitag",
+			"Samstag",
 		];
 		let disabledWeekDays: number[] = [];
 
@@ -269,11 +269,11 @@ export class FormRenderer {
 		};
 	}
 
-	renderRow(row: FormSpec['rows'][number]) {
+	renderRow(row: FormSpec["rows"][number]) {
 		return row.rowFields.map((field) => this.renderField(field)).filter(Boolean);
 	}
 
-	renderRows(rows: FormSpec['rows']) {
+	renderRows(rows: FormSpec["rows"]) {
 		return rows.map((row) => this.renderRow(row));
 	}
 
@@ -299,7 +299,7 @@ export class FormRenderer {
 
 		for (const key in fields) {
 			switch (fields[key].typeName) {
-				case 'Field_Date':
+				case "Field_Date":
 					variables[key] = new Date(fields[key].value);
 					break;
 				default:

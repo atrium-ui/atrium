@@ -13,7 +13,7 @@ export const Ease = {
 };
 
 export function isTouch() {
-	return !!navigator.maxTouchPoints || 'ontouchstart' in window;
+	return !!navigator.maxTouchPoints || "ontouchstart" in window;
 }
 
 type VecOrNumber = Vec | number[] | number;
@@ -174,6 +174,6 @@ export class Vec extends Array {
 	static isVec = Array.isArray;
 
 	toString(): string {
-		return `Vec{${this.join(',')}}`;
+		return `Vec{${this.join(",")}}`;
 	}
 }

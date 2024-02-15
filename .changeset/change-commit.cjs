@@ -7,7 +7,7 @@ module.exports = {
 
 ${releasePlan.releases
 	.map((release) => `- ${release.name}@${release.newVersion}`)
-	.join('\n')}
+	.join("\n")}
 `;
 	},
 };

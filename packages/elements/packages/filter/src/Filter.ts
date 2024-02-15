@@ -1,13 +1,13 @@
-import { HTMLTemplateResult, LitElement, css, html } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { HTMLTemplateResult, LitElement, css, html } from "lit";
+import { customElement, property, query } from "lit/decorators.js";
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'a-command': Filter;
+		"a-command": Filter;
 	}
 }
 
-@customElement('a-filter')
+@customElement("a-filter")
 export class Filter extends LitElement {
 	public static styles = css`
     :host {
@@ -53,7 +53,7 @@ export class Filter extends LitElement {
 	@query('slot[name="input"]')
 	private input?: HTMLSlotElement;
 
-	@query('.items')
+	@query(".items")
 	private items;
 
 	current = 0;
@@ -76,25 +76,25 @@ export class Filter extends LitElement {
 
 	private onBlur() {
 		setTimeout(() => {
-			this.dispatchEvent(new Event('blur'));
+			this.dispatchEvent(new Event("blur"));
 		}, 150);
 	}
 
 	private onInput = (e) => {
-		this.dispatchEvent(new CustomEvent('input', { detail: e.target.value }));
+		this.dispatchEvent(new CustomEvent("input", { detail: e.target.value }));
 	};
 
 	private onKeyDown = (e) => {
 		switch (e.key) {
-			case 'ArrowDown':
+			case "ArrowDown":
 				this.down();
 				e.preventDefault();
 				break;
-			case 'ArrowUp':
+			case "ArrowUp":
 				this.up();
 				e.preventDefault();
 				break;
-			case 'Enter':
+			case "Enter":
 				this.enter();
 				e.preventDefault();
 				break;
@@ -122,10 +122,10 @@ export class Filter extends LitElement {
 		for (let i = 0; i < children.length; i++) {
 			const child = children[i];
 			if (i === this.current) {
-				child.setAttribute('selected', '');
-				child.scrollIntoView({ block: 'nearest' });
+				child.setAttribute("selected", "");
+				child.scrollIntoView({ block: "nearest" });
 			} else {
-				child.removeAttribute('selected');
+				child.removeAttribute("selected");
 			}
 		}
 	}
@@ -133,23 +133,23 @@ export class Filter extends LitElement {
 	connectedCallback(): void {
 		super.connectedCallback();
 
-		this.addEventListener('pointerenter', this.onPointerEnter, { capture: true });
-		this.addEventListener('blur', this.onBlur, { capture: true });
+		this.addEventListener("pointerenter", this.onPointerEnter, { capture: true });
+		this.addEventListener("blur", this.onBlur, { capture: true });
 	}
 
 	protected firstUpdated(): void {
-		this.input?.addEventListener('keydown', this.onKeyDown, { capture: true });
-		this.input?.addEventListener('input', this.onInput, { capture: true });
+		this.input?.addEventListener("keydown", this.onKeyDown, { capture: true });
+		this.input?.addEventListener("input", this.onInput, { capture: true });
 	}
 
 	disconnectedCallback(): void {
 		super.disconnectedCallback();
 
-		this.removeEventListener('pointerenter', this.onPointerEnter, { capture: true });
-		this.removeEventListener('blur', this.onBlur, { capture: true });
+		this.removeEventListener("pointerenter", this.onPointerEnter, { capture: true });
+		this.removeEventListener("blur", this.onBlur, { capture: true });
 
-		this.input?.removeEventListener('keydown', this.onKeyDown, { capture: true });
-		this.input?.removeEventListener('input', this.onInput, { capture: true });
+		this.input?.removeEventListener("keydown", this.onKeyDown, { capture: true });
+		this.input?.removeEventListener("input", this.onInput, { capture: true });
 	}
 
 	protected render(): HTMLTemplateResult {
@@ -157,7 +157,7 @@ export class Filter extends LitElement {
       <div class="input">
         <slot name="before-input"></slot>
         <slot name="input">
-          <input placeholder=${this.placeholder || ''} type="text" />
+          <input placeholder=${this.placeholder || ""} type="text" />
         </slot>
         <slot name="after-input"></slot>
       </div>

@@ -1,4 +1,4 @@
-import '@sv/elements/animation';
+import "@sv/elements/animation";
 
 type AnimationProps = {
 	src: string;

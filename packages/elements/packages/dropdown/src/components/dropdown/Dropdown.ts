@@ -1,11 +1,11 @@
-import { LitElement, css, html } from 'lit';
-import { property, query } from 'lit/decorators.js';
-import { DoropDownSelectEvent } from './DoropDownSelectEvent';
-import { OptionElement } from './Option';
+import { LitElement, css, html } from "lit";
+import { property, query } from "lit/decorators.js";
+import { DoropDownSelectEvent } from "./DoropDownSelectEvent";
+import { OptionElement } from "./Option";
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'a-dropdown': Dropdown;
+		"a-dropdown": Dropdown;
 	}
 }
 
@@ -49,7 +49,7 @@ export class Dropdown extends LitElement {
 	}
 
 	@property({ type: String, reflect: true })
-	public direction: 'up' | 'down' = 'down';
+	public direction: "up" | "down" = "down";
 
 	@property({ type: String, reflect: true })
 	public selected?: string;
@@ -60,7 +60,7 @@ export class Dropdown extends LitElement {
 	@property({ type: Boolean, reflect: true })
 	public disabled = false;
 
-	@query('.dropdown')
+	@query(".dropdown")
 	public dropdown!: HTMLElement;
 
 	private options: OptionElement[] = [];
@@ -68,17 +68,17 @@ export class Dropdown extends LitElement {
 	public connectedCallback(): void {
 		super.connectedCallback();
 
-		this.addEventListener('focusout', this.onBlur);
-		this.addEventListener('keydown', this.onKeyDown);
-		this.addEventListener('keyup', this.onKeyUp);
+		this.addEventListener("focusout", this.onBlur);
+		this.addEventListener("keydown", this.onKeyDown);
+		this.addEventListener("keyup", this.onKeyUp);
 	}
 
 	public disconnectedCallback(): void {
 		super.disconnectedCallback();
 
-		this.removeEventListener('focusout', this.onBlur);
-		this.removeEventListener('keydown', this.onKeyDown);
-		this.removeEventListener('keyup', this.onKeyUp);
+		this.removeEventListener("focusout", this.onBlur);
+		this.removeEventListener("keydown", this.onKeyDown);
+		this.removeEventListener("keyup", this.onKeyUp);
 	}
 
 	public selectNext() {
@@ -121,33 +121,33 @@ export class Dropdown extends LitElement {
 	public close() {
 		this.opened = false;
 		this.requestUpdate();
-		this.dispatchEvent(new Event('close'));
+		this.dispatchEvent(new Event("close"));
 	}
 
 	public open() {
 		if (this.disabled) return;
 
-		this.dispatchEvent(new Event('open'));
+		this.dispatchEvent(new Event("open"));
 		this.opened = true;
 		this.requestUpdate();
 
 		const inputElement = this.querySelector(`[slot="input"]`) as HTMLElement;
 		if (inputElement) inputElement.focus();
 
-		if (this.direction === 'up') {
+		if (this.direction === "up") {
 			this.dropdown.scrollTo(0, this.dropdown.scrollHeight);
 		}
 	}
 
 	private onBlur(e) {
 		const blurOnNextMouseUp = () => {
-			window.removeEventListener('pointerup', blurOnNextMouseUp);
+			window.removeEventListener("pointerup", blurOnNextMouseUp);
 
-			if (!this.querySelector('*:focus-within')) {
+			if (!this.querySelector("*:focus-within")) {
 				this.close();
 			}
 		};
-		window.addEventListener('pointerup', blurOnNextMouseUp);
+		window.addEventListener("pointerup", blurOnNextMouseUp);
 	}
 
 	private onClick(event: PointerEvent) {
@@ -161,15 +161,15 @@ export class Dropdown extends LitElement {
 	private scrollToSelected() {
 		if (this.selected) {
 			const selectedOption = this.getOptionByValue(this.selected);
-			selectedOption?.scrollIntoView({ block: 'nearest' });
+			selectedOption?.scrollIntoView({ block: "nearest" });
 		}
 	}
 
 	private onKeyDown(event: KeyboardEvent) {
 		switch (event.key) {
-			case 'ArrowUp':
-				if (this.querySelector('*:focus')) {
-					if (this.direction === 'up') {
+			case "ArrowUp":
+				if (this.querySelector("*:focus")) {
+					if (this.direction === "up") {
 						this.selectPrev();
 					} else {
 						this.selectNext();
@@ -178,9 +178,9 @@ export class Dropdown extends LitElement {
 					event.preventDefault();
 				}
 				break;
-			case 'ArrowDown':
-				if (this.querySelector('*:focus')) {
-					if (this.direction === 'up') {
+			case "ArrowDown":
+				if (this.querySelector("*:focus")) {
+					if (this.direction === "up") {
 						this.selectNext();
 					} else {
 						this.selectPrev();
@@ -189,14 +189,14 @@ export class Dropdown extends LitElement {
 					event.preventDefault();
 				}
 				break;
-			case 'Tab':
+			case "Tab":
 				setTimeout(() => {
-					if (!this.querySelector('*:focus-within')) {
+					if (!this.querySelector("*:focus-within")) {
 						this.close();
 					}
 				}, 10);
 				break;
-			case 'Enter':
+			case "Enter":
 				event.preventDefault();
 				break;
 		}
@@ -204,15 +204,15 @@ export class Dropdown extends LitElement {
 
 	private onKeyUp(event: KeyboardEvent) {
 		switch (event.key) {
-			case 'Enter':
+			case "Enter":
 				if (this.opened && this.selected !== undefined) {
 					this.submitSelected();
 				}
 				break;
-			case 'Escape':
+			case "Escape":
 				this.close();
 				break;
-			case 'Tab':
+			case "Tab":
 				if (!this.opened) {
 					this.open();
 				}
@@ -222,9 +222,9 @@ export class Dropdown extends LitElement {
 
 	private onSlotChange() {
 		// update dom image
-		this.options = [...this.querySelectorAll('a-option')] as OptionElement[];
+		this.options = [...this.querySelectorAll("a-option")] as OptionElement[];
 
-		if (this.direction === 'up') {
+		if (this.direction === "up") {
 			this.options.reverse();
 		}
 	}
@@ -233,7 +233,7 @@ export class Dropdown extends LitElement {
 		let index = 0;
 		for (const child of this.options) {
 			if (child === e.target || child.contains(e.target as HTMLElement)) {
-				const value = child.getAttribute('value') || index.toString();
+				const value = child.getAttribute("value") || index.toString();
 				this.selected = value;
 				this.submitSelected();
 				break;
@@ -244,7 +244,7 @@ export class Dropdown extends LitElement {
 
 	private getValueOfOption(optionElement: OptionElement) {
 		return (
-			optionElement.getAttribute('value') ||
+			optionElement.getAttribute("value") ||
 			this.options.indexOf(optionElement).toString()
 		);
 	}
@@ -269,9 +269,9 @@ export class Dropdown extends LitElement {
 		for (const option of options) {
 			const optionValue = this.getValueOfOption(option);
 			if (optionValue === this.selected) {
-				option.setAttribute('selected', '');
+				option.setAttribute("selected", "");
 			} else {
-				option.removeAttribute('selected');
+				option.removeAttribute("selected");
 			}
 		}
 	}
@@ -290,4 +290,4 @@ export class Dropdown extends LitElement {
 	}
 }
 
-customElements.define('a-dropdown', Dropdown);
+customElements.define("a-dropdown", Dropdown);

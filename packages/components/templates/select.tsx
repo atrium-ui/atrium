@@ -1,14 +1,14 @@
-import '@sv/elements/dropdown';
-import '@sv/elements/expandable';
+import "@sv/elements/dropdown";
+import "@sv/elements/expandable";
 
-import { Button } from './button.jsx';
+import { Button } from "./button.jsx";
 
 export function Select(
 	props: {
 		children?: JSX.Element | string;
 		value: string;
 	},
-	context
+	context,
 ) {
 	const slots = {
 		default: () =>

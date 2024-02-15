@@ -1,5 +1,5 @@
-import '@sv/elements/dropdown';
-import '@sv/elements/expandable';
+import "@sv/elements/dropdown";
+import "@sv/elements/expandable";
 
 interface Props {
 	children?: JSX.Element | string;

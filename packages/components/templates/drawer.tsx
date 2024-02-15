@@ -1,31 +1,31 @@
-import '@sv/elements/blur';
-import { Track, Trait } from '@sv/elements/track';
-import { PointerTrait } from '../../elements/packages/track/src/traits/Pointer.js';
+import "@sv/elements/blur";
+import { Track, Trait } from "@sv/elements/track";
+import { PointerTrait } from "../../elements/packages/track/src/traits/Pointer.js";
 
 customElements.define(
-	'drawer-track',
+	"drawer-track",
 	class extends Track {
 		connectedCallback(): void {
 			super.connectedCallback();
 
-			const pointer = this.findTrait<PointerTrait>('pointer');
+			const pointer = this.findTrait<PointerTrait>("pointer");
 			if (pointer) {
 				pointer.borderResistnce = 0;
 			}
 
 			this.addTrait(
-				'drawer',
+				"drawer",
 				class extends Trait {
 					input() {
 						if (this.entity.position.y < this.entity.offsetHeight * -1 + 40) {
-							this.entity.dispatchEvent(new Event('close', { bubbles: true }));
+							this.entity.dispatchEvent(new Event("close", { bubbles: true }));
 						}
 					}
 				},
-				true
+				true,
 			);
 		}
-	}
+	},
 );
 
 interface Props {

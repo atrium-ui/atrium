@@ -1,1 +1,1 @@
-export { AnimationElement } from './AnimationElement.js';
+export { AnimationElement } from "./AnimationElement.js";

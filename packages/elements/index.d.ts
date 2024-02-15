@@ -5,7 +5,7 @@ type ElementProps<T> = {
 type CustomElementChildren = Element | Element[] | JSX.Element | JSX.Element[];
 
 type CustomElementProps<T> = {
-	[K in keyof Omit<T, 'children'> as string & K]?: T[K];
+	[K in keyof Omit<T, "children"> as string & K]?: T[K];
 } & {
 	children?: CustomElementChildren;
 	class?: string;
@@ -22,7 +22,7 @@ declare global {
 		}
 	}
 
-	declare module 'solid-js' {
+	declare module "solid-js" {
 		namespace JSX {
 			interface IntrinsicElements extends ElementProps<HTMLElementTagNameMap> {}
 		}

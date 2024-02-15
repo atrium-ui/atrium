@@ -1,12 +1,12 @@
-import { Button } from '@sv/components/templates/button.jsx';
-import { Drawer } from '@sv/components/templates/drawer.jsx';
-import { createSignal } from 'solid-js';
-import { paragraph } from 'txtgen';
-import '@sv/elements/adaptive';
+import { Button } from "@sv/components/templates/button.jsx";
+import { Drawer } from "@sv/components/templates/drawer.jsx";
+import { createSignal } from "solid-js";
+import { paragraph } from "txtgen";
+import "@sv/elements/adaptive";
 
 export function DrawerDemo() {
 	const [open, setOpen] = createSignal(false);
-	const [text, setText] = createSignal('');
+	const [text, setText] = createSignal("");
 
 	const toggle = () => setOpen(!open());
 	const next = () => {

@@ -1,7 +1,7 @@
-import { HTMLTemplateResult, LitElement, html, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { HTMLTemplateResult, LitElement, html, unsafeCSS } from "lit";
+import { customElement, property } from "lit/decorators.js";
 
-@customElement('a-example')
+@customElement("a-example")
 export class Example extends LitElement {
 	public static styles = unsafeCSS(`
 		:host {

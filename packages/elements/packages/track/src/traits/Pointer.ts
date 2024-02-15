@@ -1,6 +1,6 @@
-import { InputState, Track } from '../Track.js';
-import { Trait } from '../Trait.js';
-import { Vec, isTouch } from '../utils.js';
+import { InputState, Track } from "../Track.js";
+import { Trait } from "../Trait.js";
+import { Vec, isTouch } from "../utils.js";
 
 export class PointerTrait extends Trait {
 	grabbing = false;
@@ -16,11 +16,11 @@ export class PointerTrait extends Trait {
 		const track = e.track;
 		if (track) {
 			if (!isTouch()) {
-				track.style.pointerEvents = this.grabbing ? 'none' : '';
+				track.style.pointerEvents = this.grabbing ? "none" : "";
 			}
 		}
 		if (!isTouch()) {
-			e.style.cursor = this.grabbing ? 'grabbing' : '';
+			e.style.cursor = this.grabbing ? "grabbing" : "";
 		}
 	}
 
@@ -34,7 +34,7 @@ export class PointerTrait extends Trait {
 		if (inputState.grab.value && !this.grabbing) {
 			this.grabbing = true;
 			this.grabbedStart.set(e.mousePos);
-			this.entity.dispatchEvent(new Event('pointer:grab'));
+			this.entity.dispatchEvent(new Event("pointer:grab"));
 			this.entity.setTarget(undefined);
 		}
 
@@ -44,7 +44,7 @@ export class PointerTrait extends Trait {
 
 		if (inputState.release.value) {
 			this.grabbing = false;
-			this.entity.dispatchEvent(new Event('pointer:release'));
+			this.entity.dispatchEvent(new Event("pointer:release"));
 		}
 
 		if (inputState.move.value.abs()) {
@@ -68,7 +68,7 @@ export class PointerTrait extends Trait {
 			if (!this.grabbing && !e.target) {
 				// this ration might not be perfect for every size
 				if (accel * forceToSizeRatio < 1) {
-					e.moveBy(0, 'linear');
+					e.moveBy(0, "linear");
 				}
 			}
 		}
@@ -101,23 +101,23 @@ export class PointerTrait extends Trait {
 			stopRight = e.trackWidth - e.offsetWidth;
 		}
 
-		if (e.align === 'left') {
+		if (e.align === "left") {
 			clampedPos = new Vec(
 				Math.min(stopRight, clampedPos.x),
-				Math.min(stopBottom, clampedPos.y)
+				Math.min(stopBottom, clampedPos.y),
 			);
 			clampedPos = new Vec(
 				Math.max(stopLeft, clampedPos.x),
-				Math.max(stopTop, clampedPos.y)
+				Math.max(stopTop, clampedPos.y),
 			);
 		} else {
 			clampedPos = new Vec(
 				Math.max(stopLeft, clampedPos.x),
-				Math.max(stopTop, clampedPos.y)
+				Math.max(stopTop, clampedPos.y),
 			);
 			clampedPos = new Vec(
 				Math.min(stopRight, clampedPos.x),
-				Math.min(stopBottom, clampedPos.y)
+				Math.min(stopBottom, clampedPos.y),
 			);
 		}
 

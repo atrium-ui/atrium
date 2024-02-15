@@ -1,18 +1,18 @@
-import lit from '@astrojs/lit';
-import solid from '@astrojs/solid-js';
-import starlight from '@astrojs/starlight';
-import tailwind from '@astrojs/tailwind';
-import { defineConfig } from 'astro/config';
+import lit from "@astrojs/lit";
+import solid from "@astrojs/solid-js";
+import starlight from "@astrojs/starlight";
+import tailwind from "@astrojs/tailwind";
+import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
-	base: '/sv-frontend-library/mono',
-	site: 'https://sv.pages.s-v.de',
-	publicDir: 'static',
+	base: "/sv-frontend-library/mono",
+	site: "https://sv.pages.s-v.de",
+	publicDir: "static",
 	vite: {
 		server: {
 			fs: {
-				allow: ['..'],
+				allow: [".."],
 			},
 		},
 	},
@@ -24,45 +24,45 @@ export default defineConfig({
 		}),
 		starlight({
 			components: {
-				ContentPanel: './src/components/ContentPanel.astro',
+				ContentPanel: "./src/components/ContentPanel.astro",
 			},
-			title: 'Atrium',
-			customCss: ['./src/styles/custom.css'],
+			title: "Atrium",
+			customCss: ["./src/styles/custom.css"],
 			logo: {
-				src: './src/assets/atrium.png',
+				src: "./src/assets/atrium.png",
 			},
 			social: {
-				gitlab: 'https://gitlab.s-v.de/sv-components/mono',
+				gitlab: "https://gitlab.s-v.de/sv-components/mono",
 			},
 			sidebar: [
 				{
-					label: 'Concept',
-					link: '/concept',
+					label: "Concept",
+					link: "/concept",
 				},
 				{
-					label: 'Usage',
-					link: '/usage',
+					label: "Usage",
+					link: "/usage",
 				},
 				{
-					label: 'Component Templates',
+					label: "Component Templates",
 					collapsed: false,
-					autogenerate: { directory: 'components' },
+					autogenerate: { directory: "components" },
 				},
 				{
-					label: 'Elements',
+					label: "Elements",
 					collapsed: false,
-					autogenerate: { directory: 'elements' },
+					autogenerate: { directory: "elements" },
 				},
 				{
-					label: 'Packages',
+					label: "Packages",
 					collapsed: false,
-					autogenerate: { directory: 'packages' },
+					autogenerate: { directory: "packages" },
 				},
 				{
-					label: 'Experimental',
-					badge: 'new',
+					label: "Experimental",
+					badge: "new",
 					collapsed: true,
-					autogenerate: { directory: 'experimental' },
+					autogenerate: { directory: "experimental" },
 				},
 			],
 		}),

@@ -1,9 +1,9 @@
-import { LitElement, css, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { LitElement, css, html } from "lit";
+import { property } from "lit/decorators.js";
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'a-option': OptionElement;
+		"a-option": OptionElement;
 	}
 }
 
@@ -24,4 +24,4 @@ export class OptionElement extends LitElement {
 	}
 }
 
-customElements.define('a-option', OptionElement);
+customElements.define("a-option", OptionElement);

@@ -1,5 +1,5 @@
-import '@sv/elements/expandable';
-import '@sv/elements/toggle';
+import "@sv/elements/expandable";
+import "@sv/elements/toggle";
 
 interface Props {
 	children?: JSX.Element | string;
@@ -68,7 +68,7 @@ export function Accordion(props: Props, context) {
 
 Accordion.Item = function AccordionItem(
 	props: { title: string; children?: JSX.Element | string },
-	context
+	context,
 ) {
 	const slots = {
 		default: () =>

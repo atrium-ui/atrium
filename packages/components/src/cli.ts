@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-import { resolve } from 'path';
-import { fileURLToPath } from 'url';
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
-import en from 'enquirer';
+import { resolve } from "path";
+import { fileURLToPath } from "url";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
+import en from "enquirer";
 
-const dist = resolve('./src/components/ui');
-const componentRoot = resolve(fileURLToPath(import.meta.url), '../../templates/');
+const dist = resolve("./src/components/ui");
+const componentRoot = resolve(fileURLToPath(import.meta.url), "../../templates/");
 const availableComponents = readdirSync(componentRoot).map((file) =>
-	file.replace('.tsx', '')
+	file.replace(".tsx", ""),
 );
 
 export function component(name: string) {
@@ -28,13 +28,13 @@ async function main() {
 
 	if (components.length === 0) {
 		const options = readdirSync(componentRoot)
-			.filter((file) => file.match('.tsx'))
-			.map((file) => file.replace('.tsx', ''));
+			.filter((file) => file.match(".tsx"))
+			.map((file) => file.replace(".tsx", ""));
 
 		// @ts-ignore
 		const prompt = new en.MultiSelect({
-			name: 'component',
-			message: 'Pick components you want to use',
+			name: "component",
+			message: "Pick components you want to use",
 			choices: options,
 		});
 
@@ -53,10 +53,10 @@ async function main() {
 	}
 
 	for (const comp of components) {
-		const template = readFileSync(component(comp), 'utf8');
+		const template = readFileSync(component(comp), "utf8");
 		const filename = `${dist}/${comp}.tsx`;
 		writeFileSync(filename, template);
-		console.log('use', comp, filename);
+		console.log("use", comp, filename);
 	}
 }
 

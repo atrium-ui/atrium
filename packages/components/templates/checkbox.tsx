@@ -1,4 +1,4 @@
-import '@sv/elements/toggle';
+import "@sv/elements/toggle";
 
 function CheckIcon() {
 	return (

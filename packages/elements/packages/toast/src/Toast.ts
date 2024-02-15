@@ -1,4 +1,4 @@
-import { LitElement, css, html } from 'lit';
+import { LitElement, css, html } from "lit";
 
 let instance: ToastFeed | null = null;
 
@@ -75,7 +75,7 @@ export class Notifications {
 			new Toast({
 				message: `${message}`,
 				time: 3000,
-			})
+			}),
 		);
 	}
 
@@ -84,7 +84,7 @@ export class Notifications {
 			new ToastError({
 				message: `Error: ${message}`,
 				time: 3000,
-			})
+			}),
 		);
 	}
 }
@@ -149,7 +149,7 @@ export class Toast extends LitElement {
 		this.message = options.message;
 		this.time = options.time;
 
-		this.addEventListener('click', () => {
+		this.addEventListener("click", () => {
 			setTimeout(() => {
 				this.kill();
 			}, 100);
@@ -171,8 +171,8 @@ export class Toast extends LitElement {
 
 		this.offsetHeight;
 
-		this.style.opacity = '0';
-		this.style.height = '0px';
+		this.style.opacity = "0";
+		this.style.height = "0px";
 
 		setTimeout(() => {
 			this.remove();
@@ -231,14 +231,14 @@ export class ToastError extends Toast {
 	}
 }
 
-customElements.define('a-toast-feed', ToastFeed);
-customElements.define('a-toast', Toast);
-customElements.define('a-toast-error', ToastError);
+customElements.define("a-toast-feed", ToastFeed);
+customElements.define("a-toast", Toast);
+customElements.define("a-toast-error", ToastError);
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'a-toast-feed': ToastFeed;
-		'a-toast': Toast;
-		'a-toast-error': ToastError;
+		"a-toast-feed": ToastFeed;
+		"a-toast": Toast;
+		"a-toast-error": ToastError;
 	}
 }

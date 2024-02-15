@@ -6,13 +6,13 @@ export default class DebugElement extends HTMLElement {
 	context!: CanvasRenderingContext2D | null;
 
 	connectedCallback() {
-		if (!this.shadowRoot) this.attachShadow({ mode: 'open' });
+		if (!this.shadowRoot) this.attachShadow({ mode: "open" });
 
 		if (this.shadowRoot && !this.canvas) {
-			const ele = document.createElement('canvas');
+			const ele = document.createElement("canvas");
 
 			this.canvas = ele;
-			this.context = this.canvas.getContext('2d');
+			this.context = this.canvas.getContext("2d");
 			this.shadowRoot.appendChild(ele);
 		}
 
@@ -54,13 +54,13 @@ export default class DebugElement extends HTMLElement {
 		title: string | number,
 		row: number,
 		arr: number[],
-		defaultColor = 'red'
+		defaultColor = "red",
 	) {
-		const params = title.toString().split(';');
+		const params = title.toString().split(";");
 
 		const color = params[1] || defaultColor;
 
-		ctx.fillStyle = 'white';
+		ctx.fillStyle = "white";
 
 		const maxValue = Math.max(Math.max(...arr), 1);
 
@@ -95,11 +95,11 @@ export default class DebugElement extends HTMLElement {
 		}
 		ctx.stroke();
 
-		ctx.strokeStyle = 'white';
+		ctx.strokeStyle = "white";
 
 		ctx.restore();
 
-		ctx.textAlign = 'left';
+		ctx.textAlign = "left";
 
 		const y = this.lineHeight(row);
 		let x = leftPad;
@@ -109,7 +109,7 @@ export default class DebugElement extends HTMLElement {
 			x += params[0].length * 7 + 2;
 		}
 
-		ctx.fillText((arr[arr.length - 1] || '').toString(), x, y + height);
+		ctx.fillText((arr[arr.length - 1] || "").toString(), x, y + height);
 	}
 
 	render() {
@@ -122,7 +122,7 @@ export default class DebugElement extends HTMLElement {
 						return prev + 3;
 					}
 					return prev + 1;
-				}, 0) as number
+				}, 0) as number,
 			) + 4;
 
 		if (!this.context) return;
@@ -135,10 +135,10 @@ export default class DebugElement extends HTMLElement {
 
 		for (let i = 0; i < this.props.length; i++) {
 			switch (typeof this.props[i]) {
-				case 'object': {
+				case "object": {
 					const item = this.props[i];
 					if (Array.isArray(item)) {
-						this.drawGraph(ctx, item[0] || '', line, item.slice(1) as number[]);
+						this.drawGraph(ctx, item[0] || "", line, item.slice(1) as number[]);
 					}
 					line += 3;
 					break;
@@ -151,10 +151,10 @@ export default class DebugElement extends HTMLElement {
 	}
 
 	drawRow(ctx, row, value) {
-		ctx.fillStyle = 'white';
+		ctx.fillStyle = "white";
 		ctx.font = `300 ${this.fontSize}px sans-serif`;
 		if (value) ctx.fillText(value, 5, this.lineHeight(row));
 	}
 }
 
-customElements.define('debug-hud', DebugElement);
+customElements.define("debug-hud", DebugElement);

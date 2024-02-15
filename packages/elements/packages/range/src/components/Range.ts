@@ -1,13 +1,13 @@
-import { LitElement, css, html } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { LitElement, css, html } from "lit";
+import { customElement, property, query } from "lit/decorators.js";
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'a-range': Range;
+		"a-range": Range;
 	}
 }
 
-@customElement('a-range')
+@customElement("a-range")
 export class Range extends LitElement {
 	static get styles() {
 		return css`
@@ -93,15 +93,15 @@ export class Range extends LitElement {
 	}
 
 	@property({ type: String, reflect: true })
-	public title = '';
+	public title = "";
 
 	@property({ type: String, reflect: true })
-	public subtitle = '';
+	public subtitle = "";
 
 	@property({ type: Number, reflect: true })
 	public value = 0;
 
-	@query('#progressElement')
+	@query("#progressElement")
 	private readonly progressElement!: HTMLElement;
 
 	private dragging = false;
@@ -145,18 +145,18 @@ export class Range extends LitElement {
 
 	protected updateProgress(progress: number): void {
 		this.value = progress;
-		this.dispatchEvent(new CustomEvent('input', { detail: { value: progress } }));
+		this.dispatchEvent(new CustomEvent("input", { detail: { value: progress } }));
 	}
 
 	protected onKeyDown(e): void {
 		const ev = e as KeyboardEvent;
 
 		switch (ev.key) {
-			case 'ArrowLeft':
-				this.dispatchEvent(new Event('input-jump-back'));
+			case "ArrowLeft":
+				this.dispatchEvent(new Event("input-jump-back"));
 				break;
-			case 'ArrowRight':
-				this.dispatchEvent(new Event('input-jump-forward'));
+			case "ArrowRight":
+				this.dispatchEvent(new Event("input-jump-forward"));
 				break;
 		}
 	}
@@ -164,10 +164,10 @@ export class Range extends LitElement {
 	connectedCallback(): void {
 		super.connectedCallback();
 
-		window.addEventListener('pointermove', this.onMouseMove.bind(this));
-		window.addEventListener('pointerup', this.onMouseUp.bind(this));
-		window.addEventListener('pointercancel', this.onMouseUp.bind(this));
-		this.addEventListener('keydown', this.onKeyDown.bind(this));
+		window.addEventListener("pointermove", this.onMouseMove.bind(this));
+		window.addEventListener("pointerup", this.onMouseUp.bind(this));
+		window.addEventListener("pointercancel", this.onMouseUp.bind(this));
+		this.addEventListener("keydown", this.onKeyDown.bind(this));
 	}
 
 	render() {
