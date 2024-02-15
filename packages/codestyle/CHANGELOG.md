@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.1.3
+
+### Patch Changes
+
+- fe044c0: Remove vue from shared stylelint
+
 ## 0.1.2
 
 ### Patch Changes
