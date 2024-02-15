@@ -1,6 +1,7 @@
 {
 	"extends": "@sv/codestyle/tsconfig.json",
 	"compilerOptions": {
+		"target": "ES2020",
 		"jsx": "preserve",
 		"types": ["bun-types"]
 	},
