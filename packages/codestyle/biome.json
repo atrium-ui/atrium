@@ -11,6 +11,7 @@
 		"ignore": [
 			".mise",
 			".astro",
+			".nuxt",
 			"vendor",
 			"public",
 			"dist"
