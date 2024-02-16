@@ -6,8 +6,14 @@ module.exports = {
 		return `publish: ${releasePlan.releases.length} packages
 
 ${releasePlan.releases
-	.map((release) => `- ${release.name}@${release.newVersion}`)
-	.join("\n")}
-`;
+	.map(
+		(release) => `## ${release.name}@${release.newVersion}
+
+${release.changesets.map((changeset) => {
+	const changes = releasePlan.changesets.find((cs) => cs.id === changeset);
+	return changes.summary;
+})}`,
+	)
+	.join("\n")}`;
 	},
 };
