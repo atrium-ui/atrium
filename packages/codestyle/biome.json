@@ -1,10 +1,9 @@
 {
 	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
 	"vcs": {
-		"clientKind": "git",
 		"enabled": true,
-		"useIgnoreFile": true,
-		"defaultBranch": "main"
+		"clientKind": "git",
+		"useIgnoreFile": true
 	},
 	"files": {
 		"ignoreUnknown": true,
