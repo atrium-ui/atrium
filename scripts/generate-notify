@@ -1,29 +1,29 @@
 #!/usr/bin/env bun
 
-import fs from 'fs';
-import fg from 'fast-glob';
+import fs from "fs";
+import fg from "fast-glob";
 
-const publishOutputLog = '.task/publish.txt';
+const publishOutputLog = ".task/publish.txt";
 
 function getPackageTree() {
-	const rootPackage = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+	const rootPackage = JSON.parse(fs.readFileSync("package.json", "utf8"));
 	const packages = fg.sync(
 		rootPackage.workspaces.map((p) => {
 			return `${p}/package.json`;
-		})
+		}),
 	);
 
 	const tree = new Map();
 
 	for (const pkg of packages) {
-		const root = pkg.replace('/package.json', '');
-		const pkgJson = JSON.parse(fs.readFileSync(pkg, 'utf8'));
+		const root = pkg.replace("/package.json", "");
+		const pkgJson = JSON.parse(fs.readFileSync(pkg, "utf8"));
 		const changelog = `${root}/CHANGELOG.md`;
 		if (!fs.existsSync(changelog)) {
 			continue;
 		}
 
-		const log = fs.readFileSync(changelog, 'utf8');
+		const log = fs.readFileSync(changelog, "utf8");
 
 		tree.set(pkgJson.name, {
 			root: root,
@@ -47,8 +47,8 @@ function versionChanges(pkg, version) {
 	}
 
 	let isVersion = false;
-	for (const line of info.changelog.split('\n')) {
-		if (line.startsWith('## ')) {
+	for (const line of info.changelog.split("\n")) {
+		if (line.startsWith("## ")) {
 			isVersion = false;
 		}
 
@@ -61,37 +61,36 @@ function versionChanges(pkg, version) {
 		}
 	}
 
-	return changes.join('\n');
+	return changes.join("\n");
 }
 
 function generateMessage() {
 	if (!fs.existsSync(publishOutputLog)) {
-		console.warn('No publish output log found');
+		console.warn("No publish output log found");
 		return process.exit(1);
 	}
 
-	const publishOutput = fs.readFileSync(publishOutputLog, 'utf8');
+	const publishOutput = fs.readFileSync(publishOutputLog, "utf8");
 
 	const publishedPackages = [
 		...publishOutput.matchAll(/info Publishing "([@a-zA-Z\/-0-9]+)" at "([-.0-9a-z]+)"/g),
 	];
 
 	if (publishedPackages.length === 0) {
-		console.warn('No packages published');
+		console.warn("No packages published");
 		return process.exit(1);
 	}
 
-	let message = '\n';
+	let message = "\n";
 
 	for (const [_, pkg, version] of publishedPackages) {
 		const changes = versionChanges(pkg, version);
 
-		const pkgWithoutScope = pkg.replace('@sv/', '');
+		const pkgWithoutScope = pkg.replace("@sv/", "");
 		const changelogUrl = `https://sv.pages.s-v.de/sv-frontend-library/mono/packages/${pkgWithoutScope}/#changelog`;
 
 		message += `\n🚀 Published ${pkg}@${version}\n`;
 		message += `\n${changes}`;
-		message += `\nFull changelog: ${changelogUrl}\n`;
 	}
 
 	return `${message}\n`;
