@@ -34,6 +34,50 @@ Make sure your project is set up with access to the registry as described in [Us
 ## Usage
 
 <Tabs>
+  <TabItem label="editorconfig">
+    The `.editorconfig` will be copied to the root of your package using a postinstall script.
+  </TabItem>
+  <TabItem label="biome">
+    ```json
+    // biome.json
+    {
+      "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+      "extends": ["./node_modules/@sv/codestyle/biome.json"]
+    }
+    ```
+  </TabItem>
+  <TabItem label="prettier">
+    // Contribute
+  </TabItem>
+  <TabItem label="commitlint">
+    ```javascript
+    // commitlint.config.js
+    module.exports = {
+      extends: ["@sv/codestyle/commitlint.cjs"]
+    };
+    ```
+  </TabItem>
+  <TabItem label="eslint">
+    // Contribute
+  </TabItem>
+  <TabItem label="stylelint">
+    // Contribute
+  </TabItem>
+  <TabItem label="tsconfig">
+    ```json
+    // tsconfig.json
+    {
+      "$schema": "http://json.schemastore.org/tsconfig",
+      "extends": ["@sv/codestyle/tsconfig.json"],
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+
+## Included configuration files
+
+<Tabs>
   <TabItem label=".editorconfig">
     <File file="../packages/codestyle/.editorconfig" />
   </TabItem>
