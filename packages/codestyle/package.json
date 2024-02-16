@@ -7,6 +7,7 @@
 	"type": "module",
 	"scripts": {
 		"check": "tsc --pretty",
+		"test": "bun test",
 		"postinstall": "./install.js"
 	},
 	"keywords": [],
