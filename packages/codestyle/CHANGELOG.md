@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.2.2
+
+### Patch Changes
+
+- 28c13a2: Fix editorconfig indent_style
+
 ## 0.2.1
 
 ### Patch Changes
