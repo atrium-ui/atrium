@@ -7,7 +7,7 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 
 [*.{js,json,css,html}]
-indent_style = tabs
+indent_style = tab
 indent_size = 2
 
 [*.py]
@@ -18,5 +18,5 @@ indent_size = 4
 trim_trailing_whitespace = false
 
 [*.xml]
-indent_style = tabs
+indent_style = tab
 indent_size = 2
