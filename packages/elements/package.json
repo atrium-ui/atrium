@@ -76,6 +76,11 @@
 			"import": "./packages/filter/dist/index.js",
 			"require": "./packages/filter/dist/index.cjs",
 			"types": "./packages/filter/src/index.ts"
+		},
+		"./toast": {
+			"import": "./packages/toast/dist/index.js",
+			"require": "./packages/toast/dist/index.cjs",
+			"types": "./packages/toast/src/index.ts"
 		}
 	},
 	"keywords": [],
