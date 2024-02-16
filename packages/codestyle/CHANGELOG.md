@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.2.3
+
+### Patch Changes
+
+- fb5b36b: Remove defaultBranch from biome config
+
 ## 0.2.2
 
 ### Patch Changes
