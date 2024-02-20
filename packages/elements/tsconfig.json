@@ -1,6 +1,8 @@
 {
 	"extends": "@sv/codestyle/tsconfig.json",
 	"compilerOptions": {
+		"useDefineForClassFields": false,
+		"experimentalDecorators": true,
 		"types": ["bun-types"]
 	},
 	"exclude": [

@@ -33,5 +33,3 @@ describe(NODE_NAME, () => {
 		expect(blur.hasAttribute("enabled")).toBe(true);
 	});
 });
-
-// TODO: test case with 100% width child element
