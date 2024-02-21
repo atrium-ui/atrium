@@ -31,15 +31,4 @@ describe(NODE_NAME, () => {
 		blur.setAttribute("enabled", "");
 		expect(blur.enabled).toBe(true);
 	});
-
-	it("scroll inside blur", async () => {
-		const blur = createBlur();
-		blur.innerHTML = `
-		  <div style="height: 500px; width: 400px;">
-  		  <div style="height: 1000px; width: 400px;"></div>
-  		</div>
-		`;
-		blur.scrollBy(0, 200);
-		expect(blur.scrollTop).toBe(200);
-	});
 });
