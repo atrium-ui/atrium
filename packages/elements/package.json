@@ -89,7 +89,7 @@
 		"lit": "^2.5.0"
 	},
 	"optionalDependencies": {
-		"@sv/scroll-lock": "^0.1.7",
+		"@sv/scroll-lock": "^0.1.8",
 		"@rive-app/canvas-single": "^2.7.1"
 	}
 }

@@ -2,6 +2,7 @@ import "@sv/elements/blur";
 
 interface Props {
 	children?: JSX.Element | string;
+	enabled?: boolean | undefined;
 }
 
 export function Sheet(props: Props, context) {
@@ -16,11 +17,12 @@ export function Sheet(props: Props, context) {
 
 	return (
 		<a-blur
+			enabled={props?.enabled}
 			class="group/blur block fixed z-50 top-0 left-0 w-full h-full transition-all
-           [&[enabled]]:bg-[#33333333] [&[enabled]]:backdrop-blur-md"
+           [&[enabled]]:bg-[#33333333]"
 		>
 			<div
-				class="fixed top-0 left-full h-full bg-zinc-800 transition-all
+				class="fixed top-0 left-full h-full bg-zinc-800 overflow-auto transition-all
                group-[&[enabled]]/blur:-translate-x-full py-32 px-4
                w-full sm:w-96"
 			>
