@@ -34,32 +34,32 @@ tasks:
     desc: Build all packages
     deps: [setup]
     cmds:
-      - bun x turbo --no-daemon build --filter "./packages/**"
+      - bun x turbo build --filter "./packages/**"
 
   dev:
     desc: Watch-build packages for development
     deps: [setup]
     cmds:
-      - bun x turbo --no-daemon dev --filter "./packages/**"
+      - bun x turbo dev --filter "./packages/**"
 
   test:
     desc: Run tests on all packages
     dir: "{{.TASKFILE_DIR}}"
     deps: [cli:build, build]
     cmds:
-      - bun x turbo --no-daemon test
+      - bun x turbo test
 
   check:
     desc: Run checks on all packages
     deps: [setup]
     cmds:
-      - bun x turbo --no-daemon check
+      - bun x turbo check
       - bun x biome check .
 
   fix:
     desc: Apply all (unsafe) autofixes
     cmds:
-      - bun x biome check --apply-unsafe .
+      - bun x biome check --apply .
 
   clean:
     desc: Clean untracked files

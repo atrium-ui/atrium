@@ -20,7 +20,7 @@ export function Select(
 	};
 
 	return (
-		<div onSelect={(e) => console.log(e.option.value)}>
+		<div onSelect={(e) => console.info(e.option.value)}>
 			<a-dropdown class="relative inline-block">
 				<Button slot="input" class="w-[150px]">
 					{props.value}

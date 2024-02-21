@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <script type="module" src="./src/Blur.ts"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
       a-blur {
@@ -23,8 +24,12 @@
         align-items: center;
       }
       .menu {
+        overflow: auto;
+        max-width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
         position: absolute;
         top: 0;
@@ -42,6 +47,66 @@
   </head>
   <body>
     <button onclick="document.querySelector('a-blur').enabled = true">Open</button>
+
+    <a-blur>
+      <div class="menu">
+        <button onclick="document.querySelector('a-blur').enabled = false">Close</button>
+
+        <div>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+          </p>
+        </div>
+      </div>
+    </a-blur>
 
     <div style="max-width: 900px">
       <p>
@@ -96,11 +161,5 @@
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
       </p>
     </div>
-
-    <a-blur>
-      <div class="menu">
-        <button onclick="document.querySelector('a-blur').enabled = false">Close</button>
-      </div>
-    </a-blur>
   </body>
 </html>

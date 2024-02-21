@@ -23,7 +23,7 @@ class resizeObserver {
 	}
 
 	destroyResizeObserver() {
-		console.log('resizeObserver: Destroy.');
+		console.info('resizeObserver: Destroy.');
 
 		if (this.instance) {
 			this.instance.disconnect();

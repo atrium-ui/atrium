@@ -93,25 +93,25 @@
             //
 
             onInit: (slider) => {
-              console.log('slider:onInit')
+              console.info('slider:onInit')
             },
             onMove: (event, slider) => {
-              console.log('slider:onMove', event, slider)
+              console.info('slider:onMove', event, slider)
             },
             onChange: (slider, oldIndex, newIndex) => {
-              console.log('slider:onChange', slider, oldIndex, newIndex)
+              console.info('slider:onChange', slider, oldIndex, newIndex)
             },
             onComplete: () => {
-              console.log('slider:onComplete')
+              console.info('slider:onComplete')
             },
             onStart: (event, slider) => {
-              console.log('slider:onStart', event, slider)
+              console.info('slider:onStart', event, slider)
             },
             onEnd: (event, slider) => {
-              console.log('slider:onEnd', event, slider)
+              console.info('slider:onEnd', event, slider)
             },
             onTranslate: (x, y, slider) => {
-              console.log('slider:onTranslate', slider.currentIndex, slider)
+              console.info('slider:onTranslate', slider.currentIndex, slider)
             },
             prevent(event) {
               return Math.abs(event.deltaY) > 0

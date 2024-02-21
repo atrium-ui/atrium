@@ -4,8 +4,12 @@
  *  @todo: maybe use https://github.com/d4nyll/lethargy to normalize scrollevent in different browsers with different input devices
  */
 
+type ScrollLockOptions = {
+	debug?: boolean;
+	allowElements?: string[];
+};
+
 export class ScrollLock {
-	installed = false;
 	enabled = false;
 
 	initialClientY = 0;
@@ -18,13 +22,18 @@ export class ScrollLock {
 		allowElements: ["textarea", "iframe"],
 	};
 
-	constructor() {
-		if (!this.installed) {
-			this.installed = true;
+	constructor(options?: ScrollLockOptions) {
+		if (options) {
+			this.options = {
+				debug: options.debug || false,
+				allowElements: options.allowElements
+					? [...this.options.allowElements, ...options.allowElements]
+					: this.options.allowElements,
+			};
+		}
 
-			if (typeof window !== "undefined") {
-				this.checkForPassiveEvents();
-			}
+		if (typeof window !== "undefined") {
+			this.checkForPassiveEvents();
 		}
 	}
 

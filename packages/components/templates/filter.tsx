@@ -18,7 +18,7 @@ export function Filter(props: Props, context) {
 
 	return (
 		<div
-			onInput={(e) => console.log(e.target.value)}
+			onInput={(e) => console.info(e.target.value)}
 			class="p-1 bg-zinc-800 rounded-lg border border-zinc-700"
 		>
 			<a-dropdown class="block" style="--dropdown-position: static;">

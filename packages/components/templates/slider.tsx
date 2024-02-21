@@ -33,7 +33,7 @@ export function Slider(props: Props, context) {
 			<a-toggle
 				class="flex gap-2 justify-center mt-4"
 				onchange={(e) => {
-					console.log(e);
+					console.info(e);
 				}}
 			>
 				<Dot />

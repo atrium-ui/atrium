@@ -74,7 +74,7 @@ export function SomeForm() {
 							new FormData(e.currentTarget),
 						);
 
-						console.log("FORM -> SUBMIT", fields, variables);
+						console.info("FORM -> SUBMIT", fields, variables);
 
 						setLoading(true);
 

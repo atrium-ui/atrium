@@ -277,16 +277,16 @@ export default {
           this.current.y = y
         },
         onComplete: () => {
-          console.log('slider:onComplete')
+          console.info('slider:onComplete')
         },
         onStart: () => {
-          console.log('slider:onStart')
+          console.info('slider:onStart')
         },
         onEnd: () => {
-          console.log('slider:onEnd')
+          console.info('slider:onEnd')
         },
         onTranslate: (x, y, element, index, draggable) => {
-          console.log('slider:onTranslate')
+          console.info('slider:onTranslate')
           this.current.index = index
           this.current.speed = draggable.speed
         },

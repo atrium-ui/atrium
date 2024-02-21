@@ -56,7 +56,7 @@ async function main() {
 		const template = readFileSync(component(comp), "utf8");
 		const filename = `${dist}/${comp}.tsx`;
 		writeFileSync(filename, template);
-		console.log("use", comp, filename);
+		console.info("use", comp, filename);
 	}
 }
 

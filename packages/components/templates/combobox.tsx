@@ -40,7 +40,7 @@ export function Combobox(
 	};
 
 	return (
-		<div onInput={(e) => console.log(e.target.value)}>
+		<div onInput={(e) => console.info(e.target.value)}>
 			<a-dropdown class="relative inline-block">
 				<Button slot="input" class="w-[150px]">
 					{props.value}

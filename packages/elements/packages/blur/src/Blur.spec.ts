@@ -1,9 +1,15 @@
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it, beforeAll } from "bun:test";
 import { type Blur } from "./Blur.js";
 
 const NODE_NAME = "a-blur";
 
 describe(NODE_NAME, () => {
+	function createBlur() {
+		const blur = document.createElement(NODE_NAME) as Blur;
+		document.body.appendChild(blur);
+		return blur;
+	}
+
 	it("import element", async () => {
 		const { Blur } = await import("@sv/elements/blur");
 		expect(Blur).toBeDefined();
@@ -14,22 +20,26 @@ describe(NODE_NAME, () => {
 		// is constructable
 		expect(new Blur()).toBeInstanceOf(Blur);
 
+		// upgrades when added to the DOM
 		const ele = document.createElement("div");
 		ele.innerHTML = `<${NODE_NAME} />`;
-
 		expect(ele.children[0]).toBeInstanceOf(Blur);
 	});
 
 	it("enabled property", async () => {
-		await import("@sv/elements/blur");
+		const blur = createBlur();
+		blur.setAttribute("enabled", "");
+		expect(blur.enabled).toBe(true);
+	});
 
-		const ele = document.createElement("div");
-		ele.innerHTML = `<${NODE_NAME} />`;
-
-		const blur = ele.querySelector<Blur>("a-blur");
-		if (!blur) throw new Error("Element not found");
-
-		blur.enabled = true;
-		expect(blur.hasAttribute("enabled")).toBe(true);
+	it("scroll inside blur", async () => {
+		const blur = createBlur();
+		blur.innerHTML = `
+		  <div style="height: 500px; width: 400px;">
+  		  <div style="height: 1000px; width: 400px;"></div>
+  		</div>
+		`;
+		blur.scrollBy(0, 200);
+		expect(blur.scrollTop).toBe(200);
 	});
 });

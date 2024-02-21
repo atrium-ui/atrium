@@ -8,8 +8,6 @@ declare global {
 	}
 }
 
-const scrollLock = new ScrollLock();
-
 /**
  * # a-blur
  *
@@ -62,17 +60,33 @@ export class Blur extends LitElement {
 	 * @defaultValue false
 	 */
 	@property({ type: Boolean, reflect: true })
-	public scrollLock = false;
+	public scrollLock = true;
+
+	scrollLockControl = new ScrollLock({
+		allowElements: ["a-blur > *"],
+	});
+
+	tryLock() {
+		if (this.scrollLock) {
+			this.scrollLockControl.enable();
+		}
+	}
+
+	tryUnlock() {
+		if (this.scrollLock) {
+			this.scrollLockControl.disable();
+		}
+	}
 
 	@query("slot")
 	slot;
 
 	protected updated(): void {
 		if (this.enabled) {
-			scrollLock.enable();
+			this.tryLock();
 			this.setAttribute("aria-hidden", "false");
 		} else {
-			scrollLock.disable();
+			this.tryUnlock();
 			this.setAttribute("aria-hidden", "true");
 		}
 	}
@@ -107,7 +121,7 @@ export class Blur extends LitElement {
 
 		// TODO: This call should be on a stack.
 		//				So that if multiple blur elements are enabled, it only disables when all are disabled.
-		scrollLock.disable();
+		this.tryUnlock();
 	}
 
 	render(): HTMLTemplateResult {

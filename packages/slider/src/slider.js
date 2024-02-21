@@ -617,7 +617,7 @@ class Slider extends Dragger {
 
 			if (indexFound > -1) {
 				this.goTo(this.children[indexFound], duration, true);
-				console.log(`Slider:goToIndex: Index "${index}" found.`);
+				console.info(`Slider:goToIndex: Index "${index}" found.`);
 			} else {
 				console.error(`Slider:goToIndex: Index "${index}" not found.`);
 			}
@@ -637,7 +637,7 @@ class Slider extends Dragger {
 			this.children[this.currentIndex].classList.add('current');
 
 			this.goTo(element);
-			console.log(`Slider:goToClosestElement: Element "${element}" found.`);
+			console.info(`Slider:goToClosestElement: Element "${element}" found.`);
 		} else {
 			console.error(
 				'Slider:goToClosestElement: No closest element found.',
@@ -655,7 +655,7 @@ class Slider extends Dragger {
 		if (element) {
 			this.goTo(element);
 
-			console.log(`Slider:goToPrev: Element "${element}" found.`);
+			console.info(`Slider:goToPrev: Element "${element}" found.`);
 		}
 	}
 
@@ -669,7 +669,7 @@ class Slider extends Dragger {
 		if (element) {
 			this.goTo(element);
 
-			console.log(`Slider:goToNext: Element "${element}" found.`);
+			console.info(`Slider:goToNext: Element "${element}" found.`);
 		}
 	}
 
