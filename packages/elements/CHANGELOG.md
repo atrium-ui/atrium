@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.3.1
+
+### Patch Changes
+
+- 608123d: Allow scrolling inside scroll-locked a-blur
+
 ## 0.3.0
 
 ### Minor Changes
