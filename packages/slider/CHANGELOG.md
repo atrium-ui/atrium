@@ -1,5 +1,11 @@
 # @sv/slider
 
+## 1.1.1
+
+### Patch Changes
+
+- 00fd8a1: Update scrollLock to apply passed options
+
 ## 1.1.0
 
 ### Minor Changes

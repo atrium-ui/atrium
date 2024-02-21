@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.2.4
+
+### Patch Changes
+
+- b2db633: Remove experimentalDecorators and useDefineForClassFields from tsconfig
+
 ## 0.2.3
 
 ### Patch Changes

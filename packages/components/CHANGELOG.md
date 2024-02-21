@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.7.1
+
+### Patch Changes
+
+- 00fd8a1: Update scrollLock to apply passed options
+
 ## 0.7.0
 
 ### Minor Changes

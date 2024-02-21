@@ -1,5 +1,11 @@
 # @sv/scroll-lock
 
+## 0.1.8
+
+### Patch Changes
+
+- 00fd8a1: Update scrollLock to apply passed options
+
 ## 0.1.7
 
 ### Patch Changes

@@ -1,11 +1,11 @@
 {
 	"name": "@sv/slider",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "slider description",
 	"author": "f.kretschmer@s-v.de",
 	"scripts": {
-    "test": "bun test"
-  },
+		"test": "bun test"
+	},
 	"files": [
 		"dist",
 		"src"
