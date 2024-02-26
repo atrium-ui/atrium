@@ -37,19 +37,12 @@ All elements share the same dependencies from the packages/elements/package.json
 
 ### Prerequisites
 
-See [./.rtx.toml](./.rtx.toml) for tools and versions used in this project.
+See [./.mise.toml](./.mise.toml) for tools and versions used in this project.
 
 - [task](https://taskfile.dev/)
 - [bun](https://bun.sh/)
 
-They can be installed using [mise (formerly rtx)](https://github.com/jdxcode/mise) with `mise install` in the root directory of this project.
-This will also happen automatically when running `task docs` for the first time.
-
-### Quick setup (optional)
-
-```shell
-git clone git@gitlab.s-v.de:sv/sv-frontend-library/mono.git && cd mono && task docs
-```
+It is recomended to use [mise (formerly rtx)](https://github.com/jdxcode/mise) to automatically manage these tools.
 
 ### Getting Started
 
@@ -93,6 +86,4 @@ The tsup configuration is located in the package.json of each element.
 
 To create a new version of a package, run `task version` and follow the instructions of the cli.
 
-After the changes done by the cli are committed and pushed, the CI will automatically publish the package(s) when merged into main.
-
-When develop is merged into the **main** branch, the docs will be automatically built and deployed to pages.
+After the changes done by the cli are committed and pushed, the CI will automatically publish the package(s) when merged into main, as well as build and deployed docs to gitlab pages.
