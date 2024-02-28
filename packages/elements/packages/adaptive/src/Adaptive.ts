@@ -2,9 +2,9 @@ import { HTMLTemplateResult, LitElement, css, html } from "lit";
 import { query } from "lit/decorators.js";
 
 declare global {
-	interface HTMLElementTagNameMap {
-		"a-adaptive": AdaptiveElement;
-	}
+  interface HTMLElementTagNameMap {
+    "a-adaptive": AdaptiveElement;
+  }
 }
 
 /**
@@ -17,9 +17,9 @@ declare global {
  * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-adaptive/
  */
 export class AdaptiveElement extends LitElement {
-	public static get styles() {
-		return [
-			css`
+  public static get styles() {
+    return [
+      css`
         :host {
           display: block;
         }
@@ -28,74 +28,74 @@ export class AdaptiveElement extends LitElement {
           display: block;
         }
       `,
-		];
-	}
+    ];
+  }
 
-	observer!: MutationObserver;
+  observer!: MutationObserver;
 
-	connectedCallback() {
-		super.connectedCallback();
+  connectedCallback() {
+    super.connectedCallback();
 
-		if (typeof MutationObserver !== "undefined") {
-			this.observer = new MutationObserver((cahgnes) => {
-				this.requestUpdate();
-			});
-			this.observer.observe(this, {
-				subtree: true,
-				childList: true,
-				characterData: true,
-			});
-		}
+    if (typeof MutationObserver !== "undefined") {
+      this.observer = new MutationObserver((cahgnes) => {
+        this.requestUpdate();
+      });
+      this.observer.observe(this, {
+        subtree: true,
+        childList: true,
+        characterData: true,
+      });
+    }
 
-		window.addEventListener("resize", this.onResize);
-	}
+    window.addEventListener("resize", this.onResize);
+  }
 
-	disconnectedCallback(): void {
-		super.disconnectedCallback();
-		window.removeEventListener("resize", this.onResize);
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    window.removeEventListener("resize", this.onResize);
 
-		if (this.observer) this.observer.disconnect();
-	}
+    if (this.observer) this.observer.disconnect();
+  }
 
-	onResize = () => {
-		this.lastHeight = this.content?.offsetHeight;
-		this.lastWidth = this.content?.offsetWidth;
-	};
+  onResize = () => {
+    this.lastHeight = this.content?.offsetHeight;
+    this.lastWidth = this.content?.offsetWidth;
+  };
 
-	@query("slot")
-	content!: HTMLElement;
+  @query("slot")
+  content!: HTMLElement;
 
-	lastHeight = this.offsetHeight;
-	lastWidth = this.offsetWidth;
+  lastHeight = this.offsetHeight;
+  lastWidth = this.offsetWidth;
 
-	async updated() {
-		const height = this.content?.offsetHeight;
-		const width = this.content?.offsetWidth;
-		if (height && width) {
-			await this.animate(
-				[
-					{
-						height: `${this.lastHeight}px`,
-						width: `${this.lastWidth}px`,
-					},
-					{
-						height: `${height}px`,
-						width: `${width}px`,
-					},
-				],
-				{
-					duration: 200,
-					easing: "ease-out",
-				},
-			).finished;
-		}
-		this.lastHeight = height;
-		this.lastWidth = width;
-	}
+  async updated() {
+    const height = this.content?.offsetHeight;
+    const width = this.content?.offsetWidth;
+    if (height && width) {
+      await this.animate(
+        [
+          {
+            height: `${this.lastHeight}px`,
+            width: `${this.lastWidth}px`,
+          },
+          {
+            height: `${height}px`,
+            width: `${width}px`,
+          },
+        ],
+        {
+          duration: 200,
+          easing: "ease-out",
+        },
+      ).finished;
+    }
+    this.lastHeight = height;
+    this.lastWidth = width;
+  }
 
-	protected render(): HTMLTemplateResult {
-		return html`<slot class="content"></slot>`;
-	}
+  protected render(): HTMLTemplateResult {
+    return html`<slot class="content"></slot>`;
+  }
 }
 
 customElements.define("a-adaptive", AdaptiveElement);

@@ -2,15 +2,15 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 
 declare global {
-	interface HTMLElementTagNameMap {
-		"a-range": Range;
-	}
+  interface HTMLElementTagNameMap {
+    "a-range": Range;
+  }
 }
 
 @customElement("a-range")
 export class Range extends LitElement {
-	static get styles() {
-		return css`
+  static get styles() {
+    return css`
       :host {
         display: inline-block;
 
@@ -90,89 +90,89 @@ export class Range extends LitElement {
         cursor: grabbing;
       }
     `;
-	}
+  }
 
-	@property({ type: String, reflect: true })
-	public title = "";
+  @property({ type: String, reflect: true })
+  public title = "";
 
-	@property({ type: String, reflect: true })
-	public subtitle = "";
+  @property({ type: String, reflect: true })
+  public subtitle = "";
 
-	@property({ type: Number, reflect: true })
-	public value = 0;
+  @property({ type: Number, reflect: true })
+  public value = 0;
 
-	@query("#progressElement")
-	private readonly progressElement!: HTMLElement;
+  @query("#progressElement")
+  private readonly progressElement!: HTMLElement;
 
-	private dragging = false;
+  private dragging = false;
 
-	private dragStartPosition = 0;
+  private dragStartPosition = 0;
 
-	private lastProgress = 0;
+  private lastProgress = 0;
 
-	protected onHandleMouseDown(event: MouseEvent): void {
-		this.lastProgress = this.value;
-		this.dragStartPosition = event.clientX;
-		this.dragging = true;
-	}
+  protected onHandleMouseDown(event: MouseEvent): void {
+    this.lastProgress = this.value;
+    this.dragStartPosition = event.clientX;
+    this.dragging = true;
+  }
 
-	protected onMouseUp(): void {
-		this.dragging = false;
-	}
+  protected onMouseUp(): void {
+    this.dragging = false;
+  }
 
-	protected onMouseMove(e: MouseEvent): void {
-		if (this.dragging) {
-			const deltaPixels = (e.x - this.dragStartPosition) / window.devicePixelRatio;
-			const deltaProgress =
-				(deltaPixels / this.progressElement.clientWidth) * devicePixelRatio;
+  protected onMouseMove(e: MouseEvent): void {
+    if (this.dragging) {
+      const deltaPixels = (e.x - this.dragStartPosition) / window.devicePixelRatio;
+      const deltaProgress =
+        (deltaPixels / this.progressElement.clientWidth) * devicePixelRatio;
 
-			const progress = Math.min(1, Math.max(this.lastProgress + deltaProgress, 0));
+      const progress = Math.min(1, Math.max(this.lastProgress + deltaProgress, 0));
 
-			this.updateProgress(progress);
-		}
-	}
+      this.updateProgress(progress);
+    }
+  }
 
-	protected onProgressClick(e: MouseEvent): void {
-		const rect = this.progressElement.getClientRects()[0];
+  protected onProgressClick(e: MouseEvent): void {
+    const rect = this.progressElement.getClientRects()[0];
 
-		if (!rect) return;
+    if (!rect) return;
 
-		const progress = (e.x - rect.x) / this.progressElement.clientWidth;
-		this.updateProgress(progress);
+    const progress = (e.x - rect.x) / this.progressElement.clientWidth;
+    this.updateProgress(progress);
 
-		this.onHandleMouseDown(e);
-	}
+    this.onHandleMouseDown(e);
+  }
 
-	protected updateProgress(progress: number): void {
-		this.value = progress;
-		this.dispatchEvent(new CustomEvent("input", { detail: { value: progress } }));
-	}
+  protected updateProgress(progress: number): void {
+    this.value = progress;
+    this.dispatchEvent(new CustomEvent("input", { detail: { value: progress } }));
+  }
 
-	protected onKeyDown(e): void {
-		const ev = e as KeyboardEvent;
+  protected onKeyDown(e): void {
+    const ev = e as KeyboardEvent;
 
-		switch (ev.key) {
-			case "ArrowLeft":
-				this.dispatchEvent(new Event("input-jump-back"));
-				break;
-			case "ArrowRight":
-				this.dispatchEvent(new Event("input-jump-forward"));
-				break;
-		}
-	}
+    switch (ev.key) {
+      case "ArrowLeft":
+        this.dispatchEvent(new Event("input-jump-back"));
+        break;
+      case "ArrowRight":
+        this.dispatchEvent(new Event("input-jump-forward"));
+        break;
+    }
+  }
 
-	connectedCallback(): void {
-		super.connectedCallback();
+  connectedCallback(): void {
+    super.connectedCallback();
 
-		window.addEventListener("pointermove", this.onMouseMove.bind(this));
-		window.addEventListener("pointerup", this.onMouseUp.bind(this));
-		window.addEventListener("pointercancel", this.onMouseUp.bind(this));
-		this.addEventListener("keydown", this.onKeyDown.bind(this));
-	}
+    window.addEventListener("pointermove", this.onMouseMove.bind(this));
+    window.addEventListener("pointerup", this.onMouseUp.bind(this));
+    window.addEventListener("pointercancel", this.onMouseUp.bind(this));
+    this.addEventListener("keydown", this.onKeyDown.bind(this));
+  }
 
-	render() {
-		const value = this.value || 0;
-		return html`
+  render() {
+    const value = this.value || 0;
+    return html`
       <div class="horizontal-slider" tabindex="0">
         <div class="slider" style="--progress: ${value}">
           <div
@@ -184,5 +184,5 @@ export class Range extends LitElement {
         </div>
       </div>
     `;
-	}
+  }
 }

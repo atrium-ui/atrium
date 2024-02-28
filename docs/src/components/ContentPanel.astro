@@ -1,39 +1,39 @@
 <div class="content-panel">
-  <div class="sl-container"><slot /></div>
+    <div class="sl-container"><slot /></div>
 </div>
 
 <script>
-  // Import all elements globally for now.
-  import "@sv/elements/toggle";
-  import "@sv/elements/time";
-  import "@sv/elements/expandable";
-  import "@sv/elements/dropdown";
-  import "@sv/elements/pager";
-  import "@sv/elements/track";
-  import "@sv/elements/blur";
-  import "@sv/elements/popover";
-  import "@sv/elements/range";
-  import "@sv/elements/adaptive";
+    // Import all elements globally for now.
+    import "@sv/elements/toggle";
+    import "@sv/elements/time";
+    import "@sv/elements/expandable";
+    import "@sv/elements/dropdown";
+    import "@sv/elements/pager";
+    import "@sv/elements/track";
+    import "@sv/elements/blur";
+    import "@sv/elements/popover";
+    import "@sv/elements/range";
+    import "@sv/elements/adaptive";
 </script>
 
 <style>
-  .content-panel {
-    padding: 1.5rem var(--sl-content-pad-x);
-  }
-  .content-panel + .content-panel {
-    border-top: 1px solid var(--sl-color-hairline);
-  }
-  .sl-container {
-    max-width: var(--sl-content-width);
-  }
-
-  .sl-container > :global(* + *) {
-    margin-top: 1.5rem;
-  }
-
-  @media (min-width: 72rem) {
-    .sl-container {
-      margin-inline: var(--sl-content-margin-inline, auto);
+    .content-panel {
+        padding: 1.5rem var(--sl-content-pad-x);
     }
-  }
+    .content-panel + .content-panel {
+        border-top: 1px solid var(--sl-color-hairline);
+    }
+    .sl-container {
+        max-width: var(--sl-content-width);
+    }
+
+    .sl-container > :global(* + *) {
+        margin-top: 1.5rem;
+    }
+
+    @media (min-width: 72rem) {
+        .sl-container {
+            margin-inline: var(--sl-content-margin-inline, auto);
+        }
+    }
 </style>

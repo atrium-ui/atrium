@@ -1,13 +1,13 @@
 {
-	"format": "%t %v %u",
-	"now": "jetzt",
-	"ago": "her",
-	"second": "sekunde",
-	"seconds": "sekunden",
-	"minute": "minute",
-	"minutes": "minuten",
-	"hour": "stunde",
-	"hours": "stunden",
-	"day": "tag",
-	"days": "tage"
+  "format": "%t %v %u",
+  "now": "jetzt",
+  "ago": "her",
+  "second": "sekunde",
+  "seconds": "sekunden",
+  "minute": "minute",
+  "minutes": "minuten",
+  "hour": "stunde",
+  "hours": "stunden",
+  "day": "tag",
+  "days": "tage"
 }
