@@ -42,11 +42,21 @@ test:
     - tags
   script: task test
 
-format:
+check_merge:
   stage: check
   only:
     - merge_requests
-  script: task format
+  script:
+    - task check
+
+test_merge:
+  stage: test
+  dependencies:
+    - check_merge
+  only:
+    - merge_requests
+  script:
+    - task test
 
 publish:
   stage: publish
