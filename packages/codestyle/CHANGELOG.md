@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.3.0
+
+### Minor Changes
+
+- c18188f: eslint.json -> .eslintrc.json, align prettier and biome format configuration, use spaces over tabs
+
 ## 0.2.4
 
 ### Patch Changes
