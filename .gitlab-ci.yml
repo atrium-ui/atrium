@@ -46,17 +46,15 @@ check_merge:
   stage: check
   only:
     - merge_requests
-  script:
-    - task check
+  script: task check
 
 test_merge:
-  stage: test
+  stage: check
   dependencies:
     - check_merge
   only:
     - merge_requests
-  script:
-    - task test
+  script: task test
 
 publish:
   stage: publish
