@@ -1,28 +1,28 @@
 {
-	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-	"extends": [
-		"./packages/codestyle/biome.json"
-	],
-	"linter": {
-		"rules": {
-			"style": {
-				"noDefaultExport": "warn"
-			},
-			"correctness": {
-				"useExhaustiveDependencies": "warn"
-			},
-			"complexity": {
-				"noStaticOnlyClass": "off"
-			},
-			"suspicious": {
-				"noConsoleLog": "error"
-			}
-		}
-	},
-	"files": {
-		"ignore": [
-			"./packages/slider/src",
-			"./packages/html-to-custom-tag-replacement/src"
-		]
-	}
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": [
+    "./packages/codestyle/biome.json"
+  ],
+  "linter": {
+    "rules": {
+      "style": {
+        "noDefaultExport": "warn"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "warn"
+      },
+      "complexity": {
+        "noStaticOnlyClass": "off"
+      },
+      "suspicious": {
+        "noConsoleLog": "error"
+      }
+    }
+  },
+  "files": {
+    "ignore": [
+      "./packages/slider/src",
+      "./packages/html-to-custom-tag-replacement/src"
+    ]
+  }
 }

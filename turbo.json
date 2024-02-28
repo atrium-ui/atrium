@@ -1,19 +1,19 @@
 {
-	"$schema": "https://turbo.build/schema.json",
-	"pipeline": {
-		"build": {
-			"cache": true,
-			"outputMode": "errors-only"
-		},
-		"dev": {
-			"cache": false
-		},
-		"test": {
-			"cache": true,
-			"outputMode": "new-only"
-		},
-		"check": {
-			"cache": false
-		}
-	}
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "cache": true,
+      "outputMode": "errors-only"
+    },
+    "dev": {
+      "cache": false
+    },
+    "test": {
+      "cache": true,
+      "outputMode": "new-only"
+    },
+    "check": {
+      "cache": false
+    }
+  }
 }

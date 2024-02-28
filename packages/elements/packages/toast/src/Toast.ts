@@ -25,78 +25,77 @@ let instance: ToastFeed | null = null;
  * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-blur/
  */
 export class ToastFeed extends LitElement {
-	static get styles() {
-		return css`
+  static get styles() {
+    return css`
       :host {
         display: block;
       }
     `;
-	}
+  }
 
-	constructor() {
-		super();
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		instance = this;
-	}
+  constructor() {
+    super();
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    instance = this;
+  }
 
-	protected render() {
-		return html`
+  protected render() {
+    return html`
       <div>
         <slot></slot>
       </div>
     `;
-	}
+  }
 
-	static getInstance() {
-		if (!instance) {
-			instance = new ToastFeed();
-		}
-		return instance;
-	}
+  static getInstance() {
+    if (!instance) {
+      instance = new ToastFeed();
+    }
+    return instance;
+  }
 }
 
 const log: Toast[] = [];
 
-// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 export class Toasts {
-	private static push(notification: Toast) {
-		const feed = ToastFeed.getInstance();
-		if (feed) {
-			feed?.append(notification);
-			log.unshift(notification);
-			return notification;
-		}
+  private static push(notification: Toast) {
+    const feed = ToastFeed.getInstance();
+    if (feed) {
+      feed?.append(notification);
+      log.unshift(notification);
+      return notification;
+    }
 
-		return;
-	}
+    return;
+  }
 
-	static info(message: string) {
-		Toasts.push(
-			new Toast({
-				message: `${message}`,
-				time: 3000,
-			}),
-		);
-	}
+  static info(message: string) {
+    Toasts.push(
+      new Toast({
+        message: `${message}`,
+        time: 3000,
+      }),
+    );
+  }
 
-	static error(message: string) {
-		Toasts.push(
-			new ToastError({
-				message: `Error: ${message}`,
-				time: 3000,
-			}),
-		);
-	}
+  static error(message: string) {
+    Toasts.push(
+      new ToastError({
+        message: `Error: ${message}`,
+        time: 3000,
+      }),
+    );
+  }
 }
 
 interface NotificationOptions {
-	message?: string;
-	time?: number;
+  message?: string;
+  time?: number;
 }
 
 export class Toast extends LitElement {
-	static get styles() {
-		return css`
+  static get styles() {
+    return css`
       :host {
         display: block;
         position: relative;
@@ -138,60 +137,60 @@ export class Toast extends LitElement {
         }
       }
     `;
-	}
+  }
 
-	message?: string;
-	time?: number;
+  message?: string;
+  time?: number;
 
-	constructor(options: NotificationOptions) {
-		super();
+  constructor(options: NotificationOptions) {
+    super();
 
-		this.message = options.message;
-		this.time = options.time;
+    this.message = options.message;
+    this.time = options.time;
 
-		this.addEventListener("click", () => {
-			setTimeout(() => {
-				this.kill();
-			}, 100);
-		});
-	}
+    this.addEventListener("click", () => {
+      setTimeout(() => {
+        this.kill();
+      }, 100);
+    });
+  }
 
-	connectedCallback(): void {
-		super.connectedCallback();
+  connectedCallback(): void {
+    super.connectedCallback();
 
-		if (this.time) {
-			setTimeout(() => {
-				this.kill();
-			}, this.time);
-		}
-	}
+    if (this.time) {
+      setTimeout(() => {
+        this.kill();
+      }, this.time);
+    }
+  }
 
-	kill() {
-		this.style.height = `${this.offsetHeight + 5}px`;
+  kill() {
+    this.style.height = `${this.offsetHeight + 5}px`;
 
-		this.offsetHeight;
+    this.offsetHeight;
 
-		this.style.opacity = "0";
-		this.style.height = "0px";
+    this.style.opacity = "0";
+    this.style.height = "0px";
 
-		setTimeout(() => {
-			this.remove();
-		}, 1000);
-	}
+    setTimeout(() => {
+      this.remove();
+    }, 1000);
+  }
 
-	protected render() {
-		return html`
+  protected render() {
+    return html`
       <div class="wrapper">
         <span>${this.message}</span>
         <slot></slot>
       </div>
     `;
-	}
+  }
 }
 
 export class ToastError extends Toast {
-	static get styles() {
-		return css`
+  static get styles() {
+    return css`
       ${Toast.styles}
 
       span {
@@ -213,10 +212,10 @@ export class ToastError extends Toast {
         flex: none;
       }
     `;
-	}
+  }
 
-	protected render() {
-		return html`
+  protected render() {
+    return html`
       <div class="wrapper">
         <span>
           <svg class="icon" width="16" height="16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -228,7 +227,7 @@ export class ToastError extends Toast {
         </span>
       </div>
     `;
-	}
+  }
 }
 
 customElements.define("a-toast-feed", ToastFeed);
@@ -236,9 +235,9 @@ customElements.define("a-toast", Toast);
 customElements.define("a-toast-error", ToastError);
 
 declare global {
-	interface HTMLElementTagNameMap {
-		"a-toast-feed": ToastFeed;
-		"a-toast": Toast;
-		"a-toast-error": ToastError;
-	}
+  interface HTMLElementTagNameMap {
+    "a-toast-feed": ToastFeed;
+    "a-toast": Toast;
+    "a-toast-error": ToastError;
+  }
 }

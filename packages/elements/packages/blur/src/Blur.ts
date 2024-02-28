@@ -3,9 +3,9 @@ import { customElement, property, query } from "lit/decorators.js";
 import { ScrollLock } from "@sv/scroll-lock";
 
 declare global {
-	interface HTMLElementTagNameMap {
-		"a-blur": Blur;
-	}
+  interface HTMLElementTagNameMap {
+    "a-blur": Blur;
+  }
 }
 
 /**
@@ -34,7 +34,7 @@ declare global {
  */
 @customElement("a-blur")
 export class Blur extends LitElement {
-	public static styles = css`
+  public static styles = css`
     :host {
       display: block;
       transition-property: all;
@@ -46,85 +46,85 @@ export class Blur extends LitElement {
     }
   `;
 
-	/**
-	 * ### enabled
-	 * Whether the blur is enabled or not.
-	 * @defaultValue false
-	 */
-	@property({ type: Boolean, reflect: true })
-	public enabled = false;
+  /**
+   * ### enabled
+   * Whether the blur is enabled or not.
+   * @defaultValue false
+   */
+  @property({ type: Boolean, reflect: true })
+  public enabled = false;
 
-	/**
-	 * ### scrollLock
-	 * Whether the blur should lock scrolling when shown.
-	 * @defaultValue false
-	 */
-	@property({ type: Boolean, reflect: true })
-	public scrollLock = true;
+  /**
+   * ### scrollLock
+   * Whether the blur should lock scrolling when shown.
+   * @defaultValue false
+   */
+  @property({ type: Boolean, reflect: true })
+  public scrollLock = true;
 
-	scrollLockControl = new ScrollLock({
-		allowElements: ["a-blur > *"],
-	});
+  scrollLockControl = new ScrollLock({
+    allowElements: ["a-blur > *"],
+  });
 
-	tryLock() {
-		if (this.scrollLock) {
-			this.scrollLockControl.enable();
-		}
-	}
+  tryLock() {
+    if (this.scrollLock) {
+      this.scrollLockControl.enable();
+    }
+  }
 
-	tryUnlock() {
-		if (this.scrollLock) {
-			this.scrollLockControl.disable();
-		}
-	}
+  tryUnlock() {
+    if (this.scrollLock) {
+      this.scrollLockControl.disable();
+    }
+  }
 
-	@query("slot")
-	slot;
+  @query("slot")
+  slot;
 
-	protected updated(): void {
-		if (this.enabled) {
-			this.tryLock();
-			this.setAttribute("aria-hidden", "false");
-		} else {
-			this.tryUnlock();
-			this.setAttribute("aria-hidden", "true");
-		}
-	}
+  protected updated(): void {
+    if (this.enabled) {
+      this.tryLock();
+      this.setAttribute("aria-hidden", "false");
+    } else {
+      this.tryUnlock();
+      this.setAttribute("aria-hidden", "true");
+    }
+  }
 
-	shouldBlur(e: MouseEvent) {
-		if (e.target === this && this.contains(e.target as HTMLElement)) {
-			return this.enabled;
-		}
-		return false;
-	}
+  shouldBlur(e: MouseEvent) {
+    if (e.target === this && this.contains(e.target as HTMLElement)) {
+      return this.enabled;
+    }
+    return false;
+  }
 
-	handleClick = (e: MouseEvent) => {
-		if (this.shouldBlur(e)) {
-			this.dispatchEvent(new Event("blur"));
-			this.enabled = false;
-		}
-	};
+  handleClick = (e: MouseEvent) => {
+    if (this.shouldBlur(e)) {
+      this.dispatchEvent(new Event("blur"));
+      this.enabled = false;
+    }
+  };
 
-	handleCloseEvent = (e: Event) => {
-		this.enabled = false;
-	};
+  handleCloseEvent = (e: Event) => {
+    this.enabled = false;
+  };
 
-	connectedCallback(): void {
-		super.connectedCallback();
-		this.addEventListener("mousedown", this.handleClick);
-		this.addEventListener("close", this.handleCloseEvent, { capture: true });
-	}
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.addEventListener("mousedown", this.handleClick);
+    this.addEventListener("close", this.handleCloseEvent, { capture: true });
+  }
 
-	disconnectedCallback(): void {
-		this.removeEventListener("mousedown", this.handleClick);
-		this.removeEventListener("close", this.handleCloseEvent, { capture: true });
+  disconnectedCallback(): void {
+    this.removeEventListener("mousedown", this.handleClick);
+    this.removeEventListener("close", this.handleCloseEvent, { capture: true });
 
-		// TODO: This call should be on a stack.
-		//				So that if multiple blur elements are enabled, it only disables when all are disabled.
-		this.tryUnlock();
-	}
+    // TODO: This call should be on a stack.
+    //				So that if multiple blur elements are enabled, it only disables when all are disabled.
+    this.tryUnlock();
+  }
 
-	render(): HTMLTemplateResult {
-		return html`<slot></slot>`;
-	}
+  render(): HTMLTemplateResult {
+    return html`<slot></slot>`;
+  }
 }
