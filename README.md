@@ -1,9 +1,9 @@
-<p align="center">
-  <p align="center">
+<p align="center" style="text-align:cetner;">
+  <p align="center" style="text-align:cetner;">
    <img width="150" height="150" src="docs/src/assets/atrium.png" alt="Logo">
   </p>
-	<h1 align="center"><b>Atrium Mono</b></h1>
-	<p align="center">
+	<h1 align="center" style="text-align:cetner;"><b>Atrium Mono</b></h1>
+	<p align="center" style="text-align:cetner;">
     A collection of framework agnostic and functional web-components and templates for building Websites.
     <br />
     <br />
