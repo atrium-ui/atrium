@@ -185,7 +185,7 @@ export class Track extends LitElement {
 
   mousePos = new Vec();
   inputForce = new Vec();
-  mouseGrab = false;
+  mouseGrab = false; // TODO: this should be in input state, right?
   private scrollTimeout;
   private canScroll = true;
   drag = 0.95;
@@ -229,7 +229,7 @@ export class Track extends LitElement {
     },
   };
 
-  private traits: Trait[] = [
+  public traits: Trait[] = [
     new PointerTrait("pointer", this, true),
     new AutoFocusTrait("autofocus", this),
     // new DebugTrait("debug", this),

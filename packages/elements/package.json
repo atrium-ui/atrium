@@ -1,95 +1,100 @@
 {
-	"name": "@sv/elements",
-	"author": "t.havlicek@s-v.de",
-	"contributors": [],
-	"version": "0.3.1",
-	"description": "Atrium Component Library",
-	"type": "module",
-	"scripts": {
-		"check": "tsc --pretty",
-		"test": "bun test --preload ./test/preload.ts"
-	},
-	"exports": {
-		"./CHNAGELOG.md": {
-			"import": "./CHANGELOG.md"
-		},
-		".": {
-			"import": "./index.js",
-			"types": "./index.d.ts"
-		},
-		"./toggle": {
-			"import": "./packages/toggle/dist/index.js",
-			"require": "./packages/toggle/dist/index.cjs",
-			"types": "./packages/toggle/src/index.ts"
-		},
-		"./time": {
-			"import": "./packages/time/dist/index.js",
-			"require": "./packages/time/dist/index.cjs",
-			"types": "./packages/time/src/index.ts"
-		},
-		"./expandable": {
-			"import": "./packages/expandable/dist/index.js",
-			"require": "./packages/expandable/dist/index.cjs",
-			"types": "./packages/expandable/src/index.ts"
-		},
-		"./dropdown": {
-			"import": "./packages/dropdown/dist/index.js",
-			"require": "./packages/dropdown/dist/index.cjs",
-			"types": "./packages/dropdown/src/index.ts"
-		},
-		"./pager": {
-			"import": "./packages/pager/dist/index.js",
-			"require": "./packages/pager/dist/index.cjs",
-			"types": "./packages/pager/src/index.ts"
-		},
-		"./track": {
-			"import": "./packages/track/dist/index.js",
-			"require": "./packages/track/dist/index.cjs",
-			"types": "./packages/track/src/index.ts"
-		},
-		"./blur": {
-			"import": "./packages/blur/dist/index.js",
-			"require": "./packages/blur/dist/index.cjs",
-			"types": "./packages/blur/src/index.ts"
-		},
-		"./popover": {
-			"import": "./packages/popover/dist/index.js",
-			"require": "./packages/popover/dist/index.cjs",
-			"types": "./packages/popover/src/index.ts"
-		},
-		"./range": {
-			"import": "./packages/range/dist/index.js",
-			"require": "./packages/range/dist/index.cjs",
-			"types": "./packages/range/src/index.ts"
-		},
-		"./animation": {
-			"import": "./packages/animation/dist/index.js",
-			"require": "./packages/animation/dist/index.cjs",
-			"types": "./packages/animation/src/index.ts"
-		},
-		"./adaptive": {
-			"import": "./packages/adaptive/dist/index.js",
-			"require": "./packages/adaptive/dist/index.cjs",
-			"types": "./packages/adaptive/src/index.ts"
-		},
-		"./filter": {
-			"import": "./packages/filter/dist/index.js",
-			"require": "./packages/filter/dist/index.cjs",
-			"types": "./packages/filter/src/index.ts"
-		},
-		"./toast": {
-			"import": "./packages/toast/dist/index.js",
-			"require": "./packages/toast/dist/index.cjs",
-			"types": "./packages/toast/src/index.ts"
-		}
-	},
-	"keywords": [],
-	"license": "ISC",
-	"dependencies": {
-		"lit": "^2.5.0"
-	},
-	"optionalDependencies": {
-		"@sv/scroll-lock": "^0.1.8",
-		"@rive-app/canvas-single": "^2.7.1"
-	}
+  "name": "@sv/elements",
+  "author": "t.havlicek@s-v.de",
+  "contributors": [],
+  "version": "0.3.1",
+  "description": "Atrium Component Library",
+  "type": "module",
+  "scripts": {
+    "check": "tsc --pretty",
+    "test": "bun test --preload ./test/preload.ts"
+  },
+  "exports": {
+    "./CHNAGELOG.md": {
+      "import": "./CHANGELOG.md"
+    },
+    ".": {
+      "import": "./index.js",
+      "types": "./index.d.ts"
+    },
+    "./toggle": {
+      "import": "./packages/toggle/dist/index.js",
+      "require": "./packages/toggle/dist/index.cjs",
+      "types": "./packages/toggle/src/index.ts"
+    },
+    "./time": {
+      "import": "./packages/time/dist/index.js",
+      "require": "./packages/time/dist/index.cjs",
+      "types": "./packages/time/src/index.ts"
+    },
+    "./expandable": {
+      "import": "./packages/expandable/dist/index.js",
+      "require": "./packages/expandable/dist/index.cjs",
+      "types": "./packages/expandable/src/index.ts"
+    },
+    "./dropdown": {
+      "import": "./packages/dropdown/dist/index.js",
+      "require": "./packages/dropdown/dist/index.cjs",
+      "types": "./packages/dropdown/src/index.ts"
+    },
+    "./pager": {
+      "import": "./packages/pager/dist/index.js",
+      "require": "./packages/pager/dist/index.cjs",
+      "types": "./packages/pager/src/index.ts"
+    },
+    "./track": {
+      "import": "./packages/track/dist/index.js",
+      "require": "./packages/track/dist/index.cjs",
+      "types": "./packages/track/src/index.ts"
+    },
+    "./track/traits": {
+      "import": "./packages/track/dist/traits.js",
+      "require": "./packages/track/dist/traits.cjs",
+      "types": "./packages/track/src/traits.ts"
+    },
+    "./blur": {
+      "import": "./packages/blur/dist/index.js",
+      "require": "./packages/blur/dist/index.cjs",
+      "types": "./packages/blur/src/index.ts"
+    },
+    "./popover": {
+      "import": "./packages/popover/dist/index.js",
+      "require": "./packages/popover/dist/index.cjs",
+      "types": "./packages/popover/src/index.ts"
+    },
+    "./range": {
+      "import": "./packages/range/dist/index.js",
+      "require": "./packages/range/dist/index.cjs",
+      "types": "./packages/range/src/index.ts"
+    },
+    "./animation": {
+      "import": "./packages/animation/dist/index.js",
+      "require": "./packages/animation/dist/index.cjs",
+      "types": "./packages/animation/src/index.ts"
+    },
+    "./adaptive": {
+      "import": "./packages/adaptive/dist/index.js",
+      "require": "./packages/adaptive/dist/index.cjs",
+      "types": "./packages/adaptive/src/index.ts"
+    },
+    "./filter": {
+      "import": "./packages/filter/dist/index.js",
+      "require": "./packages/filter/dist/index.cjs",
+      "types": "./packages/filter/src/index.ts"
+    },
+    "./toast": {
+      "import": "./packages/toast/dist/index.js",
+      "require": "./packages/toast/dist/index.cjs",
+      "types": "./packages/toast/src/index.ts"
+    }
+  },
+  "keywords": [],
+  "license": "ISC",
+  "dependencies": {
+    "lit": "^2.5.0"
+  },
+  "optionalDependencies": {
+    "@sv/scroll-lock": "^0.1.8",
+    "@rive-app/canvas-single": "^2.7.1"
+  }
 }

@@ -11,6 +11,7 @@
       ".mise",
       ".astro",
       ".nuxt",
+      ".output",
       "vendor",
       "public",
       "dist"
@@ -31,7 +32,11 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "style": {
+        "noDefaultExport": "warn"
+      },
       "complexity": {
+        "noStaticOnlyClass": "warn",
         "noForEach": "warn"
       },
       "a11y": {
@@ -39,7 +44,8 @@
       },
       "suspicious": {
         "noArrayIndexKey": "off",
-        "noExplicitAny": "warn"
+        "noExplicitAny": "warn",
+        "noConsoleLog": "warn"
       }
     }
   },
