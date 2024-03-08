@@ -11,7 +11,8 @@
     "./.eslintrc.json": "./.eslintrc.json",
     "./.prettierrc.json": "./.prettierrc.json",
     "./commitlint.cjs": "./commitlint.cjs",
-    "./stylelint.config.cjs": "./stylelint.config.cjs"
+    "./stylelint.config.cjs": "./stylelint.config.cjs",
+    "./CHANGELOG.md": "./CHANGELOG.md"
   },
   "scripts": {
     "check": "tsc --pretty",
