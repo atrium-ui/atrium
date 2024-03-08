@@ -5,6 +5,14 @@
   "version": "0.3.0",
   "description": "Codestyle and configuration for all projects",
   "type": "module",
+  "exports": {
+    "./biome": "./biome.json",
+    "./tsconfig": "./tsconfig.json",
+    "./eslint": "./.eslintrc.json",
+    "./prettier": "./.prettierrc.json",
+    "./commitlint": "./commitlint.cjs",
+    "./stylelint": "./stylelint.config.cjs"
+  },
   "scripts": {
     "check": "tsc --pretty",
     "test": "bun test",

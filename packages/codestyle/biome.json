@@ -44,6 +44,22 @@
         "noArrayIndexKey": "off",
         "noExplicitAny": "warn",
         "noConsoleLog": "warn"
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "warn",
+          "options": {
+            "attributes": [
+              "classList"
+            ],
+            "functions": [
+              "clsx",
+              "cva",
+              "twMerge",
+              "tw"
+            ]
+          }
+        }
       }
     }
   },
