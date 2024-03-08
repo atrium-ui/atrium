@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { resolve } from "path";
-import { fileURLToPath } from "url";
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import en from "enquirer";
 
 const dist = resolve("./src/components/ui");

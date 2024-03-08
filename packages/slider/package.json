@@ -1,52 +1,49 @@
 {
-	"name": "@sv/slider",
-	"version": "1.1.1",
-	"description": "slider description",
-	"author": "f.kretschmer@s-v.de",
-	"scripts": {
-		"test": "bun test"
-	},
-	"files": [
-		"dist",
-		"src"
-	],
-	"exports": {
-		"./CHANGELOG.md": {
-			"import": "./CHANGELOG.md"
-		},
-		".": {
-			"import": "./dist/plain/sv-slider.mjs",
-			"require": "./dist/plain/sv-slider.js"
-		},
-		"./vue2": {
-			"import": "./dist/vue2/sv-slider.mjs",
-			"require": "./dist/vue2/sv-slider.js"
-		},
-		"./vue3": {
-			"import": "./dist/vue3/sv-slider.mjs",
-			"require": "./dist/vue3/sv-slider.js"
-		}
-	},
-	"devDependencies": {
-		"@babel/core": "^7.23.2",
-		"@babel/plugin-transform-runtime": "^7.23.2",
-		"@babel/preset-env": "^7.23.2",
-		"@babel/runtime": "^7.23.2",
-		"@rollup/plugin-babel": "^6.0.4",
-		"core-js": "^3.33.1",
-		"gsap": "^3.12.2",
-		"lodash-es": "^4.17.21",
-		"rollup-plugin-visualizer": "^5.9.2",
-		"sass": "^1.69.4",
-		"vite": "^4.5.0",
-		"vite-plugin-remove-console": "^2.1.1",
-		"vue-template-compiler": "^2.7.15"
-	},
-	"peerDependencies": {
-		"gsap": "^3.12.2"
-	},
-	"browserslist": [
-		"defaults",
-		"not dead"
-	]
+  "name": "@sv/slider",
+  "version": "1.1.1",
+  "description": "slider description",
+  "author": "f.kretschmer@s-v.de",
+  "scripts": {
+    "test": "bun test"
+  },
+  "files": ["dist", "src"],
+  "exports": {
+    "./CHANGELOG.md": {
+      "import": "./CHANGELOG.md"
+    },
+    ".": {
+      "import": "./dist/plain/sv-slider.mjs",
+      "require": "./dist/plain/sv-slider.js"
+    },
+    "./vue2": {
+      "import": "./dist/vue2/sv-slider.mjs",
+      "require": "./dist/vue2/sv-slider.js"
+    },
+    "./vue3": {
+      "import": "./dist/vue3/sv-slider.mjs",
+      "require": "./dist/vue3/sv-slider.js"
+    }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/plugin-transform-runtime": "^7.23.2",
+    "@babel/preset-env": "^7.23.2",
+    "@babel/runtime": "^7.23.2",
+    "@rollup/plugin-babel": "^6.0.4",
+    "core-js": "^3.33.1",
+    "gsap": "^3.12.2",
+    "lodash-es": "^4.17.21",
+    "rollup-plugin-visualizer": "^5.9.2",
+    "sass": "^1.69.4",
+    "vite": "^4.5.0",
+    "vite-plugin-remove-console": "^2.1.1",
+    "vue-template-compiler": "^2.7.15"
+  },
+  "peerDependencies": {
+    "gsap": "^3.12.2"
+  },
+  "browserslist": [
+    "defaults",
+    "not dead"
+  ]
 }

@@ -1,36 +1,30 @@
 {
-	"name": "@sv/components",
-	"version": "0.7.1",
-	"author": "t.havlicek@s-v.de",
-	"contributors": [],
-	"scripts": {
-		"check": "tsc --pretty",
-		"test": "bun test"
-	},
-	"type": "module",
-	"main": "./dist/cli.js",
-	"bin": "./dist/cli.js",
-	"files": [
-		"templates",
-		"./dist"
-	],
-	"engines": {
-		"node": ">=16"
-	},
-	"tsup": {
-		"entry": [
-			"src/cli.ts"
-		],
-		"format": [
-			"esm"
-		],
-		"external": [
-			"@sv/*"
-		],
-		"sourcemap": true,
-		"clean": true
-	},
-	"dependencies": {
-		"enquirer": "^2.4.1"
-	}
+  "name": "@sv/components",
+  "version": "0.7.1",
+  "author": "t.havlicek@s-v.de",
+  "contributors": [],
+  "scripts": {
+    "check": "tsc --pretty",
+    "test": "bun test"
+  },
+  "type": "module",
+  "main": "./dist/cli.js",
+  "bin": "./dist/cli.js",
+  "files": [
+    "templates",
+    "./dist"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "tsup": {
+    "entry": ["src/cli.ts"],
+    "format": ["esm"],
+    "external": ["@sv/*"],
+    "sourcemap": true,
+    "clean": true
+  },
+  "dependencies": {
+    "enquirer": "^2.4.1"
+  }
 }

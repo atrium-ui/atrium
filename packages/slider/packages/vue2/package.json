@@ -1,17 +1,17 @@
 {
-	"name": "vue2",
-	"version": "1.0.0",
-	"private": true,
-	"description": "",
-	"main": "index.js",
-	"scripts": {
-		"build": "vite build"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"devDependencies": {
-		"@vitejs/plugin-vue2": "^2.2.0",
-		"vue": "2.7"
-	}
+  "name": "vue2",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "vite build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@vitejs/plugin-vue2": "^2.2.0",
+    "vue": "2.7"
+  }
 }

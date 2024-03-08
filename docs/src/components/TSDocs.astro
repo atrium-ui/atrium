@@ -4,17 +4,22 @@
  * @see https://github.com/microsoft/tsdoc/blob/26c4bab8efb04bc5d1619585e1f071bcc10cf16a/playground/src/DocHtmlView.tsx#L140
  */
 
-import { TSDocParser, ParserContext, TSDocTagSyntaxKind, Standardization, TSDocConfiguration } from '@microsoft/tsdoc';
+import {
+  TSDocParser,
+  type ParserContext,
+  TSDocTagSyntaxKind,
+  Standardization,
+  TSDocConfiguration,
+} from "@microsoft/tsdoc";
 import jsdocExtractor from "jsdoc-extractor";
-import fs from 'fs';
-import * as tsdoc from '@microsoft/tsdoc';
-import { remark } from 'remark';
-import remarkHtml from 'remark-html';
-import shiki from 'shiki';
-
+import fs from "node:fs";
+import * as tsdoc from "@microsoft/tsdoc";
+import { remark } from "remark";
+import remarkHtml from "remark-html";
+import shiki from "shiki";
 
 export interface Props {
-  source: string
+  source: string;
 }
 
 const html: any[] = [];
@@ -23,52 +28,52 @@ const buffer = fs.readFileSync(`../packages/${Astro.props.source}`);
 const config = new TSDocConfiguration();
 
 config.addTagDefinitions([
-	{
-		tagName: '@attribute',
-		syntaxKind: TSDocTagSyntaxKind.BlockTag,
-		standardization: Standardization.None,
-		tagNameWithUpperCase: '@ATTRIBUTE',
-		allowMultiple: true,
-	},
+  {
+    tagName: "@attribute",
+    syntaxKind: TSDocTagSyntaxKind.BlockTag,
+    standardization: Standardization.None,
+    tagNameWithUpperCase: "@ATTRIBUTE",
+    allowMultiple: true,
+  },
 ]);
 
-for (const [doc, start ,end] of jsdocExtractor(buffer)) {
+for (const [doc, start, end] of jsdocExtractor(buffer)) {
   const tsdocParser: TSDocParser = new TSDocParser(config);
   const parserContext: ParserContext = tsdocParser.parseString(doc.toString());
 
   // Check for any syntax errors
   if (parserContext.log.messages.length > 0) {
-    console.warn('Syntax error: ' + parserContext.log.messages[0].text);
+    console.warn(`Syntax error: ${parserContext.log.messages[0].text}`);
   }
 
-	html.push(await _renderDocComment(parserContext.docComment));
+  html.push(await _renderDocComment(parserContext.docComment));
 
-	// Only render the first comment in the file
-	break;
+  // Only render the first comment in the file
+  break;
 }
 
 async function _renderDocComment(docComment: tsdoc.DocComment) {
-	const outputElements = [];
+  const outputElements = [];
 
-	// Summary
-	if (docComment.summarySection) {
-		outputElements.push(`
+  // Summary
+  if (docComment.summarySection) {
+    outputElements.push(`
 			${await _renderContainer(docComment.summarySection)}
 		`);
-	}
+  }
 
-	// Parameters
-	if (docComment.params.count > 0) {
-		const rows = [];
-		for (const paramBlock of docComment.params.blocks) {
-			rows.push(`
+  // Parameters
+  if (docComment.params.count > 0) {
+    const rows = [];
+    for (const paramBlock of docComment.params.blocks) {
+      rows.push(`
 				<tr>
 					<td>${paramBlock.parameterName}</td>
 					<td>${await _renderContainer(paramBlock.content)}</td>
 				</tr>
 			`);
-		}
-		outputElements.push(`
+    }
+    outputElements.push(`
 			<h3 class="doc-heading">Parameters</h3>
 				<table class="doc-table">
 					<thead>
@@ -80,16 +85,18 @@ async function _renderDocComment(docComment: tsdoc.DocComment) {
 					<tbody>${rows}</tbody>
 				</table>
 		`);
-	}
+  }
 
-	// Attributes
-	const attributesBlocks: tsdoc.DocBlock[] = docComment.customBlocks.filter(
-		(x) => x.blockTag.tagNameWithUpperCase === "@ATTRIBUTE"
-	);
-	for (const block of attributesBlocks) {
-		const txt = (await _renderContainer(block.content)).replace("<p>", "").replace("</p>", "");
-		const preface = txt.split(" ")[0];
-		outputElements.push(`
+  // Attributes
+  const attributesBlocks: tsdoc.DocBlock[] = docComment.customBlocks.filter(
+    (x) => x.blockTag.tagNameWithUpperCase === "@ATTRIBUTE",
+  );
+  for (const block of attributesBlocks) {
+    const txt = (await _renderContainer(block.content))
+      .replace("<p>", "")
+      .replace("</p>", "");
+    const preface = txt.split(" ")[0];
+    outputElements.push(`
 			<ul>
 				<li>
 					<code>${preface}</code><span>${txt.split("-")[0].replace(preface, "")}</span>
@@ -97,133 +104,135 @@ async function _renderDocComment(docComment: tsdoc.DocComment) {
 				</li>
 			</ul>
 		`);
-	}
+  }
 
-	// Returns
-	if (docComment.returnsBlock) {
-		outputElements.push(`
+  // Returns
+  if (docComment.returnsBlock) {
+    outputElements.push(`
 			<h3 class="doc-heading">Return Value</h3>
 			${await _renderContainer(docComment.returnsBlock.content)}
 		`);
-	}
+  }
 
-	if (docComment.remarksBlock) {
-		outputElements.push(`
+  if (docComment.remarksBlock) {
+    outputElements.push(`
 			<h3 class="doc-heading">Remarks</h3>
 			${await _renderContainer(docComment.remarksBlock.content)}
 		`);
-	}
+  }
 
-	const exampleBlocks: tsdoc.DocBlock[] = docComment.customBlocks.filter(
-		(x) => x.blockTag.tagNameWithUpperCase === tsdoc.StandardTags.example.tagNameWithUpperCase
-	);
+  const exampleBlocks: tsdoc.DocBlock[] = docComment.customBlocks.filter(
+    (x) =>
+      x.blockTag.tagNameWithUpperCase === tsdoc.StandardTags.example.tagNameWithUpperCase,
+  );
 
-	let exampleNumber = 1;
-	for (const exampleBlock of exampleBlocks) {
-
-		outputElements.push(`
-			<h3 class="doc-heading">${exampleBlocks.length > 1 ? `Example ${exampleNumber}` : 'Example'}</h3>
+  let exampleNumber = 1;
+  for (const exampleBlock of exampleBlocks) {
+    outputElements.push(`
+			<h3 class="doc-heading">${
+        exampleBlocks.length > 1 ? `Example ${exampleNumber}` : "Example"
+      }</h3>
 		`);
 
-		for (const node of exampleBlock.content.nodes) {
-			outputElements.push(await _renderDocNode(node, true));
-		}
+    for (const node of exampleBlock.content.nodes) {
+      outputElements.push(await _renderDocNode(node, true));
+    }
 
-		++exampleNumber;
-	}
+    ++exampleNumber;
+  }
 
   // Ignore see blocks to not render the link to the same doc page again
   // Example: @see http://localhost:4321/sv-frontend-library/mono/elements/a-adaptive/
   //               ^ Current page
   //
-	// if (docComment.seeBlocks.length > 0) {
-	// 	const listItems = [];
-	// 	for (const seeBlock of docComment.seeBlocks) {
-	// 		listItems.push(`<li>${await _renderContainer(seeBlock.content)}</li>`);
-	// 	}
-	// 	outputElements.push(`
-	// 		<h3 class="doc-heading">References</h3>
-	// 		<ul>${listItems.join('')}</ul>
-	// 	`);
-	// }
+  // if (docComment.seeBlocks.length > 0) {
+  // 	const listItems = [];
+  // 	for (const seeBlock of docComment.seeBlocks) {
+  // 		listItems.push(`<li>${await _renderContainer(seeBlock.content)}</li>`);
+  // 	}
+  // 	outputElements.push(`
+  // 		<h3 class="doc-heading">References</h3>
+  // 		<ul>${listItems.join('')}</ul>
+  // 	`);
+  // }
 
-	const modifierTags: ReadonlyArray<tsdoc.DocBlockTag> = docComment.modifierTagSet.nodes;
+  const modifierTags: ReadonlyArray<tsdoc.DocBlockTag> = docComment.modifierTagSet.nodes;
 
-	if (modifierTags.length > 0) {
-		const modifierElements = [];
-		for (const modifierTag of modifierTags) {
-			modifierElements.push(`<code class="doc-code-span">${modifierTag.tagName}</code>`);
-		}
-		outputElements.push(`
+  if (modifierTags.length > 0) {
+    const modifierElements = [];
+    for (const modifierTag of modifierTags) {
+      modifierElements.push(`<code class="doc-code-span">${modifierTag.tagName}</code>`);
+    }
+    outputElements.push(`
 			<h3 class="doc-heading">Modifiers</h3>
 			${modifierElements}
 		`);
-	}
+  }
 
-	return outputElements.join('\n');
+  return outputElements.join("\n");
 }
 
 async function _renderContainer(section: tsdoc.DocNodeContainer) {
-	const elements = [];
-	for (const node of section.nodes) {
-		elements.push(await _renderDocNode(node));
-	}
-	return elements.join('\n');
+  const elements = [];
+  for (const node of section.nodes) {
+    elements.push(await _renderDocNode(node));
+  }
+  return elements.join("\n");
 }
 
 async function _renderDocNode(node: tsdoc.DocNode, escape = false) {
-	switch (node.kind) {
-		case 'CodeSpan':
-			return `<code class="doc-code-span">${(node as tsdoc.DocCodeSpan).code}</code>`;
-		case 'ErrorText':
-			return (node as tsdoc.DocErrorText).text;
-		case 'EscapedText':
-			return (node as tsdoc.DocEscapedText).decodedText;
-		case 'FencedCode': {
-			const code = (node as tsdoc.DocFencedCode).code;
-			return `
+  switch (node.kind) {
+    case "CodeSpan":
+      return `<code class="doc-code-span">${(node as tsdoc.DocCodeSpan).code}</code>`;
+    case "ErrorText":
+      return (node as tsdoc.DocErrorText).text;
+    case "EscapedText":
+      return (node as tsdoc.DocEscapedText).decodedText;
+    case "FencedCode": {
+      const code = (node as tsdoc.DocFencedCode).code;
+      return `
 				<div class="doc-fenced-code">
 					${await shiki
-						.getHighlighter({
-							theme: 'nord'
-						})
-						.then(highlighter => highlighter.codeToHtml(code, { lang: 'js' }))}
+            .getHighlighter({
+              theme: "nord",
+            })
+            .then((highlighter) => highlighter.codeToHtml(code, { lang: "js" }))}
 				</div>
 			`;
-		}
-		case 'LinkTag': {
-			const linkTag: tsdoc.DocLinkTag = node as tsdoc.DocLinkTag;
-			if (linkTag.urlDestination) {
-				return `<a href="/">${linkTag.linkText || linkTag.urlDestination}</a>`;
-			}
-			let identifier = '';
-			if (linkTag.codeDestination) {
-				const memberReferences: ReadonlyArray<tsdoc.DocMemberReference> =
-					linkTag.codeDestination.memberReferences;
-				if (memberReferences.length > 0) {
-					const memberIdentifier: tsdoc.DocMemberIdentifier | undefined =
-						memberReferences[memberReferences.length - 1].memberIdentifier;
-					if (memberIdentifier) {
-						identifier = memberIdentifier.identifier;
-					}
-				}
-			}
-			return `<a href="/">${linkTag.linkText || identifier || '???'}</a>`;
-		}
-		case 'Paragraph': {
-			const text: string = await _renderContainer(node as tsdoc.DocParagraph);
-			const html = await remark().use(remarkHtml).process(text);
-			return html.toString();
-		}
-		case 'PlainText': {
-			const text = (node as tsdoc.DocPlainText).text;
-			if (text.startsWith('# ')) return;
-			return text;
-		}
-		case 'SoftBreak':
-			return '\n';
-	}
-	return undefined;
+    }
+    case "LinkTag": {
+      const linkTag: tsdoc.DocLinkTag = node as tsdoc.DocLinkTag;
+      if (linkTag.urlDestination) {
+        return `<a href="/">${linkTag.linkText || linkTag.urlDestination}</a>`;
+      }
+      let identifier = "";
+      if (linkTag.codeDestination) {
+        const memberReferences: ReadonlyArray<tsdoc.DocMemberReference> =
+          linkTag.codeDestination.memberReferences;
+        if (memberReferences.length > 0) {
+          const memberIdentifier: tsdoc.DocMemberIdentifier | undefined =
+            memberReferences[memberReferences.length - 1].memberIdentifier;
+          if (memberIdentifier) {
+            identifier = memberIdentifier.identifier;
+          }
+        }
+      }
+      return `<a href="/">${linkTag.linkText || identifier || "???"}</a>`;
+    }
+    case "Paragraph": {
+      const text: string = await _renderContainer(node as tsdoc.DocParagraph);
+      const html = await remark().use(remarkHtml).process(text);
+      return html.toString();
+    }
+    case "PlainText": {
+      const text = (node as tsdoc.DocPlainText).text;
+      if (text.startsWith("# ")) return;
+      return text;
+    }
+    case "SoftBreak":
+      return "\n";
+  }
+  return undefined;
 }
 ---
 

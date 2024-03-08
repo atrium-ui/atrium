@@ -1,4 +1,4 @@
-import { HTMLTemplateResult, LitElement, css, html } from "lit";
+import { type HTMLTemplateResult, LitElement, css, html } from "lit";
 import { property } from "lit/decorators.js";
 
 declare global {

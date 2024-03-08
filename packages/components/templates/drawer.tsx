@@ -1,6 +1,6 @@
 import "@sv/elements/blur";
 import { Track, Trait } from "@sv/elements/track";
-import { PointerTrait } from "../../elements/packages/track/src/traits/Pointer.js";
+import type { PointerTrait } from "../../elements/packages/track/src/traits/Pointer.js";
 
 customElements.define(
   "drawer-track",

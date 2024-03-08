@@ -1,5 +1,5 @@
 <script setup>
-import Slider from '../../../src/components/slider-horizontal.vue'
+import Slider from "../../../src/components/slider-horizontal.vue";
 </script>
 
 <template>

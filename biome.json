@@ -5,14 +5,8 @@
   ],
   "linter": {
     "rules": {
-      "style": {
-        "noDefaultExport": "warn"
-      },
       "correctness": {
         "useExhaustiveDependencies": "warn"
-      },
-      "complexity": {
-        "noStaticOnlyClass": "off"
       },
       "suspicious": {
         "noConsoleLog": "error"

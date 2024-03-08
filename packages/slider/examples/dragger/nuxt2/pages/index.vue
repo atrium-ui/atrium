@@ -7,12 +7,12 @@
 </template>
 
 <script>
-import Dragger from '../../../../src/components/dragger.vue'
+import Dragger from "../../../../src/components/dragger.vue";
 
 export default {
-  name: 'IndexPage',
+  name: "IndexPage",
   components: {
-    Dragger
+    Dragger,
   },
-}
+};
 </script>

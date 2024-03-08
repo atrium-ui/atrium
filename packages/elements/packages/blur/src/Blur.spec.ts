@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeAll } from "bun:test";
-import { type Blur } from "./Blur.js";
+import type { Blur } from "./Blur.js";
 
 const NODE_NAME = "a-blur";
 

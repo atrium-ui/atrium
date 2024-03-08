@@ -1,13 +1,13 @@
 {
-	"name": "plain",
-	"version": "1.0.0",
-	"private": true,
-	"description": "",
-	"main": "index.js",
-	"scripts": {
-		"build": "vite build"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC"
+  "name": "plain",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "vite build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

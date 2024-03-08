@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { $ } from "bun";
-import fs from "fs";
+import fs from "node:fs";
 
 describe("cli", () => {
   it("use button template", async () => {

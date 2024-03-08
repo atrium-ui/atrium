@@ -1,6 +1,6 @@
 ---
 import fs from "node:fs";
-import shiki from 'shiki';
+import shiki from "shiki";
 
 export interface Props {
   file: string;
@@ -9,29 +9,31 @@ export interface Props {
 const props = Astro.props;
 
 const langs = {
-  "ts": "typescript",
-  "tsx": "typescript",
-  "js": "javascript",
-  "jsx": "javascript",
-  "json": "json",
-  "yaml": "yaml",
-  "yml": "yaml",
-  "md": "markdown",
-  "html": "html",
-  "css": "css",
-  "scss": "scss",
-  "sass": "sass",
-  "editorconfig": "ini",
-}
+  ts: "typescript",
+  tsx: "typescript",
+  js: "javascript",
+  jsx: "javascript",
+  json: "json",
+  yaml: "yaml",
+  yml: "yaml",
+  md: "markdown",
+  html: "html",
+  css: "css",
+  scss: "scss",
+  sass: "sass",
+  editorconfig: "ini",
+};
 
 const file = fs.readFileSync(props.file, "utf-8");
-const content = await shiki.getHighlighter({
-	theme: 'nord'
-}).then(highlighter => {
-  const ext = props.file.split(".").pop();
-  if(ext) return highlighter.codeToHtml(file, { lang: langs[ext] })
-  return highlighter.codeToHtml(file, { lang: "plaintext" });
-});
+const content = await shiki
+  .getHighlighter({
+    theme: "nord",
+  })
+  .then((highlighter) => {
+    const ext = props.file.split(".").pop();
+    if (ext) return highlighter.codeToHtml(file, { lang: langs[ext] });
+    return highlighter.codeToHtml(file, { lang: "plaintext" });
+  });
 ---
 
 <div set:html={content}></div>

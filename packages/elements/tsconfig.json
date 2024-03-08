@@ -1,12 +1,12 @@
 {
-	"extends": "@sv/codestyle/tsconfig.json",
-	"compilerOptions": {
-		"useDefineForClassFields": false,
-		"experimentalDecorators": true,
-		"types": ["bun-types"]
-	},
-	"exclude": [
+  "extends": "@sv/codestyle/tsconfig.json",
+  "compilerOptions": {
+    "useDefineForClassFields": false,
+    "experimentalDecorators": true,
+    "types": ["bun-types"]
+  },
+  "exclude": [
     "node_modules",
-    "**/dist",
+    "**/dist"
   ]
 }

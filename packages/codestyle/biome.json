@@ -1,5 +1,5 @@
 {
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -11,6 +11,7 @@
       ".mise",
       ".astro",
       ".nuxt",
+      ".output",
       "vendor",
       "public",
       "dist"
@@ -28,10 +29,12 @@
     "lineEnding": "lf"
   },
   "linter": {
-    "enabled": true,
     "rules": {
-      "recommended": true,
+      "style": {
+        "noDefaultExport": "warn"
+      },
       "complexity": {
+        "noStaticOnlyClass": "warn",
         "noForEach": "warn"
       },
       "a11y": {
@@ -39,7 +42,11 @@
       },
       "suspicious": {
         "noArrayIndexKey": "off",
-        "noExplicitAny": "warn"
+        "noExplicitAny": "warn",
+        "noConsoleLog": "warn"
+      },
+      "nursery": {
+        "useImportRestrictions": "error"
       }
     }
   },
@@ -54,6 +61,7 @@
   },
   "json": {
     "formatter": {
+      "trailingCommas": "none",
       "lineWidth": 30
     }
   }
