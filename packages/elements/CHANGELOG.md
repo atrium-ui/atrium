@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.5.0
+
+### Minor Changes
+
+- cd71005: Refactor a-track to expose traits
+
 ## 0.4.0
 
 ### Minor Changes

@@ -2,7 +2,7 @@
   "name": "@sv/codestyle",
   "author": "t.havlicek@s-v.de",
   "contributors": [],
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Codestyle and configuration for all projects",
   "type": "module",
   "exports": {
