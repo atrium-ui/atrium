@@ -7,11 +7,11 @@
   "type": "module",
   "exports": {
     "./biome": "./biome.json",
-    "./tsconfig": "./tsconfig.json",
-    "./eslint": "./.eslintrc.json",
-    "./prettier": "./.prettierrc.json",
-    "./commitlint": "./commitlint.cjs",
-    "./stylelint": "./stylelint.config.cjs"
+    "./tsconfig.json": "./tsconfig.json",
+    "./.eslintrc.json": "./.eslintrc.json",
+    "./.prettierrc.json": "./.prettierrc.json",
+    "./commitlint.cjs": "./commitlint.cjs",
+    "./stylelint.config.cjs": "./stylelint.config.cjs"
   },
   "scripts": {
     "check": "tsc --pretty",
