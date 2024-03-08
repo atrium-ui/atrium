@@ -4,22 +4,31 @@
     "target": "ES2018",
 		"module": "ES2020",
     "moduleResolution": "Bundler",
-    "strict": true,
-    "resolveJsonModule": true,
+
+    // typing
+    "useUnknownInCatchVariables": true,
     "noImplicitAny": false,
-    "noFallthroughCasesInSwitch": true,
+
+    // linting
+    "strict": true,
+    "checkJs": true,
+    "skipLibCheck": true,
+    "noEmit": true,
     "noImplicitReturns": true,
     "noImplicitOverride": false,
     "noUnusedParameters": false,
     "noUnusedLocals": false,
-    "useUnknownInCatchVariables": true,
+    "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
+
+    // imports
+    "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "checkJs": true,
-    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": false,
+	  "allowArbitraryExtensions": false,
+    "esModuleInterop": true,
+
     "types": ["@total-typescript/ts-reset"],
   }
 }
