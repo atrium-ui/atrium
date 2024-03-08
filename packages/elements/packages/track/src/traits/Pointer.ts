@@ -1,4 +1,4 @@
-import { InputState, Track } from "../Track.js";
+import type { InputState, Track } from "../Track.js";
 import { Trait } from "../Trait.js";
 import { Vec, isTouch } from "../utils.js";
 

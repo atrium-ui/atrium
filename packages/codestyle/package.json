@@ -1,21 +1,21 @@
 {
-	"name": "@sv/codestyle",
-	"author": "t.havlicek@s-v.de",
-	"contributors": [],
-	"version": "0.3.0",
-	"description": "Codestyle and configuration for all projects",
-	"type": "module",
-	"scripts": {
-		"check": "tsc --pretty",
-		"test": "bun test",
-		"postinstall": "./install.js"
-	},
-	"keywords": [],
-	"license": "ISC",
-	"dependencies": {
-		"@total-typescript/ts-reset": "^0.5.1"
+  "name": "@sv/codestyle",
+  "author": "t.havlicek@s-v.de",
+  "contributors": [],
+  "version": "0.3.0",
+  "description": "Codestyle and configuration for all projects",
+  "type": "module",
+  "scripts": {
+    "check": "tsc --pretty",
+    "test": "bun test",
+    "postinstall": "./install.js"
   },
-	"peerDepende": {
-		"@biomejs/biome": "^1.5.3"
-	}
+  "keywords": [],
+  "license": "ISC",
+  "dependencies": {
+    "@total-typescript/ts-reset": "^0.5.1"
+  },
+  "peerDependencies": {
+    "@biomejs/biome": "^1.6.0"
+  }
 }

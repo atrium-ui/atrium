@@ -1,4 +1,4 @@
-import { HTMLTemplateResult, LitElement, css, html } from "lit";
+import { type HTMLTemplateResult, LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { formatDate, formatTime } from "./format.js";
 

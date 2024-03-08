@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { property, query } from "lit/decorators.js";
 import { DoropDownSelectEvent } from "./DoropDownSelectEvent";
-import { OptionElement } from "./Option";
+import type { OptionElement } from "./Option";
 
 declare global {
   interface HTMLElementTagNameMap {

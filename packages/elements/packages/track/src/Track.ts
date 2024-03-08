@@ -664,7 +664,7 @@ export class Track extends LitElement {
   getCurrentItem(pos: Vec) {
     const currentAngle = (this.currentPosition / this.trackSize) * 360;
 
-    let minDist = Infinity;
+    let minDist = Number.POSITIVE_INFINITY;
     let angleToClosestIndex = 0;
 
     const rects = this.getItemRects();

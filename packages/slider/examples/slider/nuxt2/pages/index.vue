@@ -6,12 +6,12 @@
 </template>
 
 <script>
-import Slider from '../../../../src/components/slider-horizontal.vue'
+import Slider from "../../../../src/components/slider-horizontal.vue";
 
 export default {
-  name: 'IndexPage',
+  name: "IndexPage",
   components: {
-    Slider
+    Slider,
   },
-}
+};
 </script>

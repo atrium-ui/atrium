@@ -1,20 +1,20 @@
 {
-	"name": "@atrium-ui/popover",
-	"author": "t.havlicek@s-v.de",
-	"contributors": [],
-	"private": true,
-	"description": "",
-	"type": "module",
-	"main": "dist/index.js",
-	"types": "src/index.ts",
-	"scripts": {
-		"build": "tsup"
-	},
-	"tsup": {
-		"entry": ["src/index.ts"],
-		"format": ["esm", "cjs"],
-		"external": ["@sv/*"],
-		"sourcemap": true,
-		"clean": true
-	}
+  "name": "@atrium-ui/popover",
+  "author": "t.havlicek@s-v.de",
+  "contributors": [],
+  "private": true,
+  "description": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsup"
+  },
+  "tsup": {
+    "entry": ["src/index.ts"],
+    "format": ["esm", "cjs"],
+    "external": ["@sv/*"],
+    "sourcemap": true,
+    "clean": true
+  }
 }

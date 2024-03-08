@@ -1,4 +1,4 @@
-import { resolve } from "path";
+import { resolve } from "node:path";
 import { defineConfig } from "vite";
 // import legacy from '@vitejs/plugin-legacy' // not working with lib mode: https://github.com/vitejs/vite/issues/1639
 import vue from "@vitejs/plugin-vue";

@@ -6,13 +6,13 @@
 </template>
 
 <script>
-import Slider from '../../../src/components/slider-horizontal.vue'
+import Slider from "../../../src/components/slider-horizontal.vue";
 
 export default {
   components: {
-    Slider
+    Slider,
   },
-}
+};
 </script>
 
 <style scoped>

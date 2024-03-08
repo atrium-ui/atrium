@@ -1,24 +1,24 @@
 {
-	"name": "@atrium-ui/example",
-	"version": "0.0.1",
-	"description": "",
-	"type": "module",
-	"main": "dist/example.js",
-	"types": "src/index.ts",
-	"author": "",
-	"license": "ISC",
-	"scripts": {
-		"build": "tsup",
-		"dev": "tsup --watch"
-	},
-	"tsup": {
-		"entry": ["src/index.ts"],
-		"format": ["esm", "cjs"],
-		"external": [
-			"@sv/*",
-			"@rive-app/canvas-single"
-		],
-		"sourcemap": true,
-		"clean": true
-	}
+  "name": "@atrium-ui/example",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "main": "dist/example.js",
+  "types": "src/index.ts",
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "tsup": {
+    "entry": ["src/index.ts"],
+    "format": ["esm", "cjs"],
+    "external": [
+      "@sv/*",
+      "@rive-app/canvas-single"
+    ],
+    "sourcemap": true,
+    "clean": true
+  }
 }

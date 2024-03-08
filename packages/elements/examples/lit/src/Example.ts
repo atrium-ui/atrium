@@ -1,4 +1,4 @@
-import { HTMLTemplateResult, LitElement, html, unsafeCSS } from "lit";
+import { type HTMLTemplateResult, LitElement, html, unsafeCSS } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 @customElement("a-example")

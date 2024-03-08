@@ -1,21 +1,21 @@
 {
-	"name": "@atrium-ui/expandable",
-	"author": "t.havlicek@s-v.de",
-	"contributors": [],
-	"private": true,
-	"description": "",
-	"main": "dist/index.js",
-	"types": "src/index.ts",
-	"type": "module",
-	"scripts": {
-		"build": "tsup",
-		"dev": "tsup --watch"
-	},
-	"tsup": {
-		"entry": ["src/index.ts"],
-		"format": ["esm", "cjs"],
-		"external": ["@sv/*"],
-		"sourcemap": true,
-		"clean": true
-	}
+  "name": "@atrium-ui/expandable",
+  "author": "t.havlicek@s-v.de",
+  "contributors": [],
+  "private": true,
+  "description": "",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "tsup": {
+    "entry": ["src/index.ts"],
+    "format": ["esm", "cjs"],
+    "external": ["@sv/*"],
+    "sourcemap": true,
+    "clean": true
+  }
 }

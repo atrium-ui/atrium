@@ -27,7 +27,6 @@ tasks:
       - "package.json"
       - "**/package.json"
     cmds:
-      - mise install
       - bun install
 
   build:
@@ -54,7 +53,7 @@ tasks:
     deps: [setup]
     cmds:
       - bun x turbo check
-      - bun x biome check .
+      - bun x biome check . --diagnostic-level=error
 
   fix:
     desc: Apply all (unsafe) autofixes

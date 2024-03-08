@@ -1,4 +1,4 @@
-import { InputState } from "../Track.js";
+import type { InputState } from "../Track.js";
 import { Trait } from "../Trait.js";
 import { timer } from "../utils.js";
 

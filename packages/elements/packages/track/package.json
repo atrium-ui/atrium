@@ -11,7 +11,10 @@
     "build": "tsup"
   },
   "tsup": {
-    "entry": ["src/index.ts", "src/traits.ts"],
+    "entry": [
+      "src/index.ts",
+      "src/traits.ts"
+    ],
     "format": ["esm", "cjs"],
     "external": ["@sv/*"],
     "sourcemap": true,

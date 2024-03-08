@@ -1,4 +1,10 @@
-import { css, html, HTMLTemplateResult, LitElement, PropertyValueMap } from "lit";
+import {
+  css,
+  html,
+  type HTMLTemplateResult,
+  LitElement,
+  type PropertyValueMap,
+} from "lit";
 import { property, query } from "lit/decorators.js";
 import { Rive } from "@rive-app/canvas-single";
 
