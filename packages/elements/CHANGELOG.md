@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.4.0
+
+### Minor Changes
+
+- 24c1395: Refactor a-track to expose traits
+
 ## 0.3.1
 
 ### Patch Changes
