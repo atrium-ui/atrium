@@ -44,9 +44,6 @@
         "noArrayIndexKey": "off",
         "noExplicitAny": "warn",
         "noConsoleLog": "warn"
-      },
-      "nursery": {
-        "useImportRestrictions": "error"
       }
     }
   },

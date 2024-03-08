@@ -180,7 +180,7 @@ async function _renderContainer(section: tsdoc.DocNodeContainer) {
   return elements.join("\n");
 }
 
-async function _renderDocNode(node: tsdoc.DocNode, escape = false) {
+async function _renderDocNode(node: tsdoc.DocNode) {
   switch (node.kind) {
     case "CodeSpan":
       return `<code class="doc-code-span">${(node as tsdoc.DocCodeSpan).code}</code>`;
