@@ -29,9 +29,7 @@
     "lineEnding": "lf"
   },
   "linter": {
-    "enabled": true,
     "rules": {
-      "recommended": true,
       "style": {
         "noDefaultExport": "warn"
       },
@@ -46,6 +44,9 @@
         "noArrayIndexKey": "off",
         "noExplicitAny": "warn",
         "noConsoleLog": "warn"
+      },
+      "nursery": {
+        "useImportRestrictions": "error"
       }
     }
   },
