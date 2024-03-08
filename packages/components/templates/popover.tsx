@@ -22,11 +22,7 @@ export function Popover(
     <a-popover class="group relative z-10">
       <Button slot="input">{props.label}</Button>
 
-      <div
-        class="rounded-md bg-zinc-800 border border-zinc-700 p-4 mt-1 w-80
-                transition-all
-                opacity-0 group-[&[opened]]:opacity-100"
-      >
+      <div class="mt-1 w-80 rounded-md border border-zinc-700 bg-zinc-800 p-4 opacity-0 transition-all group-[&[opened]]:opacity-100">
         <slots.default />
       </div>
     </a-popover>

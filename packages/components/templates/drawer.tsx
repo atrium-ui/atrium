@@ -38,24 +38,17 @@ export function Drawer(props: Props, context) {
   return (
     <a-blur
       enabled={props.enabled === true ? true : undefined}
-      class="group/blur block fixed z-50 top-0 left-0 w-full h-full transition-all
-           [&[enabled]]:bg-[#1C1C1C33] [&[enabled]]:backdrop-blur-md"
+      class="group/blur fixed top-0 left-0 z-50 block h-full w-full transition-all [&[enabled]]:bg-[#1C1C1C33] [&[enabled]]:backdrop-blur-md"
       onBlur={() => props.onBlur?.()}
     >
       <drawer-track
         vertical
-        class="fixed z-50 bottom-0 left-1/2 -translate-x-1/2 overflow-visible
-							transition-all translate-y-full group-[&[enabled]]/blur:translate-y-0
-							opacity-0 group-[&[enabled]]/blur:opacity-100
-							group-[&[enabled]]/blur:block"
+        class="-translate-x-1/2 fixed bottom-0 left-1/2 z-50 translate-y-full overflow-visible opacity-0 transition-all group-[&[enabled]]/blur:block group-[&[enabled]]/blur:translate-y-0 group-[&[enabled]]/blur:opacity-100"
         onClose={() => props.onBlur?.()}
       >
-        <div
-          class="py-4 px-8 min-w-[250px] w-[calc(100vw-20px)] max-w-[500px]
-                rounded-t-lg bg-zinc-800 border-b-0 border border-zinc-700"
-        >
-          <div class="w-full flex justify-center pb-4">
-            <div class="w-[100px] h-[4px] bg-white rounded-3xl opacity-50" />
+        <div class="w-[calc(100vw-20px)] min-w-[250px] max-w-[500px] rounded-t-lg border border-zinc-700 border-b-0 bg-zinc-800 px-8 py-4">
+          <div class="flex w-full justify-center pb-4">
+            <div class="h-[4px] w-[100px] rounded-3xl bg-white opacity-50" />
           </div>
 
           {props.children}

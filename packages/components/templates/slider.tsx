@@ -9,7 +9,7 @@ function Dot() {
   return (
     <button
       type="button"
-      class="w-4 h-4 bg-zinc-400 rounded-full cursor-pointer [&[selected]]:bg-white"
+      class="h-4 w-4 cursor-pointer rounded-full bg-zinc-400 [&[selected]]:bg-white"
     />
   );
 }
@@ -31,7 +31,7 @@ export function Slider(props: Props, context) {
       </a-track>
 
       <a-toggle
-        class="flex gap-2 justify-center mt-4"
+        class="mt-4 flex justify-center gap-2"
         onchange={(e) => {
           console.info(e);
         }}

@@ -15,7 +15,7 @@ interface Props {
 export function Input(props: Props) {
   return (
     <div>
-      <div class="text-sm mb-1">
+      <div class="mb-1 text-sm">
         <label>{props.label}</label>
       </div>
 
@@ -25,9 +25,9 @@ export function Input(props: Props) {
           required={props.required || undefined}
           placeholder={props.placeholder}
           class={[
-            "group px-3 py-1 bg-transparent rounded-md outline-none border hover:border-zinc-600 focus:border-zinc-500 resize-y w-full",
+            "group w-full resize-y rounded-md border bg-transparent px-3 py-1 outline-none focus:border-zinc-500 hover:border-zinc-600",
             props.error ? "border-red-600" : "border-zinc-700",
-          ].join(" ")}
+          ].join("")}
           onChange={(e) => {
             props.onChange?.(e);
           }}
@@ -45,9 +45,9 @@ export function Input(props: Props) {
           required={props.required || undefined}
           placeholder={props.placeholder}
           class={[
-            "group px-3 py-1 bg-transparent rounded-md outline-none border hover:border-zinc-600 focus:border-zinc-500 min-w-0 w-full",
+            "group w-full min-w-0 rounded-md border bg-transparent px-3 py-1 outline-none focus:border-zinc-500 hover:border-zinc-600",
             props.error ? "border-red-600" : "border-zinc-700",
-          ].join(" ")}
+          ].join("")}
           onChange={(e) => {
             props.onChange?.(e);
           }}
@@ -62,7 +62,7 @@ export function Input(props: Props) {
       )}
 
       {props.error ? (
-        <div class="text-sm mt-1 text-red-600">
+        <div class="mt-1 text-red-600 text-sm">
           <label>{props.error}</label>
         </div>
       ) : null}

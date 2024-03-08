@@ -60,6 +60,12 @@ tasks:
     cmds:
       - bun x biome check --apply .
 
+  fix:unsafe:
+      desc: Apply all (unsafe) autofixes
+      cmds:
+        - bun x biome check --apply-unsafe .
+
+
   clean:
     desc: Clean untracked files
     cmds:

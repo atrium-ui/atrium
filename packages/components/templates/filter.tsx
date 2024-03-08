@@ -19,18 +19,18 @@ export function Filter(props: Props, context) {
   return (
     <div
       onInput={(e) => console.info(e.target.value)}
-      class="p-1 bg-zinc-800 rounded-lg border border-zinc-700"
+      class="rounded-lg border border-zinc-700 bg-zinc-800 p-1"
     >
       <a-dropdown class="block" style="--dropdown-position: static;">
         <input
           slot="input"
-          class="rounded-md bg-transparent px-3 py-1 text-left min-w-[500px] outline-none"
+          class="min-w-[500px] rounded-md bg-transparent px-3 py-1 text-left outline-none"
           onInput="handleFilter"
           placeholder="Type to filter..."
           value={props.value}
         />
 
-        <div class="p-1 max-h-[200px]">
+        <div class="max-h-[200px] p-1">
           <slots.default />
         </div>
       </a-dropdown>
@@ -41,12 +41,12 @@ export function Filter(props: Props, context) {
 Filter.Item = function Item(props: { value: string }) {
   return (
     <a-option
-      class="hover:bg-zinc-600 active:bg-zinc-700 [&[selected]]:bg-zinc-700 rounded-md"
+      class="rounded-md [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600"
       value={props.value}
     >
       <button
         type="button"
-        class="group cursor-pointer w-full flex items-center justify-start bg-transparent"
+        class="group flex w-full cursor-pointer items-center justify-start bg-transparent"
       >
         <div>{props.value}</div>
       </button>

@@ -3,7 +3,7 @@ import "@sv/elements/toggle";
 function CheckIcon() {
   return (
     <svg
-      class="stroke-current block"
+      class="block stroke-current"
       xmlns="http://www.w3.org/2000/svg"
       width="17.121"
       height="13.141"
@@ -31,19 +31,18 @@ export function Checkbox(props: Props) {
       <a-toggle active-attribute="data-selected">
         <button
           type="button"
-          class="group w-7 h-7 p-0 bg-transparent rounded-md cursor-pointer
-              border border-zinc-700 hover:border-zinc-600"
+          class="group h-7 w-7 cursor-pointer rounded-md border border-zinc-700 bg-transparent p-0 hover:border-zinc-600"
           id={props.id}
           data-selected={props.checked}
         >
-          <div class="items-center justify-center hidden group-[&[data-selected]]:flex">
+          <div class="hidden items-center justify-center group-[&[data-selected]]:flex">
             <CheckIcon />
           </div>
         </button>
       </a-toggle>
 
       <div>
-        <label for={props.id} class="text-lg cursor-pointer">
+        <label for={props.id} class="cursor-pointer text-lg">
           I agree to use this checkbox
         </label>
         <p class="text-base">This is still work in progress.</p>

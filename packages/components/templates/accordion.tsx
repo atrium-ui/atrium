@@ -60,7 +60,7 @@ export function Accordion(props: Props, context) {
   };
 
   return (
-    <ul class="list-none p-0 m-0">
+    <ul class="m-0 list-none p-0">
       <slots.default />
     </ul>
   );
@@ -81,10 +81,10 @@ Accordion.Item = function AccordionItem(
 
   return (
     <li class="list-none">
-      <a-expandable class="group rounded-lg border border-[#C09278] mb-2">
+      <a-expandable class="group mb-2 rounded-lg border border-[#C09278]">
         <div
           slot="toggle"
-          class="px-6 py-2 flex justify-between items-center cursor-pointer"
+          class="flex cursor-pointer items-center justify-between px-6 py-2"
         >
           <div class="text-white">
             <span>{props.title}</span>

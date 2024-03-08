@@ -18,14 +18,9 @@ export function Sheet(props: Props, context) {
   return (
     <a-blur
       enabled={props?.enabled}
-      class="group/blur block fixed z-50 top-0 left-0 w-full h-full transition-all
-           [&[enabled]]:bg-[#33333333]"
+      class="group/blur fixed top-0 left-0 z-50 block h-full w-full transition-all [&[enabled]]:bg-[#33333333]"
     >
-      <div
-        class="fixed top-0 left-full h-full bg-zinc-800 overflow-auto transition-all
-               group-[&[enabled]]/blur:-translate-x-full py-32 px-4
-               w-full sm:w-96"
-      >
+      <div class="group-[&[enabled]]/blur:-translate-x-full fixed top-0 left-full h-full w-full overflow-auto bg-zinc-800 px-4 py-32 transition-all sm:w-96">
         <slots.default />
       </div>
     </a-blur>

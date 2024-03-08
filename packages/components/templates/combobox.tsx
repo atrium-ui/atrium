@@ -7,7 +7,7 @@ import { Button } from "./button.jsx";
 function CheckIcon() {
   return (
     <svg
-      class="stroke-current block"
+      class="block stroke-current"
       xmlns="http://www.w3.org/2000/svg"
       width="12"
       viewBox="0 0 17.121 13.141"
@@ -46,7 +46,7 @@ export function Combobox(
           {props.value}
         </Button>
 
-        <div class="rounded-md bg-zinc-800 border border-zinc-700 p-1 mt-1">
+        <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-800 p-1">
           <a-toggle multiple>
             <slots.default />
           </a-toggle>
@@ -61,10 +61,9 @@ Combobox.Item = function Item(props: { value: string }) {
     <button
       type="button"
       value={props.value}
-      class="group cursor-pointer w-full flex items-center justify-start
-            rounded-md bg-transparent hover:bg-zinc-600 active:bg-zinc-700"
+      class="group flex w-full cursor-pointer items-center justify-start rounded-md bg-transparent active:bg-zinc-700 hover:bg-zinc-600"
     >
-      <div class="opacity-0 group-[&[selected]]:opacity-100 ml-1 mr-2">
+      <div class="mr-2 ml-1 opacity-0 group-[&[selected]]:opacity-100">
         <CheckIcon />
       </div>
       <div>{props.value}</div>
