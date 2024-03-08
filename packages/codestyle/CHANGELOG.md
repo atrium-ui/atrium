@@ -1,5 +1,12 @@
 # @sv/codestyle
 
+## 0.4.0
+
+### Minor Changes
+
+- 24c1395: Update config to biome v1.6. Update tsconfig +allowImportingTsExtensions +allowArbitraryExtensions
+- 24c1395: Ignore .output dir, set noDefaultExports, noStaticOnlyClass and noConsoleLog to warn
+
 ## 0.3.0
 
 ### Minor Changes
