@@ -22,9 +22,7 @@
   "keywords": [],
   "license": "ISC",
   "dependencies": {
+    "@commitlint/types": "^19.0.3",
     "@total-typescript/ts-reset": "^0.5.1"
-  },
-  "peerDependencies": {
-    "@biomejs/biome": "^1.6.0"
   }
 }
