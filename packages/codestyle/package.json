@@ -10,7 +10,7 @@
     "./tsconfig.json": "./tsconfig.json",
     "./.eslintrc.json": "./.eslintrc.json",
     "./.prettierrc.json": "./.prettierrc.json",
-    "./commitlint.cjs": "./commitlint.cjs",
+    "./commitlint.js": "./commitlint.js",
     "./stylelint.config.cjs": "./stylelint.config.cjs",
     "./CHANGELOG.md": "./CHANGELOG.md"
   },
