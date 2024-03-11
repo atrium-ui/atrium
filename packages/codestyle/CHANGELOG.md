@@ -4,11 +4,6 @@
 
 ### Minor Changes
 
-- bba1624: Update config to biome v1.6. Update tsconfig +allowImportingTsExtensions +allowArbitraryExtensions
-- d2b1898: Ignore .output dir, set noDefaultExports, noStaticOnlyClass and noConsoleLog to warn
-
-### Patch Changes
-
 - fabbd09: Correct package exports
 
 ## 0.4.0
