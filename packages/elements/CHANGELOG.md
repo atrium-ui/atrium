@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.6.0
+
+### Minor Changes
+
+- 0283038: a-track refactor
+
 ## 0.5.0
 
 ### Minor Changes
