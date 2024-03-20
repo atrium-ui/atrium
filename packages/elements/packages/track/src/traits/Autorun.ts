@@ -1,6 +1,4 @@
-import type { InputState } from "../Track.js";
-import { Trait } from "../Trait.js";
-import { Ease, Vec, isTouch, timer } from "../utils.js";
+import { type InputState, Trait, Ease, Vec, isTouch, timer } from "../Track.js";
 
 export class AutorunTrait extends Trait {
   defaultSpeed = 1;

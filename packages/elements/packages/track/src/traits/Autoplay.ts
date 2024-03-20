@@ -1,6 +1,4 @@
-import type { InputState } from "../Track.js";
-import { Trait } from "../Trait.js";
-import { timer } from "../utils.js";
+import { type InputState, Trait, timer } from "../Track.js";
 
 export class AutoplayTrait extends Trait {
   autoPlayTimeout = 4000;
@@ -21,7 +19,8 @@ export class AutoplayTrait extends Trait {
   }
 
   update() {
-    const autoplayTime = this.entity.autoplay * 1000 || this.defaultAutoPlayTime;
+    const autoplayTime =
+      this.entity.autoplay * 1000 || this.defaultAutoPlayTime;
     const slideTime = timer(this.autoPlayTimer, autoplayTime);
     if (slideTime >= 1) {
       this.entity.moveBy(1, "ease");
