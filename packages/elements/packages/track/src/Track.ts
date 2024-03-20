@@ -655,11 +655,7 @@ export class Track extends LitElement {
     const delta = Vec.sub(pos, this.mousePos);
 
     if (!this.mouseGrab && delta.abs() > 3) {
-      if (
-        this.vertical &&
-        this.mousePos.y &&
-        Math.abs(delta.x) < Math.abs(delta.y)
-      ) {
+      if (this.vertical && this.mousePos.y && Math.abs(delta.x) < Math.abs(delta.y)) {
         this.mouseGrab = true;
         this.inputState.grab.value = true;
       } else if (this.mousePos.x && Math.abs(delta.y) < Math.abs(delta.x)) {
@@ -784,8 +780,7 @@ export class Track extends LitElement {
 
     if (!easing) {
       // auto easing
-      easing =
-        this.transition === 0 || this.transition === 1 ? "ease" : "linear";
+      easing = this.transition === 0 || this.transition === 1 ? "ease" : "linear";
     }
 
     if (vec !== undefined) {
@@ -922,22 +917,15 @@ export class Track extends LitElement {
             const easedDelta = Vec.sub(this.target, this.targetStart).mul(
               Ease.easeInOutCirc(this.transition),
             );
-            this.targetForce
-              .set(this.targetStart)
-              .add(easedDelta)
-              .sub(this.position);
+            this.targetForce.set(this.targetStart).add(easedDelta).sub(this.position);
           }
           break;
         case "linear":
           {
-            const prog =
-              Vec.sub(this.position, this.target).abs() / Vec.abs(this.target);
+            const prog = Vec.sub(this.position, this.target).abs() / Vec.abs(this.target);
             this.transition = Math.round(prog * 100) / 100 || 0;
 
-            const delta = Vec.sub(
-              this.targetForce.set(this.target),
-              this.position,
-            );
+            const delta = Vec.sub(this.targetForce.set(this.target), this.position);
             this.targetForce.set(
               delta
                 .mod([this.trackWidth, this.trackHeight])
@@ -946,9 +934,7 @@ export class Track extends LitElement {
           }
           break;
         default:
-          this.targetForce.set(
-            Vec.sub(this.targetForce.set(this.target), this.position),
-          );
+          this.targetForce.set(Vec.sub(this.targetForce.set(this.target), this.position));
           break;
       }
     }
@@ -956,10 +942,7 @@ export class Track extends LitElement {
     // loop
     if (this.loop) {
       const start = new Vec();
-      const max = new Vec(
-        start.x + this.trackWidth,
-        start.y + this.trackHeight,
-      );
+      const max = new Vec(start.x + this.trackWidth, start.y + this.trackHeight);
 
       if (this.position.y >= max.y) {
         this.position.y = start.y;
@@ -1070,11 +1053,7 @@ export class Track extends LitElement {
     if (this.loop) {
       const visibleItems: number[] = [];
       let lastItem: number | null = null;
-      for (
-        let x = -this.offsetWidth;
-        x < this.offsetWidth + this.offsetWidth;
-        x += 100
-      ) {
+      for (let x = -this.offsetWidth; x < this.offsetWidth + this.offsetWidth; x += 100) {
         const item = this.getItemAtPosition(this.position.x + x);
         if (item != null && item.index !== lastItem) {
           // clone nodes if possible
@@ -1152,9 +1131,7 @@ export class Track extends LitElement {
     });
     window.addEventListener("load", this.format.bind(this), { capture: true });
 
-    this.dispatchEvent(
-      new CustomEvent("change", { detail: this.value, bubbles: true }),
-    );
+    this.dispatchEvent(new CustomEvent("change", { detail: this.value, bubbles: true }));
 
     this.observer.observe(this);
 
@@ -1199,7 +1176,7 @@ function angleDist(a, b) {
   return mod(b - a + 180, 360) - 180;
 }
 
-function timer(start, time) {
+export function timer(start, time) {
   return Math.min((Date.now() - start) / time, 1);
 }
 

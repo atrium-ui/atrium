@@ -47,11 +47,6 @@
       "require": "./packages/track/dist/index.cjs",
       "types": "./packages/track/src/index.ts"
     },
-    "./track/traits": {
-      "import": "./packages/track/dist/traits.js",
-      "require": "./packages/track/dist/traits.cjs",
-      "types": "./packages/track/src/traits.ts"
-    },
     "./blur": {
       "import": "./packages/blur/dist/index.js",
       "require": "./packages/blur/dist/index.cjs",
