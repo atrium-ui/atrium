@@ -23,7 +23,32 @@ export type InputState = {
   };
 };
 
+function mod(a, n) {
+  return a - Math.floor(a / n) * n;
+}
+
+function angleDist(a, b) {
+  return mod(b - a + 180, 360) - 180;
+}
+
+export function timer(start, time) {
+  return Math.min((Date.now() - start) / time, 1);
+}
+
 export type Easing = "ease" | "linear" | "none";
+
+export const Ease = {
+  easeInOutCirc(x) {
+    return x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2;
+  },
+  easeOutSine(x) {
+    return Math.sin((x * Math.PI) / 2);
+  },
+};
+
+export function isTouch() {
+  return !!navigator.maxTouchPoints || "ontouchstart" in window;
+}
 
 type VecOrNumber = Vec | number[] | number;
 
@@ -223,7 +248,6 @@ export class Trait {
 
 export class PointerTrait extends Trait {
   grabbing = false;
-  force = new Vec();
   grabbedStart = new Vec();
   grabDelta = new Vec();
 
@@ -243,6 +267,8 @@ export class PointerTrait extends Trait {
     this.borderBounce = options.borderBounce ?? this.borderBounce;
     this.borderResistnce = options.borderResistnce ?? this.borderResistnce;
   }
+
+  moveVelocity = new Vec();
 
   input(inputState: InputState) {
     const e = this.entity;
@@ -267,15 +293,24 @@ export class PointerTrait extends Trait {
       this.entity.dispatchEvent(new Event("pointer:release"));
     }
 
-    if (inputState.move.value.abs()) {
-      this.force.set(inputState.move.value).mul(-1);
-      e.inputForce.set(inputState.move.value).mul(-1);
-    } else {
-      if (this.grabbing) {
-        e.inputForce.mul(0);
+    this.moveVelocity.mul(0.3);
+
+    if (this.grabbing) {
+      if (inputState.move.value.abs()) {
+        this.moveVelocity.add(inputState.move.value);
+        e.inputForce.set(inputState.move.value).mul(-1);
+      } else {
+        if (this.grabbing) {
+          e.inputForce.mul(0);
+        }
       }
     }
 
+    if (inputState.release.value) {
+      e.inputForce.set(this.moveVelocity.clone().mul(-1));
+    }
+
+    // prevent moving in wrong direction
     if (e.vertical) {
       e.inputForce.x = 0;
     } else {
@@ -284,6 +319,42 @@ export class PointerTrait extends Trait {
 
     e.slotElement.style.pointerEvents = this.grabbing ? "none" : "";
     if (!isTouch()) e.style.cursor = this.grabbing ? "grabbing" : "";
+  }
+
+  update() {
+    const e = this.entity;
+    if (e.scrolling) return;
+
+    let resitance = !e.loop ? this.borderResistnce : 0;
+
+    // clamp input force
+    const pos = Vec.add(e.position, e.inputForce);
+    const clamped = this.getClapmedPosition(pos);
+    const diff = Vec.sub(pos, clamped);
+
+    resitance = (1 - Math.abs(diff.x) / 200) * resitance;
+
+    if (resitance && diff.abs() && this.grabbing) {
+      if (e.vertical && Math.abs(diff.y)) {
+        e.inputForce.mul(resitance);
+      } else if (Math.abs(diff.x)) {
+        e.inputForce.mul(resitance);
+      }
+    }
+
+    const bounce = !e.loop ? this.borderBounce : 0;
+    if (bounce && diff.abs() && !this.grabbing) {
+      if ((e.vertical && Math.abs(diff.y)) || Math.abs(diff.x)) {
+        e.inputForce.sub(diff.mul(bounce));
+        e.acceleration.mul(0);
+      }
+    }
+
+    if (!this.grabbing) {
+      e.acceleration.add(e.inputForce);
+    } else {
+      e.acceleration.mul(0);
+    }
   }
 
   getClapmedPosition(pos: Vec) {
@@ -320,59 +391,28 @@ export class PointerTrait extends Trait {
 
     return clampedPos;
   }
-
-  update() {
-    const e = this.entity;
-
-    if (this.grabbing) {
-      this.entity.acceleration.mul(0);
-    }
-    let resitance = !e.loop ? this.borderResistnce : 0;
-
-    // clamp input force
-    const pos = Vec.add(e.position, e.inputForce);
-    const clamped = this.getClapmedPosition(pos);
-    const diff = Vec.sub(pos, clamped);
-
-    resitance = (1 - Math.abs(diff.x) / 200) * resitance;
-
-    if (resitance && diff.abs() && this.grabbing) {
-      if (e.vertical && Math.abs(diff.y)) {
-        e.inputForce.mul(resitance);
-      } else if (Math.abs(diff.x)) {
-        e.inputForce.mul(resitance);
-      }
-    }
-
-    const bounce = !e.loop ? this.borderBounce : 0;
-    if (bounce && diff.abs() && !this.grabbing) {
-      if ((e.vertical && Math.abs(diff.y)) || Math.abs(diff.x)) {
-        e.inputForce.sub(diff.mul(bounce));
-        e.acceleration.mul(0);
-      }
-    }
-  }
 }
 
 export class SnapTrait extends Trait {
-  grabbing = false;
+  input() {
+    const e = this.entity;
 
-  input(inputState: InputState) {
-    if (inputState.grab.value && !this.grabbing) {
-      this.grabbing = true;
-    }
-    if (inputState.release.value) {
-      this.grabbing = false;
-    }
-  }
-
-  update() {
-    if (!this.grabbing) {
-      // console.log(this.entity.acceleration);
+    if (!e.grabbing && !e.scrolling) {
+      if (e.deltaVelocity.x < 0 || e.deltaVelocity.y < 0) {
+        // slows down
+        if (e.velocity.abs() < 1 && !e.target) {
+          e.setTarget(e.getClosestItemPosition());
+        }
+      }
     }
   }
 }
 
+/**
+ * A Track is a custom element that provides a interface for scrolling content.
+ * It can be used to create carousels, slideshows, and other scrolling elements.
+ * It provides functions to go to a specific child element, emits events on changes, and optimizes ux based input device.
+ */
 export class Track extends LitElement {
   static get styles() {
     return css`
@@ -421,33 +461,50 @@ export class Track extends LitElement {
     new PointerTrait("pointer", this),
   ];
 
+  protected updated(): void {
+    const snapTrait = this.findTrait<SnapTrait>("snap");
+    if (snapTrait) {
+      snapTrait.enabled = this.snap;
+    }
+  }
+
   @query("slot")
   slotElement!: HTMLSlotElement;
 
-  get itemCount() {
+  public get itemCount() {
     if (this.children) {
       return this.children.length - this.clones.length;
     }
     return 0;
   }
 
-  getItemRects() {
+  private getItemRects() {
     return new Array(this.itemCount)
       .fill(0)
       .map((_, i) => new Vec(this.itemWidths[i], this.itemHeights[i]));
   }
 
-  getItemRect(index: number) {
-    const index2 = index % this.itemCount;
-    return new Vec(this.itemWidths[index2], this.itemHeights[index2]);
-  }
+  public getClosestItemPosition() {
+    const posPrev = this.getToItemPosition(this.currentItem - 1);
+    const posCurr = this.getToItemPosition(this.currentItem);
+    const posNext = this.getToItemPosition(this.currentItem + 1);
 
-  getCurrentSlideRect() {
-    return this.getItemRect(this.currentItem);
+    const prev = posPrev.clone().sub(this.position).abs();
+    const curr = posCurr.clone().sub(this.position).abs();
+    const next = posNext.clone().sub(this.position).abs();
+
+    switch (Math.min(curr, next, prev)) {
+      case prev:
+        return posPrev;
+      case next:
+        return posNext;
+      default:
+        return posCurr;
+    }
   }
 
   private _widths: number[] | undefined;
-  get itemWidths() {
+  private get itemWidths() {
     if (!this._widths) {
       this._widths = new Array(this.itemCount).fill(1).map((_, i) => {
         return (this.children[i] as HTMLElement)?.offsetWidth || 0;
@@ -457,7 +514,7 @@ export class Track extends LitElement {
   }
 
   private _heights: number[] | undefined;
-  get itemHeights() {
+  private get itemHeights() {
     if (!this._heights) {
       this._heights = new Array(this.itemCount).fill(1).map((_, i) => {
         return (this.children[i] as HTMLElement)?.offsetHeight || 0;
@@ -466,43 +523,39 @@ export class Track extends LitElement {
     return this._heights;
   }
 
-  get trackWidth() {
+  public get trackWidth() {
     if (!this.vertical) {
       return this.itemWidths.reduce((last, curr) => last + curr, 0);
     }
     return this.offsetWidth;
   }
 
-  get trackHeight() {
+  public get trackHeight() {
     if (this.vertical) {
       return this.itemHeights.reduce((last, curr) => last + curr, 0);
     }
     return this.offsetHeight;
   }
 
-  get trackSize() {
-    return this.vertical ? this.trackHeight : this.trackWidth;
-  }
-
-  get currentPosition() {
+  public get currentPosition() {
     return this.vertical ? this.position.y : this.position.x;
   }
 
-  get overflowWidth() {
+  public get overflowWidth() {
     return this.trackWidth - this.offsetWidth;
   }
 
-  get overflowHeight() {
+  public get overflowHeight() {
     return this.trackHeight - this.offsetHeight;
   }
 
-  currentItem = 0;
+  public currentItem = 0;
 
-  get value() {
+  public get value() {
     return this.currentItem % this.itemCount;
   }
 
-  set value(index: string | number) {
+  public set value(index: string | number) {
     const i = +index;
     this.currentItem = i;
     const pos = this.getToItemPosition(i);
@@ -510,40 +563,37 @@ export class Track extends LitElement {
   }
 
   private animation: number | undefined;
-  frameRate = 0;
-  tickRate = 1000 / 144;
-  lastTick = 0;
-  accumulator = 0;
-  frame = 0;
-  lastTickFrame = 0;
+  private tickRate = 1000 / 144;
+  private lastTick = 0;
+  private accumulator = 0;
 
-  drag = 0.95;
-
-  mousePos = new Vec();
-  inputForce = new Vec();
-  private mouseGrab = false;
+  public grabbing = false;
   private scrollTimeout;
-  private canScroll = true;
 
-  origin = new Vec();
-  position = new Vec();
-  acceleration = new Vec();
-  direction = new Vec();
+  public scrolling = false;
+  public mousePos = new Vec();
+  public inputForce = new Vec();
 
-  get normal() {
-    return this.vertical ? new Vec(0, 1) : new Vec(1, 0);
-  }
+  public origin = new Vec();
+  private lastPosition = new Vec();
+  public position = new Vec();
+  private lastVelocity = new Vec();
+  public velocity = new Vec();
+  public acceleration = new Vec();
+  public direction = new Vec();
 
-  targetForce = new Vec();
-  targetStart = new Vec();
-  target?: Vec;
-  targetEasing: Easing = "linear";
+  public drag = 0.95;
 
-  transitionAt = 0;
-  transitionTime = 750;
-  transition = 0;
+  public target?: Vec;
+  private targetForce = new Vec();
+  private targetStart = new Vec();
+  private targetEasing: Easing = "linear";
 
-  inputState: InputState = {
+  private transitionAt = 0;
+  private transitionTime = 750;
+  private transition = 0;
+
+  private inputState: InputState = {
     grab: {
       value: false,
     },
@@ -564,7 +614,7 @@ export class Track extends LitElement {
     },
   };
 
-  trait(callback: (t) => void) {
+  public trait(callback: (t) => void) {
     for (const t of this.traits) {
       try {
         if (t?.enabled) {
@@ -576,18 +626,18 @@ export class Track extends LitElement {
     }
   }
 
-  addTrait(id, TraitType, defaultEnabled = true) {
+  public addTrait(id, TraitType, defaultEnabled = true) {
     const trait = new TraitType(id, this, defaultEnabled);
     if (trait instanceof Trait) {
       this.traits.unshift(trait);
     }
   }
 
-  removeTrait(trait) {
+  public removeTrait(trait) {
     this.traits.splice(this.traits.indexOf(trait), 1);
   }
 
-  findTrait<T>(id: string): T | undefined {
+  public findTrait<T>(id: string): T | undefined {
     for (const trait of this.traits) {
       if (trait.id === id) {
         return trait as T;
@@ -600,9 +650,9 @@ export class Track extends LitElement {
   @property({ type: Boolean, reflect: true }) loop = false;
 
   /**
-   * wether items should snap ("x"|"y")
+   * Enable snapping to items
    */
-  @property({ type: String, reflect: true }) snap: string | undefined;
+  @property({ type: Boolean, reflect: true }) snap = false;
 
   /**
    * item alignment in the track
@@ -613,14 +663,6 @@ export class Track extends LitElement {
    * only scroll when items are overflown
    */
   @property({ type: Boolean, reflect: true }) overflowscroll = false;
-
-  protected updated(): void {
-    for (const trait of this.traits) {
-      if (Track.observedAttributes.includes(trait.id)) {
-        trait.enabled = this.hasAttribute(trait.id);
-      }
-    }
-  }
 
   private pointerEnter = (e) => {
     this.inputState.enter.value = true;
@@ -640,8 +682,8 @@ export class Track extends LitElement {
   private pointerUp = (e) => {
     this.mousePos.mul(0);
 
-    if (this.mouseGrab) {
-      this.mouseGrab = false;
+    if (this.grabbing) {
+      this.grabbing = false;
       e.preventDefault();
 
       this.inputState.release.value = true;
@@ -654,56 +696,55 @@ export class Track extends LitElement {
     const pos = new Vec(e.x, e.y);
     const delta = Vec.sub(pos, this.mousePos);
 
-    if (!this.mouseGrab && delta.abs() > 3) {
+    if (!this.grabbing && delta.abs() > 3) {
       if (this.vertical && this.mousePos.y && Math.abs(delta.x) < Math.abs(delta.y)) {
-        this.mouseGrab = true;
+        this.grabbing = true;
         this.inputState.grab.value = true;
       } else if (this.mousePos.x && Math.abs(delta.y) < Math.abs(delta.x)) {
-        this.mouseGrab = true;
+        this.grabbing = true;
         this.inputState.grab.value = true;
       }
     }
 
-    if (this.mouseGrab) {
+    if (this.grabbing) {
       this.inputState.move.value.add(delta.clone());
       this.mousePos.set(pos);
     }
   };
 
-  private onScroll = (e) => {
-    if (e.target !== this) {
+  private onWheel = (event) => {
+    if (event.target !== this) {
+      this.setTarget(undefined);
       clearTimeout(this.scrollTimeout);
 
-      this.canScroll = false;
+      this.scrolling = true;
       this.scrollTimeout = setTimeout(() => {
-        this.canScroll = true;
+        this.scrolling = false;
       }, 200);
     }
-  };
 
-  private onWheel = (e) => {
     const threshold = this.vertical
-      ? Math.abs(e.deltaX) < Math.abs(e.deltaY)
-      : Math.abs(e.deltaX) > Math.abs(e.deltaY);
+      ? Math.abs(event.deltaX) < Math.abs(event.deltaY)
+      : Math.abs(event.deltaX) > Math.abs(event.deltaY);
 
-    if (this.canScroll && threshold) {
+    if (threshold) {
       this.acceleration.mul(0);
 
       if (this.loop) {
-        this.inputForce.add(new Vec(e.deltaX, e.deltaY));
+        this.inputForce.add(new Vec(event.deltaX, event.deltaY));
       } else {
         if (this.vertical) {
-          const pos = this.position.y + e.deltaY;
+          const pos = this.position.y + event.deltaY;
           this.inputForce.y =
             Math.max(Math.min(pos, this.overflowHeight), 0) - this.position.y;
         } else {
-          const pos = this.position.x + e.deltaX;
+          const pos = this.position.x + event.deltaX;
           this.inputForce.x =
             Math.max(Math.min(pos, this.overflowWidth), 0) - this.position.x;
         }
       }
 
-      e.preventDefault();
+      event.preventDefault();
     }
   };
 
@@ -735,14 +776,10 @@ export class Track extends LitElement {
       this.origin.y = firstItem.y - bounds.y;
     }
 
-    if (this.snap) {
-      this.moveBy(0, "none");
-    }
-
     this.dispatchEvent(new CustomEvent("format", { bubbles: true }));
   }
 
-  getToItemPosition(index = 0) {
+  public getToItemPosition(index = 0) {
     const rects = this.getItemRects();
     const pos = new Vec();
 
@@ -775,7 +812,7 @@ export class Track extends LitElement {
     return pos;
   }
 
-  setTarget(vec: Vec | Array<number> | undefined, ease?: Easing) {
+  public setTarget(vec: Vec | Array<number> | undefined, ease?: Easing) {
     let easing = ease;
 
     if (!easing) {
@@ -800,7 +837,7 @@ export class Track extends LitElement {
     }
   }
 
-  moveBy(byItems: number, easing?: Easing) {
+  public moveBy(byItems: number, easing?: Easing) {
     let i = this.currentItem + byItems;
     if (!this.loop) {
       i = Math.min(Math.max(0, i), this.itemCount - 1);
@@ -809,11 +846,11 @@ export class Track extends LitElement {
     this.setTarget(pos, easing);
   }
 
-  moveTo(index: number, easing: Easing) {
+  public moveTo(index: number, easing?: Easing) {
     this.moveBy(index - this.currentItem, easing);
   }
 
-  startAnimate() {
+  public startAnimate() {
     if (!this.animation) {
       this.tick();
       this.trait((t) => t.start());
@@ -821,7 +858,7 @@ export class Track extends LitElement {
     }
   }
 
-  stopAnimate() {
+  public stopAnimate() {
     if (this.animation) {
       cancelAnimationFrame(this.animation);
       this.animation = undefined;
@@ -830,19 +867,18 @@ export class Track extends LitElement {
     }
   }
 
-  tick(ms = 0) {
+  private tick(ms = 0) {
     if (!this.lastTick) this.lastTick = ms;
     if (ms - this.lastTick > 1000) this.lastTick = ms;
 
     const deltaTick = ms - this.lastTick;
-    this.frameRate = 1000 / deltaTick;
     this.lastTick = ms;
-
-    this.updateInputs();
 
     this.accumulator += deltaTick;
 
     const lastPosition = this.position.clone();
+
+    this.updateInputs();
 
     let ticks = 0;
     const maxTicks = 10;
@@ -855,37 +891,40 @@ export class Track extends LitElement {
 
     const deltaPosition = Vec.sub(this.position, lastPosition);
 
-    const currItem = this.getCurrentItem();
+    const currItem = this.getCurrentItemAngle();
     if (deltaPosition.abs() > 0.01 || currItem !== this.currentItem) {
-      if (currItem !== this.currentItem) {
-        this.currentItem = currItem;
-        this.dispatchEvent(
-          new CustomEvent<number | string>("change", {
-            detail: this.value,
-            bubbles: true,
-          }),
-        );
-
-        let i = 0;
-        for (const child of this.children) {
-          if (i === this.currentItem) {
-            child.setAttribute("active", "");
-          } else {
-            child.removeAttribute("active");
-          }
-          i++;
-        }
-      }
-
-      this.drawUpdate();
+      this.computeCurrentItem();
     }
-
-    this.frame++;
 
     this.animation = requestAnimationFrame(this.tick.bind(this));
   }
 
-  updateInputs() {
+  private computeCurrentItem() {
+    const currItem = this.getCurrentItemAngle();
+    if (currItem !== this.currentItem) {
+      this.currentItem = currItem;
+      this.dispatchEvent(
+        new CustomEvent<number | string>("change", {
+          detail: this.value,
+          bubbles: true,
+        }),
+      );
+
+      let i = 0;
+      for (const child of this.children) {
+        if (i === this.currentItem) {
+          child.setAttribute("active", "");
+        } else {
+          child.removeAttribute("active");
+        }
+        i++;
+      }
+    }
+
+    this.drawUpdate();
+  }
+
+  private updateInputs() {
     this.trait((t) => t.input(this.inputState));
 
     this.direction.add(this.inputForce).sign();
@@ -900,7 +939,14 @@ export class Track extends LitElement {
     state.release.value = false;
   }
 
-  updateTick() {
+  public get deltaVelocity() {
+    return Vec.sub(this.velocity.abs(), this.lastVelocity.abs());
+  }
+
+  private updateTick() {
+    this.lastPosition = this.position.clone();
+    this.lastVelocity = this.velocity.clone();
+
     this.trait((t) => t.update());
 
     this.acceleration.add(this.inputForce);
@@ -975,13 +1021,16 @@ export class Track extends LitElement {
     this.position.add(this.targetForce);
     this.targetForce.mul(0);
 
+    this.velocity = Vec.sub(this.position, this.lastPosition);
+
     // TODO: need to self fix positon, sometimes NaN on innital load and resize
     // this.position[0] = this.position[0] || 0;
     // this.position[1] = this.position[1] || 0;
   }
 
-  getCurrentItem() {
-    const currentAngle = (this.currentPosition / this.trackSize) * 360;
+  private getCurrentItemAngle() {
+    const trackSize = this.vertical ? this.trackHeight : this.trackWidth;
+    const currentAngle = (this.currentPosition / trackSize) * 360;
 
     let minDist = Number.POSITIVE_INFINITY;
     let angleToClosestIndex = 0;
@@ -994,7 +1043,7 @@ export class Track extends LitElement {
       const rect = rects[itemIndex];
 
       if (rect) {
-        const currentItemAngle = (rect[axes] / this.trackSize) * 360;
+        const currentItemAngle = (rect[axes] / trackSize) * 360;
         const itemAngle = (currentItemAngle * itemIndex) % 360;
         const deltaAngle = angleDist(itemAngle, currentAngle);
 
@@ -1013,7 +1062,7 @@ export class Track extends LitElement {
     return angleToClosestIndex;
   }
 
-  getItemAtPosition(x: number) {
+  public getItemAtPosition(x: number) {
     const rects = this.getItemRects();
     let px = 0;
     if (x > 0) {
@@ -1044,7 +1093,7 @@ export class Track extends LitElement {
 
   private clones: HTMLElement[] = [];
 
-  drawUpdate() {
+  private drawUpdate() {
     this.scrollLeft = this.position.x;
     const scrollPos = new Vec(this.scrollLeft, this.scrollTop);
     const diff = Vec.sub(scrollPos, this.position);
@@ -1091,7 +1140,7 @@ export class Track extends LitElement {
 
   private observer: IntersectionObserver | undefined;
 
-  onIntersect(intersections) {
+  private onIntersect(intersections) {
     for (const entry of intersections) {
       if (entry.isIntersecting) {
         this.startAnimate();
@@ -1119,15 +1168,9 @@ export class Track extends LitElement {
     this.addEventListener("pointerenter", this.pointerEnter);
     this.addEventListener("keydown", this.onKeyDown);
     this.addEventListener("wheel", this.onWheel, { passive: false });
-    this.addEventListener("scroll", this.onScroll, {
-      passive: true,
-    });
 
     window.addEventListener("resize", this.format.bind(this), {
       passive: true,
-    });
-    window.addEventListener("scroll", this.onScroll, {
-      capture: true,
     });
     window.addEventListener("load", this.format.bind(this), { capture: true });
 
@@ -1156,10 +1199,8 @@ export class Track extends LitElement {
     this.removeEventListener("pointerenter", this.pointerEnter);
     this.removeEventListener("keydown", this.onKeyDown);
     this.removeEventListener("wheel", this.onWheel);
-    this.removeEventListener("scroll", this.onScroll);
 
     window.removeEventListener("resize", this.format.bind(this));
-    window.removeEventListener("scroll", this.onScroll);
     window.removeEventListener("load", this.format.bind(this));
 
     this.observer?.unobserve(this);
@@ -1167,28 +1208,3 @@ export class Track extends LitElement {
 }
 
 customElements.define("a-track", Track);
-
-function mod(a, n) {
-  return a - Math.floor(a / n) * n;
-}
-
-function angleDist(a, b) {
-  return mod(b - a + 180, 360) - 180;
-}
-
-export function timer(start, time) {
-  return Math.min((Date.now() - start) / time, 1);
-}
-
-export const Ease = {
-  easeInOutCirc(x) {
-    return x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2;
-  },
-  easeOutSine(x) {
-    return Math.sin((x * Math.PI) / 2);
-  },
-};
-
-export function isTouch() {
-  return !!navigator.maxTouchPoints || "ontouchstart" in window;
-}
