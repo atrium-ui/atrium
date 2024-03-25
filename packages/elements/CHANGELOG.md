@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.7.0
+
+### Minor Changes
+
+- c61e875: Minor refactor of track element
+
 ## 0.6.0
 
 ### Minor Changes
