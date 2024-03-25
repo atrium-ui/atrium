@@ -652,7 +652,7 @@ export class Track extends LitElement {
   /**
    * Enable snapping to items
    */
-  @property({ type: Boolean, reflect: true }) snap: boolean = false;
+  @property({ type: Boolean, reflect: true }) snap = false;
 
   /**
    * item alignment in the track
