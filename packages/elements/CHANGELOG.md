@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.7.1
+
+### Patch Changes
+
+- ceffb74: emit custom scroll events on a-track
+
 ## 0.7.0
 
 ### Minor Changes
