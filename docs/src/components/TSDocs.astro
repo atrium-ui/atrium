@@ -194,7 +194,7 @@ async function _renderDocNode(node: tsdoc.DocNode) {
 				<div class="doc-fenced-code">
 					${await shiki
             .getHighlighter({
-              theme: "nord",
+              theme: "dark-plus",
             })
             .then((highlighter) => highlighter.codeToHtml(code, { lang: "js" }))}
 				</div>

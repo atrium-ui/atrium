@@ -409,9 +409,30 @@ export class SnapTrait extends Trait {
 }
 
 /**
- * A Track is a custom element that provides a interface for scrolling content.
- * It can be used to create carousels, slideshows, and other scrolling elements.
- * It provides functions to go to a specific child element, emits events on changes, and optimizes ux based input device.
+ * # a-track
+ *
+ * - A Track is a custom element that provides a interface for scrolling content.
+ * - It can be used to create carousels, slideshows, and other scrolling elements.
+ * - It provides functions to go to a specific child element, emits events on changes, and optimizes ux based input device.
+ *
+ * ## Props
+ *
+ * @attribute snap (default: false) - Whether the track should snap to the closest child element.
+ * @attribute loop (default: false) - Whether the track should loop back to the start when reaching the end.
+ * @attribute vertical (default: false) - Whether the track should scroll vertically.
+ * @attribute align (default: "left") - The alignment of the track. Can be "left" or "right".
+ *
+ * @example
+ * ```html
+ * <a-track snap class="flex w-full overflow-visible">
+ *   <div class="flex-none w-full">
+ *     <canvas width={720} height={480} class="w-full bg-slate-400 m-1" />
+ *   </div>
+ *   <div class="flex-none w-full">
+ *     <canvas width={720} height={480} class="w-full bg-slate-400 m-1" />
+ *   </div>
+ * </a-track>
+ * ```
  */
 export class Track extends LitElement {
   static get styles() {
@@ -1098,6 +1119,8 @@ export class Track extends LitElement {
     const scrollPos = new Vec(this.scrollLeft, this.scrollTop);
     const diff = Vec.sub(scrollPos, this.position);
     this.slotElement.style.transform = `translate(${diff.x}px,${diff.y}px)`;
+
+    this.dispatchEvent(new CustomEvent("scroll"));
 
     if (this.loop) {
       const visibleItems: number[] = [];
