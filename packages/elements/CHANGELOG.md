@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.8.0
+
+### Minor Changes
+
+- 0ae2eee: Track refactoring and fixes
+
 ## 0.7.1
 
 ### Patch Changes
