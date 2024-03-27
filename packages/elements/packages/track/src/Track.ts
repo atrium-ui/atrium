@@ -379,7 +379,6 @@ export class PointerTrait extends Trait {
           Math.min(stopBottom, clampedPos.y),
         );
         break;
-      case "start":
       default:
         clampedPos = new Vec(
           Math.min(stopRight, clampedPos.x),

@@ -10,7 +10,7 @@ customElements.define(
 
       const pointer = this.findTrait<PointerTrait>("pointer");
       if (pointer) {
-        pointer.borderResistnce = 0;
+        pointer.borderResistance = 0;
       }
 
       this.addTrait(
@@ -22,7 +22,6 @@ customElements.define(
             }
           }
         },
-        true,
       );
     }
   },
