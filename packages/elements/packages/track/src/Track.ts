@@ -610,10 +610,10 @@ export class Track extends LitElement {
   public target?: Vec;
   private targetForce = new Vec();
   private targetStart = new Vec();
-  private targetEasing: Easing = "linear";
+  public targetEasing: Easing = "linear";
 
+  public transitionTime = 750;
   private transitionAt = 0;
-  private transitionTime = 750;
   private transition = 0;
 
   private inputState: InputState = {
