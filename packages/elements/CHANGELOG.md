@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.8.1
+
+### Patch Changes
+
+- da0612d: Make transition time configurable
+
 ## 0.8.0
 
 ### Minor Changes
