@@ -9,8 +9,7 @@
       "cache": false
     },
     "test": {
-      "cache": true,
-      "outputMode": "new-only"
+      "cache": true
     },
     "check": {
       "cache": false

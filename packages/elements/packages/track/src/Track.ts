@@ -317,7 +317,9 @@ export class PointerTrait extends Trait {
       e.inputForce.y = 0;
     }
 
-    e.slotElement.style.pointerEvents = this.grabbing ? "none" : "";
+    if (e.slotElement) {
+      e.slotElement.style.pointerEvents = this.grabbing ? "none" : "";
+    }
     if (!isTouch()) e.style.cursor = this.grabbing ? "grabbing" : "";
   }
 
@@ -480,7 +482,7 @@ export class Track extends LitElement {
 
   public traits: Trait[] = [
     //
-    // new SnapTrait("snap", this),
+    new SnapTrait("snap", this),
     new PointerTrait("pointer", this),
   ];
 
@@ -687,22 +689,22 @@ export class Track extends LitElement {
    */
   @property({ type: Boolean, reflect: true }) overflowscroll = false;
 
-  private pointerEnter = (e) => {
+  private pointerEnter = () => {
     this.inputState.enter.value = true;
   };
 
-  private pointerLeave = (e) => {
+  private pointerLeave = () => {
     this.inputState.leave.value = true;
   };
 
-  private pointerDown = (e) => {
+  private pointerDown = (e: PointerEvent) => {
     this.mousePos.x = e.x;
     this.mousePos.y = e.y;
 
     this.setTarget(undefined);
   };
 
-  private pointerUp = (e) => {
+  private pointerUp = (e: PointerEvent) => {
     this.mousePos.mul(0);
 
     if (this.grabbing) {
@@ -785,7 +787,7 @@ export class Track extends LitElement {
     }
   };
 
-  private onKeyDown = (e) => {
+  private onKeyDown = (e: KeyboardEvent) => {
     const Key = {
       prev: this.vertical ? "ArrowUp" : "ArrowLeft",
       next: this.vertical ? "ArrowDown" : "ArrowRight",
@@ -801,7 +803,7 @@ export class Track extends LitElement {
     }
   };
 
-  private onSlotChange = (e) => {
+  private onSlotChange = (e: Event) => {
     this.format();
   };
 
