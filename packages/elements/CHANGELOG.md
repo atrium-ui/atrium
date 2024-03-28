@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.8.2
+
+### Patch Changes
+
+- e169da2: track: fix snap trait not working
+
 ## 0.8.1
 
 ### Patch Changes
