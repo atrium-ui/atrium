@@ -18,7 +18,7 @@
   "scripts": {
     "check": "tsc --pretty",
     "test": "bun test",
-    "prepare": "./bin/cli.js editorconfig"
+    "postinstall": "./bin/cli.js editorconfig"
   },
   "keywords": [],
   "license": "ISC",
