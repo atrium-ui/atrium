@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.6.1
+
+### Patch Changes
+
+- 73bcace: Fix postinstall script
+
 ## 0.6.0
 
 ### Minor Changes
