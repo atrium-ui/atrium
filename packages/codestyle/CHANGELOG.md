@@ -1,5 +1,15 @@
 # @sv/codestyle
 
+## 0.6.0
+
+### Minor Changes
+
+- 2273cd3: Rewrite cli to support more configs
+
+### Patch Changes
+
+- 2273cd3: removed biome as peer dependency, commitlint.cjs -> commitlint.js, expanded @commitlint/config-conventional
+
 ## 0.5.0
 
 ### Minor Changes
