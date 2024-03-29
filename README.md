@@ -58,7 +58,7 @@ Run dev server for docs website:
 task docs
 ```
 
-### Development with external projects
+### Development
 
 Watch and build packages:
 
@@ -66,11 +66,18 @@ Watch and build packages:
 task dev
 ```
 
-Install packages from local mono in external project:
+Link packages from local repository in external project:
 
 ```shell
-cd <external_project>
-npm install --save <local_path>/mono/packages/<package_name>
+cd <project>
+pnpm link <path_to_atrium>/mono/packages/<package_name>
+```
+
+This will link the local package to the project.
+To unlink the package, run:
+
+```shell
+pnpm unlink <package_name>
 ```
 
 ### Building elements
