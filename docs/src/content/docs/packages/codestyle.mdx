@@ -35,9 +35,31 @@ Make sure your project is set up with access to the registry as described in [Us
 
 ## Usage
 
-### Editorconfig
+Automatically setup the configuration in your project by running the following command for the desired tool:
 
-The `.editorconfig` will be copied next to your package.json using a [postinstall script](https://docs.npmjs.com/cli/v10/using-npm/scripts#npm-install) -- if not already present.
+<Tabs>
+  <TabItem label="editorconfig">
+    The `.editorconfig` will be copied next to your package.json using a [postinstall script](https://docs.npmjs.com/cli/v10/using-npm/scripts#npm-install) -- if not already present.
+
+    ```sh
+    npx @sv/codestyle editorconfig
+    ```
+  </TabItem>
+  <TabItem label="biome">
+    ```sh
+    npx @sv/codestyle biome
+    ```
+  </TabItem>
+  <TabItem label="tsconfig">
+    ```sh
+    npx @sv/codestyle tsconfig
+    ```
+  </TabItem>
+</Tabs>
+
+<br/><br/>
+
+## Manual setup
 
 ### Biome
 
@@ -130,6 +152,8 @@ module.exports = {
     <File file="../packages/codestyle/tsconfig.json" />
   </TabItem>
 </Tabs>
+
+<br/><br/>
 
 ## Changelog
 

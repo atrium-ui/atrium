@@ -27,7 +27,7 @@ const langs = {
 const file = fs.readFileSync(props.file, "utf-8");
 const content = await shiki
   .getHighlighter({
-    theme: "nord",
+    theme: "dark-plus",
   })
   .then((highlighter) => {
     const ext = props.file.split(".").pop();
