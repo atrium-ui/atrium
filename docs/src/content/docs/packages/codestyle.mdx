@@ -55,10 +55,14 @@ For the biome configuration to work with your editior, the `biome.json` file nee
 
 ### Prettier
 
+Prettier [docs](https://prettier.io/docs/en/configuration.html).
+
 ```json
-// .prettierrc.json
+// package.json
 {
-  "extends": "@sv/codestyle/.prettierrc.json"
+  "name": "your-package",
+  ...
+  "prettier": "@sv/codestyle/.prettierrc.json"
 }
 ```
 
