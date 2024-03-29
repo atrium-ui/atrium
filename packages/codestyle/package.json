@@ -5,6 +5,7 @@
   "version": "0.5.0",
   "description": "Codestyle and configuration for all projects",
   "type": "module",
+  "bin": "./bin/cli.js",
   "exports": {
     "./biome": "./biome.json",
     "./tsconfig.json": "./tsconfig.json",
@@ -17,7 +18,7 @@
   "scripts": {
     "check": "tsc --pretty",
     "test": "bun test",
-    "postinstall": "./install.js"
+    "prepare": "./bin/cli.js editorconfig"
   },
   "keywords": [],
   "license": "ISC",

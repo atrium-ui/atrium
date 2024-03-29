@@ -5,28 +5,8 @@
     "clientKind": "git",
     "useIgnoreFile": true
   },
-  "files": {
-    "ignoreUnknown": true,
-    "ignore": [
-      ".mise",
-      ".astro",
-      ".nuxt",
-      ".output",
-      "vendor",
-      "public",
-      "dist"
-    ]
-  },
   "organizeImports": {
     "enabled": false
-  },
-  "formatter": {
-    "enabled": true,
-    "indentWidth": 2,
-    "lineWidth": 90,
-    "indentStyle": "space",
-    "formatWithErrors": true,
-    "lineEnding": "lf"
   },
   "linter": {
     "rules": {
@@ -63,6 +43,14 @@
       }
     }
   },
+  "formatter": {
+    "enabled": true,
+    "indentWidth": 2,
+    "lineWidth": 90,
+    "indentStyle": "space",
+    "formatWithErrors": true,
+    "lineEnding": "lf"
+  },
   "javascript": {
     "formatter": {
       "quoteStyle": "double",
@@ -72,10 +60,28 @@
       "jsxQuoteStyle": "double"
     }
   },
+  "css": {
+    "formatter": {
+      "lineWidth": 80,
+      "quoteStyle": "double"
+    }
+  },
   "json": {
     "formatter": {
       "trailingCommas": "none",
       "lineWidth": 30
     }
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "ignore": [
+      ".mise",
+      ".astro",
+      ".nuxt",
+      ".output",
+      "vendor",
+      "public",
+      "dist"
+    ]
   }
 }
