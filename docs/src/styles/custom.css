@@ -28,21 +28,6 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-:root[data-theme="light"] {
-    --sl-color-accent-low: #e8d2c1;
-    --sl-color-accent: #9d5800;
-    --sl-color-accent-high: #4a2907;
-    --sl-color-white: #181818;
-    --sl-color-gray-1: #272727;
-    --sl-color-gray-2: #383838;
-    --sl-color-gray-3: #585858;
-    --sl-color-gray-4: #8b8b8b;
-    --sl-color-gray-5: #c2c2c2;
-    --sl-color-gray-6: #eeeeee;
-    --sl-color-gray-7: #f6f6f6;
-    --sl-color-black: #ffffff;
-}
-
 .sl-markdown-content p {
     max-width: 800px;
 }
@@ -66,7 +51,6 @@
 
 strong {
     font-weight: bolder;
-    color: white;
 }
 
 .loading-indicator {
