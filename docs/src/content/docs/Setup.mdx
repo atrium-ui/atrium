@@ -1,0 +1,63 @@
+---
+group: "docs"
+icon: "carbon:template"
+title: "Setup"
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Configure package registry
+
+Configure the package registry to install packages from the prviate Gitlab package registry.
+
+More information about the Gitlab Package Registry can be found [here](https://docs.gitlab.com/ee/user/packages/npm_registry/#install-from-the-instance-level).
+
+<br/>
+
+### Project based configuration
+
+Update or create .npmrc file located next to the package.json file with the following content:
+
+<Tabs>
+  <TabItem label="npm">
+    ```ini
+    # .npmrc
+    @sv:registry=https://gitlab.s-v.de/api/v4/packages/npm/
+    //gitlab.s-v.de/api/v4/packages/npm/:_authToken=GITLAB_ACCESS_TOKEN
+    ```
+  </TabItem>
+  <TabItem label="bun">
+    ```toml
+    # .bunfig.toml
+    [install.scopes]
+    @sv = { token = "GITLAB_ACCESS_TOKEN", url = "https://gitlab.s-v.de/api/v4/packages/npm/" }
+    ```
+  </TabItem>
+</Tabs>
+
+Replace `GITLAB_ACCESS_TOKEN` with a Gitlab access token created from the atrium [Project Settings](https://gitlab.s-v.de/sv/sv-frontend-library/mono/-/settings/access_tokens) page.
+
+<br/>
+
+### User based configuration
+
+This only need to be done once per machine.
+
+<Tabs>
+  <TabItem label="npm">
+    ```ini
+    # ~/.npmrc
+    @sv:registry=https://gitlab.s-v.de/api/v4/packages/npm/
+    //gitlab.s-v.de/api/v4/packages/npm/:_authToken=GITLAB_ACCESS_TOKEN
+    ```
+  </TabItem>
+  <TabItem label="bun">
+    ```toml
+    # ~/.bunfig.toml
+    [install.scopes]
+    @sv = { token = "GITLAB_ACCESS_TOKEN", url = "https://gitlab.s-v.de/api/v4/packages/npm/" }
+    ```
+  </TabItem>
+</Tabs>
+
+Replace `GITLAB_ACCESS_TOKEN` with a personal Gitlab access token created at [User settings](https://gitlab.s-v.de/-/user_settings/personal_access_tokens) page.

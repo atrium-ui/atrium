@@ -4,22 +4,30 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Dark mode colors. */
 :root {
-    --sl-color-accent-low: #331e0c;
-    --sl-color-accent: #9b5600;
-    --sl-color-accent-high: #dfc3ac;
-    --sl-color-white: #ffffff;
-    --sl-color-gray-1: #eeeeee;
-    --sl-color-gray-2: #c2c2c2;
-    --sl-color-gray-3: #8b8b8b;
-    --sl-color-gray-4: #585858;
-    --sl-color-gray-5: #383838;
-    --sl-color-gray-6: #272727;
-    --sl-color-black: #181818;
+    --sl-color-bg-sidebar: transparent;
+
+    --sl-content-width: 1000px;
+    --sl-sidebar-width: 16rem;
+    --sl-sidebar-pad-x: 0.8rem;
+
+    --sl-text-xs: 0.8125rem;
+    --sl-text-sm: 0.875rem;
+    --sl-text-base: 1.125rem;
+    --sl-text-lg: 1.125rem;
+    --sl-text-xl: 1.25rem;
+    --sl-text-2xl: 1.5rem;
+    --sl-text-3xl: 1.65rem;
+    --sl-text-4xl: 2.1875rem;
+    --sl-text-5xl: 3rem;
+    --sl-text-6xl: 4rem;
+
+    font-family: "Lato", sans-serif;
+    font-size: var(--sl-text-base);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* Light mode colors. */
 :root[data-theme="light"] {
     --sl-color-accent-low: #e8d2c1;
     --sl-color-accent: #9d5800;
@@ -35,33 +43,12 @@
     --sl-color-black: #ffffff;
 }
 
-:root[data-theme="light"],
-:root[data-theme="dark"] {
-    --sl-content-width: 1000px;
-    --sl-text-5xl: 3.5rem;
-    --sl-color-bg-nav: transparent;
-    --sl-color-hairline-shade: transparent;
-    --sl-sidebar-width: 16rem;
-    --sl-sidebar-pad-x: 0.8rem;
-    --sl-color-bg-sidebar: transparent;
-}
-
-body {
-    font-family: "Lato", sans-serif;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    -webkit-tap-highlight-color: transparent;
-}
-
-.header {
-    background: #1a1a1a;
+.sl-markdown-content p {
+    max-width: 800px;
 }
 
 .sidebar .top-level .large {
     font-weight: normal;
-}
-
-iframe {
-    width: 100%;
 }
 
 .box {

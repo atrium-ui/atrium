@@ -30,6 +30,8 @@ export default defineConfig({
       customCss: ["./src/styles/custom.css"],
       logo: {
         src: "./src/assets/atrium.png",
+        replacesTitle: true,
+        alt: "Atrium Logo",
       },
       social: {
         gitlab: "https://gitlab.s-v.de/sv-components/mono",
@@ -38,6 +40,10 @@ export default defineConfig({
         {
           label: "Concept",
           link: "/concept",
+        },
+        {
+          label: "Setup",
+          link: "/setup",
         },
         {
           label: "Usage",

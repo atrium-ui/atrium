@@ -10,23 +10,9 @@ import Command from "../../components/Command.astro"
 
 Components require **tailwindcss** to be installed in the project.
 
-Here links for [NuxtJS](https://www.npmjs.com/package/@nuxtjs/tailwindcss), [Vite](https://tailwindcss.com/docs/guides/vite) or [Tailwind](https://tailwindcss.com/docs/installation) cli.
+Here links for [NuxtJS](https://www.npmjs.com/package/@nuxtjs/tailwindcss), [Vite](https://tailwindcss.com/docs/guides/vite) or [Tailwind cli](https://tailwindcss.com/docs/installation).
 
 ## Installation
-
-### Configure package registry
-
-Update or create .npmrc file located next to the package.json file with the following content:
-
-```ini
-# .npmrc
-@sv:registry=https://gitlab.s-v.de/api/v4/packages/npm/
-//gitlab.s-v.de/api/v4/packages/npm/:_authToken=${GITLAB_ACCESS_TOKEN}
-```
-
-Replace `${GITLAB_ACCESS_TOKEN}` with a Gitlab access token created from repository [Gitlab settings page](https://gitlab.s-v.de/sv/sv-frontend-library/mono/-/settings/access_tokens).
-
-More information about the Gitlab Package Registry can be found [here](https://docs.gitlab.com/ee/user/packages/npm_registry/#install-from-the-instance-level).
 
 ### Install packages
 
@@ -50,11 +36,11 @@ More information about the Gitlab Package Registry can be found [here](https://d
 
 ### 2. Use a component in your project.
 
+This **copies** a component template into your project.
+
 ```bash
 npx @sv/components button
 ```
-
-This **copies** a component template into your project.
 
 ### 3. Change styling or behavior of the component in the copy inside your project.
 
