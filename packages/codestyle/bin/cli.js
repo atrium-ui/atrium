@@ -10,53 +10,56 @@ process.exit(
   (() => {
     const args = process.argv.slice(2);
 
-    switch (args[0]) {
-      case "tsconfig":
-        writeFile(
-          path.join(getRootPackagePaath(), "tsconfig.json"),
-          JSON.stringify(
-            {
-              $schema: "http://json.schemastore.org/tsconfig",
-              extends: ["@sv/codestyle/tsconfig.json"],
-            },
-            null,
-            "  ",
-          ),
-        );
-        break;
+    if (args.length === 0) {
+      console.error("Unknown argument:", args[0]);
+      console.info("Usage: codestyle [tsconfig|biome|editorconfig]");
+      return 1;
+    }
 
-      case "biome":
-        writeFile(
-          path.join(getRootPackagePaath(), "biome.json"),
-          JSON.stringify(
-            {
-              $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
-              extends: ["@sv/codestyle/biome"],
-            },
-            null,
-            "  ",
-          ),
-        );
-        console.info(
-          "[codestyle] See https://biomejs.dev/guides/integrate-in-editor/ for editor integration.",
-        );
-        console.info("[codestyle] Installing biome...");
-        installPackage("@biomejs/biome");
-        break;
+    for (const arg of args) {
+      switch (arg) {
+        case "tsconfig":
+          writeFile(
+            path.join(getRootPackagePaath(), "tsconfig.json"),
+            JSON.stringify(
+              {
+                $schema: "http://json.schemastore.org/tsconfig",
+                extends: ["@sv/codestyle/tsconfig.json"],
+              },
+              null,
+              "  ",
+            ),
+          );
+          break;
 
-      case "editorconfig": {
-        const __filename = fileURLToPath(import.meta.url);
-        copyFile(
-          path.resolve(__filename, "../../.editorconfig"),
-          path.join(getRootPackagePaath(), ".editorconfig"),
-        );
-        break;
+        case "biome":
+          writeFile(
+            path.join(getRootPackagePaath(), "biome.json"),
+            JSON.stringify(
+              {
+                $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
+                extends: ["@sv/codestyle/biome"],
+              },
+              null,
+              "  ",
+            ),
+          );
+          console.info(
+            "[codestyle] See https://biomejs.dev/guides/integrate-in-editor/ for editor integration.",
+          );
+          console.info("[codestyle] Installing biome...");
+          installPackage("@biomejs/biome");
+          break;
+
+        case "editorconfig": {
+          const __filename = fileURLToPath(import.meta.url);
+          copyFile(
+            path.resolve(__filename, "../../.editorconfig"),
+            path.join(getRootPackagePaath(), ".editorconfig"),
+          );
+          break;
+        }
       }
-
-      default:
-        console.error("Unknown argument:", args[0]);
-        console.info("Available arguments: tsconfig, biome, editorconfig");
-        return 1;
     }
 
     return 0;
@@ -124,8 +127,7 @@ function detectPackageManager() {
     return "bun";
   }
 
-  console.error("[codestyle] Could not detect package manager. Ignored.");
-  process.exit(1);
+  return undefined;
 }
 
 /**
@@ -141,6 +143,11 @@ function installPackage(packageName) {
   };
 
   const packageManager = detectPackageManager();
+  if (!packageManager) {
+    console.error("[codestyle] Could not detect package manager. Ignored.");
+    return 0;
+  }
+
   const proc = spawnSync(packageManager, command[packageManager]);
   if (proc.status !== 0) {
     console.error(`[codestyle] Failed to install ${packageName}`);
@@ -174,5 +181,4 @@ function writeFile(outputPath, content) {
   }
 
   console.info(`[codestyle] File already exists at ${outputPath}`);
-  process.exit(0);
 }
