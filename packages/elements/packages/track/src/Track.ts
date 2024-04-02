@@ -1,6 +1,15 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, PropertyValueMap, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
 import { query } from "lit/decorators/query.js";
+import { Vec } from "./Vec.js";
+
+function mod(a: number, n: number) {
+  return a - Math.floor(a / n) * n;
+}
+
+function angleDist(a: number, b: number) {
+  return mod(b - a + 180, 360) - 180;
+}
 
 export type InputState = {
   grab: {
@@ -23,25 +32,17 @@ export type InputState = {
   };
 };
 
-function mod(a, n) {
-  return a - Math.floor(a / n) * n;
-}
-
-function angleDist(a, b) {
-  return mod(b - a + 180, 360) - 180;
-}
-
-export function timer(start, time) {
+export function timer(start: number, time: number) {
   return Math.min((Date.now() - start) / time, 1);
 }
 
 export type Easing = "ease" | "linear" | "none";
 
 export const Ease = {
-  easeInOutCirc(x) {
+  easeInOutCirc(x: number) {
     return x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2;
   },
-  easeOutSine(x) {
+  easeOutSine(x: number) {
     return Math.sin((x * Math.PI) / 2);
   },
 };
@@ -50,175 +51,13 @@ export function isTouch() {
   return !!navigator.maxTouchPoints || "ontouchstart" in window;
 }
 
-type VecOrNumber = Vec | number[] | number;
-
-export class Vec extends Array {
-  constructor(x: VecOrNumber = 0, y = 0) {
-    super();
-
-    if (Vec.isVec(x)) {
-      this[0] = x[0];
-      this[1] = x[1];
-    } else {
-      this[0] = x;
-      this[1] = y;
-    }
-  }
-
-  get x() {
-    return this[0];
-  }
-
-  set x(x: number) {
-    this[0] = x;
-  }
-
-  get y() {
-    return this[1];
-  }
-
-  set y(y: number) {
-    this[1] = y;
-  }
-
-  get xy() {
-    return [this[0], this[1]];
-  }
-
-  set xy(xy: number[]) {
-    this[0] = xy[0];
-    this[1] = xy[1];
-  }
-
-  add(vec: VecOrNumber) {
-    if (Vec.isVec(vec)) {
-      this[0] += vec[0];
-      this[1] += vec[1];
-    } else {
-      this[0] += vec;
-      this[1] += vec;
-    }
-    return this;
-  }
-
-  sub(vec: VecOrNumber) {
-    if (Vec.isVec(vec)) {
-      this[0] -= vec[0];
-      this[1] -= vec[1];
-    } else {
-      this[0] -= vec;
-      this[1] -= vec;
-    }
-    return this;
-  }
-
-  mul(vec: VecOrNumber) {
-    if (Vec.isVec(vec)) {
-      this[0] *= vec[0];
-      this[1] *= vec[1];
-    } else {
-      this[0] *= vec;
-      this[1] *= vec;
-    }
-    return this;
-  }
-
-  set(vec: VecOrNumber) {
-    if (Vec.isVec(vec)) {
-      this[0] = vec[0];
-      this[1] = vec[1];
-    } else {
-      this[0] = vec;
-      this[1] = vec;
-    }
-    return this;
-  }
-
-  mod(vec: VecOrNumber) {
-    if (Vec.isVec(vec)) {
-      this[0] = this[0] % vec[0];
-      this[1] = this[1] % vec[1];
-    } else {
-      this[0] = this[0] % vec;
-      this[1] = this[1] % vec;
-    }
-    return this;
-  }
-
-  sign() {
-    this[0] = Math.sign(this[0]);
-    this[1] = Math.sign(this[1]);
-    return this;
-  }
-
-  dist(vec: Vec) {
-    return Math.sqrt((vec[0] - this[0]) ** 2 + (vec[1] - this[1]) ** 2);
-  }
-
-  abs() {
-    return Math.sqrt(this[0] ** 2 + this[1] ** 2);
-  }
-
-  abs2() {
-    this[0] = Math.abs(this[0]);
-    this[1] = Math.abs(this[1]);
-    return this;
-  }
-
-  precision(precision: number) {
-    this[0] = Math.floor(this[0] / precision) * precision;
-    this[1] = Math.floor(this[1] / precision) * precision;
-  }
-
-  floor() {
-    this[0] = Math.floor(this[0]);
-    this[1] = Math.floor(this[1]);
-    return this;
-  }
-
-  clone() {
-    return new Vec(this);
-  }
-
-  static add(vec1: VecOrNumber, vec2: VecOrNumber) {
-    if (Vec.isVec(vec1)) {
-      return new Vec(vec1[0], vec1[1]).add(vec2);
-    }
-    return new Vec(vec1, vec1).add(vec2);
-  }
-
-  static sub(vec1: VecOrNumber, vec2: VecOrNumber) {
-    if (Vec.isVec(vec1)) {
-      return new Vec(vec1[0], vec1[1]).sub(vec2);
-    }
-    return new Vec(vec1, vec1).sub(vec2);
-  }
-
-  static mul(vec1: VecOrNumber, vec2: VecOrNumber) {
-    if (Vec.isVec(vec1)) {
-      return new Vec(vec1[0], vec1[1]).mul(vec2);
-    }
-    return new Vec(vec1, vec1).mul(vec2);
-  }
-
-  static abs(vec: Vec) {
-    return new Vec(vec.x, vec.y).abs();
-  }
-
-  static isVec = Array.isArray;
-
-  toString(): string {
-    return `Vec{${this.join(",")}}`;
-  }
-}
-
-export class Trait {
+export class Trait<T extends Track = Track> {
   id: string;
   enabled = true;
 
-  entity: Track;
+  entity: T;
 
-  constructor(id: string, entity: Track) {
+  constructor(id: string, entity: T) {
     this.id = id;
     this.entity = entity;
 
@@ -271,21 +110,21 @@ export class PointerTrait extends Trait {
   moveVelocity = new Vec();
 
   input(inputState: InputState) {
-    const e = this.entity;
+    const track = this.entity;
 
-    if (e.overflowscroll && e.overflowWidth < 0) {
+    if (track.overflowscroll && track.overflowWidth < 0) {
       return;
     }
 
     if (inputState.grab.value && !this.grabbing) {
       this.grabbing = true;
-      this.grabbedStart.set(e.mousePos);
+      this.grabbedStart.set(track.mousePos);
       this.entity.dispatchEvent(new Event("pointer:grab"));
       this.entity.setTarget(undefined);
     }
 
-    if (e.mousePos.abs()) {
-      this.grabDelta.set(e.mousePos).sub(this.grabbedStart);
+    if (track.mousePos.abs()) {
+      this.grabDelta.set(track.mousePos).sub(this.grabbedStart);
     }
 
     if (inputState.release.value) {
@@ -298,61 +137,62 @@ export class PointerTrait extends Trait {
     if (this.grabbing) {
       if (inputState.move.value.abs()) {
         this.moveVelocity.add(inputState.move.value);
-        e.inputForce.set(inputState.move.value).mul(-1);
+        track.inputForce.set(inputState.move.value).mul(-1);
       } else {
         if (this.grabbing) {
-          e.inputForce.mul(0);
+          track.inputForce.mul(0);
         }
       }
     }
 
     if (inputState.release.value) {
-      e.inputForce.set(this.moveVelocity.clone().mul(-1));
+      track.inputForce.set(this.moveVelocity.clone().mul(-1));
     }
 
     // prevent moving in wrong direction
-    if (e.vertical) {
-      e.inputForce.x = 0;
+    if (track.vertical) {
+      track.inputForce.x = 0;
     } else {
-      e.inputForce.y = 0;
+      track.inputForce.y = 0;
     }
 
-    if (e.slotElement) {
-      e.slotElement.style.pointerEvents = this.grabbing ? "none" : "";
+    if (track.slotElement) {
+      track.slotElement.style.pointerEvents = this.grabbing ? "none" : "";
     }
-    if (!isTouch()) e.style.cursor = this.grabbing ? "grabbing" : "";
+    if (!isTouch()) track.style.cursor = this.grabbing ? "grabbing" : "";
   }
 
   update() {
-    const e = this.entity;
-    if (e.scrolling) return;
+    const track = this.entity;
+    if (track.scrolling) return;
 
     // clamp input force
-    const pos = Vec.add(e.position, e.inputForce);
+    const pos = Vec.add(track.position, track.inputForce);
     const clamped = this.getClapmedPosition(pos);
     const diff = Vec.sub(pos, clamped);
 
-    const resitance = (!e.loop ? this.borderResistance : 0) * (1 - diff.abs() / 200);
-    if (diff.abs() && this.grabbing) {
-      if (e.vertical) {
-        e.inputForce.mul(resitance);
+    if (!track.loop && diff.abs() && this.grabbing) {
+      const resitance = this.borderResistance * (1 - diff.abs() / 200);
+
+      if (track.vertical) {
+        track.inputForce.mul(resitance);
       } else {
-        e.inputForce.mul(resitance);
+        track.inputForce.mul(resitance);
       }
     }
 
-    const bounce = !e.loop ? this.borderBounce : 0;
-    if (bounce && diff.abs() && !this.grabbing) {
-      if ((e.vertical && Math.abs(diff.y)) || Math.abs(diff.x)) {
-        e.inputForce.sub(diff.mul(bounce));
-        e.acceleration.mul(0);
+    const bounce = this.borderBounce;
+    if (!track.loop && bounce && diff.abs() && !this.grabbing) {
+      if ((track.vertical && Math.abs(diff.y)) || Math.abs(diff.x)) {
+        track.inputForce.sub(diff.mul(bounce));
+        track.acceleration.mul(0);
       }
     }
 
     if (!this.grabbing) {
-      e.acceleration.add(e.inputForce);
+      track.acceleration.add(track.inputForce);
     } else {
-      e.acceleration.mul(0);
+      track.acceleration.mul(0);
     }
   }
 
@@ -399,16 +239,24 @@ export class PointerTrait extends Trait {
 
 export class SnapTrait extends Trait {
   input() {
-    const e = this.entity;
+    const track = this.entity;
 
-    if (!e.grabbing && !e.scrolling) {
-      if (e.deltaVelocity.x < 0 || e.deltaVelocity.y < 0) {
-        // slows down
-        if (e.velocity.abs() < 1 && !e.target) {
-          e.setTarget(e.getClosestItemPosition());
-        }
-      }
+    if (track.grabbing || track.scrolling || track.target) return;
+
+    if (!track.loop) {
+      // Ignore if target is out of bounds
+      if (!track.vertical && track.position.x - track.overflowWidth > 0) return;
+      if (track.vertical && track.position.y - track.overflowHeight > 0) return;
     }
+
+    // Only when decelerating
+    if (!track.vertical && track.deltaVelocity.x > 0) return;
+    if (track.vertical && track.deltaVelocity.y > 0) return;
+
+    // Only when velocity is low
+    if (track.velocity.abs() > 0.9) return;
+
+    track.setTarget(track.getClosestItemPosition(), "ease");
   }
 }
 
@@ -424,7 +272,7 @@ export class SnapTrait extends Trait {
  * @attribute snap (default: false) - Whether the track should snap to the closest child element.
  * @attribute loop (default: false) - Whether the track should loop back to the start when reaching the end.
  * @attribute vertical (default: false) - Whether the track should scroll vertically.
- * @attribute align (default: "left") - The alignment of the track. Can be "left" or "right".
+ * @attribute align (default: "start") - The alignment of the track. Can be "start" or "end".
  *
  * @example
  * ```html
@@ -576,15 +424,8 @@ export class Track extends LitElement {
 
   public currentItem = 0;
 
-  public get value() {
+  public get currentIndex() {
     return this.currentItem % this.itemCount;
-  }
-
-  public set value(index: string | number) {
-    const i = +index;
-    this.currentItem = i;
-    const pos = this.getToItemPosition(i);
-    if (pos) this.setTarget(pos);
   }
 
   private animation: number | undefined;
@@ -651,14 +492,14 @@ export class Track extends LitElement {
     }
   }
 
-  public addTrait(id: string, TraitType: typeof Trait) {
-    const trait = new TraitType(id, this);
+  public addTrait<T extends Track>(id: string, TraitType: typeof Trait<T>) {
+    const trait = new TraitType(id, this as any);
     if (trait instanceof Trait) {
       this.traits.unshift(trait);
     }
   }
 
-  public removeTrait(trait: Trait) {
+  public removeTrait<T extends Track>(trait: Trait<T>) {
     this.traits.splice(this.traits.indexOf(trait), 1);
   }
 
@@ -698,10 +539,15 @@ export class Track extends LitElement {
   };
 
   private pointerDown = (e: PointerEvent) => {
+    if (e.button !== 0) return; // only left click
+
     this.mousePos.x = e.x;
     this.mousePos.y = e.y;
 
     this.setTarget(undefined);
+
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   private pointerUp = (e: PointerEvent) => {
@@ -742,6 +588,7 @@ export class Track extends LitElement {
     }
 
     pointerEvent.preventDefault();
+    pointerEvent.stopPropagation();
   };
 
   private onWheel = (wheelEvent: WheelEvent) => {
@@ -803,11 +650,30 @@ export class Track extends LitElement {
     }
   };
 
-  private onSlotChange = (e: Event) => {
+  private observedChildren = new Set<Node>();
+
+  private onSlotChange = () => {
+    const slot = this.slotElement;
+    const nodes = slot.assignedNodes();
+
+    for (const node of this.observedChildren) {
+      if (node instanceof HTMLElement && !nodes.includes(node)) {
+        this.resizeObserver?.unobserve(node);
+        this.observedChildren.delete(node);
+      }
+    }
+
+    for (const node of nodes) {
+      if (node instanceof HTMLElement && !this.observedChildren.has(node)) {
+        this.observedChildren.add(node);
+        this.resizeObserver?.observe(node);
+      }
+    }
+
     this.format();
   };
 
-  format() {
+  format = () => {
     this.inputState.format.value = true;
     this._widths = undefined;
     this._heights = undefined;
@@ -818,12 +684,16 @@ export class Track extends LitElement {
         this.origin.set([0, 0]);
         break;
       case "end":
-        this.origin.set([this.offsetWidth, this.offsetHeight]);
+        if (this.vertical) {
+          this.origin.set([0, this.offsetHeight]);
+        } else {
+          this.origin.set([this.offsetWidth, 0]);
+        }
         break;
     }
 
     this.dispatchEvent(new CustomEvent("format", { bubbles: true }));
-  }
+  };
 
   /**
    * Get the position of the item at the given index, relative to the current item.
@@ -960,7 +830,7 @@ export class Track extends LitElement {
     this.currentItem = currItem;
     this.dispatchEvent(
       new CustomEvent<number | string>("change", {
-        detail: this.value,
+        detail: this.currentItem,
         bubbles: true,
       }),
     );
@@ -1049,21 +919,17 @@ export class Track extends LitElement {
         if (this.target) {
           this.target.y -= max.y - start.y;
         }
-      }
-      if (this.position.y < start.y) {
+      } else if (this.position.y < start.y) {
         this.position.y = max.y;
         if (this.target) {
           this.target.y += max.y - start.y;
         }
-      }
-
-      if (this.position.x >= max.x) {
+      } else if (this.position.x >= max.x) {
         this.position.x = start.x;
         if (this.target) {
           this.target.x -= max.x - start.x;
         }
-      }
-      if (this.position.x < start.x) {
+      } else if (this.position.x < start.x) {
         this.position.x = max.x;
         if (this.target) {
           this.target.x += max.x - start.x;
@@ -1076,10 +942,6 @@ export class Track extends LitElement {
     this.targetForce.mul(0);
 
     this.velocity = Vec.sub(this.position, this.lastPosition);
-
-    // TODO: need to self fix positon, sometimes NaN on innital load and resize
-    // this.position[0] = this.position[0] || 0;
-    // this.position[1] = this.position[1] || 0;
   }
 
   private getCurrentItem() {
@@ -1199,9 +1061,9 @@ export class Track extends LitElement {
     this.dispatchEvent(new CustomEvent("scroll"));
   }
 
-  private observer: IntersectionObserver | undefined;
+  private intersectionObserver: IntersectionObserver | undefined;
 
-  private onIntersect(intersections) {
+  private onIntersect = (intersections) => {
     for (const entry of intersections) {
       if (entry.isIntersecting) {
         this.startAnimate();
@@ -1209,15 +1071,12 @@ export class Track extends LitElement {
         this.stopAnimate();
       }
     }
-  }
+  };
+
+  resizeObserver: ResizeObserver | undefined;
 
   connectedCallback(): void {
     super.connectedCallback();
-
-    this.observer = new IntersectionObserver(this.onIntersect.bind(this), {});
-
-    // stop last animation if there was one
-    this.stopAnimate();
 
     this.tabIndex = 0;
 
@@ -1230,14 +1089,20 @@ export class Track extends LitElement {
     this.addEventListener("keydown", this.onKeyDown);
     this.addEventListener("wheel", this.onWheel, { passive: false });
 
-    window.addEventListener("resize", this.format.bind(this), {
+    window.addEventListener("resize", this.format, {
       passive: true,
     });
-    window.addEventListener("load", this.format.bind(this), { capture: true });
+    window.addEventListener("load", this.format, { capture: true });
 
-    this.dispatchEvent(new CustomEvent("change", { detail: this.value, bubbles: true }));
+    this.dispatchEvent(
+      new CustomEvent("change", { detail: this.currentItem, bubbles: true }),
+    );
 
-    this.observer.observe(this);
+    this.resizeObserver = new ResizeObserver(() => this.format());
+    this.resizeObserver.observe(this);
+
+    this.intersectionObserver = new IntersectionObserver(this.onIntersect);
+    this.intersectionObserver.observe(this);
 
     // needs markup to exist
     this.format();
@@ -1260,10 +1125,11 @@ export class Track extends LitElement {
     this.removeEventListener("keydown", this.onKeyDown);
     this.removeEventListener("wheel", this.onWheel);
 
-    window.removeEventListener("resize", this.format.bind(this));
-    window.removeEventListener("load", this.format.bind(this));
+    window.removeEventListener("resize", this.format);
+    window.removeEventListener("load", this.format);
 
-    this.observer?.unobserve(this);
+    this.intersectionObserver?.disconnect();
+    this.resizeObserver?.disconnect();
   }
 }
 
