@@ -2,7 +2,7 @@
   "name": "@sv/elements",
   "author": "t.havlicek@s-v.de",
   "contributors": [],
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Atrium Component Library",
   "type": "module",
   "scripts": {

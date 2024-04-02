@@ -1,5 +1,13 @@
 # @sv/elements
 
+## 0.8.3
+
+### Patch Changes
+
+- ed1d4bc: track: correctly prevent events with nested tracks
+- ed1d4bc: track: update caches when child dimensions change
+- ed1d4bc: track: prevent snapping when end is reached
+
 ## 0.8.2
 
 ### Patch Changes
