@@ -1,0 +1,1 @@
+import{B as t}from"./Button.vue._Svzmbdd.js";import{T as e}from"./index.BC5jXn26.js";import{c as o,a as r,r as a}from"./runtime-core.esm-bundler.Bu07HdzU.js";function i(){return o("div",null,[o(t,{onClick:()=>{e.info("Hello, World!")}},{default:()=>[r("Click")]}),o(a("a-toast-feed"),null,null)])}export{i as ToastButton};
