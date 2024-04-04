@@ -1,13 +1,20 @@
 ---
+import { codeToHtml } from "shiki";
+
 export interface Props {
   title: string;
+  code: string;
 }
+
+const file = Astro.props.code?.trim();
+const content =
+  Astro.props.code && codeToHtml(file, { theme: "dark-plus", lang: "astro" });
 ---
 
 <h3>{Astro.props.title}</h3>
 
-<div class="not-content box w-full flex items-center justify-center">
-  <slot name="preview"></slot>
+<div class="not-content box w-full flex flex-col items-center justify-center">
+  <slot></slot>
 </div>
 
-<slot name="code"></slot>
+<div set:html={content}></div>

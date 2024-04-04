@@ -2,7 +2,7 @@
 title: ImageText
 ---
 import Example from "../../../components/Example.astro";
-import { ImageText } from "@sv/components/templates/imagetext.tsx";
+import { ImageText } from "@sv/components/src/ImageText.vue.jsx";
 
 ```bash
 npx @sv/components imagetext
@@ -10,13 +10,14 @@ npx @sv/components imagetext
 
 A simple image-text layout component.
 
-<Example title="Example">
-  <div slot="preview">
+<Example title="Example" code={`
+---
+import { ImageText } from "./ImageText.vue.jsx";
+---
+
+<ImageText />
+`}>
+  <div>
     <ImageText />
-  </div>
-  <div slot="code">
-    ```tsx
-      <ImageText />
-    ```
   </div>
 </Example>

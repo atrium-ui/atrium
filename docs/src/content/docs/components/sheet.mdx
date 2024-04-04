@@ -2,8 +2,8 @@
 title: Sheet
 ---
 import Example from "../../../components/Example.astro";
-import { Sheet } from "@sv/components/templates/sheet.tsx";
-import { Button } from "@sv/components/templates/button.tsx";
+import { Sheet } from "@sv/components/src/Sheet.vue.jsx";
+import { Button } from "@sv/components/src/Button.vue.jsx";
 
 ```bash
 npx @sv/components sheet
@@ -12,9 +12,23 @@ npx @sv/components sheet
 A sheet is basically a burger menu. Composed of a-blur.
 
 
-<Example title="Example">
-  <div slot="preview">
-    <Sheet>
+<Example title="Example" code={`
+---
+import { Sheet } from "./Sheet.vue.jsx";
+---
+
+<Sheet>
+  <div onclick="document.querySelector('a-blur').enabled = false">
+    <Button>Close</Button>
+  </div>
+</Sheet>
+
+<div onclick="document.querySelector('a-blur').enabled = true">
+  <Button>Open</Button>
+</div>
+`}>
+  <div>
+    <Sheet client:load>
       <div onclick="document.querySelector('a-blur').enabled = false">
         <Button>Close</Button>
       </div>
@@ -24,18 +38,4 @@ A sheet is basically a burger menu. Composed of a-blur.
       <Button>Open</Button>
     </div>
   </div>
-  <div slot="code">
-    ```tsx
-      <Sheet>
-        <div onclick="document.querySelector('a-blur').enabled = false">
-          <Button>Close</Button>
-        </div>
-      </Sheet>
-
-      <div onclick="document.querySelector('a-blur').enabled = true">
-        <Button>Open</Button>
-      </div>
-    ```
-  </div>
 </Example>
-

@@ -2,7 +2,7 @@
 title: Popover
 ---
 import Example from "../../../components/Example.astro";
-import { Popover } from "@sv/components/templates/popover.tsx";
+import { Popover } from "@sv/components/src/Popover.vue.jsx";
 
 ```bash
 npx @sv/components popover
@@ -10,17 +10,18 @@ npx @sv/components popover
 
 A popover.
 
-<Example title="Example">
-  <div slot="preview">
-    <Popover label="Click">
+<Example title="Example" code={`
+---
+import { Popover } from "./Popover.vue.jsx";
+---
+
+<Popover label="Click">
+  <span>Some Content</span>
+</Popover>
+`}>
+  <div>
+    <Popover client:load label="Click">
       <span>Some Content</span>
     </Popover>
-  </div>
-  <div slot="code">
-    ```tsx
-      <Popover label="Click">
-        <span>Some Content</span>
-      </Popover>
-    ```
   </div>
 </Example>

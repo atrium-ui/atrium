@@ -1,8 +1,10 @@
-import { Button } from "@sv/components/templates/button.jsx";
-import { Drawer } from "@sv/components/templates/drawer.jsx";
+/* @jsxImportSource vue */
+
+import { Button } from "@sv/components/src/Button.vue.jsx";
+import { Drawer } from "@sv/components/src/Drawer.vue.jsx";
+import "@sv/elements/adaptive";
 import { createSignal } from "solid-js";
 import { paragraph } from "txtgen";
-import "@sv/elements/adaptive";
 
 export function DrawerDemo() {
   const [open, setOpen] = createSignal(false);

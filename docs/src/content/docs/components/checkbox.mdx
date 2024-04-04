@@ -2,7 +2,7 @@
 title: Checkbox
 ---
 import Example from "../../../components/Example.astro";
-import { Checkbox } from "@sv/components/templates/checkbox.tsx";
+import { Checkbox } from "@sv/components/src/Checkbox.vue.jsx";
 
 ```bash
 npx @sv/components checkbox
@@ -10,13 +10,20 @@ npx @sv/components checkbox
 
 A checkbox.
 
-<Example title="Example">
-  <div slot="preview">
-    <Checkbox id="check"/>
-  </div>
-  <div slot="code">
-    ```tsx
-      <Checkbox id="check"/>
-    ```
+<Example title="Example" code={`
+---
+import { Checkbox } from "./Checkbox.vue.jsx";
+---
+
+<Checkbox id="checkbox1">
+  <span>I agree to use this checkbox</span>
+  <p class="text-base">This is still work in progress.</p>
+</Checkbox>
+`}>
+  <div>
+    <Checkbox client:load id="checkbox1">
+      <span>I agree to use this checkbox</span>
+      <p class="text-base">This is still work in progress.</p>
+    </Checkbox>
   </div>
 </Example>

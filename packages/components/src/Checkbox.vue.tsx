@@ -1,3 +1,5 @@
+/* @jsxImportSource vue */
+
 import "@sv/elements/toggle";
 
 function CheckIcon() {
@@ -22,13 +24,15 @@ function CheckIcon() {
 
 interface Props {
   id: string;
-  checked: boolean;
+  checked?: boolean;
+  onChange?: (event: Event) => void;
 }
 
-export function Checkbox(props: Props) {
+export function Checkbox(props: Props, { slots }) {
   return (
     <div class="grid grid-cols-[auto_auto] gap-3">
-      <a-toggle active-attribute="data-selected">
+      <a-toggle onInput={props.onChange} active-attribute="data-selected">
+        {/* TODO: there should be an actual input here for form compatibility */}
         <button
           type="button"
           class="group h-7 w-7 cursor-pointer rounded-md border border-zinc-700 bg-transparent p-0 hover:border-zinc-600"
@@ -43,9 +47,8 @@ export function Checkbox(props: Props) {
 
       <div>
         <label for={props.id} class="cursor-pointer text-lg">
-          I agree to use this checkbox
+          {slots.default?.()}
         </label>
-        <p class="text-base">This is still work in progress.</p>
       </div>
     </div>
   );

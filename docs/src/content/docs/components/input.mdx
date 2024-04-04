@@ -2,7 +2,7 @@
 title: Input
 ---
 import Example from "../../../components/Example.astro";
-import { Input } from "@sv/components/templates/input.tsx";
+import { Input } from "@sv/components/src/Input.vue.jsx";
 
 ```bash
 npx @sv/components input
@@ -10,17 +10,18 @@ npx @sv/components input
 
 A styles input with error states and label.
 
-<Example title="Example">
-  <div slot="preview">
+<Example title="Example" code={`
+---
+import { Input } from "./Input.vue.jsx";
+---
+
+<Input placeholder="Text" label="Input" client:load />
+<br />
+<Input placeholder="Text" label="Input" error="Can not be empty" client:load />
+`}>
+  <div>
     <Input placeholder="Text" label="Input" client:load />
     <br />
-    <Input placeholder="Text" label="Input" error="Cant be empty" client:load />
-  </div>
-  <div slot="code">
-    ```tsx
-      <Input placeholder="Text" label="Input" client:load />
-      <br />
-      <Input placeholder="Text" label="Input" error="Cant be empty" client:load />
-    ```
+    <Input placeholder="Text" label="Input" error="Can not be empty" client:load />
   </div>
 </Example>

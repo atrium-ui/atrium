@@ -1,4 +1,6 @@
-import { Input } from "./input.jsx";
+/* @jsxImportSource vue */
+
+import { Input } from "./Input.vue.jsx";
 
 export function FormField(props: {
   field: {
@@ -31,7 +33,7 @@ export function FormField(props: {
   };
 
   return (
-    <form-field>
+    <a-form-field>
       <div class={`form-field-${props.field.type}`}>
         <InputField
           {...props.field}
@@ -51,10 +53,10 @@ export function FormField(props: {
         ) : null}
       </div>
 
-      <div class="form-field-error">
-        <form-field-error />
+      <div class="text-red-400 text-xs">
+        <a-form-field-error />
       </div>
-    </form-field>
+    </a-form-field>
   );
 }
 
@@ -62,8 +64,8 @@ export function FormField(props: {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "form-field": FormFieldElement;
-    "form-field-error": FormFieldErrorElement;
+    "a-form-field": FormFieldElement;
+    "a-form-field-error": FormFieldErrorElement;
   }
 }
 
@@ -82,14 +84,18 @@ class FormFieldErrorElement extends HTMLElement {
   };
 
   connectedCallback() {
-    const formField = this.closest("form-field");
+    const formField = this.closest("a-form-field");
     formField?.addEventListener("field-state", this.onState);
   }
 
   disconnectedCallback() {
-    const formField = this.closest("form-field");
+    const formField = this.closest("a-form-field");
     formField?.removeEventListener("field-state", this.onState);
   }
+}
+
+if (typeof window === "object") {
+  customElements.define("a-form-field-error", FormFieldErrorElement);
 }
 
 class FormFieldElement extends HTMLElement {
@@ -152,12 +158,8 @@ class FormFieldElement extends HTMLElement {
   };
 }
 
-if (customElements.get("form-field-error") === undefined) {
-  customElements.define("form-field-error", FormFieldErrorElement);
-}
-
-if (customElements.get("form-field") === undefined) {
-  customElements.define("form-field", FormFieldElement);
+if (typeof window === "object") {
+  customElements.define("a-form-field", FormFieldElement);
 }
 
 type FormField = {

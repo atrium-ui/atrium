@@ -1,38 +1,30 @@
+/* @jsxImportSource vue */
+
 import "@sv/elements/dropdown";
 import "@sv/elements/expandable";
 
 interface Props {
-  children?: JSX.Element | string;
   value: string;
 }
 
-export function Filter(props: Props, context) {
-  const slots = {
-    default: () =>
-      props.children
-        ? props.children
-        : context?.slots?.default
-          ? context?.slots.default()
-          : null,
-  };
-
+export function Filter(props: Props, { slots }) {
   return (
     <div
-      onInput={(e) => console.info(e.target.value)}
+      // @ts-ignore
+      onInput={(e) => console.info(e.target?.value)}
       class="rounded-lg border border-zinc-700 bg-zinc-800 p-1"
     >
       <a-dropdown class="block" style="--dropdown-position: static;">
         <input
+          // @ts-ignore
           slot="input"
           class="min-w-[500px] rounded-md bg-transparent px-3 py-1 text-left outline-none"
-          onInput="handleFilter"
+          // onInput="handleFilter"
           placeholder="Type to filter..."
           value={props.value}
         />
 
-        <div class="max-h-[200px] p-1">
-          <slots.default />
-        </div>
+        <div class="max-h-[200px] p-1">{slots.default?.()}</div>
       </a-dropdown>
     </div>
   );

@@ -57,11 +57,13 @@ export class Expandable extends LitElement {
   public close(): void {
     this.opened = false;
     this.onAnimationFrame();
+    this.dispatchEvent(new Event("change"));
   }
 
   public open(): void {
     this.opened = true;
     this.onAnimationFrame();
+    this.dispatchEvent(new Event("change"));
   }
 
   public toggle(): void {

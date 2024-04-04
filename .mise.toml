@@ -1,4 +1,4 @@
 [tools]
 task = "3.35"
-bun = "1.0.35"
+bun = "1.1"
 node = "21"    # still need node for "npm version", since we cant install npm without node atm

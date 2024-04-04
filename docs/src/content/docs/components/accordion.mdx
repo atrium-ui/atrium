@@ -3,7 +3,7 @@ title: Accordion
 ---
 
 import Example from "../../../components/Example.astro";
-import { Accordion } from "@sv/components/templates/accordion.tsx";
+import { Accordion, AccordionItem } from "@sv/components/src/Accordion.vue.jsx";
 
 ```bash
 npx @sv/components accordion
@@ -11,43 +11,34 @@ npx @sv/components accordion
 
 An array of expandable elements that close automaticly when another element is expanded.
 
-<Example title="Example">
-  <div slot="preview">
-    <Accordion>
-      <Accordion.Item title="Item 1">
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-        voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-        clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-        amet.
-      </Accordion.Item>
-      <Accordion.Item title="Item 2">
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-        voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-        clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-        amet.
-      </Accordion.Item>
-    </Accordion>
-  </div>
-  <div slot="code">
-    ```tsx
-      <Accordion>
-        <Accordion.Item title="Item 1">
+<Example title="Example" code={`
+---
+import { Accordion, AccordionItem } from "./Accordion.vue.jsx";
+---
+
+<Accordion>
+  <AccordionItem title="Item 1">
+      ...
+  </AccordionItem>
+  <AccordionItem title="Item 2">
+      ...
+  </AccordionItem>
+</Accordion>
+`}>
+  <Accordion client:load>
+      <AccordionItem client:load title="Item 1">
           Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
           eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
           voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
           clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
           amet.
-        </Accordion.Item>
-        <Accordion.Item title="Item 2">
+      </AccordionItem>
+      <AccordionItem client:load title="Item 2">
           Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
           eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
           voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
           clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
           amet.
-        </Accordion.Item>
-      </Accordion>
-    ```
-  </div>
+      </AccordionItem>
+  </Accordion>
 </Example>

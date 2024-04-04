@@ -3,7 +3,7 @@ title: Animation
 ---
 
 import Example from "../../../components/Example.astro";
-import { Animation } from '@sv/components/templates/animation.tsx'
+import { Animation } from '@sv/components/src/Animation.vue.jsx'
 
 
 ```bash
@@ -12,14 +12,14 @@ npx @sv/components animation
 
 A component that implmenets rive animations.
 
-<Example title="Example">
-  <div slot="preview" class="aspect-square w-[200px]">
+<Example title="Example" code={`
+---
+import { Animation } from './Animation.vue.jsx'
+---
+
+<Animation width={200} height={200} src="/sv-frontend-library/mono/loader.riv" />
+`}>
+  <div class="aspect-square w-[200px]">
     <Animation client:load width={200} height={200} src="/sv-frontend-library/mono/loader.riv" />
   </div>
-  <div slot="code">
-    ```tsx
-      <Animation width={200} height={200} src="/sv-frontend-library/mono/loader.riv" />
-    ```
-  </div>
 </Example>
-

@@ -1,6 +1,10 @@
+/* @jsxImportSource vue */
+
 interface Props {
   placeholder?: string;
   label?: string;
+  name?: string;
+  id?: string;
   error?: string;
   required?: boolean;
   multiline?: boolean;
@@ -9,9 +13,6 @@ interface Props {
   onChange?: (e: Event) => void;
 }
 
-// TODO: I think this input should be a custom-element.
-// - Without label.
-// - Need to think about how to position the error message.
 export function Input(props: Props) {
   return (
     <div>
@@ -21,7 +22,8 @@ export function Input(props: Props) {
 
       {props.multiline ? (
         <textarea
-          type="text"
+          id={props.id}
+          name={props.name}
           required={props.required || undefined}
           placeholder={props.placeholder}
           class={[
@@ -42,6 +44,8 @@ export function Input(props: Props) {
       ) : (
         <input
           type="text"
+          id={props.id}
+          name={props.name}
           required={props.required || undefined}
           placeholder={props.placeholder}
           class={[

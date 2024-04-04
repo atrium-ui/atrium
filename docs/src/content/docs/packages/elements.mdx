@@ -4,8 +4,35 @@ description: A reference page in my new Starlight docs site.
 tableOfContents: false
 ---
 
-import Changelog from "@sv/elements/CHNAGELOG.md";
+import Changelog from "package:/components/Changelog.astro";
+import Command from "package:/components/Command.astro"
+
+## Installation
+
+Make sure your project is set up with access to the registry as described in [Usage](/sv-frontend-library/mono/usage#configure-package-registry).
+
+<Command>
+  <div slot="pnpm">
+    ```sh
+    pnpm add @sv/elements --save-exact
+    ```
+  </div>
+  <div slot="npm">
+    ```sh
+    npm i @sv/elements --save-exact
+    ```
+  </div>
+  <div slot="bun">
+    ```sh
+    bun add @sv/elements --exact
+    ```
+  </div>
+</Command>
+
+## Usage
+
+See [usage](../../usage).
 
 ## Changelog
 
-<Changelog />
+<Changelog package="elements" />
