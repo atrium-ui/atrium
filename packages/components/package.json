@@ -8,23 +8,17 @@
     "test": "bun test"
   },
   "type": "module",
-  "main": "./dist/cli.js",
-  "bin": "./dist/cli.js",
+  "main": "./cli.js",
+  "bin": "./cli.js",
   "files": [
-    "templates",
+    "components",
     "./dist"
   ],
   "engines": {
     "node": ">=16"
   },
-  "tsup": {
-    "entry": ["src/cli.ts"],
-    "format": ["esm"],
-    "external": ["@sv/*"],
-    "sourcemap": true,
-    "clean": true
-  },
   "dependencies": {
+    "tailwind-merge": "^2.2.1",
     "enquirer": "^2.4.1"
   }
 }

@@ -1,15 +1,19 @@
-import lit from "@astrojs/lit";
 import solid from "@astrojs/solid-js";
+import vue from "@astrojs/vue";
+import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
 import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
 
-// https://astro.build/config
 export default defineConfig({
   base: "/sv-frontend-library/mono/",
   site: "https://sv.pages.s-v.de",
-  publicDir: "static",
   vite: {
+    resolve: {
+      alias: {
+        "package:": "/src",
+      },
+    },
     server: {
       fs: {
         allow: [".."],
@@ -17,17 +21,25 @@ export default defineConfig({
     },
   },
   integrations: [
-    lit(),
-    solid(),
     tailwind({
       applyBaseStyles: false,
     }),
+    vue({
+      jsx: true,
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag.includes("-"),
+        },
+      },
+    }),
+    // solid(),
+    // react(),
     starlight({
       components: {
         ContentPanel: "./src/components/ContentPanel.astro",
       },
       title: "Atrium",
-      customCss: ["./src/styles/custom.css"],
+      customCss: ["./styles/custom.css"],
       logo: {
         dark: "./src/assets/atrium-dark.png",
         light: "./src/assets/atrium-light.png",
@@ -35,7 +47,7 @@ export default defineConfig({
         alt: "Atrium Logo",
       },
       social: {
-        gitlab: "https://gitlab.s-v.de/sv-components/mono",
+        gitlab: "https://gitlab.s-v.de/sv-components/mono/",
       },
       sidebar: [
         {
@@ -57,7 +69,7 @@ export default defineConfig({
         },
         {
           label: "Elements",
-          collapsed: false,
+          collapsed: true,
           autogenerate: { directory: "elements" },
         },
         {
@@ -67,7 +79,6 @@ export default defineConfig({
         },
         {
           label: "Experimental",
-          badge: "new",
           collapsed: true,
           autogenerate: { directory: "experimental" },
         },

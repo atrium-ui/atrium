@@ -88,8 +88,7 @@
   "dependencies": {
     "lit": "^2.5.0"
   },
-  "optionalDependencies": {
-    "@sv/scroll-lock": "^0.1.8",
+  "peerDependencies": {
     "@rive-app/canvas-single": "^2.7.1"
   }
 }

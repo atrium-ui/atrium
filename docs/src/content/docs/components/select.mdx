@@ -2,7 +2,7 @@
 title: Select
 ---
 import Example from "../../../components/Example.astro";
-import { Select } from "@sv/components/templates/select.tsx";
+import { Select } from "@sv/components/src/Select.vue.jsx";
 
 ```bash
 npx @sv/components select
@@ -10,21 +10,22 @@ npx @sv/components select
 
 A dropdown with specific options to select.
 
-<Example title="Example">
-  <div slot="preview">
-    <Select value="Select">
-      <Select.Item value="Item 1"/>
-      <Select.Item value="Item 2"/>
-      <Select.Item value="Item 3"/>
+<Example title="Example" code={`
+---
+import { Select } from "./Select.vue.jsx";
+---
+
+<Select value="Select">
+  <Select.Item value="Item 1"/>
+  <Select.Item value="Item 2"/>
+  <Select.Item value="Item 3"/>
+</Select>
+`}>
+  <div>
+    <Select client:load value="Select">
+      <Select.Item client:load value="Item 1"/>
+      <Select.Item client:load value="Item 2"/>
+      <Select.Item client:load value="Item 3"/>
     </Select>
-  </div>
-  <div slot="code">
-    ```tsx
-      <Select value="Select">
-        <Select.Item value="Item 1"/>
-        <Select.Item value="Item 2"/>
-        <Select.Item value="Item 3"/>
-      </Select>
-    ```
   </div>
 </Example>

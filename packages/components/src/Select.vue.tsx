@@ -1,33 +1,25 @@
+/* @jsxImportSource vue */
+
 import "@sv/elements/dropdown";
 import "@sv/elements/expandable";
 
-import { Button } from "./button.jsx";
+import { Button } from "./Button.vue.jsx";
 
 export function Select(
   props: {
-    children?: JSX.Element | string;
     value: string;
   },
-  context,
+  { slots },
 ) {
-  const slots = {
-    default: () =>
-      props.children
-        ? props.children
-        : context?.slots?.default
-          ? context?.slots.default()
-          : null,
-  };
-
   return (
-    <div onSelect={(e) => console.info(e.option.value)}>
+    <div onSelect={(e: any) => console.info(e.option?.value)}>
       <a-dropdown class="relative inline-block">
-        <Button slot="input" class="w-[150px]">
-          {props.value}
+        <Button slot="input">
+          <div class="w-[150px] text-left">{props.value}</div>
         </Button>
 
         <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-800 p-1">
-          <slots.default />
+          {slots.default?.()}
         </div>
       </a-dropdown>
     </div>

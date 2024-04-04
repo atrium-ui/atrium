@@ -4,8 +4,21 @@ description: A reference page in my new Starlight docs site.
 tableOfContents: false
 ---
 
-import Changelog from "@sv/components/CHANGELOG.md";
+import Changelog from "package:/components/Changelog.astro";
+
+## CLI
+
+Make sure your project is set up with access to the registry as described in [Usage](/sv-frontend-library/mono/usage#configure-package-registry).
+
+```sh
+npx @sv/components
+```
+
+### Flags
+
+- `--vue` - Overwrite framework detection and use Vue
+- `--stdout` - Output template to stdout instead of writing to file
 
 ## Changelog
 
-<Changelog />
+<Changelog package="components" />

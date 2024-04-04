@@ -2,8 +2,8 @@
 title: Dialog
 ---
 import Example from "../../../components/Example.astro";
-import { Dialog } from "@sv/components/templates/dialog.tsx";
-import { Button } from "@sv/components/templates/button.tsx";
+import { Dialog } from "@sv/components/src/Dialog.vue.jsx";
+import { Button } from "@sv/components/src/Button.vue.jsx";
 
 ```bash
 npx @sv/components dialog
@@ -11,9 +11,27 @@ npx @sv/components dialog
 
 A sheet is basically a burger menu. Composed of an a-blur.
 
-<Example title="Example">
-  <div slot="preview">
-    <Dialog>
+<Example title="Example" code={`
+---
+import { Dialog } from "./Dialog.vue.jsx";
+import { Button } from "./Button.vue.jsx";
+---
+
+<Dialog>
+  ## Dialog
+  This is a dialog.
+
+  <div class="mt-4" onclick="document.querySelector('a-blur').enabled = false">
+    <Button>Close</Button>
+  </div>
+</Dialog>
+
+<div onclick="document.querySelector('a-blur').enabled = true">
+  <Button>Open</Button>
+</div>
+`}>
+  <div>
+    <Dialog client:load>
       ## Dialog
       This is a dialog.
 
@@ -25,21 +43,5 @@ A sheet is basically a burger menu. Composed of an a-blur.
     <div onclick="document.querySelector('a-blur').enabled = true">
       <Button>Open</Button>
     </div>
-  </div>
-  <div slot="code">
-    ```tsx
-      <Dialog>
-        ## Dialog
-        This is a dialog.
-
-        <div class="mt-4" onclick="document.querySelector('a-blur').enabled = false">
-          <Button>Close</Button>
-        </div>
-      </Dialog>
-
-      <div onclick="document.querySelector('a-blur').enabled = true">
-        <Button>Open</Button>
-      </div>
-    ```
   </div>
 </Example>

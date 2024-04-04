@@ -44,7 +44,7 @@ tasks:
   test:
     desc: Run tests on all packages
     dir: "{{.TASKFILE_DIR}}"
-    deps: [cli:build, build]
+    deps: [build]
     cmds:
       - bun x turbo test
 
@@ -87,7 +87,7 @@ tasks:
       - task: version
 
   publish:
-    deps: [cli:build, build]
+    deps: [build]
     vars:
       message:
         sh: "git log -1 --pretty=format:%B"

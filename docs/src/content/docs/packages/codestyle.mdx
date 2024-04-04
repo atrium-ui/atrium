@@ -5,9 +5,9 @@ tableOfContents: false
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
-import Command from "../../../components/Command.astro"
-import File from "../../../components/File.astro"
-import Changelog from "@sv/codestyle/CHANGELOG.md";
+import Command from "package:/components/Command.astro"
+import File from "package:/components/File.astro"
+import Changelog from "package:/components/Changelog.astro";
 
 ## Installation
 
@@ -30,8 +30,6 @@ Make sure your project is set up with access to the registry as described in [Se
     ```
   </div>
 </Command>
-
-<br/><br/>
 
 ## Usage
 
@@ -157,4 +155,4 @@ module.exports = {
 
 ## Changelog
 
-<Changelog />
+<Changelog package="codestyle" />

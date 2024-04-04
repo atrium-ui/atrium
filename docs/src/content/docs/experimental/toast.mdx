@@ -2,6 +2,7 @@
 title: Toast
 ---
 import Example from "../../../components/Example.astro";
+import ToastButtonRaw from "./toast/ToastButton.jsx?raw";
 import { ToastButton } from "./toast/ToastButton.jsx";
 
 ```bash
@@ -10,12 +11,6 @@ npx @sv/components toast
 
 A sheet is basically a burger menu. Composed of a-blur.
 
-<Example title="Example">
-  <div slot="preview">
-    <ToastButton client:load />
-  </div>
-  <div slot="code">
-    ```tsx
-    ```
-  </div>
+<Example title="Example" code={ToastButtonRaw}>
+  <ToastButton client:load />
 </Example>

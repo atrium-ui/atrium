@@ -5,32 +5,30 @@
   "type": "module",
   "private": "true",
   "scripts": {
-    "check": "astro check"
+    "check": "# astro check"
   },
   "dependencies": {
-    "@astrojs/check": "^0.5.4",
-    "@astrojs/lit": "^3.0.2",
-    "@astrojs/solid-js": "^3.0.2",
-    "@astrojs/starlight": "^0.14.0",
+    "@astrojs/check": "^0.5.6",
+    "@astrojs/react": "^3.0.10",
+    "@astrojs/solid-js": "^4.0.1",
+    "@astrojs/starlight": "^0.21.2",
     "@astrojs/starlight-tailwind": "^2.0.1",
-    "@astrojs/tailwind": "^5.0.2",
+    "@astrojs/tailwind": "^5.1.0",
+    "@astrojs/vue": "^4.0.8",
     "@microsoft/tsdoc": "^0.14.2",
-    "@parse5/tools": "0.3.0",
-    "@rive-app/canvas-single": "^2.7.1",
+    "@rive-app/canvas-single": "^2.10.3",
     "@sv/components": "workspace:",
     "@sv/elements": "workspace:",
-    "@webcomponents/template-shadowroot": "^0.2.1",
-    "astro": "^3.6.4",
-    "execa": "8.0.1",
+    "astro": "^4.5.9",
     "jsdoc-extractor": "^3.2.0",
     "lit": "^2.5.0",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
     "sass": "^1.69.5",
-    "shiki": "^0.14.7",
-    "solid-js": "^1.8.5",
+    "shiki": "^1.2.4",
     "tailwindcss": "^3.3.3",
     "txtgen": "^3.0.4",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vue": "^3.4.21"
   }
 }

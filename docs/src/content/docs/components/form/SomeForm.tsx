@@ -1,6 +1,8 @@
-import { Button } from "@sv/components/templates/button.jsx";
-import { FormField, FormRenderer } from "@sv/components/templates/form.jsx";
-import { createSignal } from "solid-js";
+/* @jsxImportSource vue */
+
+import { ref } from "vue";
+import { Button } from "@sv/components/src/Button.vue";
+import { FormField, FormRenderer } from "@sv/components/src/Form.vue";
 import "@sv/elements/adaptive";
 
 const formSpec = {
@@ -50,18 +52,18 @@ const formSpec = {
 };
 
 export function SomeForm() {
-  const [error, setError] = createSignal<string>();
-  const [success, setSuccess] = createSignal<string>();
-  const [loading, setLoading] = createSignal(false);
+  const error = ref<string>();
+  const success = ref<string>();
+  const loading = ref(false);
 
   const renderer = new FormRenderer();
 
   return (
     <div>
-      {success() ? (
+      {success.value ? (
         <div>
           <h2>Geschafft</h2>
-          <p>{success()}</p>
+          <p>{success.value}</p>
         </div>
       ) : (
         <form
@@ -76,11 +78,11 @@ export function SomeForm() {
 
             console.info("FORM -> SUBMIT", fields, variables);
 
-            setLoading(true);
+            loading.value = true;
 
             setTimeout(() => {
-              setError("Failed");
-              setLoading(false);
+              error.value = "Failed";
+              loading.value = false;
             }, 2000);
           }}
         >
@@ -109,11 +111,11 @@ export function SomeForm() {
           })}
 
           <div>
-            <Button type="submit" disabled={!!loading()} class="overflow-hidden">
+            <Button type="submit" disabled={!!loading.value} class="overflow-hidden">
               <a-adaptive>
                 <div class="flex items-center gap-2">
                   <span>{"Submit"}</span>
-                  {loading() ? <span class="loading-indicator flex-none" /> : ""}
+                  {loading.value ? <span class="loading-indicator flex-none" /> : ""}
                 </div>
               </a-adaptive>
             </Button>
@@ -121,9 +123,9 @@ export function SomeForm() {
         </form>
       )}
 
-      {error() ? (
+      {error.value ? (
         <div>
-          <p>{error()}</p>
+          <p>{error.value}</p>
         </div>
       ) : null}
     </div>

@@ -1,0 +1,20 @@
+---
+import { join } from "node:path";
+import fs from "node:fs";
+import { remark } from "remark";
+import remarkHtml from "remark-html";
+
+export interface Props {
+  package: string;
+}
+
+const path = join("../packages/", Astro.props.package, "/CHANGELOG.md");
+const content = fs.readFileSync(path, "utf-8");
+const txt = `${content.split("\n").slice(1, 25).join("\n")}\n\n...`;
+const html = await remark().use(remarkHtml).process(txt);
+---
+
+<br>
+<div set:html={html} />
+<br>
+<a target="_blank" href={`https://gitlab.s-v.de/sv/sv-frontend-library/mono/-/blob/main/packages/${Astro.props.package}/CHANGELOG.md`}>Full changelog</a>

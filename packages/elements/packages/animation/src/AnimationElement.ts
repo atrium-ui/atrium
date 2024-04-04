@@ -6,7 +6,8 @@ import {
   type PropertyValueMap,
 } from "lit";
 import { property, query } from "lit/decorators.js";
-import { Rive } from "@rive-app/canvas-single";
+import * as rive from "@rive-app/canvas-single";
+const { Rive } = rive;
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -39,7 +40,7 @@ export class AnimationElement extends LitElement {
   protected canvas: HTMLCanvasElement = document.createElement("canvas");
   protected bufferCanvas: HTMLCanvasElement = document.createElement("canvas");
 
-  protected animations: Rive[] = [];
+  protected animations: rive.Rive[] = [];
 
   protected get pixelRatio() {
     return devicePixelRatio || 1;
@@ -90,7 +91,7 @@ export class AnimationElement extends LitElement {
     this.dispose(0);
   }
 
-  public trigger(rive: Rive, stateMachine: string, name: string) {
+  public trigger(rive: rive.Rive, stateMachine: string, name: string) {
     const inputs = rive.stateMachineInputs(stateMachine);
     if (inputs) {
       for (const input of inputs) {

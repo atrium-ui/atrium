@@ -1,0 +1,28 @@
+---
+title: Icon
+---
+
+import Example from "../../../components/Example.astro";
+import { Icon } from "@sv/components/src/Icon.vue.jsx";
+
+```bash
+npx @sv/components icon
+```
+
+Example Icon Component.
+
+<Example title="Example" code={`
+---
+import { Icon } from "./Icon.vue.jsx";
+---
+
+<Icon name="unknown"/>
+`}>
+  <div class="text-base">
+    <Icon name="unknown"/><span class="ml-2">Unknown</span>
+  </div>
+  <br/>
+  <div class="text-lg">
+    <Icon name="unknown"/><span class="ml-2">Unknown</span>
+  </div>
+</Example>

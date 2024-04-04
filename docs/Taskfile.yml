@@ -8,12 +8,12 @@ tasks:
     dir: ./
     cmds:
       - cd .. && task build
-      - bun --bun x astro dev
+      - bun x astro dev
 
   build:
     desc: Builds the docs into the public folder
     dir: ./
     cmds:
       - cd .. && task build
-      - bun --bun x astro build
+      - bun x astro build
       - mv dist ../public

@@ -1,7 +1,9 @@
-import { Button } from "./button.jsx";
+/* @jsxImportSource vue */
 
-// biome-ignore lint/suspicious/noEmptyInterface: <explanation>
-interface Props {}
+import { Button } from "./Button.vue.jsx";
+
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
+type Props = {};
 
 export function ImageText(props: Props) {
   return (
@@ -27,7 +29,7 @@ export function ImageText(props: Props) {
             width="300"
             height="300"
             alt="alt"
-            load="async"
+            loading="lazy"
           />
           <figcaption class="text-sm">
             <p>Caption</p>

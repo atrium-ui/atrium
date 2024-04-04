@@ -2,7 +2,7 @@
 title: Filter
 ---
 import Example from "../../../components/Example.astro";
-import { Filter } from "@sv/components/templates/filter.tsx";
+import { Filter } from "@sv/components/src/Filter.vue.jsx";
 
 ```bash
 npx @sv/components filter
@@ -10,27 +10,28 @@ npx @sv/components filter
 
 A dropdowm with text filter
 
-<Example title="Example">
-  <div slot="preview" class="min-h-[250px]">
-    <Filter>
-      <Filter.Item value="Item1" />
-      <Filter.Item value="Item2" />
-      <Filter.Item value="Item3" />
+<Example title="Example" code={`
+---
+import { Filter } from "./Filter.vue.jsx";
+---
+
+<Filter>
+  <Filter.Item value="Item1" />
+  <Filter.Item value="Item2" />
+  <Filter.Item value="Item3" />
+  <hr class="w-full h-[1px] bg-white opacity-20 my-1 mx-1" />
+  <Filter.Item value="Item4" />
+  <Filter.Item value="Item5" />
+</Filter>
+`}>
+  <div class="min-h-[250px]">
+    <Filter client:load>
+      <Filter.Item client:load value="Item1" />
+      <Filter.Item client:load value="Item2" />
+      <Filter.Item client:load value="Item3" />
       <hr class="w-full h-[1px] bg-white opacity-20 my-1 mx-1" />
-      <Filter.Item value="Item4" />
-      <Filter.Item value="Item5" />
+      <Filter.Item client:load value="Item4" />
+      <Filter.Item client:load value="Item5" />
     </Filter>
-  </div>
-  <div slot="code">
-    ```tsx
-      <Filter>
-        <Filter.Item value="Item1" />
-        <Filter.Item value="Item2" />
-        <Filter.Item value="Item3" />
-        <hr class="w-full h-[1px] bg-white opacity-20 my-1 mx-1" />
-        <Filter.Item value="Item4" />
-        <Filter.Item value="Item5" />
-      </Filter>
-    ```
   </div>
 </Example>

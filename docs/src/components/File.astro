@@ -1,6 +1,6 @@
 ---
 import fs from "node:fs";
-import shiki from "shiki";
+import { codeToHtml } from "shiki";
 
 export interface Props {
   file: string;
@@ -24,16 +24,16 @@ const langs = {
   editorconfig: "ini",
 };
 
-const file = fs.readFileSync(props.file, "utf-8");
-const content = await shiki
-  .getHighlighter({
-    theme: "dark-plus",
-  })
-  .then((highlighter) => {
-    const ext = props.file.split(".").pop();
-    if (ext) return highlighter.codeToHtml(file, { lang: langs[ext] });
-    return highlighter.codeToHtml(file, { lang: "plaintext" });
-  });
+async function code() {
+  const file = fs.readFileSync(props.file, "utf-8");
+  const ext = props.file.split(".").pop();
+  const lang = langs[ext] || "plaintext";
+  if (file && lang) {
+    return codeToHtml(file, { theme: "dark-plus", lang });
+  }
+}
+
+const content = await code();
 ---
 
 <div set:html={content}></div>

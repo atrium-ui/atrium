@@ -2,7 +2,7 @@
 title: Combobox
 ---
 import Example from "../../../components/Example.astro";
-import { Combobox } from "@sv/components/templates/combobox.tsx";
+import { Combobox } from "@sv/components/src/Combobox.vue.jsx";
 
 ```bash
 npx @sv/components combobox
@@ -10,21 +10,22 @@ npx @sv/components combobox
 
 A combobox dropdown
 
-<Example title="Example">
-  <div slot="preview">
-    <Combobox value="Select">
-      <Combobox.Item value="Item 1" />
-      <Combobox.Item value="Item 2" />
-      <Combobox.Item value="Item 3" />
+<Example title="Example" code={`
+---
+import { Combobox } from "./Combobox.vue.jsx";
+---
+
+<Combobox value="Select">
+  <Combobox.Item value="Item 1" />
+  <Combobox.Item value="Item 2" />
+  <Combobox.Item value="Item 3" />
+</Combobox>
+`}>
+  <div>
+    <Combobox client:load value="Select">
+      <Combobox.Item client:load value="Item 1" />
+      <Combobox.Item client:load value="Item 2" />
+      <Combobox.Item client:load value="Item 3" />
     </Combobox>
-  </div>
-  <div slot="code">
-    ```tsx
-      <Combobox value="Select">
-        <Combobox.Item value="Item 1" />
-        <Combobox.Item value="Item 2" />
-        <Combobox.Item value="Item 3" />
-      </Combobox>
-    ```
   </div>
 </Example>
