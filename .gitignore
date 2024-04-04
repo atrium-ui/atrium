@@ -29,3 +29,6 @@ dist
 target
 
 stats.html
+
+# docs built
+public
