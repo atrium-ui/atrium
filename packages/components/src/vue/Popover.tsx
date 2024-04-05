@@ -2,7 +2,7 @@
 
 import "@sv/elements/popover";
 
-import { Button } from "./Button.vue.jsx";
+import { Button } from "./Button.jsx";
 
 export function Popover(
   props: {

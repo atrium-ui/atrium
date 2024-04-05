@@ -4,8 +4,8 @@ import "@sv/elements/dropdown";
 import "@sv/elements/toggle";
 import "@sv/elements/expandable";
 
-import { Button } from "./Button.vue.jsx";
-import { Icon } from "./Icon.vue.jsx";
+import { Button } from "./Button.jsx";
+import { Icon } from "./Icon.jsx";
 
 export function Combobox(
   props: {

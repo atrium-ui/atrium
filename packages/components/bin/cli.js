@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
-import { resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import chalk from "chalk";
 import enquirer from "enquirer";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import dependencyTree from "dependency-tree";
 
-const componentRoot = resolve(fileURLToPath(import.meta.url), "../src/");
+const componentRoot = resolve(fileURLToPath(import.meta.url), "../../src/");
 
 const HELP = `
   Usage: cli [options] [components]
@@ -22,11 +23,10 @@ const HELP = `
  * @param {string} name
  * @param {string} [framework]
  */
-export function component(name, framework) {
-  if (framework) {
-    return resolve(componentRoot, `${name}.${framework}.tsx`);
-  }
-  return resolve(componentRoot, `${name}.tsx`);
+export async function component(name, framework = "vue") {
+  const file = resolve(componentRoot, framework, `${name}.tsx`);
+  const files = await peers(file);
+  return files;
 }
 
 export function detectFramework() {
@@ -44,14 +44,21 @@ export function detectFramework() {
   return undefined;
 }
 
+export async function peers(file) {
+  const list = dependencyTree.toList({
+    filename: file,
+    directory: componentRoot,
+    filter(mod) {
+      return !mod.match("node_modules");
+    },
+  });
+  return list;
+}
+
 /**
  * @param {string[]} args
  */
 export async function use(args = []) {
-  const availableComponents = readdirSync(componentRoot).map((file) =>
-    file.replace(".tsx", ""),
-  );
-
   const flags = {
     framework:
       (args.find((arg) => arg.startsWith("--vue")) && "vue") ||
@@ -66,6 +73,10 @@ export async function use(args = []) {
     process.stderr.write(HELP);
     return;
   }
+
+  const availableComponents = [
+    ...readdirSync(resolve(componentRoot, "vue")).map((file) => file.replace(".tsx", "")),
+  ];
 
   const components = args.filter((arg) => {
     if (availableComponents.includes(arg)) {
@@ -97,29 +108,30 @@ export async function use(args = []) {
     return;
   }
 
-  if (!flags.stdout) {
-    const dist = resolve("./components");
-
-    if (!existsSync(dist)) {
-      mkdirSync(dist, {
-        recursive: true,
-      });
-    }
-
-    for (const comp of components) {
-      const template = readFileSync(component(comp, flags.framework), "utf8");
-      const filename = `${dist}/${comp}${
-        flags.framework ? `.${flags.framework}` : ""
-      }.tsx`;
-      writeFileSync(filename, template);
-      process.stdout.write(`√ ${comp}\n`);
-    }
-  }
-
   if (flags.stdout) {
     for (const comp of components) {
-      const template = readFileSync(component(comp, flags.framework), "utf8");
-      process.stdout.write(template);
+      const files = await component(comp, flags.framework);
+      for (const file of files) {
+        process.stdout.write(readFileSync(file, "utf8"));
+      }
+    }
+    return;
+  }
+
+  const dist = resolve("./components");
+
+  if (!existsSync(dist)) {
+    mkdirSync(dist, {
+      recursive: true,
+    });
+  }
+
+  for (const comp of components) {
+    const files = await component(comp, flags.framework);
+    for (const file of files) {
+      const name = file.split("/").pop()?.split(".")[0];
+      writeFileSync(`${dist}/${name}.tsx`, readFileSync(file, "utf8"));
+      process.stdout.write(`√ ${name}\n`);
     }
   }
 }

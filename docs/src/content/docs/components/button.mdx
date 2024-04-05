@@ -4,7 +4,7 @@ title: Button
 
 import Example from "../../../components/Example.astro";
 import Icon from "../../../components/Icon.astro";
-import { Button, Link } from "@sv/components/src/Button.vue";
+import { Button, Link } from "@sv/components/src/vue/Button";
 
 ```bash
 npx @sv/components button
@@ -14,7 +14,7 @@ A button.
 
 <Example title="Example" code={`
 ---
-import { Button } from "./Button.vue";
+import { Button } from "./Button";
 ---
 
 <Button>Button</Button>
@@ -34,7 +34,7 @@ import { Button } from "./Button.vue";
 
 <Example title="Outline" code={`
 ---
-import { Button } from "./Button.vue";
+import { Button } from "./Button";
 ---
 
 <Button variant="outline">Button</Button>
@@ -54,7 +54,7 @@ import { Button } from "./Button.vue";
 
 <Example title="Ghost" code={`
 ---
-import { Button } from "./Button.vue";
+import { Button } from "./Button";
 ---
 
 <Button variant="ghost">Button</Button>
@@ -83,7 +83,7 @@ But sometimes you need a link that looks like a button. So we have a separate Li
 
 <Example code={`
 ---
-import { Link } from "./Button.vue";
+import { Link } from "./Button";
 ---
 
 <Link variant="default" href="https://google.com" target="_blank">To somewhere</Link>

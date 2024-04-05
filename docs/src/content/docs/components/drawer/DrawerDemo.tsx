@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
-import { Button } from "@sv/components/src/Button.vue.jsx";
-import { Drawer } from "@sv/components/src/Drawer.vue.jsx";
+import { Button } from "@sv/components/src/vue/Button.jsx";
+import { Drawer } from "@sv/components/src/vue/Drawer.jsx";
 import "@sv/elements/adaptive";
 import { createSignal } from "solid-js";
 import { paragraph } from "txtgen";

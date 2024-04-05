@@ -2,7 +2,7 @@
 
 import "@sv/elements/expandable";
 import { defineComponent } from "vue";
-import { Icon } from "./Icon.vue.jsx";
+import { Icon } from "./Icon.jsx";
 
 export const Accordion = defineComponent((_, { slots }) => {
   return () => <ul class="m-0 list-none p-0">{slots.default?.()}</ul>;
