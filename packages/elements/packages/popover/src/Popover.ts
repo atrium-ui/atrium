@@ -7,6 +7,31 @@ declare global {
   }
 }
 
+/**
+ * # a-popover
+ *
+ * - A wrapper element that shows content when the user clicks with the input element.
+ *
+ * ## Props
+ *
+ * @attribute direction (default: "down") - Controls the direction in that the content will be show from the origin element.
+ * @attribute opened (default: false) - Controls if the content is shown or not.
+ *
+ * @example
+ * ```html
+ * <a-popover>
+ *   <button type="button" slot="input">
+ *     Label
+ *   </button>
+ *
+ *   <div>
+ *     Content
+ *   </div>
+ * </a-popover>
+ * ```
+ *
+ * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-popover/
+ */
 @customElement("a-popover")
 export class Popover extends LitElement {
   public static styles = css`

@@ -3,42 +3,17 @@ title: a-popover
 description: A reference page in my new Starlight docs site.
 ---
 
+import TSDocs from "../../../components/TSDocs.astro"
 import Elements from "./elements/Elements.astro"
 
 <Elements />
 
 Implemented with [Popover](/sv-frontend-library/mono/components/popover).
 
-## Summary
-
-- A wrapper element that shows content when the user clicks with the input element.
-
-## Props
-
-- `opened` (boolean: default = false)
-
-  Controls if the content is shown or not.
-
-- `direction` ("up" | "down": default = "down")
-
-  Controls the direction in that the content will be show from the origin element.
+<TSDocs source="/elements/packages/popover/src/Popover.ts" />
 
 ## Slots
 
 - `input`
 
   The element that will trigger the opened state.
-
-## Examples
-
-```tsx
-<a-popover>
-  <button type="button" slot="input">
-    Label
-  </button>
-
-  <div>
-    Content
-  </div>
-</a-popover>
-```

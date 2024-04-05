@@ -9,6 +9,35 @@ declare global {
   }
 }
 
+/**
+ * # a-dropdown
+ *
+ * - Accessible and styleable dropdown component
+ * - Wraps the content in an a-expandable
+ *
+ * ## Props
+ *
+ * @attribute direction (default: "down") - In what direction the dropdown openes
+ * @attribute opened (default: false) - Whether the dropdown is open
+ * @attribute disabled (default: false) - Whether the dropdown is disabled.
+ * @attribute selected (default: undefined) - The selected option.
+ *
+ * @example
+ * ```html
+ * <a-dropdown>
+ *  <Button slot="input">
+ *    <div class="w-[150px] text-left">{props.value}</div>
+ *  </Button>
+ *
+ *  <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-800 p-1">
+ *    <a-option>Option 1</a-option>
+ *    <a-option>Option 2</a-option>
+ *  </div>
+ * </a-dropdown>
+ * ```
+ *
+ * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-dropdown/
+ */
 export class Dropdown extends LitElement {
   static get styles() {
     return css`

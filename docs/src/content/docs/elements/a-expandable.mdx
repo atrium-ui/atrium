@@ -6,35 +6,22 @@ description: A reference page in my new Starlight docs site.
 import "./styles/expandable.scss";
 import { paragraph } from "txtgen";
 import ExpandIcon from "./expandable/ExpandIcon.astro";
+import TSDocs from "../../../components/TSDocs.astro"
 import Elements from "./elements/Elements.astro"
 
 <Elements />
 
 Implemented with [Accordion](/sv-frontend-library/mono/components/accordion), [Combobox](/sv-frontend-library/mono/components/combobox), [Filter](/sv-frontend-library/mono/components/filter) and [Select](/sv-frontend-library/mono/components/select).
 
-## Summary
-
-- A wrapper element, that can collapse and expand its content with an animation.
-- It can include a trigger elemeent which is always visible.
-
-## Props
-
-- `opened` (boolean: default = false)
-
-  Controls the expand state of the element.
-
-- `direction` ("up" | "down": default = "down")
-
-  Controls the direction the element will expand.
+<TSDocs source="/elements/packages/expandable/src/Expandable.ts" />
 
 ## Slots
 
-- `toggle`
+- `input`
 
   The element that will trigger the expand state.
 
 ## Examples
-
 
 ```tsx
 <a-expandable opened class="accordion">

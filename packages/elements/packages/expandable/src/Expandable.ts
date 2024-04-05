@@ -7,6 +7,19 @@ declare global {
   }
 }
 
+/**
+ * # a-expandable
+ *
+ * - A wrapper element, that can collapse and expand its content with an animation.
+ * - It can include a trigger elemeent which is always visible.
+ *
+ * ## Props
+ *
+ * @attribute opened (default: false) - Controls the expand state of the element.
+ * @attribute direction (default: "down") - Controls the direction the element will expand.
+ *
+ * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-expandable/
+ */
 export class Expandable extends LitElement {
   public static get styles() {
     return [
