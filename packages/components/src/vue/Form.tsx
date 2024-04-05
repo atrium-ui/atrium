@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 
-import { Input } from "./Input.vue.jsx";
+import { Input } from "./Input.jsx";
 
 export function FormField(props: {
   field: {

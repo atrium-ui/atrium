@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 
-import { Button } from "./Button.vue.jsx";
+import { Button } from "./Button.jsx";
 
 // biome-ignore lint/complexity/noBannedTypes: <explanation>
 type Props = {};

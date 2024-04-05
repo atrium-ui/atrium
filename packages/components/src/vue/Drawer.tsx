@@ -3,7 +3,7 @@
 import { defineComponent, onMounted, onUpdated, ref } from "vue";
 import "@sv/elements/blur";
 import { Track, Trait } from "@sv/elements/track";
-import { Button } from "./Button.vue.jsx";
+import { Button } from "./Button.jsx";
 
 class DrawerTrait extends Trait {
   input() {

@@ -17,7 +17,7 @@ const gray = {
 export default {
   content: [
     "./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}",
-    "../packages/components/src/*.tsx",
+    "../packages/components/src/vue/*.tsx",
   ],
   theme: {
     extend: {

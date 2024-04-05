@@ -6,4 +6,4 @@ tasks:
   test:
     desc: Run tests for the cli
     cmds:
-      - bun test
+      - bun test {{.CLI_ARGS}}

@@ -8,17 +8,15 @@
     "test": "bun test"
   },
   "type": "module",
-  "main": "./cli.js",
-  "bin": "./cli.js",
-  "files": [
-    "components",
-    "./dist"
-  ],
+  "main": "./bin/cli.js",
+  "bin": "./bin/cli.js",
+  "files": ["src", "./dist"],
   "engines": {
     "node": ">=16"
   },
   "dependencies": {
-    "tailwind-merge": "^2.2.1",
-    "enquirer": "^2.4.1"
+    "dependency-tree": "^10.0.9",
+    "enquirer": "^2.4.1",
+    "tailwind-merge": "^2.2.1"
   }
 }

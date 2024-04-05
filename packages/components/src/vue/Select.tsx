@@ -3,7 +3,7 @@
 import "@sv/elements/dropdown";
 import "@sv/elements/expandable";
 
-import { Button } from "./Button.vue.jsx";
+import { Button } from "./Button.jsx";
 
 export function Select(
   props: {

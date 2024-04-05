@@ -1,4 +1,4 @@
-import { Slider } from "@sv/components/src/Slider.vue";
+import { Slider } from "@sv/components/src/vue/Slider";
 
 export default function () {
   return (
