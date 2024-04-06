@@ -5,11 +5,18 @@ import Example from "../../../components/Example.astro";
 import SomeFormExample from "./form/SomeForm.jsx?raw";
 import { SomeForm } from "./form/SomeForm";
 
+A styles input with error states and label.
+
 ```bash
 npx @sv/components form
 ```
 
-A styles input with error states and label.
+import Pill from "../../../components/Pill.astro";
+
+<div class="flex gap-2">
+  <Pill label="Button" href="/sv-frontend-library/mono/components/button" />
+  <Pill label="Input" href="/sv-frontend-library/mono/components/input" />
+</div>
 
 <Example title="Example" code={SomeFormExample}>
   <SomeForm client:load />

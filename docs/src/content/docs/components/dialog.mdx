@@ -5,11 +5,18 @@ import Example from "../../../components/Example.astro";
 import { Dialog } from "@sv/components/src/vue/Dialog";
 import { Button } from "@sv/components/src/vue/Button";
 
+A sheet is basically a burger menu. Composed of an a-blur.
+
 ```bash
 npx @sv/components dialog
 ```
 
-A sheet is basically a burger menu. Composed of an a-blur.
+import Pill from "../../../components/Pill.astro";
+
+<div class="flex gap-2">
+  <Pill label="a-blur" href="/sv-frontend-library/mono/elements/a-blur" />
+  <Pill label="Button" href="/sv-frontend-library/mono/components/button" />
+</div>
 
 <Example title="Example" code={`
 ---

@@ -1,22 +1,20 @@
 /* @jsxImportSource vue */
 
-import { twMerge } from "tailwind-merge";
-
 export const buttonVariants = {
   base: [
-    "flex gap-2 items-center cursor-pointer leading-none",
-    "rounded-lg px-4 py-2 transition-all active:transition-none",
+    "flex cursor-pointer items-center gap-2 leading-none",
+    "rounded-lg px-3 py-2 transition-all active:transition-none",
     "outline-none focus-visible:ring focus-visible:ring-[currentColor]",
   ],
   default: [
     "bg-[var(--button-color,#bfa188)]",
-    "filter hover:brightness-110 active:brightness-90 active:contrast-125",
-    "border border-width-[var(--button-border-width,1px)] border-[var(--button-color,transparent)]",
+    "filter active:brightness-90 hover:brightness-110 active:contrast-125",
+    "border border-[var(--button-color,#bfa188)] border-width-[var(--button-border-width,1px)]",
   ],
   outline: [
     "bg-transparent hover:bg-[rgba(150,150,150,0.1)]",
-    "filter hover:brightness-110 active:brightness-90 active:contrast-125",
-    "border border-width-[var(--button-border-width,1px)] border-[var(--button-color,currentColor)]",
+    "filter active:brightness-90 hover:brightness-110 active:contrast-125",
+    "border border-[var(--button-color,currentColor)] border-width-[var(--button-border-width,1px)]",
   ],
   ghost: [
     "bg-transparent active:bg-[rgba(150,150,150,0.1)]",
@@ -27,10 +25,11 @@ export const buttonVariants = {
 export function Button(
   props: {
     type?: "button" | "submit";
-    class?: string;
+    class?: string | string[];
     disabled?: boolean;
     variant?: keyof typeof buttonVariants;
     slot?: string;
+    label?: string;
     onClick?: (e: MouseEvent) => void;
   },
   { slots },
@@ -40,13 +39,14 @@ export function Button(
       // @ts-ignore
       slot={props.slot}
       type={props.type || "button"}
-      class={twMerge(
+      class={[
         buttonVariants.base,
         buttonVariants[props.variant ?? "default"],
+        props.class,
         // the disabled prop is not used as attribute, for accessibility reasons
         props.disabled && "cursor-not-allowed opacity-80",
-        props.class,
-      )}
+      ]}
+      aria-label={props.label}
       onClick={(event) => {
         if (!props.disabled && props.onClick) props.onClick(event);
       }}
@@ -66,12 +66,12 @@ export function Link(
 ) {
   return (
     <a
-      class={twMerge(
+      class={[
         "inline text-inherit no-underline",
         "transition-all active:transition-none",
         props.variant && buttonVariants.base,
         buttonVariants[props.variant ?? "default"],
-      )}
+      ]}
       href={props.href}
       target={props.target}
     >

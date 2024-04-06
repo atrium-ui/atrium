@@ -1,4 +1,5 @@
 ---
+import { Tabs, TabItem } from "@astrojs/starlight/components";
 import { codeToHtml } from "shiki";
 
 export interface Props {
@@ -13,8 +14,15 @@ const content =
 
 <h3>{Astro.props.title}</h3>
 
-<div class="not-content box w-full flex flex-col items-center justify-center">
-  <slot></slot>
+<div>
+  <Tabs>
+    <TabItem label="Preview">
+    <div class="not-content box w-full flex flex-col items-center justify-center">
+      <slot></slot>
+    </div>
+    </TabItem>
+    <TabItem label="Code">
+      <div set:html={content}></div>
+    </TabItem>
+  </Tabs>
 </div>
-
-<div set:html={content}></div>

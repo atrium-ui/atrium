@@ -1,23 +1,5 @@
----
-title: Slider
----
+/* @jsxImportSource vue */
 
-import Example from "../../../components/Example.astro";
-import { SomeSlider } from "./slider/Slider.jsx";
-import Pill from "../../../components/Pill.astro";
-
-Just a slider.
-
-```bash
-npx @sv/components slider
-```
-
-<div class="flex gap-2">
-  <Pill label="a-track" href="/sv-frontend-library/mono/elements/a-track" />
-  <Pill label="Button" href="/sv-frontend-library/mono/components/button" />
-</div>
-
-<Example title="Example" code={`
 import { Slider } from "@sv/components/src/vue/Slider";
 
 export const SomeSlider = () => (
@@ -38,11 +20,21 @@ export const SomeSlider = () => (
         loading="lazy"
       />
     </div>
+    <div class="h-[500px] w-full flex-none p-2">
+      <img
+        class="h-full w-full bg-zinc-400 object-cover"
+        src="https://picsum.photos/900/480"
+        alt="alt"
+        loading="lazy"
+      />
+    </div>
+    <div class="h-[500px] w-full flex-none p-2">
+      <img
+        class="h-full w-full bg-zinc-400 object-cover"
+        src="https://picsum.photos/900/480"
+        alt="alt"
+        loading="lazy"
+      />
+    </div>
   </Slider>
 );
-
-`}>
-  <div class="w-full">
-    <SomeSlider client:load />
-  </div>
-</Example>
