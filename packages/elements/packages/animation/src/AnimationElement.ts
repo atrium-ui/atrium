@@ -1,12 +1,12 @@
+import * as rive from "@rive-app/canvas-single";
 import {
-  css,
-  html,
-  type HTMLTemplateResult,
-  LitElement,
-  type PropertyValueMap,
+    LitElement,
+    css,
+    html,
+    type HTMLTemplateResult,
+    type PropertyValueMap,
 } from "lit";
 import { property, query } from "lit/decorators.js";
-import * as rive from "@rive-app/canvas-single";
 const { Rive } = rive;
 
 declare global {
@@ -15,6 +15,27 @@ declare global {
   }
 }
 
+/**
+* # a-animation
+* Rive animation
+*
+* ## Props
+*
+* @attribute width - Canvas width
+* @attribute height - Canvas height
+* @attribute src - Path to .riv file
+*
+* @example
+* ```html
+* <a-animation
+*   height={props.height || 200}
+*   width={props.width || 200}
+*   src={props.src}
+* />
+* ```
+*
+* @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-animation/
+*/
 export class AnimationElement extends LitElement {
   public static styles = css`
     canvas {

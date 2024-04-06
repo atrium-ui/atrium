@@ -4,18 +4,19 @@ title: Slider
 
 import Example from "../../../components/Example.astro";
 import { SomeSlider } from "./slider/Slider.jsx";
-import Pill from "../../../components/Pill.astro";
 
 Just a slider.
+
+import { Pills, Atrium } from "../../../components/Pills";
+
+<Pills>
+  <Atrium label="a-track" href="/sv-frontend-library/mono/elements/a-track" />
+  <Atrium label="Button" href="/sv-frontend-library/mono/components/button" />
+</Pills>
 
 ```bash
 npx @sv/components slider
 ```
-
-<div class="flex gap-2">
-  <Pill label="a-track" href="/sv-frontend-library/mono/elements/a-track" />
-  <Pill label="Button" href="/sv-frontend-library/mono/components/button" />
-</div>
 
 <Example title="Example" code={`
 import { Slider } from "@sv/components/src/vue/Slider";

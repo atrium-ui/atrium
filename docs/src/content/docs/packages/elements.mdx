@@ -6,6 +6,14 @@ description: A reference page in my new Starlight docs site.
 import Changelog from "package:/components/Changelog.astro";
 import Command from "package:/components/Command.astro"
 
+This package includes all custom-elements used in components.
+
+import { Pills, Lit } from "../../../components/Pills";
+
+<Pills>
+  <Lit />
+</Pills>
+
 ## Installation
 
 Make sure your project is set up with access to the registry as described in [Setup](/sv-frontend-library/mono/setup).
@@ -27,10 +35,6 @@ Make sure your project is set up with access to the registry as described in [Se
     ```
   </div>
 </Command>
-
-## Usage
-
-See [usage](../../usage).
 
 ## Changelog
 

@@ -5,6 +5,14 @@ description: A reference page in my new Starlight docs site.
 
 import Changelog from "package:/components/Changelog.astro";
 
+This package distributes all Component Templates including a convenient cli.
+
+import { Pills, Vue } from "../../../components/Pills";
+
+<Pills>
+  <Vue />
+</Pills>
+
 ## CLI
 
 Make sure your project is set up with access to the registry as described in [Setup](/sv-frontend-library/mono/setup).
@@ -17,6 +25,10 @@ npx @sv/components
 
 - `--vue` - Overwrite framework detection and use Vue
 - `--stdout` - Output template to stdout instead of writing to file
+
+## Usage
+
+See [usage](../../usage).
 
 ## Changelog
 

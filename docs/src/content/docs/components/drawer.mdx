@@ -7,16 +7,16 @@ import { DrawerDemo } from "./drawer/DrawerDemo.jsx";
 
 A sheet is basically a burger menu. Composed of an a-blur.
 
+import { Pills, Atrium } from "../../../components/Pills";
+
+<Pills>
+  <Atrium label="a-track" href="/sv-frontend-library/mono/elements/a-track" />
+  <Atrium label="a-adaptive" href="/sv-frontend-library/mono/elements/a-adaptive" />
+</Pills>
+
 ```bash
 npx @sv/components dialog
 ```
-
-import Pill from "../../../components/Pill.astro";
-
-<div class="flex gap-2">
-  <Pill label="a-track" href="/sv-frontend-library/mono/elements/a-track" />
-  <Pill label="a-adaptive" href="/sv-frontend-library/mono/elements/a-adaptive" />
-</div>
 
 <Example title="Example" code={DrawerDemoRaw}>
   <DrawerDemo client:load />
