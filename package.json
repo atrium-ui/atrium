@@ -27,5 +27,6 @@
     "packages/elements/packages/*",
     "packages/slider/packages/*",
     "docs"
-  ]
+  ],
+  "prettier": "@sv/codestyle/.prettierrc.json"
 }
