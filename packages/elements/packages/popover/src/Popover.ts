@@ -87,30 +87,15 @@ export class Popover extends LitElement {
       transition-property: all;
     }
 
-    @keyframes scale-up {
-      from {
-        transform: translateY(-5px);
-      }
-    }
-
-    @keyframes scale-down {
-      to {
-        transform: translateY(-5px);
-      }
-    }
-
     .content {
       display: block;
       position: absolute;
-    }
-
-    :host([opened]) .content {
-      animation: scale-up 0.2s ease both;
+      width: 0px;
+      height: 0px;
     }
 
     :host(:not([opened])) .content {
       pointer-events: none;
-      animation: scale-down 0.2s ease both;
     }
   `;
 
@@ -223,16 +208,19 @@ export class Popover extends LitElement {
         alignBottom(content);
       }
 
-      if (bounds.right > window.innerWidth) {
+      if (
+        trigger.left - contentWidth / 2 > 0 &&
+        trigger.right + contentWidth / 2 < window.innerWidth
+      ) {
+        // center
+        content.style.left = `calc(50% - ${contentWidth / 2}px)`;
+        content.style.right = "auto";
+      } else if (bounds.right > window.innerWidth) {
         // align left
         alignLeft(content);
       } else if (bounds.left <= 0) {
         // align right
         alignRight(content);
-      } else {
-        // center
-        content.style.left = `calc(50% - ${contentWidth / 2}px)`;
-        content.style.right = "auto";
       }
     };
 
