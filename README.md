@@ -1,6 +1,6 @@
 <p align="center" style="text-align:cetner;">
   <p align="center" style="text-align:cetner;">
-   <img width="150" height="150" src="docs/src/assets/atrium-dark.png" alt="Logo">
+   <img width="150" height="150" src="docs/assets/atrium-dark.png" alt="Logo">
   </p>
 	<h1 align="center" style="text-align:cetner;"><b>Atrium Mono</b></h1>
 	<p align="center" style="text-align:cetner;">

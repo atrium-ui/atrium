@@ -10,18 +10,12 @@ It includes libraries, web-components and component templates designed to be ind
 
 The components in this library are composed of two layers:
 
-- The first layer is the **Elements** layer. Elements are "Headless" components that only implement behavior and no styling.
+- The first layer is the **Components** layer. Components are pre-styled and implement Elements to provide a more specific use case.
 
-- The second layer is the **Components** layer. Components are pre-styled and implement Elements to provide a more specific use case.
+- The second layer is the **Elements** layer. Elements are "Headless" components that only implement behavior without fixed styling.
 
 
 This approach gives the given project ownership over the components design. We start with sensible defaults, then change the design for the projects needs.
-
-## Elements
-
-Elements are built as web-components using [Lit](https://lit.dev/docs/) which make them framework agnostic. They can be used in any framework or even without a framework.
-
-These web-components are imported from node_modules, they do not use tailwind, their minimal styles are defined in regular css inside the element itself.
 
 ## Component Templates
 
@@ -31,3 +25,23 @@ They are styled using [TailwindCSS](https://tailwindcss.com/) and written as JSX
 Components can have dependencies on other packages, though when "using" a component you do not import the component itself, but a copy of it. This copy can be freely changed and styled. In the same way, that makes it possible to update or change the component without breaking the websites that use it.
 
 Inspired by https://ui.shadcn.com/.
+
+## Elements
+
+Elements are built as web-components using [Lit](https://lit.dev/docs/) which make them framework agnostic. They can be used in any framework or even without a framework.
+
+These web-components are imported from node_modules, they do not use tailwind, their minimal styles are defined in regular css inside the element itself.
+
+### Server side rendering
+
+Unless specific plugins for Lit SSR are used, **Elements** are not fully server side rendered. The custom-element tags will exist in the markup (like *\<a-track\/\>*), but only on the client the markup of the [shadow-root](https://lit.dev/docs/components/shadow-dom/) is generated.
+
+This does not apply for the children of the Element, those are still rendered by the framework. Only the presentation of those children may vary from server to final hydrated client.
+
+### Extending Elements
+
+Extending custom-element classes gives you the posibility to almost completly change or overwrite specific behaviours of a custom-element.
+
+[Read more](https://lit.dev/docs/composition/mixins/)
+
+To reduce complexity, this is not recommended, but if needed, available.
