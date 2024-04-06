@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.9.0
+
+### Minor Changes
+
+- 1300f04: a-popover: automatically determine direction of popover
+
 ## 0.8.0
 
 ### Minor Changes
