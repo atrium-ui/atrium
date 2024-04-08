@@ -16,11 +16,13 @@ process.exit(
       return 1;
     }
 
+    const root = getRootPackagePaath();
+
     for (const arg of args) {
       switch (arg) {
         case "tsconfig":
           writeFile(
-            path.join(getRootPackagePaath(), "tsconfig.json"),
+            path.join(root, "tsconfig.json"),
             JSON.stringify(
               {
                 $schema: "http://json.schemastore.org/tsconfig",
@@ -34,7 +36,7 @@ process.exit(
 
         case "biome":
           writeFile(
-            path.join(getRootPackagePaath(), "biome.json"),
+            path.join(root, "biome.json"),
             JSON.stringify(
               {
                 $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
@@ -51,11 +53,25 @@ process.exit(
           installPackage("@biomejs/biome");
           break;
 
+        case "prettier": {
+          const pkgpath = path.join(root, "package.json");
+          try {
+            const pkg = fs.readFileSync(pkgpath);
+            const json = JSON.parse(pkg.toString());
+            // @ts-ignore
+            json.prettier = "@sv/codestyle/.prettierrc.json";
+            fs.writeFileSync(pkgpath, JSON.stringify(json, null, "  "));
+          } catch (err) {
+            console.error(err);
+          }
+          break;
+        }
+
         case "editorconfig": {
           const __filename = fileURLToPath(import.meta.url);
           copyFile(
             path.resolve(__filename, "../../.editorconfig"),
-            path.join(getRootPackagePaath(), ".editorconfig"),
+            path.join(root, ".editorconfig"),
           );
           break;
         }

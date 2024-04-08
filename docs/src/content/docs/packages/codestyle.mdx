@@ -56,7 +56,8 @@ Automatically setup the configuration in your project by running the following c
   </TabItem>
 </Tabs>
 
-<br/><br/>
+<br/>
+<br/>
 
 ## Manual setup
 
@@ -76,7 +77,7 @@ For the biome configuration to work with your editior, the `biome.json` file nee
 
 ### Prettier
 
-Prettier [docs](https://prettier.io/docs/en/configuration.html).
+We should use Biome for js formatting but Prettier is still useful for many other files and integrations.
 
 ```json
 // package.json
@@ -84,6 +85,18 @@ Prettier [docs](https://prettier.io/docs/en/configuration.html).
   "name": "your-package",
   ...
   "prettier": "@sv/codestyle/.prettierrc.json"
+}
+```
+
+Prettier [docs](https://prettier.io/docs/en/configuration.html).
+
+### TypeScript
+
+```json
+// tsconfig.json
+{
+  "$schema": "http://json.schemastore.org/tsconfig",
+  "extends": ["@sv/codestyle/tsconfig.json"]
 }
 ```
 
@@ -95,6 +108,12 @@ module.exports = {
   extends: ["@sv/codestyle/commitlint.cjs"],
 };
 ```
+
+<br/>
+
+:::note
+Reccomended for a new setup is biome instead of eslint and stylelint.
+:::
 
 ### ESLint
 
@@ -112,16 +131,6 @@ module.exports = {
 module.exports = {
   extends: ["@sv/codestyle/stylelint.config.cjs"],
 };
-```
-
-### TypeScript
-
-```json
-// tsconfig.json
-{
-  "$schema": "http://json.schemastore.org/tsconfig",
-  "extends": ["@sv/codestyle/tsconfig.json"]
-}
 ```
 
 <br/><br/>
