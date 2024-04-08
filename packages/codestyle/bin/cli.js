@@ -6,6 +6,10 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
+function json(obj) {
+  return JSON.stringify(obj, null, "  ");
+}
+
 process.exit(
   (() => {
     const args = process.argv.slice(2);
@@ -23,28 +27,20 @@ process.exit(
         case "tsconfig":
           writeFile(
             path.join(root, "tsconfig.json"),
-            JSON.stringify(
-              {
-                $schema: "http://json.schemastore.org/tsconfig",
-                extends: ["@sv/codestyle/tsconfig.json"],
-              },
-              null,
-              "  ",
-            ),
+            json({
+              $schema: "http://json.schemastore.org/tsconfig",
+              extends: ["@sv/codestyle/tsconfig.json"],
+            }),
           );
           break;
 
         case "biome":
           writeFile(
             path.join(root, "biome.json"),
-            JSON.stringify(
-              {
-                $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
-                extends: ["@sv/codestyle/biome"],
-              },
-              null,
-              "  ",
-            ),
+            json({
+              $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
+              extends: ["@sv/codestyle/biome"],
+            }),
           );
           console.info(
             "[codestyle] See https://biomejs.dev/guides/integrate-in-editor/ for editor integration.",
@@ -54,13 +50,12 @@ process.exit(
           break;
 
         case "prettier": {
-          const pkgpath = path.join(root, "package.json");
+          const pkgpath = path.join(root, "./package.json");
           try {
-            const pkg = fs.readFileSync(pkgpath);
-            const json = JSON.parse(pkg.toString());
+            const pkg = JSON.parse(fs.readFileSync(pkgpath).toString());
             // @ts-ignore
-            json.prettier = "@sv/codestyle/.prettierrc.json";
-            fs.writeFileSync(pkgpath, JSON.stringify(json, null, "  "));
+            pkg.prettier = "@sv/codestyle/.prettierrc.json";
+            fs.writeFileSync(pkgpath, json(pkg));
             console.info(
               `[codestyle] prettier installed in ${path.relative(root, pkgpath)}`,
             );
