@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.7.0
+
+### Minor Changes
+
+- ce61d0a: Added css and json overrides to prettier. +prettier cli command
+
 ## 0.6.1
 
 ### Patch Changes
