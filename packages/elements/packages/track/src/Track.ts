@@ -261,18 +261,9 @@ export class SnapTrait extends Trait {
 }
 
 /**
- * # a-track
- *
  * - A Track is a custom element that provides a interface for scrolling content.
  * - It can be used to create carousels, slideshows, and other scrolling elements.
  * - It provides functions to go to a specific child element, emits events on changes, and optimizes ux based input device.
- *
- * ## Props
- *
- * @attribute snap (default: false) - Whether the track should snap to the closest child element.
- * @attribute loop (default: false) - Whether the track should loop back to the start when reaching the end.
- * @attribute vertical (default: false) - Whether the track should scroll vertically.
- * @attribute align (default: "start") - The alignment of the track. Can be "start" or "end".
  *
  * @example
  * ```html
@@ -511,21 +502,28 @@ export class Track extends LitElement {
     return undefined;
   }
 
+  /**
+   * Whether the track should scroll vertically.
+   */
   @property({ type: Boolean, reflect: true }) vertical = false;
+
+  /**
+   * Whether the track should loop back to the start when reaching the end.
+   */
   @property({ type: Boolean, reflect: true }) loop = false;
 
   /**
-   * Enable snapping to items
+   * Whether the track should snap to the closest child element.
    */
   @property({ type: Boolean, reflect: true }) snap = false;
 
   /**
-   * item alignment in the track. "start" (left/top) or "end" (right/bottom)
+   * Item alignment in the track. "start" (left/top) or "end" (right/bottom)
    */
   @property({ type: String }) align: "start" | "end" = "start";
 
   /**
-   * only scroll when items are overflown
+   * Only scroll when items are overflown. Like "overflow: auto".
    */
   @property({ type: Boolean, reflect: true }) overflowscroll = false;
 

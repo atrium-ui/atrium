@@ -1,34 +1,74 @@
 ---
-import dependents from "../../assets/dependents.json";
-// This file comes from https://tihav.pages.s-v.de/gitlab-dependency-analysis/dependents.json.
-// It scrapes the GitLab API for all projects once every month.
+const baseUrl = "https://gitlab.s-v.de/api/v4";
+const token = import.meta.env.GITLAB_DEPENDENCY_ANALYSIS;
 
-const project = dependents["1455"];
 const projects = new Set();
+const project = token ? await getProject() : undefined;
 
-for (const dep of project.dependents) {
-  projects.add(dep.project.gitlabId);
+async function getProject() {
+  const res = await fetch(
+    `${baseUrl}/projects/1485/jobs/artifacts/main/raw/public/dependents.json?job=pages`,
+    {
+      headers: {
+        "PRIVATE-TOKEN": token,
+      },
+    },
+  );
+  const tree = await res.json();
+  const project = tree["1455"];
+
+  for (const dep of project.dependents) {
+    projects.add(dep.project.gitlabId);
+  }
+
+  return project;
+}
+
+async function avatar(project) {
+  const id = project.gitlabId;
+
+  // needs gitlab >=v16.9
+  return await fetch(`${baseUrl}/projects/${id}/avatar`, {
+    headers: {
+      "PRIVATE-TOKEN": token,
+    },
+  }).then(async (res) => {
+    if (res.status !== 200) return;
+
+    const blob = await res.blob();
+    const buffer = Buffer.from(await blob.arrayBuffer());
+    return `data:${blob.type};base64,${buffer.toString("base64")}`;
+  });
 }
 ---
 
-<div class="not-content box dependents">
-  {[...projects].map(id => {
-    return project.dependents.find(dep => dep.project.gitlabId === id);
-  }).map((dep: any) => {
-    const url = dep.project.web_url;
-    const name = dep.project.name;
-    const title = dep.project.name_with_namespace;
-    const image = dep.project.avatar_url;
+{token ? <h3>Used by</h3> : null}
+{
+  token ? (
+    <div class="not-content box dependents">
+      {await Promise.all(
+        [...projects]
+          .map(id => {
+            return project.dependents.find(dep => dep.project.gitlabId === id);
+          })
+          .map(async (dep: any) => {
+            const url = dep.project.web_url;
+            const name = dep.project.name;
+            const title = dep.project.name_with_namespace;
+            const avatarUri = await avatar(dep.project);
 
-    return (
-      <div class="project">
-        <a href={url} class="avatar" title={title}>
-          {image ? <img src={image} /> : name[0]}
-        </a>
-      </div>
-    );
-  })}
-</div>
+            return (
+              <div class="project">
+                <a href={url} class="avatar" title={title}>
+                  {avatarUri ? <img src={avatarUri} /> : name[0]}
+                </a>
+              </div>
+            );
+          }),
+      )}
+    </div>
+  ) : null
+}
 
 <style>
   .dependents {
@@ -43,7 +83,7 @@ for (const dep of project.dependents) {
     overflow: hidden;
     border-radius: 6px;
     color: black;
-    font-size: var(--size);
+    font-size: calc(var(--size) * 0.65);
     font-weight: bold;
     width: var(--size);
     height: var(--size);
@@ -51,6 +91,9 @@ for (const dep of project.dependents) {
     justify-content: center;
     align-items: center;
     text-decoration: none;
+    text-transform: capitalize;
+    color: white;
+    background: #333;
   }
 
   .avatar img {

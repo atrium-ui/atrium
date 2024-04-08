@@ -9,7 +9,7 @@ export function Icon(props: {
         "relative top-[0.15em] inline-block align-baseline leading-none [&>svg]:h-[1em] [&>svg]:w-[1em]",
       ]}
     >
-      {ICONS[props.name]}
+      {ICONS[props.name || "unknown"]}
     </span>
   );
 }

@@ -18,13 +18,9 @@ npx @sv/components animation
 ```
 
 <Example title="Example" code={`
----
 import { Animation } from './Animation.jsx'
----
 
-<Animation width={200} height={200} src="/sv-frontend-library/mono/loader.riv" />
+<Animation width={400} height={400} src="/sv-frontend-library/mono/pie-runtime.riv" />
 `}>
-  <div class="aspect-square w-[200px]">
-    <Animation client:load width={200} height={200} src="/sv-frontend-library/mono/loader.riv" />
-  </div>
+  <Animation client:load width={400} height={400} src="/sv-frontend-library/mono/pie-runtime.riv" />
 </Example>

@@ -1,0 +1,124 @@
+---
+import path from "node:path";
+import { Application, Serializer } from "typedoc";
+import { remark } from "remark";
+import remarkHtml from "remark-html";
+import { codeToHtml } from "shiki";
+
+export interface Props {
+  source: string;
+}
+
+const props = Astro.props;
+
+async function parse(options: { pkg: string; entry: string; config?: string }) {
+  const base = path.resolve(options.pkg);
+  const app = await Application.bootstrap({
+    basePath: base,
+    exclude: ["**/node_modules/**"],
+    includes: `${base}/src/*`,
+    entryPoints: [`${base}${options.entry}`],
+    tsconfig: options.config ? `${base}${options.config}` : `${base}/tsconfig.json`,
+    validation: false,
+    cacheBust: false,
+    emit: "none",
+  });
+  const project = await app.convert();
+  if (project) {
+    const doc = new Serializer().projectToObject(project, process.cwd());
+
+    const d = {
+      summary: "",
+      example: "",
+    };
+
+    return doc;
+  }
+}
+
+function declaration(obj, name) {
+  return obj.children?.find((c) => c.name === name);
+}
+
+function children(obj) {
+  return obj.children?.filter((c) => !c.flags.isExternal && c.comment);
+}
+
+async function toHtml(content: any[]) {
+  let html = "";
+
+  for (const item of content) {
+    switch (item.kind) {
+      case "text": {
+        html += remark().use(remarkHtml).processSync(item.text);
+        break;
+      }
+      case "code": {
+        const lines = item.text.split("\n");
+        const code = lines.slice(1, lines.length - 1).join("\n");
+
+        html += await codeToHtml(code, {
+          lang: "tsx",
+          theme: "dark-plus",
+        });
+        break;
+      }
+    }
+  }
+
+  return html;
+}
+
+async function Summary({ doc, symbol }) {
+  const obj = declaration(doc, symbol)?.comment;
+  return await toHtml(obj?.summary);
+}
+
+async function Attributes({ doc, symbol }) {
+  const fields = children(declaration(doc, symbol));
+  return Promise.all(
+    fields.map(async (field) => {
+      const html = `
+        <li class="pt-2">
+          <div class="align-top inline-block">
+            <code>${field.name}${
+              field.type.name ? `: ${field.type.name}` : ""
+            }</code> (default: ${field.defaultValue})
+            <div class="pt-2">${await toHtml(field.comment.summary)}</div>
+          </div>
+        </li>
+      `;
+      return html;
+    }),
+  );
+}
+
+function Methods() {
+  return null;
+}
+
+async function Example({ doc, symbol }) {
+  const obj = declaration(doc, symbol)?.comment;
+  const block = obj?.blockTags.find((t) => t.tag === "@example")?.content;
+  return await toHtml(block);
+}
+
+const doc = await parse({
+  pkg: props.source,
+  entry: "/src/index.ts",
+  config: "/tsconfig.json",
+});
+---
+
+<div class="typedoc pb-10 pt-4">
+  <h2>Summary</h2>
+  <div set:html={Summary({ doc, symbol: "Track" })} />
+
+  <h2>Attributes</h2>
+  <div set:html={Attributes({ doc, symbol: "Track" })} />
+
+  <div set:html={Methods({ doc, symbol: "Track" })} />
+
+  <h2>Example</h2>
+  <div set:html={Example({ doc, symbol: "Track" })} />
+</div>
