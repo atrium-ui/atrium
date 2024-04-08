@@ -1,4 +1,4 @@
-import { LitElement, PropertyValueMap, css, html } from "lit";
+import { LitElement, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
 import { query } from "lit/decorators/query.js";
 import { Vec } from "./Vec.js";
@@ -65,7 +65,7 @@ export class Trait<T extends Track = Track> {
   }
 
   created() {
-    // ...
+    // trait created
   }
 
   start() {
@@ -76,7 +76,7 @@ export class Trait<T extends Track = Track> {
     // called on animation stop
   }
 
-  input(inputState: InputState) {
+  input(_inputState: InputState) {
     // input tick
   }
 
@@ -127,25 +127,24 @@ export class PointerTrait extends Trait {
       this.grabDelta.set(track.mousePos).sub(this.grabbedStart);
     }
 
-    if (inputState.release.value) {
-      this.grabbing = false;
-      this.entity.dispatchEvent(new Event("pointer:release"));
-    }
-
-    this.moveVelocity.mul(0.3);
+    // TODO: might want to give every trait a "inputForce",
+    //       so I dont have to mutate the tracks fields.
 
     if (this.grabbing) {
       if (inputState.move.value.abs()) {
         this.moveVelocity.add(inputState.move.value);
-        track.inputForce.set(inputState.move.value).mul(-1);
+        track.inputForce.set(inputState.move.value.clone().mul(-1));
       } else {
-        if (this.grabbing) {
-          track.inputForce.mul(0);
-        }
+        track.inputForce.mul(0);
       }
     }
 
+    this.moveVelocity.mul(0.7);
+
     if (inputState.release.value) {
+      this.grabbing = false;
+      this.entity.dispatchEvent(new Event("pointer:release"));
+
       track.inputForce.set(this.moveVelocity.clone().mul(-1));
     }
 
@@ -165,6 +164,12 @@ export class PointerTrait extends Trait {
   update() {
     const track = this.entity;
     if (track.scrolling) return;
+
+    if (this.grabbing) {
+      track.drag = 0;
+    } else {
+      track.drag = 0.95;
+    }
 
     // clamp input force
     const pos = Vec.add(track.position, track.inputForce);
@@ -187,12 +192,6 @@ export class PointerTrait extends Trait {
         track.inputForce.sub(diff.mul(bounce));
         track.acceleration.mul(0);
       }
-    }
-
-    if (!this.grabbing) {
-      track.acceleration.add(track.inputForce);
-    } else {
-      track.acceleration.mul(0);
     }
   }
 
@@ -250,11 +249,12 @@ export class SnapTrait extends Trait {
     }
 
     // Only when decelerating
-    if (!track.vertical && track.deltaVelocity.x > 0) return;
-    if (track.vertical && track.deltaVelocity.y > 0) return;
+    if (!track.vertical && track.deltaVelocity.x >= 0) return;
+    if (track.vertical && track.deltaVelocity.y >= 0) return;
 
     // Only when velocity is low
-    if (track.velocity.abs() > 0.9) return;
+    if (track.lastVelocity.abs() > 4) return;
+    // this checks lastVelocity, because I don't know why velocity is 0,0 at random points.
 
     track.setTarget(track.getClosestItemPosition(), "ease");
   }
@@ -440,22 +440,21 @@ export class Track extends LitElement {
   public mousePos = new Vec();
   public inputForce = new Vec();
 
-  public origin = new Vec();
-  private lastPosition = new Vec();
-  public position = new Vec();
-  private lastVelocity = new Vec();
-  public velocity = new Vec();
-  public acceleration = new Vec();
-  public direction = new Vec();
-
   public drag = 0.95;
+  public origin = new Vec();
+  public position = new Vec();
+  public velocity = new Vec();
+  public direction = new Vec();
+  public acceleration = new Vec();
+  public lastVelocity = new Vec();
+  private lastPosition = new Vec();
 
   public target?: Vec;
+  public targetEasing: Easing = "linear";
   private targetForce = new Vec();
   private targetStart = new Vec();
-  public targetEasing: Easing = "linear";
 
-  public transitionTime = 750;
+  public transitionTime = 500;
   private transitionAt = 0;
   private transition = 0;
 
@@ -871,16 +870,22 @@ export class Track extends LitElement {
     this.lastPosition = this.position.clone();
     this.lastVelocity = this.velocity.clone();
 
+    this.acceleration.mul(this.drag);
+
     this.trait((t) => t.update());
 
     this.acceleration.add(this.inputForce);
-    this.position.add(this.acceleration);
-
     this.inputForce.mul(0);
-    this.acceleration.mul(this.drag);
+
+    this.position.add(this.acceleration);
 
     if (this.target !== undefined) {
       switch (this.targetEasing) {
+        // case "smooth":
+        //   {
+        //     // TODO: implement exponential smoothing
+        //   }
+        //   break;
         case "ease":
           {
             this.transition = timer(this.transitionAt, this.transitionTime);

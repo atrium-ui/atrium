@@ -53,7 +53,7 @@ export const Slider = defineComponent((_, { slots }) => {
         <Button
           variant="ghost"
           class={[
-            "-translate-y-1/2 absolute top-1/2 left-4 z-10 transform text-2xl opacity-0 transition-all lg:block",
+            "-translate-y-1/2 absolute top-1/2 left-4 z-10 hidden transform text-2xl opacity-0 transition-all lg:block",
             showPrevious.value ? "group-hover:opacity-100" : "cursor-default opacity-0",
           ]}
           onClick={() => track.value?.moveBy(-1)}
@@ -63,7 +63,7 @@ export const Slider = defineComponent((_, { slots }) => {
         <Button
           variant="ghost"
           class={[
-            "-translate-y-1/2 absolute top-1/2 right-4 z-10 transform text-2xl opacity-0 transition-all lg:block",
+            "-translate-y-1/2 absolute top-1/2 right-4 z-10 hidden transform text-2xl opacity-0 transition-all lg:block",
             showNext.value ? "group-hover:opacity-100" : "cursor-default opacity-0",
           ]}
           onClick={() => track.value?.moveBy(1)}

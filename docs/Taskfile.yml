@@ -8,7 +8,7 @@ tasks:
     dir: ./
     cmds:
       - cd .. && task build
-      - bun x astro dev
+      - bun x astro dev --host
 
   build:
     desc: Builds the docs into the public folder
