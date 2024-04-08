@@ -30,20 +30,20 @@ interface Props {
 
 export function Checkbox(props: Props, { slots }) {
   return (
-    <div class="grid grid-cols-[auto_auto] gap-3">
-      <a-toggle onInput={props.onChange} active-attribute="data-selected">
-        {/* TODO: there should be an actual input here for form compatibility */}
-        <button
-          type="button"
-          class="group h-7 w-7 cursor-pointer rounded-md border border-zinc-700 bg-transparent p-0 hover:border-zinc-600"
+    <div class="grid grid-cols-[auto_1fr] gap-3">
+      <div onInput={props.onChange} active-attribute="checked">
+        <input
+          type="checkbox"
+          class="group mt-2 h-4 w-4 cursor-pointer rounded-md border border-zinc-700 bg-transparent p-0 hover:border-zinc-600"
           id={props.id}
-          data-selected={props.checked}
-        >
-          <div class="hidden items-center justify-center group-[&[data-selected]]:flex">
-            <CheckIcon />
-          </div>
-        </button>
-      </a-toggle>
+          name={props.id}
+          checked={props.checked}
+        />
+        {/* TODO: fix markup to use this icon */}
+        <div class="hidden items-center justify-center group-[&[checked]]:flex">
+          <CheckIcon />
+        </div>
+      </div>
 
       <div>
         <label for={props.id} class="cursor-pointer text-lg">

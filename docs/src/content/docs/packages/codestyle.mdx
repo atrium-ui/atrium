@@ -6,6 +6,7 @@ description: Codestyle and configuration for all projects.
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import Command from "package:/components/Command.astro"
 import File from "package:/components/File.astro"
+import CodeStyle from "package:/components/CodeStyle"
 import Changelog from "package:/components/Changelog.astro";
 
 This package includes confugration files for different tools used to enforce a consistent code style accross projects.
@@ -34,30 +35,12 @@ Make sure your project is set up with access to the registry as described in [Se
 
 ## Usage
 
-Automatically setup the configuration in your project by running the following command for the desired tool:
+The `.editorconfig` will be copied next to your package.json using a [postinstall script](https://docs.npmjs.com/cli/v10/using-npm/scripts#npm-install) -- if not already present.
 
-<Tabs>
-  <TabItem label="editorconfig">
-    The `.editorconfig` will be copied next to your package.json using a [postinstall script](https://docs.npmjs.com/cli/v10/using-npm/scripts#npm-install) -- if not already present.
+Automatically setup the configuration in your project by running the following command for the desired tool(s):
 
-    ```sh
-    npx @sv/codestyle editorconfig
-    ```
-  </TabItem>
-  <TabItem label="biome">
-    ```sh
-    npx @sv/codestyle biome
-    ```
-  </TabItem>
-  <TabItem label="tsconfig">
-    ```sh
-    npx @sv/codestyle tsconfig
-    ```
-  </TabItem>
-</Tabs>
+<CodeStyle client:load />
 
-<br/>
-<br/>
 
 ## Manual setup
 
