@@ -61,6 +61,9 @@ process.exit(
             // @ts-ignore
             json.prettier = "@sv/codestyle/.prettierrc.json";
             fs.writeFileSync(pkgpath, JSON.stringify(json, null, "  "));
+            console.info(
+              `[codestyle] prettier installed in ${path.relative(root, pkgpath)}`,
+            );
           } catch (err) {
             console.error(err);
           }
@@ -75,6 +78,10 @@ process.exit(
           );
           break;
         }
+
+        default:
+          console.error(`[codestyle] '${arg}' is not a valid configration.`);
+          return 1;
       }
     }
 
@@ -193,7 +200,8 @@ function writeFile(outputPath, content) {
   if (!fs.existsSync(outputPath)) {
     fs.writeFileSync(outputPath, content);
 
-    console.info(`[codestyle] Wrote to ${outputPath}`);
+    const pwd = path.resolve(".");
+    console.info(`[codestyle] Wrote to ${path.relative(pwd, outputPath)}`);
   }
 
   console.info(`[codestyle] File already exists at ${outputPath}`);
