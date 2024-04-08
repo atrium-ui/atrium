@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.9.1
+
+### Patch Changes
+
+- 1d07dc1: a-track: improve ux of snap
+
 ## 0.9.0
 
 ### Minor Changes
