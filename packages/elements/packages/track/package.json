@@ -9,6 +9,7 @@
   "types": "src/index.ts",
   "scripts": {
     "build": "tsup",
+    "check": "tsc",
     "dev": "tsup --watch"
   },
   "tsup": {

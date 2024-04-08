@@ -9,15 +9,29 @@ type ScrollLockOptions = {
   allowElements?: string[];
 };
 
+/**
+ * # scroll-lock
+ *
+ * @example
+ * ```js
+ * import { ScrollLock } from '@sv/scroll-lock';
+ * const scrollLock = new ScrollLock();
+ *
+ * // lock page scrolling
+ * scrollLock.enable();
+ * // unlock page scrolling
+ * scrollLock.disable();
+ * ```
+ */
 export class ScrollLock {
   enabled = false;
 
-  initialClientY = 0;
-  initialScrollX = 0;
-  initialScrollY = 0;
-  hasPassiveEvents = false;
+  private initialClientY = 0;
+  private initialScrollX = 0;
+  private initialScrollY = 0;
+  private hasPassiveEvents = false;
 
-  options = {
+  private options = {
     debug: false,
     allowElements: ["textarea", "iframe"],
   };

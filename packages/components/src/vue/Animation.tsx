@@ -12,9 +12,10 @@ export function Animation(props: AnimationProps) {
   return (
     <div>
       <a-animation
-        height={props.height || 200}
-        width={props.width || 200}
+        height={props.height || 400}
+        width={props.width || 400}
         src={props.src}
+        stateMachine="State Machine 1"
       />
     </div>
   );

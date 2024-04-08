@@ -3,7 +3,7 @@ title: Button
 ---
 
 import Example from "../../../components/Example.astro";
-import Icon from "../../../components/Icon.astro";
+import { Icon } from "@sv/components/src/vue/Icon";
 import { Button, Link } from "@sv/components/src/vue/Button";
 
 A button.
@@ -20,14 +20,14 @@ import { Button } from "./Button";
 <Button>Button</Button>
 <Button disabled>Disabled</Button>
 <Button>
-  <Icon /><span>with icon</span>
+  <Icon name="check" /><span>with icon</span>
 </Button>
 `}>
   <div class="flex gap-10">
     <Button>Button</Button>
     <Button disabled>Disabled</Button>
     <Button>
-      <Icon /><span>with icon</span>
+      <Icon name="check" /><span>with icon</span>
     </Button>
   </div>
 </Example>
@@ -40,14 +40,14 @@ import { Button } from "./Button";
 <Button variant="outline">Button</Button>
 <Button variant="outline" disabled>Disabled</Button>
 <Button variant="outline">
-  <span>with icon</span><Icon />
+  <span>with icon</span><Icon name="check" />
 </Button>
 `}>
   <div class="flex gap-10">
     <Button variant="outline">Button</Button>
     <Button variant="outline" disabled>Disabled</Button>
     <Button variant="outline">
-      <span>with icon</span><Icon />
+      <span>with icon</span><Icon name="check" />
     </Button>
   </div>
 </Example>
@@ -60,14 +60,14 @@ import { Button } from "./Button";
 <Button variant="ghost">Button</Button>
 <Button variant="ghost" disabled>Disabled</Button>
 <Button variant="ghost">
-  <Icon /><span>with icon</span>
+  <Icon name="check" /><span>with icon</span>
 </Button>
 `}>
   <div class="flex gap-10">
     <Button variant="ghost">Button</Button>
     <Button variant="ghost" disabled>Disabled</Button>
     <Button variant="ghost">
-      <Icon /><span>with icon</span>
+      <Icon name="check" /><span>with icon</span>
     </Button>
   </div>
 </Example>
