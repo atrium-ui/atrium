@@ -5,7 +5,7 @@ import { Checkbox } from "@sv/components/src/vue/Checkbox";
 import { Input } from "@sv/components/src/vue/Input";
 
 export default defineComponent(() => {
-  const args = ref(["editorconfig", "biome", "tsconfig"]);
+  const args = ref(["editorconfig", "biome", "tsconfig", "prettier"]);
 
   return () => (
     <div>
