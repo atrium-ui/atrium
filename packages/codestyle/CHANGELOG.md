@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.7.1
+
+### Patch Changes
+
+- a447ed8: Fix css indent width
+
 ## 0.7.0
 
 ### Minor Changes
