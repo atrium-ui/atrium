@@ -27,6 +27,8 @@ async function getProject() {
 async function avatar(project) {
   const id = project.gitlabId;
 
+  console.log(`${baseUrl}/projects/${id}/avatar`);
+
   // needs gitlab >=v16.9
   return await fetch(`${baseUrl}/projects/${id}/avatar`, {
     headers: {
