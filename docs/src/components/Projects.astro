@@ -27,15 +27,15 @@ async function getProject() {
 async function avatar(project) {
   const id = project.gitlabId;
 
-  console.log(`${baseUrl}/projects/${id}/avatar`);
+  console.info(`${baseUrl}/projects/${id}/avatar`);
 
   // needs gitlab >=v16.9
   return await fetch(`${baseUrl}/projects/${id}/avatar`, {
     headers: {
       "PRIVATE-TOKEN": token,
     },
-  }).then(async res => {
-    console.log(res.status);
+  }).then(async (res) => {
+    console.info(res.status);
     if (res.status !== 200) return;
 
     const blob = await res.blob();
