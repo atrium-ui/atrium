@@ -1,7 +1,6 @@
 import {
   LitElement,
   type ReactiveController,
-  ReactiveControllerHost,
   css,
   html,
 } from "lit";
@@ -301,6 +300,7 @@ export class SnapTrait extends Trait {
  *
  * @customEvent format - emitted when: slots changed, window load and resize or children size changes.
  * @customEvent change - emitted when the current index changed.
+ * @customEvent scroll - emitted when the position changed
  * @customEvent move - emitted when the position was changed by a user action.
  *
  * @example
