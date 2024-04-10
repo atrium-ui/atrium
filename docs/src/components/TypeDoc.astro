@@ -40,11 +40,11 @@ async function parse(options: { pkg: string; entry: string; config?: string }) {
 }
 
 function declaration(obj, name) {
-  return obj.children?.find(c => c.name === name);
+  return obj.children?.find((c) => c.name === name);
 }
 
 function children(obj) {
-  return obj.children?.filter(c => !c.flags.isExternal && c.comment);
+  return obj.children?.filter((c) => !c.flags.isExternal && c.comment);
 }
 
 async function toHtml(content: any[]) {
@@ -80,7 +80,7 @@ async function Summary({ doc, symbol }) {
 async function Attributes({ doc, symbol }) {
   const fields = children(declaration(doc, symbol));
   return Promise.all(
-    fields.map(async field => {
+    fields.map(async (field) => {
       const html = `
         <li class="pt-2">
           <div class="align-top inline-block">
@@ -98,10 +98,9 @@ async function Attributes({ doc, symbol }) {
 
 function Events({ doc, symbol }) {
   const track = declaration(doc, symbol);
-  const events = track?.comment?.blockTags.filter(tag => tag.tag === "@customEvent");
+  const events = track?.comment?.blockTags.filter((tag) => tag.tag === "@customEvent");
 
-  return events.map(event => {
-    console.log(event);
+  return events.map((event) => {
     const text = event.content[0]?.text?.split(" - ");
     if (text) {
       return `
@@ -122,7 +121,7 @@ function Methods() {
 
 async function Example({ doc, symbol }) {
   const obj = declaration(doc, symbol)?.comment;
-  const block = obj?.blockTags.find(t => t.tag === "@example")?.content;
+  const block = obj?.blockTags.find((t) => t.tag === "@example")?.content;
   return await toHtml(block);
 }
 
