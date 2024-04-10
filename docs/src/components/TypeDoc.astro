@@ -7,6 +7,7 @@ import { codeToHtml } from "shiki";
 
 export interface Props {
   source: string;
+  symbol: string;
 }
 
 const props = Astro.props;
@@ -22,7 +23,9 @@ async function parse(options: { pkg: string; entry: string; config?: string }) {
     validation: false,
     cacheBust: false,
     emit: "none",
+    blockTags: ["@customEvent"],
   });
+
   const project = await app.convert();
   if (project) {
     const doc = new Serializer().projectToObject(project, process.cwd());
@@ -37,11 +40,11 @@ async function parse(options: { pkg: string; entry: string; config?: string }) {
 }
 
 function declaration(obj, name) {
-  return obj.children?.find((c) => c.name === name);
+  return obj.children?.find(c => c.name === name);
 }
 
 function children(obj) {
-  return obj.children?.filter((c) => !c.flags.isExternal && c.comment);
+  return obj.children?.filter(c => !c.flags.isExternal && c.comment);
 }
 
 async function toHtml(content: any[]) {
@@ -77,7 +80,7 @@ async function Summary({ doc, symbol }) {
 async function Attributes({ doc, symbol }) {
   const fields = children(declaration(doc, symbol));
   return Promise.all(
-    fields.map(async (field) => {
+    fields.map(async field => {
       const html = `
         <li class="pt-2">
           <div class="align-top inline-block">
@@ -93,13 +96,33 @@ async function Attributes({ doc, symbol }) {
   );
 }
 
+function Events({ doc, symbol }) {
+  const track = declaration(doc, symbol);
+  const events = track?.comment?.blockTags.filter(tag => tag.tag === "@customEvent");
+
+  return events.map(event => {
+    console.log(event);
+    const text = event.content[0]?.text?.split(" - ");
+    if (text) {
+      return `
+        <li class="pt-2">
+          <div class="inline-block">
+            <code>${text[0]}</code> -
+            <span class="inline-block">${remark().use(remarkHtml).processSync(text[1])}</span>
+          </div>
+        </li>
+      `;
+    }
+  });
+}
+
 function Methods() {
   return null;
 }
 
 async function Example({ doc, symbol }) {
   const obj = declaration(doc, symbol)?.comment;
-  const block = obj?.blockTags.find((t) => t.tag === "@example")?.content;
+  const block = obj?.blockTags.find(t => t.tag === "@example")?.content;
   return await toHtml(block);
 }
 
@@ -112,13 +135,16 @@ const doc = await parse({
 
 <div class="typedoc pb-10 pt-4">
   <h2>Summary</h2>
-  <div set:html={Summary({ doc, symbol: "Track" })} />
+  <div set:html={Summary({ doc, symbol: props.symbol })} />
 
   <h2>Attributes</h2>
-  <div set:html={Attributes({ doc, symbol: "Track" })} />
+  <div set:html={Attributes({ doc, symbol: props.symbol })} />
 
-  <div set:html={Methods({ doc, symbol: "Track" })} />
+  <h2>Events</h2>
+  <div set:html={Events({ doc, symbol: props.symbol })} />
+
+  <div set:html={Methods({ doc, symbol: props.symbol })} />
 
   <h2>Example</h2>
-  <div set:html={Example({ doc, symbol: "Track" })} />
+  <div set:html={Example({ doc, symbol: props.symbol })} />
 </div>

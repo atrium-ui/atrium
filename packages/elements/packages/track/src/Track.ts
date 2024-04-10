@@ -265,6 +265,10 @@ export class SnapTrait extends Trait {
  * - It can be used to create carousels, slideshows, and other scrolling elements.
  * - It provides functions to go to a specific child element, emits events on changes, and optimizes ux based input device.
  *
+ * @customEvent format - emitted when: slots changed, window load and resize or children size changes.
+ * @customEvent change - emitted when the current index changed.
+ * @customEvent move - emitted when the position was changed by a user action.
+ *
  * @example
  * ```html
  * <a-track snap class="flex w-full overflow-visible">
