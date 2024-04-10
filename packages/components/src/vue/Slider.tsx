@@ -36,9 +36,9 @@ export const Slider = defineComponent((_, { slots }) => {
     window.addEventListener("resize", () => {
       overflowWidth.value = track.value?.overflowWidth || 0;
     });
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       overflowWidth.value = track.value?.overflowWidth || 0;
-    }, 500);
+    });
   });
 
   const progress = computed(() => {

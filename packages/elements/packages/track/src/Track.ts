@@ -1,4 +1,10 @@
-import { LitElement, css, html } from "lit";
+import {
+  LitElement,
+  type ReactiveController,
+  ReactiveControllerHost,
+  css,
+  html,
+} from "lit";
 import { property } from "lit/decorators/property.js";
 import { query } from "lit/decorators/query.js";
 import { Vec } from "./Vec.js";
@@ -49,6 +55,34 @@ export const Ease = {
 
 export function isTouch() {
   return !!navigator.maxTouchPoints || "ontouchstart" in window;
+}
+
+function windowEventListener<
+  E extends string,
+  T extends EventListenerOrEventListenerObject,
+>(host: LitElement, event: E, handler: T): ReactiveController {
+  return {
+    hostConnected() {
+      host.addEventListener(event, handler);
+    },
+    hostDisconnected() {
+      host.removeEventListener(event, handler);
+    },
+  };
+}
+
+function elementEventListener<
+  E extends string,
+  T extends EventListenerOrEventListenerObject,
+>(host: LitElement, event: E, handler: T): ReactiveController {
+  return {
+    hostConnected() {
+      host.addEventListener(event, handler);
+    },
+    hostDisconnected() {
+      host.removeEventListener(event, handler);
+    },
+  };
 }
 
 export class Trait<T extends Track = Track> {
@@ -696,6 +730,15 @@ export class Track extends LitElement {
     this.dispatchEvent(new CustomEvent("format", { bubbles: true }));
   };
 
+  public elementItemIndex(ele: HTMLElement) {
+    let index = 0;
+    for (const child of this.children) {
+      if (child.contains(ele)) return index;
+      index++;
+    }
+    return -1;
+  }
+
   /**
    * Get the position of the item at the given index, relative to the current item.
    */
@@ -1040,8 +1083,10 @@ export class Track extends LitElement {
 
             if (!child && realChild) {
               const clone = realChild.cloneNode(true) as HTMLElement;
-              this.clones.push(clone);
+              clone.tabIndex = -1;
+              clone.inert = true;
               clone.classList.add("ghost");
+              this.clones.push(clone);
               this.appendChild(clone);
             }
           } else {
@@ -1082,11 +1127,21 @@ export class Track extends LitElement {
 
   resizeObserver: ResizeObserver | undefined;
 
+  constructor() {
+    super();
+
+    this.addController(elementEventListener(this, "focusin", (e: Event) => {
+      const index = this.elementItemIndex(e.target as HTMLElement);
+      this.moveTo(index);
+    }))
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
 
     this.tabIndex = 0;
 
+    // TODO: refactor all of these with "elementEventListener" and "windowEventListener" like at L:1133
     window.addEventListener("pointermove", this.pointerMove);
     this.addEventListener("pointerdown", this.pointerDown);
     window.addEventListener("pointerup", this.pointerUp);
