@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.9.2
+
+### Patch Changes
+
+- 9268acf: a-track: handle focus events inside children
+
 ## 0.9.1
 
 ### Patch Changes
