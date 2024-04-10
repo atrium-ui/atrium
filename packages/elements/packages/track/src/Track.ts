@@ -1130,10 +1130,12 @@ export class Track extends LitElement {
   constructor() {
     super();
 
-    this.addController(elementEventListener(this, "focusin", (e: Event) => {
-      const index = this.elementItemIndex(e.target as HTMLElement);
-      this.moveTo(index);
-    }))
+    this.addController(
+      elementEventListener(this, "focusin", (e: Event) => {
+        const index = this.elementItemIndex(e.target as HTMLElement);
+        this.moveTo(index);
+      }),
+    );
   }
 
   connectedCallback(): void {
