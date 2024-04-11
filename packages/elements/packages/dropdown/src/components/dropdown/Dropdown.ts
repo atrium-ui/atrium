@@ -10,12 +10,8 @@ declare global {
 }
 
 /**
- * # a-dropdown
- *
  * - Accessible and styleable dropdown component
  * - Wraps the content in an a-expandable
- *
- * ## Props
  *
  * @attribute direction (default: "down") - In what direction the dropdown openes
  * @attribute opened (default: false) - Whether the dropdown is open

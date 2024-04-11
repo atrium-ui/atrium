@@ -6,8 +6,8 @@ description: A reference page in my new Starlight docs site.
 import "./styles/expandable.scss";
 import { paragraph } from "txtgen";
 import ExpandIcon from "./expandable/ExpandIcon.astro";
-import TSDocs from "../../../components/TSDocs.astro"
-import Elements from "./elements/Elements.astro"
+import TypeDoc from "../../../components/TypeDoc.astro";
+import Elements from "./elements/Elements.astro";
 import { Pills, Lit } from "../../../components/Pills";
 
 <Pills>
@@ -18,27 +18,11 @@ import { Pills, Lit } from "../../../components/Pills";
 
 Implemented with [Accordion](/sv-frontend-library/mono/components/accordion), [Combobox](/sv-frontend-library/mono/components/combobox), [Filter](/sv-frontend-library/mono/components/filter) and [Select](/sv-frontend-library/mono/components/select).
 
-<TSDocs source="/elements/packages/expandable/src/Expandable.ts" />
+<TypeDoc source="../packages/elements/packages/expandable" symbol="Expandable" />
 
-## Slots
+## Preview
 
-- `input`
-
-  The element that will trigger the expand state.
-
-## Examples
-
-```tsx
-<a-expandable opened class="accordion">
-  <div slot="toggle">
-    <button type="button">
-      <div class="headline">Title</div>
-    </button>
-  </div>
-
-  <div>Content</div>
-</a-expandable>
-```
+Different example confugrations of expandables.
 
 <div class="not-content box">
   <a-expandable class="accordion">

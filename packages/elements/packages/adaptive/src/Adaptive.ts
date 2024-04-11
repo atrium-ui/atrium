@@ -8,8 +8,6 @@ declare global {
 }
 
 /**
- * # a-adaptive
- *
  * - Inherits the size of its child
  * - Automatically reacts to changes in the child’s size
  * - Animated by default

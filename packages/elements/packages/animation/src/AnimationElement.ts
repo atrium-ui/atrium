@@ -16,10 +16,7 @@ declare global {
 }
 
 /**
- * # a-animation
  * Rive animation
- *
- * ## Props
  *
  * @attribute width - Canvas width
  * @attribute height - Canvas height
@@ -49,10 +46,15 @@ export class AnimationElement extends LitElement {
     return html`${this.canvas}`;
   }
 
+  /** url to .riv file */
   @property({ type: String, reflect: true }) public src!: string;
+  /** width in pixel */
   @property({ type: Number, reflect: true }) public width = 600;
+  /** height in pixel */
   @property({ type: Number, reflect: true }) public height = 600;
+  /** name of state machine */
   @property({ type: String, reflect: true }) public stateMachine?: string;
+  /** wether to autoplay on load */
   @property({ type: Boolean, reflect: true }) public autoplay = true;
 
   @query("canvas")

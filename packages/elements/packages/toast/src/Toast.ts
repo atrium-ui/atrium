@@ -3,11 +3,7 @@ import { LitElement, css, html } from "lit";
 let instance: ToastFeed | null = null;
 
 /**
- * # a-toast-feed
- *
  * A feed of toast elements
- *
- * ## Props
  *
  * @attribute enabled (default: false) - Whether the blur is enabled or not.
  * @attribute scrollLock (default: false) - Whether the blur should lock scrolling when shown.

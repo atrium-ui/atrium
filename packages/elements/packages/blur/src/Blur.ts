@@ -9,13 +9,9 @@ declare global {
 }
 
 /**
- * # a-blur
- *
  * - A Blur is a wrapper element which can show and hide its children.
  * - It will automatically "blur" (hide) the content, when clicked outside of its children.
  * - Optionally, when the content is shown, scrolling will be locked.
- *
- * ## Props
  *
  * @attribute enabled (default: false) - Whether the blur is enabled or not.
  * @attribute scrollLock (default: false) - Whether the blur should lock scrolling when shown.
@@ -47,7 +43,6 @@ export class Blur extends LitElement {
   `;
 
   /**
-   * ### enabled
    * Whether the blur is enabled or not.
    * @defaultValue false
    */
@@ -55,7 +50,6 @@ export class Blur extends LitElement {
   public enabled = false;
 
   /**
-   * ### scrollLock
    * Whether the blur should lock scrolling when shown.
    * @defaultValue false
    */

@@ -3,8 +3,8 @@ title: a-popover
 description: A reference page in my new Starlight docs site.
 ---
 
-import TSDocs from "../../../components/TSDocs.astro"
 import Elements from "./elements/Elements.astro"
+import TypeDoc from "../../../components/TypeDoc.astro";
 import { Pills, Lit } from "../../../components/Pills";
 
 <Pills>
@@ -15,10 +15,4 @@ import { Pills, Lit } from "../../../components/Pills";
 
 Implemented with [Popover](/sv-frontend-library/mono/components/popover).
 
-<TSDocs source="/elements/packages/popover/src/Popover.ts" />
-
-## Slots
-
-- `input`
-
-  The element that will trigger the opened state.
+<TypeDoc source="../packages/elements/packages/popover" symbol="Popover" />

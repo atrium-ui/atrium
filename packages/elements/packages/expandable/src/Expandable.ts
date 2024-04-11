@@ -13,6 +13,19 @@ declare global {
  *
  * @customEvent change - Emitted when the element open state changes
  *
+ * @example
+ * ```tsx
+ * <a-expandable opened class="accordion">
+ *    <div slot="toggle">
+ *      <button type="button">
+ *        <div class="headline">Title</div>
+ *      </button>
+ *    </div>
+ *
+ *    <div>Content</div>
+ *  </a-expandable>
+ * ```
+ *
  * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-expandable/
  */
 export class Expandable extends LitElement {
