@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.10.0
+
+### Minor Changes
+
+- 91ce937: a-track: refactor interface
+
 ## 0.9.2
 
 ### Patch Changes
