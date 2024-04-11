@@ -18,7 +18,10 @@
       "src/traits.ts"
     ],
     "format": ["esm", "cjs"],
-    "external": ["@sv/*"],
+    "external": [
+      "@sv/*",
+      "lit"
+    ],
     "sourcemap": true,
     "clean": true
   }
