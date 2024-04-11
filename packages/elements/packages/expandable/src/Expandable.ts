@@ -1,4 +1,4 @@
-import { type HTMLTemplateResult, LitElement, css, html } from "lit";
+import { type HTMLTemplateResult, LitElement, css, html, PropertyValueMap } from "lit";
 import { property } from "lit/decorators.js";
 
 declare global {
@@ -8,15 +8,10 @@ declare global {
 }
 
 /**
- * # a-expandable
- *
  * - A wrapper element, that can collapse and expand its content with an animation.
  * - It can include a trigger elemeent which is always visible.
  *
- * ## Props
- *
- * @attribute opened (default: false) - Controls the expand state of the element.
- * @attribute direction (default: "down") - Controls the direction the element will expand.
+ * @customEvent change - Emitted when the element open state changes
  *
  * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-expandable/
  */
@@ -62,8 +57,11 @@ export class Expandable extends LitElement {
     ];
   }
 
+  /** Wether the eleemnt is open or not */
   @property({ type: Boolean, reflect: true }) public opened = false;
-  @property({ type: String, reflect: true }) public direction = "down";
+
+  /** What direction to open */
+  @property({ type: String, reflect: true }) public direction: "down" | "up" = "down";
 
   private _id = `expandable_${Math.floor(Math.random() * 100000)}`;
 
@@ -86,6 +84,11 @@ export class Expandable extends LitElement {
   @property({ type: Number })
   public scrollOffsetY?: number;
 
+  protected updated(): void {
+    const btn = this.button;
+    if (btn) btn.ariaExpanded = this.opened.toString();
+  }
+
   protected onAnimationFrame() {
     // scrolls interaction into viewport
     const rect = this.getClientRects()[0];
@@ -98,26 +101,35 @@ export class Expandable extends LitElement {
     }
   }
 
-  private renderButton() {
-    // TODO: don't render button if no child in toggle slot
-    return html`<button
-      aria-controls="${this._id}"
-      aria-expanded=${this.opened}
-      @click=${(e) => {
-        this.toggle();
-      }}
-    >
-      <slot name="toggle"></slot>
-    </button>`;
+  private get button() {
+    const slot = this.shadowRoot?.querySelector<HTMLSlotElement>('slot[name="toggle"]');
+    return slot?.assignedElements()[0];
+  }
+
+  private renderToggle() {
+    return html`
+      <slot name="toggle"
+        @slotchange=${(e) => {
+          const slot = e.currentTarget;
+          const child = slot.children[0] as HTMLElement;
+          child?.setAttribute("aria-controls", this._id);
+        }}
+        @click=${(e) => {
+          if (this.button?.contains(e.target)) {
+            this.toggle();
+          }
+        }}>
+      </slot>
+    `;
   }
 
   protected render(): HTMLTemplateResult {
     return html`
-      ${this.direction === "down" ? this.renderButton() : undefined}
+      ${this.direction === "down" ? this.renderToggle() : undefined}
       <div class="container" id="${this._id}" aria-hidden=${!this.opened && "true"}>
         <slot class="content"></slot>
       </div>
-      ${this.direction === "up" ? this.renderButton() : undefined}
+      ${this.direction === "up" ? this.renderToggle() : undefined}
     `;
   }
 }

@@ -1,6 +1,13 @@
 ---
 import path from "node:path";
-import { Application, Serializer } from "typedoc";
+import {
+  Application,
+  type DeclarationReflection,
+  type ProjectReflection,
+  type Reflection,
+  ReflectionKind,
+  ReflectionFlag,
+} from "typedoc";
 import { remark } from "remark";
 import remarkHtml from "remark-html";
 import { codeToHtml } from "shiki";
@@ -26,48 +33,42 @@ async function parse(options: { pkg: string; entry: string; config?: string }) {
     blockTags: ["@customEvent"],
   });
 
-  const project = await app.convert();
-  if (project) {
-    const doc = new Serializer().projectToObject(project, process.cwd());
-
-    const d = {
-      summary: "",
-      example: "",
-    };
-
-    return doc;
-  }
+  return await app.convert();
 }
 
-function declaration(obj, name) {
-  return obj.children?.find((c) => c.name === name);
+function declaration(obj: ProjectReflection, name) {
+  return obj.getChildByName(name);
 }
 
-function children(obj) {
-  return obj.children?.filter((c) => !c.flags.isExternal && c.comment);
+function childrenWithComments(
+  obj?: Reflection | undefined,
+): DeclarationReflection[] | undefined {
+  // @ts-ignore
+  return obj?.children?.filter((c) => c.comment);
 }
 
-async function toHtml(content: any[]) {
+async function toHtml(content: any[] | undefined) {
   let html = "";
 
-  for (const item of content) {
-    switch (item.kind) {
-      case "text": {
-        html += remark().use(remarkHtml).processSync(item.text);
-        break;
-      }
-      case "code": {
-        const lines = item.text.split("\n");
-        const code = lines.slice(1, lines.length - 1).join("\n");
+  if (content)
+    for (const item of content) {
+      switch (item.kind) {
+        case "text": {
+          html += remark().use(remarkHtml).processSync(item.text);
+          break;
+        }
+        case "code": {
+          const lines = item.text.split("\n");
+          const code = lines.slice(1, lines.length - 1).join("\n");
 
-        html += await codeToHtml(code, {
-          lang: "tsx",
-          theme: "dark-plus",
-        });
-        break;
+          html += await codeToHtml(code, {
+            lang: "tsx",
+            theme: "dark-plus",
+          });
+          break;
+        }
       }
     }
-  }
 
   return html;
 }
@@ -78,32 +79,36 @@ async function Summary({ doc, symbol }) {
 }
 
 async function Attributes({ doc, symbol }) {
-  const fields = children(declaration(doc, symbol));
-  return Promise.all(
-    fields.map(async (field) => {
-      const html = `
+  const fields = childrenWithComments(declaration(doc, symbol));
+  if (fields)
+    return Promise.all(
+      fields.map(async (field) => {
+        const html = `
         <li class="pt-2">
           <div class="align-top inline-block">
             <code>${field.name}${
-              field.type.name ? `: ${field.type.name}` : ""
+              field.type?.name ? `: ${field.type.name}` : ""
             }</code> (default: ${field.defaultValue})
-            <div class="pt-2">${await toHtml(field.comment.summary)}</div>
+            <div class="pt-2">${await toHtml(field.comment?.summary)}</div>
           </div>
         </li>
       `;
-      return html;
-    }),
-  );
+        return html;
+      }),
+    );
+
+  return [];
 }
 
 function Events({ doc, symbol }) {
   const track = declaration(doc, symbol);
   const events = track?.comment?.blockTags.filter((tag) => tag.tag === "@customEvent");
 
-  return events.map((event) => {
-    const text = event.content[0]?.text?.split(" - ");
-    if (text) {
-      return `
+  if (events)
+    return events.map((event) => {
+      const text = event.content[0]?.text?.split(" - ");
+      if (text) {
+        return `
         <li class="pt-2">
           <div class="inline-block">
             <code>${text[0]}</code> -
@@ -111,12 +116,36 @@ function Events({ doc, symbol }) {
           </div>
         </li>
       `;
-    }
-  });
+      }
+    });
 }
 
-function Methods() {
-  return null;
+async function Methods({ doc, symbol }: { doc: ProjectReflection; symbol: string }) {
+  const dec = doc.getChildByName(symbol) as DeclarationReflection;
+  const methods = dec.groups
+    ?.find((g) => g.title === "Methods")
+    ?.children.filter((child) => child.flags.hasFlag(ReflectionFlag.Public))
+    .map((method) => {
+      return method.signatures?.[0];
+    });
+
+  if (methods)
+    return methods.map(async (child) => {
+      if (child) {
+        const source = child?.sources?.[0];
+        return `
+          <div class="not-content grid grid-cols-[1fr_auto]">
+            <h4>
+              <code class="text-lg">${symbol}.${child.name}</code>
+            </h4>
+            <span class="text-xs opacity-50">
+              ${source?.fileName}:${source?.line}
+            </span>
+            <div class="text-base opacity-70">${await toHtml(child.comment?.summary)}</div>
+          </div>
+        `;
+      }
+    });
 }
 
 async function Example({ doc, symbol }) {
@@ -132,9 +161,16 @@ const doc = await parse({
 });
 ---
 
-<div class="typedoc pb-10 pt-4">
-  <h2>Summary</h2>
+<script>
+  import "@sv/elements/expandable";
+</script>
+
+<div class="typedoc pb-12 pt-4">
+  <h2>{props.symbol}</h2>
   <div set:html={Summary({ doc, symbol: props.symbol })} />
+
+  <h2>Example</h2>
+  <div set:html={Example({ doc, symbol: props.symbol })} />
 
   <h2>Attributes</h2>
   <div set:html={Attributes({ doc, symbol: props.symbol })} />
@@ -142,8 +178,15 @@ const doc = await parse({
   <h2>Events</h2>
   <div set:html={Events({ doc, symbol: props.symbol })} />
 
-  <div set:html={Methods({ doc, symbol: props.symbol })} />
+  <a-expandable class="group pt-6 max-w-[800px]">
+    <button slot="toggle" class="cursor-pointer hover:bg-zinc-800 w-full text-left bg-transparent p-0 flex justify-between items-center">
+      <h2>Methods</h2>
 
-  <h2>Example</h2>
-  <div set:html={Example({ doc, symbol: props.symbol })} />
+      <span class="text-xl group-[&[opened]]:hidden">↴</span>
+      <span class="text-xl hidden group-[&[opened]]:block">↶</span>
+    </button>
+    <div class="p-4">
+      <div set:html={Methods({ doc, symbol: props.symbol })} />
+    </div>
+  </a-expandable>
 </div>

@@ -14,7 +14,10 @@
   "tsup": {
     "entry": ["src/index.ts"],
     "format": ["esm", "cjs"],
-    "external": ["@sv/*"],
+    "external": [
+      "@sv/*",
+      "lit"
+    ],
     "sourcemap": true,
     "clean": true
   }

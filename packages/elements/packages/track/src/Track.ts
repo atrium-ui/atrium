@@ -297,6 +297,9 @@ export class Track extends LitElement {
       .map((_, i) => new Vec2(this.itemWidths[i], this.itemHeights[i]));
   }
 
+  /**
+   * Get the absolute position of the closest item to the current position.
+   */
   public getClosestItemPosition() {
     const posPrev = this.getToItemPosition(this.currentItem - 1);
     const posCurr = this.getToItemPosition(this.currentItem);
@@ -419,7 +422,7 @@ export class Track extends LitElement {
     },
   };
 
-  public trait(callback: (t: Trait) => void) {
+  private trait(callback: (t: Trait) => void) {
     for (const t of this.traits) {
       try {
         callback(t);
@@ -429,14 +432,17 @@ export class Track extends LitElement {
     }
   }
 
+  /** Add a trait. */
   public addTrait<T extends Trait>(trait: T) {
     this.traits.push(trait);
   }
 
+  /** Remove a trait. */
   public removeTrait<T extends Track>(trait: Trait<T>) {
     this.traits.splice(this.traits.indexOf(trait), 1);
   }
 
+  /** Get a trait by id. */
   public findTrait<T extends Trait>(id: string): T | undefined {
     for (const trait of this.traits) {
       if (trait.id === id) {
@@ -446,7 +452,7 @@ export class Track extends LitElement {
     return undefined;
   }
 
-  /** Whether the track should scroll vertically. */
+  /** Whether the track should scroll vertically, instead of horizontally. */
   @property({ type: Boolean, reflect: true }) vertical = false;
 
   /** Whether the track should loop back to the start when reaching the end. */
@@ -455,7 +461,7 @@ export class Track extends LitElement {
   /** Whether the track should snap to the closest child element. */
   @property({ type: Boolean, reflect: true }) snap = false;
 
-  /** Item alignment in the track. "start" (left/top) or "end" (right/bottom) */
+  // /** Item alignment in the track. "start" (left/top) or "end" (right/bottom) */
   @property({ type: String }) align: "start" | "end" = "start";
 
   /** Only scroll when items are overflown. Like "overflow: auto". */
@@ -513,6 +519,9 @@ export class Track extends LitElement {
     this.trait((t) => t.format?.(this));
   };
 
+  /**
+   * Get the index of the item that contains given element. Returns -1 if it is not in any item.
+   */
   public elementItemIndex(ele: HTMLElement) {
     let index = 0;
     for (const child of this.children) {
@@ -564,6 +573,9 @@ export class Track extends LitElement {
     return pos;
   }
 
+  /**
+   * Set the target position to transition to.
+   */
   public setTarget(vec: Vec2 | Array<number> | undefined, ease?: Easing) {
     let easing = ease;
 
@@ -589,6 +601,9 @@ export class Track extends LitElement {
     }
   }
 
+  /**
+   * Move by given count of items.
+   */
   public moveBy(byItems: number, easing?: Easing) {
     let i = this.currentItem + byItems;
     if (!this.loop) {
@@ -598,6 +613,9 @@ export class Track extends LitElement {
     this.setTarget(pos, easing);
   }
 
+  /**
+   * Move to index of item.
+   */
   public moveTo(index: number, easing?: Easing) {
     this.moveBy(index - this.currentItem, easing);
   }
@@ -816,6 +834,9 @@ export class Track extends LitElement {
     return closestIndex;
   }
 
+  /**
+   * Get the item at a specific position.
+   */
   public getItemAtPosition(pos: Vec2) {
     const rects = this.getItemRects();
     let px = 0;
