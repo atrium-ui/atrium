@@ -2,28 +2,26 @@
 
 import { defineComponent, onMounted, onUpdated, ref } from "vue";
 import "@sv/elements/blur";
-import { Track, Trait } from "@sv/elements/track";
+import { PointerTrait, Track, type Trait } from "@sv/elements/track";
 import { Button } from "./Button.jsx";
 
-class DrawerTrait extends Trait {
-  input() {
-    if (this.entity.position.y > window.innerHeight / 2) {
-      this.entity.dispatchEvent(new Event("open", { bubbles: true }));
+class DrawerTrait implements Trait {
+  id = "dawer";
+
+  input(track: Track) {
+    if (track.position.y > window.innerHeight / 2) {
+      track.dispatchEvent(new Event("open", { bubbles: true }));
     }
   }
 }
 
 class DrawerTrack extends Track {
-  connectedCallback(): void {
-    super.connectedCallback();
-
-    const pointer = this.findTrait<any>("pointer");
-    if (pointer) {
-      pointer.borderResistnce = 0;
-    }
-
-    this.addTrait("drawer", DrawerTrait);
-  }
+  public traits = [
+    new PointerTrait({
+      // borderResistance: 0,
+    }),
+    new DrawerTrait(),
+  ];
 }
 
 customElements.define("drawer-track", DrawerTrack);

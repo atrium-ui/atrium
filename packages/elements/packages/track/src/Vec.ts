@@ -1,10 +1,10 @@
-type VecOrNumber = Vec | number[] | number;
+type VecOrNumber = Vec2 | number[] | number;
 
-export class Vec extends Array {
+export class Vec2 extends Array {
   constructor(x: VecOrNumber = 0, y = 0) {
     super();
 
-    if (Vec.isVec(x)) {
+    if (Vec2.isVec(x)) {
       this[0] = x[0];
       this[1] = x[1];
     } else {
@@ -39,7 +39,7 @@ export class Vec extends Array {
   }
 
   add(vec: VecOrNumber) {
-    if (Vec.isVec(vec)) {
+    if (Vec2.isVec(vec)) {
       this[0] += vec[0];
       this[1] += vec[1];
     } else {
@@ -50,7 +50,7 @@ export class Vec extends Array {
   }
 
   sub(vec: VecOrNumber) {
-    if (Vec.isVec(vec)) {
+    if (Vec2.isVec(vec)) {
       this[0] -= vec[0];
       this[1] -= vec[1];
     } else {
@@ -61,7 +61,7 @@ export class Vec extends Array {
   }
 
   mul(vec: VecOrNumber) {
-    if (Vec.isVec(vec)) {
+    if (Vec2.isVec(vec)) {
       this[0] *= vec[0];
       this[1] *= vec[1];
     } else {
@@ -72,7 +72,7 @@ export class Vec extends Array {
   }
 
   set(vec: VecOrNumber) {
-    if (Vec.isVec(vec)) {
+    if (Vec2.isVec(vec)) {
       this[0] = vec[0];
       this[1] = vec[1];
     } else {
@@ -83,7 +83,7 @@ export class Vec extends Array {
   }
 
   mod(vec: VecOrNumber) {
-    if (Vec.isVec(vec)) {
+    if (Vec2.isVec(vec)) {
       this[0] = this[0] % vec[0];
       this[1] = this[1] % vec[1];
     } else {
@@ -99,7 +99,7 @@ export class Vec extends Array {
     return this;
   }
 
-  dist(vec: Vec) {
+  dist(vec: Vec2) {
     return Math.sqrt((vec[0] - this[0]) ** 2 + (vec[1] - this[1]) ** 2);
   }
 
@@ -125,35 +125,39 @@ export class Vec extends Array {
   }
 
   clone() {
-    return new Vec(this);
+    return new Vec2(this);
   }
 
   static add(vec1: VecOrNumber, vec2: VecOrNumber) {
-    if (Vec.isVec(vec1)) {
-      return new Vec(vec1[0], vec1[1]).add(vec2);
+    if (Vec2.isVec(vec1)) {
+      return new Vec2(vec1[0], vec1[1]).add(vec2);
     }
-    return new Vec(vec1, vec1).add(vec2);
+    return new Vec2(vec1, vec1).add(vec2);
   }
 
   static sub(vec1: VecOrNumber, vec2: VecOrNumber) {
-    if (Vec.isVec(vec1)) {
-      return new Vec(vec1[0], vec1[1]).sub(vec2);
+    if (Vec2.isVec(vec1)) {
+      return new Vec2(vec1[0], vec1[1]).sub(vec2);
     }
-    return new Vec(vec1, vec1).sub(vec2);
+    return new Vec2(vec1, vec1).sub(vec2);
   }
 
   static mul(vec1: VecOrNumber, vec2: VecOrNumber) {
-    if (Vec.isVec(vec1)) {
-      return new Vec(vec1[0], vec1[1]).mul(vec2);
+    if (Vec2.isVec(vec1)) {
+      return new Vec2(vec1[0], vec1[1]).mul(vec2);
     }
-    return new Vec(vec1, vec1).mul(vec2);
+    return new Vec2(vec1, vec1).mul(vec2);
   }
 
-  static abs(vec: Vec) {
-    return new Vec(vec.x, vec.y).abs();
+  static abs(vec: Vec2) {
+    return new Vec2(vec.x, vec.y).abs();
   }
 
   static isVec = Array.isArray;
+
+  isNaN() {
+    return Number.isNaN(this[0]) || Number.isNaN(this[1]);
+  }
 
   toString(): string {
     return `Vec{${this.join(",")}}`;

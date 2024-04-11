@@ -23,6 +23,16 @@ test("check default traits", async () => {
   const { Track } = await import("@sv/elements/track");
 
   const track = new Track();
-  expect(track.findTrait("snap")).toBeDefined();
   expect(track.findTrait("pointer")).toBeDefined();
+});
+
+test("check snap trait", async () => {
+  const { Track } = await import("@sv/elements/track");
+
+  const track = new Track();
+  track.snap = true;
+  // @ts-ignore: simulate update
+  track.updated();
+
+  expect(track.findTrait("snap")).toBeDefined();
 });
