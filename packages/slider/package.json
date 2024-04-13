@@ -7,10 +7,7 @@
     "test": "bun test",
     "publish-package": "task publish"
   },
-  "files": [
-    "dist",
-    "src"
-  ],
+  "files": ["dist", "src"],
   "exports": {
     "./CHANGELOG.md": {
       "import": "./CHANGELOG.md"

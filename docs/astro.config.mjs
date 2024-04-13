@@ -39,6 +39,7 @@ export default defineConfig({
       components: {
         ContentPanel: "./src/components/ContentPanel.astro",
       },
+      favicon: "favicon.png",
       title: "Atrium",
       customCss: ["./styles/custom.css"],
       logo: {
