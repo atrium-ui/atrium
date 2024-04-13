@@ -52,3 +52,9 @@ shell = true
 type = "Command"
 command = "git push origin HEAD:main -o ci.skip && git push --tags || true"
 shell = true
+
+[[workflows]]
+name = "document-change"
+
+[[workflows.steps]]
+type = "CreateChangeFile"

@@ -72,6 +72,7 @@ tasks:
     desc: Create a package version
     cmds:
       - knope document-change
+      - git add --all
 
   release:
     deps: [build]
