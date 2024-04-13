@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.7.2 (2024-04-13)
+
+### Fixes
+
+- Test release
+
 ## 0.7.4 (2024-04-13)
 
 ### Fixes
