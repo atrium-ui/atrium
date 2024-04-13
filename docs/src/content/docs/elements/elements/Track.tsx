@@ -21,7 +21,7 @@ export const VariableTrack = defineComponent(() => {
 
   return () => {
     return (
-      <div>
+      <div class="relative">
         <span>Child count: </span>{" "}
         <input
           type="number"
@@ -43,7 +43,7 @@ export const VariableTrack = defineComponent(() => {
             );
           })}
         </a-track>
-        <div class="flex justify-between">
+        <div class="pointer-events-none absolute top-1/2 right-0 left-0 mx-[-10px] flex justify-between">
           <span>
             <button type="button" class={[position.value < 10 ? "hidden" : "block"]}>
               {"<"}

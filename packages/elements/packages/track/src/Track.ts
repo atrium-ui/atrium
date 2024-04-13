@@ -175,8 +175,6 @@ export class SnapTrait implements Trait {
     track.setTarget(track.getClosestItemPosition(), "ease");
   });
 
-  lastCurrent = 0;
-
   format(track: Track) {
     this.formatDebounced(track);
   }
@@ -210,7 +208,7 @@ export class SnapTrait implements Trait {
  * - It can be used to create carousels, slideshows, and other scrolling elements.
  * - It provides functions to go to a specific child element, emits events on changes, and optimizes ux based input device.
  *
- * @customEvent format - Emitted when: slots changed, window load and resize or children size changes.
+ * @customEvent format - Emitted when: slots changed, window load and resize or children size changes. Can be canceled.
  * @customEvent change - Emitted when the current index changed.
  * @customEvent scroll - Emitted when the position changed.
  * @customEvent move - Emitted when the position is about to cahnge by a user action. Can be canceled.
@@ -319,7 +317,7 @@ export class Track extends LitElement {
     }
   }
 
-  private _widths: number[] | undefined;
+  private _widths: number[] | undefined = undefined;
   private get itemWidths() {
     if (!this._widths) {
       this._widths = new Array(this.itemCount).fill(1).map((_, i) => {
@@ -329,7 +327,7 @@ export class Track extends LitElement {
     return this._widths;
   }
 
-  private _heights: number[] | undefined;
+  private _heights: number[] | undefined = undefined;
   private get itemHeights() {
     if (!this._heights) {
       this._heights = new Array(this.itemCount).fill(1).map((_, i) => {
@@ -514,9 +512,16 @@ export class Track extends LitElement {
         break;
     }
 
-    this.dispatchEvent(new CustomEvent("format", { bubbles: true }));
+    const formatEvent = new CustomEvent("format", { bubbles: true, cancelable: true });
+    this.dispatchEvent(formatEvent);
 
-    this.trait((t) => t.format?.(this));
+    if (!formatEvent.defaultPrevented) {
+      this.trait((t) => t.format?.(this));
+
+      if (this.position.x > this.overflowWidth || this.position.y > this.overflowHeight) {
+        this.setTarget(undefined);
+      }
+    }
   };
 
   /**
@@ -1075,7 +1080,7 @@ export class Track extends LitElement {
       }
     });
 
-    this.listener(window, ["resize", "load"], this.format, { passive: true });
+    this.listener(window, ["resize"], this.format, { passive: true });
 
     const intersectionObserver = new IntersectionObserver((intersections) => {
       for (const entry of intersections) {

@@ -185,7 +185,20 @@ Different example confugrations of tracks.
 
 ### Dynamic children
 
+When children change, and the last selected item does not exist anymore, it will recover to the closest available child.
+
 <VariableTrack client:load />
+
+Configure format behaviour:
+
+```typescript
+track.addEventListener("format", e => {
+  // prevent default behaviour (move to the closest available child)
+  e.preventDefault();
+  // instead move to the first child
+  e.currentTarget?.moveTo(0);
+});
+```
 
 ### Nested
 
