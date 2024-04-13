@@ -37,7 +37,7 @@ allow_empty = true
 
 [[workflows.steps]]
 type = "Command"
-command = "git commit -m \"chore: prepare releases\" || true"
+command = "git add --all && git commit -m \"chore: prepare releases\" || true"
 shell = true
 
 [[workflows.steps]]
