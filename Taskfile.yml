@@ -6,9 +6,6 @@ includes:
   docs:
     taskfile: docs/Taskfile.yml
     dir: docs
-  cli:
-    taskfile: packages/components/Taskfile.yml
-    dir: packages/components
 
 tasks:
   default:
