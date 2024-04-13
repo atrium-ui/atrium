@@ -10,6 +10,13 @@
     "test": "bun test --preload ./test/preload.ts",
     "publish-package": "task publish"
   },
+  "files": [
+    "README.md",
+    "packages",
+    "index.d.ts",
+    "index.js",
+    "tsconfig.json"
+  ],
   "exports": {
     "./CHNAGELOG.md": {
       "import": "./CHANGELOG.md"
