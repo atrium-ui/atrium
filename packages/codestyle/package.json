@@ -2,7 +2,7 @@
   "name": "@sv/codestyle",
   "author": "t.havlicek@s-v.de",
   "contributors": [],
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Codestyle and configuration for all projects",
   "type": "module",
   "bin": "./bin/cli.js",
