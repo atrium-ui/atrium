@@ -19,8 +19,6 @@ before_script:
 
 check:
   stage: test
-  dependencies:
-    - build
   except:
     - tags
   script: task check
