@@ -1,6 +1,6 @@
 {
   "name": "@atrium-ui/filter",
-  "author": "t.havlicek@s-v.de",
+  "author": "atrium",
   "contributors": [],
   "private": true,
   "description": "",
@@ -12,9 +12,16 @@
     "dev": "tsup --watch"
   },
   "tsup": {
-    "entry": ["src/index.ts"],
-    "format": ["esm", "cjs"],
-    "external": ["@sv/*"],
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "esm",
+      "cjs"
+    ],
+    "external": [
+      "@sv/*"
+    ],
     "sourcemap": true,
     "clean": true
   }

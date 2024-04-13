@@ -1,6 +1,6 @@
 {
   "name": "@atrium-ui/popover",
-  "author": "t.havlicek@s-v.de",
+  "author": "atrium",
   "contributors": [],
   "private": true,
   "description": "",
@@ -11,9 +11,16 @@
     "build": "tsup"
   },
   "tsup": {
-    "entry": ["src/index.ts"],
-    "format": ["esm", "cjs"],
-    "external": ["@sv/*"],
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "esm",
+      "cjs"
+    ],
+    "external": [
+      "@sv/*"
+    ],
     "sourcemap": true,
     "clean": true
   }

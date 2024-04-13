@@ -2,10 +2,7 @@
   "name": "atrium",
   "version": "1.0.0",
   "description": "Atrium Component Library",
-  "author": "t.havlicek@s-v.de",
-  "contributors": [
-    "f.kretschmer@s-v.de"
-  ],
+  "author": "atrium",
   "type": "module",
   "keywords": [],
   "license": "ISC",

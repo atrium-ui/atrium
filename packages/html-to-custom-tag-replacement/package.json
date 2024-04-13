@@ -3,19 +3,24 @@
   "version": "0.1.0",
   "description": "",
   "author": {
-    "name": "f.kretschmer@s-v.de",
-    "publish-package": "task publish"
+    "name": "f.kretschmer@s-v.de"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "scripts": {
     "test": "bun test",
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "publish-package": "task publish"
   },
   "tsup": {
-    "entry": ["src/index.ts"],
-    "format": ["esm", "cjs"],
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "esm",
+      "cjs"
+    ],
     "external": [],
     "sourcemap": true,
     "clean": true

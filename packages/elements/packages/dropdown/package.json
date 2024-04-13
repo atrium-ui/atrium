@@ -1,6 +1,6 @@
 {
   "name": "@atrium-ui/dropdown",
-  "author": "t.havlicek@s-v.de",
+  "author": "atrium",
   "contributors": [],
   "private": true,
   "description": "",
@@ -12,8 +12,13 @@
     "dev": "tsup --watch"
   },
   "tsup": {
-    "entry": ["src/index.ts"],
-    "format": ["esm", "cjs"],
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "esm",
+      "cjs"
+    ],
     "external": [
       "@sv/elements/expandable"
     ],
