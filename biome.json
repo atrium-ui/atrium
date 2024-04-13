@@ -15,7 +15,7 @@
   },
   "files": {
     "ignore": [
-      "./docs/assets/dependents.json",
+      "**/package.json",
       "./packages/slider/src",
       "./packages/html-to-custom-tag-replacement/src"
     ]
