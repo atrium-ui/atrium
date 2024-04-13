@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.10.2 (2024-04-13)
+
+### Fixes
+
+- correctly debounce resize events
+
 ## 0.10.1 (2024-04-13)
 
 ### Fixes
