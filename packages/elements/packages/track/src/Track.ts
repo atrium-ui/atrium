@@ -171,12 +171,14 @@ export class PointerTrait implements Trait {
 export class SnapTrait implements Trait {
   id = "snap";
 
-  formatDebounced = debounce((track: Track) => {
-    track.setTarget(track.getClosestItemPosition(), "ease");
-  });
-
   format(track: Track) {
-    this.formatDebounced(track);
+    if (
+      (track.vertical && track.position.y < track.overflowHeight) ||
+      track.position.x < track.overflowWidth
+    ) {
+      // only when it was on a child already
+      track.setTarget(track.getClosestItemPosition(), "ease");
+    }
   }
 
   input(track: Track) {
@@ -1080,8 +1082,6 @@ export class Track extends LitElement {
       }
     });
 
-    this.listener(window, ["resize"], this.format, { passive: true });
-
     const intersectionObserver = new IntersectionObserver((intersections) => {
       for (const entry of intersections) {
         if (entry.isIntersecting) {
@@ -1097,7 +1097,7 @@ export class Track extends LitElement {
       hostDisconnected: () => intersectionObserver.disconnect(),
     });
 
-    this.resizeObserver = new ResizeObserver(() => this.format());
+    this.resizeObserver = new ResizeObserver(debounce(() => this.format()));
 
     this.addController({
       hostConnected: () => this.resizeObserver?.observe(this),
