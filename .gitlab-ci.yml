@@ -25,8 +25,6 @@ check:
 
 test:
   stage: test
-  artifacts:
-    untracked: true
   except:
     - tags
   script: task test
@@ -45,8 +43,8 @@ test_merge:
 
 publish:
   stage: publish
-  dependencies:
-    - test
+  artifacts:
+    untracked: true
   rules:
     - if: $CI_COMMIT_MESSAGE =~ "/^publish:/"
       when: never
@@ -60,6 +58,8 @@ publish:
 
 pages:
   stage: docs
+  dependencies:
+    - publish
   only:
     - main
   environment:
