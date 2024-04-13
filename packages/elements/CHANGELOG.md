@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 0.10.1 (2024-04-13)
+
+### Fixes
+
+- fix bug where a-track would prevent text selection on page
+- better configure behaviour of format changes
+
 ## 0.10.0
 
 ### Minor Changes
