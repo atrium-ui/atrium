@@ -5,12 +5,9 @@
   "author": "f.kretschmer@s-v.de",
   "scripts": {
     "test": "bun test",
-    "publish-package": "npm publish || true"
+    "publish-package": "task publish"
   },
-  "files": [
-    "dist",
-    "src"
-  ],
+  "files": ["dist", "src"],
   "exports": {
     "./CHANGELOG.md": {
       "import": "./CHANGELOG.md"

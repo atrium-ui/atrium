@@ -76,20 +76,30 @@ tasks:
     cmds:
       - knope document-change
 
-  publish:
+  release:
     deps: [build]
     cmds:
-      - knope release
-      # - task notify || true
+      - knope release | tee .task/publish.txt
+      - task notify || true
 
-  # notify:
-  #   silent: true
-  #   dir: "./"
-  #   cmds:
-  #     - bun ./scripts/generate-notify > .task/notify.txt
-  #     - defer: rm .task/notify.txt
-  #     - 'echo "{\"message\": \"$(cat .task/notify.txt)\"}"'
-  #     - 'curl -X POST -d "{\"message\": \"$(cat .task/notify.txt)\"}" $SLACK_WEBHOOK_URL'
+  publish:
+    dir: "{{.USER_WORKING_DIR}}"
+    vars:
+      NAME:
+        sh: npm version --json | jq "keys[0]"
+      VERSION:
+        sh: npm version --json | jq ".[keys[0]]"
+    cmds:
+      - npm publish && echo info Publishing \"{{.NAME}}\" at \"{{.VERSION}}\" || true
+
+  notify:
+    silent: true
+    dir: "./"
+    cmds:
+      - bun ./scripts/generate-notify > .task/notify.txt
+      - defer: rm .task/notify.txt
+      - 'echo "{\"message\": \"$(cat .task/notify.txt)\"}"'
+      - 'curl -X POST -d "{\"message\": \"$(cat .task/notify.txt)\"}" $SLACK_WEBHOOK_URL'
 
   docker:build:
     cmds:

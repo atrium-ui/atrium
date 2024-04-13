@@ -8,7 +8,7 @@
   "scripts": {
     "check": "tsc --pretty",
     "test": "bun test --preload ./test/preload.ts",
-    "publish-package": "npm publish || true"
+    "publish-package": "task publish"
   },
   "exports": {
     "./CHNAGELOG.md": {
