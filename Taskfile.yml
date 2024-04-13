@@ -76,7 +76,7 @@ tasks:
   release:
     deps: [build]
     cmds:
-      - knope release | tee .task/publish.txt
+      - knope -v release | tee .task/publish.txt
       - task notify || true
 
   publish:
