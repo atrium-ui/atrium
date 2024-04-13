@@ -1,5 +1,0 @@
----
-codestyle: patch
----
-
-# Test releases
