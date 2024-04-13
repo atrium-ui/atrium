@@ -1,0 +1,55 @@
+[packages.codestyle]
+versioned_files = ["packages/codestyle/package.json"]
+changelog = "packages/codestyle/CHANGELOG.md"
+scopes = ["codestyle"]
+
+[packages.components]
+versioned_files = ["packages/components/package.json"]
+changelog = "packages/components/CHANGELOG.md"
+scopes = ["components"]
+
+[packages.elements]
+versioned_files = ["packages/elements/package.json"]
+changelog = "packages/elements/CHANGELOG.md"
+scopes = ["elements"]
+
+[packages.html-to-custom-tag-replacement]
+versioned_files = ["packages/html-to-custom-tag-replacement/package.json"]
+changelog = "packages/html-to-custom-tag-replacement/CHANGELOG.md"
+scopes = ["htctr"]
+
+[packages.scroll-lock]
+versioned_files = ["packages/scroll-lock/package.json"]
+changelog = "packages/scroll-lock/CHANGELOG.md"
+scopes = ["scroll-lock"]
+
+[packages.slider]
+versioned_files = ["packages/slider/package.json"]
+changelog = "packages/slider/CHANGELOG.md"
+scopes = ["slider"]
+
+[[workflows]]
+name = "release"
+
+[[workflows.steps]]
+type = "PrepareRelease"
+allow_empty = true
+
+[[workflows.steps]]
+type = "Command"
+command = "git commit -m \"chore: prepare releases\""
+
+[[workflows.steps]]
+type = "Command"
+command = "git push origin HEAD:main -o ci.skip"
+
+[[workflows.steps]]
+type = "Release"
+
+[[workflows.steps]]
+type = "Command"
+command = "bun x turbo run publish-package"
+
+[[workflows.steps]]
+type = "Command"
+command = "git push && git push --tags"

@@ -5,12 +5,16 @@
   "contributors": [],
   "scripts": {
     "check": "tsc --pretty",
-    "test": "bun test"
+    "test": "bun test",
+    "publish-package": "npm publish"
   },
   "type": "module",
   "main": "./bin/cli.js",
   "bin": "./bin/cli.js",
-  "files": ["src", "./dist"],
+  "files": [
+    "src",
+    "./dist"
+  ],
   "engines": {
     "node": ">=16"
   },

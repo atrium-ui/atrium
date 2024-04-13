@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "",
   "author": {
-    "name": "f.kretschmer@s-v.de"
+    "name": "f.kretschmer@s-v.de",
+    "publish-package": "npm publish"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -13,8 +14,13 @@
     "dev": "tsup --watch"
   },
   "tsup": {
-    "entry": ["src/index.ts"],
-    "format": ["esm", "cjs"],
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "esm",
+      "cjs"
+    ],
     "external": [],
     "sourcemap": true,
     "clean": true

@@ -18,7 +18,8 @@
   "scripts": {
     "check": "tsc --pretty",
     "test": "bun test",
-    "postinstall": "./bin/cli.js editorconfig"
+    "postinstall": "./bin/cli.js editorconfig",
+    "publish-package": "npm publish"
   },
   "keywords": [],
   "license": "ISC",

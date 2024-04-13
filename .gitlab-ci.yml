@@ -4,7 +4,7 @@ stages:
   - publish
   - docs
 
-image: luckydye/mise:latest
+image: luckydye/atrium:latest
 
 variables:
   MISE_DATA_DIR: $CI_PROJECT_DIR/.mise

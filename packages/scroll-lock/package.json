@@ -7,13 +7,20 @@
   "types": "src/index.ts",
   "scripts": {
     "test": "bun test",
-    "build": "tsup"
+    "build": "tsup",
+    "publish-package": "npm publish"
   },
   "author": "f.kretschmer@s-v.de",
   "tsup": {
-    "entry": ["src/index.ts"],
-    "format": ["esm"],
-    "external": ["@sv/*"],
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "esm"
+    ],
+    "external": [
+      "@sv/*"
+    ],
     "sourcemap": true,
     "clean": true
   },
