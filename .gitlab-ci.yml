@@ -1,6 +1,5 @@
 stages:
-  - build
-  - check
+  - test
   - publish
   - docs
 
@@ -18,16 +17,8 @@ before_script:
   - git config user.name "CI"
   - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
 
-build:
-  stage: build
-  artifacts:
-    untracked: true
-  except:
-    - tags
-  script: task build
-
 check:
-  stage: check
+  stage: test
   dependencies:
     - build
   except:
@@ -35,23 +26,21 @@ check:
   script: task check
 
 test:
-  stage: check
-  dependencies:
-    - build
+  stage: test
+  artifacts:
+    untracked: true
   except:
     - tags
   script: task test
 
 check_merge:
-  stage: check
+  stage: test
   only:
     - merge_requests
   script: task check
 
 test_merge:
-  stage: check
-  dependencies:
-    - check_merge
+  stage: test
   only:
     - merge_requests
   script: task test
@@ -59,7 +48,7 @@ test_merge:
 publish:
   stage: publish
   dependencies:
-    - build
+    - test
   rules:
     - if: $CI_COMMIT_MESSAGE =~ "/^publish:/"
       when: never
@@ -72,8 +61,6 @@ publish:
 
 pages:
   stage: docs
-  dependencies:
-    - build
   only:
     - main
   environment:
