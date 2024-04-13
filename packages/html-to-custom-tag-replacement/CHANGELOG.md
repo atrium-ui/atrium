@@ -1,5 +1,11 @@
 # @sv/html-to-custom-tag-replacement
 
+## 0.1.1 (2024-04-13)
+
+### Features
+
+- Shared codestyle configuration files
+
 ## 0.1.0
 
 ### Minor Changes
