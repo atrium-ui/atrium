@@ -6,6 +6,7 @@ description: A scroll-container with slider utility functions.
 import "./styles/track.scss";
 import Elements from "./elements/Elements.astro"
 import { Pills, Lit } from "../../../components/Pills";
+import { VariableTrack } from "./elements/Track";
 import TypeDoc from "../../../components/TypeDoc.astro";
 
 <Elements />
@@ -181,6 +182,10 @@ Different example confugrations of tracks.
     </div>
   </a-track>
 </div>
+
+### Dynamic children
+
+<VariableTrack client:load />
 
 ### Nested
 

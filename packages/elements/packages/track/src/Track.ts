@@ -1014,10 +1014,10 @@ export class Track extends LitElement {
       if (this.grabbing) {
         this.inputState.move.value.add(delta.clone());
         this.mousePos.set(pos);
-      }
 
-      pointerEvent.preventDefault();
-      pointerEvent.stopPropagation();
+        pointerEvent.preventDefault();
+        pointerEvent.stopPropagation();
+      }
     });
 
     // TODO: put this in a trait so it can be disabled
