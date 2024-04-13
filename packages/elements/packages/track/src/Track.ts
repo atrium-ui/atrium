@@ -1097,6 +1097,7 @@ export class Track extends LitElement {
       hostDisconnected: () => intersectionObserver.disconnect(),
     });
 
+    // TODO: diff the container size and appliy to position of track
     this.resizeObserver = new ResizeObserver(debounce(() => this.format()));
 
     this.addController({
