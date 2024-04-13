@@ -5,9 +5,12 @@
   "author": "f.kretschmer@s-v.de",
   "scripts": {
     "test": "bun test",
-    "publish-package": "npm publish"
+    "publish-package": "npm publish || true"
   },
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "exports": {
     "./CHANGELOG.md": {
       "import": "./CHANGELOG.md"
