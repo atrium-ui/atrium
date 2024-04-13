@@ -1020,6 +1020,7 @@ export class Track extends LitElement {
       pointerEvent.stopPropagation();
     });
 
+    // TODO: put this in a trait so it can be disabled
     this.listener(
       this,
       "wheel",
