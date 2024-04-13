@@ -1,6 +1,6 @@
 FROM debian:latest
 
-RUN apt update -y && apt install curl bash wget git -y
+RUN apt update -y && apt install curl bash wget jq git -y
 
 RUN wget -O - https://mise.jdx.dev/install.sh | MISE_INSTALL_PATH=/usr/local/bin/mise sh
 ENV PATH=$PATH:/root/.local/share/mise/shims
