@@ -1,4 +1,5 @@
 stages:
+  - merge
   - test
   - publish
   - docs
@@ -29,17 +30,23 @@ test:
     - tags
   script: task test
 
-check_merge:
-  stage: test
+merge_check:
+  stage: merge
   only:
     - merge_requests
   script: task check
 
-test_merge:
-  stage: test
+merge_test:
+  stage: merge
   only:
     - merge_requests
   script: task test
+
+merge_release_preview:
+  stage: merge
+  only:
+    - merge_requests
+  script: task release:preview
 
 publish:
   stage: publish

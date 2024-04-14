@@ -26,9 +26,10 @@ export function Button(
   props: {
     type?: "button" | "submit";
     class?: string | string[];
-    disabled?: boolean;
-    variant?: keyof typeof buttonVariants;
     slot?: string;
+    disabled?: boolean;
+    autofocus?: boolean;
+    variant?: keyof typeof buttonVariants;
     label?: string;
     onClick?: (e: MouseEvent) => void;
   },
@@ -36,9 +37,10 @@ export function Button(
 ) {
   return (
     <button
+      type={props.type || "button"}
       // @ts-ignore
       slot={props.slot}
-      type={props.type || "button"}
+      autofocus={props.autofocus}
       class={[
         buttonVariants.base,
         buttonVariants[props.variant ?? "default"],

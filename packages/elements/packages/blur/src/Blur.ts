@@ -1,5 +1,5 @@
-import { type HTMLTemplateResult, LitElement, css, html } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { LitElement, type PropertyValueMap, css, html } from "lit";
+import { property } from "lit/decorators/property.js";
 import { ScrollLock } from "@sv/scroll-lock";
 
 declare global {
@@ -13,8 +13,7 @@ declare global {
  * - It will automatically "blur" (hide) the content, when clicked outside of its children.
  * - Optionally, when the content is shown, scrolling will be locked.
  *
- * @attribute enabled (default: false) - Whether the blur is enabled or not.
- * @attribute scrollLock (default: false) - Whether the blur should lock scrolling when shown.
+ * @customEvent blur - Emitted when the elements is blurred / closed.
  *
  * @example
  * ```html
@@ -28,9 +27,8 @@ declare global {
  *
  * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-blur/
  */
-@customElement("a-blur")
 export class Blur extends LitElement {
-  public static styles = css`
+  static styles = css`
     :host {
       display: block;
       transition-property: all;
@@ -42,83 +40,155 @@ export class Blur extends LitElement {
     }
   `;
 
+  protected render() {
+    return html`<slot></slot>`;
+  }
+
   /**
    * Whether the blur is enabled or not.
    * @defaultValue false
+   * @propert
    */
-  @property({ type: Boolean, reflect: true })
-  public enabled = false;
+  @property({ type: Boolean, reflect: true }) public enabled = false;
 
   /**
    * Whether the blur should lock scrolling when shown.
    * @defaultValue false
+   * @propert
    */
-  @property({ type: Boolean, reflect: true })
-  public scrollLock = true;
+  @property({ type: Boolean, reflect: true }) public scrollLock = true;
 
-  scrollLockControl = new ScrollLock({
+  public lock = new ScrollLock({
     allowElements: ["a-blur > *"],
   });
 
-  tryLock() {
+  private tryLock() {
     if (this.scrollLock) {
-      this.scrollLockControl.enable();
+      this.lock.enable();
     }
   }
 
-  tryUnlock() {
+  private tryUnlock() {
     if (this.scrollLock) {
-      this.scrollLockControl.disable();
+      this.lock.disable();
     }
   }
 
-  @query("slot")
-  slot;
+  private lastActiveElement: HTMLElement | null = null;
 
-  protected updated(): void {
-    if (this.enabled) {
-      this.tryLock();
-      this.setAttribute("aria-hidden", "false");
-    } else {
-      this.tryUnlock();
-      this.setAttribute("aria-hidden", "true");
-    }
+  /** Disable the blur element */
+  public disable() {
+    this.tryUnlock();
+    this.inert = true;
+    this.ariaHidden = "true";
+    this.enabled = false;
+
+    this.lastActiveElement?.focus();
   }
 
-  shouldBlur(e: MouseEvent) {
+  /** Enable the blur element */
+  public enable() {
+    this.tryLock();
+    this.inert = false;
+    this.ariaHidden = "false";
+    this.enabled = true;
+
+    this.lastActiveElement = document.activeElement as HTMLElement;
+
+    const elements = this.focusableElements();
+    elements[0]?.focus();
+  }
+
+  private shouldBlur(e: MouseEvent) {
     if (e.target === this && this.contains(e.target as HTMLElement)) {
       return this.enabled;
     }
     return false;
   }
 
-  handleClick = (e: MouseEvent) => {
-    if (this.shouldBlur(e)) {
-      this.dispatchEvent(new Event("blur"));
-      this.enabled = false;
-    }
-  };
+  private focusableElements() {
+    return this.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
+  }
 
-  handleCloseEvent = (e: Event) => {
-    this.enabled = false;
-  };
+  protected updated(changed: PropertyValueMap<any>): void {
+    if (changed.has("enabled")) this.enabled ? this.enable() : this.disable();
+  }
 
-  connectedCallback(): void {
+  public connectedCallback() {
     super.connectedCallback();
-    this.addEventListener("mousedown", this.handleClick);
-    this.addEventListener("close", this.handleCloseEvent, { capture: true });
+
+    this.role = "dialog";
+
+    this.listener(this, "keydown", (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        this.disable();
+      }
+
+      if (e.key === "Tab") {
+        const elements = this.focusableElements();
+
+        if (e.shiftKey) {
+          if (document.activeElement === elements[0]) {
+            elements[elements.length - 1]?.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === elements[elements.length - 1]) {
+            elements[0]?.focus();
+            e.preventDefault();
+          }
+        }
+      }
+    });
+
+    this.listener(this, "mousedown", (e: MouseEvent) => {
+      if (!this.shouldBlur(e)) return;
+
+      const blurEvent = new CustomEvent("blur", { cancelable: true });
+      this.dispatchEvent(blurEvent);
+
+      if (blurEvent.defaultPrevented) return;
+      this.disable();
+    });
+
+    // capture close events coming from inside the blur
+    this.listener(
+      this,
+      "close",
+      () => {
+        this.disable();
+      },
+      { capture: true },
+    );
   }
 
-  disconnectedCallback(): void {
-    this.removeEventListener("mousedown", this.handleClick);
-    this.removeEventListener("close", this.handleCloseEvent, { capture: true });
-
+  public disconnectedCallback(): void {
     // TODO: This call should be on a stack.
-    //				So that if multiple blur elements are enabled, it only disables when all are disabled.
+    //			 So that if multiple blur elements are enabled,
+    //       it only disables when all are disabled.
     this.tryUnlock();
+
+    super.disconnectedCallback();
   }
 
-  render(): HTMLTemplateResult {
-    return html`<slot></slot>`;
+  private listener<T extends Event>(
+    host: HTMLElement | typeof globalThis,
+    events: string | string[],
+    handler: (ev: T) => void,
+    options?: AddEventListenerOptions,
+  ) {
+    for (const event of Array.isArray(events) ? events : [events]) {
+      // A controller is just a hook into lifecycle functions (connected, disconnected, update, updated);
+      this.addController({
+        hostConnected: () =>
+          host.addEventListener(event, handler as EventListener, options),
+        hostDisconnected: () =>
+          host.removeEventListener(event, handler as EventListener, options),
+      });
+    }
   }
 }
+
+customElements.define("a-blur", Blur);
