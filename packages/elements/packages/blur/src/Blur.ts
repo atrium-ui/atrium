@@ -116,6 +116,14 @@ export class Blur extends LitElement {
     if (changed.has("enabled")) this.enabled ? this.enable() : this.disable();
   }
 
+  private tryBlur() {
+    const blurEvent = new CustomEvent("blur", { cancelable: true });
+    this.dispatchEvent(blurEvent);
+
+    if (blurEvent.defaultPrevented) return;
+    this.disable();
+  }
+
   public connectedCallback() {
     super.connectedCallback();
 
@@ -123,7 +131,7 @@ export class Blur extends LitElement {
 
     this.listener(this, "keydown", (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        this.disable();
+        this.tryBlur();
       }
 
       if (e.key === "Tab") {
@@ -146,11 +154,7 @@ export class Blur extends LitElement {
     this.listener(this, "mousedown", (e: MouseEvent) => {
       if (!this.shouldBlur(e)) return;
 
-      const blurEvent = new CustomEvent("blur", { cancelable: true });
-      this.dispatchEvent(blurEvent);
-
-      if (blurEvent.defaultPrevented) return;
-      this.disable();
+      this.tryBlur();
     });
 
     // capture close events coming from inside the blur
