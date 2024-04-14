@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.10.4 (2024-04-14)
+
+### Features
+
+- Implemented focus management to a-blur
+
 ## 0.10.3 (2024-04-13)
 
 ### Fixes

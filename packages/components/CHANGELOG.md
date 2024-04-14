@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.9.1 (2024-04-14)
+
+### Fixes
+
+- Added Lightbox component
+
 ## 0.9.0
 
 ### Minor Changes
