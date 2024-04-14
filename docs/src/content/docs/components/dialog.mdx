@@ -5,7 +5,7 @@ import Example from "../../../components/Example.astro";
 import { Dialog } from "@sv/components/src/vue/Dialog";
 import { Button } from "@sv/components/src/vue/Button";
 
-A sheet is basically a burger menu. Composed of an a-blur.
+A Dialog.
 
 import { Pills, Atrium } from "../../../components/Pills";
 
@@ -24,31 +24,13 @@ import { Dialog } from "./Dialog.jsx";
 import { Button } from "./Button.jsx";
 ---
 
-<Dialog>
+<Dialog client:load>
   ## Dialog
   This is a dialog.
-
-  <div class="mt-4" onclick="document.querySelector('a-blur').enabled = false">
-    <Button>Close</Button>
-  </div>
 </Dialog>
-
-<div onclick="document.querySelector('a-blur').enabled = true">
-  <Button>Open</Button>
-</div>
 `}>
-  <div>
-    <Dialog client:load>
-      ## Dialog
-      This is a dialog.
-
-      <div class="mt-4" onclick="document.querySelector('a-blur').enabled = false">
-        <Button>Close</Button>
-      </div>
-    </Dialog>
-
-    <div onclick="document.querySelector('a-blur').enabled = true">
-      <Button>Open</Button>
-    </div>
-  </div>
+  <Dialog client:load>
+    ## Dialog
+    This is a dialog.
+  </Dialog>
 </Example>

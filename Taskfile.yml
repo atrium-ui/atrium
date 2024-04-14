@@ -80,6 +80,10 @@ tasks:
       - knope -v release | tee .task/publish.txt
       - task notify || true
 
+  release:preview:
+    cmds:
+      - knope release --dry-run
+
   publish:
     dir: "{{.USER_WORKING_DIR}}"
     vars:
