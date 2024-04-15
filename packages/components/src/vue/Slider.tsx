@@ -2,7 +2,7 @@
 
 import "@sv/elements/track";
 import type { Track } from "@sv/elements/track";
-import { computed, defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
 
@@ -22,23 +22,6 @@ export const Slider = defineComponent((_, { slots }) => {
   });
   const showPrevious = computed(() => {
     return overflowWidth.value > 0 && current.value > 0;
-  });
-
-  onMounted(() => {
-    itemCount.value = track.value?.children.length || 0;
-
-    track.value?.addEventListener("change", () => {
-      current.value = track.value?.currentItem || 0;
-    });
-    track.value?.addEventListener("scroll", () => {
-      position.value = track.value?.position.x || 0;
-    });
-    window.addEventListener("resize", () => {
-      overflowWidth.value = track.value?.overflowWidth || 0;
-    });
-    requestAnimationFrame(() => {
-      overflowWidth.value = track.value?.overflowWidth || 0;
-    });
   });
 
   const progress = computed(() => {
@@ -71,7 +54,21 @@ export const Slider = defineComponent((_, { slots }) => {
           <Icon name="arrow-right" />
         </Button>
 
-        <a-track ref={track} overflowscroll snap class="flex w-full overflow-visible">
+        <a-track
+          ref={track}
+          class="flex w-full overflow-visible"
+          overflowscroll
+          snap
+          onScroll={() => {
+            position.value = track.value?.position.x || 0;
+          }}
+          onChange={() => {
+            current.value = track.value?.currentItem || 0;
+          }}
+          onFormat={(e) => {
+            overflowWidth.value = track.value?.overflowWidth || 0;
+            itemCount.value = track.value?.children.length || 0;
+          }}>
           {slots.default?.()}
         </a-track>
       </div>
