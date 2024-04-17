@@ -49,12 +49,12 @@ tasks:
     deps: [setup]
     cmds:
       - bun x turbo check
-      - bun x biome check .
+      - bun x biome check --diagnostic-level=error .
 
   fix:
     desc: Apply all (unsafe) autofixes
     cmds:
-      - bun x biome check --diagnostic-level=error --apply .
+      - bun x biome check --apply .
 
   fix:unsafe:
     desc: Apply all (unsafe) autofixes

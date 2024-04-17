@@ -86,10 +86,6 @@ export async function use(args = []) {
   });
 
   if (process.stdin.isTTY && components.length === 0) {
-    const options = readdirSync(componentRoot)
-      .filter((file) => file.match(".tsx"))
-      .map((file) => file.replace(".tsx", ""));
-
     // @ts-ignore
     const { component } = await enquirer.prompt({
       type: "multiselect",
@@ -98,7 +94,7 @@ export async function use(args = []) {
       // @ts-ignore
       footer: chalk.dim("Press <space> to select"),
       stdout: process.stderr,
-      choices: options,
+      choices: availableComponents,
     });
 
     if (component) components.push(...component);
