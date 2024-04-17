@@ -68,7 +68,8 @@ export const Slider = defineComponent((_, { slots }) => {
           onFormat={(e) => {
             overflowWidth.value = track.value?.overflowWidth || 0;
             itemCount.value = track.value?.children.length || 0;
-          }}>
+          }}
+        >
           {slots.default?.()}
         </a-track>
       </div>
