@@ -1016,6 +1016,7 @@ export class Track extends LitElement {
       this.mousePos.y = e.y;
 
       this.setTarget(undefined);
+      this.acceleration.set(0);
 
       e.preventDefault();
       e.stopPropagation();
