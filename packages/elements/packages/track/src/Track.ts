@@ -91,6 +91,8 @@ export class PointerTrait implements Trait {
 
     if (track.slotElement) {
       track.slotElement.style.pointerEvents = this.grabbing ? "none" : "";
+      // TOOD: maybe the inert is enough here, not sure how browser support is.
+      track.slotElement.inert = this.grabbing;
     }
     if (!isTouch()) track.style.cursor = this.grabbing ? "grabbing" : "";
   }
@@ -1102,6 +1104,7 @@ export class Track extends LitElement {
       if (this.grabbing) {
         this.grabbing = false;
         e.preventDefault();
+        e.stopPropagation();
 
         this.inputState.release.value = true;
       }
