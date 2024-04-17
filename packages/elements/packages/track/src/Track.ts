@@ -136,8 +136,8 @@ export class PointerTrait implements Trait {
     let stopBottom = 0;
     let stopRight = 0;
 
-    stopBottom = e.trackHeight - e.offsetHeight;
-    stopRight = e.trackWidth - e.offsetWidth;
+    stopBottom = e.trackHeight - e.height;
+    stopRight = e.trackWidth - e.width;
 
     const align = e.align || "start";
 
@@ -343,13 +343,21 @@ export class Track extends LitElement {
     if (!this.vertical) {
       return this.itemWidths.reduce((last, curr) => last + curr, 0);
     }
-    return this.offsetWidth;
+    return this.width;
   }
 
   public get trackHeight() {
     if (this.vertical) {
       return this.itemHeights.reduce((last, curr) => last + curr, 0);
     }
+    return this.height;
+  }
+
+  public get width() {
+    return this.offsetWidth;
+  }
+
+  public get height() {
     return this.offsetHeight;
   }
 
@@ -358,11 +366,11 @@ export class Track extends LitElement {
   }
 
   public get overflowWidth() {
-    return this.trackWidth - this.offsetWidth;
+    return this.trackWidth - this.width;
   }
 
   public get overflowHeight() {
-    return this.trackHeight - this.offsetHeight;
+    return this.trackHeight - this.height;
   }
 
   public currentItem = 0;
@@ -507,9 +515,9 @@ export class Track extends LitElement {
         break;
       case "end":
         if (this.vertical) {
-          this.origin.set([0, this.offsetHeight]);
+          this.origin.set([0, this.height]);
         } else {
-          this.origin.set([this.offsetWidth, 0]);
+          this.origin.set([this.width, 0]);
         }
         break;
     }
@@ -889,7 +897,7 @@ export class Track extends LitElement {
     if (this.loop) {
       const visibleItems: number[] = [];
       let lastItem: number | null = null;
-      for (let x = -this.offsetWidth; x < this.offsetWidth + this.offsetWidth; x += 100) {
+      for (let x = -this.width; x < this.width + this.width; x += 100) {
         const item = this.getItemAtPosition(this.position.clone().add([x, 0]));
         if (item != null && item.index !== lastItem) {
           // clone nodes if possible
@@ -963,7 +971,20 @@ export class Track extends LitElement {
     this.role = "region";
 
     this.listener(this, "focusin", (e: FocusEvent) => {
-      this.moveTo(this.elementItemIndex(e.target as HTMLElement));
+      const item = this.elementItemIndex(e.target as HTMLElement);
+      const dist = Vec2.dist2(this.getToItemPosition(item), this.position);
+      const rect = this.getItemRects()[item];
+
+      if (!rect) return;
+
+      if (
+        dist.x + rect.x > this.width ||
+        dist.x < 0 ||
+        dist.y + rect.y > this.height ||
+        dist.y < 0
+      ) {
+        this.moveTo(item);
+      }
     });
 
     this.listener(this, "keydown", (e: KeyboardEvent) => {
