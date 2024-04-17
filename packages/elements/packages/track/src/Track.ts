@@ -985,6 +985,10 @@ export class Track extends LitElement {
     this.listener(this, "pointerdown", (e: PointerEvent) => {
       if (e.button !== 0) return; // only left click
 
+      // Try to focus this element when clicked on for arrow key navigation,
+      // will only work when tabindex=0.
+      this.focus();
+
       this.mousePos.x = e.x;
       this.mousePos.y = e.y;
 
