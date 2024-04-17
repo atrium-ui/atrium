@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.9.2 (2024-04-17)
+
+### Fixes
+
+- Fix cli not finding components
+
 ## 0.9.1 (2024-04-14)
 
 ### Fixes
