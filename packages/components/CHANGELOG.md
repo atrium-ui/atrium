@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.9.3 (2024-04-18)
+
+### Features
+
+- update component templates
+
 ## 0.9.2 (2024-04-17)
 
 ### Fixes
