@@ -1,5 +1,17 @@
 # @sv/elements
 
+## 0.10.5 (2024-04-18)
+
+### Features
+
+- a-track: grab focus when clicked on
+- a-track: move on focus only when item is out of view
+
+### Fixes
+
+- correctly prevent click events while dragging
+- a-track: stop track on pointer down
+
 ## 0.10.4 (2024-04-14)
 
 ### Features
