@@ -39,6 +39,6 @@ export const AccordionItem = defineComponent(
     );
   },
   {
-    props: ["title"],
+    props: ["title", "opened"],
   },
 );

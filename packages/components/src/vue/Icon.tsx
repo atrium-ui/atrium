@@ -2,11 +2,13 @@
 
 export function Icon(props: {
   name: keyof typeof ICONS;
+  class?: string | string[];
 }) {
   return (
     <span
       class={[
         "relative top-[0.15em] inline-block align-baseline leading-none [&>svg]:h-[1em] [&>svg]:w-[1em]",
+        props.class,
       ]}
     >
       {ICONS[props.name || "unknown"]}
