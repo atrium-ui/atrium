@@ -128,6 +128,14 @@ export class Vec2 extends Array {
     return new Vec2(this);
   }
 
+  isNaN() {
+    return Number.isNaN(this[0]) || Number.isNaN(this[1]);
+  }
+
+  toString(): string {
+    return `Vec{${this.join(",")}}`;
+  }
+
   static add(vec1: VecOrNumber, vec2: VecOrNumber) {
     if (Vec2.isVec(vec1)) {
       return new Vec2(vec1[0], vec1[1]).add(vec2);
@@ -153,13 +161,9 @@ export class Vec2 extends Array {
     return new Vec2(vec.x, vec.y).abs();
   }
 
+  static dist2(vec1: Vec2, vec2: Vec2) {
+    return new Vec2(vec1[0] - vec2[0], vec1[1] - vec2[1]);
+  }
+
   static isVec = Array.isArray;
-
-  isNaN() {
-    return Number.isNaN(this[0]) || Number.isNaN(this[1]);
-  }
-
-  toString(): string {
-    return `Vec{${this.join(",")}}`;
-  }
 }
