@@ -3,9 +3,7 @@
   "compilerOptions": {
     "useDefineForClassFields": false,
     "experimentalDecorators": true,
-    "types": [
-      "@types/bun"
-    ]
+    "types": ["@types/bun"]
   },
   "exclude": [
     "node_modules",

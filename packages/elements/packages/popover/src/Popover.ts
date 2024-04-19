@@ -107,7 +107,7 @@ export class Popover extends LitElement {
       </slot>
       <slot
         class="content"
-        ?inert=${this.opened ? false : true}
+        ?inert=${!this.opened}
         aria-hidden=${this.opened ? "false" : "true"}
         @keydown=${this.onKeyDown}>
       </slot>

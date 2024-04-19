@@ -34,10 +34,10 @@ export const VariableTrack = defineComponent(() => {
           }
         />
         <a-track ref={track} overflowscroll snap class="flex max-w-[100vw]">
-          {new Array(count.value).fill(1).map(() => {
+          {new Array(count.value).fill(1).map((_, i) => {
             return (
               // biome-ignore lint/a11y/useValidAnchor: <explanation>
-              <a href="javascript:(null)" class="block flex-none pr-4">
+              <a href="javascript:(null)" class="block flex-none pr-4" key={i}>
                 <canvas width={260} height={280} class="bg-slate-500" />
               </a>
             );
