@@ -16,10 +16,7 @@ async function trackWithChildren() {
     track.append(div);
   }
 
-  // TODO: IntersectionObserver not defined
-  // TODO  event.eventPhase = EventPhaseEnum.atTarget; TypeError: Attempted to assign to readonly property.
-  // document.body.append(track);
-
+  document.body.append(track);
   return track;
 }
 
@@ -54,11 +51,10 @@ test("check snap trait", async () => {
   expect(track.findTrait("snap")).toBeDefined();
 });
 
-// TODO: *see above*
-// test("tab navigation", async () => {
-//   const track = await trackWithChildren();
-//   track.children[8]?.focus();
-//   track.updated();
+test("tab navigation", async () => {
+  const track = await trackWithChildren();
+  const child = track.children[8];
+  child?.focus();
 
-//   console.log(track.position);
-// });
+  console.log(document.activeElement === child);
+});

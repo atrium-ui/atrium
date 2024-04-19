@@ -8,11 +8,9 @@
   "license": "ISC",
   "devDependencies": {
     "@biomejs/biome": "^1.6.0",
-    "@happy-dom/global-registrator": "^11.0.2",
-    "@types/bun": "latest",
+    "@types/bun": "^1.1.0",
     "@types/node": "^20.11.0",
     "@types/web": "^0.0.123",
-    "bun-types": "^1.0.14",
     "fast-glob": "^3.3.2",
     "tsup": "^7.2.0",
     "turbo": "^1.10.16",

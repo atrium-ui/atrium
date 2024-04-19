@@ -5,7 +5,9 @@
     "useDefineForClassFields": false,
     "experimentalDecorators": true,
     "jsx": "preserve",
-    "types": ["bun-types"]
+    "types": [
+      "@types/bun"
+    ]
   },
   "exclude": [
     "node_modules",

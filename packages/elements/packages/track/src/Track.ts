@@ -973,6 +973,8 @@ export class Track extends LitElement {
     this.role = "region";
 
     this.listener(this, "focusin", (e: FocusEvent) => {
+      console.log("FOCUS");
+
       const item = this.elementItemIndex(e.target as HTMLElement);
       const dist = Vec2.dist2(this.getToItemPosition(item), this.position);
       const rect = this.getItemRects()[item];

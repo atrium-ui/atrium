@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "check": "tsc --pretty",
-    "test": "bun test --preload ./test/preload.ts",
+    "test": "bun test --preload ./test/preload.ts .",
     "publish-package": "task publish"
   },
   "files": [
@@ -95,6 +95,10 @@
   "license": "ISC",
   "dependencies": {
     "lit": "^2.5.0"
+  },
+  "devDependencies": {
+    "@happy-dom/global-registrator": "^14.7.1",
+    "intersection-observer": "^0.12.2"
   },
   "peerDependencies": {
     "@rive-app/canvas-single": "^2.7.1"
