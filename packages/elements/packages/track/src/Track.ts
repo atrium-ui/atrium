@@ -5,9 +5,6 @@ import { Vec2 } from "./Vec.js";
 export interface Trait<T extends Track = Track> {
   id: string;
 
-  /** trait created */
-  created?(track: T): void;
-
   /** format event */
   format?(track: T): void;
 
@@ -288,6 +285,7 @@ export class Track extends LitElement {
 
   public get itemCount() {
     if (this.children) {
+      // TODO: respect left children too
       return this.children.length - this.clones.length;
     }
     return 0;
@@ -324,7 +322,9 @@ export class Track extends LitElement {
   private _widths: number[] | undefined = undefined;
   private get itemWidths() {
     if (!this._widths) {
+      // TODO: respect left children too
       this._widths = new Array(this.itemCount).fill(1).map((_, i) => {
+        // TODO: offsetWidth doesn't take transforms in consideration, so we use. Maybe use getBoundingClientRect
         return (this.children[i] as HTMLElement)?.offsetWidth || 0;
       });
     }
@@ -334,6 +334,7 @@ export class Track extends LitElement {
   private _heights: number[] | undefined = undefined;
   private get itemHeights() {
     if (!this._heights) {
+      // TODO: respect left children too
       this._heights = new Array(this.itemCount).fill(1).map((_, i) => {
         return (this.children[i] as HTMLElement)?.offsetHeight || 0;
       });
@@ -973,8 +974,6 @@ export class Track extends LitElement {
     this.role = "region";
 
     this.listener(this, "focusin", (e: FocusEvent) => {
-      console.log("FOCUS");
-
       const item = this.elementItemIndex(e.target as HTMLElement);
       const dist = Vec2.dist2(this.getToItemPosition(item), this.position);
       const rect = this.getItemRects()[item];

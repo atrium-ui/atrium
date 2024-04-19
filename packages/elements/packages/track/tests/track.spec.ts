@@ -2,18 +2,17 @@ import { test, expect } from "bun:test";
 
 const NODE_NAME = "a-track";
 
-async function trackWithChildren() {
+async function trackWithChildren(itemCount = 10) {
   const { Track } = await import("@sv/elements/track");
 
   const track = new Track();
   track.style.width = "800px";
   track.style.height = "200px";
-  for (let i = 0; i < 10; i++) {
-    const div = document.createElement("div");
-    div.style.flex = "none";
-    div.style.height = "200px";
-    div.style.height = "200px";
-    track.append(div);
+  for (let i = 0; i < itemCount; i++) {
+    const child = document.createElement("canvas");
+    child.width = 200;
+    child.height = 200;
+    track.append(child);
   }
 
   document.body.append(track);
@@ -26,6 +25,10 @@ test("import track element", async () => {
 
   // is defined in custom element registry
   expect(customElements.get(NODE_NAME)).toBeDefined();
+});
+
+test("construct track element", async () => {
+  const { Track } = await import("@sv/elements/track");
 
   // is constructable
   expect(new Track()).toBeInstanceOf(Track);
@@ -37,24 +40,92 @@ test("import track element", async () => {
   expect(ele.children[0]).toBeInstanceOf(Track);
 });
 
+test("deconstruct track element", async () => {
+  const track = await trackWithChildren();
+  track.remove();
+  // @ts-ignore
+  expect(track.animation).toBeUndefined();
+});
+
 test("check default traits", async () => {
   const track = await trackWithChildren();
   expect(track.findTrait("pointer")).toBeDefined();
 });
 
+test("item count", async () => {
+  const track = await trackWithChildren(10);
+  expect(track.itemCount).toBe(10);
+});
+
+test("custom trait", async () => {
+  const track = await trackWithChildren();
+
+  let input = false;
+  let update = false;
+  let format = false;
+  let start = false;
+  let stop = false;
+
+  track.addTrait({
+    id: "test",
+
+    input() {
+      input = true;
+    },
+
+    update() {
+      update = true;
+    },
+
+    stop() {
+      stop = true;
+    },
+
+    start() {
+      start = true;
+    },
+
+    format() {
+      format = true;
+    },
+  });
+
+  // @ts-ignore
+  track.format();
+  track.startAnimate();
+  // @ts-ignore Force update tick
+  track.updateTick();
+
+  expect(start).toBeTrue();
+  expect(input).toBeTrue();
+  expect(update).toBeTrue();
+  expect(format).toBeTrue();
+
+  track.remove();
+
+  expect(stop).toBeTrue();
+});
+
 test("check snap trait", async () => {
   const track = await trackWithChildren();
   track.snap = true;
-  // @ts-ignore: simulate update
-  track.updated();
-
+  await track.updateComplete;
   expect(track.findTrait("snap")).toBeDefined();
 });
 
-test("tab navigation", async () => {
+test("arrow key navigation", async () => {
   const track = await trackWithChildren();
-  const child = track.children[8];
-  child?.focus();
+  track.tabIndex = 0;
+  track.focus();
 
-  console.log(document.activeElement === child);
+  track.dispatchEvent(
+    new KeyboardEvent("keydown", {
+      key: "ArrowRight",
+    }),
+  );
+
+  expect(document.activeElement).toBe(track);
+
+  // TODO: we dont have this info in test yet
+  // console.log(track.currentItem);
 });
