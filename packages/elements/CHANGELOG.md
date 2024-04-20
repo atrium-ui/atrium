@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 0.10.6 (2024-04-20)
+
+### Features
+
+- a-track: add details to move event
+- a-animation: added layout prop and docuemntation
+
 ## 0.10.5 (2024-04-18)
 
 ### Features
