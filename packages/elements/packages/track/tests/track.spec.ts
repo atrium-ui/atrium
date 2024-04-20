@@ -1,5 +1,5 @@
 import { test, expect } from "bun:test";
-import { MoveEvent } from "../src/Track";
+import type { MoveEvent } from "../src/Track";
 
 const NODE_NAME = "a-track";
 

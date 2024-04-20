@@ -6,7 +6,8 @@ import {
   type HTMLTemplateResult,
   type PropertyValueMap,
 } from "lit";
-import { property, query } from "lit/decorators.js";
+import { property } from "lit/decorators/property.js";
+
 const { Rive } = rive;
 
 declare global {
@@ -18,16 +19,16 @@ declare global {
 /**
  * Rive animation
  *
- * @attribute width - Canvas width
- * @attribute height - Canvas height
- * @attribute src - Path to .riv file
+ * @customEvent load - Emitted when animation has loaded.
+ * @customEvent play - Emitted when animation has started playing.
+ * @customEvent pause - Emitted when animation has been paused.
  *
  * @example
  * ```html
  * <a-animation
- *   height={props.height || 200}
- *   width={props.width || 200}
- *   src={props.src}
+ *   height="200"
+ *   width="200"
+ *   src="/loading.riv"
  * />
  * ```
  *
@@ -35,10 +36,14 @@ declare global {
  */
 export class AnimationElement extends LitElement {
   public static styles = css`
+    :host {
+      display: inline-block;
+    }
     canvas {
       display: block;
-      width: var(--w);
-      height: var(--h);
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
     }
   `;
 
@@ -47,33 +52,44 @@ export class AnimationElement extends LitElement {
   }
 
   /** url to .riv file */
-  @property({ type: String, reflect: true }) public src!: string;
+  @property({ type: String, reflect: true })
+  public src?: string;
+
+  /** fit */
+  @property({ type: String, reflect: true })
+  public layout: "cover" | "fill" | "contain" = "contain";
+
   /** width in pixel */
-  @property({ type: Number, reflect: true }) public width = 600;
+  @property({ type: Number, reflect: true })
+  public width = 300;
+
   /** height in pixel */
-  @property({ type: Number, reflect: true }) public height = 600;
+  @property({ type: Number, reflect: true })
+  public height = 150;
+
   /** name of state machine */
-  @property({ type: String, reflect: true }) public stateMachine?: string;
+  @property({ type: String, reflect: true })
+  public stateMachine?: string;
+
+  /** artboard name */
+  @property({ type: String, reflect: true })
+  public artboard?: string;
+
   /** wether to autoplay on load */
-  @property({ type: Boolean, reflect: true }) public autoplay = true;
+  @property({ type: Boolean, reflect: true })
+  public autoplay = true;
 
-  @query("canvas")
-  private container!: HTMLElement;
+  private canvas: HTMLCanvasElement = document.createElement("canvas");
 
-  protected canvas: HTMLCanvasElement = document.createElement("canvas");
-  protected bufferCanvas: HTMLCanvasElement = document.createElement("canvas");
+  private animations: rive.Rive[] = [];
 
-  protected animations: rive.Rive[] = [];
-
-  protected get pixelRatio() {
-    return devicePixelRatio || 1;
+  private get pixelRatio() {
+    return devicePixelRatio || 2;
   }
 
-  public format() {
+  private format() {
     this.canvas.width = this.width * this.pixelRatio;
     this.canvas.height = this.height * this.pixelRatio;
-    this.container.style.setProperty("--w", `${this.width}px`);
-    this.container.style.setProperty("--h", `${this.height}px`);
   }
 
   protected firstUpdated(): void {
@@ -83,30 +99,53 @@ export class AnimationElement extends LitElement {
   protected updated(
     _changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
-    if (_changedProperties.has("src")) {
+    if (_changedProperties.has("src") && this.src) {
       this.dispose(0);
-      this.createAnimation(this.src, this.autoplay, this.stateMachine);
+      this.createAnimation(this.src, {
+        autoplay: this.autoplay,
+        stateMachines: this.stateMachine,
+        artboard: this.artboard,
+      });
       this.format();
     }
   }
 
-  protected dispose(index: number) {
+  private dispose(index: number) {
     if (this.animations.length > 0) {
       this.animations[index]?.cleanup();
       this.animations.splice(index, 1);
     }
   }
 
-  protected createAnimation(src: string, autoplay?: boolean, stateMachine?: string) {
+  private createAnimation(src: string, riveOptions: Partial<rive.RiveParameters>) {
     return new Promise((resolve) => {
-      const rive = new Rive({
+      const instance = new Rive({
+        ...riveOptions,
+        layout: new rive.Layout({
+          fit:
+            this.layout === "contain"
+              ? rive.Fit.Contain
+              : this.layout === "cover"
+                ? rive.Fit.Cover
+                : this.layout === "fill"
+                  ? rive.Fit.Fill
+                  : rive.Fit.Contain,
+          alignment: rive.Alignment.Center,
+        }),
         canvas: this.canvas,
         src: src,
-        stateMachines: stateMachine,
-        autoplay: autoplay,
-        onLoad: () => resolve(rive),
+        onLoad: () => {
+          resolve(instance);
+          this.dispatchEvent(new CustomEvent("load"));
+        },
+        onPlay: () => {
+          this.dispatchEvent(new CustomEvent("play"));
+        },
+        onPause: () => {
+          this.dispatchEvent(new CustomEvent("pause"));
+        },
       });
-      this.animations.push(rive);
+      this.animations.push(instance);
     });
   }
 
@@ -114,6 +153,9 @@ export class AnimationElement extends LitElement {
     this.dispose(0);
   }
 
+  /**
+   * Trigger a rive input by name
+   */
   public trigger(rive: rive.Rive, stateMachine: string, name: string) {
     const inputs = rive.stateMachineInputs(stateMachine);
     if (inputs) {
@@ -126,11 +168,13 @@ export class AnimationElement extends LitElement {
     }
   }
 
-  public transition(source: string, trigger?: string, duration?: number, offset = 0) {
+  public transition(source: string, trigger?: string, duration?: number) {
     if (this.stateMachine) {
       const anim = this.animations[0];
       if (trigger && anim) this.trigger(anim, this.stateMachine, trigger);
-      this.createAnimation(source, true);
+      this.createAnimation(source, {
+        autoplay: true,
+      });
     }
   }
 }
