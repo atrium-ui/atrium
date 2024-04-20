@@ -1,4 +1,5 @@
 import { test, expect } from "bun:test";
+import { MoveEvent } from "../src/Track";
 
 const NODE_NAME = "a-track";
 
@@ -128,4 +129,18 @@ test("arrow key navigation", async () => {
 
   // TODO: we dont have this info in test yet
   // console.log(track.currentItem);
+});
+
+test("move event details", async () => {
+  const track = await trackWithChildren();
+  track.addEventListener("move", ((e: MoveEvent) => {
+    expect(e.detail.direction).toBeDefined();
+    expect(e.detail.velocity).toBeDefined();
+    expect(e.detail.position).toBeDefined();
+
+    e.preventDefault();
+  }) as EventListener);
+
+  // @ts-ignore
+  expect(track.canMove()).toBeFalse();
 });

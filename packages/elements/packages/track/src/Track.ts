@@ -960,11 +960,7 @@ export class Track extends LitElement {
   }
 
   private canMove() {
-    return this.dispatchEvent(
-      new CustomEvent("move", {
-        cancelable: true,
-      }),
-    );
+    return this.dispatchEvent(new MoveEvent(this));
   }
 
   connectedCallback(): void {
@@ -1145,6 +1141,23 @@ export class Track extends LitElement {
 }
 
 customElements.define("a-track", Track);
+
+export class MoveEvent extends CustomEvent<{
+  direction: Vec2;
+  velocity: Vec2;
+  position: Vec2;
+}> {
+  constructor(track: Track) {
+    super("move", {
+      cancelable: true,
+      detail: {
+        direction: track.direction.clone(),
+        velocity: track.velocity.clone(),
+        position: track.position.clone(),
+      },
+    });
+  }
+}
 
 function mod(a: number, n: number) {
   return a - Math.floor(a / n) * n;
