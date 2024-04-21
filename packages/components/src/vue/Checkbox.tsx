@@ -21,7 +21,7 @@ export const Checkbox = defineComponent(
         input.value.checked = value;
         input.value.dispatchEvent(new Event("change", { bubbles: true }));
       }
-    }
+    };
 
     return () => (
       <div class="flex gap-3 items-center">
@@ -44,12 +44,15 @@ export const Checkbox = defineComponent(
           class="hidden"
           id={`input_${props.id}`}
           name={props.id}
-          aria-hidden="true"
           checked={checked.value || undefined}
           onInput={(e: Event) => handleChange((e.target as HTMLInputElement).checked)}
         />
 
-        <label id={`label_${props.id}`} for={`input_${props.id}`} class="cursor-pointer text-lg">
+        <label
+          id={`label_${props.id}`}
+          for={`input_${props.id}`}
+          class="cursor-pointer text-lg"
+        >
           {slots.default?.()}
         </label>
       </div>
