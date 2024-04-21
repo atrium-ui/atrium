@@ -12,7 +12,7 @@ export default defineComponent(() => {
       <form
         class="not-content my-8"
         onChange={(e) => {
-          const data = new FormData(e.currentTarget);
+          const data = new FormData(e.currentTarget as HTMLFormElement);
           args.value = [...data.keys()];
         }}
       >
@@ -32,15 +32,10 @@ export default defineComponent(() => {
         </div>
       </form>
 
-      <div>
-        <input
-          class={[
-            "w-full min-w-0 rounded-md border bg-transparent px-3 py-1 outline-none focus:border-zinc-500 hover:border-zinc-600",
-          ]}
-          readonly
-          value={`npx @sv/codestyle ${args.value.join(" ")}`}
-        />
-      </div>
+      <Input
+        readonly
+        value={`npx @sv/codestyle ${args.value.join(" ")}`}
+      />
     </div>
   );
 });

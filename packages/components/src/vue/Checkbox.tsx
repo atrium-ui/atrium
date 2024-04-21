@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 
-import { defineComponent, ref } from "vue";
+import { defineComponent, effect, ref } from "vue";
 import "@sv/elements/toggle";
 import { Icon } from "./Icon";
 
@@ -13,15 +13,25 @@ interface Props {
 export const Checkbox = defineComponent(
   (props: Props, { slots }) => {
     const checked = ref(props.checked);
+    const input = ref<HTMLInputElement>();
+
+    const handleChange = (value: boolean) => {
+      checked.value = value;
+      if (input.value) {
+        input.value.checked = value;
+        input.value.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    }
 
     return () => (
-      <div class="grid grid-cols-[auto_1fr] gap-3">
+      <div class="flex gap-3 items-center">
         <button
+          role="checkbox"
+          aria-checked={checked.value}
           type="button"
-          onClick={() => {
-            checked.value = !checked.value;
-          }}
-          class="group mt-1 h-6 w-6 cursor-pointer rounded-md border border-zinc-700 bg-transparent p-0 hover:border-zinc-600"
+          aria-labelledby={`label_${props.id}`}
+          onClick={() => handleChange(!checked.value)}
+          class="group h-6 w-6 cursor-pointer rounded-md border border-zinc-700 bg-transparent p-0 hover:border-zinc-600"
         >
           <div class={["flex items-center justify-center", !checked.value && "hidden"]}>
             <Icon name="check" />
@@ -29,14 +39,17 @@ export const Checkbox = defineComponent(
         </button>
 
         <input
+          ref={input}
           type="checkbox"
           class="hidden"
-          id={props.id}
+          id={`input_${props.id}`}
           name={props.id}
-          checked={checked.value}
+          aria-hidden="true"
+          checked={checked.value || undefined}
+          onInput={(e: Event) => handleChange((e.target as HTMLInputElement).checked)}
         />
 
-        <label for={props.id} class="cursor-pointer text-lg">
+        <label id={`label_${props.id}`} for={`input_${props.id}`} class="cursor-pointer text-lg">
           {slots.default?.()}
         </label>
       </div>

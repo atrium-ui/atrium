@@ -5,8 +5,10 @@ interface Props {
   label?: string;
   name?: string;
   id?: string;
+  value?: string;
   error?: string;
   required?: boolean;
+  readonly?: boolean;
   multiline?: boolean;
   onInvalid?: (e: Event) => void;
   onInput?: (e: Event) => void;
@@ -24,8 +26,10 @@ export function Input(props: Props) {
         <textarea
           id={props.id}
           name={props.name}
+          readonly={props.readonly}
           required={props.required || undefined}
           placeholder={props.placeholder}
+          value={props.value}
           class={[
             "group w-full resize-y rounded-md border bg-transparent px-3 py-1 outline-none focus:border-zinc-500 hover:border-zinc-600",
             props.error ? "border-red-600" : "border-zinc-700",
@@ -46,8 +50,10 @@ export function Input(props: Props) {
           type="text"
           id={props.id}
           name={props.name}
+          readonly={props.readonly}
           required={props.required || undefined}
           placeholder={props.placeholder}
+          value={props.value}
           class={[
             "group w-full min-w-0 rounded-md border bg-transparent px-3 py-1 outline-none focus:border-zinc-500 hover:border-zinc-600",
             props.error ? "border-red-600" : "border-zinc-700",
