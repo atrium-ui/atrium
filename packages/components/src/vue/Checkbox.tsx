@@ -24,16 +24,16 @@ export const Checkbox = defineComponent(
     };
 
     return () => (
-      <div class="flex gap-3 items-center">
+      <div class="flex items-start gap-3">
         <button
           role="checkbox"
           aria-checked={checked.value}
           type="button"
           aria-labelledby={`label_${props.id}`}
           onClick={() => handleChange(!checked.value)}
-          class="group h-6 w-6 cursor-pointer rounded-md border border-zinc-700 bg-transparent p-0 hover:border-zinc-600"
+          class="mt-[2px] h-6 w-6 cursor-pointer rounded-md border border-zinc-700 bg-transparent p-0 align-bottom hover:border-zinc-600"
         >
-          <div class={["flex items-center justify-center", !checked.value && "hidden"]}>
+          <div aria-hidden="true" class={["flex items-center justify-center", !checked.value && "hidden"]}>
             <Icon name="check" />
           </div>
         </button>
