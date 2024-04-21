@@ -6,10 +6,12 @@ import { Icon } from "./Icon.jsx";
 
 export const Accordion = defineComponent((_, { slots }) => {
   const onChange = (e: Event) => {
-    for (const expand of (e.currentTarget as HTMLElement).querySelectorAll("a-expandable")) {
-      if (expand !== e.target as HTMLElement) expand.opened = false;
+    for (const expand of (e.currentTarget as HTMLElement).querySelectorAll(
+      "a-expandable",
+    )) {
+      if (expand !== (e.target as HTMLElement)) expand.opened = false;
     }
-  }
+  };
 
   return () => <div onChange={onChange}>{slots.default?.()}</div>;
 });
@@ -17,10 +19,7 @@ export const Accordion = defineComponent((_, { slots }) => {
 export const AccordionItem = defineComponent(
   (props: { title: string; opened: boolean }, { slots }) => {
     return () => (
-      <a-expandable
-        opened={props.opened}
-        class="group mb-2 block rounded-lg border"
-      >
+      <a-expandable opened={props.opened} class="group mb-2 block rounded-lg border">
         <button
           // @ts-ignore
           slot="toggle"

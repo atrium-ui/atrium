@@ -98,7 +98,7 @@ export class Expandable extends LitElement {
       this.scrollIntoView({
         behavior: "smooth",
         block: "nearest",
-        inline: "nearest"
+        inline: "nearest",
       });
   }
 
@@ -143,8 +143,7 @@ export class Expandable extends LitElement {
   }
 
   private onClick(e: Event) {
-    if (this.button?.contains(e.target as HTMLElement))
-      this.toggle();
+    if (this.button?.contains(e.target as HTMLElement)) this.toggle();
   }
 
   private renderToggle() {
