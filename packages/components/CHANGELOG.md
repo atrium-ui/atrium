@@ -1,5 +1,11 @@
 # @sv/components
 
+## 0.9.4 (2024-04-21)
+
+### Fixes
+
+- fix the checkbox
+
 ## 0.9.3 (2024-04-18)
 
 ### Features
