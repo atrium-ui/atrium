@@ -5,37 +5,38 @@ import { defineComponent } from "vue";
 import { Icon } from "./Icon.jsx";
 
 export const Accordion = defineComponent((_, { slots }) => {
-  return () => <ul class="m-0 list-none p-0">{slots.default?.()}</ul>;
+  const onChange = (e: Event) => {
+    for (const expand of (e.currentTarget as HTMLElement).querySelectorAll("a-expandable")) {
+      if (expand !== e.target as HTMLElement) expand.opened = false;
+    }
+  }
+
+  return () => <div onChange={onChange}>{slots.default?.()}</div>;
 });
 
 export const AccordionItem = defineComponent(
   (props: { title: string; opened: boolean }, { slots }) => {
     return () => (
-      <li class="list-none">
-        <a-expandable
-          opened={props.opened}
-          class="group mb-2 block rounded-lg border border-[#C09278]"
+      <a-expandable
+        opened={props.opened}
+        class="group mb-2 block rounded-lg border"
+      >
+        <button
+          // @ts-ignore
+          slot="toggle"
+          type="button"
+          class="flex w-full cursor-pointer items-center justify-between bg-transparent px-6 py-2"
         >
-          <div
-            // @ts-ignore
-            slot="toggle"
-            class="flex cursor-pointer items-center justify-between px-6 py-2"
-          >
-            <div class="text-white">
-              <span>{props.title}</span>
-            </div>
+          <div class="text-white">{props.title}</div>
 
-            <div class="block group-[[opened]]:hidden">
-              <Icon name="expand" />
-            </div>
-            <div class="hidden group-[[opened]]:block">
-              <Icon name="collapse" />
-            </div>
-          </div>
+          <span aria-hidden="true">
+            <Icon class="block group-[[opened]]:hidden" name="expand" />
+            <Icon class="hidden group-[[opened]]:block" name="collapse" />
+          </span>
+        </button>
 
-          <div class="px-6 py-2">{slots.default?.()}</div>
-        </a-expandable>
-      </li>
+        <div class="px-6 py-2">{slots.default?.()}</div>
+      </a-expandable>
     );
   },
   {

@@ -1,11 +1,13 @@
-import { type HTMLTemplateResult, LitElement, css, html, PropertyValueMap } from "lit";
-import { property } from "lit/decorators.js";
+import { type HTMLTemplateResult, LitElement, css, html } from "lit";
+import { property } from "lit/decorators/property.js";
 
 declare global {
   interface HTMLElementTagNameMap {
     "a-expandable": Expandable;
   }
 }
+
+let accordionIncrement = 0;
 
 /**
  * - A wrapper element, that can collapse and expand its content with an animation.
@@ -16,11 +18,9 @@ declare global {
  * @example
  * ```tsx
  * <a-expandable opened class="accordion">
- *    <div slot="toggle">
- *      <button type="button">
- *        <div class="headline">Title</div>
- *      </button>
- *    </div>
+ *    <button slot="toggle" type="button">
+ *      <div class="headline">Title</div>
+ *    </button>
  *
  *    <div>Content</div>
  *  </a-expandable>
@@ -76,42 +76,30 @@ export class Expandable extends LitElement {
   /** What direction to open */
   @property({ type: String, reflect: true }) public direction: "down" | "up" = "down";
 
-  private _id = `expandable_${Math.floor(Math.random() * 100000)}`;
-
   public close(): void {
     this.opened = false;
-    this.onAnimationFrame();
-    this.dispatchEvent(new Event("change"));
+    this.onChange();
   }
 
   public open(): void {
     this.opened = true;
-    this.onAnimationFrame();
-    this.dispatchEvent(new Event("change"));
+    this.onChange();
   }
 
   public toggle(): void {
     this.opened ? this.close() : this.open();
   }
 
-  @property({ type: Number })
-  public scrollOffsetY?: number;
+  private onChange() {
+    const ev = new Event("change", { bubbles: true, cancelable: true });
+    this.dispatchEvent(ev);
 
-  protected updated(): void {
-    const btn = this.button;
-    if (btn) btn.ariaExpanded = this.opened.toString();
-  }
-
-  protected onAnimationFrame() {
-    // scrolls interaction into viewport
-    const rect = this.getClientRects()[0];
-    if (rect) {
-      const elementStartPosY = rect.y;
-      const offsetY = this.scrollOffsetY || 0;
-      if (elementStartPosY <= offsetY) {
-        window.scrollBy(0, (elementStartPosY - offsetY) / 10);
-      }
-    }
+    if (!ev.defaultPrevented)
+      this.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "nearest"
+      });
   }
 
   private get button() {
@@ -119,28 +107,55 @@ export class Expandable extends LitElement {
     return slot?.assignedElements()[0];
   }
 
+  private get content() {
+    const slot = this.shadowRoot?.querySelector<HTMLSlotElement>('slot[class="content"]');
+    return slot?.assignedElements()[0];
+  }
+
+  protected updated(): void {
+    const btn = this.button;
+    if (btn) {
+      this.button.ariaExpanded = this.opened.toString();
+    }
+
+    const content = this.content;
+    if (content) {
+      content.ariaHidden = String(!this.opened);
+    }
+  }
+
+  private _id_toggle = `expandable_toggle_${++accordionIncrement}`;
+  private _id_content = `expandable_content_${accordionIncrement}`;
+
+  private onSlotChange() {
+    const btn = this.button;
+    if (btn) {
+      btn.setAttribute("aria-controls", this._id_content);
+      btn.id = this._id_toggle;
+    }
+
+    const content = this.content;
+    if (content) {
+      content.role = "region";
+      content.id = this._id_content;
+      content.setAttribute("aria-labelledby", this._id_toggle);
+    }
+  }
+
+  private onClick(e: Event) {
+    if (this.button?.contains(e.target as HTMLElement))
+      this.toggle();
+  }
+
   private renderToggle() {
-    return html`
-      <slot name="toggle"
-        @slotchange=${(e) => {
-          const slot = e.currentTarget;
-          const child = slot.children[0] as HTMLElement;
-          child?.setAttribute("aria-controls", this._id);
-        }}
-        @click=${(e) => {
-          if (this.button?.contains(e.target)) {
-            this.toggle();
-          }
-        }}>
-      </slot>
-    `;
+    return html`<slot name="toggle" @slotchange=${this.onSlotChange} @click=${this.onClick}></slot>`;
   }
 
   protected render(): HTMLTemplateResult {
     return html`
       ${this.direction === "down" ? this.renderToggle() : undefined}
-      <div class="container" id="${this._id}" aria-hidden=${!this.opened && "true"}>
-        <slot class="content"></slot>
+      <div class="container">
+        <slot @slotchange=${this.onSlotChange} class="content"></slot>
       </div>
       ${this.direction === "up" ? this.renderToggle() : undefined}
     `;

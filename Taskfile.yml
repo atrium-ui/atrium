@@ -37,10 +37,8 @@ tasks:
       - bun x turbo dev --filter "./packages/**"
 
   test:
-    desc: "Run tests on all packages (Run specific test: t test --  --test-name-pattern prettier)"
+    desc: "Run tests on all packages (Run specific test: t test --  -t prettier)"
     deps: [build]
-    env:
-      CI_JOB_TOKEN: "glpat-tDVjH5PFYZkPiw39ffMy"
     cmds:
       - bun x turbo test -- {{.CLI_ARGS}}
 
