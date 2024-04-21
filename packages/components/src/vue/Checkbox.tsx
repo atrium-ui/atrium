@@ -33,7 +33,10 @@ export const Checkbox = defineComponent(
           onClick={() => handleChange(!checked.value)}
           class="mt-[2px] h-6 w-6 cursor-pointer rounded-md border border-zinc-700 bg-transparent p-0 align-bottom hover:border-zinc-600"
         >
-          <div aria-hidden="true" class={["flex items-center justify-center", !checked.value && "hidden"]}>
+          <div
+            aria-hidden="true"
+            class={["flex items-center justify-center", !checked.value && "hidden"]}
+          >
             <Icon name="check" />
           </div>
         </button>
