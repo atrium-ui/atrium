@@ -29,7 +29,6 @@ export function Button(
     class?: string | string[];
     slot?: string;
     disabled?: boolean;
-    inert?: boolean;
     autofocus?: boolean;
     variant?: keyof typeof buttonVariants;
     label?: string;
@@ -42,14 +41,13 @@ export function Button(
       type={props.type || "button"}
       // @ts-ignore
       slot={props.slot}
-      inert={props.inert}
       autofocus={props.autofocus}
       class={twMerge(
         buttonVariants.base,
         buttonVariants[props.variant ?? "default"],
-        props.class,
         // the disabled prop is not used as attribute, for accessibility reasons
         props.disabled && "cursor-not-allowed opacity-80",
+        props.class,
       )}
       title={props.label}
       aria-label={props.label}

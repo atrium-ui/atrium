@@ -6,6 +6,7 @@ export function Icon(props: {
 }) {
   return (
     <span
+      aria-hidden="true"
       class={[
         "relative top-[0.15em] inline-block align-baseline leading-none [&>svg]:h-[1em] [&>svg]:w-[1em]",
         props.class,

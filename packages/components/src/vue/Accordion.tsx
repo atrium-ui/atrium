@@ -29,10 +29,8 @@ export const AccordionItem = defineComponent(
         >
           <div class="text-white">{props.title}</div>
 
-          <span aria-hidden="true">
-            <Icon class="block group-[[opened]]:hidden" name="expand" />
-            <Icon class="hidden group-[[opened]]:block" name="collapse" />
-          </span>
+          <Icon class="block group-[[opened]]:hidden" name="expand" />
+          <Icon class="hidden group-[[opened]]:block" name="collapse" />
         </button>
 
         <div class="px-6 py-2">{slots.default?.()}</div>

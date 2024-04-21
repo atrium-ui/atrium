@@ -2,8 +2,8 @@
 
 import "@sv/elements/track";
 import type { Track } from "@sv/elements/track";
-import { computed, defineComponent, ref, onMounted } from "vue";
 import { twMerge } from "tailwind-merge";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
 
@@ -57,11 +57,10 @@ export const Slider = defineComponent(
         <div class="relative w-full">
           <Button
             variant="ghost"
-            inert={!showPrev.value}
+            disabled={!showPrev.value}
             class={[
-              "-translate-y-1/2 absolute top-1/2 z-10 hidden transform opacity-0 transition-all lg:block focus-visible:opacity-100",
+              "-translate-y-1/2 absolute top-1/2 left-[12px] z-10 hidden transform transition-all lg:block focus-visible:opacity-100",
               showPrev.value ? "group-hover:opacity-100" : "opacity-0",
-              "left-[12px]",
             ]}
             onClick={prev}
             label="Previous page"
@@ -70,11 +69,10 @@ export const Slider = defineComponent(
           </Button>
           <Button
             variant="ghost"
-            inert={!showNext.value}
+            disabled={!showNext.value}
             class={[
-              "-translate-y-1/2 absolute top-1/2 z-10 hidden transform opacity-0 transition-all lg:block focus-visible:opacity-100",
+              "-translate-y-1/2 absolute top-1/2 right-[12px] z-10 hidden transform transition-all lg:block focus-visible:opacity-100",
               showNext.value ? "group-hover:opacity-100" : "opacity-0",
-              "right-[12px]",
             ]}
             onClick={next}
             label="Next page"
