@@ -18,33 +18,31 @@ hero:
       icon: right-arrow
 ---
 import Projects from "../../components/Projects.astro";
-import Dashboard from "../../components/Dashboard.astro";
+import { Showcase } from "../../components/Showcase";
 import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 
-<Dashboard />
+<div class="not-content min-h-[600px]">
+  <Showcase client:only="vue" />
+</div>
 
-<br/>
-<br/>
-
-<CardGrid>
-  <LinkCard
-    title="@sv/components"
-    description="This package contains all component templates and the cli for use."
-    href="/sv-frontend-library/mono/packages/components/"
-  />
-  <LinkCard
-    title="@sv/elements"
-    description="A library of reusable and high quality custom-elements."
-    href="/sv-frontend-library/mono/packages/elements/"
-  />
-  <LinkCard
-    title="@sv/codestyle"
-    description="Codestyle and configuration for all projects."
-    href="/sv-frontend-library/mono/packages/codestyle/"
-  />
-</CardGrid>
-
-<br/>
-<br/>
+<div class="py-20">
+  <CardGrid>
+    <LinkCard
+      title="@sv/components"
+      description="This package contains all component templates and the cli for use."
+      href="/sv-frontend-library/mono/packages/components/"
+    />
+    <LinkCard
+      title="@sv/elements"
+      description="A library of reusable and high quality custom-elements."
+      href="/sv-frontend-library/mono/packages/elements/"
+    />
+    <LinkCard
+      title="@sv/codestyle"
+      description="Codestyle and configuration for all projects."
+      href="/sv-frontend-library/mono/packages/codestyle/"
+    />
+  </CardGrid>
+</div>
 
 <Projects />
