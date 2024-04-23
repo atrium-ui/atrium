@@ -17,7 +17,7 @@ export const Accordion = defineComponent((_, { slots }) => {
 });
 
 export const AccordionItem = defineComponent(
-  (props: { title: string; opened: boolean }, { slots }) => {
+  (props: { title: string; opened?: boolean }, { slots }) => {
     return () => (
       <a-expandable opened={props.opened} class="group mb-2 block rounded-lg border">
         <button
@@ -26,7 +26,7 @@ export const AccordionItem = defineComponent(
           type="button"
           class="flex w-full cursor-pointer items-center justify-between bg-transparent px-6 py-2"
         >
-          <div class="text-white">{props.title}</div>
+          <div class="text-left">{props.title}</div>
 
           <Icon class="block group-[[opened]]:hidden" name="expand" />
           <Icon class="hidden group-[[opened]]:block" name="collapse" />

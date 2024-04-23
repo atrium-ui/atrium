@@ -1,6 +1,7 @@
 /* @jsxImportSource vue */
 
 interface Props {
+  class?: string;
   placeholder?: string;
   label?: string;
   name?: string;
@@ -17,8 +18,8 @@ interface Props {
 
 export function Input(props: Props) {
   return (
-    <div>
-      <div class="mb-1 text-sm">
+    <div class={props.class}>
+      <div class="text-sm">
         <label>{props.label}</label>
       </div>
 
@@ -55,7 +56,7 @@ export function Input(props: Props) {
           placeholder={props.placeholder}
           value={props.value}
           class={[
-            "group w-full min-w-0 rounded-md border bg-transparent px-3 py-1 outline-none focus:border-zinc-500 hover:border-zinc-600",
+            "group w-full min-w-0 rounded-md border bg-transparent px-3 py-1 leading-normal outline-none focus:border-zinc-500 hover:border-zinc-600",
             props.error ? "border-red-600" : "border-zinc-700",
           ].join("")}
           onChange={(e) => {

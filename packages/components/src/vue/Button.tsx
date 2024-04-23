@@ -3,8 +3,8 @@ import { twMerge } from "tailwind-merge";
 
 export const buttonVariants = {
   base: [
-    "flex cursor-pointer items-center gap-2 leading-none",
-    "rounded-lg px-3 py-2 transition-all active:transition-none",
+    "flex cursor-pointer items-center gap-2 leading-normal",
+    "rounded-lg px-3 py-1 transition-all active:transition-none",
     "outline-none focus-visible:ring focus-visible:ring-[currentColor]",
   ],
   default: [
@@ -25,7 +25,7 @@ export const buttonVariants = {
 
 export function Button(
   props: {
-    type?: "button" | "submit";
+    type?: "button" | "submit" | "reset";
     class?: string | string[];
     slot?: string;
     disabled?: boolean;

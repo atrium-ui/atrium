@@ -36,9 +36,7 @@ export default defineConfig({
     // solid(),
     // react(),
     starlight({
-      components: {
-        ContentPanel: "./src/components/ContentPanel.astro",
-      },
+      components: {},
       favicon: "favicon.png",
       title: "Atrium",
       customCss: ["./styles/custom.css"],
