@@ -42,7 +42,7 @@ See [./.mise.toml](./.mise.toml) for tools and versions used in this project.
 - [task](https://taskfile.dev/)
 - [bun](https://bun.sh/)
 
-It is recomended to use [mise (formerly rtx)](https://github.com/jdxcode/mise) to automatically manage these tools.
+It is recomended to use [mise](https://github.com/jdxcode/mise) to automatically manage these tools.
 
 ### Getting Started
 
@@ -83,7 +83,7 @@ pnpm unlink <package_name>
 ### Building elements
 
 Since all elements are written in TypeScript, they need to be compiled to JavaScript.
-All the elements share the same build system. We use [tsup](https://tsup.egoist.dev/) to generate light weight bundles.
+Most of the elements share the same build system. We use [tsup](https://tsup.egoist.dev/) to generate light weight bundles.
 
 The tsup configuration is located in the package.json of each element.
 
@@ -91,6 +91,16 @@ The tsup configuration is located in the package.json of each element.
 
 ## Publishing packages
 
-To create a new version of a package, run `task version` and follow the instructions of the cli.
+This project uses [Knope](https://knope.tech/) for creating releases. Packages are automatically versioned using [Conventional commits](https://knope.tech/reference/concepts/conventional-commits/) or [Changeset](https://knope.tech/reference/concepts/changeset/).
 
-After the changes done by the cli are committed and pushed, the CI will automatically publish the package(s) when merged into main, as well as build and deployed docs to gitlab pages.
+Example commit to bump the elements package by a minor version when merged into main:
+
+```bash
+git commit -m "feat(elements): some change notes"
+```
+
+Scopes for each package are define in [./knope.toml](./knope.toml). Commits without scope will version **all** packages.
+
+To create a new version of multiple packages at once, run `task version` and follow the instructions of the cli to create a [Changeset](https://knope.tech/reference/concepts/changeset/).
+
+After all changes are committed and merged into main, the CI will automatically version and publish the package(s), as well as build and deployed docs to gitlab pages.
