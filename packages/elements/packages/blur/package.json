@@ -16,7 +16,8 @@
     "format": ["esm", "cjs"],
     "external": [
       "lit",
-      "@sv/elements"
+      "@sv/elements",
+      "@sv/scroll-lock"
     ],
     "sourcemap": true,
     "clean": true
