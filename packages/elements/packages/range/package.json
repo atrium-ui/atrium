@@ -11,15 +11,11 @@
     "build": "tsup"
   },
   "tsup": {
-    "entry": [
-      "src/index.ts"
-    ],
-    "format": [
-      "esm",
-      "cjs"
-    ],
+    "entry": ["src/index.ts"],
+    "format": ["esm", "cjs"],
     "external": [
-      "@sv/*"
+      "lit",
+      "@sv/elements"
     ],
     "sourcemap": true,
     "clean": true

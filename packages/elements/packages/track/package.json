@@ -17,13 +17,10 @@
       "src/index.ts",
       "src/traits.ts"
     ],
-    "format": [
-      "esm",
-      "cjs"
-    ],
+    "format": ["esm", "cjs"],
     "external": [
-      "@sv/*",
-      "lit"
+      "lit",
+      "@sv/elements"
     ],
     "sourcemap": true,
     "clean": true

@@ -20,7 +20,8 @@
       "cjs"
     ],
     "external": [
-      "@sv/*",
+      "lit",
+      "@sv/elements",
       "@rive-app/canvas-single"
     ],
     "sourcemap": true,

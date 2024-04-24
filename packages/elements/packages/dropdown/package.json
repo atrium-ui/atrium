@@ -12,15 +12,11 @@
     "dev": "tsup --watch"
   },
   "tsup": {
-    "entry": [
-      "src/index.ts"
-    ],
-    "format": [
-      "esm",
-      "cjs"
-    ],
+    "entry": ["src/index.ts"],
+    "format": ["esm", "cjs"],
     "external": [
-      "@sv/elements/expandable"
+      "lit",
+      "@sv/elements"
     ],
     "sourcemap": true,
     "clean": true
