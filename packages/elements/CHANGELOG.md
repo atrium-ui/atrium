@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.11.0 (2024-04-24)
+
+### Breaking Changes
+
+- update to lit v3.1.3
+
 ## 0.10.7 (2024-04-24)
 
 ### Features
