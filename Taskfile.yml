@@ -30,6 +30,18 @@ tasks:
     cmds:
       - bun x turbo build --filter "./packages/**"
 
+  # experimental bundle task using bun
+  bundle:
+    dir: "{{.USER_WORKING_DIR}}"
+    vars:
+      ENTRY:
+        sh: cat package.json | jq -jr '.tsup.entry[] | " ",.'
+      FORMAT:
+        sh: cat package.json | jq -jr '.tsup.format[] | " ",.'
+      EXTERNAL:
+        sh: cat package.json | jq -jr '.tsup.external[] | " -e ",.'
+    cmd: bun build --target=browser {{.ENTRY}} --outdir dist --sourcemap=external --format {{.FORMAT}} {{.EXTERNAL}} {{.CLI_ARGS}}
+
   dev:
     desc: Watch-build packages for development
     deps: [setup]
