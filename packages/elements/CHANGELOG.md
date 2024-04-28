@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.11.1 (2024-04-28)
+
+### Features
+
+- a-track add delta to move event detail
+
 ## 0.11.0 (2024-04-24)
 
 ### Breaking Changes
