@@ -233,7 +233,7 @@ export class Track extends LitElement {
         display: flex;
         outline: none;
         overflow: hidden;
-        touch-action: pan-y;
+        touch-action: none;
       }
 
       slot {
@@ -251,7 +251,7 @@ export class Track extends LitElement {
       }
 
       :host {
-        overscroll-behavior: contain;
+        overscroll-behavior: none;
         scrollbar-width: none;
       }
 
@@ -959,8 +959,8 @@ export class Track extends LitElement {
     }
   }
 
-  private canMove() {
-    return this.dispatchEvent(new MoveEvent(this));
+  private canMove(delta: Vec2) {
+    return this.dispatchEvent(new MoveEvent(this, delta));
   }
 
   connectedCallback(): void {
@@ -1028,10 +1028,10 @@ export class Track extends LitElement {
     });
 
     this.listener(window, "pointermove", (pointerEvent: PointerEvent) => {
-      if (!this.canMove()) return;
-
       const pos = new Vec2(pointerEvent.x, pointerEvent.y);
       const delta = Vec2.sub(pos, this.mousePos);
+
+      if (!this.canMove(delta)) return;
 
       if (!this.grabbing && delta.abs() > 3) {
         if (this.vertical && this.mousePos.y && Math.abs(delta.x) < Math.abs(delta.y)) {
@@ -1057,7 +1057,9 @@ export class Track extends LitElement {
       this,
       "wheel",
       (wheelEvent: WheelEvent) => {
-        if (!this.canMove()) return;
+        const delta = new Vec2(wheelEvent.deltaX, wheelEvent.deltaY);
+
+        if (!this.canMove(delta)) return;
 
         if (wheelEvent.target !== this) {
           this.setTarget(undefined);
@@ -1070,14 +1072,14 @@ export class Track extends LitElement {
         }
 
         const threshold = this.vertical
-          ? Math.abs(wheelEvent.deltaX) < Math.abs(wheelEvent.deltaY)
-          : Math.abs(wheelEvent.deltaX) > Math.abs(wheelEvent.deltaY);
+          ? Math.abs(delta.x) < Math.abs(delta.y)
+          : Math.abs(delta.x) > Math.abs(delta.y);
 
         if (threshold) {
           this.acceleration.mul(0);
 
           if (this.loop) {
-            this.inputForce.add(new Vec2(wheelEvent.deltaX, wheelEvent.deltaY));
+            this.inputForce.add(delta);
           } else {
             if (this.vertical) {
               const pos = this.position.y + wheelEvent.deltaY;
@@ -1143,14 +1145,16 @@ export class Track extends LitElement {
 customElements.define("a-track", Track);
 
 export class MoveEvent extends CustomEvent<{
+  delta: Vec2;
   direction: Vec2;
   velocity: Vec2;
   position: Vec2;
 }> {
-  constructor(track: Track) {
+  constructor(track: Track, delta: Vec2) {
     super("move", {
       cancelable: true,
       detail: {
+        delta: delta,
         direction: track.direction.clone(),
         velocity: track.velocity.clone(),
         position: track.position.clone(),
