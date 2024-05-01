@@ -23,7 +23,7 @@
       "suspicious": {
         "noArrayIndexKey": "off",
         "noExplicitAny": "warn",
-        "noConsoleLog": "warn"
+        "noConsoleLog": "error"
       },
       "nursery": {
         "useSortedClasses": {

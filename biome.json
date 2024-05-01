@@ -3,16 +3,6 @@
   "extends": [
     "./packages/codestyle/biome.json"
   ],
-  "linter": {
-    "rules": {
-      "correctness": {
-        "useExhaustiveDependencies": "warn"
-      },
-      "suspicious": {
-        "noConsoleLog": "error"
-      }
-    }
-  },
   "files": {
     "ignore": [
       "**/package.json",
