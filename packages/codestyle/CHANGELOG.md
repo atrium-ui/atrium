@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.8.0 (2024-05-01)
+
+### Breaking Changes
+
+- set noConsoleLog to error
+
 ## 0.7.2 (2024-04-13)
 
 ### Fixes
