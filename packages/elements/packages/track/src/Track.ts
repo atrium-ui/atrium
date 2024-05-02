@@ -233,7 +233,6 @@ export class Track extends LitElement {
         display: flex;
         outline: none;
         overflow: hidden;
-        touch-action: none;
       }
 
       slot {
@@ -248,6 +247,14 @@ export class Track extends LitElement {
 
       :host([vertical]) {
         flex-direction: column;
+      }
+
+      :host {
+        touch-action: pan-y;
+      }
+
+      :host([vertical]) {
+        touch-action: pan-x;
       }
 
       :host {

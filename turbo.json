@@ -3,6 +3,9 @@
   "pipeline": {
     "build": {
       "cache": true,
+      "outputs": [
+        "dist"
+      ],
       "outputMode": "errors-only"
     },
     "dev": {
