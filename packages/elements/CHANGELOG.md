@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.11.2 (2024-05-02)
+
+### Features
+
+- a-track: set touch-action according to mode
+
 ## 0.11.1 (2024-04-28)
 
 ### Features
