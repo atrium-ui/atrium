@@ -363,12 +363,14 @@ export class Track extends LitElement {
     return this.height;
   }
 
+  private _width;
   public get width() {
-    return this.offsetWidth;
+    return this._width ?? (this._width = this.offsetWidth);
   }
 
+  private _height;
   public get height() {
-    return this.offsetHeight;
+    return this._height ?? (this._height = this.offsetHeight);
   }
 
   public get currentPosition() {
@@ -515,6 +517,8 @@ export class Track extends LitElement {
 
   private format = () => {
     this.inputState.format.value = true;
+    this._width = undefined;
+    this._height = undefined;
     this._widths = undefined;
     this._heights = undefined;
 
@@ -697,13 +701,8 @@ export class Track extends LitElement {
   private computeCurrentItem() {
     const currItem = this.getCurrentItem();
 
+    const changed = this.currentItem !== currItem;
     this.currentItem = currItem;
-    this.dispatchEvent(
-      new CustomEvent<number | string>("change", {
-        detail: this.currentItem,
-        bubbles: true,
-      }),
-    );
 
     let i = 0;
     for (const child of this.children) {
@@ -716,6 +715,15 @@ export class Track extends LitElement {
     }
 
     this.drawUpdate();
+
+    if(changed) {
+      this.dispatchEvent(
+        new CustomEvent<number | string>("change", {
+          detail: this.currentItem,
+          bubbles: true,
+        }),
+      );
+    }
   }
 
   private updateInputs() {
@@ -901,7 +909,11 @@ export class Track extends LitElement {
     const scrollPos = new Vec2(this.scrollLeft, this.scrollTop);
     const diff = Vec2.sub(scrollPos, this.position);
     if (this.slotElement) {
-      this.slotElement.style.transform = `translateX(${diff.x}px) translateY(${diff.y}px)`;
+      if(diff.abs() > 1.5) {
+        this.slotElement.style.transform = `translateX(${diff.x}px) translateY(${diff.y}px)`;
+      } else {
+        this.slotElement.style.transform = `translateX(0px) translateY(0px)`;
+      }
     }
 
     if (this.loop) {
