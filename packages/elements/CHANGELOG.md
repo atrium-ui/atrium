@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.11.3 (2024-05-07)
+
+### Features
+
+- a-track: improve perf by leaning on native scrolling more
+
 ## 0.11.2 (2024-05-02)
 
 ### Features
