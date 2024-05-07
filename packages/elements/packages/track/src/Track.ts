@@ -365,12 +365,18 @@ export class Track extends LitElement {
 
   private _width;
   public get width() {
-    return this._width ?? (this._width = this.offsetWidth);
+    if (this._width === undefined) {
+      this._width = this.offsetWidth;
+    }
+    return this._width;
   }
 
   private _height;
   public get height() {
-    return this._height ?? (this._height = this.offsetHeight);
+    if (this._height === undefined) {
+      this._height = this.offsetHeight;
+    }
+    return this._height;
   }
 
   public get currentPosition() {
@@ -716,7 +722,7 @@ export class Track extends LitElement {
 
     this.drawUpdate();
 
-    if(changed) {
+    if (changed) {
       this.dispatchEvent(
         new CustomEvent<number | string>("change", {
           detail: this.currentItem,
@@ -909,10 +915,10 @@ export class Track extends LitElement {
     const scrollPos = new Vec2(this.scrollLeft, this.scrollTop);
     const diff = Vec2.sub(scrollPos, this.position);
     if (this.slotElement) {
-      if(diff.abs() > 1.5) {
+      if (diff.abs() > 1.5) {
         this.slotElement.style.transform = `translateX(${diff.x}px) translateY(${diff.y}px)`;
       } else {
-        this.slotElement.style.transform = `translateX(0px) translateY(0px)`;
+        this.slotElement.style.transform = "translateX(0px) translateY(0px)";
       }
     }
 
