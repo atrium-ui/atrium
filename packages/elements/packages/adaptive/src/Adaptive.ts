@@ -21,9 +21,8 @@ export class AdaptiveElement extends LitElement {
         :host {
           display: block;
         }
-
         .content {
-          display: block;
+          display: inherit;
         }
       `,
     ];
@@ -66,9 +65,19 @@ export class AdaptiveElement extends LitElement {
   lastHeight = this.offsetHeight;
   lastWidth = this.offsetWidth;
 
+  initial = false;
+
   async updated() {
-    const height = this.content?.offsetHeight;
-    const width = this.content?.offsetWidth;
+    const height = this.offsetHeight;
+    const width = this.offsetWidth;
+
+    if(!this.initial) {
+      this.initial = true;
+      this.lastHeight = height;
+      this.lastWidth = width;
+      return;
+    }
+
     if (height && width) {
       await this.animate(
         [
@@ -87,6 +96,7 @@ export class AdaptiveElement extends LitElement {
         },
       ).finished;
     }
+
     this.lastHeight = height;
     this.lastWidth = width;
   }

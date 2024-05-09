@@ -32,7 +32,7 @@ export function Input(props: Props) {
           placeholder={props.placeholder}
           value={props.value}
           class={[
-            "group w-full resize-y rounded-md border bg-transparent px-3 py-1 outline-none focus:border-zinc-500 hover:border-zinc-600",
+            "group w-full resize-y rounded-md border border-zinc-700 bg-transparent px-3 py-1 outline-none focus:border-zinc-500 hover:border-zinc-600",
             props.error ? "border-red-600" : "border-zinc-700",
           ].join("")}
           onChange={(e) => {
@@ -56,7 +56,7 @@ export function Input(props: Props) {
           placeholder={props.placeholder}
           value={props.value}
           class={[
-            "group w-full min-w-0 rounded-md border bg-transparent px-3 py-1 leading-normal outline-none focus:border-zinc-500 hover:border-zinc-600",
+            "group w-full min-w-0 rounded-md border border-zinc-700 bg-transparent px-3 py-1 leading-normal outline-none focus:border-zinc-500 hover:border-zinc-600",
             props.error ? "border-red-600" : "border-zinc-700",
           ].join("")}
           onChange={(e) => {

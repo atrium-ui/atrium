@@ -53,7 +53,7 @@ export const Slider = defineComponent(
     };
 
     return () => (
-      <div class="@container group relative w-full overflow-hidden px-4">
+      <div class="@container group relative w-full overflow-hidden">
         <div class="relative w-full">
           <Button
             variant="ghost"
