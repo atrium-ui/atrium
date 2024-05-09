@@ -19,7 +19,10 @@ export const Accordion = defineComponent((_, { slots }) => {
 export const AccordionItem = defineComponent(
   (props: { title: string; opened?: boolean }, { slots }) => {
     return () => (
-      <a-expandable opened={props.opened} class="group mb-2 block rounded-lg border border-zinc-700">
+      <a-expandable
+        opened={props.opened}
+        class="group mb-2 block rounded-lg border border-zinc-700"
+      >
         <button
           // @ts-ignore
           slot="toggle"

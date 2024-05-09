@@ -15,11 +15,17 @@ export function Combobox(
   { slots },
 ) {
   return (
-    <a-dropdown selected={props.value} class="relative inline-block" onInput={(e) => {
-      props.onChange(e.target?.value as string[]);
-    }}>
+    <a-dropdown
+      selected={props.value}
+      class="relative inline-block"
+      onInput={(e) => {
+        props.onChange(e.target?.value as string[]);
+      }}
+    >
       <Button variant="outline" slot="input">
-        <div class="w-[150px] text-left overflow-hidden whitespace-nowrap text-ellipsis">{props.value.length > 0 ? props.value.join(", ") : "Select"}</div>
+        <div class="w-[150px] text-left overflow-hidden whitespace-nowrap text-ellipsis">
+          {props.value.length > 0 ? props.value.join(", ") : "Select"}
+        </div>
       </Button>
 
       <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-800 p-1">
@@ -43,4 +49,4 @@ export function ComboboxItem(props: { selected: boolean; value: string }) {
       <div>{props.value}</div>
     </button>
   );
-};
+}

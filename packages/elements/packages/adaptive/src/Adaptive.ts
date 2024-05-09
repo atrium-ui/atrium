@@ -71,7 +71,7 @@ export class AdaptiveElement extends LitElement {
     const height = this.offsetHeight;
     const width = this.offsetWidth;
 
-    if(!this.initial) {
+    if (!this.initial) {
       this.initial = true;
       this.lastHeight = height;
       this.lastWidth = width;

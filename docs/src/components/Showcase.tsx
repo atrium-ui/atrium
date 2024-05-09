@@ -15,11 +15,7 @@ import { Slider } from "@sv/components/src/vue/Slider";
 import "@sv/elements/adaptive";
 
 export const Showcase = defineComponent(() => {
-  const options = ref<string[]>([
-    "Item 1",
-    "Item 2",
-    "Item 3",
-  ]);
+  const options = ref<string[]>(["Item 1", "Item 2", "Item 3"]);
 
   const search = ref<string>("");
   const filter = ref<string[]>(["Item 1"]);
@@ -48,50 +44,85 @@ export const Showcase = defineComponent(() => {
     {
       title: sentence().split(" ").slice(0, 6).join(" "),
       text: lorem(10, 30),
-    }
-  ]
+    },
+  ];
 
   return () => (
     <div class="relative 2xl:mx-[-130px]">
       <div class="pointer-events-none absolute bottom-0 left-0 h-[150px] w-full bg-[linear-gradient(0deg,var(--sl-color-black),transparent)]" />
 
-      <div class="rounded-md border border-zinc-950 shadow-md border-b-0 p-8">
-        <div class="grid lg:grid-cols-[1fr_400px] gap-10 pb-10">
+      <div class="rounded-md border border-zinc-950 border-b-0 p-8 shadow-md">
+        <div class="grid gap-10 pb-10 lg:grid-cols-[1fr_400px]">
           <div>
             <div class="flex gap-4 pb-3">
-              <Input value={search.value} onInput={e => {
-                search.value = e.target?.value;
-              }} class="w-full" placeholder="Search..." />
-              <Combobox onChange={arr => {
-                filter.value = [...arr];
-              }} value={filter.value}>
-                {options.value.map(opt => {
-                  return <ComboboxItem value={opt} selected={filter.value.includes(opt)} />
+              <Input
+                value={search.value}
+                onInput={(e) => {
+                  search.value = e.target?.value;
+                }}
+                class="w-full"
+                placeholder="Search..."
+              />
+              <Combobox
+                onChange={(arr) => {
+                  filter.value = [...arr];
+                }}
+                value={filter.value}
+              >
+                {options.value.map((opt, i) => {
+                  return (
+                    <ComboboxItem
+                      key={i}
+                      value={opt}
+                      selected={filter.value.includes(opt)}
+                    />
+                  );
                 })}
               </Combobox>
               <Dialog label="Submit">This doesn't actually do anything.</Dialog>
             </div>
-            <div class="inline-flex rounded-md border border-zinc-800 p-1 overflow-hidden justify-between">
+            <div class="inline-flex justify-between overflow-hidden rounded-md border border-zinc-800 p-1">
               <a-adaptive>
                 <div class="flex gap-1">
-                  {filter.value.length > 0 ? filter.value.map((str, i) => {
-                    return (
-                      <div key={i} class="flex-none rounded border border-zinc-800 px-2">
-                        <span>{str}</span>
-                        <button class="bg-transparent cursor-pointer p-0 px-2" onClick={() => {
-                          const tmp = [...filter.value];
-                          tmp.splice(i, 1);
-                          filter.value = tmp;
-                        }}>X</button>
-                      </div>
-                    );
-                  }) : <div class="flex-none rounded-lg border border-transparent px-2">No Filter</div>}
+                  {filter.value.length > 0 ? (
+                    filter.value.map((str, i) => {
+                      return (
+                        <div
+                          key={i}
+                          class="flex-none rounded border border-zinc-800 px-2"
+                        >
+                          <span>{str}</span>
+                          <button
+                            type="button"
+                            class="cursor-pointer bg-transparent p-0 px-2"
+                            onClick={() => {
+                              const tmp = [...filter.value];
+                              tmp.splice(i, 1);
+                              filter.value = tmp;
+                            }}
+                          >
+                            X
+                          </button>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div class="flex-none rounded-lg border border-transparent px-2">
+                      No Filter
+                    </div>
+                  )}
                 </div>
               </a-adaptive>
 
-              <button class="bg-transparent cursor-pointer px-3" onClick={() => {
-                filter.value = [];
-              }}>X</button>
+              <button
+                type="button"
+                class="cursor-pointer bg-transparent px-3"
+                onClick={() => {
+                  filter.value = [];
+                }}
+              >
+                X
+              </button>
             </div>
           </div>
 
@@ -126,27 +157,35 @@ export const Showcase = defineComponent(() => {
           </div>
         </div>
 
-        <div class="grid lg:grid-cols-[1fr_400px] gap-10 overflow-hidden">
+        <div class="grid gap-10 overflow-hidden lg:grid-cols-[1fr_400px]">
           <Slider>
-            {data.filter((item) => {
-              const matchTitle = search.value.length === 0 || item.title.match(search.value);
-              const matchType = filter.value.length === 0 || filter.value.includes(item.type);
+            {data
+              .filter((item) => {
+                const matchTitle =
+                  search.value.length === 0 || item.title.match(search.value);
+                const matchType =
+                  filter.value.length === 0 || filter.value.includes(item.type);
 
-              return matchTitle && matchType;
-            }).map((data, i) => {
-              return (
-                <div class="pr-2">
-                  <div key={i} class="flex-none text-justify h-[300px] w-[200px] uppercase rounded bg-zinc-800 p-2 overflow-hidden text-[#1c1c1c] font-bold text-xl">
-                    {data.title}
+                return matchTitle && matchType;
+              })
+              .map((data, i) => {
+                return (
+                  <div key={i} class="pr-2">
+                    <div class="h-[300px] w-[200px] flex-none overflow-hidden rounded bg-zinc-800 p-2 text-justify font-bold text-[#1c1c1c] text-xl uppercase">
+                      {data.title}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </Slider>
 
           <Accordion class="min-h-[400px]">
-            {data2.map(data => {
-              return <AccordionItem title={data.title}>{data.text}</AccordionItem>;
+            {data2.map((data, i) => {
+              return (
+                <AccordionItem key={i} title={data.title}>
+                  {data.text}
+                </AccordionItem>
+              );
             })}
           </Accordion>
         </div>
