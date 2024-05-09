@@ -2,7 +2,7 @@
 title: Combobox
 ---
 import Example from "../../../components/Example.astro";
-import { Combobox } from "@sv/components/src/vue/Combobox";
+import { Combobox, ComboboxItem } from "@sv/components/src/vue/Combobox";
 
 A combobox dropdown
 
@@ -23,16 +23,16 @@ import { Combobox } from "./Combobox.jsx";
 ---
 
 <Combobox value="Select">
-  <Combobox.Item value="Item 1" />
-  <Combobox.Item value="Item 2" />
-  <Combobox.Item value="Item 3" />
+  <ComboboxItem value="Item 1" />
+  <ComboboxItem value="Item 2" />
+  <ComboboxItem value="Item 3" />
 </Combobox>
 `}>
   <div>
     <Combobox client:load value="Select">
-      <Combobox.Item client:load value="Item 1" />
-      <Combobox.Item client:load value="Item 2" />
-      <Combobox.Item client:load value="Item 3" />
+      <ComboboxItem client:load value="Item 1" />
+      <ComboboxItem client:load value="Item 2" />
+      <ComboboxItem client:load value="Item 3" />
     </Combobox>
   </div>
 </Example>

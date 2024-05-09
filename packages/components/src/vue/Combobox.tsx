@@ -23,8 +23,12 @@ export function Combobox(
       }}
     >
       <Button variant="outline" slot="input">
-        <div class="w-[150px] text-left overflow-hidden whitespace-nowrap text-ellipsis">
-          {props.value.length > 0 ? props.value.join(", ") : "Select"}
+        <div class="w-[150px] overflow-hidden text-ellipsis whitespace-nowrap text-left">
+          {Array.isArray(props.value)
+            ? props.value?.length > 0
+              ? props.value?.join(", ")
+              : "Select"
+            : props.value}
         </div>
       </Button>
 
