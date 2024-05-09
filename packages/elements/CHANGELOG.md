@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.11.4 (2024-05-09)
+
+### Fixes
+
+- a-adaptive: fix width and height calculations
+
 ## 0.11.3 (2024-05-07)
 
 ### Features
