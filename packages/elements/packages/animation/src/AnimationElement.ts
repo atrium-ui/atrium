@@ -1,4 +1,4 @@
-import * as rive from "@rive-app/canvas-single";
+import * as rive from "@rive-app/canvas";
 import {
   LitElement,
   css,

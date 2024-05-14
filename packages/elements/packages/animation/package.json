@@ -22,7 +22,7 @@
     "external": [
       "lit",
       "@sv/elements",
-      "@rive-app/canvas-single"
+      "@rive-app/canvas"
     ],
     "sourcemap": true,
     "clean": true

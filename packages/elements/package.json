@@ -101,6 +101,6 @@
     "intersection-observer": "^0.12.2"
   },
   "peerDependencies": {
-    "@rive-app/canvas-single": "^2.7.1"
+    "@rive-app/canvas": "^2.15.6"
   }
 }
