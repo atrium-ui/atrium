@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.11.5 (2024-05-14)
+
+### Features
+
+- a-animation: load wasm async
+
 ## 0.11.4 (2024-05-09)
 
 ### Fixes
