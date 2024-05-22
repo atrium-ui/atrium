@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.11.7 (2024-05-22)
+
+### Features
+
+- a-blur: force pointer events when enabled
+
 ## 0.11.6 (2024-05-22)
 
 ### Features
