@@ -1,5 +1,17 @@
 # @svp/elements
 
+## 0.11.6 (2024-05-22)
+
+### Features
+
+- a-track: set touch-action according to mode
+- a-track: improve perf by leaning on native scrolling more
+- a-animation: load wasm async
+
+### Fixes
+
+- a-adaptive: fix width and height calculations
+
 ## 0.11.5 (2024-05-14)
 
 ### Features
