@@ -29,7 +29,7 @@ process.exit(
             path.join(root, "tsconfig.json"),
             json({
               $schema: "http://json.schemastore.org/tsconfig",
-              extends: ["@svp/codestyle/tsconfig.json"],
+              extends: ["@sv/codestyle/tsconfig.json"],
             }),
           );
           break;
@@ -39,7 +39,7 @@ process.exit(
             path.join(root, "biome.json"),
             json({
               $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
-              extends: ["@svp/codestyle/biome"],
+              extends: ["@sv/codestyle/biome"],
             }),
           );
           console.info(
@@ -54,7 +54,7 @@ process.exit(
           try {
             const pkg = JSON.parse(fs.readFileSync(pkgpath).toString());
             // @ts-ignore
-            pkg.prettier = "@svp/codestyle/.prettierrc.json";
+            pkg.prettier = "@sv/codestyle/.prettierrc.json";
             fs.writeFileSync(pkgpath, json(pkg));
             console.info(
               `[codestyle] prettier installed in ${path.relative(root, pkgpath)}`,

@@ -32,7 +32,7 @@ export default defineComponent(() => {
         </div>
       </form>
 
-      <Input readonly value={`npx @svp/codestyle ${args.value.join(" ")}`} />
+      <Input readonly value={`npx @sv/codestyle ${args.value.join(" ")}`} />
     </div>
   );
 });

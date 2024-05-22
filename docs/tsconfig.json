@@ -1,6 +1,6 @@
 {
   "extends": [
-    "@svp/codestyle/tsconfig.json",
+    "@sv/codestyle/tsconfig.json",
     "astro/tsconfigs/strict"
   ],
   "compilerOptions": {

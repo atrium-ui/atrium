@@ -1,5 +1,5 @@
 {
-  "extends": "@svp/codestyle/tsconfig.json",
+  "extends": "@sv/codestyle/tsconfig.json",
   "compilerOptions": {
     "useDefineForClassFields": false,
     "experimentalDecorators": true,
