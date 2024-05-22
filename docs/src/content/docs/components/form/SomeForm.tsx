@@ -1,9 +1,9 @@
 /* @jsxImportSource vue */
 
 import { ref } from "vue";
-import { Button } from "@svp/components/src/vue/Button.jsx";
-import { FormField, FormRenderer } from "@svp/components/src/vue/Form.jsx";
-import "@svp/elements/adaptive";
+import { Button } from "@sv/components/src/vue/Button.jsx";
+import { FormField, FormRenderer } from "@sv/components/src/vue/Form.jsx";
+import "@sv/elements/adaptive";
 
 const formSpec = {
   pages: [],

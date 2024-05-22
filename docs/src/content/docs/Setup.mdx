@@ -22,7 +22,7 @@ Update or create .npmrc file located next to the package.json file with the foll
   <TabItem label="npm">
     ```ini
     # .npmrc
-    @svp:registry=https://gitlab.s-v.de/api/v4/packages/npm/
+    @sv:registry=https://gitlab.s-v.de/api/v4/packages/npm/
     //gitlab.s-v.de/api/v4/packages/npm/:_authToken=GITLAB_ACCESS_TOKEN
     ```
   </TabItem>
@@ -30,7 +30,7 @@ Update or create .npmrc file located next to the package.json file with the foll
     ```toml
     # .bunfig.toml
     [install.scopes]
-    @svp = { token = "GITLAB_ACCESS_TOKEN", url = "https://gitlab.s-v.de/api/v4/packages/npm/" }
+    @sv = { token = "GITLAB_ACCESS_TOKEN", url = "https://gitlab.s-v.de/api/v4/packages/npm/" }
     ```
   </TabItem>
 </Tabs>
@@ -47,7 +47,7 @@ This only need to be done once per machine.
   <TabItem label="npm">
     ```ini
     # ~/.npmrc
-    @svp:registry=https://gitlab.s-v.de/api/v4/packages/npm/
+    @sv:registry=https://gitlab.s-v.de/api/v4/packages/npm/
     //gitlab.s-v.de/api/v4/packages/npm/:_authToken=GITLAB_ACCESS_TOKEN
     ```
   </TabItem>
@@ -55,7 +55,7 @@ This only need to be done once per machine.
     ```toml
     # ~/.bunfig.toml
     [install.scopes]
-    @svp = { token = "GITLAB_ACCESS_TOKEN", url = "https://gitlab.s-v.de/api/v4/packages/npm/" }
+    @sv = { token = "GITLAB_ACCESS_TOKEN", url = "https://gitlab.s-v.de/api/v4/packages/npm/" }
     ```
   </TabItem>
 </Tabs>

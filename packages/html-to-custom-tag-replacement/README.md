@@ -1,11 +1,9 @@
 # html-to-custom-tag-replacement
 
-
-
 ## Usage
 
 ### Install
 
 ```bash
-npm i @svp/html-to-custom-tag-replacement
+npm i @sv/html-to-custom-tag-replacement
 ```

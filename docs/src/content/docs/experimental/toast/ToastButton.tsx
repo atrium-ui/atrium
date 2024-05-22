@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
-import { Button } from "@svp/components/src/vue/Button.jsx";
-import { Toasts } from "@svp/elements/toast";
+import { Button } from "@sv/components/src/vue/Button.jsx";
+import { Toasts } from "@sv/elements/toast";
 
 export function ToastButton() {
   return (

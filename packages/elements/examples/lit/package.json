@@ -15,7 +15,7 @@
     "entry": ["src/index.ts"],
     "format": ["esm", "cjs"],
     "external": [
-      "@svp/*",
+      "@sv/*",
       "@rive-app/canvas-single"
     ],
     "sourcemap": true,

@@ -1,4 +1,4 @@
-# @svp/slider
+# @sv/slider
 
 ## 1.1.1
 

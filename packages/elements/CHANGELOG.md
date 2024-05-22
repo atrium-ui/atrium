@@ -1,4 +1,4 @@
-# @svp/elements
+# @sv/elements
 
 ## 0.11.6 (2024-05-22)
 

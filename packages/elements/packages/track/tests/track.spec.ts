@@ -4,7 +4,7 @@ import type { MoveEvent } from "../src/Track";
 const NODE_NAME = "a-track";
 
 async function trackWithChildren(itemCount = 10) {
-  const { Track } = await import("@svp/elements/track");
+  const { Track } = await import("@sv/elements/track");
 
   const track = new Track();
   track.style.width = "800px";
@@ -21,7 +21,7 @@ async function trackWithChildren(itemCount = 10) {
 }
 
 test("import track element", async () => {
-  const { Track } = await import("@svp/elements/track");
+  const { Track } = await import("@sv/elements/track");
   expect(Track).toBeDefined();
 
   // is defined in custom element registry
@@ -29,7 +29,7 @@ test("import track element", async () => {
 });
 
 test("construct track element", async () => {
-  const { Track } = await import("@svp/elements/track");
+  const { Track } = await import("@sv/elements/track");
 
   // is constructable
   expect(new Track()).toBeInstanceOf(Track);

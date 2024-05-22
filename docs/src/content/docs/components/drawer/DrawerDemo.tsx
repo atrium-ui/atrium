@@ -1,9 +1,9 @@
 /* @jsxImportSource vue */
 
 import { ref, defineComponent } from "vue";
-import { Button } from "@svp/components/src/vue/Button.jsx";
-import { Drawer } from "@svp/components/src/vue/Drawer.jsx";
-import "@svp/elements/adaptive";
+import { Button } from "@sv/components/src/vue/Button.jsx";
+import { Drawer } from "@sv/components/src/vue/Drawer.jsx";
+import "@sv/elements/adaptive";
 import { paragraph } from "txtgen";
 
 export const DrawerDemo = defineComponent(() => {

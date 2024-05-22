@@ -10,7 +10,7 @@ export default defineConfig({
     outDir: resolve(__dirname, "../../dist/plain"),
     lib: {
       entry: resolve(__dirname, "../../src/index.plain.js"),
-      name: "@svp/slider",
+      name: "@sv/slider",
       fileName: "sv-slider",
       // formats: ['es', 'amd', 'umd', 'cjs']
       formats: ["es", "umd", "cjs"],

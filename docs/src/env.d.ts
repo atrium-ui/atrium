@@ -1,3 +1,3 @@
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="astro/client" />
-/// <reference types="@svp/elements" />
+/// <reference types="@sv/elements" />

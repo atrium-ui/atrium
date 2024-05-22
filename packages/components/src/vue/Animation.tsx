@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 
-import "@svp/elements/animation";
+import "@sv/elements/animation";
 
 type AnimationProps = {
   src: string;

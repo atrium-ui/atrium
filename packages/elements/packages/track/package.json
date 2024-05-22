@@ -20,7 +20,7 @@
     "format": ["esm", "cjs"],
     "external": [
       "lit",
-      "@svp/elements"
+      "@sv/elements"
     ],
     "sourcemap": true,
     "clean": true

@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
 import { defineComponent, ref } from "vue";
-import "@svp/elements/blur";
+import "@sv/elements/blur";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
 

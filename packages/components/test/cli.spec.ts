@@ -14,12 +14,12 @@ afterEach(async () => {
 });
 
 test("resolve bin", async () => {
-  const binPath = require.resolve("@svp/components");
+  const binPath = require.resolve("@sv/components");
   expect(binPath).toBeDefined();
 });
 
 test("use cli", async () => {
-  const binPath = require.resolve("@svp/components");
+  const binPath = require.resolve("@sv/components");
   const out = await $`${binPath} Button`;
   expect(out.exitCode).toBe(0);
   const dir = fs.readdirSync("./components/");

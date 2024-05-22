@@ -1,4 +1,4 @@
-# @svp/components
+# @sv/components
 
 ## 0.9.4 (2024-04-21)
 

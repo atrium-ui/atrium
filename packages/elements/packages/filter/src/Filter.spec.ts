@@ -4,7 +4,7 @@ const NODE_NAME = "a-filter";
 
 describe(NODE_NAME, () => {
   it("import element", async () => {
-    const { Filter } = await import("@svp/elements/filter");
+    const { Filter } = await import("@sv/elements/filter");
     expect(Filter).toBeDefined();
 
     // is defined in custom element registry

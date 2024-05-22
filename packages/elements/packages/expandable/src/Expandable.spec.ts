@@ -3,7 +3,7 @@ import { test, expect } from "bun:test";
 const NODE_NAME = "a-expandable";
 
 test("import element", async () => {
-  const { Expandable } = await import("@svp/elements/expandable");
+  const { Expandable } = await import("@sv/elements/expandable");
   expect(Expandable).toBeDefined();
 
   // is defined in custom element registry
@@ -20,7 +20,7 @@ test("import element", async () => {
 });
 
 test("change event", async () => {
-  const { Expandable } = await import("@svp/elements/expandable");
+  const { Expandable } = await import("@sv/elements/expandable");
 
   const ele = new Expandable();
 

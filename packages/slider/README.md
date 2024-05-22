@@ -7,5 +7,5 @@
 ### Install
 
 ```bash
-npm i @svp/slider
+npm i @sv/slider
 ```

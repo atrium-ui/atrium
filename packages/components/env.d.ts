@@ -1,4 +1,4 @@
-/// <reference types="@svp/elements" />
+/// <reference types="@sv/elements" />
 
 declare namespace JSX {
   // TODO: Polyfill type for JSX.Element

@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
-import "@svp/elements/dropdown";
-import "@svp/elements/expandable";
+import "@sv/elements/dropdown";
+import "@sv/elements/expandable";
 
 import { Button } from "./Button.jsx";
 

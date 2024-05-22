@@ -12,7 +12,7 @@ export default defineConfig({
     outDir: resolve(__dirname, "../../dist/vue3"),
     lib: {
       entry: resolve(__dirname, "../../src/index.vue.js"),
-      name: "@svp/slider",
+      name: "@sv/slider",
       fileName: "sv-slider",
       // formats: ['es', 'amd', 'umd', 'cjs']
       formats: ["es", "umd", "cjs"],

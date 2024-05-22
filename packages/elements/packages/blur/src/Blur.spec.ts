@@ -11,7 +11,7 @@ describe(NODE_NAME, () => {
   }
 
   it("import element", async () => {
-    const { Blur } = await import("@svp/elements/blur");
+    const { Blur } = await import("@sv/elements/blur");
     expect(Blur).toBeDefined();
 
     // is defined in custom element registry
