@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
-import "@sv/elements/dropdown";
-import "@sv/elements/expandable";
+import "@svp/elements/dropdown";
+import "@svp/elements/expandable";
 
 interface Props {
   value: string;

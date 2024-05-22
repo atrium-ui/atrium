@@ -7,5 +7,5 @@
 ### Install
 
 ```bash
-npm i @sv/html-to-custom-tag-replacement
+npm i @svp/html-to-custom-tag-replacement
 ```

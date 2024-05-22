@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 
-import "@sv/elements/blur";
+import "@svp/elements/blur";
 
 interface Props {
   enabled?: boolean | undefined;

@@ -1,4 +1,4 @@
-# @sv/scroll-lock
+# @svp/scroll-lock
 
 ## 0.1.8
 

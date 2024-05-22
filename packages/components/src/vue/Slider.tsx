@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
-import "@sv/elements/track";
-import type { Track } from "@sv/elements/track";
+import "@svp/elements/track";
+import type { Track } from "@svp/elements/track";
 import { twMerge } from "tailwind-merge";
 import { computed, defineComponent, onMounted, ref } from "vue";
 import { Button } from "./Button";

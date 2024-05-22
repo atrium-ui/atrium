@@ -1,14 +1,14 @@
 /* @jsxImportSource vue */
 
 import { defineComponent, ref } from "vue";
-import "@sv/elements/blur";
+import "@svp/elements/blur";
 import {
   PointerTrait,
   Track,
   type InputState,
   type Easing,
   type Trait,
-} from "@sv/elements/track";
+} from "@svp/elements/track";
 
 export const Drawer = defineComponent(
   (

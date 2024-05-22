@@ -1,6 +1,6 @@
 import { LitElement, type PropertyValueMap, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
-import { ScrollLock } from "@sv/scroll-lock";
+import { ScrollLock } from "@svp/scroll-lock";
 
 declare global {
   interface HTMLElementTagNameMap {

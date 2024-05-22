@@ -1,4 +1,4 @@
-# @sv/html-to-custom-tag-replacement
+# @svp/html-to-custom-tag-replacement
 
 ## 0.1.1 (2024-04-13)
 

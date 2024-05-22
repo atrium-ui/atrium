@@ -1,4 +1,4 @@
-# @sv/codestyle
+# @svp/codestyle
 
 ## 0.8.0 (2024-05-01)
 

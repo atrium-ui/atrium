@@ -21,7 +21,7 @@
     ],
     "external": [
       "lit",
-      "@sv/elements",
+      "@svp/elements",
       "@rive-app/canvas"
     ],
     "sourcemap": true,

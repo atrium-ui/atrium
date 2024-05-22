@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 
-import "@sv/elements/expandable";
+import "@svp/elements/expandable";
 import { defineComponent } from "vue";
 import { Icon } from "./Icon.jsx";
 

@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
 import { defineComponent, ref } from "vue";
-import "@sv/elements/blur";
+import "@svp/elements/blur";
 import { Button } from "./Button";
 
 export const Dialog = defineComponent(

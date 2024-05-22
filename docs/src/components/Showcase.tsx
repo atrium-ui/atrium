@@ -2,17 +2,17 @@
 
 import { sentence, lorem } from "txtgen";
 import { defineComponent, ref } from "vue";
-import { Checkbox } from "@sv/components/src/vue/Checkbox";
-import { Accordion, AccordionItem } from "@sv/components/src/vue/Accordion";
-import { Input } from "@sv/components/src/vue/Input";
-import { Combobox, ComboboxItem } from "@sv/components/src/vue/Combobox";
-import { Button } from "@sv/components/src/vue/Button";
-import { Icon } from "@sv/components/src/vue/Icon";
-import { Popover } from "@sv/components/src/vue/Popover";
-import { Dialog } from "@sv/components/src/vue/Dialog";
-import { Slider } from "@sv/components/src/vue/Slider";
+import { Checkbox } from "@svp/components/src/vue/Checkbox";
+import { Accordion, AccordionItem } from "@svp/components/src/vue/Accordion";
+import { Input } from "@svp/components/src/vue/Input";
+import { Combobox, ComboboxItem } from "@svp/components/src/vue/Combobox";
+import { Button } from "@svp/components/src/vue/Button";
+import { Icon } from "@svp/components/src/vue/Icon";
+import { Popover } from "@svp/components/src/vue/Popover";
+import { Dialog } from "@svp/components/src/vue/Dialog";
+import { Slider } from "@svp/components/src/vue/Slider";
 
-import "@sv/elements/adaptive";
+import "@svp/elements/adaptive";
 
 export const Showcase = defineComponent(() => {
   const options = ref<string[]>(["Item 1", "Item 2", "Item 3"]);

@@ -1,8 +1,8 @@
 /* @jsxImportSource vue */
 
 import { defineComponent, ref } from "vue";
-import { Checkbox } from "@sv/components/src/vue/Checkbox";
-import { Input } from "@sv/components/src/vue/Input";
+import { Checkbox } from "@svp/components/src/vue/Checkbox";
+import { Input } from "@svp/components/src/vue/Input";
 
 export default defineComponent(() => {
   const args = ref(["editorconfig", "biome", "tsconfig", "prettier"]);
@@ -32,7 +32,7 @@ export default defineComponent(() => {
         </div>
       </form>
 
-      <Input readonly value={`npx @sv/codestyle ${args.value.join(" ")}`} />
+      <Input readonly value={`npx @svp/codestyle ${args.value.join(" ")}`} />
     </div>
   );
 });

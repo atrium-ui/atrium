@@ -17,17 +17,17 @@ Here links for [NuxtJS](https://www.npmjs.com/package/@nuxtjs/tailwindcss), [Vit
 <Command>
   <div slot="pnpm">
     ```sh
-    pnpm add @sv/components @sv/elements
+    pnpm add @svp/components @svp/elements
     ```
   </div>
   <div slot="npm">
     ```sh
-    npm install @sv/components @sv/elements
+    npm install @svp/components @svp/elements
     ```
   </div>
   <div slot="bun">
     ```sh
-    bun add @sv/components @sv/elements
+    bun add @svp/components @svp/elements
     ```
   </div>
 </Command>
@@ -37,7 +37,7 @@ Here links for [NuxtJS](https://www.npmjs.com/package/@nuxtjs/tailwindcss), [Vit
 This **copies** a component template into your project.
 
 ```bash
-npx @sv/components button
+npx @svp/components button
 ```
 
 ### 3. Change styling or behavior of the component in the copy inside your project.
@@ -83,7 +83,7 @@ import "~/components/Button";
 
 ```tsx
 // src/App.tsx
-import "@sv/elements/a-expandable";
+import "@svp/elements/a-expandable";
 
 <a-expandable opened></a-expandable>;
 ```
@@ -106,7 +106,7 @@ import "@sv/elements/a-expandable";
 // /tsconfig.json
 {
   "compilerOptions": {
-    "types": ["@sv/elements"]
+    "types": ["@svp/elements"]
   }
 }
 ```

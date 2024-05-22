@@ -1,5 +1,5 @@
 {
-  "extends": "@sv/codestyle/tsconfig.json",
+  "extends": "@svp/codestyle/tsconfig.json",
   "compilerOptions": {
     "target": "ES2020",
     "useDefineForClassFields": false,

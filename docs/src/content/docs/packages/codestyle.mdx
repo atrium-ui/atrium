@@ -1,5 +1,5 @@
 ---
-title: "@sv/codestyle"
+title: "@svp/codestyle"
 description: Codestyle and configuration for all projects.
 ---
 
@@ -18,17 +18,17 @@ Make sure your project is set up with access to the registry as described in [Se
 <Command>
   <div slot="pnpm">
     ```sh
-    pnpm add @sv/codestyle --save-exact
+    pnpm add @svp/codestyle --save-exact
     ```
   </div>
   <div slot="npm">
     ```sh
-    npm i @sv/codestyle --save-exact
+    npm i @svp/codestyle --save-exact
     ```
   </div>
   <div slot="bun">
     ```sh
-    bun add @sv/codestyle --exact
+    bun add @svp/codestyle --exact
     ```
   </div>
 </Command>
@@ -54,7 +54,7 @@ For the biome configuration to work with your editior, the `biome.json` file nee
 // biome.json
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": ["@sv/codestyle/biome"]
+  "extends": ["@svp/codestyle/biome"]
 }
 ```
 
@@ -67,7 +67,7 @@ We should use Biome for js formatting but Prettier is still useful for many othe
 {
   "name": "your-package",
   ...
-  "prettier": "@sv/codestyle/.prettierrc.json"
+  "prettier": "@svp/codestyle/.prettierrc.json"
 }
 ```
 
@@ -79,7 +79,7 @@ Prettier [docs](https://prettier.io/docs/en/configuration.html).
 // tsconfig.json
 {
   "$schema": "http://json.schemastore.org/tsconfig",
-  "extends": ["@sv/codestyle/tsconfig.json"]
+  "extends": ["@svp/codestyle/tsconfig.json"]
 }
 ```
 
@@ -88,7 +88,7 @@ Prettier [docs](https://prettier.io/docs/en/configuration.html).
 ```javascript
 // commitlint.config.js
 module.exports = {
-  extends: ["@sv/codestyle/commitlint.cjs"],
+  extends: ["@svp/codestyle/commitlint.cjs"],
 };
 ```
 
@@ -103,7 +103,7 @@ Reccomended for a new setup is biome instead of eslint and stylelint.
 ```json
 // .eslintrc.json
 {
-  "extends": ["@sv/codestyle/.eslintrc.json"]
+  "extends": ["@svp/codestyle/.eslintrc.json"]
 }
 ```
 
@@ -112,7 +112,7 @@ Reccomended for a new setup is biome instead of eslint and stylelint.
 ```javascript
 // stylelint.config.cjs
 module.exports = {
-  extends: ["@sv/codestyle/stylelint.config.cjs"],
+  extends: ["@svp/codestyle/stylelint.config.cjs"],
 };
 ```
 

@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
 import { defineComponent, ref } from "vue";
-import "@sv/elements/toggle";
+import "@svp/elements/toggle";
 import { Icon } from "./Icon";
 
 interface Props {
