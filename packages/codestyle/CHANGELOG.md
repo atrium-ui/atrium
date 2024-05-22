@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 0.8.1 (2024-05-22)
+
+### Features
+
+- Try to publish package as sv
+
 ## 0.8.0 (2024-05-01)
 
 ### Breaking Changes
