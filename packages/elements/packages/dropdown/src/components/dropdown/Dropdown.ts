@@ -32,7 +32,7 @@ declare global {
  * </a-dropdown>
  * ```
  *
- * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-dropdown/
+ * @see https://svp.pages.s-v.de/atrium/elements/a-dropdown/
  */
 export class Dropdown extends LitElement {
   static get styles() {

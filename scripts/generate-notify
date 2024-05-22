@@ -87,7 +87,7 @@ function generateMessage() {
 		const changes = versionChanges(pkg, version);
 
 		const pkgWithoutScope = pkg.replace("@svp/", "");
-		const changelogUrl = `https://sv.pages.s-v.de/sv-frontend-library/mono/packages/${pkgWithoutScope}/#changelog`;
+		const changelogUrl = `https://svp.pages.s-v.de/atrium/packages/${pkgWithoutScope}/#changelog`;
 
 		message += `\n🚀 Published ${pkg}@${version}\n`;
 		message += `\n${changes}`;

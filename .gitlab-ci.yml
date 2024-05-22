@@ -72,7 +72,7 @@ pages:
     - main
   environment:
     name: docs
-    url: https://sv.pages.s-v.de/sv-frontend-library/mono
+    url: https://svp.pages.s-v.de/atrium
   artifacts:
     paths:
       - public

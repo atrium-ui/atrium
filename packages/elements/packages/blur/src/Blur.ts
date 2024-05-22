@@ -25,7 +25,7 @@ declare global {
  * </a-blur>
  * ```
  *
- * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-blur/
+ * @see https://svp.pages.s-v.de/atrium/elements/a-blur/
  */
 export class Blur extends LitElement {
   static styles = css`

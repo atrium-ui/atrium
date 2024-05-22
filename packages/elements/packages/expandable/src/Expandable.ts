@@ -26,7 +26,7 @@ let accordionIncrement = 0;
  *  </a-expandable>
  * ```
  *
- * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-expandable/
+ * @see https://svp.pages.s-v.de/atrium/elements/a-expandable/
  */
 export class Expandable extends LitElement {
   public static get styles() {

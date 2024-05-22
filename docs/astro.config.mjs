@@ -6,7 +6,7 @@ import vue from "@astrojs/vue";
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  base: "/sv-frontend-library/mono/",
+  base: "/atrium/",
   site: "https://sv.pages.s-v.de",
   publicDir: "assets",
   vite: {
@@ -47,7 +47,7 @@ export default defineConfig({
         alt: "Atrium Logo",
       },
       social: {
-        gitlab: "https://gitlab.s-v.de/sv/sv-frontend-library/mono",
+        gitlab: "https://gitlab.s-v.de/atrium",
       },
       sidebar: [
         {

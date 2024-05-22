@@ -7,8 +7,8 @@
     A collection of framework agnostic and functional web-components and templates for building Websites.
     <br />
     <br />
-    <a href="https://sv.pages.s-v.de/sv-frontend-library/mono/">Docs</a> ·
-    <a href="https://gitlab.s-v.de/sv/sv-frontend-library/mono/-/packages">Packages</a>
+    <a href="https://svp.pages.s-v.de/atrium/">Docs</a> ·
+    <a href="https://gitlab.s-v.de/atrium/-/packages">Packages</a>
     <br />
   </p>
 </p>
@@ -16,7 +16,7 @@
 
 ## Use in other projects
 
-See [Usage](https://sv.pages.s-v.de/sv-frontend-library/mono/usage/) in the docs for instructions.
+See [Usage](https://svp.pages.s-v.de/atrium/usage/) in the docs for instructions.
 
 <br />
 

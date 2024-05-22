@@ -66,7 +66,7 @@ const PopoverAlignment = {
  * </a-popover>
  * ```
  *
- * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-popover/
+ * @see https://svp.pages.s-v.de/atrium/elements/a-popover/
  */
 @customElement("a-popover")
 export class Popover extends LitElement {

@@ -32,7 +32,7 @@ declare global {
  * />
  * ```
  *
- * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-animation/
+ * @see https://svp.pages.s-v.de/atrium/elements/a-animation/
  */
 export class AnimationElement extends LitElement {
   public static styles = css`

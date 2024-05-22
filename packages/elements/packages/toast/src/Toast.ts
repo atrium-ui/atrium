@@ -18,7 +18,7 @@ let instance: ToastFeed | null = null;
  * </a-blur>
  * ```
  *
- * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-blur/
+ * @see https://svp.pages.s-v.de/atrium/elements/a-blur/
  */
 export class ToastFeed extends LitElement {
   static get styles() {
