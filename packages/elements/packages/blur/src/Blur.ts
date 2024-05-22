@@ -36,7 +36,7 @@ export class Blur extends LitElement {
     }
 
     :host([enabled]) {
-      pointer-events: all;
+      pointer-events: all !important;
     }
   `;
 
