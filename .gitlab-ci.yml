@@ -59,7 +59,7 @@ publish:
       when: on_success
     - when: never
   script:
-    - git checkout "origin/$CI_COMMIT_REF_NAME"
+    - git checkout "$CI_COMMIT_REF_NAME"
     - git fetch --prune --prune-tags -f
     - git pull
     - task release
