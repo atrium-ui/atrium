@@ -29,7 +29,7 @@ export default defineConfig({
       jsx: true,
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.includes("-"),
+          isCustomElement: tag => tag.includes("-"),
         },
       },
     }),
@@ -41,13 +41,13 @@ export default defineConfig({
       title: "Atrium",
       customCss: ["./styles/custom.css"],
       logo: {
-        dark: "./assets/atrium-dark.png",
-        light: "./assets/atrium-light.png",
+        dark: "./assets/logo.svg",
+        light: "./assets/logo.svg",
         replacesTitle: true,
         alt: "Atrium Logo",
       },
       social: {
-        gitlab: "https://gitlab.s-v.de/atrium",
+        gitlab: "https://gitlab.s-v.de/svp/atrium",
       },
       sidebar: [
         {
@@ -67,7 +67,7 @@ export default defineConfig({
           link: "/design",
         },
         {
-          label: "Component Templates",
+          label: "Components",
           collapsed: false,
           autogenerate: { directory: "components" },
         },

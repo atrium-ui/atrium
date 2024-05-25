@@ -5,11 +5,9 @@
 @tailwind utilities;
 
 :root {
-  --sl-color-bg-sidebar: transparent;
-
   --sl-content-width: 1000px;
+
   --sl-sidebar-width: 16rem;
-  --sl-sidebar-pad-x: 0.8rem;
 
   --sl-text-xs: 0.8125rem;
   --sl-text-sm: 0.875rem;
@@ -22,10 +20,18 @@
   --sl-text-5xl: 3rem;
   --sl-text-6xl: 4rem;
 
-  font-family: "Lato", sans-serif;
-  font-size: var(--sl-text-base);
-
   -webkit-tap-highlight-color: transparent;
+}
+
+.header {
+  --sl-color-bg-nav: transparent;
+
+  border-bottom: none;
+  backdrop-filter: blur(8px);
+}
+
+.sidebar-pane {
+  border-top-right-radius: 9px;
 }
 
 .sl-markdown-content p {
@@ -44,13 +50,25 @@
   border: 1px solid #222;
 }
 
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(40deg, transparent 42%, #e3c49217);
+  z-index: -1;
+}
+
+.main-frame {
+  font-size: var(--sl-text-base);
+}
+
+/* Sheets fix */
 .main-pane {
   z-index: 1;
   position: relative;
-}
-
-strong {
-  font-weight: bolder;
 }
 
 .loading-indicator {

@@ -48,7 +48,7 @@ export const Showcase = defineComponent(() => {
   ];
 
   return () => (
-    <div class="relative 2xl:mx-[-130px]">
+    <div class="relative bg-[#18181a] shadow-xl 2xl:mx-[-130px]">
       <div class="pointer-events-none absolute bottom-0 left-0 h-[150px] w-full bg-[linear-gradient(0deg,var(--sl-color-black),transparent)]" />
 
       <div class="rounded-md border border-zinc-950 border-b-0 p-8 shadow-md">
