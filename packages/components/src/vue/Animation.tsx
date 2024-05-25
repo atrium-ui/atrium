@@ -1,22 +1,22 @@
 /* @jsxImportSource vue */
 
 import "@sv/elements/animation";
+import riveWASMResource from "@rive-app/canvas/rive.wasm?url";
+import { RuntimeLoader } from "@rive-app/canvas";
 
-type AnimationProps = {
+RuntimeLoader.setWasmUrl(riveWASMResource);
+
+export function Animation(props: {
   src: string;
   width?: number;
   height?: number;
-};
-
-export function Animation(props: AnimationProps) {
+}) {
   return (
-    <div>
-      <a-animation
-        height={props.height || 400}
-        width={props.width || 400}
-        src={props.src}
-        stateMachine="State Machine 1"
-      />
-    </div>
+    <a-animation
+      height={props.height || 400}
+      width={props.width || 400}
+      src={props.src}
+      stateMachine="State Machine 1"
+    />
   );
 }

@@ -21,11 +21,13 @@ export const buttonVariants = {
     "bg-transparent active:bg-[rgba(150,150,150,0.1)]",
     "filter hover:brightness-110",
   ],
+  disabled: ["cursor-not-allowed opacity-50"],
 };
 
 export function Button(
   props: {
     type?: "button" | "submit" | "reset";
+    inert?: boolean;
     class?: string | string[];
     slot?: string;
     disabled?: boolean;
@@ -39,21 +41,23 @@ export function Button(
   return (
     <button
       type={props.type || "button"}
+      inert={props.inert || undefined}
       // @ts-ignore
-      slot={props.slot}
-      autofocus={props.autofocus}
+      slot={props.slot || undefined}
+      autofocus={props.autofocus || undefined}
+      aria-disabled={props.disabled || undefined}
       class={twMerge(
         buttonVariants.base,
         buttonVariants[props.variant ?? "default"],
-        // the disabled prop is not used as attribute, for accessibility reasons
-        props.disabled && "cursor-not-allowed opacity-80",
         props.class,
+        // the disabled attribute is not used for accessibility reasons
+        props.disabled && buttonVariants.disabled,
       )}
+      onClick={(e) => {
+        !props.disabled && props.onClick?.(e)
+      }}
       title={props.label}
       aria-label={props.label}
-      onClick={(event) => {
-        if (!props.disabled && props.onClick) props.onClick(event);
-      }}
     >
       {slots.default?.()}
     </button>
