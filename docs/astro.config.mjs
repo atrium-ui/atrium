@@ -73,13 +73,13 @@ export default defineConfig({
           collapsed: false,
           items: [
             {
-              label: "Design Reference",
-              link: "/design",
-            },
-            {
               label: "Templates",
               collapsed: false,
               autogenerate: { directory: "components" },
+            },
+            {
+              label: "Design Reference",
+              link: "/design",
             },
           ],
         },

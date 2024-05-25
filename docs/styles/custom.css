@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 :root {
-  --sl-content-width: 1000px;
+  --sl-content-width: 900px;
 
   --sl-sidebar-width: 16rem;
 
