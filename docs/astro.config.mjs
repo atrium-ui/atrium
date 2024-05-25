@@ -41,8 +41,8 @@ export default defineConfig({
       title: "Atrium",
       customCss: ["./styles/custom.css"],
       logo: {
-        dark: "./assets/logo.svg",
-        light: "./assets/logo.svg",
+        dark: "./assets/logo-dark.svg",
+        light: "./assets/logo-light.svg",
         replacesTitle: true,
         alt: "Atrium Logo",
       },
