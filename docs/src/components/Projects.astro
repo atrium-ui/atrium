@@ -34,7 +34,7 @@ async function avatar(project) {
     headers: {
       "PRIVATE-TOKEN": token,
     },
-  }).then(async (res) => {
+  }).then(async res => {
     console.info(res.status);
     if (res.status !== 200) return;
 
@@ -55,14 +55,13 @@ async function avatar(project) {
             return project.dependents.find(dep => dep.project.gitlabId === id);
           })
           .map(async (dep: any) => {
-            const url = dep.project.web_url;
             const name = dep.project.name;
             const title = dep.project.name_with_namespace;
             const avatarUri = await avatar(dep.project);
 
             return (
               <div class="project">
-                <a href={url} class="avatar" title={title}>
+                <a class="avatar" title={title}>
                   {avatarUri ? <img src={avatarUri} /> : name[0]}
                 </a>
               </div>

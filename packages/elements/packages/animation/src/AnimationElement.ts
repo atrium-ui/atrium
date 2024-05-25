@@ -43,6 +43,8 @@ export class AnimationElement extends LitElement {
       display: block;
       width: 100%;
       height: 100%;
+      max-width: 100%;
+      max-height: 100%;
       pointer-events: none;
     }
   `;
