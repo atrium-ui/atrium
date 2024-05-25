@@ -3,22 +3,20 @@ title: a-pager
 description: A reference page in my new Starlight docs site.
 ---
 
-:::danger
-TODO
-:::
+import Elements from "../elements/elements/Elements.astro"
+import TypeDoc from "../../../components/TypeDoc.astro";
+import { Pills, Lit } from "../../../components/Pills";
 
-## Summary
+<Pills>
+  <Lit />
+</Pills>
 
-- A pager
+<Elements />
 
-## Props
-
-## Slots
+<TypeDoc source="../packages/elements/packages/pager" symbol="Pager" />
 
 ## Examples
 
-<a-pager count="12" current="3"></a-pager>
-
-```tsx
-<a-pager count="12" current="3"></a-pager>
-```
+<div class="not-content box">
+  <a-pager count="12" current="3"></a-pager>
+</div>

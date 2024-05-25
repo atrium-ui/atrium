@@ -3,6 +3,20 @@ title: a-range
 description: A reference page in my new Starlight docs site.
 ---
 
-:::danger
-TODO
-:::
+import Elements from "../elements/elements/Elements.astro"
+import TypeDoc from "../../../components/TypeDoc.astro";
+import { Pills, Lit } from "../../../components/Pills";
+
+<Pills>
+  <Lit />
+</Pills>
+
+<Elements />
+
+<TypeDoc source="../packages/elements/packages/range" symbol="Range" />
+
+## Examples
+
+<div class="not-content box">
+  <a-range class="w-[400px]"></a-range>
+</div>

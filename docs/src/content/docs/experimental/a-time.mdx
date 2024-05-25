@@ -3,10 +3,20 @@ title: a-time
 description: A reference page in my new Starlight docs site.
 ---
 
-import Example from "../../../components/Example.astro";
+import Elements from "../elements/elements/Elements.astro"
+import TypeDoc from "../../../components/TypeDoc.astro";
+import { Pills, Lit } from "../../../components/Pills";
 
-<Example title="Example" code={`
-<div>This was loaded <a-time>{ Date.now() }</a-time></div>
-`}>
+<Pills>
+  <Lit />
+</Pills>
+
+<Elements />
+
+<TypeDoc source="../packages/elements/packages/time" symbol="Time" />
+
+## Examples
+
+<div class="not-content box">
   <div>This was loaded <a-time>{ Date.now() }</a-time></div>
-</Example>
+</div>
