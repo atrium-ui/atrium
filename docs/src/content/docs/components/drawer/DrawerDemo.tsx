@@ -1,9 +1,7 @@
 /* @jsxImportSource vue */
 
 import { ref, defineComponent } from "vue";
-import { Button } from "@sv/components/src/vue/Button.jsx";
 import { Drawer } from "@sv/components/src/vue/Drawer.jsx";
-import "@sv/elements/adaptive";
 import { paragraph } from "txtgen";
 
 export const DrawerDemo = defineComponent(() => {
@@ -16,20 +14,10 @@ export const DrawerDemo = defineComponent(() => {
   next();
 
   return () => (
-    <div>
-      <Drawer>
-        <div class="px-4">
-          <a-adaptive class="overflow-hidden">
-            <p>{text.value}</p>
-          </a-adaptive>
-
-          <div class="flex justify-end pt-10">
-            <Button variant="outline" onClick={() => next()}>
-              Next
-            </Button>
-          </div>
-        </div>
-      </Drawer>
-    </div>
+    <Drawer>
+      <div class="px-6 pt-4">
+        <p>{text.value}</p>
+      </div>
+    </Drawer>
   );
 });

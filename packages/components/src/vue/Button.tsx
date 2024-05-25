@@ -54,7 +54,7 @@ export function Button(
         props.disabled && buttonVariants.disabled,
       )}
       onClick={(e) => {
-        !props.disabled && props.onClick?.(e)
+        !props.disabled && props.onClick?.(e);
       }}
       title={props.label}
       aria-label={props.label}

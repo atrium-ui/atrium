@@ -4,11 +4,14 @@ import "@sv/elements/toggle";
 import { Icon } from "./Icon";
 
 export const Checkbox = defineComponent(
-  (props: {
-    id: string;
-    checked?: boolean;
-    onChange?: (event: Event) => void;
-  }, { slots }) => {
+  (
+    props: {
+      id: string;
+      checked?: boolean;
+      onChange?: (event: Event) => void;
+    },
+    { slots },
+  ) => {
     const checked = ref(props.checked);
     const input = ref<HTMLInputElement>();
 

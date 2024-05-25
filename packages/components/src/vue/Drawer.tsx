@@ -1,7 +1,5 @@
 /* @jsxImportSource vue */
-
-import { defineComponent, ref } from "vue";
-import "@sv/elements/blur";
+import { defineComponent, ref, onMounted, effect, nextTick } from "vue";
 import {
   PointerTrait,
   Track,
@@ -9,51 +7,116 @@ import {
   type Easing,
   type Trait,
 } from "@sv/elements/track";
+import { Button } from "./Button";
+import { Icon } from "./Icon";
 
 export const Drawer = defineComponent(
   (
     props: {
+      disabled?: boolean;
+      dynamicHeight?: boolean;
+      open?: boolean;
+      // X to close was pressed
       onClose?: () => void;
+      // Drawer was pushed down
+      onCollapse?: () => void;
+      // // when the drawer is pushed down
+      // onCollapse: () => void;
+      // when the drawer is pulled up
       onOpen?: () => void;
     },
     { slots },
   ) => {
+    const open = ref(props.open ?? false);
     const drawer = ref<DrawerTrack>();
-    const open = ref(false);
+    const scrollContainer = ref<HTMLDivElement>();
+    const contentContainer = ref<HTMLDivElement>();
+    const drawerHeight = ref<number>();
+
+    effect(() => {
+      if (props.open === true) {
+        open.value = true;
+      }
+    });
+
+    onMounted(() => {
+      requestAnimationFrame(async () => {
+        drawerHeight.value = contentContainer.value?.offsetHeight;
+
+        await nextTick();
+        // default state should always be half open
+        drawer.value?.minimize();
+      });
+    });
 
     return () => (
-      <div class="drawer group/blur pointer-events-none fixed top-0 left-0 z-50 block h-full w-full overflow-hidden transition-all">
-        <a-drawer
+      <div class="drawer max-w-[900px] group/blur pointer-events-none fixed top-0 left-1/2 -translate-x-1/2 z-50 block h-full w-full overflow-hidden transition-all">
+        <drawer-track
+          contentheight={props.dynamicHeight ? drawerHeight.value : undefined}
           ref={drawer}
-          class="-translate-x-1/2 absolute bottom-0 left-1/2 h-[100px] max-w-[800px] translate-y-0 touch-none overflow-visible transition-all"
+          class="block h-full w-full translate-y-0 touch-none transition-all"
           onOpen={() => {
             open.value = true;
             props.onOpen?.();
           }}
           onClose={() => {
             open.value = false;
-            props.onClose?.();
+            scrollContainer.value?.scrollTo(0, 0);
+            props.onCollapse?.();
           }}
+          onMove={(e: Event) => {
+            if (props.disabled) e.preventDefault();
+            if (
+              scrollContainer.value &&
+              scrollContainer.value?.scrollTop > 10 &&
+              open.value === true
+            ) {
+              e.preventDefault();
+            }
+          }}
+          onFormat={(e: Event) => e.preventDefault()}
         >
-          <div class="pointer-events-auto h-[calc(100vh-88px+26px)] w-full rounded-t-lg bg-zinc-800">
+          <div class="h-[calc(100vh)] w-full" />
+
+          <div class="pointer-events-auto relative rounded-t-lg bg-zinc-800">
             <div class="flex w-full justify-center py-3">
-              <div class="h-[2px] w-[40px] rounded-3xl bg-white" />
+              {!props.disabled && (
+                <div class="h-[2px] w-[40px] rounded-3xl bg-emerald-100" />
+              )}
             </div>
 
             <div
+              ref={scrollContainer}
+              data-scroll-container
               class={[
-                "h-[calc(100vh-88px+26px)] pt-4",
+                "h-[calc(100vh-env(safe-area-inset-top))] touch-auto",
                 open.value ? "overflow-auto" : "overflow-hidden",
               ]}
             >
-              {slots.default?.()}
+              <div ref={contentContainer}>{slots.default?.()}</div>
             </div>
+
+            {(!open.value || props.disabled) && (
+              <Button
+                variant="ghost"
+                class="absolute top-3 right-3 text-xs w-auto h-auto"
+                onClick={() => {
+                  drawer.value?.close();
+
+                  setTimeout(() => {
+                    props.onClose?.();
+                  }, 16);
+                }}
+              >
+                <Icon name="close" />
+              </Button>
+            )}
           </div>
-        </a-drawer>
+        </drawer-track>
       </div>
     );
   },
-  { props: ["onClose", "onOpen"] },
+  { props: ["disabled", "dynamicHeight", "open", "onClose", "onCollapse", "onOpen"] },
 );
 
 class DrawerTrack extends Track {
@@ -62,36 +125,34 @@ class DrawerTrack extends Track {
     {
       id: "drawer",
       input(track: DrawerTrack, inputState: InputState) {
-        const step = window.innerHeight - 200;
-        if (track.position.y > step && !track.isOpen) {
+        const openThreshold = window.innerHeight - 400;
+
+        if (track.position.y > openThreshold && !track.isOpen) {
           track.setOpen(true);
         }
-        if (track.position.y < step && track.isOpen) {
+        if (track.position.y < openThreshold && track.isOpen) {
           track.setOpen(false);
         }
 
-        if (!track.grabbing && track.velocity.abs() < 6 && inputState.release.value) {
-          if (track.position.y > 450) {
-            // fully open
-            track.setTarget([0, track.overflowHeight], "linear");
+        if (inputState.release.value && track.velocity.abs() < 3) {
+          if (track.position.y > 400) {
+            track.open();
           } else if (track.position.y > 40) {
-            // full preview
-            track.setTarget([0, 200], "linear");
+            track.minimize();
           } else {
-            // collapsed preview
-            track.setTarget([0, 30], "linear");
+            track.close();
           }
         }
       },
     },
   ];
 
-  transitionTime = 200;
+  transitionTime = 350;
+  drag = 0.98;
   isOpen = false;
 
   constructor() {
     super();
-
     this.vertical = true;
   }
 
@@ -105,11 +166,19 @@ class DrawerTrack extends Track {
   }
 
   open(ease: Easing = "linear") {
-    this.setTarget([0, this.overflowHeight], ease);
+    this.setTarget(this.getToItemPosition(1), ease);
   }
 
-  preview(ease: Easing = "linear") {
-    this.setTarget([0, 200], ease);
+  minimize(ease: Easing = "linear") {
+    let height = 200;
+    if (this.hasAttribute("contentheight")) {
+      const value = this.getAttribute("contentheight");
+      const valueInt = value ? +value : Number.NaN;
+      const openedPosition = this.getToItemPosition(1);
+      height = valueInt > openedPosition.y ? openedPosition.y : valueInt;
+    }
+
+    this.setTarget([0, height], ease);
   }
 
   close(ease: Easing = "linear") {
@@ -117,4 +186,4 @@ class DrawerTrack extends Track {
   }
 }
 
-customElements.define("a-drawer", DrawerTrack);
+customElements.define("drawer-track", DrawerTrack);
