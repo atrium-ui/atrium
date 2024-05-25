@@ -90,6 +90,8 @@ export class AnimationElement extends LitElement {
   private format() {
     this.canvas.width = this.width * this.pixelRatio;
     this.canvas.height = this.height * this.pixelRatio;
+    this.canvas.style.width = `${this.width}px`;
+    this.canvas.style.height = `${this.height}px`;
   }
 
   protected firstUpdated(): void {
