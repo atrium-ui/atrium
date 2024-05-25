@@ -34,7 +34,7 @@ async function avatar(project) {
     headers: {
       "PRIVATE-TOKEN": token,
     },
-  }).then(async res => {
+  }).then(async (res) => {
     console.info(res.status);
     if (res.status !== 200) return;
 
