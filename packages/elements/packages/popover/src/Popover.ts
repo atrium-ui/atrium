@@ -143,6 +143,12 @@ export class Popover extends LitElement {
     }
   });
 
+  private resizeListener = new WindowEventListener(this, "resize", (e: Event) => {
+    if (this.opened) {
+      this.updatePosition();
+    }
+  });
+
   show() {
     this.opened = true;
   }
@@ -155,15 +161,7 @@ export class Popover extends LitElement {
     this.opened ? this.close() : this.show();
   }
 
-  protected updated(): void {
-    if (this.trigger) {
-      this.trigger.ariaHasPopup = "dialog";
-      this.trigger.ariaExpanded = this.opened ? "true" : "false";
-    }
-    if (this.content) {
-      this.content.role = "dialog";
-    }
-
+  private updatePosition() {
     if (!this.container) return;
 
     const trigger = this.getBoundingClientRect();
@@ -240,5 +238,17 @@ export class Popover extends LitElement {
         alignAuto(this.container);
         break;
     }
+  }
+
+  protected updated(): void {
+    if (this.trigger) {
+      this.trigger.ariaHasPopup = "dialog";
+      this.trigger.ariaExpanded = this.opened ? "true" : "false";
+    }
+    if (this.content) {
+      this.content.role = "dialog";
+    }
+
+    this.updatePosition();
   }
 }

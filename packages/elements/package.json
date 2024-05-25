@@ -17,6 +17,18 @@
     "index.js",
     "tsconfig.json"
   ],
+  "keywords": [],
+  "license": "ISC",
+  "dependencies": {
+    "lit": "^3.1.3"
+  },
+  "devDependencies": {
+    "@happy-dom/global-registrator": "^14.7.1",
+    "intersection-observer": "^0.12.2"
+  },
+  "peerDependencies": {
+    "@rive-app/canvas": "^2.15.6"
+  },
   "exports": {
     "./CHNAGELOG.md": {
       "import": "./CHANGELOG.md"
@@ -90,17 +102,5 @@
       "require": "./packages/toast/dist/index.cjs",
       "types": "./packages/toast/src/index.ts"
     }
-  },
-  "keywords": [],
-  "license": "ISC",
-  "dependencies": {
-    "lit": "^3.1.3"
-  },
-  "devDependencies": {
-    "@happy-dom/global-registrator": "^14.7.1",
-    "intersection-observer": "^0.12.2"
-  },
-  "peerDependencies": {
-    "@rive-app/canvas": "^2.15.6"
   }
 }
