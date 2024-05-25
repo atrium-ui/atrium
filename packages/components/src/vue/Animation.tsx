@@ -4,7 +4,8 @@ import "@sv/elements/animation";
 import riveWASMResource from "@rive-app/canvas/rive.wasm?url";
 import { RuntimeLoader } from "@rive-app/canvas";
 
-RuntimeLoader.setWasmUrl(riveWASMResource);
+// Uncomment to not use cdn wasm
+// RuntimeLoader.setWasmUrl(riveWASMResource);
 
 export function Animation(props: {
   src: string;
