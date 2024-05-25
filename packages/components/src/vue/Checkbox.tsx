@@ -1,20 +1,20 @@
 /* @jsxImportSource vue */
-
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, effect } from "vue";
 import "@sv/elements/toggle";
 import { Icon } from "./Icon";
 
-interface Props {
-  id: string;
-  checked?: boolean;
-  onChange?: (event: Event) => void;
-}
-
-// TODO: most of this can be a custom element
 export const Checkbox = defineComponent(
-  (props: Props, { slots }) => {
+  (props: {
+    id: string;
+    checked?: boolean;
+    onChange?: (event: Event) => void;
+  }, { slots }) => {
     const checked = ref(props.checked);
     const input = ref<HTMLInputElement>();
+
+    effect(() => {
+      checked.value = props.checked;
+    });
 
     const handleChange = (value: boolean) => {
       checked.value = value;
