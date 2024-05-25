@@ -20,7 +20,7 @@ export const Slider = defineComponent(
     const showPrev = computed(() => position.value > 100);
 
     const progress = computed(() => {
-      const value = position.value / (width.value - width.value / itemCount.value);
+      const value = 1 - (overflowWidth.value - position.value) / overflowWidth.value;
       return Math.min(1, Math.max(0, value));
     });
 
