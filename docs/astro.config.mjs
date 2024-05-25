@@ -51,29 +51,41 @@ export default defineConfig({
       },
       sidebar: [
         {
-          label: "Concept",
-          link: "/concept",
-        },
-        {
-          label: "Setup",
-          link: "/setup",
-        },
-        {
-          label: "Usage",
-          link: "/usage",
-        },
-        {
-          label: "Design",
-          link: "/design",
+          label: "Getting Started",
+          collapsed: false,
+          items: [
+            {
+              label: "Concept",
+              link: "/concept",
+            },
+            {
+              label: "Setup",
+              link: "/setup",
+            },
+            {
+              label: "Usage",
+              link: "/usage",
+            },
+          ],
         },
         {
           label: "Components",
           collapsed: false,
-          autogenerate: { directory: "components" },
+          items: [
+            {
+              label: "Design Reference",
+              link: "/design",
+            },
+            {
+              label: "Templates",
+              collapsed: false,
+              autogenerate: { directory: "components" },
+            },
+          ],
         },
         {
           label: "Elements",
-          collapsed: true,
+          collapsed: false,
           autogenerate: { directory: "elements" },
         },
         {

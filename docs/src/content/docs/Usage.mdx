@@ -17,17 +17,17 @@ Here links for [NuxtJS](https://www.npmjs.com/package/@nuxtjs/tailwindcss), [Vit
 <Command>
   <div slot="pnpm">
     ```sh
-    pnpm add @sv/components @sv/elements
+    pnpm add @sv/elements
     ```
   </div>
   <div slot="npm">
     ```sh
-    npm install @sv/components @sv/elements
+    npm install @sv/elements
     ```
   </div>
   <div slot="bun">
     ```sh
-    bun add @sv/components @sv/elements
+    bun add @sv/elements
     ```
   </div>
 </Command>
@@ -47,7 +47,7 @@ npx @sv/components button
 
 const variants = {
   outline: "rounded-lg border border-[#C09278] px-6 py-2 bg-transparent",
-- solid: "rounded-lg bg-[#C09278] px-6 py-2 active:bg-[rgba(158,118,96,1)]",
+-  solid: "rounded-lg bg-[#C09278] px-6 py-2 active:bg-[rgba(158,118,96,1)]",
 +  ghost: "p-2 flex items-center gap-2 text-2xl hover:text-[#C09278]",
 };
 
@@ -90,23 +90,10 @@ import "@sv/elements/a-expandable";
 
 <br/>
 
-## Support
+## Browser Support
 
 [Can I use](https://caniuse.com/mdn-api_window_customelements) Support for WebComponents exists in major browsers since around 2018.
 
 ![Support table](../../../assets/support.jpg)
 
 [More information here](https://www.webcomponents.org/)
-
-<br/>
-
-## TypeScript (Experimental)
-
-```json
-// /tsconfig.json
-{
-  "compilerOptions": {
-    "types": ["@sv/elements"]
-  }
-}
-```
