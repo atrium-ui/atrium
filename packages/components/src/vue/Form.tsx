@@ -17,18 +17,28 @@ export const Form = defineComponent(
     const loading = ref(false);
 
     const submit = async (e: Event) => {
+      const form = e.currentTarget as HTMLFormElement;
+
       e.preventDefault();
       e.stopPropagation();
 
       loading.value = true;
 
       try {
-        const data = new FormData(e.currentTarget as HTMLFormElement);
+        const data = new FormData(form);
         const res = await props.onSubmit?.(data);
         success.value = res;
       } catch (err: any) {
         error.value = err;
         console.error(error.value);
+
+        // backpropagate errors to inputs
+        // for (const error of errors) {
+        //   for (const key in error) {
+        //     const e = new CustomEvent('error', { bubbles: true, detail: { name: key, message: error[key] } })
+        //     form.dispatchEvent(e)
+        //   }
+        // }
       } finally {
         loading.value = false;
       }
