@@ -22,7 +22,7 @@
     "publish-package": "task publish"
   },
   "keywords": [],
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@commitlint/types": "^19.0.3",
     "@total-typescript/ts-reset": "^0.5.1"

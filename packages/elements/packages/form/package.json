@@ -1,12 +1,12 @@
 {
-  "name": "@atrium-ui/example",
-  "version": "0.0.1",
+  "name": "@atrium-ui/form",
+  "author": "atrium",
+  "contributors": [],
+  "private": true,
   "description": "",
   "type": "module",
-  "main": "dist/example.js",
+  "main": "dist/index.js",
   "types": "src/index.ts",
-  "author": "",
-  "license": "MIT",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
@@ -20,8 +20,8 @@
       "cjs"
     ],
     "external": [
-      "@sv/*",
-      "@rive-app/canvas-single"
+      "lit",
+      "@sv/elements"
     ],
     "sourcemap": true,
     "clean": true

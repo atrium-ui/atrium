@@ -54,7 +54,11 @@ export function Button(
         props.disabled && buttonVariants.disabled,
       )}
       onClick={(e) => {
-        !props.disabled && props.onClick?.(e);
+        if (props.disabled) {
+          e.preventDefault();
+          return;
+        }
+        props.onClick?.(e);
       }}
       title={props.label}
       aria-label={props.label}
