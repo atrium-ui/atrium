@@ -38,5 +38,5 @@ test("use form template", async () => {
   await cli.use(["Form"]);
 
   const dir = fs.readdirSync("./components/");
-  expect(dir).toEqual(["Input.tsx", "Form.tsx"]);
+  expect(dir).toEqual(["Button.tsx", "Input.tsx", "Form.tsx"]);
 });
