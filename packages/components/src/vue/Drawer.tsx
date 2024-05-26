@@ -50,7 +50,7 @@ export const Drawer = defineComponent(
     });
 
     return () => (
-      <div class="drawer max-w-[900px] group/blur pointer-events-none fixed top-0 left-1/2 -translate-x-1/2 z-50 block h-full w-full overflow-hidden transition-all">
+      <div class="drawer group/blur -translate-x-1/2 pointer-events-none fixed top-0 left-1/2 z-50 block h-full w-full max-w-[700px] overflow-hidden transition-all">
         <drawer-track
           contentheight={props.dynamicHeight ? drawerHeight.value : undefined}
           ref={drawer}
@@ -99,7 +99,7 @@ export const Drawer = defineComponent(
             {(!open.value || props.disabled) && (
               <Button
                 variant="ghost"
-                class="absolute top-3 right-3 text-xs w-auto h-auto"
+                class="absolute top-3 right-3 h-auto w-auto text-xs"
                 onClick={() => {
                   drawer.value?.close();
 

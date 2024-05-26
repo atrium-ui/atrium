@@ -1,5 +1,4 @@
 /* @jsxImportSource vue */
-
 import "@sv/elements/track";
 import type { Track } from "@sv/elements/track";
 import { twMerge } from "tailwind-merge";

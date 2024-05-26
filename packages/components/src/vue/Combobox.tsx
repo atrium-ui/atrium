@@ -1,5 +1,4 @@
 /* @jsxImportSource vue */
-
 import "@sv/elements/dropdown";
 import "@sv/elements/toggle";
 import "@sv/elements/expandable";

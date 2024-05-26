@@ -1,5 +1,4 @@
 /* @jsxImportSource vue */
-
 import "@sv/elements/blur";
 
 interface Props {

@@ -1,5 +1,4 @@
 /* @jsxImportSource vue */
-
 export function Icon(props: {
   name: keyof typeof ICONS;
   class?: string | string[];

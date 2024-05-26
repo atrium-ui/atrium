@@ -1,5 +1,4 @@
 /* @jsxImportSource vue */
-
 interface Props {
   class?: string;
   placeholder?: string;
