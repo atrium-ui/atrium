@@ -4,6 +4,7 @@ title: Tabs
 
 import Example from "../../../components/Example.astro";
 import { TabsDemo } from "./tabs/TabsDemo.jsx";
+import TabsDemoCode from "./tabs/TabsDemo.jsx?raw";
 
 Tabs
 
@@ -18,20 +19,6 @@ import { Pills, Atrium } from "../../../components/Pills";
 npx @sv/components tabs
 ```
 
-<Example title="Example" code={`
----
-import { Tabs } from "./Tabs.jsx";
----
-
-<div class="flex max-w-80 justify-center">
-  <Tabs active={0}>
-    <TabItem>Tab 1</TabItem>
-    <TabItem>Tab 2</TabItem>
-    <TabItem>Tab 3</TabItem>
-    <TabItem>Tab 4</TabItem>
-    <TabItem>Tab 5</TabItem>
-  </Tabs>
-</div>
-`}>
+<Example title="Example" code={TabsDemoCode}>
   <TabsDemo client:load />
 </Example>

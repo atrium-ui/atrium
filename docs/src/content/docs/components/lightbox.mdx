@@ -19,11 +19,6 @@ npx @sv/components dialog
 ```
 
 <Example title="Example" code={`
----
-import { Dialog } from "./Dialog.jsx";
-import { Button } from "./Button.jsx";
----
-
 <Lightbox>
   <div class="h-[500px] w-full flex-none p-2">
     <img
@@ -34,10 +29,6 @@ import { Button } from "./Button.jsx";
     />
   </div>
 </Lightbox>
-
-<div onclick="document.querySelector('a-blur').enabled = true">
-  <Button>Open</Button>
-</div>
 `}>
   <Lightbox client:load>
     <div class="h-[500px] w-full flex-none p-2">
