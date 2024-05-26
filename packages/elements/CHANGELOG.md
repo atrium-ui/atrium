@@ -1,5 +1,9 @@
 # @sv/elements
 
+## 1.0.0 (2024-05-26)
+
+- added form elements
+
 ## 0.11.7 (2024-05-22)
 
 ### Features

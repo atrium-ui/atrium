@@ -1,5 +1,7 @@
 # @sv/scroll-lock
 
+## 1.0.0 (2024-05-26)
+
 ## 0.1.8
 
 ### Patch Changes
