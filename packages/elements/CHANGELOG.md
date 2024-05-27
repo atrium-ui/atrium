@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.1.1 (2024-05-27)
+
+### Fixes
+
+- a-portal: fix the portal
+
 ## 1.1.0 (2024-05-27)
 
 ### Features
