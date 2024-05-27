@@ -1,4 +1,4 @@
-export class Portal extends (globalThis.HTMLElement || class {}) {
+class Portal extends (globalThis.HTMLElement || class {}) {
   // TODO: make simpler id generator
   portalId = crypto.randomUUID();
   portal = this.portalGun();
@@ -15,12 +15,12 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
   }
 
   observer = new MutationObserver(() => {
-    if (this.children.length) {
-      requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      if (this.children.length) {
         this.portal.innerHTML = "";
         this.portal.append(...this.children);
-      });
-    }
+      }
+    });
   });
 
   disconnectedCallback(): void {
