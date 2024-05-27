@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.1.0 (2024-05-27)
+
+### Features
+
+- added experimental portal gun 🌀
+
 ## 1.0.0 (2024-05-26)
 
 - added form elements
