@@ -1,6 +1,7 @@
 /* @jsxImportSource vue */
 import { defineComponent, ref } from "vue";
 import "@sv/elements/blur";
+import "@sv/elements/portal";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
 
@@ -54,49 +55,3 @@ export const Lightbox = defineComponent((_, { slots }) => {
     </div>
   );
 });
-
-// This portal just moves all its children into an element at the top layer of the document
-customElements.define(
-  "a-portal",
-  class extends (globalThis.HTMLElement || class {}) {
-    // TODO: try to find existing portal with this.dataset.portal
-    portal = this.createPortal();
-
-    protected createPortal() {
-      const ele = document.createElement("div");
-      const id = crypto.randomUUID();
-      ele.dataset.portal = id;
-      ele.style.position = "fixed";
-      ele.style.top = "0px";
-      ele.style.left = "0px";
-      ele.style.zIndex = "10000000";
-      return ele;
-    }
-
-    disconnectedCallback(): void {
-      this.portal.remove();
-    }
-
-    connectedCallback(): void {
-      const observer = new MutationObserver(() => {
-        if (this.children.length) {
-          requestAnimationFrame(() => {
-            this.portal.innerHTML = "";
-            this.portal.append(...this.children);
-          });
-        }
-      });
-
-      observer.observe(this, {
-        subtree: true,
-        childList: true,
-        attributes: true,
-        characterData: true,
-      });
-
-      document.body.append(this.portal);
-
-      this.dataset.portal = this.portal.dataset.portal;
-    }
-  },
-);

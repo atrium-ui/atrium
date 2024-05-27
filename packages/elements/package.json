@@ -107,6 +107,11 @@
       "import": "./packages/form/dist/index.js",
       "require": "./packages/form/dist/index.cjs",
       "types": "./packages/form/src/index.ts"
+    },
+    "./portal": {
+      "import": "./packages/portal/dist/index.js",
+      "require": "./packages/portal/dist/index.cjs",
+      "types": "./packages/portal/src/index.ts"
     }
   }
 }
