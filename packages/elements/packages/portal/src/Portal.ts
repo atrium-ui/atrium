@@ -1,4 +1,4 @@
-class Portal extends (globalThis.HTMLElement || class {}) {
+export class Portal extends (globalThis.HTMLElement || class {}) {
   // TODO: make simpler id generator
   portalId = crypto.randomUUID();
   portal = this.portalGun();
