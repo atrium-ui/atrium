@@ -1,3 +1,19 @@
+/**
+ * The a-portal element is used to render elements (its children) in a different location in the DOM.
+ * Most frameworks have their own primitives for this. Vue has [Teleports](https://vuejs.org/guide/built-ins/teleport.html),
+ * React has [createPortal](https://react.dev/reference/react-dom/createPortal) and Solid as well calls it [Portal](https://docs.solidjs.com/concepts/control-flow/portal).
+ *
+ * @example
+ * ```html
+ * <a-portal>
+ *   <div>
+ *     Content rendered over the page
+ *   </div>
+ * </a-portal>
+ * ```
+ *
+ * @see https://svp.pages.s-v.de/atrium/elements/a-portal/
+ */
 export class Portal extends (globalThis.HTMLElement || class {}) {
   // TODO: make simpler id generator
   portalId = crypto.randomUUID();

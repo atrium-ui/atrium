@@ -1,0 +1,23 @@
+---
+title: a-portal
+description: A reference page in my new Starlight docs site.
+---
+
+import Elements from "../elements/elements/Elements.astro"
+import TypeDoc from "../../../components/TypeDoc.astro";
+import { Pills, Lit } from "../../../components/Pills";
+
+<Pills>
+</Pills>
+
+<Elements />
+
+<TypeDoc source="../packages/elements/packages/portal" symbol="Portal" />
+
+## Examples
+
+This example renders a div with `data-portal` in the body.
+
+<div class="not-content box">
+  <a-portal></a-portal>
+</div>
