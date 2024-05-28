@@ -29,10 +29,10 @@ import { Combobox } from "./Combobox.jsx";
 </Combobox>
 `}>
   <div>
-    <Combobox client:load value="Select">
-      <ComboboxItem client:load value="Item 1" />
-      <ComboboxItem client:load value="Item 2" />
-      <ComboboxItem client:load value="Item 3" />
+    <Combobox client:only="vue" value="Select">
+      <ComboboxItem value="Item 1" />
+      <ComboboxItem value="Item 2" />
+      <ComboboxItem value="Item 3" />
     </Combobox>
   </div>
 </Example>

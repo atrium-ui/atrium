@@ -29,10 +29,10 @@ import { Select } from "./Select.jsx";
 </Select>
 `}>
   <div>
-    <Select client:load value="Select">
-      <Select.Item client:load value="Item 1"/>
-      <Select.Item client:load value="Item 2"/>
-      <Select.Item client:load value="Item 3"/>
+    <Select client:only="vue" value="Select">
+      <Select.Item value="Item 1"/>
+      <Select.Item value="Item 2"/>
+      <Select.Item value="Item 3"/>
     </Select>
   </div>
 </Example>

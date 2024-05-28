@@ -1,0 +1,16 @@
+---
+title: Toast
+---
+import Example from "../../../components/Example.astro";
+import ToastDemoCode from "./toast/ToastDemo.jsx?raw";
+import { ToastDemo } from "./toast/ToastDemo.jsx";
+
+```bash
+npx @sv/components toast
+```
+
+A sheet is basically a burger menu. Composed of a-blur.
+
+<Example title="Example" code={ToastDemoCode}>
+  <ToastDemo client:only="vue" />
+</Example>
