@@ -1,0 +1,37 @@
+---
+import { Showcase } from "./Showcase";
+import "../../../styles/custom.css";
+---
+
+<html>
+  <head>
+    <title>Atrium - Showcase</title>
+  </head>
+
+  <body>
+    <Showcase client:only="vue" />
+  </body>
+</html>
+
+<style is:global>
+  @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap");
+
+  body {
+    font-family: "Lato", sans-serif;
+    background-color: #26262a;
+    color: #fff;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+  }
+
+  button,
+  input {
+    appearance: none;
+    color: #fff;
+    font-size: inherit;
+    box-sizing: border-box;
+    line-height: 1.5;
+  }
+</style>

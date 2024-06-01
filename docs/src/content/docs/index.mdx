@@ -19,11 +19,41 @@ hero:
 ---
 
 import Projects from "../../components/Projects.astro";
-import { Showcase } from "../../components/Showcase";
+import { Button } from "@sv/components/src/vue/Button";
+import { Icon } from "@sv/components/src/vue/Icon";
 import { LinkCard, CardGrid } from "@astrojs/starlight/components";
 
-<div class="not-content min-h-[600px]">
-  <Showcase client:only="vue" />
+<div class="not-content">
+  <div class="relative rounded-xl overflow-hidden border border-zinc-950 border-b-0 bg-[#18181a] shadow-xl 2xl:mx-[-220px] xl:mx-[-80px]">
+    <div class="flex w-full p-2 pl-10">
+      <Button
+        variant="disabled"
+        class="min-w-[180px] rounded-none rounded-t-md border-none bg-[#26262A] px-4 py-1 text-base"
+      >
+        Example
+      </Button>
+    </div>
+
+    <div class="grid w-full grid-cols-[auto_1fr_200px] gap-2 p-2 pb-4">
+      <div class="flex">
+        <Button variant="disabled" class="bg-transparent py-2">
+          <Icon name="arrow-left" />
+        </Button>
+        <Button variant="disabled" class="bg-transparent py-2">
+          <Icon name="arrow-right" />
+        </Button>
+        <Button variant="disabled" class="bg-transparent py-2">
+          <Icon name="reload" />
+        </Button>
+      </div>
+
+      <div class="rounded-md bg-[#26262A]" />
+    </div>
+
+    <iframe src="/atrium/showcase" class="bg-[#26262a] m-0 w-full h-[600px]" />
+
+    <div class="pointer-events-none absolute bottom-0 left-0 h-[150px] w-full bg-[linear-gradient(0deg,var(--sl-color-black),transparent)]" />
+  </div>
 </div>
 
 <div class="py-20">

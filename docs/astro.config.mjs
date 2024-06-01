@@ -22,14 +22,12 @@ export default defineConfig({
     },
   },
   integrations: [
-    tailwind({
-      applyBaseStyles: false,
-    }),
+    tailwind(),
     vue({
       jsx: true,
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.includes("-"),
+          isCustomElement: tag => tag.includes("-"),
         },
       },
     }),
