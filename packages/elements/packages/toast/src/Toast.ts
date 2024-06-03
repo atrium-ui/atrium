@@ -5,8 +5,8 @@ export interface ToastOptions {
   time?: number;
 }
 
-export function toast(options: ToastOptions) {
-  const toast = new Toast(options);
+export function toast(options: ToastOptions, toastType: typeof Toast = Toast) {
+  const toast = new toastType(options);
   const feed = ToastFeed.getInstance();
   const ele = document.createElement("div");
   ele.style.margin = "4px 0";
