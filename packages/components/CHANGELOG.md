@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.1.0 (2024-06-03)
+
+### Features
+
+- release updated form component and added toasts
+
 ## 1.0.0 (2024-05-26)
 
 ## 0.9.4 (2024-04-21)
