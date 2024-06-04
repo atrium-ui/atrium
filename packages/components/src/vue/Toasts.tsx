@@ -1,8 +1,7 @@
 /* @jsxImportSource vue */
 import "@sv/elements/portal";
-import { Button } from "@sv/components/src/vue/Button.jsx";
+import { Button } from "./Button";
 import { toast } from "@sv/elements/toast";
-import { paragraph } from "txtgen";
 
 export function ToastDemo() {
   return (
@@ -10,7 +9,7 @@ export function ToastDemo() {
       <Button
         onClick={() => {
           toast({
-            message: paragraph(1),
+            message: "Lorem ipsum is simply dummy text",
             time: 3000,
           });
         }}

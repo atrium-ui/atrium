@@ -1,7 +1,9 @@
 {
   "name": "@sv/elements",
   "author": "atrium",
-  "contributors": [],
+  "contributors": [
+    "luckydye"
+  ],
   "version": "1.1.1",
   "description": "Atrium Component Library",
   "type": "module",

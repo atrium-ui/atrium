@@ -1,7 +1,9 @@
 {
   "name": "@sv/codestyle",
   "author": "atrium",
-  "contributors": [],
+  "contributors": [
+    "luckydye"
+  ],
   "version": "1.0.0",
   "description": "Codestyle and configuration for all projects",
   "type": "module",
