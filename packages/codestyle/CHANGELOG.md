@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 1.1.0 (2024-06-04)
+
+### Features
+
+- enable allowComments in json parser and add css formatter config
+
 ## 1.0.0 (2024-05-26)
 
 ## 0.8.1 (2024-05-22)
