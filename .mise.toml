@@ -1,4 +1,4 @@
 [tools]
-task = "3.35.1"
-bun = "1.1"
-node = "21" # needed to run starlight docs, https://github.com/oven-sh/bun/issues/7531
+task = "3.35"
+bun = "1.1.12"
+node = "20"    # needed to run starlight docs, https://github.com/oven-sh/bun/issues/7531
