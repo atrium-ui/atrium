@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.1.2 (2024-06-10)
+
+### Fixes
+
+- Make toast elements restyleable
+
 ## 1.1.1 (2024-05-27)
 
 ### Fixes
