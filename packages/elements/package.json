@@ -5,7 +5,7 @@
     "luckydye"
   ],
   "version": "1.1.1",
-  "description": "Atrium Component Library",
+  "description": "Atrium Elements",
   "type": "module",
   "scripts": {
     "check": "tsc --pretty",
