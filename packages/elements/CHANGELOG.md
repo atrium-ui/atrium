@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 1.1.3 (2024-06-12)
+
+### Fixes
+
+- fix bug where current item was not calculated correctly
+- a-track: calculate the item to snap to based on current velocity
+
 ## 1.1.2 (2024-06-10)
 
 ### Fixes
