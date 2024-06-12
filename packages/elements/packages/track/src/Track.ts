@@ -235,6 +235,13 @@ export class Track extends LitElement {
         overflow: hidden;
       }
 
+      .debug {
+        position: absolute;
+        z-index: 100;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+      }
+
       slot {
         display: inherit;
         flex-direction: inherit;
@@ -272,7 +279,10 @@ export class Track extends LitElement {
   }
 
   render() {
-    return html`<slot @slotchange=${this.onSlotChange}></slot>`;
+    return html`
+      <slot @slotchange=${this.onSlotChange}></slot>
+      ${this.debug ? html`<div class="debug">${this.debugCanvas}</div>` : null}
+    `;
   }
 
   public get slotElement() {
@@ -492,6 +502,8 @@ export class Track extends LitElement {
 
   /** Only scroll when items are overflown. Like "overflow: auto". */
   @property({ type: Boolean, reflect: true }) overflowscroll = false;
+
+  @property({ type: Boolean }) debug = false;
 
   private observedChildren = new Set<Node>();
 
@@ -839,24 +851,61 @@ export class Track extends LitElement {
     this.velocity = Vec2.sub(this.position, this.lastPosition);
   }
 
+  debugCanvas = document.createElement("canvas");
+
   private getCurrentItem() {
+    let ctx: CanvasRenderingContext2D | null = null;
+    if (this.debug) {
+      ctx = this.debugCanvas.getContext("2d");
+      ctx?.translate(0.5, 0.5);
+      this.debugCanvas.width = 200;
+      this.debugCanvas.height = 200;
+      this.debugCanvas.style.width = "100px";
+      this.debugCanvas.style.height = "100px";
+    }
+
     const trackSize = this.vertical ? this.trackHeight : this.trackWidth;
-    const currentAngle = (this.currentPosition / trackSize) * 360;
+    const currentAngle = (this.currentPosition / trackSize) * Math.PI * 2;
 
     let minDist = Number.POSITIVE_INFINITY;
+    let closestAngle = 0;
     let closestIndex = 0;
 
     const rects = this.getItemRects();
+
+    const PI2 = Math.PI * 2;
+
     const axes = this.vertical ? 1 : 0;
+    // all items angles
+    const angles = rects.reduce((acc, rect, i) => {
+      acc[i] = (rect[axes] / trackSize) * PI2;
+      return acc;
+    }, [] as number[]);
 
     for (let i = -1; i < this.itemCount + 1; i++) {
       const itemIndex = i % this.itemCount;
       const rect = rects[itemIndex];
 
+      // when -1 is nothing go next (with loop enabled, its the last item)
       if (!rect) continue;
 
-      const currentItemAngle = (rect[axes] / trackSize) * 360;
-      const itemAngle = (currentItemAngle * itemIndex) % 360;
+      const itemAngle = angles.reduce((acc, angle, j) => {
+        if (j < itemIndex) {
+          return acc + angle;
+        }
+        return acc;
+      }, 0);
+
+      if (this.debug && ctx) {
+        // draw a line from the center to the current position with angle
+        ctx.strokeStyle = "#eee";
+        ctx.beginPath();
+        ctx.moveTo(100, 100);
+        ctx.lineTo(100 + Math.cos(itemAngle) * 69, 100 + Math.sin(itemAngle) * 69);
+        ctx.lineWidth = 3;
+        ctx.stroke();
+      }
+
       const deltaAngle = angleDist(itemAngle, currentAngle);
 
       const offset = Math.floor(i / this.itemCount) * this.itemCount;
@@ -864,10 +913,50 @@ export class Track extends LitElement {
       if (Math.abs(deltaAngle) <= minDist) {
         minDist = Math.abs(deltaAngle);
         closestIndex = itemIndex;
-        if (currentAngle > 180) {
+        if (currentAngle > PI2 / 2) {
           closestIndex += offset;
         }
+
+        closestAngle = itemAngle;
       }
+    }
+
+    if (this.debug && ctx) {
+      // draw a line from the center to the current position with angle
+      ctx.strokeStyle = "yellow";
+      ctx.beginPath();
+      ctx.moveTo(100, 100);
+      ctx.lineTo(100 + Math.cos(closestAngle) * 69, 100 + Math.sin(closestAngle) * 69);
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    }
+
+    if (this.debug && ctx) {
+      // draw a line from the center to the current position with angle
+      ctx.strokeStyle = "red";
+      ctx.beginPath();
+      ctx.moveTo(100, 100);
+      ctx.lineTo(100 + Math.cos(currentAngle) * 69, 100 + Math.sin(currentAngle) * 69);
+      ctx.lineWidth = 6;
+      ctx.stroke();
+
+      // print current position
+      ctx.font = "24px sans-serif";
+      ctx.fillStyle = "#fff";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText(
+        `${this.currentPosition.toFixed(1)} / ${trackSize.toFixed(1)}`,
+        42,
+        18,
+      );
+
+      // print current position
+      ctx.font = "24px sans-serif";
+      ctx.fillStyle = "#fff";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText(closestIndex.toString(), 0, 18);
     }
 
     return closestIndex;

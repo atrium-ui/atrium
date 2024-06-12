@@ -7,6 +7,7 @@ export const VariableTrack = defineComponent(() => {
 
   const track = ref();
   const position = ref(0);
+  const itemWidth = ref(260);
   const overflowWidth = ref(0);
 
   const sync = () => {
@@ -21,27 +22,47 @@ export const VariableTrack = defineComponent(() => {
 
   return () => {
     return (
-      <div class="relative">
-        <span>Child count: </span>{" "}
-        <input
-          type="number"
-          class="my-4 w-12"
-          value={count.value}
-          onInput={
-            ((e: InputEvent) => {
-              count.value = (e.currentTarget as HTMLInputElement).valueAsNumber;
-            }) as EventListener
-          }
-        />
-        <a-track ref={track} overflowscroll snap class="flex max-w-[100vw]">
-          {new Array(count.value).fill(1).map((_, i) => {
+      <div class="not-content relative">
+        <div class="my-4 grid grid-cols-3 gap-2">
+          <div>
+            <span>Child count: </span>
+            <input
+              min={1}
+              type="number"
+              class="w-12"
+              value={count.value}
+              onInput={
+                ((e: InputEvent) => {
+                  count.value = (e.currentTarget as HTMLInputElement).valueAsNumber;
+                }) as EventListener
+              }
+            />
+          </div>
+          <div>
+            <span>Item width: </span>
+            <input
+              type="number"
+              class="w-20"
+              value={itemWidth.value}
+              onInput={
+                ((e: InputEvent) => {
+                  itemWidth.value = (e.currentTarget as HTMLInputElement).valueAsNumber;
+                }) as EventListener
+              }
+            />
+          </div>
+        </div>
+        <a-track ref={track} overflowscroll snap class="flex max-w-[100vw]" debug>
+          {new Array(count.value || 1).fill(1).map((_, i) => {
             return (
-              // biome-ignore lint/a11y/useValidAnchor: <explanation>
-              <a href="javascript:(null)" class="block flex-none pr-4" key={i}>
-                <canvas width={260} height={280} class="bg-slate-500" />
-              </a>
+              <div class="flex-none pr-2" key={i}>
+                <canvas width={itemWidth.value} height={280} class="bg-slate-500" />
+              </div>
             );
           })}
+          <div class="flex-none">
+            <canvas width={125} height={280} class="bg-slate-500" />
+          </div>
         </a-track>
         <div class="pointer-events-none absolute top-1/2 right-0 left-0 mx-[-10px] flex justify-between">
           <span>
