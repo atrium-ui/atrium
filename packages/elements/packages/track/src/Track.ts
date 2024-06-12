@@ -933,12 +933,21 @@ export class Track extends LitElement {
 
     if (this.debug && ctx) {
       // draw a line from the center to the current position with angle
-      ctx.strokeStyle = "red";
+      ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
       ctx.beginPath();
       ctx.moveTo(100, 100);
-      ctx.lineTo(100 + Math.cos(currentAngle) * 69, 100 + Math.sin(currentAngle) * 69);
-      ctx.lineWidth = 6;
-      ctx.stroke();
+      const [x, y] = [
+        100 + Math.cos(currentAngle) * 69,
+        100 + Math.sin(currentAngle) * 69,
+      ];
+      const [x2, y2] = [
+        100 + Math.cos(currentAngle + 0.1) * 69,
+        100 + Math.sin(currentAngle + 0.1) * 69,
+      ];
+      ctx.lineTo(x, y);
+      ctx.arc(100, 100, 69, currentAngle, currentAngle + (this.width / trackSize) * PI2);
+      ctx.lineTo(100, 100);
+      ctx.fill();
 
       // print current position
       ctx.font = "24px sans-serif";
@@ -951,12 +960,12 @@ export class Track extends LitElement {
         18,
       );
 
-      // print current position
+      // print current position index
       ctx.font = "24px sans-serif";
       ctx.fillStyle = "#fff";
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
-      ctx.fillText(closestIndex.toString(), 0, 18);
+      ctx.fillText(closestIndex.toString(), 6, 18);
     }
 
     return closestIndex;
