@@ -1,5 +1,7 @@
 ---
 import path from "node:path";
+import { Code } from "@astrojs/starlight/components";
+import { Markdown } from "astro/components";
 import {
   Application,
   type DeclarationReflection,
@@ -44,7 +46,7 @@ function childrenWithComments(
   obj?: Reflection | undefined,
 ): DeclarationReflection[] | undefined {
   // @ts-ignore
-  return obj?.children?.filter((c) => c.comment);
+  return obj?.children?.filter(c => c.comment);
 }
 
 async function toHtml(content: any[] | undefined) {
@@ -86,7 +88,7 @@ async function Attributes({ doc, symbol }) {
   }
 
   return Promise.all(
-    fields.map(async (field) => {
+    fields.map(async field => {
       const html = `
         <li class="pt-2">
           <div class="align-top inline-block">
@@ -104,13 +106,13 @@ async function Attributes({ doc, symbol }) {
 
 function Events({ doc, symbol }) {
   const track = declaration(doc, symbol);
-  const events = track?.comment?.blockTags.filter((tag) => tag.tag === "@customEvent");
+  const events = track?.comment?.blockTags.filter(tag => tag.tag === "@customEvent");
 
   if (!events || events.length === 0) {
     return "No Events";
   }
 
-  return events.map((event) => {
+  return events.map(event => {
     const text = event.content[0]?.text?.split(" - ");
     if (text) {
       return `
@@ -128,9 +130,9 @@ function Events({ doc, symbol }) {
 async function Methods({ doc, symbol }: { doc: ProjectReflection; symbol: string }) {
   const dec = doc.getChildByName(symbol) as DeclarationReflection;
   const methods = dec.groups
-    ?.find((g) => g.title === "Methods")
-    ?.children.filter((child) => child.flags.hasFlag(ReflectionFlag.Public))
-    .map((method) => {
+    ?.find(g => g.title === "Methods")
+    ?.children.filter(child => child.flags.hasFlag(ReflectionFlag.Public))
+    .map(method => {
       return method.signatures?.[0];
     });
 
@@ -138,7 +140,7 @@ async function Methods({ doc, symbol }: { doc: ProjectReflection; symbol: string
     return "No Methods";
   }
 
-  return methods.map(async (child) => {
+  return methods.map(async child => {
     if (child) {
       const source = child?.sources?.[0];
       return `
@@ -156,10 +158,12 @@ async function Methods({ doc, symbol }: { doc: ProjectReflection; symbol: string
   });
 }
 
-async function Example({ doc, symbol }) {
+function Example({ doc, symbol }) {
   const obj = declaration(doc, symbol)?.comment;
-  const block = obj?.blockTags.find((t) => t.tag === "@example")?.content;
-  return await toHtml(block);
+  const content = obj?.blockTags.find(t => t.tag === "@example")?.content;
+  const lines = content?.[0]?.text.split("\n");
+  const code = lines?.slice(1, lines.length - 1).join("\n");
+  return code;
 }
 
 const doc = await parse({
@@ -167,6 +171,8 @@ const doc = await parse({
   entry: "/src/index.ts",
   config: "/tsconfig.json",
 });
+
+const example = Example({ doc, symbol: props.symbol });
 ---
 
 <script>
@@ -177,8 +183,16 @@ const doc = await parse({
   <h2>{props.symbol}</h2>
   <div set:html={Summary({ doc, symbol: props.symbol })} />
 
-  <h3>Example</h3>
-  <div set:html={Example({ doc, symbol: props.symbol })} />
+  {
+    example ? (
+      <div>
+        <h3>Example</h3>
+        <Code code={example} lang="js" />
+      </div>
+    ) : (
+      ""
+    )
+  }
 
   <h3>Attributes</h3>
   <div set:html={Attributes({ doc, symbol: props.symbol })} />

@@ -31,6 +31,8 @@ export class PointerTrait implements Trait {
   borderBounce = 0.1;
   borderResistance = 0.3;
 
+  moveDrag = 0.5;
+
   constructor(
     options: {
       borderBounce?: number;
@@ -70,8 +72,6 @@ export class PointerTrait implements Trait {
       }
     }
 
-    this.moveVelocity.mul(0.7);
-
     if (inputState.release.value) {
       this.grabbing = false;
       track.dispatchEvent(new Event("pointer:release"));
@@ -95,6 +95,8 @@ export class PointerTrait implements Trait {
   }
 
   update(track: Track) {
+    this.moveVelocity.mul(this.moveDrag);
+
     if (track.scrolling) return;
 
     if (this.grabbing) {
@@ -196,11 +198,13 @@ export class SnapTrait implements Trait {
     if (!track.vertical && track.deltaVelocity.x >= 0) return;
     if (track.vertical && track.deltaVelocity.y >= 0) return;
 
-    // Only when velocity is low
-    // this checks lastVelocity, because I don't know why velocity is 0,0 at random points.
-    if (track.lastVelocity.abs() > 4) return;
+    // Project the current velocity to determine the target item.
+    // This checks lastVelocity, because I don't know why velocity is 0,0 at random points.
+    const dir = Math.sign(track.lastVelocity[track.vertical ? 1 : 0]);
+    const power =
+      Math.max(Math.min(Math.round(track.lastVelocity.abs() / 15), 5), 1) * dir;
 
-    track.setTarget(track.getClosestItemPosition(), "ease");
+    track.setTarget(track.getClosestItemPosition(power), "linear");
   }
 }
 
@@ -316,11 +320,12 @@ export class Track extends LitElement {
 
   /**
    * Get the absolute position of the closest item to the current position.
+   * @argument power - offset the position by a number
    */
-  public getClosestItemPosition() {
-    const posPrev = this.getToItemPosition(this.currentItem - 1);
-    const posCurr = this.getToItemPosition(this.currentItem);
-    const posNext = this.getToItemPosition(this.currentItem + 1);
+  public getClosestItemPosition(power = 0) {
+    const posPrev = this.getToItemPosition(this.currentItem + (-1 + power));
+    const posCurr = this.getToItemPosition(this.currentItem + (0 + power));
+    const posNext = this.getToItemPosition(this.currentItem + (1 + power));
 
     const prev = posPrev.clone().sub(this.position).abs();
     const curr = posCurr.clone().sub(this.position).abs();
@@ -407,6 +412,13 @@ export class Track extends LitElement {
     return this.currentItem % this.itemCount;
   }
 
+  public get maxIndex() {
+    return (
+      (this.getItemAtPosition(new Vec2(this.overflowWidth, this.overflowHeight))?.index ||
+        0) + 1 || 0
+    );
+  }
+
   private animation: number | undefined;
   private tickRate = 1000 / 144;
   private lastTick = 0;
@@ -433,7 +445,8 @@ export class Track extends LitElement {
   private targetForce = new Vec2();
   private targetStart = new Vec2();
 
-  public transitionTime = 500;
+  public transitionTime = 350;
+
   private transitionAt = 0;
   private transition = 0;
 
@@ -585,7 +598,11 @@ export class Track extends LitElement {
     const rects = this.getItemRects();
     const pos = this.origin.clone();
 
-    const currentIndex = index;
+    let currentIndex = index;
+
+    if (!this.loop) {
+      currentIndex = Math.min(Math.max(0, currentIndex), this.maxIndex);
+    }
 
     if (currentIndex < 0) {
       // only happens when loop is enabled
@@ -923,28 +940,10 @@ export class Track extends LitElement {
 
     if (this.debug && ctx) {
       // draw a line from the center to the current position with angle
-      ctx.strokeStyle = "yellow";
-      ctx.beginPath();
-      ctx.moveTo(100, 100);
-      ctx.lineTo(100 + Math.cos(closestAngle) * 69, 100 + Math.sin(closestAngle) * 69);
-      ctx.lineWidth = 3;
-      ctx.stroke();
-    }
-
-    if (this.debug && ctx) {
-      // draw a line from the center to the current position with angle
       ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
       ctx.beginPath();
       ctx.moveTo(100, 100);
-      const [x, y] = [
-        100 + Math.cos(currentAngle) * 69,
-        100 + Math.sin(currentAngle) * 69,
-      ];
-      const [x2, y2] = [
-        100 + Math.cos(currentAngle + 0.1) * 69,
-        100 + Math.sin(currentAngle + 0.1) * 69,
-      ];
-      ctx.lineTo(x, y);
+      ctx.lineTo(100 + Math.cos(currentAngle) * 69, 100 + Math.sin(currentAngle) * 69);
       ctx.arc(100, 100, 69, currentAngle, currentAngle + (this.width / trackSize) * PI2);
       ctx.lineTo(100, 100);
       ctx.fill();
@@ -966,6 +965,26 @@ export class Track extends LitElement {
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
       ctx.fillText(closestIndex.toString(), 6, 18);
+
+      // draw a line from the center to the current position with angle
+      ctx.strokeStyle = "yellow";
+      ctx.beginPath();
+      ctx.moveTo(100, 100);
+      ctx.lineTo(100 + Math.cos(closestAngle) * 69, 100 + Math.sin(closestAngle) * 69);
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      const targetAngle = this.target ? (this.target.x / trackSize) * PI2 : undefined;
+
+      if (targetAngle) {
+        // draw a line from the center to the current position with angle
+        ctx.strokeStyle = "blue";
+        ctx.beginPath();
+        ctx.moveTo(100, 100);
+        ctx.lineTo(100 + Math.cos(closestAngle) * 50, 100 + Math.sin(closestAngle) * 50);
+        ctx.lineWidth = 3;
+        ctx.stroke();
+      }
     }
 
     return closestIndex;

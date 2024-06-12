@@ -7,7 +7,7 @@ export const VariableTrack = defineComponent(() => {
 
   const track = ref();
   const position = ref(0);
-  const itemWidth = ref(260);
+  const itemWidth = ref(360);
   const overflowWidth = ref(0);
 
   const sync = () => {
@@ -66,14 +66,26 @@ export const VariableTrack = defineComponent(() => {
         </a-track>
         <div class="pointer-events-none absolute top-1/2 right-0 left-0 mx-[-10px] flex justify-between">
           <span>
-            <button type="button" class={[position.value < 10 ? "hidden" : "block"]}>
+            <button
+              type="button"
+              class={[position.value < 10 ? "hidden" : "block", "pointer-events-auto"]}
+              onClick={() => {
+                track.value?.moveBy(-1, "linear");
+              }}
+            >
               {"<"}
             </button>
           </span>
           <span>
             <button
               type="button"
-              class={[overflowWidth.value - position.value > 0 ? "block" : "hidden"]}
+              class={[
+                overflowWidth.value - position.value > 0 ? "block" : "hidden",
+                "pointer-events-auto",
+              ]}
+              onClick={() => {
+                track.value?.moveBy(1, "linear");
+              }}
             >
               {">"}
             </button>
