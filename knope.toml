@@ -37,7 +37,12 @@ allow_empty = true
 
 [[workflows.steps]]
 type = "Command"
-command = "git add --all && git commit -m \"chore: prepare releases\" || true"
+command = "git add --all"
+shell = true
+
+[[workflows.steps]]
+type = "Command"
+command = "git commit -m \"chore: prepare releases\" || true"
 shell = true
 
 [[workflows.steps]]
@@ -50,7 +55,7 @@ shell = true
 
 [[workflows.steps]]
 type = "Command"
-command = "git push origin HEAD:main -o ci.skip && git push --tags || true"
+command = "git push origin HEAD:main -o ci.skip && git push --tags"
 shell = true
 
 [[workflows]]
