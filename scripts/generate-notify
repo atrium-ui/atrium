@@ -53,7 +53,7 @@ function versionChanges(pkg, version) {
     }
 
     if (isVersion) {
-      let text = line.replace(/^## /, "");
+      let text = line.replace(/^### /, "");
       text = text.replace("Fixes", "*Fixes*");
       text = text.replace("Features", "*Features*");
       text = text.replace("Breaking Changes", "*Breaking Changes*");
