@@ -4,8 +4,7 @@ description: A reference page in my new Starlight docs site.
 ---
 
 import { Elements } from "package:/components"
-import TypeDoc from "../../../components/TypeDoc.astro";
-import { Pills, Lit } from "../../../components/Pills";
+import { TypeDoc, Example, Lit, Pills } from "package:/components";
 
 <Pills>
   <Lit />
@@ -18,5 +17,5 @@ import { Pills, Lit } from "../../../components/Pills";
 ## Examples
 
 <div class="not-content box">
-  <div>This was loaded <a-time>{ Date.now() }</a-time></div>
+  <div>This was rendered <a-time>{ Date.now() }</a-time></div>
 </div>
