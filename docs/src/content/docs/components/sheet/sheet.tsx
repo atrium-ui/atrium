@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 import { Button } from "@components/src/vue/Button";
-import { Sheet } from "@sv/components/src/vue/Sheet";
+import { Sheet } from "@components/src/vue/Sheet";
 
 export default function () {
   return (

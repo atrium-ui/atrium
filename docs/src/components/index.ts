@@ -17,4 +17,4 @@ export { default as Projects } from "./Projects.astro";
 export { default as TypeDoc } from "./TypeDoc.astro";
 
 export { default as Icon } from "./Icon.astro";
-export { Accordion, AccordionItem } from "@sv/components/src/vue/Accordion";
+export { Accordion, AccordionItem } from "@components/src/vue/Accordion";

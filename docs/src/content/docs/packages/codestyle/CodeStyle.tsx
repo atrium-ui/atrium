@@ -1,8 +1,8 @@
 /* @jsxImportSource vue */
 
 import { defineComponent, ref } from "vue";
-import { Checkbox } from "@sv/components/src/vue/Checkbox";
-import { Input } from "@sv/components/src/vue/Input";
+import { Checkbox } from "@components/src/vue/Checkbox";
+import { Input } from "@components/src/vue/Input";
 
 const args = ref(["editorconfig", "biome", "tsconfig", "prettier"]);
 

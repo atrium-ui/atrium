@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import { Link } from "@sv/components/src/vue/Button";
+import { Link } from "@components/src/vue/Button";
 
 export default function () {
   return (

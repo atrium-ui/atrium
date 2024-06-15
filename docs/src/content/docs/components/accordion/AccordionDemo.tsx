@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import { Accordion, AccordionItem } from "@sv/components/src/vue/Accordion";
+import { Accordion, AccordionItem } from "@components/src/vue/Accordion";
 
 export function AccordionDemo() {
   return (

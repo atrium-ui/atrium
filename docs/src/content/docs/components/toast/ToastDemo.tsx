@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 import "@sv/elements/portal";
-import { Button } from "@sv/components/src/vue/Button.jsx";
+import { Button } from "@components/src/vue/Button";
 import { toast } from "@sv/elements/toast";
 import { paragraph } from "txtgen";
 

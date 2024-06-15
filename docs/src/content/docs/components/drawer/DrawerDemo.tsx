@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
 import { ref, defineComponent } from "vue";
-import { Drawer } from "@sv/components/src/vue/Drawer.jsx";
+import { Drawer } from "@components/src/vue/Drawer";
 import { paragraph } from "txtgen";
 
 export const DrawerDemo = defineComponent(() => {

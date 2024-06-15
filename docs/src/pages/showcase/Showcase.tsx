@@ -2,15 +2,15 @@
 
 import { sentence, lorem } from "txtgen";
 import { defineComponent, ref } from "vue";
-import { Checkbox } from "@sv/components/src/vue/Checkbox";
-import { Accordion, AccordionItem } from "@sv/components/src/vue/Accordion";
-import { Input } from "@sv/components/src/vue/Input";
-import { Combobox, ComboboxItem } from "@sv/components/src/vue/Combobox";
-import { Button } from "@sv/components/src/vue/Button";
-import { Icon } from "@sv/components/src/vue/Icon";
-import { Popover } from "@sv/components/src/vue/Popover";
-import { Dialog } from "@sv/components/src/vue/Dialog";
-import { Slider } from "@sv/components/src/vue/Slider";
+import { Checkbox } from "@components/src/vue/Checkbox";
+import { Accordion, AccordionItem } from "@components/src/vue/Accordion";
+import { Input } from "@components/src/vue/Input";
+import { Combobox, ComboboxItem } from "@components/src/vue/Combobox";
+import { Button } from "@components/src/vue/Button";
+import { Icon } from "@components/src/vue/Icon";
+import { Popover } from "@components/src/vue/Popover";
+import { Dialog } from "@components/src/vue/Dialog";
+import { Slider } from "@components/src/vue/Slider";
 import "@sv/elements/adaptive";
 
 export const Showcase = defineComponent(() => {

@@ -1,4 +1,4 @@
-import { Filter, FilterItem } from "@sv/components/src/vue/Filter";
+import { Filter, FilterItem } from "@components/src/vue/Filter";
 
 export default function () {
   return (

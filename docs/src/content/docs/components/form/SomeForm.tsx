@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import { Form, FormField } from "@sv/components/src/vue/Form.jsx";
+import { Form, FormField } from "@components/src/vue/Form";
 
 export function SomeForm() {
   return (

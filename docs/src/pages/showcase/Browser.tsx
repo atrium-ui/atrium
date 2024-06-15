@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
-import { Button } from "@sv/components/src/vue/Button";
-import { Icon } from "@sv/components/src/vue/Icon";
+import { Button } from "@components/src/vue/Button";
+import { Icon } from "@components/src/vue/Icon";
 import { onMounted, ref, defineComponent } from "vue";
 
 export const Browser = defineComponent(() => {

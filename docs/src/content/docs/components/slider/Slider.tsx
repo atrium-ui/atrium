@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 
-import { Slider } from "@sv/components/src/vue/Slider";
+import { Slider } from "@components/src/vue/Slider";
 
 export const SomeSlider = () => (
   <Slider>
