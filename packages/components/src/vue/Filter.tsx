@@ -2,19 +2,18 @@
 import "@sv/elements/dropdown";
 import "@sv/elements/expandable";
 
-interface Props {
-  value: string;
-}
-
-export function Filter(props: Props, { slots }) {
+export function Filter(
+  props: {
+    value: string;
+  },
+  { slots },
+) {
   return (
-    <div
-      // @ts-ignore
-      onInput={(e) => console.info(e.target?.value)}
-      class="rounded-lg border border-zinc-700 bg-zinc-800 p-1"
-    >
+    <div class="rounded-lg border border-zinc-700 bg-zinc-800 p-1">
       <a-dropdown class="block" style="--dropdown-position: static;">
         <input
+          // @ts-ignore
+          onInput={(e) => console.info(e.target?.value)}
           // @ts-ignore
           slot="input"
           class="min-w-[500px] rounded-md bg-transparent px-3 py-1 text-left outline-none"
@@ -29,7 +28,7 @@ export function Filter(props: Props, { slots }) {
   );
 }
 
-Filter.Item = function Item(props: { value: string }) {
+export function FilterItem(props: { value: string }) {
   return (
     <a-option
       class="rounded-md [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600"
@@ -43,4 +42,4 @@ Filter.Item = function Item(props: { value: string }) {
       </button>
     </a-option>
   );
-};
+}

@@ -2,6 +2,14 @@ import { LitElement, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
 import { Vec2 } from "./Vec.js";
 
+/**
+ * Traits can override the default behaviour or define new behaviours for a track.
+ *
+ * @example
+ * ```js
+ *
+ * ```
+ */
 export interface Trait<T extends Track = Track> {
   id: string;
 
@@ -21,6 +29,14 @@ export interface Trait<T extends Track = Track> {
   update?(track: T): void;
 }
 
+/**
+ * The PointerTrait addes the ability to move the track with the mouse or touch inputs by dragging.
+ *
+ * @example
+ * ```js
+ *
+ * ```
+ */
 export class PointerTrait implements Trait {
   id = "pointer";
 
@@ -169,6 +185,14 @@ export class PointerTrait implements Trait {
   }
 }
 
+/**
+ * The SnapTrait addes the snapping of items to the track.
+ *
+ * @example
+ * ```js
+ *
+ * ```
+ */
 export class SnapTrait implements Trait {
   id = "snap";
 
@@ -209,9 +233,9 @@ export class SnapTrait implements Trait {
 }
 
 /**
- * - A Track is a custom element that provides a interface for scrolling content.
- * - It can be used to create carousels, slideshows, and other scrolling elements.
- * - It provides functions to go to a specific child element, emits events on changes, and optimizes ux based input device.
+ * A Track is a custom element that provides a interface for scrolling content.
+ * It can be used to create carousels, slideshows, and other scrolling elements.
+ * It provides functions to go to a specific child element, emits events on changes, and optimizes ux based input device.
  *
  * @customEvent format - Emitted when: slots changed, window load and resize or children size changes. Can be canceled.
  * @customEvent change - Emitted when the current index changed.
@@ -229,6 +253,16 @@ export class SnapTrait implements Trait {
  *   </div>
  * </a-track>
  * ```
+ *
+ * ## Traits
+ *
+ * The Track implements a trait system, which can be used to add new behaviours to the track.
+ *
+ * @example
+ * ```js
+ *
+ * ```
+ *
  */
 export class Track extends LitElement {
   static get styles() {

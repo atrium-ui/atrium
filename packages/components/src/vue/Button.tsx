@@ -36,7 +36,7 @@ export function Button(
     label?: string;
     onClick?: (e: MouseEvent) => void;
   },
-  { slots },
+  context,
 ) {
   return (
     <button
@@ -65,7 +65,7 @@ export function Button(
       title={props.label}
       aria-label={props.label}
     >
-      {slots.default?.()}
+      {context?.slots.default?.()}
     </button>
   );
 }
@@ -76,7 +76,7 @@ export function Link(
     href: string;
     target?: string;
   },
-  { slots },
+  context,
 ) {
   return (
     <a
@@ -89,7 +89,7 @@ export function Link(
       href={props.href}
       target={props.target}
     >
-      {slots.default?.()}
+      {context?.slots.default?.()}
     </a>
   );
 }

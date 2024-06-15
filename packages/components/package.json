@@ -6,7 +6,7 @@
     "luckydye"
   ],
   "scripts": {
-    "check": "tsc --pretty",
+    "check": "tsc -p ./tsconfig.json --pretty",
     "test": "bun test",
     "publish-package": "task publish"
   },
@@ -23,6 +23,9 @@
     "enquirer": "^2.4.1"
   },
   "devDependencies": {
-    "tailwind-merge": "^2.2.1"
+    "tailwind-merge": "^2.2.1",
+    "solid-js": "^1.8.17",
+    "vue": "^3.4.27",
+    "react": "^18.3.1"
   }
 }

@@ -1,11 +1,18 @@
 {
   "$schema": "http://json.schemastore.org/tsconfig",
   "extends": [
-    "@sv/codestyle/tsconfig.json",
-    "astro/tsconfigs/strict"
+    "astro/tsconfigs/strict",
+    "@sv/codestyle/tsconfig.json"
   ],
   "compilerOptions": {
+    "paths": {
+      "package:/components": [
+        "./src/components"
+      ],
+      "@components/*": [
+        "../packages/components/*"
+      ]
+    },
     "jsx": "preserve"
-  },
-  "exclude": ["."]
+  }
 }

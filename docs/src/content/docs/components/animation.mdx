@@ -2,25 +2,21 @@
 title: Animation
 ---
 
-import Example from "../../../components/Example.astro";
 import { Animation } from '@sv/components/src/vue/Animation'
+import { Example, Rive, ComponentHeader } from "package:/components";
 
-A component that implmenets rive animations.
+<ComponentHeader name="Animation">
+ <Rive slot="pills" />
 
-import { Pills, Rive } from "../../../components/Pills";
+ A component that implmenets rive animations.
+</ComponentHeader>
 
-<Pills>
-  <Rive />
-</Pills>
+## Example
 
-```bash
-npx @sv/components animation
-```
-
-<Example title="Example" code={`
+<Example code={`
 import { Animation } from './Animation.jsx'
 
 <Animation class="w-[400px] h-[400px]" width={400} height={400} src="/atrium/pie.riv" />
 `}>
-  <Animation client:load class="w-[400px] h-[400px]" width={400} height={400} src="/atrium/pie.riv" />
+  <Animation client:only="vue" class="w-[400px] h-[400px]" width={400} height={400} src="/atrium/pie.riv" />
 </Example>

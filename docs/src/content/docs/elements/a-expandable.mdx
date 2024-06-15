@@ -3,12 +3,8 @@ title: a-expandable
 description: A reference page in my new Starlight docs site.
 ---
 
-import "./styles/expandable.scss";
 import { paragraph } from "txtgen";
-import ExpandIcon from "./expandable/ExpandIcon.astro";
-import TypeDoc from "../../../components/TypeDoc.astro";
-import Elements from "./elements/Elements.astro";
-import { Pills, Lit } from "../../../components/Pills";
+import { TypeDoc, Elements, Icon, Pills, Lit } from "package:/components"
 
 <Pills>
   <Lit />
@@ -28,9 +24,8 @@ Different example confugrations of expandables.
   <a-expandable class="accordion">
 
     <div slot="toggle">
-      <button class="accordion-title">
+      <button class="w-full text-left rounded-md my-1">
         <div class="headline">Expand Down</div>
-        <ExpandIcon />
       </button>
     </div>
 
@@ -43,9 +38,8 @@ Different example confugrations of expandables.
   <a-expandable client:load class="accordion" direction="up">
 
     <div slot="toggle">
-      <button class="accordion-title">
+      <button class="w-full text-left rounded-md my-1">
         <div class="headline">Expand up</div>
-        <ExpandIcon />
       </button>
     </div>
 
@@ -60,11 +54,10 @@ Different example confugrations of expandables.
   <a-toggle client:load active-attribute="opened">
     <a-expandable class="accordion">
       <div slot="toggle">
-        <button class="accordion-title">
+        <button class="w-full text-left rounded-md my-1">
           <div class="headline">
             <span>Toggle</span>
           </div>
-          <ExpandIcon />
         </button>
       </div>
 
@@ -73,9 +66,8 @@ Different example confugrations of expandables.
 
     <a-expandable class="accordion">
       <div slot="toggle">
-        <button class="accordion-title">
+        <button class="w-full text-left rounded-md my-1">
           <div class="headline">Toggle</div>
-          <ExpandIcon />
         </button>
       </div>
 
@@ -94,7 +86,7 @@ Different example confugrations of expandables.
     <p>{paragraph(4)}</p>
 
     <div slot="toggle" class="flex justify-center cursor-pointer p-6">
-      <ExpandIcon />
+      <Icon name="expand" />
     </div>
 
   </a-expandable>

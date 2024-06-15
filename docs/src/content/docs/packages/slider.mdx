@@ -3,12 +3,9 @@ title: "@sv/slider"
 description: A reference page in my new Starlight docs site.
 ---
 
-import Command from "../../../components/Command.astro"
-import Changelog from "package:/components/Changelog.astro";
+import { Pills, Pill, Changelog, Command } from "package:/components";
 
 A slider library.
-
-import { Pills, Pill } from "../../../components/Pills";
 
 <Pills>
   <Pill label="gsap" />
@@ -19,23 +16,11 @@ import { Pills, Pill } from "../../../components/Pills";
 
 Make sure your project is set up with access to the registry as described in [Setup](/atrium/setup).
 
-<Command>
-  <div slot="pnpm">
-    ```sh
-    pnpm add @sv/slider
-    ```
-  </div>
-  <div slot="npm">
-    ```sh
-    npm i @sv/slider
-    ```
-  </div>
-  <div slot="bun">
-    ```sh
-    bun add @sv/slider
-    ```
-  </div>
-</Command>
+<Command
+  pnpm="pnpm add @sv/slider"
+  npm="npm i @sv/slider"
+  bun="bun add @sv/slider"
+/>
 
 ## Usage
 

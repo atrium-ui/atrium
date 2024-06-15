@@ -1,38 +1,19 @@
 ---
 title: Select
 ---
-import Example from "../../../components/Example.astro";
-import { Select } from "@sv/components/src/vue/Select";
+import SelectDemoRaw from "./select/select?raw";
+import SelectDemo from "./select/select";
+import { Example, Atrium, ComponentHeader } from "package:/components";
 
-A dropdown with specific options to select.
+<ComponentHeader name="Select">
+  <Atrium slot="pills" label="a-dropdown" href="/atrium/elements/a-dropdown" />
+  <Atrium slot="pills" label="Button" href="/atrium/components/button" />
 
-import { Pills, Atrium } from "../../../components/Pills";
+  A dropdown with specific options to select.
+</ComponentHeader>
 
-<Pills>
-  <Atrium label="a-dropdown" href="/atrium/elements/a-dropdown" />
-  <Atrium label="Button" href="/atrium/components/button" />
-</Pills>
+## Example
 
-```bash
-npx @sv/components select
-```
-
-<Example title="Example" code={`
----
-import { Select } from "./Select.jsx";
----
-
-<Select value="Select">
-  <Select.Item value="Item 1"/>
-  <Select.Item value="Item 2"/>
-  <Select.Item value="Item 3"/>
-</Select>
-`}>
-  <div>
-    <Select client:only="vue" value="Select">
-      <Select.Item value="Item 1"/>
-      <Select.Item value="Item 2"/>
-      <Select.Item value="Item 3"/>
-    </Select>
-  </div>
+<Example code={SelectDemoRaw}>
+  <SelectDemo client:only="vue"/>
 </Example>

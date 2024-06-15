@@ -1,16 +1,19 @@
 ---
 title: ImageText
 ---
-import Example from "../../../components/Example.astro";
 import { ImageText } from "@sv/components/src/vue/ImageText";
 import ImageTextCode from "@sv/components/src/vue/ImageText?raw";
+import { Example, Atrium, ComponentHeader } from "package:/components";
 
-A simple image-text layout component.
+<ComponentHeader name="ImageText">
+  <Atrium slot="pills" label="a-track" href="/atrium/elements/a-track" />
+  <Atrium slot="pills" label="a-adaptive" href="/atrium/elements/a-adaptive" />
 
-```bash
-npx @sv/components imagetext
-```
+  A simple image-text layout component.
+</ComponentHeader>
 
-<Example title="Example" code={ImageTextCode}>
-  <ImageText />
+## Example
+
+<Example code={ImageTextCode}>
+  <ImageText client:only="vue" />
 </Example>

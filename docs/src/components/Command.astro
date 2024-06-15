@@ -1,17 +1,19 @@
 ---
-import { Tabs, TabItem } from "@astrojs/starlight/components";
+import { Tabs, TabItem, Code } from "@astrojs/starlight/components";
+
+const props = Astro.props;
 ---
 
 <div class="terminal-command">
-  <Tabs>
-    <TabItem label="pnpm">
-      <slot name="pnpm"/>
+  <Tabs syncKey="packageManagerCommand">
+    <TabItem label="pnpm" icon="pnpm">
+      <Code code={props.pnpm} lang="sh" />
     </TabItem>
-    <TabItem label="npm">
-      <slot name="npm"/>
+    <TabItem label="npm" icon="seti:npm">
+      <Code code={props.npm} lang="sh" />
     </TabItem>
-    <TabItem label="bun">
-      <slot name="bun"/>
+    <TabItem label="bun" icon="bun">
+      <Code code={props.bun} lang="sh" />
     </TabItem>
   </Tabs>
 </div>

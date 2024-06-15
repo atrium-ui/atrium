@@ -84,7 +84,7 @@ async function Attributes({ doc, symbol }) {
   const fields = childrenWithComments(declaration(doc, symbol));
 
   if (!fields || fields.length === 0) {
-    return "No Attributes";
+    return;
   }
 
   return Promise.all(
@@ -109,7 +109,7 @@ function Events({ doc, symbol }) {
   const events = track?.comment?.blockTags.filter((tag) => tag.tag === "@customEvent");
 
   if (!events || events.length === 0) {
-    return "No Events";
+    return;
   }
 
   return events.map((event) => {
@@ -137,7 +137,7 @@ async function Methods({ doc, symbol }: { doc: ProjectReflection; symbol: string
     });
 
   if (!methods || methods.length === 0) {
-    return "No Methods";
+    return;
   }
 
   return methods.map(async (child) => {
@@ -172,7 +172,14 @@ const doc = await parse({
   config: "/tsconfig.json",
 });
 
+const dec = declaration(doc, props.symbol);
+const summary = await Summary({ doc, symbol: props.symbol });
 const example = Example({ doc, symbol: props.symbol });
+const attributes = await Attributes({ doc, symbol: props.symbol });
+const events = Events({ doc, symbol: props.symbol });
+const methods = await Methods({ doc, symbol: props.symbol });
+
+const source = dec?.sources?.[0];
 ---
 
 <script>
@@ -180,8 +187,12 @@ const example = Example({ doc, symbol: props.symbol });
 </script>
 
 <div class="typedoc pb-12 pt-4">
-  <h2>{props.symbol}</h2>
-  <div set:html={Summary({ doc, symbol: props.symbol })} />
+  <a
+    href={`https://gitlab.s-v.de/svp/atrium/-/blob/main/rec/${props.source}/${source.fileName}#L${source.line}`}
+  >
+    <h2 class="font-mono pb-2">{props.symbol}</h2>
+  </a>
+  <div set:html={summary} />
 
   {
     example ? (
@@ -194,24 +205,46 @@ const example = Example({ doc, symbol: props.symbol });
     )
   }
 
-  <h3>Attributes</h3>
-  <div set:html={Attributes({ doc, symbol: props.symbol })} />
+  {
+    attributes ? (
+      <>
+        <h3>Attributes</h3>
+        <div set:html={attributes} />
+      </>
+    ) : (
+      ""
+    )
+  }
 
-  <h3>Events</h3>
-  <div set:html={Events({ doc, symbol: props.symbol })} />
+  {
+    events ? (
+      <>
+        <h3>Events</h3>
+        <div set:html={events} />
+      </>
+    ) : (
+      ""
+    )
+  }
 
-  <a-expandable class="group pt-6 max-w-[800px]">
-    <button
-      slot="toggle"
-      class="cursor-pointer hover:bg-zinc-800 w-full text-left bg-transparent p-0 flex justify-between items-center"
-    >
-      <h3>Methods</h3>
+  {
+    methods ? (
+      <a-expandable opened class="group pt-6 max-w-[800px]">
+        <button
+          slot="toggle"
+          class="cursor-pointer hover:bg-zinc-800 w-full text-left bg-transparent p-0 flex justify-between items-center"
+        >
+          <h3>Methods</h3>
 
-      <span class="text-xl group-[&[opened]]:hidden">↴</span>
-      <span class="text-xl hidden group-[&[opened]]:block">↶</span>
-    </button>
-    <div class="p-4">
-      <div set:html={Methods({ doc, symbol: props.symbol })} />
-    </div>
-  </a-expandable>
+          <span class="text-xl group-[&[opened]]:hidden">↴</span>
+          <span class="text-xl hidden group-[&[opened]]:block">↶</span>
+        </button>
+        <div class="p-4">
+          <div set:html={methods} />
+        </div>
+      </a-expandable>
+    ) : (
+      ""
+    )
+  }
 </div>

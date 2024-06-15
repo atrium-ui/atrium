@@ -4,10 +4,10 @@ import { defineComponent, ref } from "vue";
 import { Checkbox } from "@sv/components/src/vue/Checkbox";
 import { Input } from "@sv/components/src/vue/Input";
 
-export default defineComponent(() => {
-  const args = ref(["editorconfig", "biome", "tsconfig", "prettier"]);
+const args = ref(["editorconfig", "biome", "tsconfig", "prettier"]);
 
-  return () => (
+export default function () {
+  return (
     <div>
       <form
         class="not-content my-8"
@@ -35,4 +35,4 @@ export default defineComponent(() => {
       <Input readonly value={`npx @sv/codestyle ${args.value.join(" ")}`} />
     </div>
   );
-});
+}

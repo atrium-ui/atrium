@@ -1,23 +1,19 @@
 ---
 title: Popover
 ---
-import Example from "../../../components/Example.astro";
 import { Popover } from "@sv/components/src/vue/Popover";
+import { Example, Atrium, ComponentHeader } from "package:/components";
 
-A popover.
+<ComponentHeader name="Popover">
+  <Atrium slot="pills" label="a-popover" href="/atrium/elements/a-popover" />
+  <Atrium slot="pills" label="Button" href="/atrium/components/button" />
 
-import { Pills, Atrium } from "../../../components/Pills";
+  A popover.
+</ComponentHeader>
 
-<Pills>
-  <Atrium label="a-popover" href="/atrium/elements/a-popover" />
-  <Atrium label="Button" href="/atrium/components/button" />
-</Pills>
+## Example
 
-```bash
-npx @sv/components popover
-```
-
-<Example title="Example" code={`
+<Example code={`
 ---
 import { Popover } from "./Popover.jsx";
 ---
@@ -27,7 +23,7 @@ import { Popover } from "./Popover.jsx";
 </Popover>
 `}>
   <div>
-    <Popover client:load label="Click">
+    <Popover client:only="vue" label="Click">
       <div class="w-[200px]">Some Content</div>
     </Popover>
   </div>

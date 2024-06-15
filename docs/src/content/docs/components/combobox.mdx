@@ -1,38 +1,19 @@
 ---
 title: Combobox
 ---
-import Example from "../../../components/Example.astro";
-import { Combobox, ComboboxItem } from "@sv/components/src/vue/Combobox";
+import ComboboxDemoRaw from "./combobox/combobox?raw";
+import ComboboxDemo from "./combobox/combobox";
+import { Example, Atrium, ComponentHeader } from "package:/components";
 
-A combobox dropdown
+<ComponentHeader name="Combobox">
+  <Atrium slot="pills" label="a-dropdown" href="/atrium/elements/a-dropdown" />
+  <Atrium slot="pills" label="Button" href="/atrium/components/button" />
 
-import { Pills, Atrium } from "../../../components/Pills";
+  A combobox dropdown
+</ComponentHeader>
 
-<Pills>
-  <Atrium label="a-dropdown" href="/atrium/elements/a-dropdown" />
-  <Atrium label="Button" href="/atrium/components/button" />
-</Pills>
+## Example
 
-```bash
-npx @sv/components combobox
-```
-
-<Example title="Example" code={`
----
-import { Combobox } from "./Combobox.jsx";
----
-
-<Combobox value="Select">
-  <ComboboxItem value="Item 1" />
-  <ComboboxItem value="Item 2" />
-  <ComboboxItem value="Item 3" />
-</Combobox>
-`}>
-  <div>
-    <Combobox client:only="vue" value="Select">
-      <ComboboxItem value="Item 1" />
-      <ComboboxItem value="Item 2" />
-      <ComboboxItem value="Item 3" />
-    </Combobox>
-  </div>
+<Example code={ComboboxDemoRaw}>
+  <ComboboxDemo client:only="vue"/>
 </Example>

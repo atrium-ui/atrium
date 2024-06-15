@@ -33,9 +33,6 @@
     "@rive-app/canvas": "^2.15.6"
   },
   "exports": {
-    "./CHNAGELOG.md": {
-      "import": "./CHANGELOG.md"
-    },
     ".": {
       "import": "./index.js",
       "types": "./index.d.ts"

@@ -1,22 +1,22 @@
 ---
 title: Checkbox
 ---
-import Example from "../../../components/Example.astro";
+import { Example, Pills, Atrium } from "package:/components";
 import { Checkbox } from "@sv/components/src/vue/Checkbox";
-
-A checkbox.
-
-import { Pills, Atrium } from "../../../components/Pills";
 
 <Pills>
   <Atrium label="a-toggle" href="/atrium/elements/a-toggle" />
 </Pills>
 
+A checkbox.
+
 ```bash
 npx @sv/components checkbox
 ```
 
-<Example title="Example" code={`
+## Example
+
+<Example code={`
 ---
 import { Checkbox } from "./Checkbox.jsx";
 ---
@@ -27,7 +27,7 @@ import { Checkbox } from "./Checkbox.jsx";
 </Checkbox>
 `}>
   <form>
-    <Checkbox client:load id="checkbox1" checked>
+    <Checkbox client:only="vue" id="checkbox1" checked>
       <span>I agree to use this checkbox</span>
       <p class="text-base">This is still work in progress.</p>
     </Checkbox>

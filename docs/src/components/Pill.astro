@@ -1,0 +1,15 @@
+---
+export interface Props {
+  href: string;
+  label: string;
+}
+
+const props = Astro.props;
+---
+
+<a
+  href={props.href}
+  class="flex gap-1 rounded-lg bg-zinc-800 px-2 py-1 leading-none no-underline hover:bg-zinc-700"
+>
+  <span class="align-bottom text-[#eee] text-xs">{props.label}</span>
+</a>

@@ -4,10 +4,8 @@ description: Codestyle and configuration for all projects.
 ---
 
 import { Tabs, TabItem } from "@astrojs/starlight/components";
-import Command from "package:/components/Command.astro";
-import File from "package:/components/File.astro";
-import CodeStyle from "package:/components/CodeStyle";
-import Changelog from "package:/components/Changelog.astro";
+import { Command, File, Changelog } from "package:/components";
+import CodeStyle from "./codestyle/CodeStyle";
 
 This package includes confugration files for different tools used to enforce a consistent code style accross projects.
 
@@ -15,23 +13,11 @@ This package includes confugration files for different tools used to enforce a c
 
 Make sure your project is set up with access to the registry as described in [Setup](/atrium/setup).
 
-<Command>
-  <div slot="pnpm">
-  ```sh
-  pnpm add @sv/codestyle --save-exact
-  ```
-  </div>
-  <div slot="npm">
-  ```sh
-  npm i @sv/codestyle --save-exact
-  ```
-  </div>
-  <div slot="bun">
-  ```sh
-  bun add @sv/codestyle --exact
-  ```
-  </div>
-</Command>
+<Command
+  pnpm="pnpm add @sv/codestyle --save-exact"
+  npm="npm i @sv/codestyle --save-exact"
+  bun="bun add @sv/codestyle --exact"
+/>
 
 ## Usage
 
@@ -39,7 +25,7 @@ The `.editorconfig` will be copied next to your package.json using a [postinstal
 
 Automatically setup the configuration in your project by running the following command for the desired tool(s):
 
-<CodeStyle client:load />
+<CodeStyle client:only="vue" />
 
 ## Manual setup
 
@@ -124,8 +110,11 @@ module.exports = {
   <TabItem label=".editorconfig">
     <File file="../packages/codestyle/.editorconfig" />
   </TabItem>
-  <TabItem label="biome.json">
+  <TabItem label="biome.json" icon="biome">
     <File file="../packages/codestyle/biome.json" />
+  </TabItem>
+  <TabItem label="tsconfig.json" icon="seti:typescript">
+    <File file="../packages/codestyle/tsconfig.json" />
   </TabItem>
   <TabItem label=".prettierrc.json">
     <File file="../packages/codestyle/.prettierrc.json" />
@@ -133,14 +122,11 @@ module.exports = {
   <TabItem label="commitlint.cjs">
     <File file="../packages/codestyle/commitlint.js" />
   </TabItem>
-  <TabItem label="eslint.json">
+  <TabItem label="eslint.json" icon="seti:eslint">
     <File file="../packages/codestyle/.eslintrc.json" />
   </TabItem>
-  <TabItem label="stylelint.config.cjs">
+  <TabItem label="stylelint.config.cjs" icon="seti:stylelint">
     <File file="../packages/codestyle/stylelint.config.cjs" />
-  </TabItem>
-  <TabItem label="tsconfig.json">
-    <File file="../packages/codestyle/tsconfig.json" />
   </TabItem>
 </Tabs>
 

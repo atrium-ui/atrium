@@ -13,13 +13,17 @@ Configure your package manager to install packages from the Gitlab package regis
 Update or create .npmrc file located next to the package.json file with the following content:
 
 <Tabs>
-  <TabItem label="npm">
-    ```ini
-    # .npmrc
-    @sv:registry=https://gitlab.s-v.de/api/v4/projects/1560/packages/npm/
+  <TabItem label="pnpm" icon="pnpm">
+    ```sh
+    echo @sv:registry=https://gitlab.s-v.de/api/v4/projects/1560/packages/npm/ >> .npmrc
     ```
   </TabItem>
-  <TabItem label="bun">
+  <TabItem label="npm" icon="seti:npm">
+    ```sh
+    echo @sv:registry=https://gitlab.s-v.de/api/v4/projects/1560/packages/npm/ >> .npmrc
+    ```
+  </TabItem>
+  <TabItem label="bun" icon="bun">
     ```toml
     # bunfig.toml
     [install.scopes]
