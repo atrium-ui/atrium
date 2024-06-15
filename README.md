@@ -7,6 +7,7 @@
     <br />
     <br />
     <a href="https://svp.pages.s-v.de/atrium/">Docs</a> ·
+    <a href="https://gitlab.s-v.de/svp/atrium/-/issues">Issues</a> ·
     <a href="https://gitlab.s-v.de/svp/atrium/-/packages">Packages</a>
     <br />
   </p>
