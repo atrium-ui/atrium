@@ -16,6 +16,8 @@ export function Icon(props: {
   );
 }
 
+export type IconName = keyof typeof ICONS;
+
 const ICONS = {
   unknown: (
     <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">

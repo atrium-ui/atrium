@@ -1,6 +1,9 @@
 /* @jsxImportSource vue */
-interface Props {
+import { twMerge } from "tailwind-merge";
+
+export function Input(props: {
   class?: string;
+  autofocus?: boolean;
   placeholder?: string;
   label?: string;
   name?: string;
@@ -9,13 +12,13 @@ interface Props {
   error?: string;
   required?: boolean;
   readonly?: boolean;
+  password?: boolean;
   multiline?: boolean;
-  onInvalid?: (e: Event) => void;
+  onInvalid?: (e: Event) => undefined | string | Error;
   onInput?: (e: Event) => void;
   onChange?: (e: Event) => void;
-}
-
-export function Input(props: Props) {
+  onKeydown?: (e: KeyboardEvent) => void;
+}) {
   return (
     <div class={props.class}>
       <div class="text-sm">
@@ -26,20 +29,17 @@ export function Input(props: Props) {
         <textarea
           id={props.id}
           name={props.name}
+          autofocus={props.autofocus}
           readonly={props.readonly}
           required={props.required || undefined}
           placeholder={props.placeholder}
           value={props.value}
-          class={[
-            "group w-full resize-y rounded-md border border-zinc-700 bg-transparent px-3 py-1 outline-none focus:border-zinc-500 hover:border-zinc-600",
+          class={twMerge(
+            "w-full resize-y rounded-md border border-zinc-700 bg-transparent px-3 py-1 outline-none focus:border-zinc-500 hover:border-zinc-600",
             props.error ? "border-red-600" : "border-zinc-700",
-          ].join("")}
-          onChange={(e) => {
-            props.onChange?.(e);
-          }}
-          onInput={(e) => {
-            props.onInput?.(e);
-          }}
+          )}
+          onChange={props.onChange}
+          onInput={props.onInput}
           onInvalid={(e) => {
             const err = props.onInvalid?.(e);
             e.preventDefault();
@@ -47,23 +47,21 @@ export function Input(props: Props) {
         />
       ) : (
         <input
-          type="text"
+          type={props.password ? "password" : "text"}
           id={props.id}
           name={props.name}
+          autofocus={props.autofocus}
           readonly={props.readonly}
           required={props.required || undefined}
           placeholder={props.placeholder}
           value={props.value}
-          class={[
-            "group w-full min-w-0 rounded-md border border-zinc-700 bg-transparent px-3 py-1 leading-normal outline-none focus:border-zinc-500 hover:border-zinc-600",
+          class={twMerge(
+            "w-full min-w-0 rounded-md border border-zinc-700 bg-transparent px-3 py-1 leading-normal outline-none focus:border-zinc-500 hover:border-zinc-600",
             props.error ? "border-red-600" : "border-zinc-700",
-          ].join("")}
-          onChange={(e) => {
-            props.onChange?.(e);
-          }}
-          onInput={(e) => {
-            props.onInput?.(e);
-          }}
+          )}
+          onChange={props.onChange}
+          onKeydown={props.onKeydown}
+          onInput={props.onInput}
           onInvalid={(e) => {
             const err = props.onInvalid?.(e);
             e.preventDefault();

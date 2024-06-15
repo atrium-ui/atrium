@@ -1,12 +1,11 @@
 ---
 title: Filter
 ---
-import Example from "../../../components/Example.astro";
-import { Filter } from "@sv/components/src/vue/Filter";
+
+import { Example, Pills, Atrium } from "package:/components";
+import { Filter, FilterItem } from "@sv/components/src/vue/Filter";
 
 A dropdowm with text filter
-
-import { Pills, Atrium } from "../../../components/Pills";
 
 <Pills>
   <Atrium label="a-dropdown" href="/atrium/elements/a-dropdown" />
@@ -16,28 +15,30 @@ import { Pills, Atrium } from "../../../components/Pills";
 npx @sv/components filter
 ```
 
-<Example title="Example" code={`
+## Example
+
+<Example code={`
 ---
 import { Filter } from "./Filter.jsx";
 ---
 
 <Filter>
-  <Filter.Item value="Item1" />
-  <Filter.Item value="Item2" />
-  <Filter.Item value="Item3" />
+  <FilterItem value="Item1" />
+  <FilterItem value="Item2" />
+  <FilterItem value="Item3" />
   <hr class="w-full h-[1px] bg-white opacity-20 my-1 mx-1" />
-  <Filter.Item value="Item4" />
-  <Filter.Item value="Item5" />
+  <FilterItem value="Item4" />
+  <FilterItem value="Item5" />
 </Filter>
 `}>
   <div class="min-h-[250px]">
     <Filter client:load>
-      <Filter.Item client:load value="Item1" />
-      <Filter.Item client:load value="Item2" />
-      <Filter.Item client:load value="Item3" />
+      <FilterItem client:load value="Item1" />
+      <FilterItem client:load value="Item2" />
+      <FilterItem client:load value="Item3" />
       <hr class="w-full h-[1px] bg-white opacity-20 my-1 mx-1" />
-      <Filter.Item client:load value="Item4" />
-      <Filter.Item client:load value="Item5" />
+      <FilterItem client:load value="Item4" />
+      <FilterItem client:load value="Item5" />
     </Filter>
   </div>
 </Example>

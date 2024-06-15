@@ -2,25 +2,21 @@
 title: Slider
 ---
 
-import Example from "../../../components/Example.astro";
 import { SomeSlider } from "./slider/Slider.jsx";
 import SomeSliderCode from "./slider/Slider.jsx?raw";
+import { Example, Atrium, ComponentHeader } from "package:/components";
 
-Just a slider.
+<ComponentHeader name="Slider">
+  <Atrium slot="pills" label="a-track" href="/atrium/elements/a-track" />
+  <Atrium slot="pills" label="Button" href="/atrium/components/button" />
 
-import { Pills, Atrium } from "../../../components/Pills";
+  Just a slider.
+</ComponentHeader>
 
-<Pills>
-  <Atrium label="a-track" href="/atrium/elements/a-track" />
-  <Atrium label="Button" href="/atrium/components/button" />
-</Pills>
+## Example
 
-```bash
-npx @sv/components slider
-```
-
-<Example title="Example" code={SomeSliderCode}>
+<Example code={SomeSliderCode}>
   <div class="w-full">
-    <SomeSlider client:load />
+    <SomeSlider client:only="vue" />
   </div>
 </Example>

@@ -2,74 +2,38 @@
 title: Button
 ---
 
-import Example from "../../../components/Example.astro";
-import { Icon } from "@sv/components/src/vue/Icon";
-import { Button, Link } from "@sv/components/src/vue/Button";
+import DefaultButtonVueRaw from "./button/default.vue?raw";
+import DefaultButtonVue from "./button/default.vue";
+import OutlineButtonVueRaw from "./button/outline.vue?raw";
+import OutlineButtonVue from "./button/outline.vue";
+import GhostButtonVueRaw from "./button/ghost.vue?raw";
+import GhostButtonVue from "./button/ghost.vue";
+import LinkVueRaw from "./button/link.vue?raw";
+import LinkVue from "./button/link.vue";
+import { Example, ComponentHeader } from "package:/components";
 
-A button.
+<ComponentHeader name="Button">
+ A button.
+</ComponentHeader>
 
-```bash
-npx @sv/components button
-```
+## Examples
 
-<Example title="Example" code={`
----
-import { Button } from "./Button";
----
+### Default
 
-<Button>Button</Button>
-<Button disabled>Disabled</Button>
-<Button>
-  <Icon name="check" /><span>with icon</span>
-</Button>
-`}>
-  <div class="flex gap-10">
-    <Button>Button</Button>
-    <Button disabled>Disabled</Button>
-    <Button>
-      <Icon name="check" /><span>with icon</span>
-    </Button>
-  </div>
+<Example code={DefaultButtonVueRaw}>
+  <DefaultButtonVue client:only="vue" />
 </Example>
 
-<Example title="Outline" code={`
----
-import { Button } from "./Button";
----
+### Outline
 
-<Button variant="outline">Button</Button>
-<Button variant="outline" disabled>Disabled</Button>
-<Button variant="outline">
-  <span>with icon</span><Icon name="check" />
-</Button>
-`}>
-  <div class="flex gap-10">
-    <Button variant="outline">Button</Button>
-    <Button variant="outline" disabled>Disabled</Button>
-    <Button variant="outline">
-      <span>with icon</span><Icon name="check" />
-    </Button>
-  </div>
+<Example code={OutlineButtonVueRaw}>
+  <OutlineButtonVue client:only="vue" />
 </Example>
 
-<Example title="Ghost" code={`
----
-import { Button } from "./Button";
----
+### Ghost
 
-<Button variant="ghost">Button</Button>
-<Button variant="ghost" disabled>Disabled</Button>
-<Button variant="ghost">
-  <Icon name="check" /><span>with icon</span>
-</Button>
-`}>
-  <div class="flex gap-10">
-    <Button variant="ghost">Button</Button>
-    <Button variant="ghost" disabled>Disabled</Button>
-    <Button variant="ghost">
-      <Icon name="check" /><span>with icon</span>
-    </Button>
-  </div>
+<Example code={GhostButtonVueRaw}>
+  <GhostButtonVue client:only="vue" />
 </Example>
 
 <br/>
@@ -81,16 +45,8 @@ Links are not buttons and buttons are not links. Links have hrefs and buttons do
 
 But sometimes you need a link that looks like a button. So we have a separate Link component with a button variant. You can replace the a tag inside this component with a framework specific router link.
 
-<Example code={`
----
-import { Link } from "./Button";
----
+### Link
 
-<Link variant="default" href="https://google.com" target="_blank">To somewhere</Link>
-<Link variant="outline" href="https://bing.com" target="_blank">To somewhere else</Link>
-`}>
-  <div class="flex gap-10 text-white">
-    <Link variant="default" href="https://google.com" target="_blank">To somewhere</Link>
-    <Link variant="outline" href="https://bing.com" target="_blank">To somewhere else</Link>
-  </div>
+<Example code={LinkVueRaw}>
+  <LinkVue client:only="vue" />
 </Example>

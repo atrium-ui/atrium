@@ -1,48 +1,21 @@
 ---
 title: Sheet
 ---
-
-import Example from "../../../components/Example.astro";
+import SheetDemoRaw from "./sheet/sheet?raw";
+import SheetDemo from "./sheet/sheet";
 import { Sheet } from "@sv/components/src/vue/Sheet";
 import { Button } from "@sv/components/src/vue/Button";
+import { Example, Atrium, ComponentHeader } from "package:/components";
 
-A sheet is basically a burger menu. Composed of a-blur.
+<ComponentHeader name="Sheet">
+  <Atrium slot="pills" label="a-blur" href="/atrium/elements/a-blur" />
+  <Atrium slot="pills" label="Button" href="/atrium/components/button" />
 
-import { Pills, Atrium } from "../../../components/Pills";
+  A sheet is basically a burger menu. Composed of a-blur.
+</ComponentHeader>
 
-<Pills>
-  <Atrium label="a-blur" href="/atrium/elements/a-blur" />
-  <Atrium label="Button" href="/atrium/components/button" />
-</Pills>
+## Example
 
-```bash
-npx @sv/components sheet
-```
-
-<Example title="Example" code={`
----
-import { Sheet } from "./Sheet.jsx";
----
-
-<Sheet>
-  <div onclick="document.querySelector('a-blur').enabled = false">
-    <Button>Close</Button>
-  </div>
-</Sheet>
-
-<div onclick="document.querySelector('a-blur').enabled = true">
-  <Button>Open</Button>
-</div>
-`}>
-  <div>
-    <Sheet client:load>
-      <div onclick="document.querySelector('a-blur').enabled = false">
-        <Button>Close</Button>
-      </div>
-    </Sheet>
-
-    <div onclick="document.querySelector('a-blur').enabled = true">
-      <Button>Open</Button>
-    </div>
-  </div>
+<Example code={SheetDemoRaw}>
+  <SheetDemo client:only="vue"/>
 </Example>

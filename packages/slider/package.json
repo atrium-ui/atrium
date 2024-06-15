@@ -9,9 +9,6 @@
   },
   "files": ["dist", "src"],
   "exports": {
-    "./CHANGELOG.md": {
-      "import": "./CHANGELOG.md"
-    },
     ".": {
       "import": "./dist/plain/sv-slider.mjs",
       "require": "./dist/plain/sv-slider.js"

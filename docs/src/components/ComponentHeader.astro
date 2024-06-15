@@ -1,0 +1,19 @@
+---
+import { Example, Pills, Git } from "package:/components";
+import { Code } from "@astrojs/starlight/components";
+
+export interface Props {
+  name: string;
+}
+
+const props = Astro.props;
+---
+
+<Pills>
+  <Git href={`/packages/components/src/vue/${props.name}.tsx`} />
+  <slot name="pills" />
+</Pills>
+
+<slot />
+
+<Code code={`npx @sv/components ${props.name.toLowerCase()}`} lang="sh" />

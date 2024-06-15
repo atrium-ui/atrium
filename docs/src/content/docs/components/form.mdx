@@ -1,23 +1,19 @@
 ---
 title: Form
 ---
-import Example from "../../../components/Example.astro";
 import SomeFormExample from "./form/SomeForm.jsx?raw";
 import { SomeForm } from "./form/SomeForm";
+import { Example, Atrium, ComponentHeader } from "package:/components";
 
-A styles input with error states and label.
+<ComponentHeader name="Form">
+  <Atrium slot="pills" label="Button" href="/atrium/components/button" />
+  <Atrium slot="pills" label="Input" href="/atrium/components/input" />
 
-import { Pills, Atrium } from "../../../components/Pills";
+  Form
+</ComponentHeader>
 
-<Pills>
-  <Atrium label="Button" href="/atrium/components/button" />
-  <Atrium label="Input" href="/atrium/components/input" />
-</Pills>
+## Example
 
-```bash
-npx @sv/components form
-```
-
-<Example title="Example" code={SomeFormExample}>
-  <SomeForm client:load />
+<Example code={SomeFormExample}>
+  <SomeForm client:only="vue" />
 </Example>

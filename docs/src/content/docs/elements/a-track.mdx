@@ -3,11 +3,9 @@ title: a-track
 description: A scroll-container with slider utility functions.
 ---
 
-import "./styles/track.scss";
-import Elements from "./elements/Elements.astro"
-import { Pills, Lit } from "../../../components/Pills";
-import { VariableTrack } from "./elements/Track";
-import TypeDoc from "../../../components/TypeDoc.astro";
+import { Elements, Pills, Lit, TypeDoc } from "package:/components"
+import { VariableTrack } from "./a-track/Track";
+import "./a-track/track.css";
 
 <Elements />
 
@@ -18,6 +16,9 @@ import TypeDoc from "../../../components/TypeDoc.astro";
 Implemented with [Slider](/atrium/components/slider) and [Drawer](/atrium/components/drawer).
 
 <TypeDoc source="../packages/elements/packages/track" symbol="Track" />
+<TypeDoc source="../packages/elements/packages/track" symbol="Trait" />
+<TypeDoc source="../packages/elements/packages/track" symbol="PointerTrait" />
+<TypeDoc source="../packages/elements/packages/track" symbol="SnapTrait" />
 
 ## Preview
 
@@ -223,7 +224,7 @@ Different example confugrations of tracks.
 
 When children change, and the last selected item does not exist anymore, it will recover to the closest available child.
 
-<VariableTrack client:load />
+<VariableTrack client:only="vue" />
 
 Configure format behaviour:
 

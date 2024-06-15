@@ -3,12 +3,9 @@ title: "@sv/elements"
 description: A reference page in my new Starlight docs site.
 ---
 
-import Changelog from "package:/components/Changelog.astro";
-import Command from "package:/components/Command.astro"
+import { Pills, Lit, Changelog, Command } from "package:/components";
 
 This package includes all custom-elements used in components.
-
-import { Pills, Lit } from "../../../components/Pills";
 
 <Pills>
   <Lit />
@@ -18,23 +15,11 @@ import { Pills, Lit } from "../../../components/Pills";
 
 Make sure your project is set up with access to the registry as described in [Setup](/atrium/setup).
 
-<Command>
-  <div slot="pnpm">
-    ```sh
-    pnpm add @sv/elements --save-exact
-    ```
-  </div>
-  <div slot="npm">
-    ```sh
-    npm i @sv/elements --save-exact
-    ```
-  </div>
-  <div slot="bun">
-    ```sh
-    bun add @sv/elements --exact
-    ```
-  </div>
-</Command>
+<Command
+  pnpm="pnpm add @sv/elements --save-exact"
+  npm="npm i @sv/elements --save-exact"
+  bun="bun add @sv/elements --exact"
+/>
 
 ## Changelog
 

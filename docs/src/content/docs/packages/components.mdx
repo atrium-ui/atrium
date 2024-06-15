@@ -3,11 +3,9 @@ title: "@sv/components"
 description: A reference page in my new Starlight docs site.
 ---
 
-import Changelog from "package:/components/Changelog.astro";
+import { Pills, Vue, Changelog, Command } from "package:/components";
 
 This package distributes all Component Templates including a convenient cli.
-
-import { Pills, Vue } from "../../../components/Pills";
 
 <Pills>
   <Vue />
@@ -17,9 +15,11 @@ import { Pills, Vue } from "../../../components/Pills";
 
 Make sure your project is set up with access to the registry as described in [Setup](/atrium/setup).
 
-```sh
-npx @sv/components
-```
+<Command
+  pnpm="pnpm exec @sv/components"
+  npm="npx @sv/components"
+  bun="bun x @sv/components"
+/>
 
 ### Flags
 

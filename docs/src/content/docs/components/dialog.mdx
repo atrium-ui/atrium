@@ -1,35 +1,31 @@
 ---
 title: Dialog
 ---
-import Example from "../../../components/Example.astro";
+import { Example, Atrium, ComponentHeader } from "package:/components";
 import { Dialog } from "@sv/components/src/vue/Dialog";
 import { Button } from "@sv/components/src/vue/Button";
 
-A Dialog.
+<ComponentHeader name="Dialog">
+  <Atrium slot="pills" label="a-blur" href="/atrium/elements/a-blur" />
+  <Atrium slot="pills" label="Button" href="/atrium/components/button" />
 
-import { Pills, Atrium } from "../../../components/Pills";
+  A Dialog.
+</ComponentHeader>
 
-<Pills>
-  <Atrium label="a-blur" href="/atrium/elements/a-blur" />
-  <Atrium label="Button" href="/atrium/components/button" />
-</Pills>
+## Example
 
-```bash
-npx @sv/components dialog
-```
-
-<Example title="Example" code={`
+<Example code={`
 ---
 import { Dialog } from "./Dialog.jsx";
 import { Button } from "./Button.jsx";
 ---
 
-<Dialog label="Open" client:load>
+<Dialog label="Open" client:only="vue">
   ## Dialog
   This is a dialog.
 </Dialog>
 `}>
-  <Dialog label="Open" client:load>
+  <Dialog label="Open" client:only="vue">
     ## Dialog
     This is a dialog.
   </Dialog>

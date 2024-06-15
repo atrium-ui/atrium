@@ -2,22 +2,22 @@
 title: Accordion
 ---
 
-import Example from "../../../components/Example.astro";
 import { AccordionDemo } from "./accordion/AccordionDemo.jsx";
 import AccordionDemoCode from "./accordion/AccordionDemo.jsx?raw";
+import { Example, Atrium, ComponentHeader } from "package:/components";
 
-An array of expandable elements.
+<ComponentHeader name="Accordion">
+ <Atrium slot="pills" label="a-expandable" href="/atrium/elements/a-expandable" />
 
-import { Pills, Atrium } from "../../../components/Pills";
+ An array of expandable elements.
+</ComponentHeader>
 
-<Pills>
-  <Atrium label="a-expandable" href="/atrium/elements/a-expandable" />
-</Pills>
+## Behaviour
 
-```bash
-npx @sv/components accordion
-```
+When the accordion is opened or closed, the component makes sure it does not slip out of the viewport by srolling into the viewport.
 
-<Example title="Example" code={AccordionDemoCode}>
+## Example
+
+<Example code={AccordionDemoCode}>
   <AccordionDemo client:only="vue" />
 </Example>

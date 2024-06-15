@@ -7,6 +7,20 @@ declare global {
   }
 }
 
+/**
+ * - Select one or multiple chilren
+ * - Keyboard controls
+ *
+ * @customEvent input - Emitted when: Selection changed
+ *
+ * @example
+ * ```html
+ * <a-toggle snap class="flex w-full overflow-visible">
+ *   <button type="button">1</button>
+ *   <button type="button">2</button>
+ * </a-toggle>
+ * ```
+ */
 export class Toggle extends LitElement {
   static getChildValue(child: HTMLElement) {
     return child.getAttribute("value") || child.dataset.value;
@@ -166,7 +180,7 @@ export class Toggle extends LitElement {
       this.updateChildren();
     }
 
-    this.addEventListener("keyup", this.onKey, { capture: true });
+    this.addEventListener("keudown", this.onKey, { capture: true });
 
     this.addEventListener("click", this.onPress);
     this.addEventListener("focus", this.focusCallback, { capture: true });
@@ -175,7 +189,7 @@ export class Toggle extends LitElement {
   disconnectedCallback(): void {
     super.disconnectedCallback();
 
-    this.removeEventListener("keyup", this.onKey, { capture: true });
+    this.removeEventListener("keudown", this.onKey, { capture: true });
 
     this.removeEventListener("click", this.onPress);
     this.removeEventListener("focus", this.focusCallback, { capture: true });

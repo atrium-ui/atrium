@@ -1,27 +1,30 @@
 ---
 title: Input
 ---
-import Example from "../../../components/Example.astro";
 import { Input } from "@sv/components/src/vue/Input";
+import { Example, Atrium, ComponentHeader } from "package:/components";
 
-A styles input with error states and label.
+<ComponentHeader name="Input">
+  <Atrium slot="pills" label="a-track" href="/atrium/elements/a-track" />
+  <Atrium slot="pills" label="a-adaptive" href="/atrium/elements/a-adaptive" />
 
-```bash
-npx @sv/components input
-```
+  A styles input with error states and label.
+</ComponentHeader>
 
-<Example title="Example" code={`
+## Example
+
+<Example code={`
 ---
 import { Input } from "./Input.jsx";
 ---
 
-<Input placeholder="Text" label="Input" client:load />
+<Input placeholder="Text" label="Input" />
 <br />
-<Input placeholder="Text" label="Input" error="Can not be empty" client:load />
+<Input placeholder="Text" label="Input" error="Can not be empty" />
 `}>
   <div>
-    <Input placeholder="Text" label="Input" client:load />
+    <Input placeholder="Text" label="Input" client:only="vue" />
     <br />
-    <Input placeholder="Text" label="Input" error="Can not be empty" client:load />
+    <Input placeholder="Text" label="Input" error="Can not be empty" client:only="vue" />
   </div>
 </Example>

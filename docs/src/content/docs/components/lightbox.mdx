@@ -1,24 +1,20 @@
 ---
 title: Lightbox
 ---
-import Example from "../../../components/Example.astro";
 import { Lightbox } from "@sv/components/src/vue/Lightbox";
 import { Button } from "@sv/components/src/vue/Button";
+import { Example, Atrium, ComponentHeader } from "package:/components";
 
-A Lightbox.
+<ComponentHeader name="Lightbox">
+  <Atrium slot="pills" label="a-blur" href="/atrium/elements/a-blur" />
+  <Atrium slot="pills" label="Button" href="/atrium/components/button" />
 
-import { Pills, Atrium } from "../../../components/Pills";
+  A Lightbox.
+</ComponentHeader>
 
-<Pills>
-  <Atrium label="a-blur" href="/atrium/elements/a-blur" />
-  <Atrium label="Button" href="/atrium/components/button" />
-</Pills>
+## Example
 
-```bash
-npx @sv/components dialog
-```
-
-<Example title="Example" code={`
+<Example code={`
 <Lightbox>
   <div class="h-[500px] w-full flex-none p-2">
     <img
@@ -30,7 +26,7 @@ npx @sv/components dialog
   </div>
 </Lightbox>
 `}>
-  <Lightbox client:load>
+  <Lightbox client:only="vue">
     <div class="h-[500px] w-full flex-none p-2">
       <img
         class="h-full w-full bg-zinc-400 object-cover"

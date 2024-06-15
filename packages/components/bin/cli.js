@@ -14,7 +14,9 @@ const HELP = `
 
   Options:
   --vue          Use Vue framework
-  --stdout        Print to stdout instead of writing to file
+  --solid        Use Solid framework
+  --react        Use React framework
+  --stdout       Print to stdout instead of writing to file
   --help         Print this help
 
 `;
@@ -74,8 +76,11 @@ export async function use(args = []) {
     return;
   }
 
+  const framwork = flags.framework || "vue";
   const availableComponents = [
-    ...readdirSync(resolve(componentRoot, "vue")).map((file) => file.replace(".tsx", "")),
+    ...readdirSync(resolve(componentRoot, framwork)).map((file) =>
+      file.replace(".tsx", ""),
+    ),
   ];
 
   const components = args.filter((arg) => {

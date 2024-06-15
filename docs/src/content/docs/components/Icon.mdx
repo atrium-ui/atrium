@@ -2,16 +2,19 @@
 title: Icon
 ---
 
-import Example from "../../../components/Example.astro";
 import { Icon } from "@sv/components/src/vue/Icon.jsx";
+import { Example, Atrium, ComponentHeader } from "package:/components";
 
-Example Icon Component.
+<ComponentHeader name="Icon">
+  <Atrium slot="pills" label="a-track" href="/atrium/elements/a-track" />
+  <Atrium slot="pills" label="a-adaptive" href="/atrium/elements/a-adaptive" />
 
-```bash
-npx @sv/components icon
-```
+  Example Icon Component.
+</ComponentHeader>
 
-<Example title="Example" code={`
+## Example
+
+<Example code={`
 ---
 import { Icon } from "./Icon.jsx";
 ---
@@ -19,10 +22,10 @@ import { Icon } from "./Icon.jsx";
 <Icon name="unknown"/>
 `}>
   <div class="text-base">
-    <Icon name="unknown"/><span class="ml-2">Unknown</span>
+    <Icon client:only="vue" name="unknown"/><span class="ml-2">Unknown</span>
   </div>
   <br/>
   <div class="text-lg">
-    <Icon name="unknown"/><span class="ml-2">Unknown</span>
+    <Icon client:only="vue" name="unknown"/><span class="ml-2">Unknown</span>
   </div>
 </Example>

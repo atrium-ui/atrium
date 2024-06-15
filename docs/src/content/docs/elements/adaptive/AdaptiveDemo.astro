@@ -2,8 +2,8 @@
 import { Button } from "@sv/components/src/vue/Button.jsx";
 ---
 
-<div class="w-full flex justify-center">
-  <Button class="demo-button overflow-hidden">
+<div class="w-full flex justify-center demo-button">
+  <Button client:only="vue" class="overflow-hidden">
     <a-adaptive class="overflow-visible">
       <div class="inner-demo-button">
         <span>Click me</span>
@@ -57,27 +57,25 @@ import { Button } from "@sv/components/src/vue/Button.jsx";
   import { paragraph } from "txtgen";
   import "@sv/elements/adaptive";
 
-  const indicator = document.createElement('div');
-  indicator.classList.add('loading-indicator');
+  const indicator = document.createElement("div");
+  indicator.classList.add("loading-indicator");
 
-  let timeout: any = -1;
+  let timeout: NodeJS.Timeout;
 
   const gen = () => {
     const text = paragraph(1 + Math.random() * 4);
-    const content = document.querySelector('.content');
-    if(content) content.innerHTML = text;
-  }
+    const content = document.querySelector(".content");
+    if (content) content.innerHTML = text;
+  };
+  gen();
 
-  gen()
-
-  const button = document.querySelector('.demo-button');
-  if(button)
-    button.addEventListener('click', () => {
+  const button = document.querySelector(".demo-button");
+  if (button)
+    button.addEventListener("click", () => {
       clearTimeout(timeout);
       button.querySelector(".inner-demo-button")?.appendChild(indicator);
       timeout = setTimeout(() => {
-
-        gen()
+        gen();
 
         indicator.remove();
       }, 800);

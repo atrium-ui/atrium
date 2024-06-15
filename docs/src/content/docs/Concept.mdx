@@ -4,7 +4,7 @@ icon: "carbon:share"
 title: "Concept"
 ---
 
-import { Accordion, AccordionItem } from "@sv/components/src/vue/Accordion";
+import { AccordionDemo } from "./components/accordion/AccordionDemo";
 
 This library serves as a place to collect and share code between projects and developers.
 
@@ -16,26 +16,11 @@ The components in this library are composed of two layers:
 
 - The second layer is the **Elements** layer. Elements are "Headless" custom-elements that only implement behavior with accessibility in mind, with as little styling as possible.
 
-<div class="max-w-[800px]">
+<div class="not-content max-w-[800px]">
   <p>
     For example, this Accordion **Vue** Component, uses the `<a-expandable/>` custom-element to implement the animated expanding behaviour.
   </p>
-  <Accordion client:load>
-      <AccordionItem client:load title="Item 1">
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-          eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-          voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-          clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-          amet.
-      </AccordionItem>
-      <AccordionItem client:load title="Item 2">
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-          eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-          voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-          clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-          amet.
-      </AccordionItem>
-  </Accordion>
+  <AccordionDemo class="pt-4" client:only="vue" />
 </div>
 
 <br/>

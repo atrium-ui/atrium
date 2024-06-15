@@ -24,14 +24,21 @@ export const Tabs = defineComponent(
           <ul class="flex list-none gap-1 p-0">
             {slots.default?.()?.map((item, i) => {
               return (
-                <item
-                  active={active.value === i}
-                  onClick={() => {
-                    active.value = i;
-                    props.onChange?.(i);
-                  }}
-                  key={`tab_${i}`}
-                />
+                <li key={`tab_${i}`}>
+                  <Button
+                    variant="ghost"
+                    class={twMerge(
+                      "whitespace-nowrap rounded-lg bg-transparent",
+                      active.value === i ? "bg-zinc-700 text-white" : "",
+                    )}
+                    onClick={() => {
+                      active.value = i;
+                      props.onChange?.(i);
+                    }}
+                  >
+                    {item}
+                  </Button>
+                </li>
               );
             })}
           </ul>
@@ -44,24 +51,6 @@ export const Tabs = defineComponent(
   },
 );
 
-export const TabItem = defineComponent(
-  (props: { active?: boolean; onClick?: () => void }, { slots }) => {
-    return () => (
-      <li>
-        <Button
-          variant="ghost"
-          class={twMerge(
-            "whitespace-nowrap rounded-lg bg-transparent",
-            props.active ? "bg-zinc-700 text-white" : "",
-          )}
-          onClick={() => props.onClick?.()}
-        >
-          {slots.default?.()}
-        </Button>
-      </li>
-    );
-  },
-  {
-    props: ["active", "onClick"],
-  },
-);
+export const TabItem = defineComponent((_, { slots }) => {
+  return () => slots.default?.();
+});

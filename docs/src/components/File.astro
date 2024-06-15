@@ -1,6 +1,6 @@
 ---
 import fs from "node:fs";
-import { codeToHtml } from "shiki";
+import { Code } from "@astrojs/starlight/components";
 
 export interface Props {
   file: string;
@@ -12,6 +12,7 @@ const langs = {
   ts: "typescript",
   tsx: "typescript",
   js: "javascript",
+  cjs: "javascript",
   jsx: "javascript",
   json: "json",
   yaml: "yaml",
@@ -24,16 +25,9 @@ const langs = {
   editorconfig: "ini",
 };
 
-async function code() {
-  const file = fs.readFileSync(props.file, "utf-8");
-  const ext = props.file.split(".").pop();
-  const lang = langs[ext] || "plaintext";
-  if (file && lang) {
-    return codeToHtml(file, { theme: "dark-plus", lang });
-  }
-}
-
-const content = await code();
+const file = fs.readFileSync(props.file, "utf-8");
+const ext = props.file.split(".").pop();
+const lang = (ext && langs[ext]) || "plaintext";
 ---
 
-<div set:html={content}></div>
+<Code code={file} lang={lang}></div>

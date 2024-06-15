@@ -1,0 +1,12 @@
+---
+import { Icon as IconVue, type IconName } from "@sv/components/src/vue/Icon";
+
+export interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const props = Astro.props;
+---
+
+<IconVue client:only="vue" name={props.name} class={props.class} />
