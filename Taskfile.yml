@@ -102,7 +102,7 @@ tasks:
       VERSION:
         sh: bun x npm version --json | jq ".[keys[0]]"
     cmds:
-      - npm publish && echo info Publishing \"{{.NAME}}\" at \"{{.VERSION}}\" || true
+      - bun x npm publish && echo info Publishing \"{{.NAME}}\" at \"{{.VERSION}}\" || true
 
   notify:
     silent: true
