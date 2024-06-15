@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 1.1.1 (2024-06-15)
+
+### Fixes
+
+- set useExponentiationOperator to warn
+
 ## 1.1.0 (2024-06-04)
 
 ### Features
