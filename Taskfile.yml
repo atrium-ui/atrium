@@ -111,7 +111,7 @@ tasks:
       - bun ./scripts/generate-notify > .task/notify.txt
       - defer: rm .task/notify.txt
       - 'echo "{\"message\": \"$(cat .task/notify.txt)\"}"'
-      - 'curl -X POST -d "{\"message\": \"$(cat .task/notify.txt)\"}" $SLACK_WEBHOOK_URL'
+      - 'curl -X POST -d "{\"text\": \"$(cat .task/notify.txt)\"}" $SLACK_WEBHOOK_URL'
 
   docker:build:
     cmds:
