@@ -11,7 +11,8 @@
   "linter": {
     "rules": {
       "style": {
-        "noDefaultExport": "warn"
+        "noDefaultExport": "warn",
+        "useExponentiationOperator": "warn"
       },
       "complexity": {
         "noStaticOnlyClass": "warn",
