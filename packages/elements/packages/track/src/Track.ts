@@ -447,10 +447,13 @@ export class Track extends LitElement {
   }
 
   public get maxIndex() {
-    return (
-      (this.getItemAtPosition(new Vec2(this.overflowWidth, this.overflowHeight))?.index ||
-        0) + 1 || 0
+    const lastItem = this.getItemAtPosition(
+      new Vec2(this.overflowWidth, this.overflowHeight),
     );
+    if (lastItem) {
+      return lastItem.index;
+    }
+    return 0;
   }
 
   private animation: number | undefined;
