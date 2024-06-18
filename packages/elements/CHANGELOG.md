@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.1.5 (2024-06-18)
+
+### Fixes
+
+- a-track: include item after lastIndex in maxIndex
+
 ## 1.1.4 (2024-06-18)
 
 ### Fixes

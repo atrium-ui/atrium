@@ -1,6 +1,6 @@
 {
   "name": "@sv/components",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "atrium",
   "contributors": [
     "luckydye"
@@ -13,7 +13,10 @@
   "type": "module",
   "main": "./bin/cli.js",
   "bin": "./bin/cli.js",
-  "files": ["src", "./dist"],
+  "files": [
+    "src",
+    "./dist"
+  ],
   "engines": {
     "node": ">=16"
   },

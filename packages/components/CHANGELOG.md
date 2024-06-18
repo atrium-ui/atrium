@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.1.1 (2024-06-18)
+
+### Fixes
+
+- add toast function to component
+
 ## 1.1.0 (2024-06-03)
 
 ### Features
