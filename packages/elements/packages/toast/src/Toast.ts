@@ -5,16 +5,6 @@ export interface ToastOptions {
   time?: number;
 }
 
-export function toast(options: ToastOptions, toastType: typeof Toast = Toast) {
-  const toast = new toastType(options);
-  const feed = ToastFeed.getInstance();
-  const ele = document.createElement("div");
-  ele.style.margin = "4px 0";
-  ele.append(toast);
-  feed?.append(ele);
-  return toast;
-}
-
 /**
  * A feed of toast elements
  *

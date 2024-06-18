@@ -473,7 +473,8 @@ export class Track extends LitElement {
       new Vec2(this.overflowWidth, this.overflowHeight),
     );
     if (lastItem) {
-      return lastItem.index;
+      // last index plus the child behind it, to reach the end of the track
+      return lastItem.index + 1;
     }
     return 0;
   }
