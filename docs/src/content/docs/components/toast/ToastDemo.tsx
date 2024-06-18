@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 import "@sv/elements/portal";
 import { Button } from "@components/src/vue/Button";
-import { toast } from "@sv/elements/toast";
+import { toast } from "@components/src/vue/Toasts";
 import { paragraph } from "txtgen";
 
 export function ToastDemo() {

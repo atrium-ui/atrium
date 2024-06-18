@@ -8,18 +8,6 @@ export interface ToastOptions {
 /**
  * A feed of toast elements
  *
- * @example
- * ```tsx
- * import { toast } from "@sv/elements/toast";
- *
- * <a-toast-feed />
- *
- * toast({
- *   message: "Hello, world!"
- *   time: 5000
- * })
- * ```
- *
  * @see https://svp.pages.s-v.de/atrium/elements/a-toast/
  */
 export class ToastFeed extends LitElement {
