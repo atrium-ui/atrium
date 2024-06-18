@@ -3,11 +3,32 @@ import { property } from "lit/decorators/property.js";
 import { Vec2 } from "./Vec.js";
 
 /**
- * Traits can override the default behaviour or define new behaviours for a track.
+ * The Track implements a trait system, which can be used to add new behaviours to the track.
  *
+ * Custom traits can be added to the track by calling the Track.addTrait method.
+ *
+ * Or the Track class can be extended to override add new behaviours entirely.
  * @example
  * ```js
+ * import { type InputState, PointerTrait, Track, type Trait } from "@sv/elements/track";
  *
+ * export class CustomTrack extends Track {
+ *   public traits: Trait[] = [
+ *     new PointerTrait(),
+ *     // satefies the "Trait" interface
+ *     {
+ *       id: "custom-trait",
+ *       input(track: DrawerTrack, inputState: InputState) {
+ *         if (inputState.release.value) {
+ *           // log track posiiton on pointer/touch release
+ *           console.log(track.posiiton);
+ *         }
+ *       },
+ *     },
+ *   ];
+ * }
+ *
+ * customElements.define("custom-track", CustomTrack);
  * ```
  */
 export interface Trait<T extends Track = Track> {
@@ -34,7 +55,10 @@ export interface Trait<T extends Track = Track> {
  *
  * @example
  * ```js
- *
+ * new PointerTrait({
+ *   borderBounce?: number;
+ *   borderResistance?: number;
+ * })
  * ```
  */
 export class PointerTrait implements Trait {
@@ -187,11 +211,6 @@ export class PointerTrait implements Trait {
 
 /**
  * The SnapTrait addes the snapping of items to the track.
- *
- * @example
- * ```js
- *
- * ```
  */
 export class SnapTrait implements Trait {
   id = "snap";
@@ -224,18 +243,24 @@ export class SnapTrait implements Trait {
 
     // Project the current velocity to determine the target item.
     // This checks lastVelocity, because I don't know why velocity is 0,0 at random points.
-    const dir = Math.sign(track.lastVelocity[track.vertical ? 1 : 0]);
-    const power =
-      Math.max(Math.min(Math.round(track.lastVelocity.abs() / 15), 5), 1) * dir;
+    const vel = Math.round(track.lastVelocity[track.currentAxis] * 10) / 10;
+    const dir = Math.sign(vel);
+    const power = Math.max(Math.round(track.lastVelocity.abs() / 40), 1) * dir;
 
-    track.setTarget(track.getClosestItemPosition(power), "linear");
+    if (Math.abs(vel) > 2) {
+      track.acceleration.mul(0.25);
+      track.inputForce.mul(0.125);
+      track.setTarget(track.getToItemPosition(track.currentItem + power), "linear");
+    } else {
+      track.setTarget(track.getToItemPosition(track.currentItem), "linear");
+    }
   }
 }
 
 /**
  * A Track is a custom element that provides a interface for scrolling content.
  * It can be used to create carousels, slideshows, and other scrolling elements.
- * It provides functions to go to a specific child element, emits events on changes, and optimizes ux based input device.
+ * It provides functions to go to a specific child element, emits events on changes, and optimizes ux based on input device.
  *
  * @customEvent format - Emitted when: slots changed, window load and resize or children size changes. Can be canceled.
  * @customEvent change - Emitted when the current index changed.
@@ -254,17 +279,10 @@ export class SnapTrait implements Trait {
  * </a-track>
  * ```
  *
- * ## Traits
- *
- * The Track implements a trait system, which can be used to add new behaviours to the track.
- *
- * @example
- * ```js
- *
- * ```
- *
  */
 export class Track extends LitElement {
+  static Vec2 = Vec2;
+
   static get styles() {
     return css`
       :host {
@@ -340,7 +358,7 @@ export class Track extends LitElement {
 
   public get itemCount() {
     if (this.children) {
-      // TODO: respect left children too
+      // TODO: respect left clones too
       return this.children.length - this.clones.length;
     }
     return 0;
@@ -354,12 +372,12 @@ export class Track extends LitElement {
 
   /**
    * Get the absolute position of the closest item to the current position.
-   * @argument power - offset the position by a number
+   * @argument offset - offset the position by a number
    */
-  public getClosestItemPosition(power = 0) {
-    const posPrev = this.getToItemPosition(this.currentItem + (-1 + power));
-    const posCurr = this.getToItemPosition(this.currentItem + (0 + power));
-    const posNext = this.getToItemPosition(this.currentItem + (1 + power));
+  public getClosestItemPosition(offset = 0) {
+    const posPrev = this.getToItemPosition(this.currentItem + -offset);
+    const posCurr = this.getToItemPosition(this.currentItem + offset);
+    const posNext = this.getToItemPosition(this.currentItem + (offset + 1));
 
     const prev = posPrev.clone().sub(this.position).abs();
     const curr = posCurr.clone().sub(this.position).abs();
@@ -446,6 +464,10 @@ export class Track extends LitElement {
     return this.currentItem % this.itemCount;
   }
 
+  public get currentAxis() {
+    return this.vertical ? 1 : 0;
+  }
+
   public get maxIndex() {
     const lastItem = this.getItemAtPosition(
       new Vec2(this.overflowWidth, this.overflowHeight),
@@ -453,6 +475,10 @@ export class Track extends LitElement {
     if (lastItem) {
       return lastItem.index;
     }
+    return 0;
+  }
+
+  public get minIndex() {
     return 0;
   }
 
@@ -638,7 +664,7 @@ export class Track extends LitElement {
     let currentIndex = index;
 
     if (!this.loop) {
-      currentIndex = Math.min(Math.max(0, currentIndex), this.maxIndex);
+      currentIndex = Math.min(Math.max(this.minIndex, currentIndex), this.maxIndex);
     }
 
     if (currentIndex < 0) {

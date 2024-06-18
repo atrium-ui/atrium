@@ -55,7 +55,7 @@ export const VariableTrack = defineComponent(() => {
         <a-track ref={track} overflowscroll snap class="flex max-w-[100vw]" debug>
           {new Array(count.value || 1).fill(1).map((_, i) => {
             return (
-              <div class="flex-none pr-2" key={i}>
+              <div class="counted flex-none pr-2" key={i}>
                 <canvas width={itemWidth.value} height={280} class="bg-slate-500" />
               </div>
             );
