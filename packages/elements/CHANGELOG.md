@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 1.1.4 (2024-06-18)
+
+### Fixes
+
+- a-track: fix wrong maxIndex
+- a-track optimize snap algorithm, added more documentation
+
 ## 1.1.3 (2024-06-12)
 
 ### Fixes
