@@ -46,7 +46,7 @@ function childrenWithComments(
   obj?: Reflection | undefined,
 ): DeclarationReflection[] | undefined {
   // @ts-ignore
-  return obj?.children?.filter(c => c.comment);
+  return obj?.children?.filter((c) => c.comment);
 }
 
 async function toHtml(content: any[] | undefined) {
@@ -88,7 +88,7 @@ async function Attributes({ doc, symbol }) {
   }
 
   return Promise.all(
-    fields.map(async field => {
+    fields.map(async (field) => {
       const html = `
         <li class="pt-2">
           <div class="align-top inline-block">
@@ -106,13 +106,13 @@ async function Attributes({ doc, symbol }) {
 
 function Events({ doc, symbol }) {
   const track = declaration(doc, symbol);
-  const events = track?.comment?.blockTags.filter(tag => tag.tag === "@customEvent");
+  const events = track?.comment?.blockTags.filter((tag) => tag.tag === "@customEvent");
 
   if (!events || events.length === 0) {
     return;
   }
 
-  return events.map(event => {
+  return events.map((event) => {
     const text = event.content[0]?.text?.split(" - ");
     if (text) {
       return `
@@ -130,9 +130,9 @@ function Events({ doc, symbol }) {
 async function Methods({ doc, symbol }: { doc: ProjectReflection; symbol: string }) {
   const dec = doc.getChildByName(symbol) as DeclarationReflection;
   const methods = dec.groups
-    ?.find(g => g.title === "Methods")
-    ?.children.filter(child => child.flags.hasFlag(ReflectionFlag.Public))
-    .map(method => {
+    ?.find((g) => g.title === "Methods")
+    ?.children.filter((child) => child.flags.hasFlag(ReflectionFlag.Public))
+    .map((method) => {
       return method.signatures?.[0];
     });
 
@@ -140,7 +140,7 @@ async function Methods({ doc, symbol }: { doc: ProjectReflection; symbol: string
     return;
   }
 
-  return methods.map(async child => {
+  return methods.map(async (child) => {
     if (child) {
       const source = child?.sources?.[0];
       return `
@@ -160,7 +160,7 @@ async function Methods({ doc, symbol }: { doc: ProjectReflection; symbol: string
 
 function Example({ doc, symbol }) {
   const obj = declaration(doc, symbol)?.comment;
-  const content = obj?.blockTags.find(t => t.tag === "@example")?.content;
+  const content = obj?.blockTags.find((t) => t.tag === "@example")?.content;
   const lines = content?.[0]?.text.split("\n");
   const code = lines?.slice(1, lines.length - 1).join("\n");
   return code;
