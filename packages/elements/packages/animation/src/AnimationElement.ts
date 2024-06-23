@@ -242,7 +242,6 @@ export class AnimationElement extends LitElement {
     }
 
     const wasmUrl = URL.createObjectURL(await AnimationElement.wasm);
-    console.log("create rive instance");
     const rive = await Rive.default({
       locateFile: (_) => wasmUrl,
     });
