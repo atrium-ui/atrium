@@ -15,7 +15,7 @@
     "@astrojs/starlight-tailwind": "^2.0.3",
     "@astrojs/tailwind": "^5.1.0",
     "@astrojs/vue": "^4.4.0",
-    "@rive-app/canvas-single": "^2.17.3",
+    "@rive-app/canvas-advanced": "^2.18.0",
     "@sv/components": "workspace:",
     "@sv/elements": "workspace:",
     "astro": "^4.10.2",

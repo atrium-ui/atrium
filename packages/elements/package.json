@@ -29,8 +29,9 @@
     "intersection-observer": "^0.12.2"
   },
   "peerDependencies": {
-    "@sv/scroll-lock": "^1.0.0",
-    "@rive-app/canvas": "^2.15.6"
+    "@rive-app/canvas-advanced": "^2.18.0",
+    "@rive-app/canvas-advanced-lite": "^2.18.0",
+    "@sv/scroll-lock": "^1.0.0"
   },
   "exports": {
     ".": {
