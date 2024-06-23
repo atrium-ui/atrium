@@ -6,7 +6,6 @@ import {
   type HTMLTemplateResult,
   type PropertyValueMap,
 } from "lit";
-import { property } from "lit/decorators/property.js";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -59,64 +58,30 @@ export class AnimationElement extends LitElement {
     return html`${this.canvas}`;
   }
 
-  protected firstUpdated(): void {
-    this.format();
+  static properties = {
+    src: { type: String, reflect: true },
+    layout: { type: String, reflect: true },
+    width: { type: Number, reflect: true },
+    height: { type: Number, reflect: true },
+    autoplay: { type: Boolean, reflect: true },
+    stateMachine: { type: String, reflect: true },
+    artboard: { type: String, reflect: true },
+  };
+
+  constructor() {
+    super();
+
+    this.layout = "contain";
+    this.autoplay = true;
+    this.width = 300;
+    this.height = 150;
   }
-
-  /** url to .riv file */
-  @property({ type: String, reflect: true })
-  public src?: string;
-
-  /** fit */
-  @property({ type: String, reflect: true })
-  public layout: "cover" | "fill" | "contain" = "contain";
-
-  /** width in pixel */
-  @property({ type: Number, reflect: true })
-  public width = 300;
-
-  /** height in pixel */
-  @property({ type: Number, reflect: true })
-  public height = 150;
-
-  /** name of state machine */
-  @property({ type: String, reflect: true })
-  public stateMachine?: string;
-
-  /** artboard name */
-  @property({ type: String, reflect: true })
-  public artboard?: string;
-
-  /** wether to autoplay on load */
-  @property({ type: Boolean, reflect: true })
-  public autoplay = true;
-
-  /**
-   * Play the animation
-   */
-  public play() {
-    this.setPlaying(true);
-  }
-
-  /**
-   * Pause the animation
-   */
-  public pause() {
-    this.setPlaying(false);
-  }
-
-  /**
-   * Trigger a rive input by name
-   */
-  public trigger(name: string) {
-    const instance = this.animations[0];
-    const input = instance?.input(name);
-    if (input) input.fire();
-  }
-
-  public loaded = false;
 
   private observer?: IntersectionObserver;
+
+  private onMouse = (e: MouseEvent) => {
+    this.animations[0]?.onMouse(e);
+  };
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -143,11 +108,66 @@ export class AnimationElement extends LitElement {
     this.observer?.disconnect();
   }
 
+  //
+  // Puplic interface
+
+  /** url to .riv file */
+  public declare src?: string;
+
+  /** fit */
+  public declare layout: "cover" | "fill" | "contain";
+
+  /** width in pixel */
+  public declare width: number;
+
+  /** height in pixel */
+  public declare height: number;
+
+  /** name of state machine */
+  public declare stateMachine?: string;
+
+  /** artboard name */
+  public declare artboard?: string;
+
+  /** wether to autoplay on load */
+  public declare autoplay: boolean;
+
+  /**
+   * Play the animation
+   */
+  public play() {
+    this.setPlaying(true);
+  }
+
+  /**
+   * Pause the animation
+   */
+  public pause() {
+    this.setPlaying(false);
+  }
+
+  /**
+   * Trigger a rive input by name
+   */
+  public trigger(name: string) {
+    const instance = this.animations[0];
+    const input = instance?.input(name);
+    if (input) input.fire();
+  }
+
+  //
+  // Internals
+
+  private canvas: HTMLCanvasElement = document.createElement("canvas");
+
+  private animations: Animation[] = [];
+
+  private loaded = false;
   private playing = false;
   private paused = false;
 
   private get shouldAnimate() {
-    return !this.playing || this.paused;
+    return this.playing && !this.paused;
   }
 
   private setPaused(paused: boolean) {
@@ -168,33 +188,21 @@ export class AnimationElement extends LitElement {
     }
   }
 
-  private canvas: HTMLCanvasElement = document.createElement("canvas");
-
-  private onMouse = (e: MouseEvent) => {
-    this.animations[0]?.onMouse(e);
-  };
-
-  private animations: Animation[] = [];
-
-  private get pixelRatio() {
-    return devicePixelRatio || 2;
-  }
-
   private format() {
-    this.canvas.width = this.width * this.pixelRatio;
-    this.canvas.height = this.height * this.pixelRatio;
+    const ratio = devicePixelRatio || 2;
+
+    this.canvas.width = this.width * ratio;
+    this.canvas.height = this.height * ratio;
     this.canvas.style.width = `${this.width}px`;
     this.canvas.style.height = `${this.height}px`;
   }
 
-  protected updated(
-    _changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
-  ): void {
-    if (_changedProperties.has("src") && this.src) {
-      if (this.loaded) {
-        this.dispose(0);
-      }
+  private init() {
+    if (this.loaded) {
+      this.dispose(0);
+    }
 
+    if (this.src) {
       this.load(this.src).then(({ rive, file }) => {
         this.rive = rive;
         this.file = file;
@@ -204,8 +212,18 @@ export class AnimationElement extends LitElement {
 
         this.createAnimation();
       });
+    }
+  }
 
-      this.format();
+  protected firstUpdated(): void {
+    this.format();
+  }
+
+  protected updated(
+    _changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
+  ): void {
+    if (_changedProperties.has("src") && this.src) {
+      this.init();
     }
   }
 
@@ -224,6 +242,7 @@ export class AnimationElement extends LitElement {
     }
 
     const wasmUrl = URL.createObjectURL(await AnimationElement.wasm);
+    console.log("create rive instance");
     const rive = await Rive.default({
       locateFile: (_) => wasmUrl,
     });
@@ -241,10 +260,14 @@ export class AnimationElement extends LitElement {
       this.animations.splice(index, 1);
       this.animations[index]?.cleanup();
     }
+
+    if (this.frame) {
+      this.rive?.cancelAnimationFrame(this.frame);
+    }
   }
 
   private get disposed() {
-    return !!this.animations[0];
+    return !this.animations[0];
   }
 
   private fit() {
@@ -271,6 +294,7 @@ export class AnimationElement extends LitElement {
   private file: Rive.File | undefined;
 
   private lastTime?: number;
+  private frame?: number;
 
   private async createAnimation() {
     // TODO: refactor this function into a seprate class
@@ -296,45 +320,6 @@ export class AnimationElement extends LitElement {
     if (!fit || !alignment) {
       throw new Error("Something went very wrong");
     }
-
-    const renderLoop = (time: number) => {
-      if (this.disposed) return;
-
-      if (!this.lastTime) {
-        this.lastTime = time;
-      }
-
-      const elapsedTimeSec = (time - this.lastTime) / 1000;
-      this.lastTime = time;
-
-      // TODO: when paused, dont call animation frames
-      if (!this.shouldAnimate) {
-        rive.requestAnimationFrame(renderLoop);
-        return;
-      }
-
-      renderer.clear();
-      stateMachine.advance(elapsedTimeSec);
-      artboard.advance(elapsedTimeSec);
-      renderer.save();
-      renderer.align(
-        fit,
-        alignment,
-        {
-          minX: 0,
-          minY: 0,
-          maxX: this.canvas.width,
-          maxY: this.canvas.height,
-        },
-        artboard.bounds,
-      );
-      artboard.draw(renderer);
-      renderer.restore();
-
-      rive.requestAnimationFrame(renderLoop);
-    };
-
-    rive.requestAnimationFrame(renderLoop);
 
     this.animations.push({
       cleanup() {
@@ -396,6 +381,45 @@ export class AnimationElement extends LitElement {
         }
       },
     });
+
+    const renderLoop = (time: number) => {
+      if (this.disposed) return;
+
+      if (!this.lastTime) {
+        this.lastTime = time;
+      }
+
+      const elapsedTimeSec = (time - this.lastTime) / 1000;
+      this.lastTime = time;
+
+      // TODO: when paused, dont call animation frames
+      if (!this.shouldAnimate) {
+        rive.requestAnimationFrame(renderLoop);
+        return;
+      }
+
+      renderer.clear();
+      stateMachine.advance(elapsedTimeSec);
+      artboard.advance(elapsedTimeSec);
+      renderer.save();
+      renderer.align(
+        fit,
+        alignment,
+        {
+          minX: 0,
+          minY: 0,
+          maxX: this.canvas.width,
+          maxY: this.canvas.height,
+        },
+        artboard.bounds,
+      );
+      artboard.draw(renderer);
+      renderer.restore();
+
+      this.frame = rive.requestAnimationFrame(renderLoop);
+    };
+
+    renderLoop(0);
   }
 }
 
