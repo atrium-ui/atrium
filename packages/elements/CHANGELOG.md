@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.2.0 (2024-06-23)
+
+### Features
+
+- use rive advanced api to better handle loading of wasm
+
 ## 1.1.5 (2024-06-18)
 
 ### Fixes
