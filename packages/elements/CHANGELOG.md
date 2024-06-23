@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.2.1 (2024-06-23)
+
+### Fixes
+
+- a-animation: fix access after dispose
+
 ## 1.2.0 (2024-06-23)
 
 ### Features
