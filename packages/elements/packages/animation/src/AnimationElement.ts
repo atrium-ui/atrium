@@ -52,7 +52,6 @@ export class AnimationElement extends LitElement {
       height: 100%;
       max-width: 100%;
       max-height: 100%;
-      pointer-events: none;
     }
   `;
 
@@ -96,14 +95,14 @@ export class AnimationElement extends LitElement {
    * Play the animation
    */
   public play() {
-    this.playing = true;
+    this.setPlaying(true);
   }
 
   /**
    * Pause the animation
    */
   public pause() {
-    this.playing = false;
+    this.setPlaying(false);
   }
 
   /**
@@ -128,7 +127,7 @@ export class AnimationElement extends LitElement {
 
     this.observer = new IntersectionObserver((intersetions) => {
       for (const intersetion of intersetions) {
-        this.paused = !intersetion.isIntersecting;
+        this.setPaused(!intersetion.isIntersecting);
       }
     });
     this.observer.observe(this);
@@ -144,8 +143,30 @@ export class AnimationElement extends LitElement {
     this.observer?.disconnect();
   }
 
-  private playing = this.autoplay;
+  private playing = false;
   private paused = false;
+
+  private get shouldAnimate() {
+    return !this.playing || this.paused;
+  }
+
+  private setPaused(paused: boolean) {
+    this.paused = paused;
+    this.emitPlayPauseEvent();
+  }
+
+  private setPlaying(playing: boolean) {
+    this.playing = playing;
+    this.emitPlayPauseEvent();
+  }
+
+  private emitPlayPauseEvent() {
+    if (this.shouldAnimate) {
+      this.dispatchEvent(new CustomEvent("play"));
+    } else {
+      this.dispatchEvent(new CustomEvent("pause"));
+    }
+  }
 
   private canvas: HTMLCanvasElement = document.createElement("canvas");
 
@@ -170,16 +191,21 @@ export class AnimationElement extends LitElement {
     _changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
     if (_changedProperties.has("src") && this.src) {
-      this.dispose(0);
-      this.createAnimation(this.src);
-      this.format();
-    }
-  }
+      if (this.loaded) {
+        this.dispose(0);
+      }
 
-  private dispose(index: number) {
-    if (this.animations.length > 0) {
-      this.animations[index]?.cleanup();
-      this.animations.splice(index, 1);
+      this.load(this.src).then(({ rive, file }) => {
+        this.rive = rive;
+        this.file = file;
+        this.loaded = true;
+
+        this.setPlaying(this.autoplay);
+
+        this.createAnimation();
+      });
+
+      this.format();
     }
   }
 
@@ -202,7 +228,7 @@ export class AnimationElement extends LitElement {
       locateFile: (_) => wasmUrl,
     });
 
-    const bytes = await (await fetch(new Request(src))).arrayBuffer();
+    const bytes = await (await fetch(src)).arrayBuffer();
     const file = await rive.load(new Uint8Array(bytes));
 
     this.dispatchEvent(new CustomEvent("load"));
@@ -210,7 +236,16 @@ export class AnimationElement extends LitElement {
     return { rive, file };
   }
 
-  private lastTime?: number;
+  private dispose(index: number) {
+    if (this.animations.length > 0) {
+      this.animations.splice(index, 1);
+      this.animations[index]?.cleanup();
+    }
+  }
+
+  private get disposed() {
+    return !!this.animations[0];
+  }
 
   private fit() {
     if (!this.rive) {
@@ -232,14 +267,19 @@ export class AnimationElement extends LitElement {
     return this.rive.Alignment.center;
   }
 
-  rive: Rive.RiveCanvas | undefined;
+  private rive: Rive.RiveCanvas | undefined;
+  private file: Rive.File | undefined;
 
-  private async createAnimation(src: string) {
+  private lastTime?: number;
+
+  private async createAnimation() {
     // TODO: refactor this function into a seprate class
-    const { rive, file } = await this.load(src);
+    const rive = this.rive;
+    const file = this.file;
 
-    this.rive = rive;
-    this.loaded = true;
+    if (!rive || !file) {
+      throw new Error("createAnimation before load");
+    }
 
     const renderer = rive.makeRenderer(this.canvas);
     const artboard = file.defaultArtboard();
@@ -258,6 +298,8 @@ export class AnimationElement extends LitElement {
     }
 
     const renderLoop = (time: number) => {
+      if (this.disposed) return;
+
       if (!this.lastTime) {
         this.lastTime = time;
       }
@@ -266,7 +308,7 @@ export class AnimationElement extends LitElement {
       this.lastTime = time;
 
       // TODO: when paused, dont call animation frames
-      if (!this.playing || this.paused) {
+      if (!this.shouldAnimate) {
         rive.requestAnimationFrame(renderLoop);
         return;
       }
@@ -291,6 +333,7 @@ export class AnimationElement extends LitElement {
 
       rive.requestAnimationFrame(renderLoop);
     };
+
     rive.requestAnimationFrame(renderLoop);
 
     this.animations.push({
@@ -325,9 +368,10 @@ export class AnimationElement extends LitElement {
           },
           artboard.bounds,
         );
-        const invertedMatrix = new Rive.Mat2D();
+
+        const invertedMatrix = new rive.Mat2D();
         forwardMatrix.invert(invertedMatrix);
-        const canvasCoordinatesVector = new Rive.Vec2D(canvasX, canvasY);
+        const canvasCoordinatesVector = new rive.Vec2D(canvasX, canvasY);
         const transformedVector = rive.mapXY(invertedMatrix, canvasCoordinatesVector);
         const transformedX = transformedVector.x();
         const transformedY = transformedVector.y();

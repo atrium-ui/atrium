@@ -1,0 +1,25 @@
+[
+  {
+    "label": "Run watch build for current package",
+    "command": "cd $ZED_DIRNAME && task setup && npm run dev",
+    "allow_concurrent_runs": false,
+    "reveal": "always"
+  },
+  {
+    "label": "Build current package",
+    "command": "cd $ZED_DIRNAME && task setup && npm run build",
+    "allow_concurrent_runs": false,
+    "reveal": "always"
+  },
+  {
+    "label": "Run tests for current package",
+    "command": "cd $ZED_DIRNAME && task setup && npm run test",
+    "allow_concurrent_runs": false,
+    "reveal": "always"
+  },
+  {
+    "label": "Start docs in dev mode",
+    "command": "task docs",
+    "allow_concurrent_runs": false
+  }
+]

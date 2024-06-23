@@ -21,8 +21,7 @@
     ],
     "external": [
       "lit",
-      "@sv/elements",
-      "@rive-app/canvas-advanced-lite"
+      "@rive-app/canvas-advanced"
     ],
     "sourcemap": true,
     "clean": true
