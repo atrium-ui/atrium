@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.2.2 (2024-06-23)
+
+### Fixes
+
+- a-animation: fix misc bugs from rewrite
+
 ## 1.2.1 (2024-06-23)
 
 ### Fixes
