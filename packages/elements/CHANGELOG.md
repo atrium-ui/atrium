@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.2.3 (2024-06-24)
+
+### Fixes
+
+- a-animation: cleanup wasm instance after use
+
 ## 1.2.2 (2024-06-23)
 
 ### Fixes
