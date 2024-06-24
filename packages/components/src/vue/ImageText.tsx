@@ -1,8 +1,9 @@
 /* @jsxImportSource vue */
 import { Button } from "./Button.jsx";
 
-// biome-ignore lint/complexity/noBannedTypes: <explanation>
-type Props = {};
+type Props = {
+  image: string;
+};
 
 export function ImageText(props: Props) {
   return (
@@ -23,8 +24,8 @@ export function ImageText(props: Props) {
       <div class="col-span-6 col-start-6 lg:col-span-3 md:col-span-4 md:pl-10">
         <figure>
           <img
-            class="h-auto w-full"
-            src="https://picsum.photos/300/300"
+            class="h-auto w-full object-cover"
+            src={props.image}
             width="300"
             height="300"
             alt="alt"

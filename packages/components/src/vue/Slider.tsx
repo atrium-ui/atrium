@@ -64,7 +64,7 @@ export const Slider = defineComponent(
             onClick={prev}
             label="Previous page"
           >
-            <Icon class="block" name="arrow-left" />
+            <Icon class="block drop-shadow-[2px_2px_6px_black]" name="arrow-left" />
           </Button>
           <Button
             variant="ghost"
@@ -76,7 +76,7 @@ export const Slider = defineComponent(
             onClick={next}
             label="Next page"
           >
-            <Icon class="block" name="arrow-right" />
+            <Icon class="block drop-shadow-[2px_2px_6px_black]" name="arrow-right" />
           </Button>
 
           <a-track
@@ -91,7 +91,6 @@ export const Slider = defineComponent(
               current.value = track.value?.currentItem || 0;
             }}
             onFormat={(e) => {
-              e.preventDefault();
               updateOverflow();
             }}
           >
