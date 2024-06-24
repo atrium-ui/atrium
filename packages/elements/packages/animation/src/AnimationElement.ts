@@ -13,12 +13,6 @@ declare global {
   }
 }
 
-interface Animation {
-  cleanup(): void;
-  onMouse(event: MouseEvent): void;
-  input(name: string): Rive.SMIInput | undefined;
-}
-
 /**
  * Rive animation
  *
@@ -38,17 +32,14 @@ interface Animation {
  * @see https://svp.pages.s-v.de/atrium/elements/a-animation/
  */
 export class AnimationElement extends LitElement {
-  static riveWasm = "https://unpkg.com/@rive-app/canvas-advanced@2.18.0/rive.wasm";
-  static wasm?: Promise<Blob>;
-
   public static styles = css`
     :host {
       display: inline-block;
     }
     canvas {
       display: block;
-      width: 100%;
-      height: 100%;
+      width: inherit;
+      height: inherit;
       max-width: 100%;
       max-height: 100%;
     }
@@ -79,10 +70,6 @@ export class AnimationElement extends LitElement {
 
   private observer?: IntersectionObserver;
 
-  private onMouse = (e: MouseEvent) => {
-    this.animations[0]?.onMouse(e);
-  };
-
   connectedCallback(): void {
     super.connectedCallback();
 
@@ -96,16 +83,20 @@ export class AnimationElement extends LitElement {
       }
     });
     this.observer.observe(this);
+
+    window.addEventListener("beforeunload", this.cleanup);
   }
 
   disconnectedCallback(): void {
-    this.dispose(0);
-
     this.canvas.removeEventListener("mousemove", this.onMouse);
     this.canvas.removeEventListener("mousedown", this.onMouse);
     this.canvas.removeEventListener("mouseup", this.onMouse);
 
     this.observer?.disconnect();
+
+    window.removeEventListener("beforeunload", this.cleanup);
+
+    this.cleanup();
   }
 
   //
@@ -150,21 +141,46 @@ export class AnimationElement extends LitElement {
    * Trigger a rive input by name
    */
   public trigger(name: string) {
-    const instance = this.animations[0];
-    const input = instance?.input(name);
+    const input = this.input(name);
     if (input) input.fire();
   }
+
+  /**
+   * Retrieve a rive input by name
+   */
+  public input(name: string) {
+    const stateMachine = this.stateMachineInstance;
+
+    if (!stateMachine) return undefined;
+
+    for (let i = 0, l = stateMachine.inputCount(); i < l; i++) {
+      const input = stateMachine.input(i);
+      if (input.name === name) return input;
+    }
+
+    return undefined;
+  }
+
+  static riveWasm = "https://unpkg.com/@rive-app/canvas-advanced@2.18.0/rive.wasm";
+  static wasm?: Promise<Blob>;
 
   //
   // Internals
 
   private canvas: HTMLCanvasElement = document.createElement("canvas");
 
-  private animations: Animation[] = [];
-
   private loaded = false;
   private playing = false;
   private paused = false;
+
+  private rive: Rive.RiveCanvas | undefined;
+  private file: Rive.File | undefined;
+  private renderer: Rive.Renderer | undefined;
+  private artboardInstance: Rive.Artboard | undefined;
+  private stateMachineInstance: Rive.StateMachineInstance | undefined;
+
+  private lastTime?: number;
+  private frame?: number;
 
   private get shouldAnimate() {
     return this.playing && !this.paused;
@@ -189,30 +205,11 @@ export class AnimationElement extends LitElement {
   }
 
   private format() {
-    const ratio = devicePixelRatio || 2;
+    // force density of 2, just looks better multisampled
+    const ratio = Math.max(devicePixelRatio || 2, 2);
 
     this.canvas.width = this.width * ratio;
     this.canvas.height = this.height * ratio;
-    this.canvas.style.width = `${this.width}px`;
-    this.canvas.style.height = `${this.height}px`;
-  }
-
-  private init() {
-    if (this.loaded) {
-      this.dispose(0);
-    }
-
-    if (this.src) {
-      this.load(this.src).then(({ rive, file }) => {
-        this.rive = rive;
-        this.file = file;
-        this.loaded = true;
-
-        this.setPlaying(this.autoplay);
-
-        this.createAnimation();
-      });
-    }
   }
 
   protected firstUpdated(): void {
@@ -223,50 +220,56 @@ export class AnimationElement extends LitElement {
     _changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
     if (_changedProperties.has("src") && this.src) {
-      this.init();
+      this.load(this.src);
     }
   }
 
   private async load(src: string) {
-    if (!AnimationElement.riveWasm) {
-      throw new Error(`Rive wasm not found: ${AnimationElement.riveWasm}`);
+    if (this.loaded) {
+      this.cleanup();
     }
+    this.loaded = false;
 
-    if (!AnimationElement.wasm) {
-      AnimationElement.wasm = fetch(AnimationElement.riveWasm).then(async (res) => {
-        if (!res.ok) {
-          throw new Error(`Failed to load Rive wasm: ${res.statusText}`);
-        }
-        return new Blob([await res.arrayBuffer()], { type: "application/wasm" });
+    if (!this.rive) {
+      if (!AnimationElement.riveWasm) {
+        throw new Error(`Rive wasm not found: ${AnimationElement.riveWasm}`);
+      }
+
+      if (!AnimationElement.wasm) {
+        AnimationElement.wasm = fetch(AnimationElement.riveWasm).then(async (res) => {
+          if (!res.ok) {
+            throw new Error(`Failed to load Rive wasm: ${res.statusText}`);
+          }
+          return new Blob([await res.arrayBuffer()], { type: "application/wasm" });
+        });
+      }
+
+      const wasmUrl = URL.createObjectURL(await AnimationElement.wasm);
+      this.rive = await Rive.default({
+        locateFile: (_) => wasmUrl,
       });
     }
 
-    const wasmUrl = URL.createObjectURL(await AnimationElement.wasm);
-    const rive = await Rive.default({
-      locateFile: (_) => wasmUrl,
-    });
-
     const bytes = await (await fetch(src)).arrayBuffer();
-    const file = await rive.load(new Uint8Array(bytes));
+    const file = await this.rive.load(new Uint8Array(bytes));
+
+    this.renderer = this.rive.makeRenderer(this.canvas);
+    this.artboardInstance = file.defaultArtboard();
+    this.stateMachineInstance = new this.rive.StateMachineInstance(
+      this.artboardInstance.stateMachineByName(
+        this.stateMachine || this.artboardInstance.stateMachineByIndex(0).name,
+      ),
+      this.artboardInstance,
+    );
+
+    this.file = file;
+    this.loaded = true;
+
+    this.createAnimation();
+
+    this.setPlaying(this.autoplay);
 
     this.dispatchEvent(new CustomEvent("load"));
-
-    return { rive, file };
-  }
-
-  private dispose(index: number) {
-    if (this.animations.length > 0) {
-      this.animations.splice(index, 1);
-      this.animations[index]?.cleanup();
-    }
-
-    if (this.frame) {
-      this.rive?.cancelAnimationFrame(this.frame);
-    }
-  }
-
-  private get disposed() {
-    return !this.animations[0];
   }
 
   private fit() {
@@ -289,101 +292,24 @@ export class AnimationElement extends LitElement {
     return this.rive.Alignment.center;
   }
 
-  private rive: Rive.RiveCanvas | undefined;
-  private file: Rive.File | undefined;
+  private cleanup = () => {
+    if (this.frame) this.rive?.cancelAnimationFrame(this.frame);
 
-  private lastTime?: number;
-  private frame?: number;
+    this.renderer?.delete();
+    this.file?.delete();
+    this.artboardInstance?.delete();
+    this.stateMachineInstance?.delete();
+    this.rive?.cleanup();
+  };
 
   private async createAnimation() {
-    // TODO: refactor this function into a seprate class
     const rive = this.rive;
-    const file = this.file;
 
-    if (!rive || !file) {
+    if (!rive) {
       throw new Error("createAnimation before load");
     }
 
-    const renderer = rive.makeRenderer(this.canvas);
-    const artboard = file.defaultArtboard();
-    const stateMachine = new rive.StateMachineInstance(
-      artboard.stateMachineByName(
-        this.stateMachine || artboard.stateMachineByIndex(0).name,
-      ),
-      artboard,
-    );
-
-    const fit = this.fit();
-    const alignment = this.alignment();
-
-    if (!fit || !alignment) {
-      throw new Error("Something went very wrong");
-    }
-
-    this.animations.push({
-      cleanup() {
-        renderer.delete();
-        file.delete();
-        artboard.delete();
-        stateMachine.delete();
-      },
-      input(name: string) {
-        for (let i = 0, l = stateMachine.inputCount(); i < l; i++) {
-          const input = stateMachine.input(i);
-          if (input.name === name) return input;
-        }
-        return undefined;
-      },
-      onMouse(event) {
-        const boundingRect = (
-          event.currentTarget as HTMLElement
-        )?.getBoundingClientRect();
-
-        const canvasX = event.clientX - boundingRect.left;
-        const canvasY = event.clientY - boundingRect.top;
-        const forwardMatrix = rive.computeAlignment(
-          fit,
-          alignment,
-          {
-            minX: 0,
-            minY: 0,
-            maxX: boundingRect.width,
-            maxY: boundingRect.height,
-          },
-          artboard.bounds,
-        );
-
-        const invertedMatrix = new rive.Mat2D();
-        forwardMatrix.invert(invertedMatrix);
-        const canvasCoordinatesVector = new rive.Vec2D(canvasX, canvasY);
-        const transformedVector = rive.mapXY(invertedMatrix, canvasCoordinatesVector);
-        const transformedX = transformedVector.x();
-        const transformedY = transformedVector.y();
-
-        switch (event.type) {
-          // Pointer moving/hovering on the canvas
-          case "mousemove": {
-            stateMachine.pointerMove(transformedX, transformedY);
-            break;
-          }
-          // Pointer click initiated but not released yet on the canvas
-          case "mousedown": {
-            stateMachine.pointerDown(transformedX, transformedY);
-            break;
-          }
-          // Pointer click released on the canvas
-          case "mouseup": {
-            stateMachine.pointerUp(transformedX, transformedY);
-            break;
-          }
-          default:
-        }
-      },
-    });
-
     const renderLoop = (time: number) => {
-      if (this.disposed) return;
-
       if (!this.lastTime) {
         this.lastTime = time;
       }
@@ -393,32 +319,110 @@ export class AnimationElement extends LitElement {
 
       // TODO: when paused, dont call animation frames
       if (!this.shouldAnimate) {
-        rive.requestAnimationFrame(renderLoop);
+        this.frame = rive.requestAnimationFrame(renderLoop);
         return;
       }
 
-      renderer.clear();
-      stateMachine.advance(elapsedTimeSec);
-      artboard.advance(elapsedTimeSec);
-      renderer.save();
-      renderer.align(
-        fit,
-        alignment,
-        {
-          minX: 0,
-          minY: 0,
-          maxX: this.canvas.width,
-          maxY: this.canvas.height,
-        },
-        artboard.bounds,
-      );
-      artboard.draw(renderer);
-      renderer.restore();
+      this.draw(elapsedTimeSec);
 
       this.frame = rive.requestAnimationFrame(renderLoop);
     };
 
     renderLoop(0);
+  }
+
+  private onMouse = (event: MouseEvent) => {
+    const rive = this.rive;
+    const stateMachine = this.stateMachineInstance;
+    const artboard = this.artboardInstance;
+
+    if (!rive || !stateMachine || !artboard) {
+      return;
+    }
+
+    const fit = this.fit();
+    const alignment = this.alignment();
+
+    if (!fit || !alignment) {
+      return;
+    }
+
+    const boundingRect = (event.currentTarget as HTMLElement)?.getBoundingClientRect();
+
+    const canvasX = event.clientX - boundingRect.left;
+    const canvasY = event.clientY - boundingRect.top;
+    const forwardMatrix = rive.computeAlignment(
+      fit,
+      alignment,
+      {
+        minX: 0,
+        minY: 0,
+        maxX: boundingRect.width,
+        maxY: boundingRect.height,
+      },
+      artboard.bounds,
+    );
+
+    const invertedMatrix = new rive.Mat2D();
+    forwardMatrix.invert(invertedMatrix);
+    const canvasCoordinatesVector = new rive.Vec2D(canvasX, canvasY);
+    const transformedVector = rive.mapXY(invertedMatrix, canvasCoordinatesVector);
+    const transformedX = transformedVector.x();
+    const transformedY = transformedVector.y();
+
+    switch (event.type) {
+      // Pointer moving/hovering on the canvas
+      case "mousemove": {
+        stateMachine.pointerMove(transformedX, transformedY);
+        break;
+      }
+      // Pointer click initiated but not released yet on the canvas
+      case "mousedown": {
+        stateMachine.pointerDown(transformedX, transformedY);
+        break;
+      }
+      // Pointer click released on the canvas
+      case "mouseup": {
+        stateMachine.pointerUp(transformedX, transformedY);
+        break;
+      }
+      default:
+    }
+  };
+
+  private draw(elapsedTimeSec: number) {
+    const renderer = this.renderer;
+    const stateMachine = this.stateMachineInstance;
+    const artboard = this.artboardInstance;
+
+    if (!renderer || !stateMachine || !artboard) {
+      return;
+    }
+
+    const fit = this.fit();
+    const alignment = this.alignment();
+
+    if (!fit || !alignment) {
+      return;
+    }
+
+    renderer.clear();
+    stateMachine.advance(elapsedTimeSec);
+    artboard.advance(elapsedTimeSec);
+    renderer.save();
+    renderer.align(
+      fit,
+      alignment,
+      {
+        minX: 0,
+        minY: 0,
+        maxX: this.canvas.width,
+        maxY: this.canvas.height,
+      },
+      artboard.bounds,
+    );
+    artboard.draw(renderer);
+    renderer.restore();
   }
 }
 

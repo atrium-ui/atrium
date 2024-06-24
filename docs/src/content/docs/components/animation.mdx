@@ -16,9 +16,9 @@ import { Example, Rive, ComponentHeader } from "package:/components";
 <Example code={`
 import { Animation } from './Animation.jsx'
 
-<Animation class="w-[400px] h-[400px]" width={400} height={400} src="/atrium/pie.riv" />
+<Animation class="w-full h-auto" width={400} height={400} src="/atrium/pie.riv" />
 `}>
-  <Animation client:only="vue" class="w-[400px] h-[400px]" width={400} height={400} src="/atrium/pie.riv" />
-
-  <Animation client:only="vue" class="w-[400px] h-[400px]" width={400} height={400} src="/atrium/pie.riv" />
+  <div class="grid">
+    <Animation client:only="vue" class="w-[400px] h-[400px]" width={400} height={400} src="/atrium/pie.riv" />
+  </div>
 </Example>
