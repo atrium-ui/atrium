@@ -68,7 +68,8 @@ export class AnimationElement extends LitElement {
     this.height = 150;
   }
 
-  private observer?: IntersectionObserver;
+  private intersectionObserver?: IntersectionObserver;
+  private static resizeObserver?: ResizeObserver;
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -77,22 +78,36 @@ export class AnimationElement extends LitElement {
     this.canvas.addEventListener("mousedown", this.onMouse);
     this.canvas.addEventListener("mouseup", this.onMouse);
 
-    this.observer = new IntersectionObserver((intersetions) => {
-      for (const intersetion of intersetions) {
-        this.setPaused(!intersetion.isIntersecting);
-      }
-    });
-    this.observer.observe(this);
+    if (!this.intersectionObserver) {
+      this.intersectionObserver = new IntersectionObserver((intersetions) => {
+        for (const intersetion of intersetions) {
+          this.setPaused(!intersetion.isIntersecting);
+        }
+      });
+    }
+    this.intersectionObserver.observe(this);
+
+    // if (!AnimationElement.resizeObserver) {
+    //   AnimationElement.resizeObserver = new ResizeObserver((entries) => {
+    //     for (const entry of entries) {
+    //       console.log(entry.target.offsetWidth);
+    //     }
+    //   });
+    // }
+    // AnimationElement.resizeObserver.observe(this.canvas);
 
     window.addEventListener("beforeunload", this.cleanup);
   }
 
   disconnectedCallback(): void {
+    super.disconnectedCallback();
+
     this.canvas.removeEventListener("mousemove", this.onMouse);
     this.canvas.removeEventListener("mousedown", this.onMouse);
     this.canvas.removeEventListener("mouseup", this.onMouse);
 
-    this.observer?.disconnect();
+    this.intersectionObserver?.disconnect();
+    // AnimationElement.resizeObserver?.unobserve(this.canvas);
 
     window.removeEventListener("beforeunload", this.cleanup);
 
@@ -295,6 +310,8 @@ export class AnimationElement extends LitElement {
       this.dispatchEvent(new CustomEvent("pause"));
       return;
     }
+
+    // time is undefined when its not called by requestAnimationFrame
     if (!time) {
       this.dispatchEvent(new CustomEvent("play"));
     }
@@ -328,12 +345,19 @@ export class AnimationElement extends LitElement {
     this.artboardInstance?.delete();
     this.artboardInstance = undefined;
     this.stateMachineInstance?.delete();
-    this.artboardInstance = undefined;
+    this.stateMachineInstance = undefined;
 
     if (this.rive) {
       this.rive.cleanup();
       this.rive = undefined;
       AnimationElement.instanceCache.delete(this);
+    }
+
+    // also cleanup other forgotten instances (TODO: why do they even exist?)
+    for (const instance of AnimationElement.instanceCache.values()) {
+      if (!document.body.contains(instance)) {
+        instance.cleanup();
+      }
     }
   };
 
