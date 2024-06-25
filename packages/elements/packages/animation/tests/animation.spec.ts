@@ -12,6 +12,7 @@ beforeAll(async () => {
 test("a-animation: defaults", async () => {
   const ele = globalThis.ele as AnimationElement;
   expect(ele.src).toBeUndefined();
+  // @ts-ignore
   expect(ele.paused).toBeTrue();
 });
 
