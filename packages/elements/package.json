@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "check": "tsc --pretty",
-    "test": "bun test --preload ./test/preload.ts .",
+    "test": "bun test .",
     "publish-package": "task publish"
   },
   "files": [
@@ -113,4 +113,4 @@
       "types": "./packages/portal/src/index.ts"
     }
   }
-}
+}}

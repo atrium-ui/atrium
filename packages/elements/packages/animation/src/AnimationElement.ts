@@ -161,6 +161,7 @@ export class AnimationElement extends LitElement {
     return undefined;
   }
 
+  static instanceCache = new Set<AnimationElement>();
   static riveWasm = "https://unpkg.com/@rive-app/canvas-advanced@2.18.0/rive.wasm";
   static wasm?: Promise<Blob>;
 
@@ -171,7 +172,7 @@ export class AnimationElement extends LitElement {
 
   private loaded = false;
   private playing = false;
-  private paused = false;
+  private paused = true;
 
   private rive: Rive.RiveCanvas | undefined;
   private file: Rive.File | undefined;
@@ -188,19 +189,24 @@ export class AnimationElement extends LitElement {
 
   private setPaused(paused: boolean) {
     this.paused = paused;
-    this.emitPlayPauseEvent();
+
+    if (paused === false) {
+      if (!this.loaded) {
+        if (this.src) this.tryLoad(this.src);
+      } else {
+        this.renderLoop();
+      }
+    }
+    if (paused === true && this.loaded) {
+      this.cleanup();
+    }
   }
 
   private setPlaying(playing: boolean) {
     this.playing = playing;
-    this.emitPlayPauseEvent();
-  }
 
-  private emitPlayPauseEvent() {
-    if (this.shouldAnimate) {
-      this.dispatchEvent(new CustomEvent("play"));
-    } else {
-      this.dispatchEvent(new CustomEvent("pause"));
+    if (playing === true) {
+      this.renderLoop();
     }
   }
 
@@ -220,15 +226,19 @@ export class AnimationElement extends LitElement {
     _changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
     if (_changedProperties.has("src") && this.src) {
-      this.load(this.src);
+      this.tryLoad(this.src);
     }
   }
 
-  private async load(src: string) {
+  private async tryLoad(src: string) {
+    if (this.paused) return;
+
     if (this.loaded) {
+      // cleanup and reinit
       this.cleanup();
     }
-    this.loaded = false;
+
+    const bytes = await (await fetch(src)).arrayBuffer();
 
     if (!this.rive) {
       if (!AnimationElement.riveWasm) {
@@ -244,94 +254,94 @@ export class AnimationElement extends LitElement {
         });
       }
 
-      const wasmUrl = URL.createObjectURL(await AnimationElement.wasm);
-      this.rive = await Rive.default({
-        locateFile: (_) => wasmUrl,
-      });
+      try {
+        const wasmUrl = URL.createObjectURL(await AnimationElement.wasm);
+        this.rive = await Rive.default({
+          locateFile: (_) => wasmUrl,
+        });
+      } catch (err) {
+        console.warn(err);
+      }
+
+      AnimationElement.instanceCache.add(this);
     }
 
-    const bytes = await (await fetch(src)).arrayBuffer();
-    const file = await this.rive.load(new Uint8Array(bytes));
+    if (this.rive) {
+      this.file = await this.rive.load(new Uint8Array(bytes));
+      this.renderer = this.rive.makeRenderer(this.canvas);
+      this.artboardInstance = this.file.defaultArtboard();
+      this.stateMachineInstance = new this.rive.StateMachineInstance(
+        this.artboardInstance.stateMachineByName(
+          this.stateMachine || this.artboardInstance.stateMachineByIndex(0).name,
+        ),
+        this.artboardInstance,
+      );
 
-    this.renderer = this.rive.makeRenderer(this.canvas);
-    this.artboardInstance = file.defaultArtboard();
-    this.stateMachineInstance = new this.rive.StateMachineInstance(
-      this.artboardInstance.stateMachineByName(
-        this.stateMachine || this.artboardInstance.stateMachineByIndex(0).name,
-      ),
-      this.artboardInstance,
-    );
+      this.loaded = true;
 
-    this.file = file;
-    this.loaded = true;
+      this.setPlaying(this.autoplay);
 
-    this.createAnimation();
+      this.renderLoop();
 
-    this.setPlaying(this.autoplay);
-
-    this.dispatchEvent(new CustomEvent("load"));
-  }
-
-  private fit() {
-    if (!this.rive) {
-      return undefined;
+      this.dispatchEvent(new CustomEvent("load"));
     }
-    return this.layout === "contain"
-      ? this.rive.Fit.contain
-      : this.layout === "cover"
-        ? this.rive.Fit.cover
-        : this.layout === "fill"
-          ? this.rive.Fit.fill
-          : this.rive.Fit.contain;
   }
 
-  private alignment() {
-    if (!this.rive) {
-      return undefined;
+  private renderLoop = (time?: number) => {
+    this.frame = undefined;
+
+    // break out of render loop on these conditions
+    if (!this.loaded || !this.shouldAnimate) {
+      this.dispatchEvent(new CustomEvent("pause"));
+      return;
     }
-    return this.rive.Alignment.center;
-  }
+    if (!time) {
+      this.dispatchEvent(new CustomEvent("play"));
+    }
 
-  private cleanup = () => {
-    if (this.frame) this.rive?.cancelAnimationFrame(this.frame);
-
-    this.renderer?.delete();
-    this.file?.delete();
-    this.artboardInstance?.delete();
-    this.stateMachineInstance?.delete();
-    this.rive?.cleanup();
-  };
-
-  private async createAnimation() {
     const rive = this.rive;
 
     if (!rive) {
-      throw new Error("createAnimation before load");
+      throw new Error("renderLoop before load");
     }
 
-    const renderLoop = (time: number) => {
-      if (!this.lastTime) {
-        this.lastTime = time;
-      }
+    let elapsedTimeSec = 0;
+    if (time && this.lastTime) {
+      elapsedTimeSec = (time - this.lastTime) / 1000;
+    }
+    this.lastTime = time;
 
-      const elapsedTimeSec = (time - this.lastTime) / 1000;
-      this.lastTime = time;
+    this.draw(elapsedTimeSec);
 
-      // TODO: when paused, dont call animation frames
-      if (!this.shouldAnimate) {
-        this.frame = rive.requestAnimationFrame(renderLoop);
-        return;
-      }
+    this.frame = rive.requestAnimationFrame(this.renderLoop);
+  };
 
-      this.draw(elapsedTimeSec);
+  public cleanup = () => {
+    if (this.frame) this.rive?.cancelAnimationFrame(this.frame);
 
-      this.frame = rive.requestAnimationFrame(renderLoop);
-    };
+    this.loaded = false;
 
-    renderLoop(0);
-  }
+    this.renderer?.delete();
+    this.renderer = undefined;
+    this.file?.delete();
+    this.file = undefined;
+    this.artboardInstance?.delete();
+    this.artboardInstance = undefined;
+    this.stateMachineInstance?.delete();
+    this.artboardInstance = undefined;
+
+    if (this.rive) {
+      this.rive.cleanup();
+      this.rive = undefined;
+      AnimationElement.instanceCache.delete(this);
+    }
+  };
 
   private onMouse = (event: MouseEvent) => {
+    if (!this.loaded) {
+      return;
+    }
+
     const rive = this.rive;
     const stateMachine = this.stateMachineInstance;
     const artboard = this.artboardInstance;
@@ -389,6 +399,26 @@ export class AnimationElement extends LitElement {
       default:
     }
   };
+
+  private fit() {
+    if (!this.rive) {
+      return undefined;
+    }
+    return this.layout === "contain"
+      ? this.rive.Fit.contain
+      : this.layout === "cover"
+        ? this.rive.Fit.cover
+        : this.layout === "fill"
+          ? this.rive.Fit.fill
+          : this.rive.Fit.contain;
+  }
+
+  private alignment() {
+    if (!this.rive) {
+      return undefined;
+    }
+    return this.rive.Alignment.center;
+  }
 
   private draw(elapsedTimeSec: number) {
     const renderer = this.renderer;

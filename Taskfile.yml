@@ -54,6 +54,12 @@ tasks:
     cmds:
       - bun x turbo test -- {{.CLI_ARGS}}
 
+  test:watch:
+    desc: "Run tests on current packages (Run specific test: t test --  -t prettier)"
+    dir: "{{.USER_WORKING_DIR}}"
+    cmds:
+      - bun test --watch -t {{.CLI_ARGS}}
+
   check:
     desc: Run checks on all packages
     deps: [setup]
