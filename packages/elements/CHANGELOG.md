@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.2.4 (2024-06-25)
+
+### Fixes
+
+- a-animation: fix out of memory error, do more cleanup
+
 ## 1.2.3 (2024-06-24)
 
 ### Fixes
