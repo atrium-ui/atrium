@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.2.5 (2024-06-25)
+
+### Fixes
+
+- a-animation: manually cleanup instance cache
+
 ## 1.2.4 (2024-06-25)
 
 ### Fixes
