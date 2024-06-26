@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.2.6 (2024-06-26)
+
+### Fixes
+
+- a-animation: fix recursion bug
+
 ## 1.2.5 (2024-06-25)
 
 ### Fixes
