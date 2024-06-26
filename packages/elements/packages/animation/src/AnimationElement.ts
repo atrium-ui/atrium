@@ -355,7 +355,7 @@ export class AnimationElement extends LitElement {
 
     // also cleanup other forgotten instances (TODO: why do they even exist?)
     for (const instance of AnimationElement.instanceCache.values()) {
-      if (!document.body.contains(instance)) {
+      if (instance !== this && !document.body.contains(instance)) {
         instance.cleanup();
       }
     }
