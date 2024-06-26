@@ -112,6 +112,13 @@ export class AnimationElement extends LitElement {
     window.removeEventListener("beforeunload", this.cleanup);
 
     this.cleanup();
+
+    // also cleanup other forgotten instances (TODO: why do they even exist?)
+    for (const instance of AnimationElement.instanceCache.values()) {
+      if (!document.body.contains(instance)) {
+        instance.cleanup();
+      }
+    }
   }
 
   //
@@ -351,13 +358,6 @@ export class AnimationElement extends LitElement {
       this.rive.cleanup();
       this.rive = undefined;
       AnimationElement.instanceCache.delete(this);
-    }
-
-    // also cleanup other forgotten instances (TODO: why do they even exist?)
-    for (const instance of AnimationElement.instanceCache.values()) {
-      if (instance !== this && !document.body.contains(instance)) {
-        instance.cleanup();
-      }
     }
   };
 
