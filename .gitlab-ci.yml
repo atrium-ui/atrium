@@ -22,12 +22,16 @@ check:
   stage: test
   except:
     - tags
+  only:
+    - main
   script: task check
 
 test:
   stage: test
   except:
     - tags
+  only:
+    - main
   script: task test
 
 merge_check:

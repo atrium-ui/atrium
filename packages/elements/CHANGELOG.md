@@ -1,5 +1,15 @@
 # @sv/elements
 
+## 1.3.0 (2024-06-27)
+
+### Features
+
+- advanced forms with selects and checkbox
+
+### Fixes
+
+- a-animation: fix default not loading
+
 ## 1.2.7 (2024-06-26)
 
 ### Fixes
