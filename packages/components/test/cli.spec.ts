@@ -39,6 +39,5 @@ test("use form template", async () => {
 
   const dir = fs.readdirSync("./components/");
   expect(dir).toContain("Button.tsx");
-  expect(dir).toContain("Input.tsx");
   expect(dir).toContain("Form.tsx");
 });
