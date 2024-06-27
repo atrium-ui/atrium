@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.2.0 (2024-06-27)
+
+### Features
+
+- added a switch
+
 ## 1.1.1 (2024-06-18)
 
 ### Fixes
