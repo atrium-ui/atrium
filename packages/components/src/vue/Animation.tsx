@@ -1,10 +1,7 @@
 /* @jsxImportSource vue */
 import { AnimationElement } from "@sv/elements/animation";
 import riveWASMResource from "@rive-app/canvas-advanced/rive.wasm?url";
-
-if (typeof window !== "undefined") {
-  AnimationElement.riveWasm = riveWASMResource;
-}
+AnimationElement.riveWasm = riveWASMResource;
 
 export function Animation(props: {
   src: string;

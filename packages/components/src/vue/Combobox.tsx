@@ -8,7 +8,7 @@ import { Icon } from "./Icon.jsx";
 
 export function Combobox(
   props: {
-    onChange: (value: string[]) => void;
+    onChange?: (value: string[]) => void;
     value: string[];
   },
   { slots },
@@ -18,7 +18,7 @@ export function Combobox(
       selected={props.value}
       class="relative inline-block"
       onInput={(e) => {
-        props.onChange(e.target?.value as string[]);
+        props.onChange?.(e.target?.value as string[]);
       }}
     >
       <Button variant="outline" slot="input">

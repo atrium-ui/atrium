@@ -184,7 +184,7 @@ export class AnimationElement extends LitElement {
   }
 
   static instanceCache = new Set<AnimationElement>();
-  static riveWasm = "https://unpkg.com/@rive-app/canvas-advanced@2.18.0/rive.wasm";
+  static riveWasm = "https://unpkg.com/@rive-app/canvas-advanced@2.7.8/rive.wasm";
   static wasm?: Promise<Blob>;
 
   //
