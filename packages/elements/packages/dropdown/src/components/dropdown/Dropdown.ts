@@ -43,7 +43,7 @@ export class Dropdown extends LitElement {
         outline: none;
 
         --dropdown-max-height: 200px;
-        --dropdown-speed: 0.15s;
+        --dropdown-speed: 75ms;
 				--dropdown-position: absolute;
       }
       :host([opened]) {

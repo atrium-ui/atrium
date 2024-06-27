@@ -1,6 +1,14 @@
 /* @jsxImportSource solid-js */
 import { twMerge } from "tailwind-merge";
 
+const inputVariants = {
+  default: [
+    "group w-full resize-y rounded-md border border-zinc-700 bg-transparent leading-normal px-3 py-1 hover:border-zinc-600",
+    "focus:border-zinc-500 outline-none focus:ring focus:ring-[currentColor]",
+  ],
+  error: ["border-red-600"],
+};
+
 export function Input(props: {
   class?: string;
   autofocus?: boolean;
@@ -34,10 +42,7 @@ export function Input(props: {
           required={props.required || undefined}
           placeholder={props.placeholder}
           value={props.value}
-          class={twMerge(
-            "group w-full resize-y rounded-md border border-zinc-700 bg-transparent px-3 py-1 outline-none focus:border-zinc-500 hover:border-zinc-600",
-            props.error ? "border-red-600" : "border-zinc-700",
-          )}
+          class={twMerge(inputVariants.default, props.error && inputVariants.error)}
           onChange={props.onChange}
           onInput={props.onInput}
           onInvalid={(e) => {
@@ -55,10 +60,7 @@ export function Input(props: {
           required={props.required || undefined}
           placeholder={props.placeholder}
           value={props.value}
-          class={twMerge(
-            "group w-full min-w-0 rounded-md border border-zinc-700 bg-transparent px-3 py-1 leading-normal outline-none focus:border-zinc-500 hover:border-zinc-600",
-            props.error ? "border-red-600" : "border-zinc-700",
-          )}
+          class={twMerge(inputVariants.default, props.error && inputVariants.error)}
           onChange={props.onChange}
           onKeyDown={props.onKeydown}
           onInput={props.onInput}

@@ -1,9 +1,13 @@
 /* @jsxImportSource vue */
 import { Form, FormField } from "@components/src/vue/Form";
+import { Input } from "@components/src/vue/Input";
+import { Select, SelectItem } from "@components/src/vue/Select";
+import { Checkbox } from "@components/src/vue/Checkbox";
 
 export function SomeForm() {
   return (
     <Form
+      class="w-[35rem] text-base"
       onSubmit={(data) => {
         console.info("Submit:", [...data]);
 
@@ -18,35 +22,106 @@ export function SomeForm() {
       <div class="grid grid-cols-2 gap-4">
         <FormField
           field={{
-            required: true,
-            type: "name",
             label: "Name",
             name: "name",
-            placeholder: "Name",
-            value: "",
           }}
-        />
+        >
+          <Input
+            {...{
+              required: true,
+              name: "name",
+              placeholder: "Albert",
+            }}
+          />
+        </FormField>
         <FormField
           field={{
-            required: true,
-            type: "email",
             label: "Email",
             name: "email",
-            placeholder: "Email",
-            value: "",
           }}
-        />
+        >
+          <Input
+            {...{
+              required: true,
+              type: "email",
+              name: "email",
+              placeholder: "mail@example.com",
+            }}
+          />
+        </FormField>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <FormField
+          field={{
+            label: "Name",
+            name: "name",
+          }}
+        >
+          <Select
+            {...{
+              required: true,
+              name: "name",
+              placeholder: "Select",
+            }}
+          >
+            <SelectItem class="opacity-50" value="">
+              Select
+            </SelectItem>
+            <SelectItem value="Option 1" />
+            <SelectItem value="Option 2" />
+            <SelectItem value="Option 3" />
+          </Select>
+        </FormField>
+
+        <FormField
+          field={{
+            label: "Name",
+            name: "name",
+          }}
+        >
+          <Select
+            {...{
+              class: "w-full",
+              required: true,
+              name: "name",
+              placeholder: "Select",
+            }}
+          >
+            <SelectItem class="opacity-50" value="">
+              Select
+            </SelectItem>
+            <SelectItem value="Option 1" />
+            <SelectItem value="Option 2" />
+            <SelectItem value="Option 3" />
+          </Select>
+        </FormField>
       </div>
 
       <FormField
         field={{
-          type: "textarea",
-          label: "Message",
+          label: "Message (optional)",
           name: "message",
-          placeholder: "Message",
-          value: "",
         }}
-      />
+      >
+        <Input
+          {...{
+            multiline: true,
+            name: "message",
+            placeholder: "Something...",
+          }}
+        />
+      </FormField>
+
+      <FormField
+        field={{
+          name: "message",
+        }}
+      >
+        <Checkbox required name="checkbox1">
+          <span>I agree to use this checkbox</span>
+        </Checkbox>
+      </FormField>
     </Form>
   );
 }

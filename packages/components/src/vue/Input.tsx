@@ -1,6 +1,14 @@
 /* @jsxImportSource vue */
 import { twMerge } from "tailwind-merge";
 
+const inputVariants = {
+  default: [
+    "group w-full resize-y rounded-md border border-zinc-700 bg-transparent leading-normal px-3 py-1 hover:border-zinc-600 focus:border-zinc-500",
+    "outline-none focus-visible:ring focus-visible:ring-zinc-500",
+  ],
+  error: ["border-red-600"],
+};
+
 export function Input(props: {
   class?: string;
   autofocus?: boolean;
@@ -12,7 +20,7 @@ export function Input(props: {
   error?: string;
   required?: boolean;
   readonly?: boolean;
-  password?: boolean;
+  type?: "password" | "text" | "email";
   multiline?: boolean;
   onInvalid?: (e: Event) => undefined | string | Error;
   onInput?: (e: Event) => void;
@@ -27,17 +35,14 @@ export function Input(props: {
 
       {props.multiline ? (
         <textarea
+          autofocus={props.autofocus}
           id={props.id}
           name={props.name}
-          autofocus={props.autofocus}
           readonly={props.readonly}
           required={props.required || undefined}
           placeholder={props.placeholder}
           value={props.value}
-          class={twMerge(
-            "w-full resize-y rounded-md border border-zinc-700 bg-transparent px-3 py-1 outline-none focus:border-zinc-500 hover:border-zinc-600",
-            props.error ? "border-red-600" : "border-zinc-700",
-          )}
+          class={twMerge(inputVariants.default, props.error && inputVariants.error)}
           onChange={props.onChange}
           onInput={props.onInput}
           onInvalid={(e) => {
@@ -47,18 +52,15 @@ export function Input(props: {
         />
       ) : (
         <input
-          type={props.password ? "password" : "text"}
+          autofocus={props.autofocus}
+          type={props.type}
           id={props.id}
           name={props.name}
-          autofocus={props.autofocus}
           readonly={props.readonly}
           required={props.required || undefined}
           placeholder={props.placeholder}
           value={props.value}
-          class={twMerge(
-            "w-full min-w-0 rounded-md border border-zinc-700 bg-transparent px-3 py-1 leading-normal outline-none focus:border-zinc-500 hover:border-zinc-600",
-            props.error ? "border-red-600" : "border-zinc-700",
-          )}
+          class={twMerge(inputVariants.default, props.error && inputVariants.error)}
           onChange={props.onChange}
           onKeydown={props.onKeydown}
           onInput={props.onInput}

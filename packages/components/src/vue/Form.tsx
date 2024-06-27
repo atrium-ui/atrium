@@ -1,9 +1,8 @@
 /* @jsxImportSource vue */
 import { ref, defineComponent } from "vue";
-import { Input } from "./Input.jsx";
-import { Button } from "@sv/components/src/vue/Button.jsx";
 import "@sv/elements/adaptive";
 import "@sv/elements/form";
+import { Button } from "./Button.jsx";
 
 export const Form = defineComponent(
   (
@@ -28,6 +27,7 @@ export const Form = defineComponent(
         const data = new FormData(form);
         const res = await props.onSubmit?.(data);
         success.value = res;
+        error.value = undefined;
       } catch (err: any) {
         error.value = err;
         console.error(error.value);
@@ -53,9 +53,9 @@ export const Form = defineComponent(
           </div>
         ) : (
           <form onSubmit={submit}>
-            <div class="flex flex-col gap-8">{slots.default?.()}</div>
+            <div class="flex flex-col gap-4">{slots.default?.()}</div>
 
-            <Button type="submit" class="mt-4 overflow-hidden">
+            <Button type="submit" class="mt-8 overflow-hidden">
               <a-adaptive>
                 <div class="flex items-center gap-2">
                   <span>Submit</span>
@@ -80,49 +80,27 @@ export const Form = defineComponent(
 );
 
 export const FormField = defineComponent(
-  (props: {
-    field: {
-      type: "text" | "name" | "email" | "textarea" | "checkbox" | "date";
-      description?: string;
-      label: string;
-      error?: string;
-      placeholder: string;
-      name: string;
-      required?: boolean;
-      value: string | boolean;
-    };
-  }) => {
-    const InputField = (props) => {
-      switch (props.type) {
-        case "text":
-        case "name":
-          return <Input {...props} />;
-        case "email":
-          return <Input type="email" {...props} />;
-        case "textarea":
-          return <Input multiline {...props} />;
-        case "checkbox":
-          return <Input type="checkbox" {...props} />;
-        case "date":
-          return <Input type="date" {...props} />;
-        default:
-          return <Input {...props} />;
-      }
-    };
-
+  (
+    props: {
+      field: {
+        name: string;
+        label?: string;
+        description?: string;
+        error?: string;
+      };
+    },
+    { slots },
+  ) => {
     return () => (
       <a-form-field>
-        <div class={`form-field-${props.field.type}`}>
-          <InputField
-            {...props.field}
-            label={
-              !props.field.description
-                ? `${props.field.label} ${props.field.required ? "" : "(optional)"}`
-                : null
-            }
-            id={props.field.name}
-            class={`form-field-input-${props.field.type}`}
-          />
+        <div>
+          {props.field.label && (
+            <div class="text-sm">
+              <label>{!props.field.description ? `${props.field.label}` : null}</label>
+            </div>
+          )}
+
+          {slots.default?.()}
 
           {props.field.description ? (
             <div class="form-field-description">

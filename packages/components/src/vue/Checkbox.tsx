@@ -6,8 +6,9 @@ import { Icon } from "./Icon";
 export const Checkbox = defineComponent(
   (
     props: {
-      id: string;
+      name: string;
       checked?: boolean;
+      required?: boolean;
       onChange?: (event: Event) => void;
     },
     { slots },
@@ -33,7 +34,7 @@ export const Checkbox = defineComponent(
           role="checkbox"
           aria-checked={checked.value}
           type="button"
-          aria-labelledby={`label_${props.id}`}
+          aria-labelledby={`label_${props.name}`}
           onClick={() => handleChange(!checked.value)}
           class="mt-[2px] h-6 w-6 cursor-pointer rounded-md border border-zinc-700 bg-transparent p-0 align-bottom hover:border-zinc-600"
         >
@@ -46,18 +47,20 @@ export const Checkbox = defineComponent(
         </button>
 
         <input
+          inert
           ref={input}
+          required={props.required}
           type="checkbox"
           class="hidden"
-          id={`input_${props.id}`}
-          name={props.id}
+          id={`input_${props.name}`}
+          name={props.name}
           checked={checked.value || undefined}
           onInput={(e: Event) => handleChange((e.target as HTMLInputElement).checked)}
         />
 
         <label
-          id={`label_${props.id}`}
-          for={`input_${props.id}`}
+          id={`label_${props.name}`}
+          for={`input_${props.name}`}
           class="cursor-pointer text-lg"
         >
           {slots.default?.()}
@@ -66,6 +69,6 @@ export const Checkbox = defineComponent(
     );
   },
   {
-    props: ["checked", "id", "onChange"],
+    props: ["checked", "name", "onChange", "required"],
   },
 );

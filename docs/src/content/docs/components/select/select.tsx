@@ -1,12 +1,12 @@
 /* @jsxImportSource vue */
-import { Select } from "@components/src/vue/Select";
+import { Select, SelectItem } from "@components/src/vue/Select";
 
 export default function () {
   return (
-    <Select value="Select">
-      <Select.Item value="Item 1" />
-      <Select.Item value="Item 2" />
-      <Select.Item value="Item 3" />
+    <Select name="select" placeholder="Select">
+      <SelectItem value="Item 1" />
+      <SelectItem value="Item 2" />
+      <SelectItem value="Item 3" />
     </Select>
   );
 }
