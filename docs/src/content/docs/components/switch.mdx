@@ -1,0 +1,34 @@
+---
+title: Switch
+---
+import { Example, Pills, Atrium } from "package:/components";
+import { Switch } from "@components/src/vue/Switch";
+
+<Pills>
+  <Atrium label="a-toggle" href="/atrium/elements/a-toggle" />
+</Pills>
+
+A switch.
+
+```bash
+npx @sv/components checkbox
+```
+
+## Example
+
+<Example code={`
+---
+import { Switch } from "./Switch.jsx";
+---
+
+<Switch id="checkbox1">
+  <span>I agree to use this checkbox</span>
+  <p class="text-base">This is still work in progress.</p>
+</Switch>
+`}>
+  <form>
+    <Switch client:only="vue" id="checkbox1" checked>
+      <span>Turn me on</span>
+    </Switch>
+  </form>
+</Example>
