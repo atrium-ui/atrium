@@ -1,0 +1,24 @@
+{
+  "name": "@atrium-ui/select",
+  "author": "atrium",
+  "contributors": [],
+  "private": true,
+  "description": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "tsup": {
+    "entry": ["src/index.ts"],
+    "format": ["esm", "cjs"],
+    "external": [
+      "lit",
+      "@sv/elements"
+    ],
+    "sourcemap": true,
+    "clean": true
+  }
+}
