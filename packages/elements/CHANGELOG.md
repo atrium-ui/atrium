@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.4.0 (2024-06-27)
+
+### Features
+
+- add a-transition element
+
 ## 1.3.0 (2024-06-27)
 
 ### Features

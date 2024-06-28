@@ -13,6 +13,11 @@ declare global {
  * - Accessible and styleable dropdown component
  * - Wraps the content in an a-expandable
  *
+ * @attribute direction (default: "down") - In what direction the dropdown openes
+ * @attribute opened (default: false) - Whether the dropdown is open
+ * @attribute disabled (default: false) - Whether the dropdown is disabled.
+ * @attribute selected (default: undefined) - The selected option.
+ *
  * @example
  * ```html
  * <a-dropdown>
@@ -21,8 +26,8 @@ declare global {
  *  </Button>
  *
  *  <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-800 p-1">
- *    <a-option value="Option 1">Option 1</a-option>
- *    <a-option value="Option 2">Option 2</a-option>
+ *    <a-option>Option 1</a-option>
+ *    <a-option>Option 2</a-option>
  *  </div>
  * </a-dropdown>
  * ```
@@ -68,32 +73,15 @@ export class Dropdown extends LitElement {
     `;
   }
 
-  render() {
-    return html`
-      <slot name="input" @click=${this.onClick}></slot>
-      <div class="dropdown-container" part="dropdown">
-        <a-expandable ?opened="${this.opened}">
-          <div class="dropdown" part="options">
-            <slot @click=${this.onOptionsClick} @slotchange=${this.onSlotChange}></slot>
-          </div>
-        </a-expandable>
-      </div>
-    `;
-  }
-
-  // In what direction the dropdown openes
   @property({ type: String, reflect: true })
   public direction: "up" | "down" = "down";
 
-  // The selected option.
   @property({ type: String, reflect: true })
-  public value?: string;
+  public selected?: string;
 
-  // Whether the dropdown is open
   @property({ type: Boolean, reflect: true })
   public opened = false;
 
-  // Whether the dropdown is disabled.// Whether the dropdown is disabled.
   @property({ type: Boolean, reflect: true })
   public disabled = false;
 
@@ -102,19 +90,12 @@ export class Dropdown extends LitElement {
 
   private options: OptionElement[] = [];
 
-  private input = document.createElement("input");
-
   public connectedCallback(): void {
     super.connectedCallback();
 
     this.addEventListener("focusout", this.onBlur);
     this.addEventListener("keydown", this.onKeyDown);
     this.addEventListener("keyup", this.onKeyUp);
-
-    this.append(this.input);
-    this.input.name = "testgin123";
-    this.input.style.display = "none";
-    this.input.required = true;
   }
 
   public disconnectedCallback(): void {
@@ -126,35 +107,35 @@ export class Dropdown extends LitElement {
   }
 
   public selectNext() {
-    const selectedElement = this.getOptionByValue(this.value);
+    const selectedElement = this.getOptionByValue(this.selected);
     const index = selectedElement ? this.options.indexOf(selectedElement) : -1;
     const nextIndex = Math.max(index - 1, 0);
     const opt = this.options[nextIndex];
     if (opt) {
-      this.value = this.getValueOfOption(opt);
+      this.selected = this.getValueOfOption(opt);
       this.updateOptionSelection();
     }
   }
 
   public selectPrev() {
-    const selectedElement = this.getOptionByValue(this.value);
+    const selectedElement = this.getOptionByValue(this.selected);
     const index = selectedElement ? this.options.indexOf(selectedElement) : -1;
     const nextIndex = Math.min(index + 1, this.options.length - 1);
     const opt = this.options[nextIndex];
     if (opt) {
-      this.value = this.getValueOfOption(opt);
+      this.selected = this.getValueOfOption(opt);
       this.updateOptionSelection();
     }
   }
 
   public reset() {
-    this.value = undefined;
+    this.selected = undefined;
     this.updateOptionSelection();
   }
 
   private submitSelected() {
-    if (this.value) {
-      const selectedOptionElement = this.getOptionByValue(this.value);
+    if (this.selected) {
+      const selectedOptionElement = this.getOptionByValue(this.selected);
       if (selectedOptionElement) {
         this.close();
         this.dispatchEvent(new DoropDownSelectEvent(selectedOptionElement));
@@ -203,8 +184,8 @@ export class Dropdown extends LitElement {
   }
 
   private scrollToSelected() {
-    if (this.value) {
-      const selectedOption = this.getOptionByValue(this.value);
+    if (this.selected) {
+      const selectedOption = this.getOptionByValue(this.selected);
       selectedOption?.scrollIntoView({ block: "nearest" });
     }
   }
@@ -249,7 +230,7 @@ export class Dropdown extends LitElement {
   private onKeyUp(event: KeyboardEvent) {
     switch (event.key) {
       case "Enter":
-        if (this.opened && this.value !== undefined) {
+        if (this.opened && this.selected !== undefined) {
           this.submitSelected();
         }
         break;
@@ -278,7 +259,7 @@ export class Dropdown extends LitElement {
     for (const child of this.options) {
       if (child === e.target || child.contains(e.target as HTMLElement)) {
         const value = child.getAttribute("value") || index.toString();
-        this.value = value;
+        this.selected = value;
         this.submitSelected();
         break;
       }
@@ -312,12 +293,25 @@ export class Dropdown extends LitElement {
     const options = this.options;
     for (const option of options) {
       const optionValue = this.getValueOfOption(option);
-      if (optionValue === this.value) {
+      if (optionValue === this.selected) {
         option.setAttribute("selected", "");
       } else {
         option.removeAttribute("selected");
       }
     }
+  }
+
+  render() {
+    return html`
+      <slot name="input" @click=${this.onClick}></slot>
+      <div class="dropdown-container" part="dropdown">
+        <a-expandable ?opened="${this.opened}">
+          <div class="dropdown" part="options">
+            <slot @click=${this.onOptionsClick} @slotchange=${this.onSlotChange}></slot>
+          </div>
+        </a-expandable>
+      </div>
+    `;
   }
 }
 

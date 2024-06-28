@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { LitElement, html } from "lit";
-import { property } from "lit/decorators.js";
+import { LitElement, html, css } from "lit";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -13,36 +12,135 @@ declare global {
   }
 }
 
+const globalTransitionStyles = `
+
+  @keyframes move-out {
+    to {
+      transform: translateX(-100px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes move-in {
+    from {
+      transform: translateX(200px);
+      opacity: 0;
+    }
+  }
+
+  ::view-transition-old(a-transition) {
+    animation: 0.33s ease both move-out;
+  }
+  ::view-transition-new(a-transition) {
+    animation: 0.33s ease both move-in;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+`;
+
+let globalStyles: HTMLStyleElement;
+
 /**
- * Transition element
+ * Transitions dom elements with the View Transition API.
  *
  * @example
  * ```html
  * <a-transition>
- *   <div>Content</div>
+ *   <div>Changing Content</div>
  * </a-transition>
  * ```
  */
 export class Transition extends LitElement {
-  // @property({ type: String, attribute: "active-attribute" })
-  // public activeAttribute = "selected";
+  // TODO: these should also work with page navigations
 
-  render() {
-    return html`<slot />`;
+  static get styles() {
+    return css`
+      :host {
+        view-transition-name: a-transition;
+      }
+    `;
   }
 
-  onChange() {
-    // @ts-ignore
-    const transition = document.startViewTransition(() => displayNewImage());
+  render() {
+    return html`<slot></slot>`;
+  }
+
+  observer = new MutationObserver(async () => {
+    if (!this.lock) {
+      this.lock = true;
+      await this.slotChangeCallback();
+      this.lock = false;
+    }
+  });
+
+  childrenCache?: Element[];
+  lock = false;
+
+  setChildReferences() {
+    this.childrenCache = Array.from(this.children);
   }
 
   connectedCallback(): void {
+    super.connectedCallback();
     // cache current dom nodes for later use
+
+    this.observer.observe(this, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+
+    if (!globalStyles) {
+      const styles = document.createElement("style");
+      styles.innerHTML = globalTransitionStyles;
+      document.head.appendChild(styles);
+      globalStyles = styles;
+    }
   }
 
-  slotChangeCallback() {
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+
+    this.observer.disconnect();
+  }
+
+  async slotChangeCallback() {
     // cache current dom nodes for later use
-    // mount old nodes, start transition, and mount new nodes again
+
+    const lastChildren = this.childrenCache;
+
+    this.setChildReferences();
+
+    if (lastChildren) {
+      // remove current children, that are stored in childrenCache
+      for (const child of this.children) {
+        child.remove();
+      }
+      // append last children to dom
+      for (const child of lastChildren) {
+        this.appendChild(child);
+      }
+
+      // start transition
+      // @ts-ignore
+      const transition = document.startViewTransition(() => {
+        // remove old children
+        for (const child of this.children) {
+          child.remove();
+        }
+        // remount new children
+        if (this.childrenCache) {
+          for (const child of this.childrenCache) {
+            this.appendChild(child);
+          }
+        }
+      });
+
+      await transition.finished;
+    }
   }
 }
 

@@ -4,7 +4,7 @@
   "contributors": [
     "luckydye"
   ],
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Atrium Elements",
   "type": "module",
   "scripts": {
@@ -111,6 +111,11 @@
       "import": "./packages/portal/dist/index.js",
       "require": "./packages/portal/dist/index.cjs",
       "types": "./packages/portal/src/index.ts"
+    },
+    "./transition": {
+      "import": "./packages/transition/dist/index.js",
+      "require": "./packages/transition/dist/index.cjs",
+      "types": "./packages/transition/src/index.ts"
     }
   }
 }
