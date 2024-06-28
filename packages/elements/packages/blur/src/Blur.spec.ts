@@ -32,3 +32,5 @@ describe(NODE_NAME, () => {
     expect(blur.enabled).toBe(true);
   });
 });
+
+// TODO: test scorlling inside blur content

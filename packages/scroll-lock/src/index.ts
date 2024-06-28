@@ -127,13 +127,11 @@ export class ScrollLock {
 
     if (this.enabled) {
       // if target is allowed to scroll do so
-      // biome-ignore lint/complexity/noForEach: <explanation>
-      this.options.allowElements.forEach((allowElement) => {
+      for (const allowElement of this.options.allowElements) {
         if (element.matches && e.target.matches(allowElement)) {
-          return true;
+          return false;
         }
-        return false;
-      });
+      }
 
       // prevent scroll on multi touch
       if (e.touches && e.touches.length > 1) {
@@ -171,7 +169,7 @@ export class ScrollLock {
               passive: false,
             }
           : undefined,
-      ); // useless?
+      );
 
       window.addEventListener(
         "wheel",
