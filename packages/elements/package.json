@@ -116,6 +116,11 @@
       "import": "./packages/transition/dist/index.js",
       "require": "./packages/transition/dist/index.cjs",
       "types": "./packages/transition/src/index.ts"
+    },
+    "./select": {
+      "import": "./packages/select/dist/index.js",
+      "require": "./packages/select/dist/index.cjs",
+      "types": "./packages/select/src/index.ts"
     }
   }
 }

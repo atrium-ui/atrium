@@ -15,16 +15,18 @@ declare global {
  *
  * @example
  * ```html
- * <a-select>
- *  <Button slot="input">
- *    <div class="w-[150px] text-left">{props.value}</div>
- *  </Button>
+ * <form onchange="console.log(event.target.value)" onsubmit="event.preventDefault()">
+ *  <a-select class="text-base">
+ *   <button type="button" slot="input" class="cursor-pointer">
+ *     <div class="w-[150px] text-left">Select</div>
+ *   </button>
  *
- *  <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-800 p-1">
- *    <a-option value="Option 1">Option 1</a-option>
- *    <a-option value="Option 2">Option 2</a-option>
- *  </div>
- * </a-select>
+ *   <div class="mt-1 border border-zinc-700 bg-zinc-800 p-1">
+ *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-1">Option 1</a-option>
+ *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-2">Option 2</a-option>
+ *   </div>
+ *  </a-select>
+ * </form>
  * ```
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-select/
@@ -163,7 +165,7 @@ export class Select extends LitElement {
       const selectedOptionElement = this.getOptionByValue(this.value);
       if (selectedOptionElement) {
         this.close();
-        this.dispatchEvent(new DoropDownSelectEvent(selectedOptionElement));
+        this.dispatchEvent(new SelectEvent(selectedOptionElement));
       }
     }
   }
