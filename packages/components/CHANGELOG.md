@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.2.1 (2024-06-28)
+
+### Fixes
+
+- update drawer component
+
 ## 1.2.0 (2024-06-27)
 
 ### Features
