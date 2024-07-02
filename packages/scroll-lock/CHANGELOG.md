@@ -1,5 +1,11 @@
 # @sv/scroll-lock
 
+## 1.0.1 (2024-06-28)
+
+### Fixes
+
+- allow elements option not working correctly
+
 ## 1.0.0 (2024-05-26)
 
 ## 0.1.8

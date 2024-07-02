@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.4.1 (2024-06-28)
+
+### Fixes
+
+- fix cant scroll inside blur content
+
 ## 1.4.0 (2024-06-27)
 
 ### Features

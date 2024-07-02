@@ -119,13 +119,14 @@ export const Drawer = defineComponent(
   { props: ["disabled", "dynamicHeight", "open", "onClose", "onCollapse", "onOpen"] },
 );
 
-class DrawerTrack extends Track {
+export class DrawerTrack extends Track {
   public traits: Trait[] = [
     new PointerTrait(),
     {
       id: "drawer",
       input(track: DrawerTrack, inputState: InputState) {
-        const openThreshold = window.innerHeight - 400;
+        const openThresholdFixed = window.innerHeight / 2;
+        const openThreshold = window.innerHeight - openThresholdFixed;
 
         if (track.position.y > openThreshold && !track.isOpen) {
           track.setOpen(true);
@@ -134,7 +135,18 @@ class DrawerTrack extends Track {
           track.setOpen(false);
         }
 
-        if (inputState.release.value && track.velocity.abs() < 3) {
+        if (track.grabbing || track.scrolling || track.target) return;
+        if (track.deltaVelocity.y >= 0) return;
+        if (track.isStatic) return;
+
+        const vel = Math.round(track.lastVelocity[track.currentAxis] * 10) / 10;
+        const power = Math.round(vel / 15);
+
+        if (power < 0) {
+          track.minimize();
+        } else if (power > 0) {
+          track.open();
+        } else {
           if (track.position.y > 400) {
             track.open();
           } else if (track.position.y > 40) {
@@ -151,13 +163,28 @@ class DrawerTrack extends Track {
   drag = 0.98;
   isOpen = false;
 
+  declare contentheight?: number;
+
+  get isStatic() {
+    return !!this.contentheight;
+  }
+
   constructor() {
     super();
     this.vertical = true;
   }
 
+  static get properties() {
+    return {
+      ...Track.properties,
+      contentheight: { type: Number, reflect: true },
+    };
+  }
+
   setOpen(value: boolean) {
     this.isOpen = value;
+
+    // dely event to prevent jank
     if (value === true) {
       this.dispatchEvent(new Event("open", { bubbles: true }));
     } else {
@@ -166,22 +193,28 @@ class DrawerTrack extends Track {
   }
 
   open(ease: Easing = "linear") {
+    this.acceleration.mul(0.25);
+    this.inputForce.mul(0.125);
     this.setTarget(this.getToItemPosition(1), ease);
   }
 
   minimize(ease: Easing = "linear") {
     let height = 200;
-    if (this.hasAttribute("contentheight")) {
+    if (this.isStatic) {
       const value = this.getAttribute("contentheight");
       const valueInt = value ? +value : Number.NaN;
       const openedPosition = this.getToItemPosition(1);
       height = valueInt > openedPosition.y ? openedPosition.y : valueInt;
     }
 
+    this.acceleration.mul(0.25);
+    this.inputForce.mul(0.125);
     this.setTarget([0, height], ease);
   }
 
   close(ease: Easing = "linear") {
+    this.acceleration.mul(0.25);
+    this.inputForce.mul(0.125);
     this.setTarget([0, 30], ease);
   }
 }
