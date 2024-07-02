@@ -42,16 +42,24 @@ To keep the amount of logic in Components small, Elements are built as custom-el
 
 These custom-elements are imported from node_modules, they do not use tailwind, their minimal styles are defined in regular css inside the element itself.
 
+### Limitations of custom-elements
+
+[Use custom-elements for what they are good at.](https://nolanlawson.com/2023/08/23/use-web-components-for-what-theyre-good-at/)
+
+- Custom-elements work best when they are completely self-contained.
+- They should not effect elements around itself.
+- Do not create DOM elements in custom-elements to avoid layout-shifts.
+- When fully client-side rendered, most of these limitations are not relevant.
+
+
 ### Server side rendering
 
 Unless specific plugins for Lit SSR are used, **Elements** are not fully server side rendered. The custom-element tags will exist in the markup (like *\<a-track\/\>*), but only on the client the markup of the [shadow-root](https://lit.dev/docs/components/shadow-dom/) is generated.
 
 This does not apply for the children of the Element, those are still rendered by the framework. Only the presentation of those children may vary from server to final hydrated client.
 
+
 ### Extending Elements
 
 Extending custom-element classes gives you the posibility to almost completly change or overwrite specific behaviours of a custom-element.
-
-[Read more](https://lit.dev/docs/composition/mixins/)
-
 To reduce complexity, this is not recommended, but if needed, available.
