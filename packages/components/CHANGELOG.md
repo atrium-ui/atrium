@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.3.0 (2024-07-02)
+
+### Features
+
+- update multiple components
+
 ## 1.2.1 (2024-06-28)
 
 ### Fixes

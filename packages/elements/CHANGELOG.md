@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.5.0 (2024-07-02)
+
+### Features
+
+- added a-select for select and combobox components
+
 ## 1.4.1 (2024-06-28)
 
 ### Fixes
