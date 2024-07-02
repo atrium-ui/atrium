@@ -9,73 +9,102 @@ const inputVariants = {
   error: ["border-red-600"],
 };
 
-export function Input(props: {
-  class?: string;
-  autofocus?: boolean;
-  placeholder?: string;
-  label?: string;
-  name?: string;
-  id?: string;
-  value?: string;
-  error?: string;
-  required?: boolean;
-  readonly?: boolean;
-  type?: "password" | "text" | "email";
-  multiline?: boolean;
-  onInvalid?: (e: Event) => undefined | string | Error;
-  onInput?: (e: Event) => void;
-  onChange?: (e: Event) => void;
-  onKeydown?: (e: KeyboardEvent) => void;
-}) {
-  return (
-    <div class={props.class}>
-      <div class="text-sm">
-        <label>{props.label}</label>
-      </div>
+import { defineComponent, ref } from "vue";
 
-      {props.multiline ? (
-        <textarea
-          autofocus={props.autofocus}
-          id={props.id}
-          name={props.name}
-          readonly={props.readonly}
-          required={props.required || undefined}
-          placeholder={props.placeholder}
-          value={props.value}
-          class={twMerge(inputVariants.default, props.error && inputVariants.error)}
-          onChange={props.onChange}
-          onInput={props.onInput}
-          onInvalid={(e) => {
-            const err = props.onInvalid?.(e);
-            e.preventDefault();
-          }}
-        />
-      ) : (
-        <input
-          autofocus={props.autofocus}
-          type={props.type}
-          id={props.id}
-          name={props.name}
-          readonly={props.readonly}
-          required={props.required || undefined}
-          placeholder={props.placeholder}
-          value={props.value}
-          class={twMerge(inputVariants.default, props.error && inputVariants.error)}
-          onChange={props.onChange}
-          onKeydown={props.onKeydown}
-          onInput={props.onInput}
-          onInvalid={(e) => {
-            const err = props.onInvalid?.(e);
-            e.preventDefault();
-          }}
-        />
-      )}
-
-      {props.error ? (
-        <div class="mt-1 text-red-600 text-sm">
-          <label>{props.error}</label>
+export const Input = defineComponent(
+  (
+    props: {
+      slot?: string;
+      class?: string;
+      autofocus?: boolean;
+      placeholder?: string;
+      label?: string;
+      name?: string;
+      id?: string;
+      value?: string;
+      error?: string;
+      required?: boolean;
+      readonly?: boolean;
+      type?: "password" | "text" | "email";
+      multiline?: boolean;
+      onInvalid?: (e: Event) => undefined | string | Error;
+      onInput?: (e: Event) => void;
+      onChange?: (e: Event) => void;
+      onKeydown?: (e: KeyboardEvent) => void;
+    },
+    { slots },
+  ) => {
+    return () => (
+      <div slot={props.slot} class={props.class}>
+        <div class="text-sm">
+          <label>{props.label}</label>
         </div>
-      ) : null}
-    </div>
-  );
-}
+
+        {props.multiline ? (
+          <textarea
+            autofocus={props.autofocus}
+            id={props.id}
+            name={props.name}
+            readonly={props.readonly}
+            required={props.required || undefined}
+            placeholder={props.placeholder}
+            value={props.value}
+            class={twMerge(inputVariants.default, props.error && inputVariants.error)}
+            onChange={props.onChange}
+            onInput={props.onInput}
+            onInvalid={(e) => {
+              const err = props.onInvalid?.(e);
+              e.preventDefault();
+            }}
+          />
+        ) : (
+          <input
+            autofocus={props.autofocus}
+            type={props.type}
+            id={props.id}
+            name={props.name}
+            readonly={props.readonly}
+            required={props.required || undefined}
+            placeholder={props.placeholder}
+            value={props.value}
+            class={twMerge(inputVariants.default, props.error && inputVariants.error)}
+            onChange={props.onChange}
+            onKeydown={props.onKeydown}
+            onInput={props.onInput}
+            onInvalid={(e) => {
+              const err = props.onInvalid?.(e);
+              e.preventDefault();
+            }}
+          />
+        )}
+
+        {props.error ? (
+          <div class="mt-1 text-red-600 text-sm">
+            <label>{props.error}</label>
+          </div>
+        ) : null}
+      </div>
+    );
+  },
+  {
+    props: [
+      "slot",
+      "class",
+      "autofocus",
+      "placeholder",
+      "label",
+      "name",
+      "id",
+      "value",
+      "error",
+      "required",
+      "readonly",
+      "type",
+      "multiline",
+      "onInvalid",
+      "onInput",
+      "onChange",
+      "onKeydown",
+    ],
+  },
+);

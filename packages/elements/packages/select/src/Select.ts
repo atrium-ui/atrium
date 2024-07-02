@@ -184,8 +184,6 @@ export class Select extends LitElement {
   public open() {
     if (this.disabled) return;
 
-    console.error("open");
-
     this.dispatchEvent(new Event("open"));
     this.opened = true;
     this.requestUpdate();
