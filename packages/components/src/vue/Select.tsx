@@ -2,7 +2,7 @@
 import "@sv/elements/dropdown";
 import "@sv/elements/expandable";
 import { Button } from "./Button.jsx";
-import { defineComponent, ref, nextTick } from "vue";
+import { defineComponent, ref } from "vue";
 import { twMerge } from "tailwind-merge";
 
 export const Select = defineComponent(
@@ -17,15 +17,15 @@ export const Select = defineComponent(
     { slots },
   ) => {
     const value = ref(props.value);
-    const input = ref<HTMLInputElement>();
 
     return () => (
       <div>
-        <a-dropdown
+        <a-select
+          required={props.required}
+          value={value.value}
+          name={props.name}
           onSelect={async (ev) => {
             value.value = ev.option?.value;
-            await nextTick();
-            input.value?.dispatchEvent(new Event("input", { bubbles: true }));
           }}
           class="relative inline-block w-full"
         >
@@ -36,16 +36,7 @@ export const Select = defineComponent(
           <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-800 p-1">
             {slots.default?.()}
           </div>
-        </a-dropdown>
-
-        <input
-          ref={input}
-          inert
-          class="hidden"
-          required={props.required}
-          name={props.name}
-          value={value.value}
-        />
+        </a-select>
       </div>
     );
   },
@@ -61,18 +52,12 @@ export const SelectItem = function Item(
   return (
     <a-option
       class={twMerge(
-        "rounded-md [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600",
+        "block cursor-pointer rounded px-2 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600",
         props.class,
       )}
       value={props.value}
     >
-      <button
-        inert
-        type="button"
-        class="group flex w-full cursor-pointer items-center justify-start bg-transparent"
-      >
-        <div>{slots.default?.() || props.value}</div>
-      </button>
+      <div>{slots.default?.() || props.value}</div>
     </a-option>
   );
 };

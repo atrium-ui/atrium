@@ -35,17 +35,7 @@ export default {
     {
       label: "Components",
       collapsed: false,
-      items: [
-        {
-          label: "Templates",
-          collapsed: false,
-          autogenerate: { directory: "components" },
-        },
-        {
-          label: "Design Reference",
-          link: "/design",
-        },
-      ],
+      autogenerate: { directory: "components" },
     },
     {
       label: "Elements",

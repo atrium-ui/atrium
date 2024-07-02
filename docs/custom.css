@@ -1,24 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   --sl-content-width: 900px;
-
   --sl-sidebar-width: 16rem;
-
-  --sl-text-xs: 0.8125rem;
-  --sl-text-sm: 0.875rem;
-  --sl-text-base: 1.125rem;
-  --sl-text-lg: 1.125rem;
-  --sl-text-xl: 1.25rem;
-  --sl-text-2xl: 1.5rem;
-  --sl-text-3xl: 1.65rem;
-  --sl-text-4xl: 2.1875rem;
-  --sl-text-5xl: 3rem;
-  --sl-text-6xl: 4rem;
 
   -webkit-tap-highlight-color: transparent;
 }
@@ -36,10 +22,6 @@
 
 .sl-markdown-content p {
   max-width: 800px;
-}
-
-.sidebar .top-level .large {
-  font-weight: normal;
 }
 
 .box {
@@ -65,12 +47,6 @@
   font-size: var(--sl-text-base);
 }
 
-/* Sheets fix */
-.main-pane {
-  z-index: 1;
-  position: relative;
-}
-
 .loading-indicator {
   display: inline-block;
   width: 1rem;
@@ -91,6 +67,7 @@
   counter-reset: content-counter;
 }
 
+/* Slides count for Slider */
 .counted {
   position: relative;
 }
