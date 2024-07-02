@@ -158,7 +158,6 @@ export class Select extends LitElement {
   private setValue(value: string | undefined) {
     this.value = value;
     this.updateOptionSelection();
-    this.input.value = value || "";
   }
 
   public reset() {
@@ -167,6 +166,8 @@ export class Select extends LitElement {
 
   private submitSelected() {
     if (this.value) {
+      this.input.value = this.value;
+      this.input.dispatchEvent(new Event("input"));
       const selectedOptionElement = this.getOptionByValue(this.value);
       if (selectedOptionElement) {
         this.close();

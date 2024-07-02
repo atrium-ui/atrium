@@ -52,7 +52,7 @@ export const SelectItem = function Item(
   return (
     <a-option
       class={twMerge(
-        "block cursor-pointer rounded-md px-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600",
+        "block cursor-pointer rounded px-2 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600",
         props.class,
       )}
       value={props.value}
