@@ -13,10 +13,10 @@ declare global {
  * - Accessible and styleable dropdown component
  * - Wraps the content in an a-expandable
  *
- * @example
+ * @example Select
  * ```html
  * <form onchange="console.log(event.target.value)" onsubmit="event.preventDefault()">
- *  <a-select class="text-base">
+ *  <a-select name="test" class="text-base">
  *   <button type="button" slot="input" class="cursor-pointer">
  *     <div class="w-[150px] text-left">Select</div>
  *   </button>
@@ -24,6 +24,8 @@ declare global {
  *   <div class="mt-1 border border-zinc-700 bg-zinc-800 p-1">
  *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-1">Option 1</a-option>
  *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-2">Option 2</a-option>
+ *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-3">Option 3</a-option>
+ *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-4">Option 4</a-option>
  *   </div>
  *  </a-select>
  * </form>
@@ -139,8 +141,7 @@ export class Select extends LitElement {
     const nextIndex = Math.max(index - 1, 0);
     const opt = this.options[nextIndex];
     if (opt) {
-      this.value = this.getValueOfOption(opt);
-      this.updateOptionSelection();
+      this.setValue(this.getValueOfOption(opt));
     }
   }
 
@@ -150,14 +151,18 @@ export class Select extends LitElement {
     const nextIndex = Math.min(index + 1, this.options.length - 1);
     const opt = this.options[nextIndex];
     if (opt) {
-      this.value = this.getValueOfOption(opt);
-      this.updateOptionSelection();
+      this.setValue(this.getValueOfOption(opt));
     }
   }
 
-  public reset() {
-    this.value = undefined;
+  private setValue(value: string | undefined) {
+    this.value = value;
     this.updateOptionSelection();
+    this.input.value = value || "";
+  }
+
+  public reset() {
+    this.setValue(undefined);
   }
 
   private submitSelected() {
@@ -178,6 +183,8 @@ export class Select extends LitElement {
 
   public open() {
     if (this.disabled) return;
+
+    console.error("open");
 
     this.dispatchEvent(new Event("open"));
     this.opened = true;
@@ -263,11 +270,6 @@ export class Select extends LitElement {
         break;
       case "Escape":
         this.close();
-        break;
-      case "Tab":
-        if (!this.opened) {
-          this.open();
-        }
         break;
     }
   }

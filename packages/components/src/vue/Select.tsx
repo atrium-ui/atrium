@@ -21,7 +21,7 @@ export const Select = defineComponent(
 
     return () => (
       <div>
-        <a-dropdown
+        <a-select
           onSelect={async (ev) => {
             value.value = ev.option?.value;
             await nextTick();
@@ -36,7 +36,7 @@ export const Select = defineComponent(
           <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-800 p-1">
             {slots.default?.()}
           </div>
-        </a-dropdown>
+        </a-select>
 
         <input
           ref={input}

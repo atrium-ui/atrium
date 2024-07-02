@@ -161,9 +161,12 @@ async function Methods({ doc, symbol }: { doc: ProjectReflection; symbol: string
 function Example({ doc, symbol }) {
   const obj = declaration(doc, symbol)?.comment;
   const content = obj?.blockTags.find(t => t.tag === "@example")?.content;
-  const lines = content?.[0]?.text.split("\n");
-  const code = lines?.slice(1, lines.length - 1).join("\n");
-  return code;
+
+  return content?.map(content => {
+    const lines = content?.text.split("\n");
+    const code = lines?.slice(1, lines.length - 1).join("\n");
+    return code;
+  });
 }
 
 const doc = await parse({
@@ -198,10 +201,12 @@ const source = dec?.sources?.[0];
     example ? (
       <div>
         <h3>Example</h3>
-        <div class="not-content box">
+        <!-- <div class="not-content box">
           <Fragment set:html={example} />
-        </div>
-        <Code code={example} lang="js" />
+        </div> -->
+        {example.map(exp => {
+          return <Code code={exp} lang="js" />;
+        })}
       </div>
     ) : (
       ""

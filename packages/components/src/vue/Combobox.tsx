@@ -1,10 +1,10 @@
 /* @jsxImportSource vue */
-import "@sv/elements/dropdown";
+import "@sv/elements/select";
 import "@sv/elements/toggle";
 import "@sv/elements/expandable";
 
-import { Button } from "./Button.jsx";
 import { Icon } from "./Icon.jsx";
+import { Input } from "./Input.jsx";
 
 export function Combobox(
   props: {
@@ -14,27 +14,29 @@ export function Combobox(
   { slots },
 ) {
   return (
-    <a-dropdown
+    <a-select
       selected={props.value}
       class="relative inline-block"
       onInput={(e) => {
         props.onChange?.(e.target?.value as string[]);
       }}
     >
-      <Button variant="outline" slot="input">
-        <div class="w-[150px] overflow-hidden text-ellipsis whitespace-nowrap text-left">
-          {Array.isArray(props.value)
-            ? props.value?.length > 0
-              ? props.value?.join(", ")
-              : "Select"
-            : props.value}
-        </div>
-      </Button>
+      <div slot="input">
+        <Input>
+          <div class="w-[150px] overflow-hidden text-ellipsis whitespace-nowrap text-left">
+            {Array.isArray(props.value)
+              ? props.value?.length > 0
+                ? props.value?.join(", ")
+                : "Select"
+              : props.value}
+          </div>
+        </Input>
+      </div>
 
       <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-800 p-1">
         <a-toggle multiple>{slots.default?.()}</a-toggle>
       </div>
-    </a-dropdown>
+    </a-select>
   );
 }
 
