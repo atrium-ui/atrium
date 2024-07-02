@@ -35,7 +35,11 @@ export const Input = defineComponent(
     { slots },
   ) => {
     return () => (
-      <div slot={props.slot} class={props.class}>
+      <div
+        // @ts-ignore
+        slot={props.slot}
+        class={props.class}
+      >
         <div class="text-sm">
           <label>{props.label}</label>
         </div>
