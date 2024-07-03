@@ -31,6 +31,18 @@ const file = Astro.props.code?.trim();
       <Icon class="hidden group-[[opened]]:block" name="collapse" />
     </button>
 
-    <Code code={file} lang="tsx" />
+    <div ssr-hidden>
+      <Code code={file} lang="tsx" />
+    </div>
   </a-expandable>
 </div>
+
+<script>
+  document.body.classList.add("hydrated");
+</script>
+
+<style is:global>
+  body:not(.hydrated) [ssr-hidden] {
+    display: none;
+  }
+</style>
