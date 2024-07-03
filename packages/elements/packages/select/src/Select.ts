@@ -78,7 +78,7 @@ export class Select extends LitElement {
       <div class="dropdown-container" part="dropdown">
         <a-expandable ?opened="${this.opened}">
           <div class="dropdown" part="options">
-            <slot @click=${this.onOptionsClick} @slotchange=${this.onSlotChange}></slot>
+            <slot @click=${this.onOptionsClick}></slot>
           </div>
         </a-expandable>
       </div>
@@ -116,6 +116,8 @@ export class Select extends LitElement {
 
   private input = document.createElement("input");
 
+  private observer?: MutationObserver;
+
   public connectedCallback(): void {
     super.connectedCallback();
 
@@ -125,10 +127,17 @@ export class Select extends LitElement {
 
     if (this.name) {
       this.append(this.input);
-      this.input.style.display = "none";
-      this.input.name = this.name;
-      this.input.required = this.required;
     }
+
+    this.observer = new MutationObserver(() => {
+      this.onSlotChange();
+    });
+
+    this.observer.observe(this, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
   }
 
   public disconnectedCallback(): void {
@@ -137,6 +146,10 @@ export class Select extends LitElement {
     this.removeEventListener("focusout", this.onBlur);
     this.removeEventListener("keydown", this.onKeyDown);
     this.removeEventListener("keyup", this.onKeyUp);
+
+    this.observer?.disconnect();
+
+    this.input.remove();
   }
 
   public selectNext() {
@@ -171,7 +184,8 @@ export class Select extends LitElement {
   private submitSelected() {
     if (this.value) {
       this.input.value = this.value;
-      this.input.dispatchEvent(new Event("input"));
+      this.input.dispatchEvent(new Event("input", { bubbles: true }));
+      this.input.dispatchEvent(new Event("change", { bubbles: true }));
       const selectedOptionElement = this.getOptionByValue(this.value);
       if (selectedOptionElement) {
         this.close();
@@ -261,6 +275,11 @@ export class Select extends LitElement {
       case "Enter":
         event.preventDefault();
         break;
+      default:
+        if (event.key) {
+          console.log("search for item with", event.key);
+        }
+        break;
     }
   }
 
@@ -319,6 +338,12 @@ export class Select extends LitElement {
 
   protected updated(): void {
     this.updateOptionSelection();
+
+    if (this.name) {
+      this.input.style.display = "none";
+      this.input.name = this.name;
+      this.input.required = this.required;
+    }
   }
 
   private updateOptionSelection() {
