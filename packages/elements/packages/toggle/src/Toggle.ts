@@ -1,5 +1,5 @@
-import { type HTMLTemplateResult, LitElement, css, html } from "lit";
-import { query } from "lit/decorators.js";
+import { LitElement, type PropertyValues, css, html } from "lit";
+import { property } from "lit/decorators/property.js";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -7,122 +7,97 @@ declare global {
   }
 }
 
-/**
- * - Inherits the size of its child
- * - Automatically reacts to changes in the child’s size
- * - Animated by default
- *
- * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-adaptive/
- */
-export class ToggleElement extends LitElement {
-  public static get styles() {
-    return [
-      css`
-        :host {
-          display: block;
-        }
-        .content {
-          display: inherit;
-        }
-      `,
-    ];
-  }
-
-  observer!: MutationObserver;
-
-  connectedCallback() {
-    super.connectedCallback();
-
-    if (typeof MutationObserver !== "undefined") {
-      this.observer = new MutationObserver((cahgnes) => {
-        this.requestUpdate();
-      });
-      this.observer.observe(this, {
-        subtree: true,
-        childList: true,
-        characterData: true,
-      });
-    }
-
-    window.addEventListener("resize", this.onResize);
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback();
-    window.removeEventListener("resize", this.onResize);
-
-    if (this.observer) this.observer.disconnect();
-  }
-
-  onResize = () => {
-    this.lastHeight = this.content?.offsetHeight;
-    this.lastWidth = this.content?.offsetWidth;
-  };
-
-  @query("slot")
-  content!: HTMLElement;
-
-  lastHeight = this.offsetHeight;
-  lastWidth = this.offsetWidth;
-
-  initial = false;
-
-  async updated() {
-    const height = this.offsetHeight;
-    const width = this.offsetWidth;
-
-    if (!this.initial) {
-      this.initial = true;
-      this.lastHeight = height;
-      this.lastWidth = width;
-      return;
-    }
-
-    if (height && width) {
-      await this.animate(
-        [
-          {
-            height: `${this.lastHeight}px`,
-            width: `${this.lastWidth}px`,
-          },
-          {
-            height: `${height}px`,
-            width: `${width}px`,
-          },
-        ],
-        {
-          duration: 200,
-          easing: "ease-out",
-        },
-      ).finished;
-    }
-
-    this.lastHeight = height;
-    this.lastWidth = width;
-  }
-
-  protected render(): HTMLTemplateResult {
-    return html`
-      <slot class="content">
-        <span>X</span>
-      </slot>
-    `;
-  }
-}
-
-customElements.define("a-toggle", ToggleElement);
-
 // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/attachInternals
 // https://web.dev/articles/more-capable-form-controls
 // https://developer.mozilla.org/en-US/docs/Web/API/FormDataEvent
 
-export class SimpleElement extends LitElement {
-  static styles = css`p { color: blue }`;
-
+/**
+ * A toggle is a button that can be toggled between two states. Also integrates into forms well.
+ * - checkboxes
+ * - switches
+ * - toggle button
+ *
+ * @customEvent change - When value changed.
+ * @customEvent input - When value changed.
+ *
+ * @example
+ * ```html
+ * <a-toggle
+ *   class="m-1 p-2 leading-none cursor-pointer border hover:border-zinc-600 border-zinc-700 bg-zinc-800 focus:ring-4 [&[value='true']]:bg-zinc-700"
+ *   name="true"
+ *   value="true"
+ * >
+ *   <span slot="true">Yes</span>
+ *   <span slot="false">No</span>
+ * </a-toggle>
+ * ```
+ *
+ * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-toggle/
+ */
+export class ToggleElement extends LitElement {
   static formAssociated = true;
 
-  private _internals: ElementInternals | undefined;
+  static styles = css`
+    :host {
+      display: inline-block;
 
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+    }
+
+    button {
+      pointer-events: none;
+      appearance: none;
+      border: none;
+      background: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    button:focus {
+      outline: none;
+    }
+  `;
+
+  /**
+   * FormData name of the field.
+   */
+  @property({ type: String })
+  public name?: string;
+
+  /**
+   * The value of the field, which is submitted with the form data.
+   */
+  @property({ type: String, reflect: true })
+  public value = "false";
+
+  protected updated(_changedProperties: PropertyValues): void {
+    if (_changedProperties.has("value")) {
+      if (this._internals) {
+        this._internals?.setFormValue(this._value.toString());
+      }
+
+      this.dispatchEvent(
+        new CustomEvent("change", { detail: this._value, bubbles: true }),
+      );
+      this.dispatchEvent(
+        new CustomEvent("input", { detail: this._value, bubbles: true }),
+      );
+    }
+  }
+
+  /**
+   * Toggles the value.
+   */
+  public toggle() {
+    this.value = String(!this._value);
+  }
+
+  /**
+   * Returns the form associated with the element.
+   */
   public get form() {
     if (this._internals) {
       return this._internals.form;
@@ -139,67 +114,107 @@ export class SimpleElement extends LitElement {
     return undefined;
   }
 
-  constructor() {
-    super();
-    this._internals = this.attachInternals?.();
+  private _internals: ElementInternals | undefined;
+
+  private get _value() {
+    if (this.value === "true" || this.value === "on") {
+      return true;
+    }
+    if (this.value === "false") {
+      return false;
+    }
+    return false;
   }
 
-  _value = 123;
+  private onFormData = (e) => {
+    if (this.name) {
+      e.formData.set(this.name, this._value.toString());
+    }
+  };
+
+  private onClick = (e) => {
+    this.toggle();
+  };
+
+  private onKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      this.toggle();
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
 
   connectedCallback() {
     super.connectedCallback();
 
+    this.addEventListener("click", this.onClick);
+    this.addEventListener("keydown", this.onKeyDown);
+
+    this._internals = this.attachInternals?.();
+
     if (!this._internals) {
       // a little higher support range
-      this.form?.addEventListener("formdata", (e) => {
-        e.formData.set("field1", this._value.toString());
-      });
+      this.form?.addEventListener("formdata", this.onFormData);
     } else {
       this._internals?.setFormValue(this._value.toString());
     }
   }
 
-  get value() {
-    return this._value;
+  disconnectedCallback(): void {
+    this.removeEventListener("click", this.onClick);
+    this.removeEventListener("keydown", this.onKeyDown);
+
+    if (!this._internals) {
+      this.form?.removeEventListener("formdata", this.onFormData);
+    }
+
+    super.disconnectedCallback();
   }
 
   render() {
-    return html`<p>Hello, ${this._value}!</p>`;
+    return html`
+      <button type="button">
+        <slot data-value=${this.value} name=${this._value === true ? "true" : "false"} />
+        <slot />
+      </button>
+    `;
   }
 }
 
-customElements.define("simple-element", SimpleElement);
+customElements.define("a-toggle", ToggleElement);
 
-export class ModernSimpleElement extends LitElement {
-  static styles = css`p { color: blue }`;
+//
+// Using only the form internals api
+// export class ModernSimpleElement extends LitElement {
+//   static styles = css`p { color: blue }`;
 
-  static formAssociated = true;
+//   static formAssociated = true;
 
-  private _internals: ElementInternals | undefined;
+//   private _internals: ElementInternals | undefined;
 
-  public get form() {
-    return this._internals?.form;
-  }
+//   public get form() {
+//     return this._internals?.form;
+//   }
 
-  constructor() {
-    super();
-    this._internals = this.attachInternals?.();
-  }
+//   constructor() {
+//     super();
+//     this._internals = this.attachInternals?.();
+//   }
 
-  _value = 456;
+//   _value = 456;
 
-  connectedCallback() {
-    super.connectedCallback();
-    this._internals?.setFormValue(this._value.toString());
-  }
+//   connectedCallback() {
+//     super.connectedCallback();
+//     this._internals?.setFormValue(this._value.toString());
+//   }
 
-  get value() {
-    return this._value;
-  }
+//   get value() {
+//     return this._value;
+//   }
 
-  render() {
-    return html`<p>Hello, ${this._value}!</p>`;
-  }
-}
+//   render() {
+//     return html`<p>Hello, ${this._value}!</p>`;
+//   }
+// }
 
-customElements.define("modern-element", ModernSimpleElement);
+// customElements.define("a-toggle-form", ModernSimpleElement);
