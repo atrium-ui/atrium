@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.5.2 (2024-07-03)
+
+### Fixes
+
+- a-select: observe mutations for a-options
+
 ## 1.5.1 (2024-07-03)
 
 ### Fixes
