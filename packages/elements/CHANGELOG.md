@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.5.1 (2024-07-03)
+
+### Fixes
+
+- a-select: input fixed to required
+
 ## 1.5.0 (2024-07-02)
 
 ### Features
