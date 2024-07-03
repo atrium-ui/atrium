@@ -1,6 +1,5 @@
 /* @jsxImportSource vue */
 import { defineComponent, ref, effect } from "vue";
-import "@sv/elements/toggle";
 
 export const Switch = defineComponent(
   (
