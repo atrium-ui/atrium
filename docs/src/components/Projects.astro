@@ -15,7 +15,7 @@ async function getProject() {
     },
   );
   const tree = await res.json();
-  const project = tree["1455"];
+  const project = tree["1560"];
 
   for (const dep of project.dependents) {
     projects.add(dep.project.gitlabId);
