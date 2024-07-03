@@ -8,8 +8,6 @@ import { Example, Atrium, ComponentHeader } from "package:/components";
   A styles input with error states and label.
 </ComponentHeader>
 
-## Example
-
 <Example code={`
 ---
 import { Input } from "./Input.jsx";
@@ -19,7 +17,7 @@ import { Input } from "./Input.jsx";
 <br />
 <Input placeholder="Text" label="Input" error="Can not be empty" />
 `}>
-  <div>
+  <div class="max-w-[300px]">
     <Input placeholder="Text" label="Input" client:only="vue" />
     <br />
     <Input placeholder="Text" label="Input" error="Can not be empty" client:only="vue" />

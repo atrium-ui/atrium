@@ -1,9 +1,12 @@
 import type starlight from "@astrojs/starlight";
 
-export default {
+const config: Parameters<typeof starlight>[0] = {
   favicon: "favicon.png",
   title: "Atrium",
   customCss: ["./custom.css"],
+  components: {
+    PageFrame: "./src/components/PageFrame.astro",
+  },
   logo: {
     dark: "./assets/logo-dark.svg",
     light: "./assets/logo-light.svg",
@@ -13,6 +16,7 @@ export default {
   social: {
     gitlab: "https://gitlab.s-v.de/svp/atrium",
   },
+  tableOfContents: false,
   sidebar: [
     {
       label: "Getting Started",
@@ -47,10 +51,16 @@ export default {
       collapsed: false,
       autogenerate: { directory: "packages" },
     },
-    {
-      label: "Experimental",
-      collapsed: true,
-      autogenerate: { directory: "experimental" },
-    },
   ],
-} satisfies Parameters<typeof starlight>[0];
+};
+
+if (import.meta.env.DEV) {
+  config.sidebar?.unshift({
+    label: "Development",
+    badge: "Dev",
+    collapsed: false,
+    autogenerate: { directory: "experimental" },
+  });
+}
+
+export default config;

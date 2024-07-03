@@ -42,11 +42,6 @@
       "require": "./packages/toggle/dist/index.cjs",
       "types": "./packages/toggle/src/index.ts"
     },
-    "./time": {
-      "import": "./packages/time/dist/index.js",
-      "require": "./packages/time/dist/index.cjs",
-      "types": "./packages/time/src/index.ts"
-    },
     "./expandable": {
       "import": "./packages/expandable/dist/index.js",
       "require": "./packages/expandable/dist/index.cjs",
@@ -56,11 +51,6 @@
       "import": "./packages/dropdown/dist/index.js",
       "require": "./packages/dropdown/dist/index.cjs",
       "types": "./packages/dropdown/src/index.ts"
-    },
-    "./pager": {
-      "import": "./packages/pager/dist/index.js",
-      "require": "./packages/pager/dist/index.cjs",
-      "types": "./packages/pager/src/index.ts"
     },
     "./track": {
       "import": "./packages/track/dist/index.js",
@@ -77,20 +67,25 @@
       "require": "./packages/popover/dist/index.cjs",
       "types": "./packages/popover/src/index.ts"
     },
-    "./range": {
-      "import": "./packages/range/dist/index.js",
-      "require": "./packages/range/dist/index.cjs",
-      "types": "./packages/range/src/index.ts"
-    },
     "./animation": {
       "import": "./packages/animation/dist/index.js",
       "require": "./packages/animation/dist/index.cjs",
       "types": "./packages/animation/src/index.ts"
     },
-    "./adaptive": {
-      "import": "./packages/adaptive/dist/index.js",
-      "require": "./packages/adaptive/dist/index.cjs",
-      "types": "./packages/adaptive/src/index.ts"
+    "./time": {
+      "import": "./packages/time/dist/index.js",
+      "require": "./packages/time/dist/index.cjs",
+      "types": "./packages/time/src/index.ts"
+    },
+    "./pager": {
+      "import": "./packages/pager/dist/index.js",
+      "require": "./packages/pager/dist/index.cjs",
+      "types": "./packages/pager/src/index.ts"
+    },
+    "./range": {
+      "import": "./packages/range/dist/index.js",
+      "require": "./packages/range/dist/index.cjs",
+      "types": "./packages/range/src/index.ts"
     },
     "./filter": {
       "import": "./packages/filter/dist/index.js",
@@ -121,6 +116,11 @@
       "import": "./packages/select/dist/index.js",
       "require": "./packages/select/dist/index.cjs",
       "types": "./packages/select/src/index.ts"
+    },
+    "./scroll": {
+      "import": "./packages/scroll/dist/index.js",
+      "require": "./packages/scroll/dist/index.cjs",
+      "types": "./packages/scroll/src/index.ts"
     }
   }
 }

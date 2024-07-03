@@ -7,10 +7,7 @@ export interface Props {
 const props = Astro.props;
 ---
 
-<a
-  href={props.href}
-  class="flex gap-1 rounded-lg bg-zinc-800 px-2 py-1 leading-none no-underline hover:bg-zinc-700"
->
+<a href={props.href} class="pill">
   <svg
     width="1em"
     height="1em"
@@ -36,5 +33,5 @@ const props = Astro.props;
       stroke="currentColor"
       stroke-width="2"></path>
   </svg>
-  <span class="align-bottom text-[#eee] text-xs">{props.label}</span>
+  <span class="align-bottom text-[#eee]">{props.label}</span>
 </a>

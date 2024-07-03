@@ -16,23 +16,15 @@ import { Example, ComponentHeader } from "package:/components";
  A button.
 </ComponentHeader>
 
-## Examples
-
-### Default
-
-<Example code={DefaultButtonVueRaw}>
+<Example title="Default" code={DefaultButtonVueRaw}>
   <DefaultButtonVue client:only="vue" />
 </Example>
 
-### Outline
-
-<Example code={OutlineButtonVueRaw}>
+<Example title="Outline" code={OutlineButtonVueRaw}>
   <OutlineButtonVue client:only="vue" />
 </Example>
 
-### Ghost
-
-<Example code={GhostButtonVueRaw}>
+<Example title="Ghost" code={GhostButtonVueRaw}>
   <GhostButtonVue client:only="vue" />
 </Example>
 
@@ -44,8 +36,6 @@ import { Example, ComponentHeader } from "package:/components";
 Links are not buttons and buttons are not links. Links have hrefs and buttons do not, so having props that apply only in a certain variation is confusing.
 
 But sometimes you need a link that looks like a button. So we have a separate Link component with a button variant. You can replace the a tag inside this component with a framework specific router link.
-
-### Link
 
 <Example code={LinkVueRaw}>
   <LinkVue client:only="vue" />

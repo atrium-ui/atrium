@@ -7,9 +7,16 @@ export interface Props {
 const props = Astro.props;
 ---
 
-<a
-  href={props.href}
-  class="flex gap-1 rounded-lg bg-zinc-800 px-2 py-1 leading-none no-underline hover:bg-zinc-700"
->
-  <span class="align-bottom text-[#eee] text-xs">{props.label}</span>
+<a href={props.href} class="pill">
+  <span class="align-bottom text-[#eee]">{props.label}</span>
 </a>
+
+<style is:global>
+  .pill {
+    @apply border border-zinc-700 flex gap-2 rounded-lg bg-zinc-800 px-3 py-2 leading-none no-underline items-center hover:bg-zinc-700;
+  }
+
+  .pill span {
+    @apply text-xs font-bold;
+  }
+</style>

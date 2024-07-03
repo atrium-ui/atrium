@@ -87,21 +87,33 @@ async function Attributes({ doc, symbol }) {
     return;
   }
 
-  return Promise.all(
-    fields.map(async (field) => {
+  return Promise.all([
+    `<tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+    </tr>`,
+    ...fields.map(async (field) => {
       const html = `
-        <li class="pt-2">
-          <div class="align-top inline-block">
-            <code>${field.name}${
-              field.type?.name ? `: ${field.type.name}` : ""
-            }</code> (default: ${field.defaultValue})
-            <div class="pt-2">${await toHtml(field.comment?.summary)}</div>
-          </div>
-        </li>
+        <tr class="pt-2">
+          <td>
+            <code>${field.name}</code>
+          </td>
+          <td>
+            ${field.type}
+          </td>
+          <td>
+            ${field.defaultValue}
+          </td>
+          <td>
+            ${await toHtml(field.comment?.summary)}
+          </td>
+        </tr>
       `;
       return html;
     }),
-  );
+  ]);
 }
 
 function Events({ doc, symbol }) {
@@ -112,19 +124,27 @@ function Events({ doc, symbol }) {
     return;
   }
 
-  return events.map((event) => {
-    const text = event.content[0]?.text?.split(" - ");
-    if (text) {
-      return `
-        <li class="pt-2">
-          <div class="inline-block">
-            <code>${text[0]}</code> -
-            <span class="inline-block">${remark().use(remarkHtml).processSync(text[1])}</span>
-          </div>
-        </li>
-      `;
-    }
-  });
+  return [
+    `<tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>`,
+    ...events.map((event) => {
+      const text = event.content[0]?.text?.split(" - ");
+      if (text) {
+        return `
+          <tr>
+            <td>
+              <code>${text[0]}</code>
+            </td>
+            <td>
+              ${remark().use(remarkHtml).processSync(text[1])}
+            </td>
+          </tr>
+        `;
+      }
+    }),
+  ];
 }
 
 async function Methods({ doc, symbol }: { doc: ProjectReflection; symbol: string }) {
@@ -189,25 +209,27 @@ const source = dec?.sources?.[0];
   import "@sv/elements/expandable";
 </script>
 
-<div class="typedoc pb-12 pt-4">
+<div class="typedoc pb-12 pt-10">
   <a
-    href={`https://gitlab.s-v.de/svp/atrium/-/blob/main/rec/${props.source}/${source.fileName}#L${source.line}`}
+   href={`https://gitlab.s-v.de/svp/atrium/-/blob/main/rec/${props.source}/${source.fileName}#L${source.line}`}
   >
     <h2 class="font-mono pb-2">{props.symbol}</h2>
   </a>
+
   <div set:html={summary} />
 
   {
     example ? (
       <div>
-        <h3>Example</h3>
+        <h3 class="pt-8">Example</h3 >
+        <hr/>
         <!-- <div class="not-content box">
           <Fragment set:html={example} />
         </div> -->
         {example.map(exp => {
           return <Code code={exp} lang="js" />;
         })}
-      </div>
+      </div >
     ) : (
       ""
     )
@@ -216,8 +238,9 @@ const source = dec?.sources?.[0];
   {
     attributes ? (
       <>
-        <h3>Attributes</h3>
-        <div set:html={attributes} />
+        <h3 class="pt-8">Attributes</h3>
+        <hr/>
+        <table set:html={attributes} />
       </>
     ) : (
       ""
@@ -227,8 +250,9 @@ const source = dec?.sources?.[0];
   {
     events ? (
       <>
-        <h3>Events</h3>
-        <div set:html={events} />
+        <h3 class="pt-8">Events</h3>
+        <hr/>
+        <table set:html={events} />
       </>
     ) : (
       ""
@@ -237,20 +261,24 @@ const source = dec?.sources?.[0];
 
   {
     methods ? (
-      <a-expandable class="group pt-6 max-w-[800px]">
-        <button
-          slot="toggle"
-          class="cursor-pointer hover:bg-zinc-800 w-full text-left bg-transparent p-0 flex justify-between items-center"
-        >
-          <h3>Methods</h3>
+        <h3 class="pt-8">Methods</h3>
+        <hr/>
+        <a-expandable class="group">
+            <button
+                slot="toggle"
+                type="button"
+                class="items-center border border-zinc-800 rounded-md hover:bg-zinc-800 p-2 px-4 cursor-pointer w-full bg-transparent text-left text-lg flex justify-between"
+            >
+                <span>Show</span>
 
-          <span class="text-xl group-[&[opened]]:hidden">↴</span>
-          <span class="text-xl hidden group-[&[opened]]:block">↶</span>
-        </button>
-        <div class="p-4">
-          <div set:html={methods} />
-        </div>
-      </a-expandable>
+                <span class="text-xl group-[&[opened]]:hidden">↴</span>
+                <span class="text-xl hidden group-[&[opened]]:block">↶</span>
+            </button>
+
+            <div class="p-4" ssr-hidden>
+                <div set:html={methods} />
+            </div >
+        </a-expandable>
     ) : (
       ""
     )

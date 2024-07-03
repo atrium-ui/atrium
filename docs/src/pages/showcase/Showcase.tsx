@@ -11,7 +11,7 @@ import { Icon } from "@components/src/vue/Icon";
 import { Popover } from "@components/src/vue/Popover";
 import { Dialog } from "@components/src/vue/Dialog";
 import { Slider } from "@components/src/vue/Slider";
-import "@sv/elements/adaptive";
+import "@sv/elements/transition";
 import "@sv/elements/select";
 
 export const Showcase = defineComponent(() => {
@@ -79,7 +79,7 @@ export const Showcase = defineComponent(() => {
             <Dialog label="Submit">This doesn't actually do anything.</Dialog>
           </div>
           <div class="inline-flex justify-between overflow-hidden rounded-md border border-zinc-700 p-1">
-            <a-adaptive>
+            <a-transition>
               <div class="flex gap-1">
                 {filter.value.length > 0 ? (
                   filter.value.map((str, i) => {
@@ -106,7 +106,7 @@ export const Showcase = defineComponent(() => {
                   </div>
                 )}
               </div>
-            </a-adaptive>
+            </a-transition>
 
             <button
               type="button"

@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 import { ref, defineComponent } from "vue";
-import "@sv/elements/adaptive";
+import "@sv/elements/transition";
 import "@sv/elements/form";
 import { Button } from "./Button.jsx";
 
@@ -56,12 +56,12 @@ export const Form = defineComponent(
             <div class="flex flex-col gap-4">{slots.default?.()}</div>
 
             <Button type="submit" class="mt-8 overflow-hidden">
-              <a-adaptive>
+              <a-transition>
                 <div class="flex items-center gap-2">
                   <span>Submit</span>
                   {loading.value && <span class="loading-indicator flex-none" />}
                 </div>
-              </a-adaptive>
+              </a-transition>
             </Button>
           </form>
         )}

@@ -42,8 +42,6 @@ Universal dropdown component
 <a-dropdown @select: ({ option: OptionElement; }) => void />
 ```
 
-## Example
-
 ```tsx
 const dropdown = (
 	<a-dropdown
