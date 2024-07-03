@@ -13,6 +13,7 @@ export default {
   social: {
     gitlab: "https://gitlab.s-v.de/svp/atrium",
   },
+  tableOfContents: false,
   sidebar: [
     {
       label: "Getting Started",

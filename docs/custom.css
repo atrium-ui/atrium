@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --sl-content-width: 900px;
+  --sl-content-width: 1000px;
   --sl-sidebar-width: 16rem;
+  --sl-color-hairline: #8080804d;
 
   -webkit-tap-highlight-color: transparent;
 }
@@ -28,8 +29,8 @@
   position: relative;
   width: 100%;
   height: auto;
-  padding: 2rem;
-  border: 1px solid #222;
+  padding: 1rem;
+  border: 1px solid var(--sl-color-hairline);
 }
 
 .hero::before {

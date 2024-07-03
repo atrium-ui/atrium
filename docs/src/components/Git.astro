@@ -9,7 +9,7 @@ const props = Astro.props;
 <a
   href={`https://gitlab.s-v.de/svp/atrium/-/blob/main/${props.href}`}
   target="_blank"
-  class="flex gap-1 rounded-lg bg-zinc-800 px-2 py-1 leading-none no-underline hover:bg-zinc-700"
+  class="pill"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -24,5 +24,5 @@ const props = Astro.props;
       fill="white"></path>
   </svg>
 
-  <span class="align-bottom text-[#eee] text-xs">Source</span>
+  <span class="align-bottom text-[#eee]">Source</span>
 </a>

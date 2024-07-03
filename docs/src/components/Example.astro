@@ -1,22 +1,36 @@
 ---
 import { Tabs, TabItem, Code } from "@astrojs/starlight/components";
+import { Headline, Icon } from "package:/components";
 
 export interface Props {
+  title?: string;
   code: string;
 }
 
 const file = Astro.props.code?.trim();
 ---
 
-<div>
-  <Tabs>
-    <TabItem label="Preview">
-      <div class="not-content box w-full flex flex-col items-center justify-center">
-        <slot />
-      </div>
-    </TabItem>
-    <TabItem label="Code">
-      <Code code={file} lang="tsx" />
-    </TabItem>
-  </Tabs>
+<Headline>{Astro.props.title || "Example"}</Headline>
+
+<div class="not-content box w-full flex flex-col items-left justify-center">
+  <div class="p-4">
+    <slot />
+  </div>
+
+  <hr class="mt-10 mb-4 border-b border-b-[var(--sl-color-hairline)]" />
+
+  <a-expandable class="group">
+    <button
+      slot="toggle"
+      type="button"
+      class="items-center border border-zinc-800 rounded-md hover:bg-zinc-800 p-2 px-4 cursor-pointer w-full bg-transparent text-left text-lg flex justify-between"
+    >
+      <span>Show Code</span>
+
+      <Icon class="block group-[[opened]]:hidden" name="expand" />
+      <Icon class="hidden group-[[opened]]:block" name="collapse" />
+    </button>
+
+    <Code code={file} lang="tsx" />
+  </a-expandable>
 </div>

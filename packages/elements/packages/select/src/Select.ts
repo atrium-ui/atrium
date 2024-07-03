@@ -78,7 +78,7 @@ export class Select extends LitElement {
       <div class="dropdown-container" part="dropdown">
         <a-expandable ?opened="${this.opened}">
           <div class="dropdown" part="options">
-            <slot @click=${this.onOptionsClick}></slot>
+            <slot @click=${this.onOptionsClick} @slotchange=${this.onSlotChange}></slot>
           </div>
         </a-expandable>
       </div>
