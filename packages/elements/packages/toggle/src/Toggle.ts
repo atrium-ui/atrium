@@ -3,7 +3,7 @@ import { query } from "lit/decorators.js";
 
 declare global {
   interface HTMLElementTagNameMap {
-    "a-adaptive": CheckboxElement;
+    "a-toggle": ToggleElement;
   }
 }
 
@@ -14,7 +14,7 @@ declare global {
  *
  * @see https://sv.pages.s-v.de/sv-frontend-library/mono/elements/a-adaptive/
  */
-export class CheckboxElement extends LitElement {
+export class ToggleElement extends LitElement {
   public static get styles() {
     return [
       css`
@@ -110,97 +110,96 @@ export class CheckboxElement extends LitElement {
   }
 }
 
-customElements.define("a-checkbox", CheckboxElement);
-
+customElements.define("a-toggle", ToggleElement);
 
 // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/attachInternals
 // https://web.dev/articles/more-capable-form-controls
 // https://developer.mozilla.org/en-US/docs/Web/API/FormDataEvent
 
 export class SimpleElement extends LitElement {
-	static styles = css`p { color: blue }`;
+  static styles = css`p { color: blue }`;
 
-	static formAssociated = true;
+  static formAssociated = true;
 
-	private _internals: ElementInternals | undefined;
+  private _internals: ElementInternals | undefined;
 
-	public get form() {
-		if (this._internals) {
-			return this._internals.form;
-		}
+  public get form() {
+    if (this._internals) {
+      return this._internals.form;
+    }
 
-		let child = this.parentElement;
-		while (child) {
-			if (child.nodeName === "FORM") {
-				return child;
-			}
-			child = this.parentElement;
-		}
+    let child = this.parentElement;
+    while (child) {
+      if (child.nodeName === "FORM") {
+        return child;
+      }
+      child = this.parentElement;
+    }
 
-		return undefined;
-	}
+    return undefined;
+  }
 
-	constructor() {
-		super();
-		this._internals = this.attachInternals?.();
-	}
+  constructor() {
+    super();
+    this._internals = this.attachInternals?.();
+  }
 
-	_value = 123;
+  _value = 123;
 
-	connectedCallback() {
-		super.connectedCallback();
+  connectedCallback() {
+    super.connectedCallback();
 
-		if (!this._internals) {
-			// a little higher support range
-			this.form?.addEventListener("formdata", (e) => {
-				e.formData.set("field1", this._value.toString());
-			});
-		} else {
-			this._internals?.setFormValue(this._value.toString());
-		}
-	}
+    if (!this._internals) {
+      // a little higher support range
+      this.form?.addEventListener("formdata", (e) => {
+        e.formData.set("field1", this._value.toString());
+      });
+    } else {
+      this._internals?.setFormValue(this._value.toString());
+    }
+  }
 
-	get value() {
-		return this._value;
-	}
+  get value() {
+    return this._value;
+  }
 
-	render() {
-		return html`<p>Hello, ${this._value}!</p>`;
-	}
+  render() {
+    return html`<p>Hello, ${this._value}!</p>`;
+  }
 }
 
 customElements.define("simple-element", SimpleElement);
 
 export class ModernSimpleElement extends LitElement {
-	static styles = css`p { color: blue }`;
+  static styles = css`p { color: blue }`;
 
-	static formAssociated = true;
+  static formAssociated = true;
 
-	private _internals: ElementInternals | undefined;
+  private _internals: ElementInternals | undefined;
 
-	public get form() {
-		return this._internals?.form;
-	}
+  public get form() {
+    return this._internals?.form;
+  }
 
-	constructor() {
-		super();
-		this._internals = this.attachInternals?.();
-	}
+  constructor() {
+    super();
+    this._internals = this.attachInternals?.();
+  }
 
-	_value = 456;
+  _value = 456;
 
-	connectedCallback() {
-		super.connectedCallback();
-		this._internals?.setFormValue(this._value.toString());
-	}
+  connectedCallback() {
+    super.connectedCallback();
+    this._internals?.setFormValue(this._value.toString());
+  }
 
-	get value() {
-		return this._value;
-	}
+  get value() {
+    return this._value;
+  }
 
-	render() {
-		return html`<p>Hello, ${this._value}!</p>`;
-	}
+  render() {
+    return html`<p>Hello, ${this._value}!</p>`;
+  }
 }
 
 customElements.define("modern-element", ModernSimpleElement);

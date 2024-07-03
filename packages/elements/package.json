@@ -121,11 +121,6 @@
       "import": "./packages/select/dist/index.js",
       "require": "./packages/select/dist/index.cjs",
       "types": "./packages/select/src/index.ts"
-    },
-    "./checkbox": {
-      "import": "./packages/checkbox/dist/index.js",
-      "require": "./packages/checkbox/dist/index.cjs",
-      "types": "./packages/checkbox/src/index.ts"
     }
   }
 }
