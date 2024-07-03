@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import "@sv/elements/dropdown";
+import "@sv/elements/select";
 import "@sv/elements/expandable";
 import { Button } from "./Button.jsx";
 import { defineComponent, ref } from "vue";

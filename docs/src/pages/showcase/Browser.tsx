@@ -20,7 +20,7 @@ export const Browser = defineComponent(() => {
       ]}
     >
       <div class="relative overflow-hidden rounded-xl border border-zinc-950 border-b-0 bg-[#18181a] shadow-xl 2xl:mx-[-220px] xl:mx-[-80px]">
-        <div class="flex w-full p-2 pl-10">
+        <div class="flex w-full p-1 pl-12">
           <Button
             variant="disabled"
             class="min-w-[180px] rounded-none rounded-t-md border-none bg-[#26262A] px-4 py-1 text-base"

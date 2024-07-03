@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import "@sv/elements/dropdown";
+import "@sv/elements/select";
 import "@sv/elements/expandable";
 import { defineComponent, ref } from "vue";
 import { twMerge } from "tailwind-merge";
