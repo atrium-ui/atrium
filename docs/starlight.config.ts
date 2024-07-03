@@ -1,6 +1,6 @@
 import type starlight from "@astrojs/starlight";
 
-export default {
+const config: Parameters<typeof starlight>[0] = {
   favicon: "favicon.png",
   title: "Atrium",
   customCss: ["./custom.css"],
@@ -48,10 +48,16 @@ export default {
       collapsed: false,
       autogenerate: { directory: "packages" },
     },
-    {
-      label: "Experimental",
-      collapsed: true,
-      autogenerate: { directory: "experimental" },
-    },
   ],
-} satisfies Parameters<typeof starlight>[0];
+};
+
+if (import.meta.env.DEV) {
+  config.sidebar?.unshift({
+    label: "Development",
+    badge: "Dev",
+    collapsed: false,
+    autogenerate: { directory: "experimental" },
+  });
+}
+
+export default config;

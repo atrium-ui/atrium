@@ -2,13 +2,11 @@
 import { Button } from "@components/src/vue/Button";
 ---
 
-<div class="w-full flex justify-center demo-button">
+<div class="w-full flex justify-center transition-demo-button">
   <Button client:only="vue" class="overflow-hidden">
-    <a-adaptive class="overflow-visible">
-      <div class="inner-demo-button">
-        <span>Click me</span>
-      </div>
-    </a-adaptive>
+    <div class="inner-demo-button">
+      <span>Click me</span>
+    </div>
   </Button>
 </div>
 
@@ -47,37 +45,31 @@ import { Button } from "@components/src/vue/Button";
 
 <hr />
 
-<a-adaptive class="overflow-hidden">
-  <div class="content"></div>
-</a-adaptive>
+<a-transition type="animation" class="container"></a-transition>
 
 <hr />
 
 <script>
   import { paragraph } from "txtgen";
-  import "@sv/elements/adaptive";
-
-  const indicator = document.createElement("div");
-  indicator.classList.add("loading-indicator");
-
-  let timeout: NodeJS.Timeout;
+  import "@sv/elements/transition";
 
   const gen = () => {
     const text = paragraph(1 + Math.random() * 4);
-    const content = document.querySelector(".content");
-    if (content) content.innerHTML = text;
+
+    const content = document.createElement("div");
+    content.innerHTML = text;
+
+    const container = document.querySelector(".container");
+    if (container) {
+      container.innerHTML = "";
+      container.appendChild(content);
+    }
   };
   gen();
 
-  const button = document.querySelector(".demo-button");
+  const button = document.querySelector(".transition-demo-button");
   if (button)
     button.addEventListener("click", () => {
-      clearTimeout(timeout);
-      button.querySelector(".inner-demo-button")?.appendChild(indicator);
-      timeout = setTimeout(() => {
-        gen();
-
-        indicator.remove();
-      }, 800);
+      gen();
     });
 </script>

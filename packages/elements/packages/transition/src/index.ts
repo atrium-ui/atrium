@@ -5,6 +5,7 @@
  */
 
 import { LitElement, html, css } from "lit";
+import { property } from "lit/decorators/property.js";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -12,39 +13,14 @@ declare global {
   }
 }
 
-const globalTransitionStyles = `
-
-  @keyframes move-out {
-    to {
-      transform: translateX(-100px);
-      opacity: 0;
-    }
-  }
-
-  @keyframes move-in {
-    from {
-      transform: translateX(200px);
-      opacity: 0;
-    }
-  }
-
-  ::view-transition-old(a-transition) {
-    animation: 0.33s ease both move-out;
-  }
-  ::view-transition-new(a-transition) {
-    animation: 0.33s ease both move-in;
-  }
-
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
-  }
-`;
-
 let globalStyles: HTMLStyleElement;
 
 /**
- * Transitions dom elements with the View Transition API.
+ * Transitions dom elements with the View Transition API or by size.
+ *
+ * - Inherits the size of its child
+ * - Automatically reacts to changes in the child’s size
+ * - Animated by default
  *
  * @example
  * ```html
@@ -52,6 +28,8 @@ let globalStyles: HTMLStyleElement;
  *   <div>Changing Content</div>
  * </a-transition>
  * ```
+ *
+ * @see https://svp.pages.s-v.de/atrium/elements/a-transition/
  */
 export class Transition extends LitElement {
   // TODO: these should also work with page navigations
@@ -59,7 +37,10 @@ export class Transition extends LitElement {
   static get styles() {
     return css`
       :host {
-        view-transition-name: a-transition;
+        display: block;
+      }
+      slot {
+        display: inherit;
       }
     `;
   }
@@ -68,24 +49,57 @@ export class Transition extends LitElement {
     return html`<slot></slot>`;
   }
 
-  observer = new MutationObserver(async () => {
-    if (!this.lock) {
-      this.lock = true;
-      await this.slotChangeCallback();
-      this.lock = false;
-    }
-  });
+  /**
+   * Whether the blur is enabled or not.
+   */
+  @property({ type: String })
+  public type: "size" | "animation" = "size";
+
+  /**
+   * Set a custom "view-transition-name"
+   */
+  @property({ type: String })
+  public name = Math.random().toString(36).substring(2, 9);
+
+  get content() {
+    return this.shadowRoot?.children[0] as HTMLElement | undefined;
+  }
+
+  observer?: MutationObserver;
 
   childrenCache?: Element[];
   lock = false;
 
-  setChildReferences() {
-    this.childrenCache = Array.from(this.children);
+  lastHeight = this.offsetHeight;
+  lastWidth = this.offsetWidth;
+
+  initialised = false;
+
+  updated() {
+    if (this.type === "size") {
+      this.animateSizes();
+    }
+
+    if (this.type === "animation") {
+      // @ts-ignore
+      this.style.setProperty("view-transition-name", this.name);
+    }
   }
 
   connectedCallback(): void {
     super.connectedCallback();
-    // cache current dom nodes for later use
+
+    this.observer = new MutationObserver(async () => {
+      if (this.type === "size") {
+        this.requestUpdate();
+      }
+
+      if (this.type === "animation" && !this.lock) {
+        this.lock = true;
+        await this.animateChildChanges();
+        this.lock = false;
+      }
+    });
 
     this.observer.observe(this, {
       childList: true,
@@ -93,26 +107,36 @@ export class Transition extends LitElement {
       characterData: true,
     });
 
-    if (!globalStyles) {
-      const styles = document.createElement("style");
-      styles.innerHTML = globalTransitionStyles;
-      document.head.appendChild(styles);
-      globalStyles = styles;
-    }
+    window.addEventListener("resize", this.onResize);
+
+    requestAnimationFrame(() => {
+      this.initialised = true;
+      this.lastHeight = this.offsetHeight;
+      this.lastWidth = this.offsetWidth;
+    });
   }
 
   disconnectedCallback(): void {
-    super.disconnectedCallback();
+    window.removeEventListener("resize", this.onResize);
 
-    this.observer.disconnect();
+    this.observer?.disconnect();
+
+    super.disconnectedCallback();
   }
 
-  async slotChangeCallback() {
+  onResize = () => {
+    if (this.type === "size") {
+      this.lastHeight = this.content?.offsetHeight || 0;
+      this.lastWidth = this.content?.offsetWidth || 0;
+    }
+  };
+
+  async animateChildChanges() {
     // cache current dom nodes for later use
 
     const lastChildren = this.childrenCache;
 
-    this.setChildReferences();
+    this.childrenCache = Array.from(this.children);
 
     if (lastChildren) {
       // remove current children, that are stored in childrenCache
@@ -141,6 +165,37 @@ export class Transition extends LitElement {
 
       await transition.finished;
     }
+  }
+
+  async animateSizes() {
+    if (!this.initialised) {
+      return;
+    }
+
+    const height = this.offsetHeight;
+    const width = this.offsetWidth;
+
+    if (height && width) {
+      await this.animate(
+        [
+          {
+            height: `${this.lastHeight}px`,
+            width: `${this.lastWidth}px`,
+          },
+          {
+            height: `${height}px`,
+            width: `${width}px`,
+          },
+        ],
+        {
+          duration: 200,
+          easing: "ease-out",
+        },
+      ).finished;
+    }
+
+    this.lastHeight = height;
+    this.lastWidth = width;
   }
 }
 

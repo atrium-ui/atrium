@@ -72,11 +72,6 @@
       "require": "./packages/animation/dist/index.cjs",
       "types": "./packages/animation/src/index.ts"
     },
-    "./adaptive": {
-      "import": "./packages/adaptive/dist/index.js",
-      "require": "./packages/adaptive/dist/index.cjs",
-      "types": "./packages/adaptive/src/index.ts"
-    },
     "./time": {
       "import": "./packages/time/dist/index.js",
       "require": "./packages/time/dist/index.cjs",

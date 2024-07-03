@@ -4,9 +4,11 @@ import { Button } from "@components/src/vue/Button";
 
 <div class="w-full flex justify-center demo-button">
   <Button client:only="vue" class="overflow-hidden">
-    <div class="inner-demo-button">
-      <span>Click me</span>
-    </div>
+    <a-transition class="overflow-visible">
+      <div class="inner-demo-button">
+        <span>Click me</span>
+      </div>
+    </a-transition>
   </Button>
 </div>
 
@@ -45,7 +47,9 @@ import { Button } from "@components/src/vue/Button";
 
 <hr />
 
-<a-transition class="container"></a-transition>
+<a-transition class="overflow-hidden">
+  <div class="content"></div>
+</a-transition>
 
 <hr />
 
@@ -53,23 +57,27 @@ import { Button } from "@components/src/vue/Button";
   import { paragraph } from "txtgen";
   import "@sv/elements/transition";
 
+  const indicator = document.createElement("div");
+  indicator.classList.add("loading-indicator");
+
+  let timeout: NodeJS.Timeout;
+
   const gen = () => {
     const text = paragraph(1 + Math.random() * 4);
-
-    const content = document.createElement("div");
-    content.innerHTML = text;
-
-    const container = document.querySelector(".container");
-    if (container) {
-      container.innerHTML = "";
-      container.appendChild(content);
-    }
+    const content = document.querySelector(".content");
+    if (content) content.innerHTML = text;
   };
   gen();
 
   const button = document.querySelector(".demo-button");
   if (button)
     button.addEventListener("click", () => {
-      gen();
+      clearTimeout(timeout);
+      button.querySelector(".inner-demo-button")?.appendChild(indicator);
+      timeout = setTimeout(() => {
+        gen();
+
+        indicator.remove();
+      }, 800);
     });
 </script>
