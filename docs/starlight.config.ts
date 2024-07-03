@@ -4,6 +4,9 @@ const config: Parameters<typeof starlight>[0] = {
   favicon: "favicon.png",
   title: "Atrium",
   customCss: ["./custom.css"],
+  components: {
+    PageFrame: "./src/components/PageFrame.astro",
+  },
   logo: {
     dark: "./assets/logo-dark.svg",
     light: "./assets/logo-light.svg",
