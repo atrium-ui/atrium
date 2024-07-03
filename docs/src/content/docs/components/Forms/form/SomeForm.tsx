@@ -83,7 +83,6 @@ export function SomeForm() {
           <Select
             {...{
               class: "w-full",
-              required: true,
               name: "name",
               placeholder: "Select",
             }}

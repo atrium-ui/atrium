@@ -101,6 +101,10 @@ export class Select extends LitElement {
   @property({ type: Boolean, reflect: true })
   public disabled = false;
 
+  // Wether the input is required.
+  @property({ type: Boolean, reflect: true })
+  public required = false;
+
   // The name or key used in form data.
   @property({ type: String, reflect: true })
   public name?: string;
@@ -121,9 +125,9 @@ export class Select extends LitElement {
 
     if (this.name) {
       this.append(this.input);
-      this.input.slot = "none";
+      this.input.style.display = "none";
       this.input.name = this.name;
-      this.input.required = true;
+      this.input.required = this.required;
     }
   }
 

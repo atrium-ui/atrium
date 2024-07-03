@@ -12,6 +12,7 @@ import { Popover } from "@components/src/vue/Popover";
 import { Dialog } from "@components/src/vue/Dialog";
 import { Slider } from "@components/src/vue/Slider";
 import "@sv/elements/adaptive";
+import "@sv/elements/select";
 
 export const Showcase = defineComponent(() => {
   const options = ref<string[]>(["Item 1", "Item 2", "Item 3"]);
