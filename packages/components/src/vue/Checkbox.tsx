@@ -1,6 +1,5 @@
 /* @jsxImportSource vue */
 import { defineComponent, ref, effect } from "vue";
-import "@sv/elements/toggle";
 import { Icon } from "./Icon";
 
 export const Checkbox = defineComponent(
