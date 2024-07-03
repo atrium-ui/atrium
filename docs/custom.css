@@ -44,9 +44,16 @@
   z-index: -1;
 }
 
-.main-frame {
-  font-size: var(--sl-text-base);
+tr {
+  text-align: left;
 }
+
+table {
+  display: table !important;
+  width: 100%;
+}
+
+/* Loader animation */
 
 .loading-indicator {
   display: inline-block;
@@ -64,11 +71,12 @@
   }
 }
 
+/* Slides count for Slider */
+
 .not-content {
   counter-reset: content-counter;
 }
 
-/* Slides count for Slider */
 .counted {
   position: relative;
 }
