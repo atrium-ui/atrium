@@ -276,9 +276,10 @@ export class Select extends LitElement {
         event.preventDefault();
         break;
       default:
-        if (event.key) {
-          console.log("search for item with", event.key);
-        }
+        // if (event.key) {
+        // TODO: implement search
+        //   console.log("search for item with", event.key);
+        // }
         break;
     }
   }
