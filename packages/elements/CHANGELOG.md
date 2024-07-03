@@ -1,5 +1,16 @@
 # @sv/elements
 
+## 1.6.0 (2024-07-03)
+
+### Features
+
+- merge a-adaptive into a-transition
+- a-toggle: implement a-toggle
+
+### Fixes
+
+- a-select: initial options not updated
+
 ## 1.5.2 (2024-07-03)
 
 ### Fixes

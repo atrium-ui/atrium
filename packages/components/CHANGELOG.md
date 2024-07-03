@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.4.0 (2024-07-03)
+
+### Features
+
+- update elements
+
 ## 1.3.0 (2024-07-02)
 
 ### Features
