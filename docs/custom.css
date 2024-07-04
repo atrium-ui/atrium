@@ -93,3 +93,14 @@ table {
   opacity: 0.5;
   font-family: monospace;
 }
+
+/* Seperator Nav Link */
+
+[href*="/---"] {
+  pointer-events: none;
+  user-select: none;
+  font-family: monospace;
+  opacity: 0.33;
+  white-space: nowrap;
+  overflow: hidden;
+}

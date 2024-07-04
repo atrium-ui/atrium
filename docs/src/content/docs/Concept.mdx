@@ -4,7 +4,7 @@ icon: "carbon:share"
 title: "Concept"
 ---
 
-import { AccordionDemo } from "./components/Layout/accordion/AccordionDemo";
+import { AccordionDemo } from "./components/accordion/AccordionDemo";
 
 This library serves as a place to collect and share code between projects and developers.
 
@@ -12,9 +12,11 @@ It includes libraries, web-components and components designed to be independent 
 
 The components in this library are composed of two layers:
 
-- The first layer are **Components**. they ready to use, framework specific and pre-styled Components that give you a solid starting point. You do not import Components as dependencies, they are copied into your projects codebase like templates.
+- The first layer are **[Components](./components)**. they ready to use, framework specific and pre-styled Components that give you a solid starting point. You do not import Components as dependencies, they are copied into your projects codebase like templates.
 
-- The second layer is the **Elements** layer. Elements are "Headless" custom-elements that only implement behavior with accessibility in mind, with as little styling as possible.
+- The second layer is the **[Elements](./elements)** layer. Elements are "Headless" custom-elements that only implement behavior with accessibility in mind, with as little styling as possible.
+
+![diagram](../../../assets/concept-diagram.png)
 
 <div class="not-content max-w-[800px]">
   <p>
@@ -26,40 +28,3 @@ The components in this library are composed of two layers:
 <br/>
 
 This approach gives the given project ownership over the components design. We start with sensible defaults, then change the design for the projects needs.
-
-## Components
-
-Components are copy-paste templates for a specific use case including styling and behavior.
-They are styled using [TailwindCSS](https://tailwindcss.com/) and written as JSX functional components. This allows us to build components that are highly customizable and compact without keeping a dependency on external CSS files.
-
-Components may have dependencies on other packages, though when "using" a component you do not import the component itself, but a copy of it. This copy can be freely changed and styled. In the same way, that makes it possible to update or change the component without breaking the websites that use it.
-
-Inspired by https://ui.shadcn.com/.
-
-## Elements
-
-To keep the amount of logic in Components small, Elements are built as custom-elements using [Lit](https://lit.dev/docs/) which makes them framework agnostic, so they can be used in any framework or even without a framework.
-
-These custom-elements are imported from node_modules, they do not use tailwind, their minimal styles are defined in regular css inside the element itself.
-
-### Limitations of custom-elements
-
-[Use custom-elements for what they are good at.](https://nolanlawson.com/2023/08/23/use-web-components-for-what-theyre-good-at/)
-
-- Custom-elements work best when they are completely self-contained.
-- They should not effect elements around itself.
-- Do not create DOM elements in custom-elements to avoid layout-shifts.
-- When fully client-side rendered, most of these limitations are not relevant.
-
-
-### Server side rendering
-
-Unless specific plugins for Lit SSR are used, **Elements** are not fully server side rendered. The custom-element tags will exist in the markup (like *\<a-track\/\>*), but only on the client the markup of the [shadow-root](https://lit.dev/docs/components/shadow-dom/) is generated.
-
-This does not apply for the children of the Element, those are still rendered by the framework. Only the presentation of those children may vary from server to final hydrated client.
-
-
-### Extending Elements
-
-Extending custom-element classes gives you the posibility to almost completly change or overwrite specific behaviours of a custom-element.
-To reduce complexity, this is not recommended, but if needed, available.
