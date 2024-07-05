@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.6.1 (2024-07-05)
+
+### Fixes
+
+- a-scroll: add a histroy strategy to store scroll position per histroy state
+
 ## 1.6.0 (2024-07-03)
 
 ### Features
