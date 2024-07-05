@@ -78,10 +78,10 @@ export const Drawer = defineComponent(
         >
           <div class="h-[calc(100vh)] w-full" />
 
-          <div class="pointer-events-auto relative rounded-t-lg bg-zinc-800">
+          <div class="pointer-events-auto relative rounded-t-lg bg-zinc-50 dark:bg-zinc-800">
             <div class="flex w-full justify-center py-3">
               {!props.disabled && (
-                <div class="h-[2px] w-[40px] rounded-3xl bg-emerald-100" />
+                <div class="h-[3px] w-[50px] rounded-3xl bg-zinc-200" />
               )}
             </div>
 

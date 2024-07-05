@@ -19,7 +19,7 @@ export const Tabs = defineComponent(
     });
 
     return () => (
-      <div class="w-full rounded-lg bg-zinc-800 p-1">
+      <div class="w-full p-1">
         <a-track overflowscroll>
           <ul class="flex list-none gap-1 p-0">
             {slots.default?.()?.map((item, i) => {
@@ -28,8 +28,8 @@ export const Tabs = defineComponent(
                   <Button
                     variant="ghost"
                     class={twMerge(
-                      "whitespace-nowrap rounded-lg bg-transparent",
-                      active.value === i ? "bg-zinc-700 text-white" : "",
+                      "whitespace-nowrap rounded-lg bg-transparent opacity-30",
+                      active.value === i ? "opacity-100" : "",
                     )}
                     onClick={() => {
                       active.value = i;

@@ -33,7 +33,7 @@ export const Select = defineComponent(
             <div class="min-w-[150px] text-left">{value.value || props.placeholder}</div>
           </Button>
 
-          <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-800 p-1">
+          <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-50 p-1 dark:bg-zinc-800">
             {slots.default?.()}
           </div>
         </a-select>
@@ -52,7 +52,9 @@ export const SelectItem = function Item(
   return (
     <a-option
       class={twMerge(
-        "block cursor-pointer rounded px-2 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600",
+        "block cursor-pointer rounded px-2",
+        "[&[selected]]:bg-zinc-200 active:bg-zinc-200 hover:bg-zinc-100",
+        "dark:[&[selected]]:bg-zinc-700 dark:active:bg-zinc-700 dark:hover:bg-zinc-600",
         props.class,
       )}
       value={props.value}

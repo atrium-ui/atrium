@@ -49,9 +49,10 @@ export const Switch = defineComponent(
         >
           <div
             class={[
-              "relative block h-6 w-12 rounded-full bg-zinc-500 transition-transform",
+              "relative block h-6 w-12 rounded-full transition-transform",
               checked.value && "-translate-x-1/2",
               "after:absolute after:top-0 after:right-0 after:h-6 after:w-6 after:rounded-full after:bg-[currentColor] after:content-['']",
+              "bg-accent-200",
             ]}
           />
         </button>

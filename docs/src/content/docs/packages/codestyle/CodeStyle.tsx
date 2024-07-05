@@ -17,16 +17,16 @@ export default function () {
         }}
       >
         <div class="grid grid-cols-4">
-          <Checkbox id="editorconfig" checked>
+          <Checkbox name="editorconfig" checked>
             editorconfig
           </Checkbox>
-          <Checkbox id="biome" checked>
+          <Checkbox name="biome" checked>
             biome
           </Checkbox>
-          <Checkbox id="tsconfig" checked>
+          <Checkbox name="tsconfig" checked>
             tsconfig
           </Checkbox>
-          <Checkbox id="prettier" checked>
+          <Checkbox name="prettier" checked>
             prettier
           </Checkbox>
         </div>

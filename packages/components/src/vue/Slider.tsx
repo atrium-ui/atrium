@@ -60,6 +60,7 @@ export const Slider = defineComponent(
             class={[
               "-translate-y-1/2 absolute top-1/2 left-[12px] z-10 hidden transform transition-all lg:block focus-visible:opacity-100",
               showPrev.value ? "group-hover:opacity-100" : "opacity-0",
+              "text-black dark:text-white",
             ]}
             onClick={prev}
             label="Previous page"
@@ -72,6 +73,7 @@ export const Slider = defineComponent(
             class={[
               "-translate-y-1/2 absolute top-1/2 right-[12px] z-10 hidden transform transition-all lg:block focus-visible:opacity-100",
               showNext.value ? "group-hover:opacity-100" : "opacity-0",
+              "text-black dark:text-white",
             ]}
             onClick={next}
             label="Next page"

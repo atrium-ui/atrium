@@ -19,7 +19,8 @@ export function Popover(props: { label?: string }, { slots }) {
       <div class="absolute py-1">
         <div
           class={[
-            "min-w-[100px] rounded-md border border-zinc-700 bg-zinc-800 p-2 transition-all duration-100",
+            "min-w-[100px] rounded-md border p-2 transition-all duration-100",
+            "border-zinc-700 bg-zinc-50 dark:bg-zinc-800",
             "scale-95 opacity-0 group-[&[opened]]:scale-100 group-[&[opened]]:opacity-100",
           ]}
         >
