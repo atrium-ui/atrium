@@ -2,7 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fonts */
+
+@font-face {
+  font-family: "NotoSans";
+  src: url("/atrium/fonts/NotoSans-VariableFont_wdth,wght.woff2")
+    format("woff2");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NotoSans";
+  src: url("/atrium/fonts/NotoSans-Italic-VariableFont_wdth,wght.woff2")
+    format("woff2");
+  font-style: italic;
+}
+
 :root {
+  --sl-font: "NotoSans", sans-serif;
   --sl-content-width: 1000px;
   --sl-sidebar-width: 16rem;
   --sl-color-hairline: #8080804d;
@@ -109,4 +126,8 @@ table {
 * > [href*="/---"] {
   padding: 0;
   line-height: 15px;
+}
+
+nav summary {
+  margin-top: 1rem;
 }

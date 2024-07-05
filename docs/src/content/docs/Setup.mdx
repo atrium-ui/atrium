@@ -4,30 +4,21 @@ icon: "carbon:template"
 title: "Setup"
 ---
 
-import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Tabs, TabItem, FileTree } from '@astrojs/starlight/components';
 
 ## Configure package registry
 
 Configure your package manager to install packages from the Gitlab package registry. More information about all published Packages can be found [here](https://gitlab.s-v.de/svp/atrium/-/packages).
 
-Update or create .npmrc file located next to the package.json file with the following content:
+Create a .npmrc file in the root of your package to configure the registry:
 
-<Tabs>
-  <TabItem label="pnpm" icon="pnpm">
-    ```sh
-    echo @sv:registry=https://gitlab.s-v.de/api/v4/projects/1560/packages/npm/ >> .npmrc
-    ```
-  </TabItem>
-  <TabItem label="npm" icon="seti:npm">
-    ```sh
-    echo @sv:registry=https://gitlab.s-v.de/api/v4/projects/1560/packages/npm/ >> .npmrc
-    ```
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-    ```toml
-    # bunfig.toml
-    [install.scopes]
-    sv = "https://gitlab.s-v.de/api/v4/projects/1560/packages/npm/"
-    ```
-  </TabItem>
-</Tabs>
+<FileTree>
+- src/
+- README.md
+- package.json
+- .npmrc ⬅
+</FileTree>
+
+```sh
+echo @sv:registry=https://gitlab.s-v.de/api/v4/projects/1560/packages/npm/ >> .npmrc
+```

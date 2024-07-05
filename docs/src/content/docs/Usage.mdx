@@ -5,7 +5,7 @@ title: "Usage"
 ---
 
 import { Command } from "package:/components"
-import { Steps } from '@astrojs/starlight/components';
+import { Steps, FileTree } from '@astrojs/starlight/components';
 
 ## Requirements
 
@@ -30,6 +30,14 @@ Components require **tailwindcss** to be installed in the project. Here links fo
     ```bash
     npx @sv/components button
     ```
+
+    <FileTree>
+    - src/components/
+      - Button.tsx
+    - README.md
+    - package.json
+    - ...
+    </FileTree>
 
 3. Change styling or behavior of the component in the copy inside your project.
 
@@ -62,7 +70,7 @@ Components require **tailwindcss** to be installed in the project. Here links fo
     <Button variant="outline">Click me</Button>;
     ```
 
-5. Or use the custom-elements directly.
+5. Or optionally use the custom-elements directly for most compatibility with, or without, a framework.
 
     ```tsx
     // src/App.tsx
