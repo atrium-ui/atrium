@@ -100,7 +100,13 @@ table {
   pointer-events: none;
   user-select: none;
   font-family: monospace;
-  opacity: 0.1;
+  opacity: 0.05;
   white-space: nowrap;
   overflow: hidden;
+  padding: 0;
+}
+
+* > [href*="/---"] {
+  padding: 0;
+  line-height: 15px;
 }
