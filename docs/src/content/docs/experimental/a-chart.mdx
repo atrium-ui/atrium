@@ -1,0 +1,32 @@
+---
+title: a-chart
+description: A chart rendered with chart.js.
+---
+
+import dataSrc from "./chart/chart-data.json?url";
+import { TypeDoc, Elements, Pills, Pill, Lit, Rive } from "package:/components"
+
+<Pills>
+  <Lit />
+  <Pill href="https://www.chartjs.org/docs/latest/" label="Chart.js" />
+</Pills>
+
+<Elements />
+
+## Preview
+
+<div class="not-content">
+
+  <a-chart
+    type="bar"
+    width="600"
+    height="300"
+    class="h-[300px] aspect-[2/1]"
+    src="/atrium/chart-data.json"
+  />
+
+</div>
+
+<br/>
+
+<TypeDoc source="../packages/elements/packages/chart" symbol="ChartElement" />

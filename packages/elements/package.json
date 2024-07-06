@@ -30,7 +30,8 @@
   },
   "peerDependencies": {
     "@rive-app/canvas-advanced": "2.7.8",
-    "@sv/scroll-lock": "^1.0.0"
+    "@sv/scroll-lock": "^1.0.0",
+    "chart.js": "^4.4.3"
   },
   "exports": {
     ".": {
@@ -121,6 +122,11 @@
       "import": "./packages/scroll/dist/index.js",
       "require": "./packages/scroll/dist/index.cjs",
       "types": "./packages/scroll/src/index.ts"
+    },
+    "./chart": {
+      "import": "./packages/chart/dist/index.js",
+      "require": "./packages/chart/dist/index.cjs",
+      "types": "./packages/chart/src/index.ts"
     }
   }
 }
