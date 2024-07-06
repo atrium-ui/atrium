@@ -2,3 +2,6 @@
 task = "3.37"
 bun = "1.1.13"
 node = "20"    # needed to run starlight docs, https://github.com/oven-sh/bun/issues/7531
+
+[tasks.dev]
+run = "task docs"
