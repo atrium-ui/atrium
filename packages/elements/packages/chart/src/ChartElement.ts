@@ -16,16 +16,18 @@ declare global {
 Chart.register(BarController, BarElement, CategoryScale, LinearScale);
 
 /**
- * A Chart with data loaded from a URL
+ * A Chart with data loaded from a URL and styleable with CSS.
  *
  * @customEvent load - Emitted when the chart has loaded.
  *
  * @example
  * ```html
  * <a-chart
- *   height="200"
- *   width="200"
- *   src="./data.json"
+ *   type="bar"
+ *   width="600"
+ *   height="300"
+ *   class="h-[300px] aspect-[2/1] text-black stroke-black/5 dark:stroke-white/5 dark:text-white"
+ *   src="/atrium/chart-data.json"
  * />
  * ```
  *
@@ -35,13 +37,23 @@ export class ChartElement extends LitElement {
   public static styles = css`
     :host {
       display: inline-block;
+      stroke: #e9e9e9;
     }
+
+    @media (prefers-color-scheme: dark) {
+   	  :host {
+    		stroke: #454545;
+     	}
+    }
+
     canvas {
       display: block;
       width: inherit;
       height: inherit;
       max-width: 100%;
       max-height: 100%;
+      color: inherit;
+      border-color: inherit;
     }
   `;
 
@@ -51,7 +63,7 @@ export class ChartElement extends LitElement {
 
   static properties = {
     src: { type: String, reflect: true },
-    type: { type: String, reflect: true },
+    type: { type: String, reflect: true, default: "bar" },
     width: { type: Number, reflect: true },
     height: { type: Number, reflect: true },
   };
@@ -65,6 +77,8 @@ export class ChartElement extends LitElement {
 
   private intersectionObserver?: IntersectionObserver;
 
+  private matchMedia?: MediaQueryList;
+
   connectedCallback(): void {
     super.connectedCallback();
 
@@ -72,19 +86,22 @@ export class ChartElement extends LitElement {
       this.intersectionObserver = new IntersectionObserver((intersetions) => {
         for (const intersetion of intersetions) {
           this.paused = !intersetion.isIntersecting;
-          if (this.paused === false) {
-            this.tryLoad(this.src);
-          }
+          this.tryLoad(this.src);
         }
       });
     }
     this.intersectionObserver.observe(this);
+
+    this.matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
+    this.matchMedia.addEventListener("change", this.onChange);
 
     window.addEventListener("beforeunload", this.cleanup);
   }
 
   disconnectedCallback(): void {
     this.intersectionObserver?.disconnect();
+
+    this.matchMedia?.removeEventListener("change", this.onChange);
 
     window.removeEventListener("beforeunload", this.cleanup);
 
@@ -98,7 +115,7 @@ export class ChartElement extends LitElement {
   public declare src?: string;
 
   /** chart type */
-  public declare type?: "bar";
+  public declare type: "bar";
 
   /** width in pixel */
   public declare width: number;
@@ -137,7 +154,46 @@ export class ChartElement extends LitElement {
     }
   }
 
+  private onChange = () => {
+    this.tryLoad(this.src);
+  };
+
+  /** chart.js options */
+  public options() {
+    const color = getComputedStyle(this.canvas).getPropertyValue("color");
+    const borderColor = getComputedStyle(this.canvas).getPropertyValue("stroke");
+
+    const scaleOptions = {
+      ticks: {
+        color: color,
+        textStrokeColor: color,
+        backdropColor: color,
+      },
+      grid: {
+        color: borderColor,
+      },
+    };
+
+    return {
+      responsive: true,
+      color: color,
+      borderColor: borderColor,
+      scales: {
+        y: scaleOptions,
+        x: scaleOptions,
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: color,
+          },
+        },
+      },
+    };
+  }
+
   private async tryLoad(src?: string) {
+    if (!src) return;
     if (this.paused) return;
 
     if (this.loaded) {
@@ -145,23 +201,24 @@ export class ChartElement extends LitElement {
       this.cleanup();
     }
 
-    if (!src) {
-      return;
-    }
-
     fetch(src)
       .then((res) => res.json())
       .then((data) => {
+        this.loaded = true;
         this.chart = new Chart(this.canvas, {
           type: this.type,
-          data: data,
+          options: this.options(),
+          data,
         });
 
         this.dispatchEvent(new CustomEvent("load"));
       });
   }
 
-  public cleanup = () => {};
+  /** chart.js destroy */
+  public cleanup = () => {
+    this.chart?.destroy();
+  };
 }
 
 customElements.define("a-chart", ChartElement);
