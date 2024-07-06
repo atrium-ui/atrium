@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 1.7.0 (2024-07-06)
+
+### Features
+
+- init a-chart element
+- a-chart: css styling
+
 ## 1.6.1 (2024-07-05)
 
 ### Fixes
