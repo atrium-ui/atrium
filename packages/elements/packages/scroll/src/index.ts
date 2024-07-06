@@ -16,6 +16,20 @@ const historyStorage = {
 
 type Strategy = "session" | "history";
 
+/**
+ * A scroll-container that can remember its scroll position.
+ *
+ * @example
+ * ```html
+ * <a-scroll>
+ *   <div class="sidebar-content sl-flex">
+ *     <slot name="sidebar" />
+ *   </div>
+ * </a-scroll>
+ * ```
+ *
+ * @see https://svp.pages.s-v.de/atrium/elements/a-scroll/
+ */
 class ScrollElement extends HTMLElement {
   fallbackName() {
     return `${this.className}-${this.parentElement?.className}`.replace(" ", "-");

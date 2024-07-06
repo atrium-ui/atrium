@@ -1,0 +1,29 @@
+{
+  "name": "@atrium-ui/chart",
+  "author": "atrium",
+  "contributors": [],
+  "private": true,
+  "description": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "tsup": {
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "esm",
+      "cjs"
+    ],
+    "external": [
+      "lit",
+      "chart.js"
+    ],
+    "sourcemap": true,
+    "clean": true
+  }
+}
