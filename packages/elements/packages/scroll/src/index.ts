@@ -35,11 +35,13 @@ class ScrollElement extends HTMLElement {
     return `${this.className}-${this.parentElement?.className}`.replace(" ", "-");
   }
 
-  get name() {
+  /** the unique name of the scroll container */
+  public get name() {
     return this.getAttribute("name") || this.fallbackName();
   }
 
-  get strategy(): Strategy {
+  /** strategy to use for remembering the scroll position, can be "session" or "history" */
+  public get strategy(): Strategy {
     return (this.getAttribute("strategy") as Strategy) || "session";
   }
 

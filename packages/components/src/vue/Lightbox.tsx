@@ -23,7 +23,7 @@ export const Lightbox = defineComponent((_, { slots }) => {
         <a-blur
           enabled={open.value || undefined}
           class={[
-            "group/dialog absolute top-0 left-0 z-50 block h-screen w-screen opacity-0 transition-all",
+            "group/dialog fixed top-0 left-0 z-50 block h-screen w-screen opacity-0 transition-all",
             "[&[enabled]]:bg-[#33333333] [&[enabled]]:opacity-100 [&[enabled]]:backdrop-blur-md",
           ]}
           onBlur={() => {
@@ -39,7 +39,7 @@ export const Lightbox = defineComponent((_, { slots }) => {
             {slots.default?.()}
           </div>
 
-          <div class="absolute top-20 right-20 z-50 text-2xl">
+          <div class="absolute top-8 right-4 z-50 text-2xl lg:top-20 lg:right-20">
             <Button
               label="close"
               variant="ghost"
