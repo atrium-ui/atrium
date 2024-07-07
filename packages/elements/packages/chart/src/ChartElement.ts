@@ -1,4 +1,11 @@
-import { Chart, BarController, BarElement, CategoryScale, LinearScale } from "chart.js";
+import {
+  Chart,
+  Tooltip,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+} from "chart.js";
 import {
   LitElement,
   css,
@@ -13,7 +20,7 @@ declare global {
   }
 }
 
-Chart.register(BarController, BarElement, CategoryScale, LinearScale);
+Chart.register(Tooltip, BarController, BarElement, CategoryScale, LinearScale);
 
 /**
  * A simple chart with data loaded from a URL and styleable with CSS.
@@ -174,6 +181,9 @@ export class ChartElement extends LitElement {
         x: scaleOptions,
       },
       plugins: {
+        tooltip: {
+          displayColors: false,
+        },
         legend: {
           labels: {
             color: color,
