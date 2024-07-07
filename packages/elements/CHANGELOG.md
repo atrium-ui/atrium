@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 1.7.1 (2024-07-07)
+
+### Fixes
+
+- a-chart: layouting improvements
+- a-chart: enabled tooltips
+
 ## 1.7.0 (2024-07-06)
 
 ### Features
