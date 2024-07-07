@@ -16,11 +16,7 @@ declare global {
 let globalStyles: HTMLStyleElement;
 
 /**
- * Transitions dom elements with the View Transition API or by size.
- *
- * - Inherits the size of its child
- * - Automatically reacts to changes in the child’s size
- * - Animated by default
+ * Transitions dom elements between two state automatically.
  *
  * @example
  * ```html

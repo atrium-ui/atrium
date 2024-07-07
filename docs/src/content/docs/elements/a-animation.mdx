@@ -12,9 +12,18 @@ import { TypeDoc, Elements, Pills, Lit, Rive } from "package:/components"
 
 <Elements />
 
+
+<div class="not-content box grid gap-4 grid-cols-3">
+  <a-animation
+    class="border"
+    src="/atrium/loading.riv"
+  />
+</div>
+
+
 <TypeDoc source="../packages/elements/packages/animation" symbol="AnimationElement" />
 
-## Preview
+## Examples
 
 Different example confugrations of rive animations.
 <br/>
@@ -24,16 +33,7 @@ Different example confugrations of rive animations.
 <br/>
 <br/>
 
-<div class="not-content grid gap-4 grid-cols-3">
-
-  <div>
-    ### Default
-
-    <a-animation
-      class="border"
-      src="/atrium/loading.riv"
-    />
-  </div>
+<div class="not-content flex flex-wrap gap-4">
 
   <div>
     ### Lauout Cover

@@ -13,9 +13,7 @@ declare global {
 
 /**
  * A toggle is a button that can be toggled between two states. Also integrates into forms well.
- * - checkboxes
- * - switches
- * - toggle button
+ * Used for checkboxes, switches and toggle buttons.
  *
  * @customEvent change - When value changed.
  * @customEvent input - When value changed.

@@ -10,8 +10,7 @@ declare global {
 let accordionIncrement = 0;
 
 /**
- * - A wrapper element, that can collapse and expand its content with an animation.
- * - It can include a trigger elemeent which is always visible.
+ * A element that can collapse and expand its content with an animation.
  *
  * @customEvent change - Emitted when the element open state changes
  *

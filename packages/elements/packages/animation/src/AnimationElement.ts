@@ -14,7 +14,7 @@ declare global {
 }
 
 /**
- * Rive animation
+ * A simple interface to include Rive animations in html, as if it was just an image.
  *
  * @customEvent load - Emitted when animation has loaded.
  * @customEvent play - Emitted when animation has started playing.

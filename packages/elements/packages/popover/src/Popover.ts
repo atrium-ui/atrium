@@ -48,7 +48,7 @@ const PopoverAlignment = {
 } as const;
 
 /**
- * - A wrapper element that shows content when the user clicks with the input element.
+ * A wrapper element that shows content when the user clicks with the slotted input element.
  *
  * @attribute align (default: "auto") - Controls the align in that the content will be show from the origin element.
  * @attribute opened (default: false) - Controls if the content is shown or not.

@@ -10,8 +10,7 @@ declare global {
 }
 
 /**
- * - Accessible and styleable dropdown component
- * - Wraps the content in an a-expandable
+ * Accessible and styleable dropdown component.
  *
  * @example Select
  * ```html

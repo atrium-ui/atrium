@@ -9,9 +9,8 @@ declare global {
 }
 
 /**
- * - A Blur is a wrapper element which can show and hide its children.
- * - It will automatically "blur" (hide) the content, when clicked outside of its children.
- * - Optionally, when the content is shown, scrolling will be locked.
+ * An a-blur functions like a low-level dialog, it manages the focus and scrolling,
+ * and provides events for when clicked outside of its children.
  *
  * @customEvent blur - Emitted when the elements is blurred / closed.
  *

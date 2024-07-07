@@ -12,20 +12,12 @@ import { TypeDoc, Elements, Icon, Pills, Lit } from "package:/components"
 
 <Elements />
 
-Implemented with [Accordion](/atrium/components/accordion), [Combobox](/atrium/components/combobox), [Filter](/atrium/components/filter) and [Select](/atrium/components/select).
-
-<TypeDoc source="../packages/elements/packages/expandable" symbol="Expandable" />
-
-## Preview
-
-Different example confugrations of expandables.
-
 <div class="not-content box">
   <a-expandable class="accordion">
 
     <div slot="toggle">
       <button class="w-full text-left rounded-md my-1">
-        <div class="headline">Expand Down</div>
+        <div class="headline">Expand</div>
       </button>
     </div>
 
@@ -34,8 +26,16 @@ Different example confugrations of expandables.
   </a-expandable>
 </div>
 
+Implemented with [Accordion](/atrium/components/accordion), [Combobox](/atrium/components/combobox), [Filter](/atrium/components/filter) and [Select](/atrium/components/select).
+
+<TypeDoc source="../packages/elements/packages/expandable" symbol="Expandable" />
+
+## Examples
+
+Different example confugrations of expandables.
+
 <div class="not-content box">
-  <a-expandable client:load class="accordion" direction="up">
+  <a-expandable class="accordion" direction="up">
 
     <div slot="toggle">
       <button class="w-full text-left rounded-md my-1">

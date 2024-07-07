@@ -16,7 +16,7 @@ declare global {
 Chart.register(BarController, BarElement, CategoryScale, LinearScale);
 
 /**
- * A Chart with data loaded from a URL and styleable with CSS.
+ * A simple chart with data loaded from a URL and styleable with CSS.
  *
  * @customEvent load - Emitted when the chart has loaded.
  *
