@@ -8,7 +8,7 @@ export const buttonVariants = {
     "outline-none focus-visible:ring focus-visible:ring-[currentColor]",
   ],
   default: [
-    "bg-[var(--button-color,#bfa188)]",
+    "bg-[var(--button-color,#bfa188)] text-black",
     "filter active:brightness-90 hover:brightness-110 active:contrast-125",
     "border border-zinc-700",
   ],

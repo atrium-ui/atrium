@@ -17,7 +17,7 @@ export const Lightbox = defineComponent((_, { slots }) => {
           open.value = true;
         }}
       >
-        {slots.default?.()}
+        {slots.trigger?.() || <Button>Show</Button>}
       </button>
 
       {/* TODO: it may be better to implement portals with a framwork specific library */}
@@ -38,7 +38,7 @@ export const Lightbox = defineComponent((_, { slots }) => {
               "scale-95 group-[&[enabled]]/dialog:block group-[&[enabled]]/dialog:scale-100",
             ]}
           >
-            {slots.content?.()}
+            {slots.default?.()}
           </div>
 
           <div class="absolute top-8 right-4 z-50 text-2xl lg:top-20 lg:right-20">

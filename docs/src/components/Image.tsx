@@ -36,7 +36,7 @@ export function Image(props: {
       <>
         <Lightbox>
           {{
-            default: () => (
+            trigger: () => (
               <img
                 class={twMerge("bg-white object-contain", props.class)}
                 src={src}
@@ -46,7 +46,7 @@ export function Image(props: {
                 loading="lazy"
               />
             ),
-            content: () => (
+            default: () => (
               <a-pinch-zoom min-scale="0.5">
                 <img
                   class={twMerge(
