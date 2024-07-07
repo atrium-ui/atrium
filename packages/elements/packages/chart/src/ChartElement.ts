@@ -24,8 +24,6 @@ Chart.register(BarController, BarElement, CategoryScale, LinearScale);
  * ```html
  * <a-chart
  *   type="bar"
- *   width="600"
- *   height="300"
  *   class="h-[300px] aspect-[2/1] text-black stroke-black/5 dark:stroke-white/5 dark:text-white"
  *   src="/atrium/chart-data.json"
  * />
@@ -46,34 +44,35 @@ export class ChartElement extends LitElement {
      	}
     }
 
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
     canvas {
       display: block;
-      width: inherit;
-      height: inherit;
-      max-width: 100%;
-      max-height: 100%;
+      width: 100%;
+      height: 100%;
       color: inherit;
       border-color: inherit;
+      position: absolute;
+      inset: 0;
     }
   `;
 
   protected render(): HTMLTemplateResult {
-    return html`${this.canvas}`;
+    return html`
+      <div class="container">
+        ${this.canvas}
+      </div>
+    `;
   }
 
   static properties = {
     src: { type: String, reflect: true },
     type: { type: String, reflect: true, default: "bar" },
-    width: { type: Number, reflect: true },
-    height: { type: Number, reflect: true },
   };
-
-  constructor() {
-    super();
-
-    this.width = 300;
-    this.height = 150;
-  }
 
   private intersectionObserver?: IntersectionObserver;
 
@@ -100,6 +99,7 @@ export class ChartElement extends LitElement {
 
   disconnectedCallback(): void {
     this.intersectionObserver?.disconnect();
+    // this.resizeObserver?.disconnect();
 
     this.matchMedia?.removeEventListener("change", this.onChange);
 
@@ -133,16 +133,7 @@ export class ChartElement extends LitElement {
   private loaded = false;
   private paused = true;
 
-  private format() {
-    // force density of 2, just looks better multisampled
-    const ratio = Math.max(devicePixelRatio || 2, 2);
-
-    this.canvas.width = this.width * ratio;
-    this.canvas.height = this.height * ratio;
-  }
-
   protected firstUpdated(): void {
-    this.format();
     this.tryLoad(this.src);
   }
 
@@ -175,7 +166,7 @@ export class ChartElement extends LitElement {
     };
 
     return {
-      responsive: true,
+      maintainAspectRatio: false,
       color: color,
       borderColor: borderColor,
       scales: {
