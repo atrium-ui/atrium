@@ -32,6 +32,16 @@ This does not apply for the children of the Element, those are still rendered by
 Extending custom-element classes gives you the posibility to almost completly change or overwrite specific behaviours of a custom-element.
 To reduce complexity, this is not recommended, but if needed, available.
 
+## Common Issues
+
+- **Lauout shifts with hydration of custom-elements.** -- When elements or their children, that should be hidden, are visivle before hydration, a simple css selector with `:not(:defined) { opacity: 0; }` or `:not(:defined) * { display: none; }` may be used to hide them before hydration..
+
+<br/>
+
+- **Failed to execute 'define' on 'CustomElementRegistry': the name "..." has already been used with this registry** -- There may be two versions of the same element imported.
+
+<br/>
+<br/>
 
 ## Links
 
