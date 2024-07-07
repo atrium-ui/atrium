@@ -18,15 +18,37 @@ hero:
       icon: right-arrow
 ---
 
-import { Browser } from "../../pages/showcase/Browser";
+import { Showcase } from "./showcase/Showcase";
 import { Projects, Icon } from "package:/components"
-import { LinkCard, CardGrid } from "@astrojs/starlight/components";
+import { Card, LinkCard, CardGrid } from "@astrojs/starlight/components";
 
-<div class="not-content min-h-[700px]">
-  <Browser client:only="vue" />
+
+<div class="not-content pb-12 min-h-[700px]">
+  <div class="relative rounded-xl border border-zinc-950 border-b-0 2xl:mx-[-220px] xl:mx-[-80px]">
+    <Showcase client:only="vue" />
+  </div>
 </div>
 
-<div class="py-20">
+<CardGrid>
+  <Card title="Not opinionated about styling" icon="star">
+    Components come pre-styled with TailwindCSS classes, but you can style them however you like.
+  </Card>
+  <Card title="Ship less JavaScript" icon="star">
+    Components use custom-elements that are written with a focus on small bundle sizes. Which can also be used without a framework.
+  </Card>
+  <Card title="Protable and easy to use" icon="star">
+    Use with any framework, or event without one.
+  </Card>
+  <Card title="Performant and accessible" icon="star">
+    Minimal framework code, optimized for performance and accessibility.
+  </Card>
+</CardGrid>
+
+<div class="pt-12"/>
+
+## Included Packages
+
+<div class="py-12">
   <CardGrid>
     <LinkCard
       title="@sv/components"
@@ -45,5 +67,7 @@ import { LinkCard, CardGrid } from "@astrojs/starlight/components";
     />
   </CardGrid>
 </div>
+
+<div class="pt-12"/>
 
 <Projects />

@@ -1,5 +1,6 @@
 /* @jsxImportSource vue */
 import "@sv/elements/portal";
+import "@sv/elements/toast";
 import { Toast, ToastFeed } from "@sv/elements/toast";
 import { Button } from "./Button";
 

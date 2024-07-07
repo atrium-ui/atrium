@@ -4,7 +4,7 @@ import { defineComponent, ref, effect } from "vue";
 export const Switch = defineComponent(
   (
     props: {
-      name: string;
+      name?: string;
       checked?: boolean;
       required?: boolean;
       onChange?: (event: Event) => void;

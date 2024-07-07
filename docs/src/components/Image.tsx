@@ -1,5 +1,8 @@
 /* @jsxImportSource vue */
 
+import { Lightbox } from "@components/src/vue/Lightbox";
+import { twMerge } from "tailwind-merge";
+
 const landscape = import.meta.glob("../../assets/images/landscape/*.webp", {
   eager: true,
   as: "url",
@@ -20,16 +23,56 @@ export function randomImage() {
   return src;
 }
 
-export function Image() {
+export function Image(props: {
+  class?: string;
+  width?: number;
+  height?: number;
+  lightbox?: boolean;
+}) {
   const src = randomImage();
+
+  if (props.lightbox) {
+    return (
+      <>
+        <Lightbox>
+          {{
+            default: () => (
+              <img
+                class={twMerge("bg-white object-contain", props.class)}
+                src={src}
+                alt={src}
+                width={props.width}
+                height={props.height}
+                loading="lazy"
+              />
+            ),
+            content: () => (
+              <a-pinch-zoom min-scale="0.5">
+                <img
+                  class={twMerge(
+                    "max-h-[70vh] max-w-[70vw] bg-white object-contain",
+                    props.class,
+                  )}
+                  src={src}
+                  alt={src}
+                  loading="lazy"
+                />
+              </a-pinch-zoom>
+            ),
+          }}
+        </Lightbox>
+      </>
+    );
+  }
 
   return (
     <img
-      class="h-full w-full bg-white object-contain p-2"
+      class={twMerge("bg-white object-contain", props.class)}
       src={src}
       alt={src}
+      width={props.width}
+      height={props.height}
       loading="lazy"
-      decoding="async"
     />
   );
 }

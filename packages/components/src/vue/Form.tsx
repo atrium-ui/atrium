@@ -3,10 +3,13 @@ import { ref, defineComponent } from "vue";
 import "@sv/elements/transition";
 import "@sv/elements/form";
 import { Button } from "./Button.jsx";
+import { twMerge } from "tailwind-merge";
 
 export const Form = defineComponent(
   (
     props: {
+      submitLabel?: string;
+      submitClass?: string;
       onSubmit: (data: FormData) => Promise<string> | string;
     },
     { slots },
@@ -55,10 +58,13 @@ export const Form = defineComponent(
           <form onSubmit={submit}>
             <div class="flex flex-col gap-4">{slots.default?.()}</div>
 
-            <Button type="submit" class="mt-8 overflow-hidden">
+            <Button
+              type="submit"
+              class={twMerge("mt-8 overflow-hidden", props.submitClass)}
+            >
               <a-transition>
                 <div class="flex items-center gap-2">
-                  <span>Submit</span>
+                  <span>{props.submitLabel || "Submit"}</span>
                   {loading.value && <span class="loading-indicator flex-none" />}
                 </div>
               </a-transition>
@@ -75,7 +81,7 @@ export const Form = defineComponent(
     );
   },
   {
-    props: ["onSubmit"],
+    props: ["onSubmit", "submitLabel", "submitClass"],
   },
 );
 

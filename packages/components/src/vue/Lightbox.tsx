@@ -9,14 +9,16 @@ export const Lightbox = defineComponent((_, { slots }) => {
   const open = ref(false);
 
   return () => (
-    <div>
-      <Button
+    <>
+      <button
+        type="button"
+        class="m-0 cursor-pointer bg-transparent p-0"
         onClick={() => {
           open.value = true;
         }}
       >
-        Open
-      </Button>
+        {slots.default?.()}
+      </button>
 
       {/* TODO: it may be better to implement portals with a framwork specific library */}
       <a-portal>
@@ -36,7 +38,7 @@ export const Lightbox = defineComponent((_, { slots }) => {
               "scale-95 group-[&[enabled]]/dialog:block group-[&[enabled]]/dialog:scale-100",
             ]}
           >
-            {slots.default?.()}
+            {slots.content?.()}
           </div>
 
           <div class="absolute top-8 right-4 z-50 text-2xl lg:top-20 lg:right-20">
@@ -52,6 +54,6 @@ export const Lightbox = defineComponent((_, { slots }) => {
           </div>
         </a-blur>
       </a-portal>
-    </div>
+    </>
   );
 });

@@ -4,7 +4,6 @@ title: Animation
 
 import { Animation } from '@components/src/vue/Animation'
 import { Example, Rive, ComponentHeader } from "package:/components";
-import pie from "./animation/pie.riv?url";
 
 <ComponentHeader name="Animation">
  <Rive slot="pills" />
@@ -18,6 +17,6 @@ import { Animation } from './Animation.jsx'
 <Animation class="w-full h-auto" width={400} height={400} src={pie} />
 `}>
   <div class="grid">
-    <Animation client:only="vue" class="w-[400px] h-[400px]" width={400} height={400} src={pie} />
+    <Animation client:only="vue" class="w-[400px] h-[400px]" width={400} height={400} src="/atrium/pie.riv" />
   </div>
 </Example>

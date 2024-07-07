@@ -38,6 +38,13 @@ const ICONS = {
       />
     </svg>
   ),
+  clipboard: (
+    <svg viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <title>clipboard</title>
+      <path d="M1 2V19H17V2" stroke="currentColor" stroke-linecap="round" />
+      <rect x="4" width="10" height="2" rx="1" fill="currentColor" />
+    </svg>
+  ),
   collapse: (
     <svg viewBox="0 0 165 165" fill="none" xmlns="http://www.w3.org/2000/svg">
       <title>collapse</title>

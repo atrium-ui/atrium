@@ -35,7 +35,6 @@ export class Range extends LitElement {
       }
 
       .horizontal-slider {
-        margin: 0 0.5rem;
         outline: none;
       }
 
@@ -75,7 +74,6 @@ export class Range extends LitElement {
         margin: 0 -0.5rem;
         position: absolute;
         top: 0;
-        z-index: 10;
       }
 
       .horizontal-slider:focus .progress::before {
@@ -88,7 +86,6 @@ export class Range extends LitElement {
         border-radius: 50%;
         background: var(--slider-handle-background);
         position: absolute;
-        z-index: 1;
         left: calc(var(--progress) * 100%);
         top: 50%;
         transform: translate(-50%, -50%);

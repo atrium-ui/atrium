@@ -7,7 +7,7 @@ import { Button } from "./Button";
 import { Icon } from "./Icon";
 
 export const Slider = defineComponent(
-  (_, { slots }) => {
+  (props: { class?: string }, { slots }) => {
     const track = ref<Track>();
     const current = ref(0);
     const width = ref(0);
@@ -52,7 +52,9 @@ export const Slider = defineComponent(
     };
 
     return () => (
-      <div class="@container group relative w-full overflow-hidden">
+      <div
+        class={twMerge("@container group relative w-full overflow-hidden", props.class)}
+      >
         <div class="relative w-full">
           <Button
             variant="ghost"
@@ -100,7 +102,7 @@ export const Slider = defineComponent(
           </a-track>
         </div>
 
-        <div class="flex justify-center py-5 @lg:py-8">
+        <div class="flex justify-center pt-5 pb-2 @lg:py-8">
           <div
             class={twMerge(
               "relative flex h-[2px] w-[200px] items-center bg-[rgba(255,255,255,30%)] @lg:w-[400px]",
@@ -123,5 +125,6 @@ export const Slider = defineComponent(
   },
   {
     name: "Slider",
+    props: ["class"],
   },
 );
