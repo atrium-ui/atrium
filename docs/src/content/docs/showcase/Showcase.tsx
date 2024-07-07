@@ -11,14 +11,14 @@ import { AnimationCard } from "./cards/AnimationCard";
 
 export const Showcase = defineComponent(() => {
   return () => (
-    <div class="p-8">
+    <div class="shoawcase p-8 pt-12">
       <div class="grid gap-4 lg:grid-cols-3">
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4 -translate-y-5">
           <ChartCard />
           <PropertiesCard />
         </div>
 
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4 translate-y-5">
           <SliderCard />
           <LoginCard />
         </div>
