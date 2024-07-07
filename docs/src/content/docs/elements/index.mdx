@@ -6,9 +6,11 @@ sidebar:
   order: 1
 ---
 
-To keep the amount of logic in Components small, Elements are built as [custom-elements](https://web.dev/articles/custom-elements-v1#prestyle) using [Lit](https://lit.dev/docs/) which makes them framework agnostic, so they can be used in any framework or even without a framework.
+To keep the amount of logic in Components small, Elements are built as unstyled [custom-elements](https://web.dev/articles/custom-elements-v1#prestyle) using [Lit](https://lit.dev/docs/) which makes them framework agnostic, so they can be reused within many requirements and with any framework.
 
-These custom-elements are imported from node_modules, they do not use tailwind, their minimal styles are defined in regular css inside the element itself.
+Since they are defined by just an html tag, it forces you to think in a simple way: Props (Attributes) are just strings, which makes it possible to use them in any way html is used.
+
+The lower-level API of custom-elements, compared to frameworks, also gives you the oppertunity to offer better performance.
 
 ## Limitations of custom-elements
 
