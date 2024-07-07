@@ -19,7 +19,7 @@ export const Browser = defineComponent(() => {
         mounted.value ? "opacity-100" : "translate-y-5 opacity-0",
       ]}
     >
-      <div class="relative overflow-hidden rounded-xl border border-zinc-950 border-b-0 bg-[#18181a] shadow-xl 2xl:mx-[-220px] xl:mx-[-80px]">
+      <div class="relative overflow-hidden rounded-xl border border-zinc-950 border-b-0 bg-zinc-200 shadow-xl 2xl:mx-[-220px] xl:mx-[-80px] dark:bg-zinc-700">
         <div class="flex w-full p-1 pl-12">
           <Button
             variant="disabled"
@@ -48,7 +48,7 @@ export const Browser = defineComponent(() => {
         <iframe
           title="showcase"
           src="/atrium/showcase"
-          class="m-0 h-[600px] w-full bg-[#26262a]"
+          class="m-0 h-[600px] w-full dark:bg-[#26262a]"
         />
 
         <div class="pointer-events-none absolute bottom-0 left-0 h-[150px] w-full bg-[linear-gradient(0deg,var(--sl-color-black),transparent)]" />
