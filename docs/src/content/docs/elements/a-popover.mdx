@@ -11,6 +11,28 @@ import { Elements, Pills, Lit, TypeDoc } from "package:/components"
 
 <Elements />
 
+<div class="not-content box">
+  <a-popover class="group relative z-10">
+    <div slot="input">
+      <button slot="input" variant="outline">
+        Label
+      </button>
+    </div>
+
+    <div class="absolute py-1">
+      <div
+        class={[
+          "min-w-[100px] rounded-md border p-2 transition-all duration-100",
+          "border-zinc-700 bg-zinc-50 dark:bg-zinc-800",
+          "scale-95 opacity-0 group-[&[opened]]:scale-100 group-[&[opened]]:opacity-100",
+        ]}
+      >
+        Content
+      </div>
+    </div>
+  </a-popover>
+</div>
+
 Implemented with [Popover](/atrium/components/popover).
 
 <TypeDoc source="../packages/elements/packages/popover" symbol="Popover" />
