@@ -11,4 +11,21 @@ import { TypeDoc, Elements, Pills, Lit } from "package:/components"
 
 <Elements />
 
+<div class="not-content box">
+  <form onchange="console.log(event.target.value)" onsubmit="event.preventDefault()">
+  <a-select name="test" class="text-base">
+    <button type="button" slot="input" class="cursor-pointer">
+      <div class="w-[150px] text-left">Select</div>
+    </button>
+
+    <div class="mt-1 border border-zinc-700 bg-zinc-50 p-1">
+      <a-option class="block p-1 [&[selected]]:bg-zinc-100 active:bg-zinc-200 hover:bg-zinc-400" value="option-1">Option 1</a-option>
+      <a-option class="block p-1 [&[selected]]:bg-zinc-100 active:bg-zinc-200 hover:bg-zinc-400" value="option-2">Option 2</a-option>
+      <a-option class="block p-1 [&[selected]]:bg-zinc-100 active:bg-zinc-200 hover:bg-zinc-400" value="option-3">Option 3</a-option>
+      <a-option class="block p-1 [&[selected]]:bg-zinc-100 active:bg-zinc-200 hover:bg-zinc-400" value="option-4">Option 4</a-option>
+    </div>
+  </a-select>
+  </form>
+</div>
+
 <TypeDoc source="../packages/elements/packages/select" symbol="Select" />

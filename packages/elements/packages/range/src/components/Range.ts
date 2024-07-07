@@ -7,6 +7,20 @@ declare global {
   }
 }
 
+// TODO: form integration
+// TODO: multi value range
+// TODO: better restyling
+
+/**
+ * A simple range slider component for a single value.
+ *
+ * @example
+ * ```html
+ * <a-range value="0.5"></a-range>
+ * ```
+ *
+ * @see https://svp.pages.s-v.de/atrium/elements/a-select/
+ */
 @customElement("a-range")
 export class Range extends LitElement {
   static get styles() {
@@ -98,6 +112,7 @@ export class Range extends LitElement {
   @property({ type: String, reflect: true })
   public subtitle = "";
 
+  /** The current value of the slider. */
   @property({ type: Number, reflect: true })
   public value = 0;
 
