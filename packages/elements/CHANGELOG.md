@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.7.2 (2024-07-09)
+
+### Fixes
+
+- a-blur: to not set focus to children when using a mouse, to prevent safari outline
+
 ## 1.7.1 (2024-07-07)
 
 ### Fixes
