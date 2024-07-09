@@ -1,5 +1,11 @@
 # @sv/slider
 
+## 1.1.2 (2024-07-09)
+
+### Fixes
+
+- add css files to package exports
+
 ## 1.1.1
 
 ### Patch Changes
