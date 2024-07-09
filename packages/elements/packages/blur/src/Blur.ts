@@ -10,22 +10,22 @@ declare global {
 
 let isKeyboard = true;
 
-if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+if (typeof window !== "undefined" && typeof document !== "undefined") {
   document.addEventListener(
-    'keydown',
+    "keydown",
     (event) => {
       isKeyboard = true;
     },
-    true
-  )
+    true,
+  );
 
   document.addEventListener(
-    'mousedown',
+    "mousedown",
     (event) => {
-       isKeyboard = false;
+      isKeyboard = false;
     },
-    true
-  )
+    true,
+  );
 }
 
 /**
