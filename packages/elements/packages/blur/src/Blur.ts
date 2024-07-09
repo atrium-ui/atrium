@@ -8,6 +8,26 @@ declare global {
   }
 }
 
+let isKeyboard = true;
+
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+  document.addEventListener(
+    'keydown',
+    (event) => {
+      isKeyboard = true;
+    },
+    true
+  )
+
+  document.addEventListener(
+    'mousedown',
+    (event) => {
+       isKeyboard = false;
+    },
+    true
+  )
+}
+
 /**
  * An a-blur functions like a low-level dialog, it manages the focus and scrolling,
  * and provides events for when clicked outside of its children.
@@ -91,8 +111,14 @@ export class Blur extends LitElement {
 
     this.lastActiveElement = document.activeElement as HTMLElement;
 
-    const elements = this.focusableElements();
-    elements[0]?.focus();
+    // Do not focus elements, when using a mouse,
+    // because *some* browsers in *some* situations will mark the element as "focus-visible",
+    // even though the click was made with the mouse.
+    // TODO: idk
+    if (isKeyboard) {
+      const elements = this.focusableElements();
+      elements[0]?.focus();
+    }
   }
 
   private shouldBlur(e: MouseEvent) {
