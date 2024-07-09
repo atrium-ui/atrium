@@ -7,7 +7,10 @@
     "test": "bun test",
     "publish-package": "task publish"
   },
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "exports": {
     ".": {
       "import": "./dist/plain/sv-slider.mjs",
@@ -17,9 +20,15 @@
       "import": "./dist/vue2/sv-slider.mjs",
       "require": "./dist/vue2/sv-slider.js"
     },
+    "./vue2/css": {
+      "import": "./dist/vue2/sv-slider.css"
+    },
     "./vue3": {
       "import": "./dist/vue3/sv-slider.mjs",
       "require": "./dist/vue3/sv-slider.js"
+    },
+    "./vue3/css": {
+      "import": "./dist/vue3/sv-slider.css"
     }
   },
   "devDependencies": {
