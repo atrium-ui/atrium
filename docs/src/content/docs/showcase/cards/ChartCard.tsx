@@ -4,7 +4,7 @@ import { Card } from "../Card";
 
 export function ChartCard() {
   return (
-    <Card>
+    <Card class="p-3">
       <div class="flex flex-col space-y-1.5 pb-8">
         <h3 class="whitespace-nowrap font-semibold text-2xl leading-none tracking-tight">
           Statistics

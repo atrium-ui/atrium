@@ -6,7 +6,7 @@ import { Form, FormField } from "@components/src/vue/Form";
 
 export function LoginCard() {
   return (
-    <Card>
+    <Card class="p-3">
       <div class="flex flex-col space-y-1">
         <h3 class="whitespace-nowrap font-bold text-2xl tracking-tight">Login</h3>
         <p class="text-muted-foreground text-sm">

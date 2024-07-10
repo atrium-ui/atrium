@@ -47,10 +47,7 @@ export function Card(props: { class?: string }, { slots }) {
         </Button>
       </div>
 
-      <div
-        class={twMerge("relative overflow-hidden p-4 lg:p-6", props.class)}
-        ref={inner}
-      >
+      <div class={twMerge("relative overflow-hidden", props.class)} ref={inner}>
         {slots.default?.()}
       </div>
     </div>
