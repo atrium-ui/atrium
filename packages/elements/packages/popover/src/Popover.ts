@@ -7,6 +7,9 @@ import {
   type ReactiveControllerHost,
 } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
+import { Portal } from "@sv/elements/portal";
+import "@sv/elements/blur";
+import { computePosition, autoUpdate, autoPlacement, shift } from "@floating-ui/dom";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -14,7 +17,7 @@ declare global {
   }
 }
 
-export class WindowEventListener<
+export class ElementEventListener<
   E extends string,
   L extends EventListenerOrEventListenerObject,
 > implements ReactiveController
@@ -23,6 +26,7 @@ export class WindowEventListener<
 
   constructor(
     host: ReactiveControllerHost,
+    public root: EventTarget,
     public event: E,
     public handleClick: L,
   ) {
@@ -31,11 +35,11 @@ export class WindowEventListener<
   }
 
   hostConnected() {
-    window.addEventListener(this.event, this.handleClick);
+    this.root.addEventListener(this.event, this.handleClick);
   }
 
   hostDisconnected() {
-    window.removeEventListener(this.event, this.handleClick);
+    this.root.removeEventListener(this.event, this.handleClick);
   }
 }
 
@@ -82,20 +86,8 @@ export class Popover extends LitElement {
       display: inline-block;
       transition-property: all;
     }
-
-    .content {
-      display: block;
-      position: absolute;
-      width: 0px;
-      height: 0px;
-    }
-
-    :host(:not([opened])) .content {
-      pointer-events: none;
-    }
   `;
 
-  @query(".content") container?: HTMLSlotElement;
   @query(".trigger") input?: HTMLSlotElement;
 
   render(): HTMLTemplateResult {
@@ -105,139 +97,77 @@ export class Popover extends LitElement {
         name="input"
         @click=${() => this.toggle()}>
       </slot>
-      <slot
-        class="content"
-        ?inert=${!this.opened}
-        aria-hidden=${this.opened ? "false" : "true"}
-        @keydown=${this.onKeyDown}>
-      </slot>
     `;
   }
 
+  private get container() {
+    return this.querySelector("a-popover-content") as HTMLElement | undefined;
+  }
+
   private get content() {
-    return this.container?.assignedElements()[0] as HTMLElement;
+    return this.container?.children[0] as HTMLElement | undefined;
   }
 
   private get trigger() {
-    return this.input?.assignedElements()[0] as HTMLButtonElement;
-  }
-
-  private onKeyDown(e: KeyboardEvent) {
-    if (e.key === "Escape") {
-      this.close();
-      this.trigger?.focus();
-    }
+    return (this.input?.assignedElements()[0] as HTMLButtonElement) || undefined;
   }
 
   private shouldBlur(e: Event) {
-    if (this.contains(e.target as HTMLElement)) {
+    if (
+      this.contains(e.target as HTMLElement) ||
+      this.content?.contains(e.target as HTMLElement)
+    ) {
       return false;
     }
     return true;
   }
 
-  private clickListener = new WindowEventListener(this, "click", (e: Event) => {
+  private clickListener = new ElementEventListener(this, window, "click", (e: Event) => {
     if (this.shouldBlur(e)) {
       this.dispatchEvent(new Event("blur"));
       this.close();
     }
   });
 
-  private resizeListener = new WindowEventListener(this, "resize", (e: Event) => {
-    if (this.opened) {
-      this.updatePosition();
+  private keyListener = new ElementEventListener(this, window, "keydown", ((
+    e: KeyboardEvent,
+  ) => {
+    if (e.key === "Escape") {
+      this.close();
+      this.trigger?.focus();
     }
-  });
+  }) as EventListenerOrEventListenerObject);
+
+  cleanup?: () => void;
 
   show() {
     this.opened = true;
+    this.container?.show();
+
+    this.cleanup = autoUpdate(this, this.content, () => {
+      computePosition(this, this.content, {
+        middleware: [
+          autoPlacement({
+            allowedPlacements: ["bottom", "top"],
+          }),
+          shift(),
+        ],
+        placement: "bottom",
+        strategy: "fixed",
+      }).then(({ x, y }) => {
+        this.content.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    });
   }
 
   close() {
     this.opened = false;
+    this.cleanup?.();
+    this.container?.hide();
   }
 
   toggle() {
     this.opened ? this.close() : this.show();
-  }
-
-  private updatePosition() {
-    if (!this.container) return;
-
-    const trigger = this.getBoundingClientRect();
-    const contentWidth = this.container.scrollWidth || 0;
-    const contentHeight = this.container.scrollHeight || 0;
-
-    const bounds = {
-      // top: trigger.top - contentHeight,
-      right: trigger.right + contentWidth,
-      bottom: trigger.bottom + contentHeight,
-      left: trigger.left - contentWidth,
-    };
-
-    const alignLeft = (content: HTMLElement) => {
-      content.style.left = "auto";
-      content.style.right = `${contentWidth}px`;
-    };
-
-    const alignRight = (content: HTMLElement) => {
-      content.style.left = "0px";
-      content.style.right = "auto";
-    };
-
-    const alignTop = (content: HTMLElement) => {
-      content.style.top = "auto";
-      content.style.bottom = `${trigger.height + contentHeight}px`;
-    };
-
-    const alignBottom = (content: HTMLElement) => {
-      content.style.top = `${trigger.height}px`;
-      content.style.bottom = "auto";
-    };
-
-    const alignAuto = (content: HTMLElement) => {
-      if (bounds.bottom > window.innerHeight) {
-        alignTop(content);
-      } else {
-        alignBottom(content);
-      }
-
-      if (
-        trigger.left - contentWidth / 2 > 0 &&
-        trigger.right + contentWidth / 2 < window.innerWidth
-      ) {
-        // center
-        content.style.left = `calc(50% - ${contentWidth / 2}px)`;
-        content.style.right = "auto";
-      } else if (bounds.right > window.innerWidth) {
-        // align left
-        alignLeft(content);
-      } else if (bounds.left <= 0) {
-        // align right
-        alignRight(content);
-      }
-    };
-
-    switch (this.align) {
-      case PopoverAlignment.Left:
-        alignLeft(this.container);
-        break;
-      case PopoverAlignment.Right:
-        alignRight(this.container);
-        break;
-      case PopoverAlignment.Top:
-        alignTop(this.container);
-        break;
-      case PopoverAlignment.Bottom:
-        alignBottom(this.container);
-        break;
-      case PopoverAlignment.Auto:
-        alignAuto(this.container);
-        break;
-      default:
-        alignAuto(this.container);
-        break;
-    }
   }
 
   protected updated(): void {
@@ -248,7 +178,18 @@ export class Popover extends LitElement {
     if (this.content) {
       this.content.role = "dialog";
     }
-
-    this.updatePosition();
   }
 }
+
+customElements.define(
+  "a-popover-content",
+  class extends Portal {
+    hide() {
+      this.portal.children[0]?.removeAttribute("enabled");
+    }
+
+    show() {
+      this.portal.children[0]?.setAttribute("enabled", "");
+    }
+  },
+);

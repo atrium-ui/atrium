@@ -30,11 +30,15 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
     return ele;
   }
 
+  get children() {
+    return this.portal.children;
+  }
+
   observer = new MutationObserver(() => {
     requestAnimationFrame(() => {
-      if (this.children.length) {
+      if (this.childNodes.length) {
         this.portal.innerHTML = "";
-        this.portal.append(...this.children);
+        this.portal.append(...this.childNodes);
       }
     });
   });
