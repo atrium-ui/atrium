@@ -52,6 +52,20 @@ merge_release_preview:
     - merge_requests
   script: task release:preview
 
+publish-dev:
+  stage: publish
+  artifacts:
+    untracked: true
+  only:
+    - /^release\/[0-9]+(?:.[0-9]+)+$/
+  script:
+    - git checkout "$CI_COMMIT_REF_NAME"
+    - git fetch --prune --prune-tags -f
+    - git pull
+    - bun x npm config set //gitlab.s-v.de/api/v4/projects/1560/packages/npm/:_authToken="$CI_JOB_TOKEN"
+    - bun x npm config list
+    - task prerelease
+
 publish:
   stage: publish
   artifacts:
