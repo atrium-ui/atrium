@@ -1,47 +1,50 @@
-// biome-ignore lint/complexity/useArrowFunction: <explanation>
-const registerElementFunction = function (tag, ElementConstructor) {
-  if (import.meta.hot) {
-    import.meta.hot.accept();
-    import.meta.hot.on("vite:afterUpdate", () => {
-      for (const node of document.querySelectorAll(tag)) {
-        // Swap prototype of instance with new one
-        Object.setPrototypeOf(node, ElementConstructor.prototype);
-        // re-render
-        node.connectedCallback?.();
-        node.requestUpdate?.();
-      }
-    });
-
-    try {
-      customElements.define(tag, ElementConstructor);
-    } catch (err) {}
-  } else {
-    customElements.define(tag, ElementConstructor);
-  }
-};
-
-const prelude = () => `const __defineElement = ${registerElementFunction.toString()};`;
+const transformDefine = (tag, Element) => `
+if (import.meta.hot) {
+  import.meta.hot.accept();
+  import.meta.hot.on("vite:afterUpdate", () => {
+    for (const node of document.querySelectorAll(${tag})) {
+      // Swap prototype of instance with new one
+      Object.setPrototypeOf(${tag}, ${Element}.prototype);
+      // re-render
+      console.log("render", node, ${tag}, ${Element}.prototype.render);
+      node.connectedCallback?.();
+      node.requestUpdate?.();
+    }
+  });
+  try {
+    customElements.define(${tag}, ${Element});
+  } catch (err) {}
+} else {
+  customElements.define(${tag}, ${Element});
+}
+`;
 
 const defineRegex = /customElements\.define\((["a-zA-Z-]+),\s+([a-zA-Z]+)\)?;/g;
 
 export default () => {
   return {
-    name: "custom-elements-hmr",
+    name: "vite:custom-elements-hmr",
+    enforce: "pre",
+    apply: "serve",
 
-    transform(code, id) {
-      if (id.match("node_modules")) return;
-
-      const matches = [...code.matchAll(defineRegex)];
-
-      if (matches.length > 0) {
-        code = `${prelude()}\n${code}`;
-
-        for (const [str, tag, elementName] of matches) {
-          code = code.replace(str, `__defineElement(${tag}, ${elementName});`);
-        }
+    transform(code, id, options) {
+      const ssr = typeof options === "object" ? options.ssr : options;
+      if (ssr || id.match("node_modules")) {
+        return;
       }
 
-      return { code };
+      const matches = [...code.matchAll(defineRegex)];
+      if (matches.length === 0) {
+        return;
+      }
+
+      let output = code;
+
+      for (const [str, tag, Element] of matches) {
+        output = output.replace(str, transformDefine(tag, Element));
+      }
+
+      return { code: output };
     },
   };
 };

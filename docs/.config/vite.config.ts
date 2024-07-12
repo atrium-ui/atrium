@@ -13,5 +13,5 @@ export default defineConfig({
       allow: [".."],
     },
   },
-  // plugins: [hmr()],
+  plugins: [hmr()],
 });
