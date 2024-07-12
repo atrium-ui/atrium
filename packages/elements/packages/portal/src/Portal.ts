@@ -15,12 +15,24 @@
  * @see https://svp.pages.s-v.de/atrium/elements/a-portal/
  */
 export class Portal extends (globalThis.HTMLElement || class {}) {
+  private proxiedEvents = ["blur", "change"];
+
+  private createPortal: () => HTMLElement = () => {
+    const ele = this.portalGun();
+
+    for (const event of this.proxiedEvents) {
+      ele.addEventListener(event, this.proxyEvent(event), { capture: true });
+    }
+
+    return ele;
+  };
+
   // TODO: make simpler id generator
   portalId = crypto.randomUUID();
-  portal = this.portalGun();
+  portal = this.createPortal();
 
   // TODO: try to find existing portal with this.dataset.portal
-  protected portalGun() {
+  protected portalGun(): HTMLElement {
     const ele = document.createElement("div");
     ele.dataset.portal = this.portalId;
     ele.style.position = "fixed";
@@ -28,6 +40,10 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
     ele.style.left = "0px";
     ele.style.zIndex = "10000000";
     return ele;
+  }
+
+  proxyEvent(name: string) {
+    return (e: Event) => this.dispatchEvent(new CustomEvent(name, { detail: e }));
   }
 
   get children() {

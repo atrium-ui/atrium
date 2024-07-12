@@ -151,7 +151,7 @@ export class Blur extends LitElement {
 
     this.role = "dialog";
 
-    this.listener(this, "keydown", (e: KeyboardEvent) => {
+    this.listener(window, "keydown", (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         this.tryBlur();
       }

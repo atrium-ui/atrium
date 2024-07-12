@@ -8,7 +8,7 @@ import {
 } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { Portal } from "@sv/elements/portal";
-import "@sv/elements/blur";
+import { Blur } from "@sv/elements/blur";
 import { computePosition, autoUpdate, autoPlacement, shift } from "@floating-ui/dom";
 
 declare global {
@@ -51,6 +51,55 @@ const PopoverAlignment = {
   Auto: "auto",
 } as const;
 
+class PopoverContent extends Blur {
+  public scrollLock = false;
+
+  static styles = css`
+    :host {
+      display: block;
+      transition-property: all;
+      pointer-events: none;
+    }
+
+    :host([enabled]) {
+      pointer-events: all !important;
+    }
+
+    :host(:not([enabled])) ::slotted(*) {
+      display: none;
+    }
+  `;
+}
+
+customElements.define("a-popover-content", PopoverContent);
+
+class PopoverPortal extends Portal {
+  protected portalGun() {
+    const ele = document.createElement("a-popover-content");
+    ele.dataset.portal = this.portalId;
+    ele.style.position = "fixed";
+    ele.style.top = "0px";
+    ele.style.left = "0px";
+    ele.style.width = "100%";
+    ele.style.height = "100%";
+    ele.style.zIndex = "10000000";
+    return ele;
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+
+    const popover = this.closest("a-popover");
+    if (popover) {
+      this.addEventListener("blur", () => {
+        popover.close();
+      });
+    }
+  }
+}
+
+customElements.define("a-popover-portal", PopoverPortal);
+
 /**
  * A wrapper element that shows content when the user clicks with the slotted input element.
  *
@@ -64,15 +113,14 @@ const PopoverAlignment = {
  *     Label
  *   </button>
  *
- *   <div>
- *     Content
- *   </div>
+ *   <a-popover-content>
+ *     <div>Content</div>
+ *   </a-popover-content>
  * </a-popover>
  * ```
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-popover/
  */
-@customElement("a-popover")
 export class Popover extends LitElement {
   @property({ type: String })
   public align: (typeof PopoverAlignment)[keyof typeof PopoverAlignment] =
@@ -100,70 +148,49 @@ export class Popover extends LitElement {
     `;
   }
 
-  private get container() {
-    return this.querySelector("a-popover-content") as HTMLElement | undefined;
+  private get portal() {
+    return this.querySelector("a-popover-portal") as PopoverContent | undefined;
   }
 
   private get content() {
-    return this.container?.children[0] as HTMLElement | undefined;
+    return this.portal?.children[0] as HTMLElement | undefined;
   }
 
   private get trigger() {
     return (this.input?.assignedElements()[0] as HTMLButtonElement) || undefined;
   }
 
-  private shouldBlur(e: Event) {
-    if (
-      this.contains(e.target as HTMLElement) ||
-      this.content?.contains(e.target as HTMLElement)
-    ) {
-      return false;
-    }
-    return true;
-  }
-
-  private clickListener = new ElementEventListener(this, window, "click", (e: Event) => {
-    if (this.shouldBlur(e)) {
-      this.dispatchEvent(new Event("blur"));
-      this.close();
-    }
-  });
-
-  private keyListener = new ElementEventListener(this, window, "keydown", ((
-    e: KeyboardEvent,
-  ) => {
-    if (e.key === "Escape") {
-      this.close();
-      this.trigger?.focus();
-    }
-  }) as EventListenerOrEventListenerObject);
-
   cleanup?: () => void;
 
   show() {
     this.opened = true;
-    this.container?.show();
+    this.portal?.portal?.enable();
+
+    if (!this.content) {
+      return;
+    }
 
     this.cleanup = autoUpdate(this, this.content, () => {
-      computePosition(this, this.content, {
-        middleware: [
-          autoPlacement({
-            allowedPlacements: ["bottom", "top"],
-          }),
-          shift(),
-        ],
-        placement: "bottom",
-        strategy: "fixed",
-      }).then(({ x, y }) => {
-        this.content.style.transform = `translate(${x}px, ${y}px)`;
-      });
+      if (this.content)
+        computePosition(this, this.content, {
+          middleware: [
+            autoPlacement({
+              allowedPlacements: ["bottom", "top"],
+            }),
+            shift(),
+          ],
+          placement: "bottom",
+          strategy: "fixed",
+        }).then(({ x, y }) => {
+          if (this.content) this.content.style.transform = `translate(${x}px, ${y}px)`;
+        });
     });
   }
 
   close() {
     this.opened = false;
     this.cleanup?.();
-    this.container?.hide();
+    this.portal?.portal?.disable();
   }
 
   toggle() {
@@ -181,15 +208,4 @@ export class Popover extends LitElement {
   }
 }
 
-customElements.define(
-  "a-popover-content",
-  class extends Portal {
-    hide() {
-      this.portal.children[0]?.removeAttribute("enabled");
-    }
-
-    show() {
-      this.portal.children[0]?.setAttribute("enabled", "");
-    }
-  },
-);
+customElements.define("a-popover", Popover);
