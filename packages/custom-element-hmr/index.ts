@@ -1,19 +1,24 @@
 const transformDefine = (tag, Element) => `
 if (import.meta.hot) {
-  import.meta.hot.accept();
-  import.meta.hot.on("vite:afterUpdate", () => {
-    for (const node of document.querySelectorAll(${tag})) {
-      // Swap prototype of instance with new one
-      Object.setPrototypeOf(${tag}, ${Element}.prototype);
-      // re-render
-      console.log("render", node, ${tag}, ${Element}.prototype.render);
-      node.connectedCallback?.();
-      node.requestUpdate?.();
-    }
-  });
-  try {
-    customElements.define(${tag}, ${Element});
-  } catch (err) {}
+  function define(tag, ElementConstructor) {
+    import.meta.hot.accept();
+    import.meta.hot.on("vite:afterUpdate", () => {
+      for (const node of document.querySelectorAll(tag)) {
+        // Swap prototype of instance with new one
+        Object.setPrototypeOf(node, ElementConstructor.prototype);
+
+        // re-render
+        node.connectedCallback?.();
+        node.requestUpdate?.();
+      }
+    });
+
+    try {
+      customElements.define(tag, ElementConstructor);
+    } catch (err) {}
+  }
+
+  define(${tag}, ${Element});
 } else {
   customElements.define(${tag}, ${Element});
 }
