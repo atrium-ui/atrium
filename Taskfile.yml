@@ -102,6 +102,13 @@ tasks:
       - knope -v release | tee .task/publish.txt
       - task notify || true
 
+  prerelease:
+    deps: [build]
+    env:
+      PRERELEASE_LABEL: dev
+    cmds:
+      - knope -v release --prerelease-label={{.PRERELEASE_LABEL}} --dry-run
+
   release:preview:
     cmds:
       - knope release --dry-run
@@ -114,7 +121,7 @@ tasks:
       VERSION:
         sh: bun x npm version --json | jq ".[keys[0]]"
     cmds:
-      - bun x npm publish && echo info Publishing \"{{.NAME}}\" at \"{{.VERSION}}\" || true
+      - bun x npm publish --tag {{.PRERELEASE_LABEL | default "latest"}} && echo info Publishing \"{{.NAME}}\" at \"{{.VERSION}}\" || true
 
   notify:
     silent: true

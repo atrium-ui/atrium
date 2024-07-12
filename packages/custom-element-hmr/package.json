@@ -1,0 +1,14 @@
+{
+  "name": "@atrium-ui/custom-element-hmr",
+  "version": "1.0.0",
+  "description": "Vite HMR plugin for custom elements",
+  "type": "module",
+  "peerDependencies": {
+    "vite": "^5.2.7"
+  },
+  "exports": {
+    ".": {
+      "import": "./index.ts"
+    }
+  }
+}

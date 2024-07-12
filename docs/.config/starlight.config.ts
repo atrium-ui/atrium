@@ -3,7 +3,7 @@ import type starlight from "@astrojs/starlight";
 const config: Parameters<typeof starlight>[0] = {
   favicon: "favicon.png",
   title: "Atrium",
-  customCss: ["./custom.css"],
+  customCss: ["./src/custom.css"],
   components: {
     PageFrame: "./src/components/PageFrame.astro",
   },
