@@ -141,6 +141,7 @@ export class Popover extends LitElement {
   `;
 
   @query(".trigger") input?: HTMLSlotElement;
+  @query(".content") contentSlot?: HTMLSlotElement;
 
   render(): HTMLTemplateResult {
     return html`
@@ -149,11 +150,15 @@ export class Popover extends LitElement {
         name="input"
         @click=${() => this.toggle()}>
       </slot>
+      <slot class="content"></slot>
     `;
   }
 
   private get portal() {
-    return this.querySelector("a-popover-content") as PopoverContent | undefined;
+    return this.contentSlot?.assignedElements()[0] as
+      | PopoverContent
+      | HTMLElement
+      | undefined;
   }
 
   private get content() {
@@ -169,7 +174,10 @@ export class Popover extends LitElement {
   show() {
     this.opened = true;
 
-    if (this.portal?.portal instanceof PopoverPortal) {
+    if (
+      this.portal instanceof PopoverContent &&
+      this.portal?.portal instanceof PopoverPortal
+    ) {
       this.portal.portal.enable();
     }
 
@@ -194,11 +202,22 @@ export class Popover extends LitElement {
     });
   }
 
+  private clickFallback = new ElementEventListener(this, window, "click", (e) => {
+    if (this.portal instanceof PopoverContent) return;
+
+    if (this.opened && !this.contains(e.target)) {
+      this.close();
+    }
+  });
+
   close() {
     this.opened = false;
     this.cleanup?.();
 
-    if (this.portal?.portal instanceof PopoverPortal) {
+    if (
+      this.portal instanceof PopoverContent &&
+      this.portal?.portal instanceof PopoverPortal
+    ) {
       this.portal.portal.disable();
     }
   }

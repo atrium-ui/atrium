@@ -19,7 +19,7 @@ export function Popover(props: { label?: string }, { slots }) {
       <a-popover-content class="group">
         <div
           class={[
-            "w-[max-content] py-1",
+            "w-[max-content] p-2",
             "opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100",
           ]}
         >
