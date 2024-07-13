@@ -109,7 +109,10 @@ export class Blur extends LitElement {
     this.ariaHidden = "false";
     this.enabled = true;
 
-    this.lastActiveElement = document.activeElement as HTMLElement;
+    // in the case enable is called after the element is already enabled, dont set the last active element
+    if (!this.contains(document.activeElement)) {
+      this.lastActiveElement = document.activeElement as HTMLElement;
+    }
 
     // Do not focus elements, when using a mouse,
     // because *some* browsers in *some* situations will mark the element as "focus-visible",

@@ -6,7 +6,7 @@ import {
   type ReactiveController,
   type ReactiveControllerHost,
 } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { property, query } from "lit/decorators.js";
 import { Portal } from "@sv/elements/portal";
 import { Blur } from "@sv/elements/blur";
 import { computePosition, autoUpdate, autoPlacement, shift } from "@floating-ui/dom";
@@ -44,14 +44,6 @@ export class ElementEventListener<
     this.root.removeEventListener(this.event, this.handleClick);
   }
 }
-
-const PopoverAlignment = {
-  Bottom: "bottom",
-  Top: "top",
-  Left: "left",
-  Right: "right",
-  Auto: "auto",
-} as const;
 
 class PopoverPortal extends Blur {
   public scrollLock = false;
@@ -107,9 +99,6 @@ customElements.define("a-popover-content", PopoverContent);
 /**
  * A wrapper element that shows content when the user clicks with the slotted input element.
  *
- * @attribute align (default: "auto") - Controls the align in that the content will be show from the origin element.
- * @attribute opened (default: false) - Controls if the content is shown or not.
- *
  * @example
  * ```html
  * <a-popover>
@@ -126,10 +115,9 @@ customElements.define("a-popover-content", PopoverContent);
  * @see https://svp.pages.s-v.de/atrium/elements/a-popover/
  */
 export class Popover extends LitElement {
-  @property({ type: String })
-  public align: (typeof PopoverAlignment)[keyof typeof PopoverAlignment] =
-    PopoverAlignment.Auto;
-
+  /**
+   * Wether the content is shown or not.
+   */
   @property({ type: Boolean, reflect: true })
   public opened = false;
 
@@ -169,9 +157,9 @@ export class Popover extends LitElement {
     return (this.input?.assignedElements()[0] as HTMLButtonElement) || undefined;
   }
 
-  cleanup?: () => void;
+  private cleanup?: () => void;
 
-  show() {
+  public show() {
     this.opened = true;
 
     if (
@@ -194,8 +182,6 @@ export class Popover extends LitElement {
             }),
             shift(),
           ],
-          placement: "bottom",
-          strategy: "fixed",
         }).then(({ x, y }) => {
           if (this.content) this.content.style.transform = `translate(${x}px, ${y}px)`;
         });
@@ -210,7 +196,7 @@ export class Popover extends LitElement {
     }
   });
 
-  close() {
+  public close() {
     this.opened = false;
     this.cleanup?.();
 
@@ -222,7 +208,7 @@ export class Popover extends LitElement {
     }
   }
 
-  toggle() {
+  public toggle() {
     this.opened ? this.close() : this.show();
   }
 
