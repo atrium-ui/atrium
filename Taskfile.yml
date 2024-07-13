@@ -107,7 +107,7 @@ tasks:
     env:
       PRERELEASE_LABEL: dev
     cmds:
-      - knope -v release --prerelease-label={{.PRERELEASE_LABEL}} --dry-run
+      - knope -v release --prerelease-label={{.PRERELEASE_LABEL}}
 
   release:preview:
     cmds:
