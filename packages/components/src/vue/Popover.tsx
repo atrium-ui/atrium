@@ -16,18 +16,23 @@ export function Popover(props: { label?: string }, { slots }) {
         )}
       </div>
 
-      <a-popover-portal class="group">
-        <div class="w-[max-content] py-1">
+      <a-popover-content class="group">
+        <div
+          class={[
+            "w-[max-content] py-1",
+            "opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100",
+          ]}
+        >
           <div
             class={[
               "min-w-[100px] rounded-md border border-zinc-700 bg-zinc-50 p-1 dark:bg-zinc-800",
-              // "scale-95 opacity-0 group-[&[enabled]]:scale-100 group-[&[enabled]]:opacity-100",
+              "scale-95 transition-all duration-150 group-[&[enabled]]:scale-100",
             ]}
           >
             {slots.default?.()}
           </div>
         </div>
-      </a-popover-portal>
+      </a-popover-content>
     </a-popover>
   );
 }

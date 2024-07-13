@@ -14,6 +14,8 @@ import { computePosition, autoUpdate, autoPlacement, shift } from "@floating-ui/
 declare global {
   interface HTMLElementTagNameMap {
     "a-popover": Popover;
+    "a-popover-content": PopoverContent;
+    "a-popover-portal": PopoverPortal;
   }
 }
 
@@ -51,7 +53,7 @@ const PopoverAlignment = {
   Auto: "auto",
 } as const;
 
-class PopoverContent extends Blur {
+class PopoverPortal extends Blur {
   public scrollLock = false;
 
   static styles = css`
@@ -72,18 +74,20 @@ class PopoverContent extends Blur {
     }
 
     :host(:not([enabled])) ::slotted(*) {
-      display: none !important;
+      pointer-events: none !important;
+      opacity: 0 !important;
     }
   `;
 }
 
-customElements.define("a-popover-content", PopoverContent);
+customElements.define("a-popover-portal", PopoverPortal);
 
-class PopoverPortal extends Portal {
+class PopoverContent extends Portal {
   protected portalGun() {
-    const ele = document.createElement("a-popover-content");
+    const ele = document.createElement("a-popover-portal");
+    ele.className = this.className;
     ele.dataset.portal = this.portalId;
-    return ele as PopoverContent;
+    return ele as PopoverPortal;
   }
 
   connectedCallback(): void {
@@ -91,16 +95,14 @@ class PopoverPortal extends Portal {
 
     this.addEventListener("blur", (e) => {
       const popover = this.closest("a-popover");
-      if (popover) {
-        if (e instanceof CustomEvent) {
-          popover.close();
-        }
+      if (e instanceof CustomEvent) {
+        popover?.close();
       }
     });
   }
 }
 
-customElements.define("a-popover-portal", PopoverPortal);
+customElements.define("a-popover-content", PopoverContent);
 
 /**
  * A wrapper element that shows content when the user clicks with the slotted input element.
@@ -151,7 +153,7 @@ export class Popover extends LitElement {
   }
 
   private get portal() {
-    return this.querySelector("a-popover-portal") as PopoverPortal | undefined;
+    return this.querySelector("a-popover-content") as PopoverContent | undefined;
   }
 
   private get content() {
@@ -167,7 +169,7 @@ export class Popover extends LitElement {
   show() {
     this.opened = true;
 
-    if (this.portal?.portal instanceof PopoverContent) {
+    if (this.portal?.portal instanceof PopoverPortal) {
       this.portal.portal.enable();
     }
 
@@ -196,7 +198,7 @@ export class Popover extends LitElement {
     this.opened = false;
     this.cleanup?.();
 
-    if (this.portal?.portal instanceof PopoverContent) {
+    if (this.portal?.portal instanceof PopoverPortal) {
       this.portal.portal.disable();
     }
   }

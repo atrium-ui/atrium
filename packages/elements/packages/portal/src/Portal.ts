@@ -29,7 +29,7 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
 
   // TODO: make simpler id generator
   public portalId = crypto.randomUUID();
-  public portal = this.createPortal();
+  public portal!: HTMLElement;
 
   // TODO: try to find existing portal with this.dataset.portal
   protected portalGun() {
@@ -77,6 +77,8 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
       attributes: true,
       characterData: true,
     });
+
+    this.portal = this.createPortal();
 
     document.body.append(this.portal);
 
