@@ -118,6 +118,8 @@ tasks:
   publish:
     dir: "{{.USER_WORKING_DIR}}"
     vars:
+      PRERELEASE_LABEL:
+        sh: echo $PRERELEASE_LABEL
       NAME:
         sh: bun x npm version --json | jq "keys[0]"
       VERSION:
