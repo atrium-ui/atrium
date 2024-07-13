@@ -32,7 +32,6 @@ export function Button(
     class?: string | string[];
     slot?: string;
     disabled?: boolean;
-    autofocus?: boolean;
     variant?: keyof typeof buttonVariants;
     label?: string;
     onClick?: (e: React.MouseEvent) => void;
@@ -44,7 +43,6 @@ export function Button(
       // @ts-ignore
       inert={props.inert || undefined}
       slot={props.slot || undefined}
-      autofocus={props.autofocus || undefined}
       aria-disabled={props.disabled || undefined}
       className={twMerge(
         buttonVariants.base,
