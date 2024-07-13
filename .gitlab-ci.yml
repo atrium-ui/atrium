@@ -1,6 +1,6 @@
 stages:
-  - merge
   - test
+  - merge
   - publish
   - docs
 
