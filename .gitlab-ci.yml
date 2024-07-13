@@ -57,7 +57,7 @@ publish-dev:
   artifacts:
     untracked: true
   only:
-    - /^release\/[0-9]+(?:.[0-9]+)+$/
+    - /^release\/.+$/
   script:
     - git checkout "$CI_COMMIT_REF_NAME"
     - git fetch --prune --prune-tags -f
