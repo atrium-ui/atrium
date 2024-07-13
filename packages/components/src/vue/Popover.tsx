@@ -4,7 +4,7 @@ import { Button } from "./Button";
 
 export function Popover(props: { label?: string }, { slots }) {
   return (
-    <a-popover class="relative z-10">
+    <a-popover-trigger class="relative z-10">
       {/* @ts-ignore */}
       <div slot="input">
         {props.label ? (
@@ -16,7 +16,7 @@ export function Popover(props: { label?: string }, { slots }) {
         )}
       </div>
 
-      <a-popover-content class="group">
+      <a-popover class="group">
         <div
           class={[
             "w-[max-content] p-2",
@@ -32,7 +32,7 @@ export function Popover(props: { label?: string }, { slots }) {
             {slots.default?.()}
           </div>
         </div>
-      </a-popover-content>
-    </a-popover>
+      </a-popover>
+    </a-popover-trigger>
   );
 }

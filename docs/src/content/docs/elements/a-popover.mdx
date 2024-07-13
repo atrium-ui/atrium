@@ -12,14 +12,14 @@ import { Elements, Pills, Lit, TypeDoc } from "package:/components"
 <Elements />
 
 <div class="not-content box">
-  <a-popover class="group relative z-10">
+  <a-popover-trigger class="group relative z-10">
     <div slot="input">
       <button slot="input" variant="outline">
         Label
       </button>
     </div>
 
-    <a-popover-content>
+    <a-popover>
       <div
         class={[
           "w-[max-content] rounded-md border p-2",
@@ -28,8 +28,8 @@ import { Elements, Pills, Lit, TypeDoc } from "package:/components"
       >
         Content
       </div>
-    </a-popover-content>
-  </a-popover>
+    </a-popover>
+  </a-popover-trigger>
 </div>
 
 Implemented with [Popover](/atrium/components/popover).

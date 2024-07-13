@@ -14,7 +14,7 @@ import { computePosition, autoUpdate, autoPlacement, shift } from "@floating-ui/
 declare global {
   interface HTMLElementTagNameMap {
     "a-popover": Popover;
-    "a-popover-content": PopoverContent;
+    "a-popover-trigger": PopoverTrigger;
     "a-popover-portal": PopoverPortal;
   }
 }
@@ -74,7 +74,7 @@ class PopoverPortal extends Blur {
 
 customElements.define("a-popover-portal", PopoverPortal);
 
-class PopoverContent extends Portal {
+class Popover extends Portal {
   protected portalGun() {
     const ele = document.createElement("a-popover-portal");
     ele.className = this.className;
@@ -82,31 +82,75 @@ class PopoverContent extends Portal {
     return ele as PopoverPortal;
   }
 
+  private cleanup?: () => void;
+
   connectedCallback(): void {
     super.connectedCallback();
 
     this.addEventListener("blur", (e) => {
-      const popover = this.closest("a-popover");
+      const trigger = this.closest("a-popover-trigger");
       if (e instanceof CustomEvent) {
-        popover?.close();
+        trigger?.close();
       }
     });
   }
+
+  public show() {
+    const trigger = this.closest("a-popover-trigger");
+    const content = this.children[0] as HTMLElement | undefined;
+
+    if (!trigger || !content) return;
+
+    this.cleanup = autoUpdate(trigger, content, () => {
+      if (content)
+        computePosition(trigger, content, {
+          middleware: [
+            autoPlacement({
+              allowedPlacements: ["bottom", "top"],
+            }),
+            shift(),
+          ],
+        }).then(({ x, y }) => {
+          if (content) content.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    });
+
+    if (this.children[0]) {
+      this.children[0].role = "dialog";
+    }
+
+    if (this.portal instanceof PopoverPortal) {
+      this.portal.enable();
+    }
+  }
+
+  public hide() {
+    this.cleanup?.();
+
+    if (this.portal instanceof PopoverPortal) {
+      this.portal.disable();
+    }
+  }
+
+  disconnectedCallback(): void {
+    this.cleanup?.();
+    super.disconnectedCallback();
+  }
 }
 
-customElements.define("a-popover-content", PopoverContent);
+customElements.define("a-popover", Popover);
 
 /**
  * A wrapper element that shows content when the user clicks with the slotted input element.
  *
  * @example
  * ```html
- * <a-popover>
+ * <a-popover-trigger>
  *   <button type="button" slot="input">
  *     Label
  *   </button>
  *
- *   <a-popover-content>
+ *   <a-popover>
  *     <div>Content</div>
  *   </a-popover-content>
  * </a-popover>
@@ -114,7 +158,7 @@ customElements.define("a-popover-content", PopoverContent);
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-popover/
  */
-export class Popover extends LitElement {
+export class PopoverTrigger extends LitElement {
   /**
    * Wether the content is shown or not.
    */
@@ -143,68 +187,34 @@ export class Popover extends LitElement {
   }
 
   private get portal() {
-    return this.contentSlot?.assignedElements()[0] as
-      | PopoverContent
-      | HTMLElement
-      | undefined;
-  }
-
-  private get content() {
-    return this.portal?.children[0] as HTMLElement | undefined;
+    return this.contentSlot?.assignedElements()[0];
   }
 
   private get trigger() {
     return (this.input?.assignedElements()[0] as HTMLButtonElement) || undefined;
   }
 
-  private cleanup?: () => void;
-
-  public show() {
-    this.opened = true;
-
-    if (
-      this.portal instanceof PopoverContent &&
-      this.portal?.portal instanceof PopoverPortal
-    ) {
-      this.portal.portal.enable();
-    }
-
-    if (!this.content) {
-      return;
-    }
-
-    this.cleanup = autoUpdate(this, this.content, () => {
-      if (this.content)
-        computePosition(this, this.content, {
-          middleware: [
-            autoPlacement({
-              allowedPlacements: ["bottom", "top"],
-            }),
-            shift(),
-          ],
-        }).then(({ x, y }) => {
-          if (this.content) this.content.style.transform = `translate(${x}px, ${y}px)`;
-        });
-    });
-  }
-
   private clickFallback = new ElementEventListener(this, window, "click", (e) => {
-    if (this.portal instanceof PopoverContent) return;
+    if (this.portal instanceof Popover) return;
 
     if (this.opened && !this.contains(e.target)) {
       this.close();
     }
   });
 
+  public show() {
+    this.opened = true;
+
+    if (this.portal instanceof Popover) {
+      this.portal.show();
+    }
+  }
+
   public close() {
     this.opened = false;
-    this.cleanup?.();
 
-    if (
-      this.portal instanceof PopoverContent &&
-      this.portal?.portal instanceof PopoverPortal
-    ) {
-      this.portal.portal.disable();
+    if (this.portal instanceof Popover) {
+      this.portal.hide();
     }
   }
 
@@ -217,10 +227,7 @@ export class Popover extends LitElement {
       this.trigger.ariaHasPopup = "dialog";
       this.trigger.ariaExpanded = this.opened ? "true" : "false";
     }
-    if (this.content) {
-      this.content.role = "dialog";
-    }
   }
 }
 
-customElements.define("a-popover", Popover);
+customElements.define("a-popover-trigger", PopoverTrigger);
