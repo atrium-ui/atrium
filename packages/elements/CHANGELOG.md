@@ -1,5 +1,16 @@
 # @sv/elements
 
+## 1.8.0 (2024-07-13)
+
+### Features
+
+- a-popover: real popover with top-level positioning
+
+#### - Rewrote popover to propperly render on top of other content using floating-ui. 
+
+- Add Event proxying to a-portal. 
+- Fixed a-blur not focusing the correct elements and listen for Esc keydown on window instead of the element directly.
+
 ## 1.7.2 (2024-07-09)
 
 ### Fixes
