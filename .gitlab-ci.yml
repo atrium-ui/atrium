@@ -23,6 +23,8 @@ check:
   except:
     - tags
   only:
+    - merge_requests
+    - /^release\/.+$/
     - main
   script: task check
 
@@ -31,19 +33,9 @@ test:
   except:
     - tags
   only:
+    - merge_requests
+    - /^release\/.+$/
     - main
-  script: task test
-
-merge_check:
-  stage: merge
-  only:
-    - merge_requests
-  script: task check
-
-merge_test:
-  stage: merge
-  only:
-    - merge_requests
   script: task test
 
 merge_release_preview:

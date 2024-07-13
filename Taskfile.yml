@@ -104,8 +104,10 @@ tasks:
 
   prerelease:
     deps: [build]
+    vars:
+      PRERELEASE_LABEL: "dev"
     env:
-      PRERELEASE_LABEL: dev
+      PRERELEASE_LABEL: "{{ .PRERELEASE_LABEL }}"
     cmds:
       - knope -v release --prerelease-label={{.PRERELEASE_LABEL}}
 
