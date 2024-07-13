@@ -132,9 +132,11 @@ export class Blur extends LitElement {
   }
 
   private focusableElements() {
-    return this.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    );
+    return [
+      ...this.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      ),
+    ].filter((element) => element.offsetWidth > 0);
   }
 
   protected updated(changed: PropertyValueMap<any>): void {
