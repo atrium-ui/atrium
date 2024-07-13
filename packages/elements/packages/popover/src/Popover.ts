@@ -59,6 +59,12 @@ class PopoverContent extends Blur {
       display: block;
       transition-property: all;
       pointer-events: none;
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
     }
 
     :host([enabled]) {
@@ -66,7 +72,7 @@ class PopoverContent extends Blur {
     }
 
     :host(:not([enabled])) ::slotted(*) {
-      display: none;
+      display: none !important;
     }
   `;
 }
@@ -77,24 +83,20 @@ class PopoverPortal extends Portal {
   protected portalGun() {
     const ele = document.createElement("a-popover-content");
     ele.dataset.portal = this.portalId;
-    ele.style.position = "fixed";
-    ele.style.top = "0px";
-    ele.style.left = "0px";
-    ele.style.width = "100%";
-    ele.style.height = "100%";
-    ele.style.zIndex = "10000000";
-    return ele;
+    return ele as PopoverContent;
   }
 
   connectedCallback(): void {
     super.connectedCallback();
 
-    const popover = this.closest("a-popover");
-    if (popover) {
-      this.addEventListener("blur", () => {
-        popover.close();
-      });
-    }
+    this.addEventListener("blur", (e) => {
+      const popover = this.closest("a-popover");
+      if (popover) {
+        if (e instanceof CustomEvent) {
+          popover.close();
+        }
+      }
+    });
   }
 }
 
@@ -149,7 +151,7 @@ export class Popover extends LitElement {
   }
 
   private get portal() {
-    return this.querySelector("a-popover-portal") as PopoverContent | undefined;
+    return this.querySelector("a-popover-portal") as PopoverPortal | undefined;
   }
 
   private get content() {
@@ -164,7 +166,10 @@ export class Popover extends LitElement {
 
   show() {
     this.opened = true;
-    this.portal?.portal?.enable();
+
+    if (this.portal?.portal instanceof PopoverContent) {
+      this.portal.portal.enable();
+    }
 
     if (!this.content) {
       return;
@@ -190,7 +195,10 @@ export class Popover extends LitElement {
   close() {
     this.opened = false;
     this.cleanup?.();
-    this.portal?.portal?.disable();
+
+    if (this.portal?.portal instanceof PopoverContent) {
+      this.portal.portal.disable();
+    }
   }
 
   toggle() {

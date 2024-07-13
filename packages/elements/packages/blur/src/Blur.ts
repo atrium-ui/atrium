@@ -139,7 +139,7 @@ export class Blur extends LitElement {
   }
 
   private tryBlur() {
-    const blurEvent = new CustomEvent("blur", { cancelable: true });
+    const blurEvent = new CustomEvent("blur", { cancelable: true, bubbles: true });
     this.dispatchEvent(blurEvent);
 
     if (blurEvent.defaultPrevented) return;

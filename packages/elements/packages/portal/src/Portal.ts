@@ -28,12 +28,12 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
   };
 
   // TODO: make simpler id generator
-  portalId = crypto.randomUUID();
-  portal = this.createPortal();
+  public portalId = crypto.randomUUID();
+  public portal = this.createPortal();
 
   // TODO: try to find existing portal with this.dataset.portal
-  protected portalGun(): HTMLElement {
-    const ele = document.createElement("div");
+  protected portalGun() {
+    const ele = document.createElement("div") as HTMLElement;
     ele.dataset.portal = this.portalId;
     ele.style.position = "fixed";
     ele.style.top = "0px";
@@ -43,7 +43,13 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
   }
 
   proxyEvent(name: string) {
-    return (e: Event) => this.dispatchEvent(new CustomEvent(name, { detail: e }));
+    return (e: Event) => {
+      if (e instanceof CustomEvent) {
+        this.dispatchEvent(new CustomEvent(name, { detail: e.detail, bubbles: true }));
+      } else {
+        this.dispatchEvent(new Event(name));
+      }
+    };
   }
 
   get children() {

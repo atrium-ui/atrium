@@ -7,7 +7,7 @@ export default function () {
   return (
     <div class="max-w-[300px]">
       <Popover label="Click">
-        <div>
+        <div class="p-3">
           <p>Some Content</p>
           <Button>Button</Button>
         </div>
