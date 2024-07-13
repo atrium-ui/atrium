@@ -1,4 +1,5 @@
 import { test, expect } from "bun:test";
+import { PopoverTrigger } from "./Popover";
 
 const NODE_NAME = "a-popover";
 
@@ -20,8 +21,8 @@ test("import element", async () => {
 });
 
 test("initial state", async () => {
-  const { Popover } = await import("@sv/elements/popover");
-  const ele = new Popover();
+  const { PopoverTrigger } = await import("@sv/elements/popover");
+  const ele = new PopoverTrigger();
 
   expect(ele.opened).toBe(false);
 });
