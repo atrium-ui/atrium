@@ -45,7 +45,7 @@ export class ElementEventListener<
   }
 }
 
-class PopoverPortal extends Blur {
+export class PopoverPortal extends Blur {
   public scrollLock = false;
 
   static styles = css`
@@ -72,9 +72,7 @@ class PopoverPortal extends Blur {
   `;
 }
 
-customElements.define("a-popover-portal", PopoverPortal);
-
-class Popover extends Portal {
+export class Popover extends Portal {
   protected portalGun() {
     const ele = document.createElement("a-popover-portal");
     ele.className = this.className;
@@ -137,8 +135,6 @@ class Popover extends Portal {
     super.disconnectedCallback();
   }
 }
-
-customElements.define("a-popover", Popover);
 
 /**
  * A wrapper element that shows content when the user clicks with the slotted input element.
@@ -229,5 +225,3 @@ export class PopoverTrigger extends LitElement {
     }
   }
 }
-
-customElements.define("a-popover-trigger", PopoverTrigger);
