@@ -1,4 +1,4 @@
-/* @jsxImportSource react */
+/* @jsx React */
 import type { PropsWithChildren } from "react";
 import { Button } from "./Button";
 import "@sv/elements/popover";
