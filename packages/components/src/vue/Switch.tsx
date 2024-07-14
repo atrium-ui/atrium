@@ -32,7 +32,7 @@ export const Switch = defineComponent(
             "outline-none focus:ring focus:ring-white",
           ]}
           name={props.name}
-          value={props.value}
+          value={props.value?.toString()}
           required={props.required}
           onChange={props.onChange}
         >
@@ -40,7 +40,7 @@ export const Switch = defineComponent(
             class={[
               "relative block h-6 w-12 rounded-full bg-accent-200 transition-transform",
               "after:absolute after:top-0 after:right-0 after:h-6 after:w-6 after:rounded-full after:bg-[currentColor] after:content-['']",
-              "group-[&[value='false']]:-translate-x-1/2",
+              "-translate-x-1/2 group-[&[value='true']]:translate-x-0",
             ]}
           />
         </a-toggle>
