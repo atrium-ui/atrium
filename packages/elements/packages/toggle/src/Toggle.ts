@@ -69,7 +69,7 @@ export class ToggleElement extends LitElement {
    * The value of the field, which is submitted with the form data.
    */
   @property({ type: String, reflect: true })
-  public value = "false";
+  public value: string | boolean = "false";
 
   protected updated(_changedProperties: PropertyValues): void {
     if (_changedProperties.has("value")) {
@@ -115,11 +115,8 @@ export class ToggleElement extends LitElement {
   private _internals: ElementInternals | undefined;
 
   private get _value() {
-    if (this.value === "true" || this.value === "on") {
+    if (this.value === true || this.value === "true" || this.value === "on") {
       return true;
-    }
-    if (this.value === "false") {
-      return false;
     }
     return false;
   }
