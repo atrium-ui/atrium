@@ -12,6 +12,7 @@
   "keywords": [],
   "license": "MIT",
   "dependencies": {
+    "pa11y": "^8.0.0",
     "pa11y-ci": "^3.1.0"
   }
 }

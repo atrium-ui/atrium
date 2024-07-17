@@ -1,11 +1,16 @@
 #!/usr/bin/env bun
 
-import { exec } from "node:child_process";
+import pa11y from "pa11y";
+import { exec, execSync } from "node:child_process";
 import path from "node:path";
 import fs from "node:fs";
 
 const configPath = path.resolve(process.argv[2]);
 const serverCommand = process.argv[3];
+
+execSync("npx puppeteer browsers install chrome", {
+  stdio: "inherit",
+});
 
 function waitForHttp(url) {
   console.info("Waiting for", url);
@@ -54,14 +59,21 @@ async function main() {
 
   await waitForHttp(config.urls[0]);
 
+  const reports = [];
+
   return new Promise((resolve, reject) => {
-    exec(`bunx pa11y-ci --config ${configPath} --json`, {}, (err, stdout, stderr) => {
-      const report = JSON.parse(stdout);
+    for (const url of config.urls) {
+      pa11y(url, {}).then((results) => {
+        console.log(results);
+        results.push(results);
+      });
+    }
 
-      console.log(JSON.stringify(report, null, "  "));
+    // const report = JSON.parse(stdout);
 
-      resolve(report.errors > 0 || report.passes < 1 ? 1 : 0);
-    });
+    // console.info(JSON.stringify(report, null, "  "));
+
+    // resolve(report.errors > 0 || report.passes < 1 ? 1 : 0);
   }).finally(() => {
     console.info("Killing server");
     server.kill();
