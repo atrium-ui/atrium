@@ -40,7 +40,7 @@ test:
 
 a11y:
   allow_failure: true
-  image: ghcr.io/puppeteer/puppeteer:latest
+  # image: ghcr.io/puppeteer/puppeteer:latest
   stage: test
   except:
     - tags
