@@ -1,18 +1,14 @@
 {
-  "name": "@sv/a11y",
-  "author": "atrium",
-  "contributors": [
-    "luckydye"
-  ],
-  "version": "0.1.0",
-  "description": "Accessibility testing",
-  "bin": "./bin/cli.js",
-  "type": "module",
-  "scripts": {},
-  "keywords": [],
-  "license": "MIT",
-  "dependencies": {
-    "pa11y": "^8.0.0",
-    "pa11y-ci": "^3.1.0"
-  }
+	"name": "@sv/a11y",
+	"author": "atrium",
+	"version": "0.1.0",
+	"description": "Accessibility testing",
+	"bin": "./bin/cli.js",
+	"type": "module",
+	"scripts": {},
+	"keywords": [],
+	"license": "MIT",
+	"dependencies": {
+		"pa11y": "^8.0.0"
+	}
 }

@@ -49,6 +49,8 @@ async function main() {
 
   console.info("Starting server");
   const server = exec(serverCommand);
+  server.stdout.pipe(process.stdout);
+  server.stderr.pipe(process.stdout);
 
   server.on("exit", (code) => {
     if (code !== 0) {
