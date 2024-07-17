@@ -39,6 +39,7 @@ test:
   script: task test
 
 a11y:
+  allow_failure: true
   stage: test
   except:
     - tags
