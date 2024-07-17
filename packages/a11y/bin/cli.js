@@ -58,7 +58,7 @@ async function main() {
     exec(`bunx pa11y-ci --config ${configPath} --json`, {}, (err, stdout, stderr) => {
       const report = JSON.parse(stdout);
 
-      console.log(JSON.stringify(report, null, "  "));
+      console.info(JSON.stringify(report, null, "  "));
 
       resolve(report.errors > 0 || report.passes < 1 ? 1 : 0);
     });
