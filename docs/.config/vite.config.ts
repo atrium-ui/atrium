@@ -1,5 +1,4 @@
 import { defineConfig } from "vite";
-import hmr from "@atrium-ui/custom-element-hmr";
 
 export default defineConfig({
   resolve: {
@@ -13,5 +12,5 @@ export default defineConfig({
       allow: [".."],
     },
   },
-  plugins: [hmr()],
+  plugins: [],
 });
