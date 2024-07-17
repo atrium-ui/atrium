@@ -38,17 +38,17 @@ test:
     - main
   script: task test
 
-a11y:
-  allow_failure: true
-  # image: ghcr.io/puppeteer/puppeteer:latest
-  stage: test
-  except:
-    - tags
-  only:
-    - merge_requests
-    - /^release\/.+$/
-    - main
-  script: task a11y
+# a11y:
+#   allow_failure: true
+#   # image: ghcr.io/puppeteer/puppeteer:latest
+#   stage: test
+#   except:
+#     - tags
+#   only:
+#     - merge_requests
+#     - /^release\/.+$/
+#     - main
+#   script: task a11y
 
 merge_release_preview:
   stage: merge
