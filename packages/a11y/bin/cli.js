@@ -59,21 +59,24 @@ async function main() {
 
   await waitForHttp(config.urls[0]);
 
+  let issues = 0;
   const reports = [];
 
-  return new Promise((resolve, reject) => {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
+  return new Promise(async (resolve, reject) => {
     for (const url of config.urls) {
-      pa11y(url, {}).then((results) => {
-        console.log(results);
-        results.push(results);
+      console.info("Testing", url);
+
+      await pa11y(url, {}).then((results) => {
+        issues += results.issues.length;
+        reports.push(results);
       });
     }
 
-    // const report = JSON.parse(stdout);
+    console.info(JSON.stringify(reports, null, "  "));
+    console.info("Issues", issues);
 
-    // console.info(JSON.stringify(report, null, "  "));
-
-    // resolve(report.errors > 0 || report.passes < 1 ? 1 : 0);
+    resolve(issues > 0 ? 1 : 0);
   }).finally(() => {
     console.info("Killing server");
     server.kill();
