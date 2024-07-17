@@ -60,6 +60,12 @@ tasks:
     cmds:
       - bun x turbo test -- {{.CLI_ARGS}}
 
+  a11y:
+    desc: "Run a11y tests"
+    dir: "packages/a11y"
+    cmds:
+      - './bin/cli.js ./config.json "task docs"'
+
   test:watch:
     desc: "Run tests on current packages (Run specific test: t test --  -t prettier)"
     dir: "{{.USER_WORKING_DIR}}"
