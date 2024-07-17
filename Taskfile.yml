@@ -63,6 +63,7 @@ tasks:
   a11y:
     desc: "Run a11y tests"
     dir: "packages/a11y"
+    deps: [setup]
     cmds:
       - './bin/cli.js ./config.json "task docs"'
 
