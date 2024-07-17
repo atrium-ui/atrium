@@ -11,6 +11,7 @@
     "@types/bun": "^1.1.0",
     "@types/node": "^20.11.0",
     "@types/web": "^0.0.123",
+    "@sv/a11y": "workspace:",
     "fast-glob": "^3.3.2",
     "tsup": "^8.1.0",
     "turbo": "^2.0.1",
