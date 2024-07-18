@@ -69,7 +69,12 @@ async function main() {
     for (const url of config.urls) {
       console.info("Testing", url);
 
-      await pa11y(url, {}).then((results) => {
+      await pa11y(url, {
+        chromeLaunchConfig: {
+          args: ["--no-sandbox"],
+        },
+        timeout: 10000,
+      }).then((results) => {
         issues += results.issues.length;
         reports.push(results);
       });
