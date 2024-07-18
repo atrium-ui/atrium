@@ -40,8 +40,11 @@ test:
 
 a11y:
   allow_failure: true
-  # image: ghcr.io/puppeteer/puppeteer:latest
   stage: test
+  artifacts:
+    paths:
+      - packages/a11y/.reports
+    untracked: true
   except:
     - tags
   only:
@@ -61,8 +64,6 @@ merge_release_preview:
 
 publish-dev:
   stage: publish
-  artifacts:
-    untracked: true
   only:
     - /^release\/.+$/
   script:
@@ -75,8 +76,6 @@ publish-dev:
 
 publish:
   stage: publish
-  artifacts:
-    untracked: true
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
       when: on_success
@@ -92,6 +91,7 @@ publish:
 pages:
   stage: docs
   dependencies:
+    - a11y
     - publish
   only:
     - main
