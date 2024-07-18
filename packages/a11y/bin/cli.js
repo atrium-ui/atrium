@@ -91,7 +91,7 @@ async function main() {
 
         fs.writeFileSync(
           path.join(reportsDistPath, `${id.replaceAll("/", "-")}.json`),
-          JSON.stringify(reports, null, "  "),
+          JSON.stringify(results, null, "  "),
         );
       });
     }

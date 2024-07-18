@@ -16,7 +16,7 @@ try {
   console.warn("[Accessibility] Failed to load report for component", reportId);
 }
 
-const issues = report[0]?.issues?.length;
+const issues = report?.issues?.length;
 const hasReport = issues !== undefined;
 ---
 
