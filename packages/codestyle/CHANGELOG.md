@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 1.2.0 (2024-07-18)
+
+### Features
+
+- update config schema to biome 1.8.0
+
 ## 1.1.1 (2024-06-15)
 
 ### Fixes
