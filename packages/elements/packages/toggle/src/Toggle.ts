@@ -176,8 +176,6 @@ export class ToggleElement extends LitElement {
   }
 }
 
-customElements.define("a-toggle", ToggleElement);
-
 //
 // Using only the form internals api
 // export class ModernSimpleElement extends LitElement {

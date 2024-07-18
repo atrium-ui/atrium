@@ -85,7 +85,3 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
     this.dataset.portal = this.portalId;
   }
 }
-
-if (typeof window !== "undefined") {
-  customElements.define("a-portal", Portal);
-}

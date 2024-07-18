@@ -314,5 +314,3 @@ export class Dropdown extends LitElement {
     `;
   }
 }
-
-customElements.define("a-dropdown", Dropdown);

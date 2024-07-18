@@ -4,4 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-export * from "./Track.js";
+import { Track } from "./Track.js";
+
+try {
+  customElements.define("a-track", Track);
+} catch (err) {
+  console.warn("a-track already defined");
+}
+
+export { Track } from "./Track";

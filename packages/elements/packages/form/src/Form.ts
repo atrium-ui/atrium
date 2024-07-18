@@ -89,8 +89,3 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
     this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
   };
 }
-
-if (typeof window !== "undefined") {
-  customElements.define("a-form-field", FormFieldElement);
-  customElements.define("a-form-field-error", FormFieldErrorElement);
-}

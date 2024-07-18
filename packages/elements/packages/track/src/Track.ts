@@ -631,7 +631,10 @@ export class Track extends LitElement {
         break;
     }
 
-    const formatEvent = new CustomEvent("format", { bubbles: true, cancelable: true });
+    const formatEvent = new CustomEvent("format", {
+      bubbles: true,
+      cancelable: true,
+    });
     this.dispatchEvent(formatEvent);
 
     if (!formatEvent.defaultPrevented) {
@@ -1347,8 +1350,6 @@ export class Track extends LitElement {
     super.disconnectedCallback();
   }
 }
-
-customElements.define("a-track", Track);
 
 export class MoveEvent extends CustomEvent<{
   delta: Vec2;

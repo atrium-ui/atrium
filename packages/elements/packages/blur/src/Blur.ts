@@ -221,5 +221,3 @@ export class Blur extends LitElement {
     }
   }
 }
-
-customElements.define("a-blur", Blur);

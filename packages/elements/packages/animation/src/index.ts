@@ -4,4 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-export { AnimationElement } from "./AnimationElement.js";
+import { AnimationElement } from "./AnimationElement.js";
+
+try {
+  customElements.define("a-animation", AnimationElement);
+} catch (err) {
+  console.warn("a-animation already defined");
+}
+
+export { AnimationElement };
