@@ -18,7 +18,7 @@ before_script:
   - git config user.name "CI"
   - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
 
-cache: &global_cache 
+cache: &global_cache
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - node_modules
@@ -50,6 +50,7 @@ a11y:
   allow_failure: true
   stage: test
   artifacts:
+    when: always
     paths:
       - packages/a11y/.reports
     untracked: true
