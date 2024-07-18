@@ -24,6 +24,7 @@ cache: &global_cache
     - node_modules
     - .task
     - .turbo
+    - .mise
   policy: pull-push
 
 check:
@@ -53,7 +54,6 @@ a11y:
     when: always
     paths:
       - packages/a11y/.reports
-    untracked: true
   except:
     - tags
   only:
