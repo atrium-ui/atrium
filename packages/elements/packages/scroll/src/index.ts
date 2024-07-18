@@ -66,4 +66,10 @@ class ScrollElement extends HTMLElement {
   }
 }
 
-customElements.define("a-scroll", ScrollElement);
+try {
+  customElements.define("a-scroll", ScrollElement);
+} catch (err) {
+  console.warn("a-scroll already defined");
+}
+
+export { ScrollElement };

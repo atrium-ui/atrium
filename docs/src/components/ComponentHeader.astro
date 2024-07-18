@@ -1,5 +1,5 @@
 ---
-import { Example, Pills, Git } from "package:/components";
+import { Example, Pills, Git, Accessibility } from "package:/components";
 import { Code } from "@astrojs/starlight/components";
 
 export interface Props {
@@ -11,6 +11,8 @@ const props = Astro.props;
 
 <Pills>
   <Git href={`/packages/components/src/vue/${props.name}.tsx`} />
+  <Accessibility reportId={`-atrium-components-${props.name.toLowerCase()}-`} />
+
   <slot name="pills" />
 </Pills>
 

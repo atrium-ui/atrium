@@ -132,11 +132,6 @@ export class Toast extends LitElement {
   }
 }
 
-if (typeof window !== "undefined") {
-  customElements.define("a-toast-feed", ToastFeed);
-  customElements.define("a-toast", Toast);
-}
-
 declare global {
   interface HTMLElementTagNameMap {
     "a-toast-feed": ToastFeed;

@@ -221,5 +221,3 @@ export class ChartElement extends LitElement {
     this.chart?.destroy();
   };
 }
-
-customElements.define("a-chart", ChartElement);

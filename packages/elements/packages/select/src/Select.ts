@@ -358,5 +358,3 @@ export class Select extends LitElement {
     }
   }
 }
-
-customElements.define("a-select", Select);

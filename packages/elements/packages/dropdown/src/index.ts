@@ -5,6 +5,14 @@
  */
 
 import "@sv/elements/expandable";
+import { Dropdown } from "./components/dropdown/Dropdown";
+import { OptionElement } from "./components/dropdown/Option";
 
-export { Dropdown } from "./components/dropdown/Dropdown";
-export { OptionElement } from "./components/dropdown/Option";
+try {
+  customElements.define("a-option", OptionElement);
+  customElements.define("a-dropdown", Dropdown);
+} catch (err) {
+  console.warn("a-dropdown already defined");
+}
+
+export { Dropdown, OptionElement };

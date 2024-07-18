@@ -18,6 +18,15 @@ before_script:
   - git config user.name "CI"
   - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
 
+cache: &global_cache
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules
+    - .task
+    - .turbo
+    - .mise
+  policy: pull-push
+
 check:
   stage: test
   except:
@@ -38,17 +47,23 @@ test:
     - main
   script: task test
 
-# a11y:
-#   allow_failure: true
-#   # image: ghcr.io/puppeteer/puppeteer:latest
-#   stage: test
-#   except:
-#     - tags
-#   only:
-#     - merge_requests
-#     - /^release\/.+$/
-#     - main
-#   script: task a11y
+a11y:
+  allow_failure: true
+  stage: test
+  artifacts:
+    when: always
+    paths:
+      - packages/a11y/.reports
+  except:
+    - tags
+  only:
+    - merge_requests
+    - /^release\/.+$/
+    - main
+  script:
+    - apt update -y
+    - apt install -y ca-certificates fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
+    - task a11y
 
 merge_release_preview:
   stage: merge
@@ -58,8 +73,6 @@ merge_release_preview:
 
 publish-dev:
   stage: publish
-  artifacts:
-    untracked: true
   only:
     - /^release\/.+$/
   script:
@@ -72,8 +85,6 @@ publish-dev:
 
 publish:
   stage: publish
-  artifacts:
-    untracked: true
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
       when: on_success
@@ -89,6 +100,7 @@ publish:
 pages:
   stage: docs
   dependencies:
+    - a11y
     - publish
   only:
     - main

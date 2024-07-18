@@ -159,7 +159,3 @@ export class Expandable extends LitElement {
     `;
   }
 }
-
-if (!customElements.get("a-expandable")) {
-  customElements.define("a-expandable", Expandable);
-}

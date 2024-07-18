@@ -4,4 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-export { ChartElement } from "./ChartElement.js";
+import { ChartElement } from "./ChartElement.js";
+
+try {
+  customElements.define("a-chart", ChartElement);
+} catch (err) {
+  console.warn("a-chart already defined");
+}
+
+export { ChartElement };
