@@ -89,7 +89,7 @@ async function main() {
         const id = new URL(url).pathname;
 
         fs.writeFileSync(
-          path.join(reportsDistPath, id.replaceAll("/", "-") + ".json"),
+          path.join(reportsDistPath, `${id.replaceAll("/", "-")}.json`),
           JSON.stringify(reports, null, "  "),
         );
       });

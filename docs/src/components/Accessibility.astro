@@ -1,9 +1,9 @@
 ---
-import path from "path";
-import fs from "fs";
+import path from "node:path";
+import fs from "node:fs";
 
 export interface Props {
-	reportId: string;
+  reportId: string;
 }
 
 const reportsDirPath = path.resolve("../packages/a11y/.reports");
@@ -11,11 +11,9 @@ const reportId = Astro.props.reportId;
 
 let report: any[] = [];
 try {
-	report = JSON.parse(
-		fs.readFileSync(`${reportsDirPath}/${reportId}.json`).toString(),
-	);
+  report = JSON.parse(fs.readFileSync(`${reportsDirPath}/${reportId}.json`).toString());
 } catch (e) {
-	console.warn("[Accessibility] Failed to load report for component", reportId);
+  console.warn("[Accessibility] Failed to load report for component", reportId);
 }
 
 const issues = report[0]?.issues?.length;
