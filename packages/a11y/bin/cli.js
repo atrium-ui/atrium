@@ -5,6 +5,7 @@ import { exec, execSync } from "node:child_process";
 import path from "node:path";
 import fs from "node:fs";
 
+const reportsDistPath = path.resolve("./.reports");
 const configPath = path.resolve(process.argv[2]);
 const serverCommand = process.argv[3];
 
@@ -25,6 +26,11 @@ function waitForHttp(url) {
           if (res.status === 200) {
             callback();
             clearTimeout(int);
+          } else {
+            console.error("Fetch failed retry in 250ms");
+
+            clearTimeout(int);
+            int = setTimeout(() => tryFetch(callback), 250);
           }
         })
         .catch((err) => {
@@ -64,6 +70,8 @@ async function main() {
   let issues = 0;
   const reports = [];
 
+  fs.mkdirSync(path.join(reportsDistPath), { recursive: true });
+
   // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     for (const url of config.urls) {
@@ -77,6 +85,13 @@ async function main() {
       }).then((results) => {
         issues += results.issues.length;
         reports.push(results);
+
+        const id = new URL(url).pathname;
+
+        fs.writeFileSync(
+          path.join(reportsDistPath, id.replaceAll("/", "-") + ".json"),
+          JSON.stringify(reports, null, "  "),
+        );
       });
     }
 

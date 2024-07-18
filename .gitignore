@@ -25,6 +25,9 @@ dist
 .turbo
 .task
 
+# a11y test reports
+.reports
+
 # rust
 target
 

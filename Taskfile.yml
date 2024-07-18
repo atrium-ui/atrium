@@ -65,7 +65,7 @@ tasks:
     dir: "packages/a11y"
     deps: [setup]
     cmds:
-      - './bin/cli.js ./config.json "task docs:preview"'
+      - './bin/cli.js ./a11y.json "task docs:preview"'
 
   test:watch:
     desc: "Run tests on current packages (Run specific test: t test --  -t prettier)"
