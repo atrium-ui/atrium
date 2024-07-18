@@ -7,9 +7,9 @@
 import { Track } from "./Track.js";
 
 try {
-	customElements.define("a-track", Track);
+  customElements.define("a-track", Track);
 } catch (err) {
-	console.warn("a-track already defined");
+  console.warn("a-track already defined");
 }
 
 export * from "./Track";
