@@ -6,7 +6,7 @@ export interface Props {
   reportId: string;
 }
 
-const reportsDirPath = path.resolve("../packages/a11y/.reports");
+const reportsDirPath = path.resolve("./.reports");
 const reportId = Astro.props.reportId;
 
 let report: any[] = [];

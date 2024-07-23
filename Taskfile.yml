@@ -62,10 +62,10 @@ tasks:
 
   a11y:
     desc: "Run a11y tests"
-    dir: "packages/a11y"
+    dir: "docs"
     deps: [setup]
     cmds:
-      - './bin/cli.js ./a11y.json "task docs:preview"'
+      - 'npx @sv/a11y ./a11y.json "task preview"'
 
   test:watch:
     desc: "Run tests on current packages (Run specific test: t test --  -t prettier)"

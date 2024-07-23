@@ -82,7 +82,7 @@ async function main() {
           args: ["--no-sandbox"],
         },
         timeout: 10000,
-        rootElement: ".not-content.box",
+        rootElement: "main",
       }).then((results) => {
         issues += results.issues.length;
         reports.push(results);
