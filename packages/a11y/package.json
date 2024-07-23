@@ -5,7 +5,11 @@
   "description": "Accessibility testing",
   "bin": "./bin/cli.js",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+	  "_check": "tsc -p ./tsconfig.json --pretty",
+     "_test": "bun test",
+     "publish-package": "task publish"
+	},
   "keywords": [],
   "license": "MIT",
   "dependencies": {

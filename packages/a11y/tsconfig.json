@@ -1,0 +1,6 @@
+{
+  "extends": "@sv/codestyle/tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2020"
+  }
+}
