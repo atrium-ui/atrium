@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.9.1 (2024-07-24)
+
+### Fixes
+
+- a-track: disable snap past maxIndex
+
 ## 1.9.0 (2024-07-24)
 
 ### Features
