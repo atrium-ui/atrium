@@ -53,7 +53,7 @@ a11y:
   artifacts:
     when: always
     paths:
-      - packages/a11y/.reports
+      - docs/.reports
   except:
     - tags
   only:
