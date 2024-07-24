@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.9.0 (2024-07-24)
+
+### Features
+
+- a-track: fix track reaching beyound end
+
 ## 1.8.0 (2024-07-13)
 
 ### Features
