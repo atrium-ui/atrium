@@ -84,7 +84,11 @@ export const VariableTrack = defineComponent(() => {
                 "pointer-events-auto",
               ]}
               onClick={() => {
-                track.value?.moveBy(1, "linear");
+                if (track.value?.currentIndex >= track.value?.maxIndex) {
+                  track.value?.setTarget([track.value?.overflowWidth, 0]);
+                } else {
+                  track.value?.moveBy(1, "linear");
+                }
               }}
             >
               {">"}

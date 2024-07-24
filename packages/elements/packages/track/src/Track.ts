@@ -474,7 +474,7 @@ export class Track extends LitElement {
     );
     if (lastItem) {
       // last index plus the child behind it, to reach the end of the track
-      return lastItem.index + 1;
+      return lastItem.index;
     }
     return 0;
   }
