@@ -6,7 +6,7 @@
 	"type": "module",
 	"keywords": [],
 	"license": "MIT",
-	"devDependencies": {
+	"dependencies": {
 		"@biomejs/biome": "^1.8.0",
 		"@types/bun": "^1.1.0",
 		"@types/node": "^20.11.0",
