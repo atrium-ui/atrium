@@ -29,26 +29,28 @@ const historyStorage = {
  * @see https://svp.pages.s-v.de/atrium/elements/a-scroll/
  */
 class ScrollElement extends HTMLElement {
-  fallbackName() {
+  /** The unique name of the scroll container. Fallback is className + className of the parent element. */
+  public name = "";
+
+  /** Strategy to use for storing the scroll position, can be "session" or "history" */
+  public strategy: "session" | "history" = "session";
+
+  private fallbackName() {
     return `${this.className}-${this.parentElement?.className}`.replace(" ", ".");
   }
 
-  /** The unique name of the scroll container. Fallback is className + className of the parent element. */
-  public declare name: string;
-
-  /** Strategy to use for storing the scroll position, can be "session" or "history" */
-  public declare strategy: "session" | "history";
-
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (name === "name") {
-      this.name = this.getAttribute("name") || this.fallbackName();
+      this.name = newValue || this.fallbackName();
     }
     if (name === "strategy") {
-      this.strategy = (this.getAttribute("strategy") as any) || "session";
+      this.strategy = (newValue as any) || "session";
     }
   }
 
   connectedCallback() {
+    this.name = this.name || this.fallbackName();
+
     const storage =
       this.strategy === "session"
         ? sessionStorage
