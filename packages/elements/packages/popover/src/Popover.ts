@@ -72,6 +72,20 @@ export class PopoverPortal extends Blur {
   `;
 }
 
+/**
+ * A popover element.
+ * It positions itself relative to the trigger element using
+ * [Floating UI](https://floating-ui.com/), a-portal and a-blur for focus management.
+ *
+ * @example
+ * ```html
+ * <a-popover>
+ *   <div>Content</div>
+ * </a-popover>
+ * ```
+ *
+ * @see https://svp.pages.s-v.de/atrium/elements/a-popover/
+ */
 export class Popover extends Portal {
   protected portalGun() {
     const ele = document.createElement("a-popover-portal");
@@ -93,6 +107,9 @@ export class Popover extends Portal {
     });
   }
 
+  /**
+   * Show the popover.
+   */
   public show() {
     const trigger = this.closest("a-popover-trigger");
     const content = this.children[0] as HTMLElement | undefined;
@@ -122,6 +139,9 @@ export class Popover extends Portal {
     }
   }
 
+  /**
+   * Hide the popover.
+   */
   public hide() {
     this.cleanup?.();
 
@@ -148,7 +168,7 @@ export class Popover extends Portal {
  *
  *   <a-popover>
  *     <div>Content</div>
- *   </a-popover-content>
+ *   </a-popover>
  * </a-popover>
  * ```
  *
@@ -198,6 +218,9 @@ export class PopoverTrigger extends LitElement {
     }
   });
 
+  /**
+   * Show the inner popover.
+   */
   public show() {
     this.opened = true;
 
@@ -206,6 +229,9 @@ export class PopoverTrigger extends LitElement {
     }
   }
 
+  /**
+   * Closes the inner popover.
+   */
   public close() {
     this.opened = false;
 
@@ -214,6 +240,9 @@ export class PopoverTrigger extends LitElement {
     }
   }
 
+  /**
+   * Toggles the inner popover.
+   */
   public toggle() {
     this.opened ? this.close() : this.show();
   }
