@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.10.0 (2024-07-29)
+
+### Features
+
+- a-toast-feed: add nice stack animation
+
 ## 1.9.1 (2024-07-24)
 
 ### Fixes
