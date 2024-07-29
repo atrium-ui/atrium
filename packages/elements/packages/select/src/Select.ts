@@ -344,6 +344,9 @@ export class Select extends LitElement {
       this.input.name = this.name;
       this.input.required = this.required;
     }
+
+    // set value from attributes
+    this.submitSelected();
   }
 
   private updateOptionSelection() {
