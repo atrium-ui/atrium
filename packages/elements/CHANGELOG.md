@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 1.10.1 (2024-07-29)
+
+### Fixes
+
+- a-select: initial value not set
+- a-select: inital value not set
+
 ## 1.10.0 (2024-07-29)
 
 ### Features
