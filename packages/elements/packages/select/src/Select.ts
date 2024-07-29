@@ -195,7 +195,6 @@ export class Select extends LitElement {
 
   public close() {
     this.opened = false;
-    this.requestUpdate();
     this.dispatchEvent(new Event("close"));
   }
 
@@ -204,7 +203,6 @@ export class Select extends LitElement {
 
     this.dispatchEvent(new Event("open"));
     this.opened = true;
-    this.requestUpdate();
 
     const inputElement = this.querySelector(`[slot="input"]`) as HTMLElement;
     if (inputElement) inputElement.focus();
@@ -343,10 +341,12 @@ export class Select extends LitElement {
       this.input.style.display = "none";
       this.input.name = this.name;
       this.input.required = this.required;
-    }
 
-    // set value from attributes
-    this.submitSelected();
+      // set value from attributes
+      this.input.value = this.value || "";
+      this.input.dispatchEvent(new Event("input", { bubbles: true }));
+      this.input.dispatchEvent(new Event("change", { bubbles: true }));
+    }
   }
 
   private updateOptionSelection() {
