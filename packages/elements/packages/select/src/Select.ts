@@ -77,7 +77,7 @@ export class Select extends LitElement {
       <div class="dropdown-container" part="dropdown">
         <a-expandable ?opened="${this.opened}">
           <div class="dropdown" part="options">
-            <slot @click=${this.onOptionsClick} @slotchange=${this.onSlotChange}></slot>
+            <slot @click=${(ev) => this.onOptionsClick(ev.target)} @slotchange=${this.onSlotChange}></slot>
           </div>
         </a-expandable>
       </div>
@@ -235,32 +235,26 @@ export class Select extends LitElement {
   private onKeyDown(event: KeyboardEvent) {
     switch (event.key) {
       case "ArrowUp":
-        if (this.querySelector("*:focus")) {
-          if (this.direction === "up") {
-            this.selectPrev();
-          } else {
-            this.selectNext();
-          }
-          this.scrollToSelected();
-          event.preventDefault();
+        if (this.direction === "up") {
+          this.selectPrev();
+        } else {
+          this.selectNext();
         }
+        this.scrollToSelected();
+        event.preventDefault();
         break;
       case "ArrowDown":
-        if (this.querySelector("*:focus")) {
-          if (this.direction === "up") {
-            this.selectNext();
-          } else {
-            this.selectPrev();
-          }
-          this.scrollToSelected();
-          event.preventDefault();
+        if (this.direction === "up") {
+          this.selectNext();
+        } else {
+          this.selectPrev();
         }
+        this.scrollToSelected();
+        event.preventDefault();
         break;
       case "Tab":
         setTimeout(() => {
-          if (!this.querySelector("*:focus-within")) {
-            this.close();
-          }
+          this.close();
         }, 10);
         break;
       case "Enter":
@@ -310,10 +304,10 @@ export class Select extends LitElement {
     }
   }
 
-  private onOptionsClick(e: MouseEvent) {
+  private onOptionsClick(target: HTMLElement) {
     let index = 0;
     for (const child of this.options) {
-      if (child === e.target || child.contains(e.target as HTMLElement)) {
+      if (child === target || child.contains(target)) {
         const value = child.getAttribute("value") || index.toString();
         this.value = value;
         this.submitSelected();
