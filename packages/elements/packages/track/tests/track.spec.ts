@@ -147,3 +147,5 @@ test("move event details", async () => {
 
 // TODO: test snap at specific position
 // TODO:  +loop
+//
+// TODO: snap with inertia to the correct position
