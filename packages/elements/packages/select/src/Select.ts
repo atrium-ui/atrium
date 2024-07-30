@@ -120,9 +120,9 @@ export class Select extends LitElement {
   public connectedCallback(): void {
     super.connectedCallback();
 
-    this.addEventListener("focusout", this.onBlur);
     this.addEventListener("keydown", this.onKeyDown);
     this.addEventListener("keyup", this.onKeyUp);
+    window.addEventListener("click", this.onOutsideClick);
 
     if (this.name) {
       this.append(this.input);
@@ -142,9 +142,9 @@ export class Select extends LitElement {
   public disconnectedCallback(): void {
     super.disconnectedCallback();
 
-    this.removeEventListener("focusout", this.onBlur);
     this.removeEventListener("keydown", this.onKeyDown);
     this.removeEventListener("keyup", this.onKeyUp);
+    window.removeEventListener("click", this.onOutsideClick);
 
     this.observer?.disconnect();
 
@@ -181,7 +181,7 @@ export class Select extends LitElement {
   }
 
   private submitSelected() {
-    if (this.value) {
+    if (this.value !== undefined) {
       this.input.value = this.value;
       this.input.dispatchEvent(new Event("input", { bubbles: true }));
       this.input.dispatchEvent(new Event("change", { bubbles: true }));
@@ -206,22 +206,16 @@ export class Select extends LitElement {
 
     const inputElement = this.querySelector(`[slot="input"]`) as HTMLElement;
     if (inputElement) inputElement.focus();
-
     if (this.direction === "up") {
       this.dropdown.scrollTo(0, this.dropdown.scrollHeight);
     }
   }
 
-  private onBlur(e) {
-    const blurOnNextMouseUp = () => {
-      window.removeEventListener("pointerup", blurOnNextMouseUp);
-
-      if (!this.querySelector("*:focus-within")) {
-        this.close();
-      }
-    };
-    window.addEventListener("pointerup", blurOnNextMouseUp);
-  }
+  private onOutsideClick = (e: MouseEvent) => {
+    if (!this.contains(e.target as HTMLElement)) {
+      this.close();
+    }
+  };
 
   private onClick(event: PointerEvent) {
     if (this.opened) {
@@ -284,13 +278,26 @@ export class Select extends LitElement {
   private onKeyUp(event: KeyboardEvent) {
     switch (event.key) {
       case "Enter":
-        if (this.opened && this.value !== undefined) {
+        if (this.opened) {
           this.submitSelected();
         }
         break;
       case "Escape":
         this.close();
         break;
+      default:
+        this.keyPressed(event.key);
+        break;
+    }
+  }
+
+  private keyPressed(key: string) {
+    const opt = this.options.find(
+      (option) => option.value.charAt(0).toLowerCase() === key.toLowerCase(),
+    );
+    if (opt) {
+      this.setValue(this.getValueOfOption(opt));
+      opt.scrollIntoView({ block: "nearest" });
     }
   }
 
@@ -344,8 +351,6 @@ export class Select extends LitElement {
 
       // set value from attributes
       this.input.value = this.value || "";
-      this.input.dispatchEvent(new Event("input", { bubbles: true }));
-      this.input.dispatchEvent(new Event("change", { bubbles: true }));
     }
   }
 
