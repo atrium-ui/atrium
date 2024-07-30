@@ -1,33 +1,14 @@
-import { test, expect, describe } from "bun:test";
+import { test, expect } from "bun:test";
+import { PopoverTrigger } from "./Popover";
 
 const NODE_NAME = "a-popover";
 
-async function newElement(
-  options: {
-    value?: string;
-  } = {},
-) {
-  const ele = document.createElement("div");
-  ele.innerHTML = `
-    <a-popover value="${options.value}">
-      <button type="button" slot="input">Button</button>
-    </a-popover>
-  `;
-
-  document.body.append(ele);
-  return ele;
-}
-
-test("import a-popover element", async () => {
+test("import element", async () => {
   const { Popover } = await import("@sv/elements/popover");
   expect(Popover).toBeDefined();
 
   // is defined in custom element registry
   expect(customElements.get(NODE_NAME)).toBeDefined();
-});
-
-test("construct a-popover element", async () => {
-  const { Popover } = await import("@sv/elements/popover");
 
   // is constructable
   expect(new Popover()).toBeInstanceOf(Popover);
@@ -37,4 +18,11 @@ test("construct a-popover element", async () => {
   ele.innerHTML = html;
 
   expect(ele.children[0]).toBeInstanceOf(Popover);
+});
+
+test("initial state", async () => {
+  const { PopoverTrigger } = await import("@sv/elements/popover");
+  const ele = new PopoverTrigger();
+
+  expect(ele.opened).toBe(false);
 });

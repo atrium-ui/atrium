@@ -1,17 +1,13 @@
-import { test, expect, describe } from "bun:test";
+import { test, expect } from "bun:test";
 
 const NODE_NAME = "a-expandable";
 
-test("import a-expandable element", async () => {
+test("import element", async () => {
   const { Expandable } = await import("@sv/elements/expandable");
   expect(Expandable).toBeDefined();
 
   // is defined in custom element registry
   expect(customElements.get(NODE_NAME)).toBeDefined();
-});
-
-test("construct a-expandable element", async () => {
-  const { Expandable } = await import("@sv/elements/expandable");
 
   // is constructable
   expect(new Expandable()).toBeInstanceOf(Expandable);
@@ -21,4 +17,23 @@ test("construct a-expandable element", async () => {
   ele.innerHTML = html;
 
   expect(ele.children[0]).toBeInstanceOf(Expandable);
+});
+
+test("change event", async () => {
+  const { Expandable } = await import("@sv/elements/expandable");
+
+  const ele = new Expandable();
+
+  let changed = false;
+  ele.addEventListener("change", () => {
+    changed = true;
+  });
+
+  ele.opened = true;
+
+  expect(changed).toBeFalse();
+
+  ele.open();
+
+  expect(changed).toBeTrue();
 });

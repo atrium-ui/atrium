@@ -1,24 +1,36 @@
-import { test, expect, describe } from "bun:test";
+import { describe, expect, it, beforeAll } from "bun:test";
+import type { Blur } from "./Blur.js";
 
 const NODE_NAME = "a-blur";
 
-test("import a-blur element", async () => {
-  const { Blur } = await import("@sv/elements/blur");
-  expect(Blur).toBeDefined();
+describe(NODE_NAME, () => {
+  function createBlur() {
+    const blur = document.createElement(NODE_NAME) as Blur;
+    document.body.appendChild(blur);
+    return blur;
+  }
 
-  // is defined in custom element registry
-  expect(customElements.get(NODE_NAME)).toBeDefined();
+  it("import element", async () => {
+    const { Blur } = await import("@sv/elements/blur");
+    expect(Blur).toBeDefined();
+
+    // is defined in custom element registry
+    expect(customElements.get(NODE_NAME)).toBeDefined();
+
+    // is constructable
+    expect(new Blur()).toBeInstanceOf(Blur);
+
+    // upgrades when added to the DOM
+    const ele = document.createElement("div");
+    ele.innerHTML = `<${NODE_NAME} />`;
+    expect(ele.children[0]).toBeInstanceOf(Blur);
+  });
+
+  it("enabled property", async () => {
+    const blur = createBlur();
+    blur.setAttribute("enabled", "");
+    expect(blur.enabled).toBe(true);
+  });
 });
 
-test("construct a-blur element", async () => {
-  const { Blur } = await import("@sv/elements/blur");
-
-  // is constructable
-  expect(new Blur()).toBeInstanceOf(Blur);
-
-  const html = `<${NODE_NAME} />`;
-  const ele = document.createElement("div");
-  ele.innerHTML = html;
-
-  expect(ele.children[0]).toBeInstanceOf(Blur);
-});
+// TODO: test scorlling inside blur content
