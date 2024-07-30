@@ -144,3 +144,6 @@ test("move event details", async () => {
   // @ts-ignore
   expect(track.canMove()).toBeFalse();
 });
+
+// TODO: test snap at specific position
+// TODO:  +loop
