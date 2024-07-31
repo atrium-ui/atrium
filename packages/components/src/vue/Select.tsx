@@ -24,8 +24,8 @@ export const Select = defineComponent(
           required={props.required}
           value={value.value}
           name={props.name}
-          onSelect={async (ev) => {
-            value.value = ev.option?.value;
+          onChange={(ev) => {
+            value.value = ev.target?.value;
           }}
           class="relative inline-block w-full"
         >

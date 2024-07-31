@@ -1,6 +1,5 @@
 import { LitElement, css, html } from "lit";
 import { property, query } from "lit/decorators.js";
-import { SelectEvent } from "./SelectEvent";
 import type { OptionElement } from "./Option";
 
 declare global {
@@ -9,8 +8,28 @@ declare global {
   }
 }
 
+export class SelectEvent extends CustomEvent<{ selected: OptionElement }> {
+  get option() {
+    return this.detail.selected;
+  }
+
+  constructor(selectedItem: OptionElement) {
+    super("change", {
+      bubbles: true,
+      detail: {
+        selected: selectedItem,
+      },
+    });
+  }
+}
+
 /**
- * Accessible and styleable dropdown component.
+ * Accessible and styleable select component.
+ *
+ * @customEvent change - Fired when the value changes.
+ * @customEvent input - Fired when the selected value changes.
+ * @customEvent open - Fired when the dropdown is opened.
+ * @customEvent close - Fired when the dropdown is closed.
  *
  * @example Select
  * ```html
@@ -84,27 +103,41 @@ export class Select extends LitElement {
     `;
   }
 
-  // In what direction the dropdown openes
+  /**
+   * In what direction the dropdown openes.
+   */
   @property({ type: String, reflect: true })
   public direction: "up" | "down" = "down";
 
-  // The selected option.
+  /**
+   * The selected option.
+   */
   @property({ type: String, reflect: true })
   public value?: string;
 
-  // Whether the dropdown is open
+  private selected?: string;
+
+  /**
+   * Whether the dropdown is open.
+   */
   @property({ type: Boolean, reflect: true })
   public opened = false;
 
-  // Whether the dropdown is disabled.
+  /**
+   * Whether the dropdown is disabled.
+   */
   @property({ type: Boolean, reflect: true })
   public disabled = false;
 
-  // Wether the input is required.
+  /**
+   * Wether the input is required.
+   */
   @property({ type: Boolean, reflect: true })
   public required = false;
 
-  // The name or key used in form data.
+  /**
+   * The name or key used in form data.
+   */
   @property({ type: String, reflect: true })
   public name?: string;
 
@@ -151,41 +184,63 @@ export class Select extends LitElement {
     this.input.remove();
   }
 
+  /**
+   * Select the next option.
+   */
   public selectNext() {
-    const selectedElement = this.getOptionByValue(this.value);
+    const selectedElement = this.getOptionByValue(this.selected);
     const index = selectedElement ? this.options.indexOf(selectedElement) : -1;
     const nextIndex = Math.max(index - 1, 0);
     const opt = this.options[nextIndex];
     if (opt) {
-      this.setValue(this.getValueOfOption(opt));
+      this.setSelected(this.getValueOfOption(opt));
     }
   }
 
+  /**
+   * Select the previous option.
+   */
   public selectPrev() {
-    const selectedElement = this.getOptionByValue(this.value);
+    const selectedElement = this.getOptionByValue(this.selected);
     const index = selectedElement ? this.options.indexOf(selectedElement) : -1;
     const nextIndex = Math.min(index + 1, this.options.length - 1);
     const opt = this.options[nextIndex];
     if (opt) {
-      this.setValue(this.getValueOfOption(opt));
+      this.setSelected(this.getValueOfOption(opt));
     }
   }
 
   private setValue(value: string | undefined) {
     this.value = value;
+    this.selected = value;
     this.updateOptionSelection();
+    this.dispatchEvent(new CustomEvent("input"));
   }
 
+  private setSelected(value: string | undefined) {
+    this.selected = value;
+    this.updateOptionSelection();
+    this.dispatchEvent(new CustomEvent("input"));
+  }
+
+  public reportValidity() {
+    return this.input.reportValidity();
+  }
+
+  /**
+   * Resets the value of the select to undefined.
+   */
   public reset() {
     this.setValue(undefined);
   }
 
   private submitSelected() {
-    if (this.value !== undefined) {
+    if (this.selected !== undefined) {
+      this.value = this.selected;
       this.input.value = this.value;
       this.input.dispatchEvent(new Event("input", { bubbles: true }));
       this.input.dispatchEvent(new Event("change", { bubbles: true }));
-      const selectedOptionElement = this.getOptionByValue(this.value);
+      const selectedOptionElement = this.getOptionByValue(this.selected);
       if (selectedOptionElement) {
         this.close();
         this.dispatchEvent(new SelectEvent(selectedOptionElement));
@@ -193,11 +248,18 @@ export class Select extends LitElement {
     }
   }
 
+  /**
+   * Close the dropdown.
+   */
   public close() {
-    this.opened = false;
     this.dispatchEvent(new Event("close"));
+    this.opened = false;
+    this.selected = this.value;
   }
 
+  /**
+   * Open the dropdown.
+   */
   public open() {
     if (this.disabled) return;
 
@@ -226,8 +288,8 @@ export class Select extends LitElement {
   }
 
   private scrollToSelected() {
-    if (this.value) {
-      const selectedOption = this.getOptionByValue(this.value);
+    if (this.selected) {
+      const selectedOption = this.getOptionByValue(this.selected);
       selectedOption?.scrollIntoView({ block: "nearest" });
     }
   }
@@ -309,7 +371,7 @@ export class Select extends LitElement {
     for (const child of this.options) {
       if (child === target || child.contains(target)) {
         const value = child.getAttribute("value") || index.toString();
-        this.value = value;
+        this.setValue(value);
         this.submitSelected();
         break;
       }
@@ -352,7 +414,7 @@ export class Select extends LitElement {
     const options = this.options;
     for (const option of options) {
       const optionValue = this.getValueOfOption(option);
-      if (optionValue === this.value) {
+      if (optionValue === this.selected) {
         option.setAttribute("selected", "");
       } else {
         option.removeAttribute("selected");
