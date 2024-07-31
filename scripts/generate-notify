@@ -106,12 +106,13 @@ function generateMessage() {
     const pkgWithoutScope = pkg.replace("@sv/", "");
     const changelogUrl = `https://svp.pages.s-v.de/atrium/packages/${pkgWithoutScope}/#changelog`;
     const packageUrl = `https://gitlab.s-v.de/svp/atrium/-/packages/?orderBy=created_at&sort=desc&search%5B%5D=${pkg}`;
+    const user = process.env.GITLAB_USER_NAME || undefined;
 
     messageData.blocks.push({
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": `\n🚀 Published <${packageUrl}|${pkg}@${version}> \n\n${changes} \n\n <${changelogUrl}|Full Changelog>`
+        "text": `\n🚀 Published <${packageUrl}|${pkg}@${version}> ${user ? `by ${user}` : ""} \n\n${changes} \n\n <${changelogUrl}|Full Changelog>`
       }
     })
   }
