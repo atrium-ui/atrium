@@ -2,57 +2,6 @@ import { test, expect, describe } from "bun:test";
 
 const NODE_NAME = "a-select";
 
-function press(ele: HTMLElement, key: string) {
-  ele.dispatchEvent(new KeyboardEvent("keydown", { key }));
-  ele.dispatchEvent(new KeyboardEvent("keyup", { key }));
-}
-
-async function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function newSelectElement() {
-  const ele = document.createElement("div");
-
-  ele.innerHTML = `
-    <a-select>
-      <button type="button" slot="input">Button</button>
-
-      <a-option value="1">Option 1</a-option>
-      <a-option value="2">Option 2</a-option>
-      <a-option value="3">Option 3</a-option>
-      <a-option value="4">Option 4</a-option>
-      <a-option value="5">Option 5</a-option>
-      <a-option value="6">Option 6</a-option>
-    </a-select>
-  `;
-
-  document.body.append(ele);
-  ele.querySelector("a-select").onSlotChange();
-  return ele;
-}
-
-async function newSelectElementWithValue(value?: string) {
-  const ele = document.createElement("div");
-
-  ele.innerHTML = `
-    <a-select value="${value}">
-      <button type="button" slot="input">Button</button>
-
-      <a-option value="1">Option 1</a-option>
-      <a-option value="2">Option 2</a-option>
-      <a-option value="3">Option 3</a-option>
-      <a-option value="4">Option 4</a-option>
-      <a-option value="5">Option 5</a-option>
-      <a-option value="6">Option 6</a-option>
-    </a-select>
-  `;
-
-  document.body.append(ele);
-  ele.querySelector("a-select").onSlotChange();
-  return ele;
-}
-
 test("import a-select element", async () => {
   const { Select } = await import("@sv/elements/select");
   expect(Select).toBeDefined();
@@ -110,11 +59,11 @@ test("open and close with events", async () => {
   });
 
   // trigger clicked
-  select.onClick();
+  open(select);
   expect(select.opened).toBe(true);
   expect(openEvent).toBe(true);
 
-  select.onClick();
+  open(select);
   expect(select.opened).toBe(false);
   expect(closeEvent).toBe(true);
 });
@@ -126,14 +75,14 @@ test("keyboard navigation", async () => {
   expect(select.value).toBe("3");
 
   // trigger clicked using Spacebar
-  select.onClick();
+  open(select);
   expect(select.opened).toBe(true);
 
   press(select, "Escape");
   expect(select.opened).toBe(false);
 
   // trigger clicked using Spacebar
-  select.onClick();
+  open(select);
   expect(select.opened).toBe(true);
 
   press(select, "ArrowDown");
@@ -147,7 +96,7 @@ test("close on tab", async () => {
   const select = root.querySelector("a-select");
 
   // trigger clicked
-  select.onClick();
+  open(select);
   expect(select.opened).toBe(true);
 
   press(select, "Tab");
@@ -160,12 +109,12 @@ test("select event on option click", async () => {
   const select = root.querySelector("a-select");
 
   let selectEvent = false;
-  select.addEventListener("select", () => {
+  select.addEventListener("change", () => {
     selectEvent = true;
   });
 
   // trigger clicked
-  select.onClick();
+  open(select);
   expect(select.opened).toBe(true);
   expect(select.value).toBe("3");
 
@@ -180,7 +129,7 @@ test("dropdown close on outside click", async () => {
   const select = root.querySelector("a-select");
 
   // trigger clicked
-  select.onClick();
+  open(select);
   expect(select.opened).toBe(true);
 
   document.body.click();
@@ -192,11 +141,11 @@ test("no change on option select using arrow keys", async () => {
   const select = root.querySelector("a-select");
 
   // trigger clicked
-  select.onClick();
+  open(select);
   expect(select.opened).toBe(true);
 
   let selectEvent = false;
-  select.addEventListener("select", () => {
+  select.addEventListener("change", () => {
     selectEvent = true;
   });
   press(select, "ArrowDown");
@@ -208,3 +157,143 @@ test("no change on option select using arrow keys", async () => {
   press(select, "Enter");
   expect(selectEvent).toBe(true);
 });
+
+// input event fires when selection changes
+test("input event on select", async () => {
+  const root = await newSelectElementWithValue("3");
+  const select = root.querySelector("a-select");
+
+  let inputEvent = false;
+  select.addEventListener("input", () => (inputEvent = true));
+
+  // trigger clicked
+  open(select);
+  press(select, "ArrowDown");
+
+  expect(inputEvent).toBe(true);
+});
+
+// input event fires when selection changes
+test("change event", async () => {
+  const root = await newSelectElementWithValue("3");
+  const select = root.querySelector("a-select");
+  expect(select.value).toBe("3");
+
+  let changeEvent = false;
+  select.addEventListener("change", () => (changeEvent = true));
+
+  // trigger clicked
+  open(select);
+
+  press(select, "ArrowDown");
+  expect(changeEvent).toBe(false);
+
+  press(select, "Enter");
+  expect(changeEvent).toBe(true);
+  expect(select.value).toBe("4");
+});
+
+test("form data", async () => {
+  const root = await newSelectElementWithValue("3");
+  const select = root.querySelector("a-select");
+
+  const form = document.createElement("form");
+  form.append(root);
+  document.body.append(form);
+
+  const formData = new FormData(form);
+  expect(formData.get("test")).toBe("3");
+
+  open(select);
+  press(select, "ArrowDown");
+  press(select, "Enter");
+
+  const formData2 = new FormData(form);
+  expect(formData2.get("test")).toBe("4");
+});
+
+test("validation", async () => {
+  const root = await newSelectElementWithRequired();
+  const select = root.querySelector("a-select");
+
+  expect(select?.reportValidity()).toBe(false);
+});
+
+//
+/// utils
+
+function press(ele: HTMLElement, key: string) {
+  ele.dispatchEvent(new KeyboardEvent("keydown", { key }));
+  ele.dispatchEvent(new KeyboardEvent("keyup", { key }));
+}
+
+function open(select) {
+  select.onClick();
+}
+
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function newSelectElement() {
+  const ele = document.createElement("div");
+
+  ele.innerHTML = `
+    <a-select>
+      <button type="button" slot="input">Button</button>
+
+      <a-option value="1">Option 1</a-option>
+      <a-option value="2">Option 2</a-option>
+      <a-option value="3">Option 3</a-option>
+      <a-option value="4">Option 4</a-option>
+      <a-option value="5">Option 5</a-option>
+      <a-option value="6">Option 6</a-option>
+    </a-select>
+  `;
+
+  document.body.append(ele);
+  ele.querySelector("a-select").onSlotChange();
+  return ele;
+}
+
+async function newSelectElementWithValue(value?: string) {
+  const ele = document.createElement("div");
+
+  ele.innerHTML = `
+    <a-select name="test" value="${value}">
+      <button type="button" slot="input">Button</button>
+
+      <a-option value="1">Option 1</a-option>
+      <a-option value="2">Option 2</a-option>
+      <a-option value="3">Option 3</a-option>
+      <a-option value="4">Option 4</a-option>
+      <a-option value="5">Option 5</a-option>
+      <a-option value="6">Option 6</a-option>
+    </a-select>
+  `;
+
+  document.body.append(ele);
+  ele.querySelector("a-select").onSlotChange();
+  return ele;
+}
+
+async function newSelectElementWithRequired() {
+  const ele = document.createElement("div");
+
+  ele.innerHTML = `
+    <a-select name="test" required>
+      <button type="button" slot="input">Button</button>
+
+      <a-option value="1">Option 1</a-option>
+      <a-option value="2">Option 2</a-option>
+      <a-option value="3">Option 3</a-option>
+      <a-option value="4">Option 4</a-option>
+      <a-option value="5">Option 5</a-option>
+      <a-option value="6">Option 6</a-option>
+    </a-select>
+  `;
+
+  document.body.append(ele);
+  ele.querySelector("a-select").onSlotChange();
+  return ele;
+}

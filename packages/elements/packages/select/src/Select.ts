@@ -211,16 +211,16 @@ export class Select extends LitElement {
   }
 
   private setValue(value: string | undefined) {
+    this.dispatchEvent(new CustomEvent("input", { detail: value }));
     this.value = value;
     this.selected = value;
     this.updateOptionSelection();
-    this.dispatchEvent(new CustomEvent("input"));
   }
 
   private setSelected(value: string | undefined) {
+    this.dispatchEvent(new CustomEvent("input", { detail: value }));
     this.selected = value;
     this.updateOptionSelection();
-    this.dispatchEvent(new CustomEvent("input"));
   }
 
   public reportValidity() {
@@ -238,8 +238,6 @@ export class Select extends LitElement {
     if (this.selected !== undefined) {
       this.value = this.selected;
       this.input.value = this.value;
-      this.input.dispatchEvent(new Event("input", { bubbles: true }));
-      this.input.dispatchEvent(new Event("change", { bubbles: true }));
       const selectedOptionElement = this.getOptionByValue(this.selected);
       if (selectedOptionElement) {
         this.close();
@@ -262,6 +260,8 @@ export class Select extends LitElement {
    */
   public open() {
     if (this.disabled) return;
+
+    this.selected = this.value;
 
     this.dispatchEvent(new Event("open"));
     this.opened = true;
@@ -407,6 +407,8 @@ export class Select extends LitElement {
 
       // set value from attributes
       this.input.value = this.value || "";
+
+      this.selected = this.value;
     }
   }
 
