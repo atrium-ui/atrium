@@ -297,19 +297,27 @@ export class Select extends LitElement {
   private onKeyDown(event: KeyboardEvent) {
     switch (event.key) {
       case "ArrowUp":
-        if (this.direction === "up") {
-          this.selectPrev();
+        if (this.opened) {
+          if (this.direction === "up") {
+            this.selectPrev();
+          } else {
+            this.selectNext();
+          }
         } else {
-          this.selectNext();
+          this.open();
         }
         this.scrollToSelected();
         event.preventDefault();
         break;
       case "ArrowDown":
-        if (this.direction === "up") {
-          this.selectNext();
+        if (this.opened) {
+          if (this.direction === "up") {
+            this.selectNext();
+          } else {
+            this.selectPrev();
+          }
         } else {
-          this.selectPrev();
+          this.open();
         }
         this.scrollToSelected();
         event.preventDefault();
