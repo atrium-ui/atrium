@@ -164,6 +164,7 @@ test("input event on select", async () => {
   const select = root.querySelector("a-select");
 
   let inputEvent = false;
+  // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
   select.addEventListener("input", () => (inputEvent = true));
 
   // trigger clicked
@@ -180,6 +181,7 @@ test("change event", async () => {
   expect(select.value).toBe("3");
 
   let changeEvent = false;
+  // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
   select.addEventListener("change", () => (changeEvent = true));
 
   // trigger clicked
