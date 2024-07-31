@@ -221,12 +221,66 @@ test("validation", async () => {
   expect(select?.reportValidity()).toBe(false);
 });
 
+test("esc to close", async () => {
+  const root = await newSelectElementWithValue("3");
+  const select = root.querySelector("a-select");
+
+  open(select);
+  expect(select.opened).toBe(true);
+
+  press(window, "Escape");
+  expect(select.opened).toBe(false);
+
+  open(select);
+  expect(select.opened).toBe(true);
+
+  press(select, "Escape");
+  expect(select.opened).toBe(false);
+});
+
+test("arrow keys navigation", async () => {
+  const root = await newSelectElementWithValue("3");
+  const select = root.querySelector("a-select");
+
+  expect(select.selected).toBe("3");
+
+  // arrow keys open dropdown
+  press(select, "ArrowDown");
+
+  expect(select.opened).toBe(true);
+  expect(select.selected).toBe("3");
+
+  press(select, "ArrowUp");
+  expect(select.selected).toBe("2");
+
+  press(select, "ArrowDown");
+  press(select, "ArrowDown");
+  expect(select.selected).toBe("4");
+
+  expect(select.value).toBe("3");
+});
+
+test("disabled", async () => {
+  const root = await newSelectElementWithDisabled();
+  const select = root.querySelector("a-select");
+
+  open(select);
+  expect(select.opened).toBe(false);
+
+  press(select, "ArrowDown");
+  expect(select.value).toBe(undefined);
+  expect(select.selected).toBe(undefined);
+
+  press(select, "Enter");
+  expect(select.value).toBe(undefined);
+});
+
 //
 /// utils
 
 function press(ele: HTMLElement, key: string) {
-  ele.dispatchEvent(new KeyboardEvent("keydown", { key }));
-  ele.dispatchEvent(new KeyboardEvent("keyup", { key }));
+  ele.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
+  ele.dispatchEvent(new KeyboardEvent("keyup", { key, bubbles: true }));
 }
 
 function open(select) {
@@ -284,6 +338,27 @@ async function newSelectElementWithRequired() {
 
   ele.innerHTML = `
     <a-select name="test" required>
+      <button type="button" slot="input">Button</button>
+
+      <a-option value="1">Option 1</a-option>
+      <a-option value="2">Option 2</a-option>
+      <a-option value="3">Option 3</a-option>
+      <a-option value="4">Option 4</a-option>
+      <a-option value="5">Option 5</a-option>
+      <a-option value="6">Option 6</a-option>
+    </a-select>
+  `;
+
+  document.body.append(ele);
+  ele.querySelector("a-select").onSlotChange();
+  return ele;
+}
+
+async function newSelectElementWithDisabled() {
+  const ele = document.createElement("div");
+
+  ele.innerHTML = `
+    <a-select name="test" disabled>
       <button type="button" slot="input">Button</button>
 
       <a-option value="1">Option 1</a-option>

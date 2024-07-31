@@ -115,7 +115,7 @@ export class Select extends LitElement {
   @property({ type: String, reflect: true })
   public value?: string;
 
-  private selected?: string;
+  public selected?: string;
 
   /**
    * Whether the dropdown is open.
@@ -155,6 +155,7 @@ export class Select extends LitElement {
 
     this.addEventListener("keydown", this.onKeyDown);
     this.addEventListener("keyup", this.onKeyUp);
+    window.addEventListener("keyup", this.globalOnKeyUp);
     window.addEventListener("click", this.onOutsideClick);
 
     if (this.name) {
@@ -177,6 +178,7 @@ export class Select extends LitElement {
 
     this.removeEventListener("keydown", this.onKeyDown);
     this.removeEventListener("keyup", this.onKeyUp);
+    window.removeEventListener("keyup", this.globalOnKeyUp);
     window.removeEventListener("click", this.onOutsideClick);
 
     this.observer?.disconnect();
@@ -339,15 +341,20 @@ export class Select extends LitElement {
     }
   }
 
+  private globalOnKeyUp = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case "Escape":
+        this.close();
+        break;
+    }
+  };
+
   private onKeyUp(event: KeyboardEvent) {
     switch (event.key) {
       case "Enter":
         if (this.opened) {
           this.submitSelected();
         }
-        break;
-      case "Escape":
-        this.close();
         break;
       default:
         this.keyPressed(event.key);
