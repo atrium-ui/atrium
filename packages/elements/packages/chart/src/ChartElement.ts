@@ -101,16 +101,16 @@ export class ChartElement extends LitElement {
     this.matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
     this.matchMedia.addEventListener("change", this.onChange);
 
-    window.addEventListener("beforeunload", this.cleanup);
+    this.tryLoad(this.src);
   }
 
   disconnectedCallback(): void {
+    this.cleanup();
+
     this.intersectionObserver?.disconnect();
     // this.resizeObserver?.disconnect();
 
     this.matchMedia?.removeEventListener("change", this.onChange);
-
-    window.removeEventListener("beforeunload", this.cleanup);
 
     super.disconnectedCallback();
   }
@@ -139,10 +139,6 @@ export class ChartElement extends LitElement {
 
   private loaded = false;
   private paused = true;
-
-  protected firstUpdated(): void {
-    this.tryLoad(this.src);
-  }
 
   protected updated(
     _changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
@@ -205,13 +201,13 @@ export class ChartElement extends LitElement {
     fetch(src)
       .then((res) => res.json())
       .then((data) => {
-        this.loaded = true;
         this.chart = new Chart(this.canvas, {
           type: this.type,
           options: this.options(),
           data,
         });
 
+        this.loaded = true;
         this.dispatchEvent(new CustomEvent("load"));
       });
   }
@@ -219,5 +215,7 @@ export class ChartElement extends LitElement {
   /** chart.js destroy */
   public cleanup = () => {
     this.chart?.destroy();
+    this.loaded = false;
+    this.paused = true;
   };
 }
