@@ -1,5 +1,13 @@
 # @sv/elements
 
+## 1.11.0 (2024-08-01)
+
+### Features
+
+- a-select: handle blur and fix change events, add keyPressed for quicksearch
+- a-select: added internal selected vaule, documentation and fixed event names
+- a-select: arrow-down and up opens select when closed
+
 ## 1.10.1 (2024-07-29)
 
 ### Fixes
