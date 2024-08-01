@@ -90,6 +90,16 @@ export class Expandable extends LitElement {
   }
 
   private onChange() {
+    const trigger = this.trigger;
+    if (trigger) {
+      this.trigger.setAttribute("aria-expanded", this.opened.toString());
+    }
+
+    const content = this.content;
+    if (content) {
+      content.setAttribute("aria-hidden", String(!this.opened));
+    }
+
     const ev = new Event("change", { bubbles: true, cancelable: true });
     this.dispatchEvent(ev);
 
@@ -101,36 +111,22 @@ export class Expandable extends LitElement {
       });
   }
 
-  private get button() {
-    const slot = this.shadowRoot?.querySelector<HTMLSlotElement>('slot[name="toggle"]');
-    return slot?.assignedElements()[0];
+  private get trigger() {
+    return this?.querySelector<HTMLElement>('[slot="toggle"]');
   }
 
   private get content() {
-    const slot = this.shadowRoot?.querySelector<HTMLSlotElement>('slot[class="content"]');
-    return slot?.assignedElements()[0];
-  }
-
-  protected updated(): void {
-    const btn = this.button;
-    if (btn) {
-      this.button.ariaExpanded = this.opened.toString();
-    }
-
-    const content = this.content;
-    if (content) {
-      content.ariaHidden = String(!this.opened);
-    }
+    return this.querySelector<HTMLElement>("> :not([slot])");
   }
 
   private _id_toggle = `expandable_toggle_${++accordionIncrement}`;
   private _id_content = `expandable_content_${accordionIncrement}`;
 
   private onSlotChange() {
-    const btn = this.button;
-    if (btn) {
-      btn.setAttribute("aria-controls", this._id_content);
-      btn.id = this._id_toggle;
+    const trigger = this.trigger;
+    if (trigger) {
+      trigger.setAttribute("aria-controls", this._id_content);
+      trigger.id = this._id_toggle;
     }
 
     const content = this.content;
@@ -142,7 +138,7 @@ export class Expandable extends LitElement {
   }
 
   private onClick(e: Event) {
-    if (this.button?.contains(e.target as HTMLElement)) this.toggle();
+    if (this.trigger?.contains(e.target as HTMLElement)) this.toggle();
   }
 
   private renderToggle() {
