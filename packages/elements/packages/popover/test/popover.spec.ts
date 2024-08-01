@@ -1,5 +1,4 @@
 import { test, expect } from "bun:test";
-import { PopoverTrigger } from "./Popover";
 
 const NODE_NAME = "a-popover";
 

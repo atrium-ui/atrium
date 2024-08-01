@@ -8,10 +8,10 @@ import "@sv/elements/expandable";
 import { OptionElement } from "./Option";
 import { Select } from "./Select";
 
-try {
+if (!customElements.get("a-select")) {
   customElements.define("a-option", OptionElement);
   customElements.define("a-select", Select);
-} catch (err) {
+} else {
   console.warn("a-select already defined");
 }
 

@@ -85,6 +85,7 @@ export function SomeForm() {
               class: "w-full",
               name: "name",
               placeholder: "Select",
+              value: "Option 2",
             }}
           >
             <SelectItem class="opacity-50" value="">
