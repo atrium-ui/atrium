@@ -95,8 +95,8 @@ export class Blur extends LitElement {
   /** Disable the blur element */
   public disable() {
     this.tryUnlock();
-    this.inert = true;
-    this.ariaHidden = "true";
+    this.setAttribute("inert", "");
+    this.setAttribute("aria-hidden", "true");
     this.enabled = false;
 
     this.lastActiveElement?.focus();
@@ -105,8 +105,8 @@ export class Blur extends LitElement {
   /** Enable the blur element */
   public enable() {
     this.tryLock();
-    this.inert = false;
-    this.ariaHidden = "false";
+    this.removeAttribute("inert");
+    this.setAttribute("aria-hidden", "false");
     this.enabled = true;
 
     // in the case enable is called after the element is already enabled, dont set the last active element
