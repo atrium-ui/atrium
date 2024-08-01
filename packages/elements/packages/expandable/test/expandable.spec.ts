@@ -77,27 +77,29 @@ test("aria attributes", async () => {
 
   open(ele);
 
-  console.log(ele.outerHTML);
   expect(trigger.getAttribute("aria-expanded")).toBe("true");
   expect(content.getAttribute("aria-hidden")).toBe("false");
 });
 
 async function newExpandable() {
-  const { Expandable } = await import("@sv/elements/expandable");
-  const ele = new Expandable();
+  await import("@sv/elements/expandable");
+  const ele = document.createElement("div");
 
   ele.innerHTML = `
-    <button slot="toggle" type="button">
-      <div class="headline">Title</div>
-    </button>
+    <a-expandable>
+      <button slot="toggle" type="button">
+        <div class="headline">Title</div>
+      </button>
 
-    <div>Content</div>
+      <div>Content</div>
+    </a-expandable>
   `;
 
+  const expandable = ele.querySelector("a-expandable");
   document.body.appendChild(ele);
-  ele.onSlotChange();
-
-  return ele;
+  const ex = expandable as any;
+  ex.onSlotChange();
+  return ex;
 }
 
 async function newExpandableOpened() {
@@ -115,7 +117,6 @@ async function newExpandableOpened() {
   `;
 
   const expandable = ele.querySelector("a-expandable");
-
   document.body.appendChild(ele);
   const ex = expandable as any;
   ex.onSlotChange();
