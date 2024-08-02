@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.11.2 (2024-08-02)
+
+### Fixes
+
+- a-expandable: change event not dispatched on attribute change, and added test
+
 ## 1.11.1 (2024-08-02)
 
 ### Fixes
