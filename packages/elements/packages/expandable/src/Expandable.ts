@@ -89,10 +89,6 @@ export class Expandable extends LitElement {
     this.opened ? this.close() : this.open();
   }
 
-  protected updated(): void {
-    this.onChange();
-  }
-
   private onChange() {
     const trigger = this.trigger;
     if (trigger) {
@@ -120,7 +116,7 @@ export class Expandable extends LitElement {
   }
 
   private get content() {
-    return this.querySelector<HTMLElement>("> :not([slot])");
+    return this.querySelector<HTMLElement>(":not([slot])");
   }
 
   private _id_toggle = `expandable_toggle_${++accordionIncrement}`;

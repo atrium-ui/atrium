@@ -81,7 +81,7 @@ test("aria attributes", async () => {
   expect(content.getAttribute("aria-hidden")).toBe("false");
 });
 
-test("change event when attribute is changed", async () => {
+test("no change event when attribute is changed", async () => {
   const ele = await newExpandable();
 
   expect(ele.opened).toBe(false);
@@ -96,7 +96,7 @@ test("change event when attribute is changed", async () => {
 
   await sleep(1);
 
-  expect(changeEvent).toBe(true);
+  expect(changeEvent).toBe(false);
 });
 
 async function newExpandable() {
