@@ -96,8 +96,8 @@ export class Popover extends Portal {
 
   private cleanup?: () => void;
 
-  connectedCallback(): void {
-    super.connectedCallback();
+  constructor() {
+    super();
 
     this.addEventListener("blur", (e) => {
       const trigger = this.closest("a-popover-trigger");
@@ -193,25 +193,45 @@ export class PopoverTrigger extends LitElement {
 
   render(): HTMLTemplateResult {
     return html`
-      <slot
-        class="trigger"
-        name="input"
-        @click=${() => this.toggle()}>
-      </slot>
+      <slot class="trigger" name="input"</slot>
       <slot class="content"></slot>
     `;
   }
 
-  private get portal() {
-    return this.contentSlot?.assignedElements()[0];
+  connectedCallback(): void {
+    super.connectedCallback();
+
+    // TODO: listen for mutations
+    this.trigger?.setAttribute("aria-haspopup", "dialog");
+    this.trigger?.setAttribute("aria-expanded", "false");
+  }
+
+  constructor() {
+    super();
+
+    this.addEventListener(
+      "click",
+      (e) => {
+        if (this.trigger?.contains(e.target as Node)) {
+          this.toggle();
+        }
+      },
+      {
+        capture: true,
+      },
+    );
+  }
+
+  private get content() {
+    return this.querySelector<HTMLElement>("> :not([slot])");
   }
 
   private get trigger() {
-    return (this.input?.assignedElements()[0] as HTMLButtonElement) || undefined;
+    return this.querySelector<HTMLElement>('[slot="input"]');
   }
 
   private clickFallback = new ElementEventListener(this, window, "click", (e) => {
-    if (this.portal instanceof Popover) return;
+    if (this.content instanceof Popover) return;
 
     if (this.opened && !this.contains(e.target)) {
       this.close();
@@ -224,9 +244,12 @@ export class PopoverTrigger extends LitElement {
   public show() {
     this.opened = true;
 
-    if (this.portal instanceof Popover) {
-      this.portal.show();
+    if (this.content instanceof Popover) {
+      this.content.show();
     }
+
+    this.trigger?.setAttribute("aria-haspopup", "dialog");
+    this.trigger?.setAttribute("aria-expanded", "true");
   }
 
   /**
@@ -235,9 +258,12 @@ export class PopoverTrigger extends LitElement {
   public close() {
     this.opened = false;
 
-    if (this.portal instanceof Popover) {
-      this.portal.hide();
+    if (this.content instanceof Popover) {
+      this.content.hide();
     }
+
+    this.trigger?.setAttribute("aria-haspopup", "dialog");
+    this.trigger?.setAttribute("aria-expanded", "false");
   }
 
   /**
@@ -246,7 +272,6 @@ export class PopoverTrigger extends LitElement {
   public toggle() {
     this.opened ? this.close() : this.show();
   }
-
   protected updated(): void {
     if (this.trigger) {
       this.trigger.ariaHasPopup = "dialog";

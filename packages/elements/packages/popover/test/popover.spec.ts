@@ -25,3 +25,53 @@ test("initial state", async () => {
 
   expect(ele.opened).toBe(false);
 });
+
+test("trigger click", async () => {
+  const popover = await createPopover();
+  const tirgger = popover.querySelector("a-popover-trigger");
+  const button = popover.querySelector("button");
+  button.click();
+  expect(tirgger.opened).toBe(true);
+  button.click();
+  expect(tirgger.opened).toBe(false);
+});
+
+test("trigger aria attributes", async () => {
+  const popover = await createPopover();
+  const button = popover.querySelector("button");
+  const tirgger = popover.querySelector("a-popover-trigger");
+
+  expect(button.getAttribute("aria-haspopup")).toBe("dialog");
+  expect(button.getAttribute("aria-expanded")).toBe("false");
+
+  button.click();
+
+  expect(button.getAttribute("aria-expanded")).toBe("true");
+});
+
+test("popover no scrolllock", async () => {
+  const popover = await createPopover();
+  const btn = popover.querySelector("button");
+  btn.click();
+
+  const content = document.querySelector("a-popover-portal");
+  expect(content.lock.enabled).toBe(false);
+});
+
+async function createPopover() {
+  await import("@sv/elements/popover");
+  const ele = document.createElement("div");
+  ele.innerHTML = `
+    <a-popover-trigger>
+      <button type="button" slot="input">
+        Label
+      </button>
+
+      <a-popover>
+        <div>Content</div>
+      </a-popover>
+    </a-popover-trigger>
+  `;
+  document.body.append(ele);
+  return ele;
+}
