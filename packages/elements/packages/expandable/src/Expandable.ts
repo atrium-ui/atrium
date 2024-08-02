@@ -89,6 +89,10 @@ export class Expandable extends LitElement {
     this.opened ? this.close() : this.open();
   }
 
+  protected updated(): void {
+    this.onChange();
+  }
+
   private onChange() {
     const trigger = this.trigger;
     if (trigger) {
@@ -100,7 +104,7 @@ export class Expandable extends LitElement {
       content.setAttribute("aria-hidden", String(!this.opened));
     }
 
-    const ev = new Event("change", { bubbles: true, cancelable: true });
+    const ev = new CustomEvent("change", { bubbles: true, cancelable: true });
     this.dispatchEvent(ev);
 
     if (!ev.defaultPrevented)

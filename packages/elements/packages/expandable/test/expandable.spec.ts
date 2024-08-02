@@ -81,6 +81,24 @@ test("aria attributes", async () => {
   expect(content.getAttribute("aria-hidden")).toBe("false");
 });
 
+test("change event when attribute is changed", async () => {
+  const ele = await newExpandable();
+
+  expect(ele.opened).toBe(false);
+
+  let changeEvent = false;
+  ele.addEventListener("change", () => {
+    changeEvent = true;
+  });
+
+  ele.setAttribute("opened", "true");
+  expect(ele.opened).toBe(true);
+
+  await sleep(1);
+
+  expect(changeEvent).toBe(true);
+});
+
 async function newExpandable() {
   await import("@sv/elements/expandable");
   const ele = document.createElement("div");
@@ -125,4 +143,8 @@ async function newExpandableOpened() {
 
 function open(ele) {
   ele.onClick({ target: ele.trigger });
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
