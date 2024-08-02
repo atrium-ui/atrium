@@ -1,5 +1,13 @@
 # @sv/elements
 
+## 1.11.1 (2024-08-02)
+
+### Fixes
+
+- improve testability of a-expandable
+- added chart element tests
+- added tests for blur element
+
 ## 1.11.0 (2024-08-01)
 
 ### Features
