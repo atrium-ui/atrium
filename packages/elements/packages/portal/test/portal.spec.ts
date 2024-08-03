@@ -26,7 +26,7 @@ test("construct a-portal element", async () => {
 // Test events beeing proxied
 test("portal events", async () => {
   const ele = await newElement();
-  const portal = document.querySelector("a-portal");
+  const portal = ele.querySelector("a-portal");
   const button = portal.querySelector("button");
 
   let blurEvent = false;
