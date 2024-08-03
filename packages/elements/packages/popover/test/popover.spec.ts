@@ -58,9 +58,12 @@ test("popover no scrolllock", async () => {
   expect(content.lock.enabled).toBe(false);
 });
 
-test("slotting", async () => {
-  const popover = await createPopover();
-  console.log("test", popover.outerHTML);
+test("slotting names", async () => {
+  const ele = await createPopover();
+  const popover = ele.querySelector("a-popover");
+  const trigger = ele.querySelector("a-popover-trigger");
+
+  // TOOD: find a way to test assigned slots
 });
 
 async function createPopover() {
