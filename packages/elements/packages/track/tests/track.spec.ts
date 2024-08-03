@@ -9,10 +9,32 @@ async function trackWithChildren(itemCount = 10) {
   const track = new Track();
   track.style.width = "800px";
   track.style.height = "200px";
+
+  Object.defineProperty(track, "offsetWidth", {
+    writable: true,
+  });
+  Object.defineProperty(track, "offsetHeight", {
+    writable: true,
+  });
+
+  track.offsetWidth = 800;
+  track.offsetHeight = 200;
+
   for (let i = 0; i < itemCount; i++) {
     const child = document.createElement("canvas");
     child.width = 200;
     child.height = 200;
+
+    Object.defineProperty(child, "offsetWidth", {
+      writable: true,
+    });
+    Object.defineProperty(child, "offsetHeight", {
+      writable: true,
+    });
+
+    child.offsetWidth = child.width;
+    child.offsetHeight = child.height;
+
     track.append(child);
   }
 
@@ -145,7 +167,27 @@ test("move event details", async () => {
   expect(track.canMove()).toBeFalse();
 });
 
+test("offsetWidth", async () => {
+  const track = await trackWithChildren();
+
+  track.moveBy(2);
+
+  const int = setInterval(() => {
+    console.log(track.currentPosition);
+  }, track.transitionTime / 10);
+
+  await sleep(track.transitionTime + 100);
+
+  console.log(track.currentItem);
+
+  clearInterval(int);
+});
+
 // TODO: test snap at specific position
 // TODO:  +loop
 //
 // TODO: snap with inertia to the correct position
+
+async function sleep(ms = 0) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
