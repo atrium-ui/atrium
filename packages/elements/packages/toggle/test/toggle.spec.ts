@@ -10,7 +10,7 @@ async function newElement(
   const ele = document.createElement("div");
   ele.innerHTML = `
     <a-toggle value="${options.value}">
-      <button type="button" slot="input">Button</button>
+      <button type="button" slot="trigger">Button</button>
     </a-toggle>
   `;
 

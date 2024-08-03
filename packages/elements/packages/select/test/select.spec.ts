@@ -296,7 +296,7 @@ async function newSelectElement() {
 
   ele.innerHTML = `
     <a-select>
-      <button type="button" slot="input">Button</button>
+      <button type="button" slot="trigger">Button</button>
 
       <a-option value="1">Option 1</a-option>
       <a-option value="2">Option 2</a-option>
@@ -317,7 +317,7 @@ async function newSelectElementWithValue(value?: string) {
 
   ele.innerHTML = `
     <a-select name="test" value="${value}">
-      <button type="button" slot="input">Button</button>
+      <button type="button" slot="trigger">Button</button>
 
       <a-option value="1">Option 1</a-option>
       <a-option value="2">Option 2</a-option>
@@ -338,7 +338,7 @@ async function newSelectElementWithRequired() {
 
   ele.innerHTML = `
     <a-select name="test" required>
-      <button type="button" slot="input">Button</button>
+      <button type="button" slot="trigger">Button</button>
 
       <a-option value="1">Option 1</a-option>
       <a-option value="2">Option 2</a-option>
@@ -359,7 +359,7 @@ async function newSelectElementWithDisabled() {
 
   ele.innerHTML = `
     <a-select name="test" disabled>
-      <button type="button" slot="input">Button</button>
+      <button type="button" slot="trigger">Button</button>
 
       <a-option value="1">Option 1</a-option>
       <a-option value="2">Option 2</a-option>

@@ -35,7 +35,7 @@ export class SelectEvent extends CustomEvent<{ selected: OptionElement }> {
  * ```html
  * <form onchange="console.log(event.target.value)" onsubmit="event.preventDefault()">
  *  <a-select name="test" class="text-base">
- *   <button type="button" slot="input" class="cursor-pointer">
+ *   <button type="button" slot="trigger" class="cursor-pointer">
  *     <div class="w-[150px] text-left">Select</div>
  *   </button>
  *
@@ -92,7 +92,7 @@ export class Select extends LitElement {
 
   render() {
     return html`
-      <slot name="input" @click=${this.onClick}></slot>
+      <slot name="trigger" @click=${this.onClick}></slot>
       <div class="dropdown-container" part="dropdown">
         <a-expandable ?opened="${this.opened}">
           <div class="dropdown" part="options">
@@ -268,7 +268,7 @@ export class Select extends LitElement {
     this.dispatchEvent(new Event("open"));
     this.opened = true;
 
-    const inputElement = this.querySelector(`[slot="input"]`) as HTMLElement;
+    const inputElement = this.querySelector(`[slot="trigger"]`) as HTMLElement;
     if (inputElement) inputElement.focus();
     if (this.direction === "up") {
       this.dropdown.scrollTo(0, this.dropdown.scrollHeight);

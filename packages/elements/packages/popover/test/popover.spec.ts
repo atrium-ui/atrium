@@ -58,12 +58,17 @@ test("popover no scrolllock", async () => {
   expect(content.lock.enabled).toBe(false);
 });
 
+test("slotting", async () => {
+  const popover = await createPopover();
+  console.log("test", popover.outerHTML);
+});
+
 async function createPopover() {
   await import("@sv/elements/popover");
   const ele = document.createElement("div");
   ele.innerHTML = `
     <a-popover-trigger>
-      <button type="button" slot="input">
+      <button type="button" slot="trigger">
         Label
       </button>
 

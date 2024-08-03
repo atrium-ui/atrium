@@ -6,9 +6,9 @@ export function Popover(props: { label?: string }, { slots }) {
   return (
     <a-popover-trigger class="relative z-10">
       {/* @ts-ignore */}
-      <div slot="input">
+      <div slot="trigger">
         {props.label ? (
-          <Button slot="input" variant="outline">
+          <Button slot="trigger" variant="outline">
             {props.label}
           </Button>
         ) : (

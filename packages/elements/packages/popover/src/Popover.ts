@@ -162,7 +162,7 @@ export class Popover extends Portal {
  * @example
  * ```html
  * <a-popover-trigger>
- *   <button type="button" slot="input">
+ *   <button type="button" slot="trigger">
  *     Label
  *   </button>
  *
@@ -193,7 +193,7 @@ export class PopoverTrigger extends LitElement {
 
   render(): HTMLTemplateResult {
     return html`
-      <slot class="trigger" name="input"</slot>
+      <slot class="trigger" name="trigger"></slot>
       <slot class="content"></slot>
     `;
   }
@@ -209,25 +209,27 @@ export class PopoverTrigger extends LitElement {
   constructor() {
     super();
 
-    this.addEventListener(
-      "click",
-      (e) => {
-        if (this.trigger?.contains(e.target as Node)) {
-          this.toggle();
-        }
-      },
-      {
-        capture: true,
-      },
-    );
+    this.addEventListener("click", (e) => {
+      if (this.trigger?.contains(e.target as Node)) {
+        this.toggle();
+      }
+    });
   }
 
   private get content() {
-    return this.querySelector<HTMLElement>("> :not([slot])");
+    // Note: slot.assignedNodes() would be better, but it's not supported within our test runner
+    for (const ele of this.children) {
+      // default slot
+      if (!ele.slot) return ele;
+    }
+    return undefined;
   }
 
   private get trigger() {
-    return this.querySelector<HTMLElement>('[slot="input"]');
+    for (const ele of this.children) {
+      if (ele.slot === "trigger") return ele;
+    }
+    return undefined;
   }
 
   private clickFallback = new ElementEventListener(this, window, "click", (e) => {

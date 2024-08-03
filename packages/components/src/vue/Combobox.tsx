@@ -30,7 +30,7 @@ export const Combobox = defineComponent(
           }}
           class="relative inline-block w-full"
         >
-          <Input class="w-full" slot="input" placeholder={props.placeholder}>
+          <Input class="w-full" slot="trigger" placeholder={props.placeholder}>
             <div class="min-w-[150px] text-left">{value.value}</div>
           </Input>
 

@@ -29,7 +29,7 @@ export const Select = defineComponent(
           }}
           class="relative inline-block w-full"
         >
-          <Button class="w-full" slot="input">
+          <Button class="w-full" slot="trigger">
             <div class="min-w-[150px] text-left">{value.value || props.placeholder}</div>
           </Button>
 

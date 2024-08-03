@@ -111,12 +111,19 @@ export class Expandable extends LitElement {
       });
   }
 
-  private get trigger() {
-    return this?.querySelector<HTMLElement>('[slot="toggle"]');
+  private get content() {
+    for (const ele of this.children) {
+      // default slot
+      if (!ele.slot) return ele;
+    }
+    return undefined;
   }
 
-  private get content() {
-    return this.querySelector<HTMLElement>(":not([slot])");
+  private get trigger() {
+    for (const ele of this.children) {
+      if (ele.slot === "toggle") return ele;
+    }
+    return undefined;
   }
 
   private _id_toggle = `expandable_toggle_${++accordionIncrement}`;

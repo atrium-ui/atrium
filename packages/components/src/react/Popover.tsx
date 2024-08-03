@@ -7,8 +7,8 @@ export function Popover(props: { label?: string } & PropsWithChildren) {
   return (
     // @ts-ignore
     <a-popover-trigger class="relative z-10">
-      <div slot="input">
-        <Button slot="input" variant="outline">
+      <div slot="trigger">
+        <Button slot="trigger" variant="outline">
           {props.label}
         </Button>
       </div>
