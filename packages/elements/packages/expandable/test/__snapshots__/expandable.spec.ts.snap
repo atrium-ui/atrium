@@ -1,0 +1,81 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`open and close: closed 1`] = `
+"<a-expandable direction="down">
+      <button slot="toggle" type="button" aria-controls="expandable_content_4" id="expandable_toggle_4">
+        <div class="headline">Title</div>
+      </button>
+
+      <div role="region" id="expandable_content_4" aria-labelledby="expandable_toggle_4">Content</div>
+    </a-expandable>"
+`;
+
+exports[`open and close: opened 1`] = `
+"<a-expandable direction="down">
+      <button slot="toggle" type="button" aria-controls="expandable_content_4" id="expandable_toggle_4" aria-expanded="true">
+        <div class="headline">Title</div>
+      </button>
+
+      <div role="region" id="expandable_content_4" aria-labelledby="expandable_toggle_4" aria-hidden="false">Content</div>
+    </a-expandable>"
+`;
+
+exports[`open and close: closed 2`] = `
+"<a-expandable direction="down">
+      <button slot="toggle" type="button" aria-controls="expandable_content_13" id="expandable_toggle_13">
+        <div class="headline">Title</div>
+      </button>
+
+      <div role="region" id="expandable_content_13" aria-labelledby="expandable_toggle_13">Content</div>
+    </a-expandable>"
+`;
+
+exports[`open and close: opened 2`] = `
+"<a-expandable direction="down">
+      <button slot="toggle" type="button" aria-controls="expandable_content_13" id="expandable_toggle_13" aria-expanded="true">
+        <div class="headline">Title</div>
+      </button>
+
+      <div role="region" id="expandable_content_13" aria-labelledby="expandable_toggle_13" aria-hidden="false">Content</div>
+    </a-expandable>"
+`;
+
+exports[`open and close: closed 3`] = `
+"<a-expandable direction="down">
+      <button slot="toggle" type="button" aria-controls="expandable_content_22" id="expandable_toggle_22">
+        <div class="headline">Title</div>
+      </button>
+
+      <div role="region" id="expandable_content_22" aria-labelledby="expandable_toggle_22">Content</div>
+    </a-expandable>"
+`;
+
+exports[`open and close: opened 3`] = `
+"<a-expandable direction="down">
+      <button slot="toggle" type="button" aria-controls="expandable_content_22" id="expandable_toggle_22" aria-expanded="true">
+        <div class="headline">Title</div>
+      </button>
+
+      <div role="region" id="expandable_content_22" aria-labelledby="expandable_toggle_22" aria-hidden="false">Content</div>
+    </a-expandable>"
+`;
+
+exports[`open and close: closed 4`] = `
+"<a-expandable direction="down">
+      <button slot="toggle" type="button" aria-controls="expandable_content_31" id="expandable_toggle_31">
+        <div class="headline">Title</div>
+      </button>
+
+      <div role="region" id="expandable_content_31" aria-labelledby="expandable_toggle_31">Content</div>
+    </a-expandable>"
+`;
+
+exports[`open and close: opened 4`] = `
+"<a-expandable direction="down">
+      <button slot="toggle" type="button" aria-controls="expandable_content_31" id="expandable_toggle_31" aria-expanded="true">
+        <div class="headline">Title</div>
+      </button>
+
+      <div role="region" id="expandable_content_31" aria-labelledby="expandable_toggle_31" aria-hidden="false">Content</div>
+    </a-expandable>"
+`;

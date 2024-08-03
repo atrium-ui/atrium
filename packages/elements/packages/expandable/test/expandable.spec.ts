@@ -40,6 +40,8 @@ test("open and close", async () => {
 
   expect(ele.opened).toBe(false);
 
+  expect(ele.outerHTML).toMatchSnapshot("closed");
+
   ele.open();
   expect(ele.opened).toBe(true);
 
@@ -48,6 +50,8 @@ test("open and close", async () => {
 
   open(ele);
   expect(ele.opened).toBe(true);
+
+  expect(ele.outerHTML).toMatchSnapshot("opened");
 });
 
 test("initialy opened", async () => {
