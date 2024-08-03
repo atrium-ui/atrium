@@ -1,5 +1,15 @@
 # @sv/elements
 
+## 1.12.0 (2024-08-03)
+
+### Features
+
+- renamed `input` slot to `trigger` for a-popover and a-select
+
+### Fixes
+
+- a-expandable: fix change event test
+
 ## 1.11.2 (2024-08-02)
 
 ### Fixes
