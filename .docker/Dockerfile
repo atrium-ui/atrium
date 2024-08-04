@@ -23,7 +23,3 @@ ENV PATH=$MISE_DATA_DIR/shims:$PATH
 COPY ../.mise.toml /root/.config/mise.toml
 
 RUN mise install --cd /root --yes
-
-WORKDIR /root
-
-ENTRYPOINT ["/bin/bash"]
