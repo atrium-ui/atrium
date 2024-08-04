@@ -22,7 +22,6 @@ export function SomeForm() {
       <div class="grid grid-cols-2 gap-4">
         <FormField
           field={{
-            label: "Name",
             name: "name",
           }}
         >
@@ -31,12 +30,12 @@ export function SomeForm() {
               required: true,
               name: "name",
               placeholder: "Albert",
+              label: "Name",
             }}
           />
         </FormField>
         <FormField
           field={{
-            label: "Email",
             name: "email",
           }}
         >
@@ -46,6 +45,7 @@ export function SomeForm() {
               type: "email",
               name: "email",
               placeholder: "mail@example.com",
+              label: "Email",
             }}
           />
         </FormField>
@@ -54,7 +54,6 @@ export function SomeForm() {
       <div class="grid grid-cols-2 gap-4">
         <FormField
           field={{
-            label: "Name",
             name: "name",
           }}
         >
@@ -63,6 +62,7 @@ export function SomeForm() {
               required: true,
               name: "name",
               placeholder: "Select",
+              label: "Name",
             }}
           >
             <SelectItem class="opacity-50" value="">
@@ -76,7 +76,6 @@ export function SomeForm() {
 
         <FormField
           field={{
-            label: "Name",
             name: "name",
           }}
         >
@@ -86,6 +85,7 @@ export function SomeForm() {
               name: "name",
               placeholder: "Select",
               value: "Option 2",
+              label: "Name",
             }}
           >
             <SelectItem class="opacity-50" value="">
@@ -100,7 +100,6 @@ export function SomeForm() {
 
       <FormField
         field={{
-          label: "Message (optional)",
           name: "message",
         }}
       >
@@ -109,6 +108,7 @@ export function SomeForm() {
             multiline: true,
             name: "message",
             placeholder: "Something...",
+            label: "Message (optional)",
           }}
         />
       </FormField>
@@ -118,7 +118,7 @@ export function SomeForm() {
           name: "message",
         }}
       >
-        <Checkbox required name="checkbox1">
+        <Checkbox required name="checkbox1" label="I agree to use this checkbox">
           <span>I agree to use this checkbox</span>
         </Checkbox>
       </FormField>

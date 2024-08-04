@@ -40,9 +40,11 @@ export const Input = defineComponent(
         slot={props.slot}
         class={props.class}
       >
-        <div class="text-sm">
-          <label>{props.label}</label>
-        </div>
+        {props.label && (
+          <div class="pb-1 text-sm">
+            <label for={props.id}>{props.label}</label>
+          </div>
+        )}
 
         {props.multiline ? (
           <textarea
@@ -51,6 +53,7 @@ export const Input = defineComponent(
             name={props.name}
             readonly={props.readonly}
             required={props.required || undefined}
+            aria-label={props.label}
             placeholder={props.placeholder}
             value={props.value}
             class={twMerge(inputVariants.default, props.error && inputVariants.error)}
@@ -69,6 +72,7 @@ export const Input = defineComponent(
             name={props.name}
             readonly={props.readonly}
             required={props.required || undefined}
+            aria-label={props.label}
             placeholder={props.placeholder}
             value={props.value}
             class={twMerge(inputVariants.default, props.error && inputVariants.error)}

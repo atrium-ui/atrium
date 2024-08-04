@@ -417,6 +417,7 @@ export class Select extends LitElement {
 
     if (this.name) {
       this.input.style.display = "none";
+      this.input.ariaHidden = "true";
       this.input.name = this.name;
       this.input.required = this.required;
 

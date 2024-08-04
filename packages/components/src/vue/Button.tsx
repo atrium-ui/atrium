@@ -80,12 +80,12 @@ export function Link(
 ) {
   return (
     <a
-      class={[
+      class={twMerge(
         "inline text-inherit no-underline",
         "transition-all active:transition-none",
         props.variant && buttonVariants.base,
         buttonVariants[props.variant ?? "default"],
-      ]}
+      )}
       href={props.href}
       target={props.target}
     >

@@ -9,6 +9,7 @@ export const Checkbox = defineComponent(
       checked?: boolean;
       required?: boolean;
       onChange?: (event: Event) => void;
+      label?: string;
     },
     { slots },
   ) => {
@@ -32,6 +33,7 @@ export const Checkbox = defineComponent(
         <button
           role="checkbox"
           aria-checked={checked.value}
+          aria-label={props.label}
           type="button"
           aria-labelledby={`label_${props.name}`}
           onClick={() => handleChange(!checked.value)}
