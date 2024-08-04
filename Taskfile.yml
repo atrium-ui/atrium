@@ -142,5 +142,6 @@ tasks:
       - 'curl -X POST -d "$(cat .task/notify.txt)" $SLACK_WEBHOOK_URL'
 
   docker:build:
+    desc: Build docker image, pass --push to push to registry
     cmds:
-      - docker buildx build --platform linux/amd64,linux/arm64 ./.docker --tag luckydye/atrium:latest --push
+      - docker buildx build --platform linux/amd64,linux/arm64 -f .docker/Dockerfile --tag luckydye/atrium:latest . {{.CLI_ARGS}}
