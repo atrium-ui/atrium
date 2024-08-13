@@ -11,7 +11,7 @@ export function Card(props: { class?: string }, { slots }) {
   return (
     <div
       class={twMerge(
-        "group relative rounded-xl border border-zinc-950 shadow-md dark:bg-zinc-900",
+        "group relative rounded-lg border border-zinc-950 shadow-md dark:bg-zinc-800",
       )}
     >
       <div
