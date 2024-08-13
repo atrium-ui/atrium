@@ -5,6 +5,9 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
+  LineElement,
+  LineController,
+  PointElement,
 } from "chart.js";
 import {
   LitElement,
@@ -20,10 +23,20 @@ declare global {
   }
 }
 
-Chart.register(Tooltip, BarController, BarElement, CategoryScale, LinearScale);
+Chart.register(
+  Tooltip,
+  BarController,
+  BarElement,
+  LineController,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+);
 
 /**
  * A simple chart with data loaded from a URL and styleable with CSS.
+ * Data should be structured acording to the [Chart.js Data Structure](https://www.chartjs.org/docs/latest/general/data-structures.html).
  *
  * @customEvent load - Emitted when the chart has loaded.
  *
@@ -37,6 +50,7 @@ Chart.register(Tooltip, BarController, BarElement, CategoryScale, LinearScale);
  * ```
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-chart/
+ * @see https://www.chartjs.org/docs/latest/general/data-structures.html
  */
 export class ChartElement extends LitElement {
   public static styles = css`
@@ -76,11 +90,6 @@ export class ChartElement extends LitElement {
     `;
   }
 
-  static properties = {
-    src: { type: String, reflect: true },
-    type: { type: String, reflect: true, default: "bar" },
-  };
-
   private intersectionObserver?: IntersectionObserver;
 
   private matchMedia?: MediaQueryList;
@@ -118,11 +127,16 @@ export class ChartElement extends LitElement {
   //
   // Puplic interface
 
+  static properties = {
+    src: { type: String, reflect: true },
+    type: { type: String, reflect: true, default: "bar" },
+  };
+
   /** url to daata */
   public declare src?: string;
 
   /** chart type */
-  public declare type: "bar";
+  public declare type: "bar" | "line";
 
   /** width in pixel */
   public declare width: number;
