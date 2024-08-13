@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.13.0 (2024-08-13)
+
+### Features
+
+- a-chart: added line chart type
+
 ## 1.12.0 (2024-08-03)
 
 ### Features
