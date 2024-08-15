@@ -12,9 +12,13 @@ export default defineConfig({
   site: "https://sv.pages.s-v.de",
   publicDir: "assets",
   vite: viteConfig,
+  experimental: {
+    contentLayer: true,
+    contentIntellisense: true,
+  },
   integrations: [
     tailwind({
-      configFile: "./.config/tailwind.config.js",
+      configFile: "./tailwind.config.js",
     }),
     starlight(starlightConfig),
     solid({

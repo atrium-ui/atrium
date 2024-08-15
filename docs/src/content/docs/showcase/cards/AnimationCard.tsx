@@ -2,7 +2,6 @@
 
 import { Animation } from "@components/src/vue/Animation";
 import { Card } from "../Card";
-import pie from "./animation/pie.riv?url";
 
 export function AnimationCard() {
   return (
@@ -19,14 +18,14 @@ export function AnimationCard() {
           class="h-[200px] w-[200px]"
           width={400}
           height={400}
-          src="/atrium/pie.riv"
+          src="/atrium/animation/pie.riv"
         />
 
         <Animation
           class="h-[200px] w-[200px]"
           width={400}
           height={400}
-          src="/atrium/pie.riv"
+          src="/atrium/animation/pie.riv"
         />
       </div>
     </Card>
