@@ -1,4 +1,5 @@
 import { test, expect, describe } from "bun:test";
+import { SelectEvent } from "../src/Select";
 
 const NODE_NAME = "a-select";
 
@@ -272,6 +273,44 @@ test("disabled", async () => {
   expect(select.selected).toBe(undefined);
 
   press(select, "Enter");
+  expect(select.value).toBe(undefined);
+});
+
+test("reset", async () => {
+  const root = await newSelectElementWithValue("3");
+  const select = root.querySelector("a-select");
+  select?.setAttribute("value", "3");
+  let changeEvent = false;
+
+  const form = document.createElement("form");
+  form.append(root);
+  document.body.append(form);
+
+  open(select);
+  press(select, "ArrowDown");
+  press(select, "Enter");
+
+  expect(select.value).toBeDefined();
+
+  select.addEventListener("change", () => {
+    changeEvent = true;
+  });
+
+  form.reset();
+
+  expect(changeEvent).toBe(true);
+  expect(select.value).toBe(select.getAttribute("value"));
+
+  // test default to undefined
+  select?.removeAttribute("value");
+  open(select);
+  press(select, "ArrowDown");
+  press(select, "Enter");
+
+  expect(select.value).toBeDefined();
+
+  form.reset();
+
   expect(select.value).toBe(undefined);
 });
 
