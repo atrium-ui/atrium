@@ -112,7 +112,7 @@ export class Select extends LitElement {
   /**
    * The selected option.
    */
-  @property({ type: String, reflect: true })
+  @property({ type: String })
   public value?: string;
 
   public selected?: string;
@@ -162,6 +162,8 @@ export class Select extends LitElement {
       this.append(this.input);
     }
 
+    this.form?.addEventListener("reset", this.onFormReset);
+
     this.observer = new MutationObserver(() => {
       this.onSlotChange();
     });
@@ -176,6 +178,7 @@ export class Select extends LitElement {
   public disconnectedCallback(): void {
     super.disconnectedCallback();
 
+    this.form?.removeEventListener("reset", this.onFormReset);
     this.removeEventListener("keydown", this.onKeyDown);
     this.removeEventListener("keyup", this.onKeyUp);
     window.removeEventListener("keyup", this.globalOnKeyUp);
@@ -233,7 +236,13 @@ export class Select extends LitElement {
    * Resets the value of the select to undefined.
    */
   public reset() {
-    this.setValue(undefined);
+    const defaultValue = this.getAttribute("value") || undefined;
+    this.setValue(defaultValue);
+    this.dispatchEvent(new CustomEvent("change", { detail: defaultValue }));
+  }
+
+  public get form() {
+    return this.input?.form;
   }
 
   private submitSelected() {
@@ -275,10 +284,14 @@ export class Select extends LitElement {
     }
   }
 
-  private onOutsideClick = (e: MouseEvent) => {
+  private onOutsideClick = (e: Event) => {
     if (!this.contains(e.target as HTMLElement)) {
       this.close();
     }
+  };
+
+  private onFormReset = (e: Event) => {
+    this.reset();
   };
 
   private onClick(event: PointerEvent) {

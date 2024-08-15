@@ -36,6 +36,7 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
 
   connectedCallback() {
     this.getForm()?.addEventListener("error", this.handleError as EventListener, true);
+    this.getForm()?.addEventListener("reset", this.handleReset as EventListener, true);
 
     this.addEventListener("invalid", this.invalid, { capture: true });
     this.addEventListener("change", this.input, { capture: true });
@@ -44,6 +45,7 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
 
   disconnectedCallback() {
     this.getForm()?.removeEventListener("error", this.handleError as EventListener, true);
+    this.getForm()?.removeEventListener("reset", this.handleReset as EventListener, true);
 
     this.removeEventListener("invalid", this.invalid, { capture: true });
     this.removeEventListener("change", this.input, { capture: true });
@@ -77,6 +79,11 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
     }
 
     this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
+  };
+
+  handleReset = (e: CustomEvent) => {
+    const input = this.getInput();
+    input?.dispatchEvent(new Event("change"));
   };
 }
 
