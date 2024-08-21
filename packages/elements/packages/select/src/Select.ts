@@ -290,6 +290,10 @@ export class Select extends LitElement {
     }
   };
 
+  private onInvalid = (e: Event) => {
+    this.scrollIntoView();
+  };
+
   private onFormReset = (e: Event) => {
     this.reset();
   };
@@ -433,6 +437,7 @@ export class Select extends LitElement {
       this.input.ariaHidden = "true";
       this.input.name = this.name;
       this.input.required = this.required;
+      this.input.oninvalid = this.onInvalid;
 
       // set value from attributes
       this.input.value = this.value || "";
