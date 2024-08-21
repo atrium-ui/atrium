@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.14.1 (2024-08-21)
+
+### Fixes
+
+- a-select: scroll into view on invalid
+
 ## 1.14.0 (2024-08-15)
 
 ### Features
