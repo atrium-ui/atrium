@@ -1,15 +1,15 @@
 ---
 title: Toast
 ---
-import { Example } from "package:/components";
+import { Example, ComponentHeader, Atrium } from "package:/components";
 import ToastDemoCode from "./toast/ToastDemo.jsx?raw";
 import { ToastDemo } from "./toast/ToastDemo.jsx";
 
-```bash
-npx @sv/components toast
-```
+<ComponentHeader name="Toast">
+  <Atrium slot="pills" label="Button" href="/atrium/components/button" />
 
-A sheet is basically a burger menu. Composed of a-blur.
+  A Toast component.
+</ComponentHeader>
 
 <Example code={ToastDemoCode}>
   <ToastDemo client:only="vue" />

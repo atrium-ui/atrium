@@ -12,6 +12,13 @@ export function ToastDemo() {
           toast({
             message: paragraph(1),
             time: Math.random() * 10000,
+            icon: "atrium",
+            button: {
+              label: "Click here",
+              onClick: () => {
+                console.info("clicked");
+              },
+            },
           });
         }}
       >

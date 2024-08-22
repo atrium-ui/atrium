@@ -1,4 +1,5 @@
 /* @jsxImportSource vue */
+import { defineComponent } from "vue";
 import { twMerge } from "tailwind-merge";
 
 const inputVariants = {
@@ -9,31 +10,27 @@ const inputVariants = {
   error: ["border-red-600"],
 };
 
-import { defineComponent, ref } from "vue";
-
 export const Input = defineComponent(
-  (
-    props: {
-      slot?: string;
-      class?: string;
-      autofocus?: boolean;
-      placeholder?: string;
-      label?: string;
-      name?: string;
-      id?: string;
-      value?: string;
-      error?: string;
-      required?: boolean;
-      readonly?: boolean;
-      type?: "password" | "text" | "email";
-      multiline?: boolean;
-      onInvalid?: (e: Event) => undefined | string | Error;
-      onInput?: (e: Event) => void;
-      onChange?: (e: Event) => void;
-      onKeydown?: (e: KeyboardEvent) => void;
-    },
-    { slots },
-  ) => {
+  (props: {
+    slot?: string;
+    class?: string | string[];
+    autofocus?: boolean;
+    autocomplete?: string;
+    placeholder?: string;
+    label?: string;
+    name?: string;
+    id?: string;
+    value?: string;
+    error?: string;
+    required?: boolean;
+    readonly?: boolean;
+    type?: "password" | "text" | "email" | "search" | "number";
+    multiline?: boolean;
+    onInvalid?: (e: Event) => undefined | string | Error;
+    onInput?: (e: Event) => void;
+    onChange?: (e: Event) => void;
+    onKeydown?: (e: KeyboardEvent) => void;
+  }) => {
     return () => (
       <div
         // @ts-ignore
@@ -67,6 +64,7 @@ export const Input = defineComponent(
         ) : (
           <input
             autofocus={props.autofocus}
+            autocomplete={props.autocomplete}
             type={props.type}
             id={props.id}
             name={props.name}
