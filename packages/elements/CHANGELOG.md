@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.14.2 (2024-08-23)
+
+### Fixes
+
+- a-select: fix scrollIntoView on invalid, even if already in view
+
 ## 1.14.1 (2024-08-21)
 
 ### Fixes
