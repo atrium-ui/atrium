@@ -291,7 +291,10 @@ export class Select extends LitElement {
   };
 
   private onInvalid = (e: Event) => {
-    this.scrollIntoView();
+    this.scrollIntoView({
+      block: "nearest",
+      inline: "nearest",
+    });
   };
 
   private onFormReset = (e: Event) => {
