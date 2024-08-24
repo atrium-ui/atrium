@@ -1,0 +1,29 @@
+{
+  "name": "@atrium-ui/field",
+  "version": "1.0.0",
+  "author": "luckydye",
+  "description": "An inpput element that is read-only by default. Enables users to edit the value by double-clicking on the input.",
+  "license": "MIT",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "index.ts",
+  "scripts": {
+    "dev": "vite",
+    "dev:build": "vite build",
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "@atrium-ui/codestyle": "^1.1.1",
+    "@biomejs/biome": "^1.8.3",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2"
+  },
+  "tsup": {
+    "entry": ["src/index.ts"],
+    "format": ["esm", "cjs"],
+    "sourcemap": true,
+    "clean": true
+  }
+}
