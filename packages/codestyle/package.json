@@ -4,7 +4,7 @@
   "contributors": [
     "luckydye"
   ],
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Codestyle and configuration for all projects",
   "type": "module",
   "bin": "./bin/cli.js",

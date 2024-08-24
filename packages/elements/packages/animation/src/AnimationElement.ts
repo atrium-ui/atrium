@@ -479,5 +479,3 @@ export class AnimationElement extends LitElement {
     renderer.restore();
   }
 }
-
-customElements.define("a-animation", AnimationElement);

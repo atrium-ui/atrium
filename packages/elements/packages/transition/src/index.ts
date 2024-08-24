@@ -27,7 +27,7 @@ let globalStyles: HTMLStyleElement;
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-transition/
  */
-export class Transition extends LitElement {
+class Transition extends LitElement {
   // TODO: these should also work with page navigations
 
   static get styles() {
@@ -195,4 +195,10 @@ export class Transition extends LitElement {
   }
 }
 
-customElements.define("a-transition", Transition);
+try {
+  customElements.define("a-transition", Transition);
+} catch (err) {
+  console.warn("a-transition already defined");
+}
+
+export { Transition };

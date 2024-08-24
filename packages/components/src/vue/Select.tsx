@@ -10,6 +10,7 @@ export const Select = defineComponent(
     props: {
       name: string;
       placeholder: string;
+      label?: string;
       value?: string;
       required?: boolean;
       onSelect?: (e: CustomEvent) => void;
@@ -20,16 +21,22 @@ export const Select = defineComponent(
 
     return () => (
       <div>
+        {props.label && (
+          <div class="pb-1 text-sm">
+            <label for={props.name}>{props.label}</label>
+          </div>
+        )}
+
         <a-select
           required={props.required}
           value={value.value}
           name={props.name}
-          onSelect={async (ev) => {
-            value.value = ev.option?.value;
+          onChange={(ev) => {
+            value.value = ev.target?.value;
           }}
           class="relative inline-block w-full"
         >
-          <Button class="w-full" slot="input">
+          <Button class="w-full" slot="trigger" aria-label={props.label}>
             <div class="min-w-[150px] text-left">{value.value || props.placeholder}</div>
           </Button>
 
@@ -41,7 +48,7 @@ export const Select = defineComponent(
     );
   },
   {
-    props: ["value", "placeholder", "required", "name", "onSelect"],
+    props: ["value", "placeholder", "required", "name", "onSelect", "label"],
   },
 );
 
@@ -53,8 +60,8 @@ export const SelectItem = function Item(
     <a-option
       class={twMerge(
         "block cursor-pointer rounded px-2",
-        "[&[selected]]:bg-zinc-200 active:bg-zinc-200 hover:bg-zinc-100",
-        "dark:[&[selected]]:bg-zinc-700 dark:active:bg-zinc-700 dark:hover:bg-zinc-600",
+        "hover:bg-zinc-100 active:bg-zinc-200 [&[selected]]:bg-zinc-200",
+        "dark:active:bg-zinc-700 dark:hover:bg-zinc-600 dark:[&[selected]]:bg-zinc-700",
         props.class,
       )}
       value={props.value}

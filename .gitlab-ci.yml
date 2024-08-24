@@ -1,28 +1,30 @@
 stages:
-  - merge
   - test
+  - merge
   - publish
   - docs
 
 image: luckydye/atrium:latest
 
 variables:
-  MISE_DATA_DIR: $CI_PROJECT_DIR/.mise
-  MISE_VERBOSE: 1
   GIT_PUSH_TOKEN: $GIT_PUSH_TOKEN # A Gitlab access token to push to the repo
 
-before_script:
-  - export PATH=$MISE_DATA_DIR/shims:$PATH
-  - mise install
-  - git config user.email "gitlab@s-v.de"
-  - git config user.name "CI"
-  - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
+cache: &global_cache
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules
+    - .task
+    - .turbo
+    - .mise
+  policy: pull-push
 
 check:
   stage: test
   except:
     - tags
   only:
+    - merge_requests
+    - /^release\/.+$/
     - main
   script: task check
 
@@ -31,20 +33,24 @@ test:
   except:
     - tags
   only:
+    - merge_requests
+    - /^release\/.+$/
     - main
   script: task test
 
-merge_check:
-  stage: merge
+a11y:
+  allow_failure: true
+  stage: test
+  artifacts:
+    when: always
+    paths:
+      - docs/.reports
+  except:
+    - tags
   only:
-    - merge_requests
-  script: task check
-
-merge_test:
-  stage: merge
-  only:
-    - merge_requests
-  script: task test
+    - /^release\/.+$/
+    - main
+  script: task a11y
 
 merge_release_preview:
   stage: merge
@@ -54,11 +60,12 @@ merge_release_preview:
 
 publish-dev:
   stage: publish
-  artifacts:
-    untracked: true
   only:
-    - /^release\/[0-9]+(?:.[0-9]+)+$/
+    - /^release\/.+$/
   script:
+    - git config user.email "gitlab@s-v.de"
+    - git config user.name "CI"
+    - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
     - git checkout "$CI_COMMIT_REF_NAME"
     - git fetch --prune --prune-tags -f
     - git pull
@@ -68,13 +75,14 @@ publish-dev:
 
 publish:
   stage: publish
-  artifacts:
-    untracked: true
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
       when: on_success
     - when: never
   script:
+    - git config user.email "gitlab@s-v.de"
+    - git config user.name "CI"
+    - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
     - git checkout "$CI_COMMIT_REF_NAME"
     - git fetch --prune --prune-tags -f
     - git pull
@@ -85,6 +93,7 @@ publish:
 pages:
   stage: docs
   dependencies:
+    - a11y
     - publish
   only:
     - main

@@ -13,6 +13,8 @@
   },
   "exclude": [
     "node_modules",
+    "src/solid/*",
+    "src/react/*",
     "**/dist"
   ]
 }

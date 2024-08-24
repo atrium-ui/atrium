@@ -6,15 +6,20 @@ import {
   type ReactiveController,
   type ReactiveControllerHost,
 } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { property, query } from "lit/decorators.js";
+import { Portal } from "@sv/elements/portal";
+import { Blur } from "@sv/elements/blur";
+import { computePosition, autoUpdate, autoPlacement, shift } from "@floating-ui/dom";
 
 declare global {
   interface HTMLElementTagNameMap {
     "a-popover": Popover;
+    "a-popover-trigger": PopoverTrigger;
+    "a-popover-portal": PopoverPortal;
   }
 }
 
-export class WindowEventListener<
+export class ElementEventListener<
   E extends string,
   L extends EventListenerOrEventListenerObject,
 > implements ReactiveController
@@ -23,6 +28,7 @@ export class WindowEventListener<
 
   constructor(
     host: ReactiveControllerHost,
+    public root: EventTarget,
     public event: E,
     public handleClick: L,
   ) {
@@ -31,49 +37,147 @@ export class WindowEventListener<
   }
 
   hostConnected() {
-    window.addEventListener(this.event, this.handleClick);
+    this.root.addEventListener(this.event, this.handleClick);
   }
 
   hostDisconnected() {
-    window.removeEventListener(this.event, this.handleClick);
+    this.root.removeEventListener(this.event, this.handleClick);
   }
 }
 
-const PopoverAlignment = {
-  Bottom: "bottom",
-  Top: "top",
-  Left: "left",
-  Right: "right",
-  Auto: "auto",
-} as const;
+export class PopoverPortal extends Blur {
+  public scrollLock = false;
+
+  static styles = css`
+    :host {
+      display: block;
+      transition-property: all;
+      pointer-events: none;
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+    }
+
+    :host([enabled]) {
+      pointer-events: all !important;
+    }
+
+    :host(:not([enabled])) ::slotted(*) {
+      pointer-events: none !important;
+      opacity: 0 !important;
+    }
+  `;
+}
 
 /**
- * A wrapper element that shows content when the user clicks with the slotted input element.
- *
- * @attribute align (default: "auto") - Controls the align in that the content will be show from the origin element.
- * @attribute opened (default: false) - Controls if the content is shown or not.
+ * A popover element.
+ * It positions itself relative to the trigger element using
+ * [Floating UI](https://floating-ui.com/), a-portal and a-blur for focus management.
  *
  * @example
  * ```html
  * <a-popover>
- *   <button type="button" slot="input">
- *     Label
- *   </button>
- *
- *   <div>
- *     Content
- *   </div>
+ *   <div>Content</div>
  * </a-popover>
  * ```
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-popover/
  */
-@customElement("a-popover")
-export class Popover extends LitElement {
-  @property({ type: String })
-  public align: (typeof PopoverAlignment)[keyof typeof PopoverAlignment] =
-    PopoverAlignment.Auto;
+export class Popover extends Portal {
+  protected portalGun() {
+    const ele = document.createElement("a-popover-portal");
+    ele.className = this.className;
+    ele.dataset.portal = this.portalId;
+    return ele as PopoverPortal;
+  }
 
+  private cleanup?: () => void;
+
+  constructor() {
+    super();
+
+    this.addEventListener("blur", (e) => {
+      const trigger = this.closest("a-popover-trigger");
+      if (e instanceof CustomEvent) {
+        trigger?.close();
+      }
+    });
+  }
+
+  /**
+   * Show the popover.
+   */
+  public show() {
+    const trigger = this.closest("a-popover-trigger");
+    const content = this.children[0] as HTMLElement | undefined;
+
+    if (!trigger || !content) return;
+
+    this.cleanup = autoUpdate(trigger, content, () => {
+      if (content)
+        computePosition(trigger, content, {
+          middleware: [
+            autoPlacement({
+              allowedPlacements: ["bottom", "top"],
+            }),
+            shift(),
+          ],
+        }).then(({ x, y }) => {
+          if (content) content.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    });
+
+    if (this.children[0]) {
+      this.children[0].role = "dialog";
+    }
+
+    if (this.portal instanceof PopoverPortal) {
+      this.portal.enable();
+    }
+  }
+
+  /**
+   * Hide the popover.
+   */
+  public hide() {
+    this.cleanup?.();
+
+    if (this.portal instanceof PopoverPortal) {
+      this.portal.disable();
+    }
+  }
+
+  disconnectedCallback(): void {
+    this.cleanup?.();
+    super.disconnectedCallback();
+  }
+}
+
+/**
+ * A wrapper element that shows content when the user clicks with the slotted input element.
+ *
+ * @example
+ * ```html
+ * <a-popover-trigger>
+ *   <button type="button" slot="trigger">
+ *     Label
+ *   </button>
+ *
+ *   <a-popover>
+ *     <div>Content</div>
+ *   </a-popover>
+ * </a-popover>
+ * ```
+ *
+ * @see https://svp.pages.s-v.de/atrium/elements/a-popover/
+ */
+export class PopoverTrigger extends LitElement {
+  /**
+   * Wether the content is shown or not.
+   */
   @property({ type: Boolean, reflect: true })
   public opened = false;
 
@@ -82,173 +186,98 @@ export class Popover extends LitElement {
       display: inline-block;
       transition-property: all;
     }
-
-    .content {
-      display: block;
-      position: absolute;
-      width: 0px;
-      height: 0px;
-    }
-
-    :host(:not([opened])) .content {
-      pointer-events: none;
-    }
   `;
 
-  @query(".content") container?: HTMLSlotElement;
   @query(".trigger") input?: HTMLSlotElement;
+  @query(".content") contentSlot?: HTMLSlotElement;
 
   render(): HTMLTemplateResult {
     return html`
-      <slot
-        class="trigger"
-        name="input"
-        @click=${() => this.toggle()}>
-      </slot>
-      <slot
-        class="content"
-        ?inert=${!this.opened}
-        aria-hidden=${this.opened ? "false" : "true"}
-        @keydown=${this.onKeyDown}>
-      </slot>
+      <slot class="trigger" name="trigger"></slot>
+      <slot class="content"></slot>
     `;
   }
 
+  connectedCallback(): void {
+    super.connectedCallback();
+
+    // TODO: listen for mutations
+    this.trigger?.setAttribute("aria-haspopup", "dialog");
+    this.trigger?.setAttribute("aria-expanded", "false");
+  }
+
+  constructor() {
+    super();
+
+    this.addEventListener("click", (e) => {
+      if (this.trigger?.contains(e.target as Node)) {
+        this.toggle();
+      }
+    });
+  }
+
   private get content() {
-    return this.container?.assignedElements()[0] as HTMLElement;
+    // Note: slot.assignedNodes() would be better, but it's not supported within our test runner
+    for (const ele of this.children) {
+      // default slot
+      if (!ele.slot) return ele;
+    }
+    return undefined;
   }
 
   private get trigger() {
-    return this.input?.assignedElements()[0] as HTMLButtonElement;
-  }
-
-  private onKeyDown(e: KeyboardEvent) {
-    if (e.key === "Escape") {
-      this.close();
-      this.trigger?.focus();
+    for (const ele of this.children) {
+      if (ele.slot === "trigger") return ele;
     }
+    return undefined;
   }
 
-  private shouldBlur(e: Event) {
-    if (this.contains(e.target as HTMLElement)) {
-      return false;
-    }
-    return true;
-  }
+  private clickFallback = new ElementEventListener(this, window, "click", (e) => {
+    if (this.content instanceof Popover) return;
 
-  private clickListener = new WindowEventListener(this, "click", (e: Event) => {
-    if (this.shouldBlur(e)) {
-      this.dispatchEvent(new Event("blur"));
+    if (this.opened && !this.contains(e.target)) {
       this.close();
     }
   });
 
-  private resizeListener = new WindowEventListener(this, "resize", (e: Event) => {
-    if (this.opened) {
-      this.updatePosition();
-    }
-  });
-
-  show() {
+  /**
+   * Show the inner popover.
+   */
+  public show() {
     this.opened = true;
+
+    if (this.content instanceof Popover) {
+      this.content.show();
+    }
+
+    this.trigger?.setAttribute("aria-haspopup", "dialog");
+    this.trigger?.setAttribute("aria-expanded", "true");
   }
 
-  close() {
+  /**
+   * Closes the inner popover.
+   */
+  public close() {
     this.opened = false;
+
+    if (this.content instanceof Popover) {
+      this.content.hide();
+    }
+
+    this.trigger?.setAttribute("aria-haspopup", "dialog");
+    this.trigger?.setAttribute("aria-expanded", "false");
   }
 
-  toggle() {
+  /**
+   * Toggles the inner popover.
+   */
+  public toggle() {
     this.opened ? this.close() : this.show();
   }
-
-  private updatePosition() {
-    if (!this.container) return;
-
-    const trigger = this.getBoundingClientRect();
-    const contentWidth = this.container.scrollWidth || 0;
-    const contentHeight = this.container.scrollHeight || 0;
-
-    const bounds = {
-      // top: trigger.top - contentHeight,
-      right: trigger.right + contentWidth,
-      bottom: trigger.bottom + contentHeight,
-      left: trigger.left - contentWidth,
-    };
-
-    const alignLeft = (content: HTMLElement) => {
-      content.style.left = "auto";
-      content.style.right = `${contentWidth}px`;
-    };
-
-    const alignRight = (content: HTMLElement) => {
-      content.style.left = "0px";
-      content.style.right = "auto";
-    };
-
-    const alignTop = (content: HTMLElement) => {
-      content.style.top = "auto";
-      content.style.bottom = `${trigger.height + contentHeight}px`;
-    };
-
-    const alignBottom = (content: HTMLElement) => {
-      content.style.top = `${trigger.height}px`;
-      content.style.bottom = "auto";
-    };
-
-    const alignAuto = (content: HTMLElement) => {
-      if (bounds.bottom > window.innerHeight) {
-        alignTop(content);
-      } else {
-        alignBottom(content);
-      }
-
-      if (
-        trigger.left - contentWidth / 2 > 0 &&
-        trigger.right + contentWidth / 2 < window.innerWidth
-      ) {
-        // center
-        content.style.left = `calc(50% - ${contentWidth / 2}px)`;
-        content.style.right = "auto";
-      } else if (bounds.right > window.innerWidth) {
-        // align left
-        alignLeft(content);
-      } else if (bounds.left <= 0) {
-        // align right
-        alignRight(content);
-      }
-    };
-
-    switch (this.align) {
-      case PopoverAlignment.Left:
-        alignLeft(this.container);
-        break;
-      case PopoverAlignment.Right:
-        alignRight(this.container);
-        break;
-      case PopoverAlignment.Top:
-        alignTop(this.container);
-        break;
-      case PopoverAlignment.Bottom:
-        alignBottom(this.container);
-        break;
-      case PopoverAlignment.Auto:
-        alignAuto(this.container);
-        break;
-      default:
-        alignAuto(this.container);
-        break;
-    }
-  }
-
   protected updated(): void {
     if (this.trigger) {
       this.trigger.ariaHasPopup = "dialog";
       this.trigger.ariaExpanded = this.opened ? "true" : "false";
     }
-    if (this.content) {
-      this.content.role = "dialog";
-    }
-
-    this.updatePosition();
   }
 }

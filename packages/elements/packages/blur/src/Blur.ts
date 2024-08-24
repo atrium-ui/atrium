@@ -95,8 +95,8 @@ export class Blur extends LitElement {
   /** Disable the blur element */
   public disable() {
     this.tryUnlock();
-    this.inert = true;
-    this.ariaHidden = "true";
+    this.setAttribute("inert", "");
+    this.setAttribute("aria-hidden", "true");
     this.enabled = false;
 
     this.lastActiveElement?.focus();
@@ -105,11 +105,14 @@ export class Blur extends LitElement {
   /** Enable the blur element */
   public enable() {
     this.tryLock();
-    this.inert = false;
-    this.ariaHidden = "false";
+    this.removeAttribute("inert");
+    this.setAttribute("aria-hidden", "false");
     this.enabled = true;
 
-    this.lastActiveElement = document.activeElement as HTMLElement;
+    // in the case enable is called after the element is already enabled, dont set the last active element
+    if (!this.contains(document.activeElement)) {
+      this.lastActiveElement = document.activeElement as HTMLElement;
+    }
 
     // Do not focus elements, when using a mouse,
     // because *some* browsers in *some* situations will mark the element as "focus-visible",
@@ -129,9 +132,11 @@ export class Blur extends LitElement {
   }
 
   private focusableElements() {
-    return this.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    );
+    return [
+      ...this.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      ),
+    ].filter((element) => element.offsetWidth > 0);
   }
 
   protected updated(changed: PropertyValueMap<any>): void {
@@ -139,7 +144,7 @@ export class Blur extends LitElement {
   }
 
   private tryBlur() {
-    const blurEvent = new CustomEvent("blur", { cancelable: true });
+    const blurEvent = new CustomEvent("blur", { cancelable: true, bubbles: true });
     this.dispatchEvent(blurEvent);
 
     if (blurEvent.defaultPrevented) return;
@@ -151,7 +156,7 @@ export class Blur extends LitElement {
 
     this.role = "dialog";
 
-    this.listener(this, "keydown", (e: KeyboardEvent) => {
+    this.listener(window, "keydown", (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         this.tryBlur();
       }
@@ -216,5 +221,3 @@ export class Blur extends LitElement {
     }
   }
 }
-
-customElements.define("a-blur", Blur);

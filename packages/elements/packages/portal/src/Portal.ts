@@ -15,13 +15,25 @@
  * @see https://svp.pages.s-v.de/atrium/elements/a-portal/
  */
 export class Portal extends (globalThis.HTMLElement || class {}) {
+  private proxiedEvents = ["blur", "change"];
+
+  private createPortal: () => HTMLElement = () => {
+    const ele = this.portalGun();
+
+    for (const event of this.proxiedEvents) {
+      ele.addEventListener(event, this.proxyEvent(event), { capture: true });
+    }
+
+    return ele;
+  };
+
   // TODO: make simpler id generator
-  portalId = crypto.randomUUID();
-  portal = this.portalGun();
+  public portalId = crypto.randomUUID();
+  public portal!: HTMLElement;
 
   // TODO: try to find existing portal with this.dataset.portal
   protected portalGun() {
-    const ele = document.createElement("div");
+    const ele = document.createElement("div") as HTMLElement;
     ele.dataset.portal = this.portalId;
     ele.style.position = "fixed";
     ele.style.top = "0px";
@@ -30,11 +42,25 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
     return ele;
   }
 
+  proxyEvent(name: string) {
+    return (e: Event) => {
+      if (e instanceof CustomEvent) {
+        this.dispatchEvent(new CustomEvent(name, { detail: e.detail, bubbles: true }));
+      } else {
+        this.dispatchEvent(new Event(name));
+      }
+    };
+  }
+
+  get children() {
+    return this.portal.children;
+  }
+
   observer = new MutationObserver(() => {
     requestAnimationFrame(() => {
-      if (this.children.length) {
+      if (this.childNodes.length) {
         this.portal.innerHTML = "";
-        this.portal.append(...this.children);
+        this.portal.append(...this.childNodes);
       }
     });
   });
@@ -52,12 +78,10 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
       characterData: true,
     });
 
+    this.portal = this.createPortal();
+
     document.body.append(this.portal);
 
     this.dataset.portal = this.portalId;
   }
-}
-
-if (typeof window !== "undefined") {
-  customElements.define("a-portal", Portal);
 }

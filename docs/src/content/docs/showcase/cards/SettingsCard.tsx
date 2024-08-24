@@ -22,7 +22,7 @@ export function SettingsCard() {
         <Popover>
           {{
             input: () => (
-              <Button slot="input" variant="outline" class="rounded-[100%] p-3 text-xl">
+              <Button slot="trigger" variant="outline" class="rounded-[100%] p-3 text-xl">
                 <Icon name="atrium" />
               </Button>
             ),

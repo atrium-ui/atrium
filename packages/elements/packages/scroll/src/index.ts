@@ -14,10 +14,8 @@ const historyStorage = {
   },
 };
 
-type Strategy = "session" | "history";
-
 /**
- * A scroll-container that can remember its scroll position.
+ * A scroll-container that can remember its scroll position throughout navigations.
  *
  * @example
  * ```html
@@ -31,21 +29,28 @@ type Strategy = "session" | "history";
  * @see https://svp.pages.s-v.de/atrium/elements/a-scroll/
  */
 class ScrollElement extends HTMLElement {
-  fallbackName() {
-    return `${this.className}-${this.parentElement?.className}`.replace(" ", "-");
+  /** The unique name of the scroll container. Fallback is className + className of the parent element. */
+  public name = "";
+
+  /** Strategy to use for storing the scroll position, can be "session" or "history" */
+  public strategy: "session" | "history" = "session";
+
+  private fallbackName() {
+    return `${this.className}-${this.parentElement?.className}`.replace(" ", ".");
   }
 
-  /** the unique name of the scroll container */
-  public get name() {
-    return this.getAttribute("name") || this.fallbackName();
-  }
-
-  /** strategy to use for remembering the scroll position, can be "session" or "history" */
-  public get strategy(): Strategy {
-    return (this.getAttribute("strategy") as Strategy) || "session";
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (name === "name") {
+      this.name = newValue || this.fallbackName();
+    }
+    if (name === "strategy") {
+      this.strategy = (newValue as any) || "session";
+    }
   }
 
   connectedCallback() {
+    this.name = this.name || this.fallbackName();
+
     const storage =
       this.strategy === "session"
         ? sessionStorage
@@ -66,4 +71,10 @@ class ScrollElement extends HTMLElement {
   }
 }
 
-customElements.define("a-scroll", ScrollElement);
+try {
+  customElements.define("a-scroll", ScrollElement);
+} catch (err) {
+  console.warn("a-scroll already defined");
+}
+
+export { ScrollElement };

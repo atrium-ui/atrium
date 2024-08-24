@@ -228,6 +228,10 @@ export class SnapTrait implements Trait {
   input(track: Track) {
     if (track.grabbing || track.scrolling || track.target) return;
 
+    // Only when decelerating
+    if (!track.vertical && track.deltaVelocity.x >= 0) return;
+    if (track.vertical && track.deltaVelocity.y >= 0) return;
+
     if (!track.loop) {
       // Ignore if target is out of bounds
       if (!track.vertical && track.position.x - track.overflowWidth > 0) return;
@@ -237,17 +241,18 @@ export class SnapTrait implements Trait {
       if (track.position.x <= 0 && track.position.y <= 0) return;
     }
 
-    // Only when decelerating
-    if (!track.vertical && track.deltaVelocity.x >= 0) return;
-    if (track.vertical && track.deltaVelocity.y >= 0) return;
-
     // Project the current velocity to determine the target item.
     // This checks lastVelocity, because I don't know why velocity is 0,0 at random points.
     const vel = Math.round(track.lastVelocity[track.currentAxis] * 10) / 10;
     const dir = Math.sign(vel);
     const power = Math.max(Math.round(track.lastVelocity.abs() / 40), 1) * dir;
 
-    if (Math.abs(vel) > 2) {
+    if (!track.loop) {
+      // disable snap when past maxIndex
+      if (track.maxIndex && track.currentIndex >= track.maxIndex && power > 0) return;
+    }
+
+    if (Math.abs(vel) > 8) {
       track.acceleration.mul(0.25);
       track.inputForce.mul(0.125);
       track.setTarget(track.getToItemPosition(track.currentItem + power), "linear");
@@ -474,7 +479,7 @@ export class Track extends LitElement {
     );
     if (lastItem) {
       // last index plus the child behind it, to reach the end of the track
-      return lastItem.index + 1;
+      return lastItem.index;
     }
     return 0;
   }
@@ -631,7 +636,10 @@ export class Track extends LitElement {
         break;
     }
 
-    const formatEvent = new CustomEvent("format", { bubbles: true, cancelable: true });
+    const formatEvent = new CustomEvent("format", {
+      bubbles: true,
+      cancelable: true,
+    });
     this.dispatchEvent(formatEvent);
 
     if (!formatEvent.defaultPrevented) {
@@ -1347,8 +1355,6 @@ export class Track extends LitElement {
     super.disconnectedCallback();
   }
 }
-
-customElements.define("a-track", Track);
 
 export class MoveEvent extends CustomEvent<{
   delta: Vec2;

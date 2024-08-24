@@ -4,11 +4,11 @@ import { Button } from "./Button";
 
 export function Popover(props: { label?: string }, { slots }) {
   return (
-    <a-popover class="group relative z-10">
+    <a-popover-trigger class="relative z-10">
       {/* @ts-ignore */}
-      <div slot="input">
+      <div slot="trigger">
         {props.label ? (
-          <Button slot="input" variant="outline">
+          <Button slot="trigger" variant="outline">
             {props.label}
           </Button>
         ) : (
@@ -16,17 +16,23 @@ export function Popover(props: { label?: string }, { slots }) {
         )}
       </div>
 
-      <div class="absolute py-1">
+      <a-popover class="group">
         <div
           class={[
-            "min-w-[100px] rounded-md border p-2 transition-all duration-100",
-            "border-zinc-700 bg-zinc-50 dark:bg-zinc-800",
-            "scale-95 opacity-0 group-[&[opened]]:scale-100 group-[&[opened]]:opacity-100",
+            "w-[max-content] p-2",
+            "opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100",
           ]}
         >
-          {slots.default?.()}
+          <div
+            class={[
+              "min-w-[100px] rounded-md border border-zinc-700 bg-zinc-50 p-1 dark:bg-zinc-800",
+              "scale-95 transition-all duration-150 group-[&[enabled]]:scale-100",
+            ]}
+          >
+            {slots.default?.()}
+          </div>
         </div>
-      </div>
-    </a-popover>
+      </a-popover>
+    </a-popover-trigger>
   );
 }

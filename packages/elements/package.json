@@ -4,12 +4,12 @@
   "contributors": [
     "luckydye"
   ],
-  "version": "1.7.2",
+  "version": "1.14.2",
   "description": "Atrium Elements",
   "type": "module",
   "scripts": {
     "check": "tsc --pretty",
-    "test": "bun test .",
+    "test": "bun test --rerun-each 5 .",
     "publish-package": "task publish"
   },
   "files": [
@@ -26,9 +26,12 @@
   },
   "devDependencies": {
     "@happy-dom/global-registrator": "^14.7.1",
-    "intersection-observer": "^0.12.2"
+    "install": "^0.13.0",
+    "intersection-observer": "^0.12.2",
+    "ts-lit-plugin": "^2.0.2"
   },
   "peerDependencies": {
+    "@floating-ui/dom": "^1.6.7",
     "@rive-app/canvas-advanced": "2.7.8",
     "@sv/scroll-lock": "^1.0.0",
     "chart.js": "^4.4.3"

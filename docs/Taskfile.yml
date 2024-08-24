@@ -10,6 +10,14 @@ tasks:
       - cd .. && task build
       - bun x astro dev --host
 
+  preview:
+    desc: Start dev server for docs
+    dir: ./
+    cmds:
+      - cd .. && task build
+      - bun x astro build
+      - bun x astro preview --host
+
   build:
     desc: Builds the docs into the public folder
     dir: ./

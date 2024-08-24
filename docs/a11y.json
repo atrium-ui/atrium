@@ -1,0 +1,20 @@
+{
+  "urls": [
+    "http://localhost:4321/atrium/components/form/",
+    "http://localhost:4321/atrium/components/button/",
+    "http://localhost:4321/atrium/components/input/",
+    "http://localhost:4321/atrium/components/accordion/",
+    "http://localhost:4321/atrium/components/checkbox/",
+    "http://localhost:4321/atrium/components/combobox/",
+    "http://localhost:4321/atrium/components/dialog/",
+    "http://localhost:4321/atrium/components/icon/",
+    "http://localhost:4321/atrium/components/icon/",
+    "http://localhost:4321/atrium/components/lightbox/",
+    "http://localhost:4321/atrium/components/popover/",
+    "http://localhost:4321/atrium/components/select/",
+    "http://localhost:4321/atrium/components/sheet/",
+    "http://localhost:4321/atrium/components/slider/",
+    "http://localhost:4321/atrium/components/switch/",
+    "http://localhost:4321/atrium/components/tabs/"
+  ]
+}

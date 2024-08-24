@@ -1,5 +1,12 @@
 # @sv/components
 
+## 1.5.0 (2024-08-22)
+
+### Features
+
+- Added more input types and updated Toasts
+- added datepicker example
+
 ## 1.4.0 (2024-07-03)
 
 ### Features

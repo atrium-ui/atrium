@@ -51,6 +51,10 @@ const config: Parameters<typeof starlight>[0] = {
       collapsed: false,
       autogenerate: { directory: "packages" },
     },
+    {
+      label: "Playground",
+      link: "/playground",
+    },
   ],
 };
 

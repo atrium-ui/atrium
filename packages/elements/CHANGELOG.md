@@ -1,5 +1,97 @@
 # @sv/elements
 
+## 1.14.2 (2024-08-23)
+
+### Fixes
+
+- a-select: fix scrollIntoView on invalid, even if already in view
+
+## 1.14.1 (2024-08-21)
+
+### Fixes
+
+- a-select: scroll into view on invalid
+
+## 1.14.0 (2024-08-15)
+
+### Features
+
+- add form reset event handling for select and checkbox in a-form-field
+
+## 1.13.0 (2024-08-13)
+
+### Features
+
+- a-chart: added line chart type
+
+## 1.12.0 (2024-08-03)
+
+### Features
+
+- renamed `input` slot to `trigger` for a-popover and a-select
+
+### Fixes
+
+- a-expandable: fix change event test
+
+## 1.11.2 (2024-08-02)
+
+### Fixes
+
+- a-expandable: change event not dispatched on attribute change, and added test
+
+## 1.11.1 (2024-08-02)
+
+### Fixes
+
+- improve testability of a-expandable
+- added chart element tests
+- added tests for blur element
+
+## 1.11.0 (2024-08-01)
+
+### Features
+
+- a-select: handle blur and fix change events, add keyPressed for quicksearch
+- a-select: added internal selected vaule, documentation and fixed event names
+- a-select: arrow-down and up opens select when closed
+
+## 1.10.1 (2024-07-29)
+
+### Fixes
+
+- a-select: initial value not set
+- a-select: inital value not set
+
+## 1.10.0 (2024-07-29)
+
+### Features
+
+- a-toast-feed: add nice stack animation
+
+## 1.9.1 (2024-07-24)
+
+### Fixes
+
+- a-track: disable snap past maxIndex
+
+## 1.9.0 (2024-07-24)
+
+### Features
+
+- a-track: fix track reaching beyound end
+
+## 1.8.0 (2024-07-13)
+
+### Features
+
+- a-popover: real popover with top-level positioning
+
+#### - Rewrote popover to propperly render on top of other content using floating-ui. 
+
+- Add Event proxying to a-portal. 
+- Fixed a-blur not focusing the correct elements and listen for Esc keydown on window instead of the element directly.
+
 ## 1.7.2 (2024-07-09)
 
 ### Fixes

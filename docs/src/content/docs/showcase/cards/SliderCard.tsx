@@ -8,7 +8,13 @@ export function SliderCard() {
   const data = new Array(10).fill(0);
 
   return (
-    <Card class="py-3 pt-4">
+    <Card class="p-3">
+      <div class="flex flex-col space-y-1.5 pb-8">
+        <h3 class="whitespace-nowrap font-semibold text-2xl leading-none tracking-tight">
+          Photos
+        </h3>
+        <p class="text-muted-foreground text-sm">Photos from your trip.</p>
+      </div>
       <div class="flex justify-center">
         <Slider class="w-[300px] overflow-visible">
           {data.map((n, i) => {

@@ -3,10 +3,16 @@
   "compilerOptions": {
     "useDefineForClassFields": false,
     "experimentalDecorators": true,
-    "types": ["@types/bun"]
+    "types": ["@types/bun"],
+    "plugins": [
+      {
+        "name": "ts-lit-plugin"
+      }
+    ]
   },
   "exclude": [
     "node_modules",
-    "**/dist"
+    "**/dist",
+    "**/*.spec.ts"
   ]
 }

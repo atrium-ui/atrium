@@ -4,4 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-export { Expandable } from "./Expandable";
+import { Expandable } from "./Expandable";
+
+try {
+  customElements.define("a-expandable", Expandable);
+} catch (err) {
+  console.warn("a-expandable already defined");
+}
+
+export { Expandable };

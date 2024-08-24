@@ -23,5 +23,3 @@ export class OptionElement extends LitElement {
     return html`<slot></slot>`;
   }
 }
-
-customElements.define("a-option", OptionElement);

@@ -5,6 +5,14 @@
  */
 
 import "@sv/elements/expandable";
+import { OptionElement } from "./Option";
+import { Select } from "./Select";
 
-export { Select } from "./Select";
-export { OptionElement } from "./Option";
+if (!customElements.get("a-select")) {
+  customElements.define("a-option", OptionElement);
+  customElements.define("a-select", Select);
+} else {
+  console.warn("a-select already defined");
+}
+
+export { OptionElement, Select };

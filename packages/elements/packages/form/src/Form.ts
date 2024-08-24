@@ -7,29 +7,19 @@ declare global {
   }
 }
 
-export class FormFieldErrorElement extends (globalThis.HTMLElement || class {}) {
-  onState = (e) => {
-    const field = e.detail as FormFieldElement;
-    const input = field.getInput();
-
-    if (input && field.valid === false) {
-      this.textContent = input.validationMessage;
-    } else {
-      this.textContent = "";
-    }
-  };
-
-  connectedCallback() {
-    const formField = this.closest("a-form-field");
-    formField?.addEventListener("field-state", this.onState);
-  }
-
-  disconnectedCallback() {
-    const formField = this.closest("a-form-field");
-    formField?.removeEventListener("field-state", this.onState);
-  }
-}
-
+/**
+ * A form field can be any single field of a form.
+ * It is used to capture changes and validation events of a form field.
+ *
+ * @example
+ * <form>
+ *   <a-form-field>
+ *     <input name="name" required />
+ *   </a-form-field>
+ * </form>
+ *
+ * @see https://svp.pages.s-v.de/atrium/elements/a-form-field/
+ */
 export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
   valid = true;
 
@@ -46,6 +36,7 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
 
   connectedCallback() {
     this.getForm()?.addEventListener("error", this.handleError as EventListener, true);
+    this.getForm()?.addEventListener("reset", this.handleReset as EventListener, true);
 
     this.addEventListener("invalid", this.invalid, { capture: true });
     this.addEventListener("change", this.input, { capture: true });
@@ -54,6 +45,7 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
 
   disconnectedCallback() {
     this.getForm()?.removeEventListener("error", this.handleError as EventListener, true);
+    this.getForm()?.removeEventListener("reset", this.handleReset as EventListener, true);
 
     this.removeEventListener("invalid", this.invalid, { capture: true });
     this.removeEventListener("change", this.input, { capture: true });
@@ -88,9 +80,47 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
 
     this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
   };
+
+  handleReset = (e: CustomEvent) => {
+    const input = this.getInput();
+    input?.dispatchEvent(new Event("change"));
+  };
 }
 
-if (typeof window !== "undefined") {
-  customElements.define("a-form-field", FormFieldElement);
-  customElements.define("a-form-field-error", FormFieldErrorElement);
+/**
+ * The form field error element is responseible for displaying validation errors to the user.
+ *
+ * @example
+ * <form>
+ *   <a-form-field field="name">
+ *
+ *     <input name="name" required />
+ *     <a-form-field-error />
+ *
+ *   </a-form-field>
+ * </form>
+ *
+ * @see https://svp.pages.s-v.de/atrium/elements/a-form-field/
+ */
+export class FormFieldErrorElement extends (globalThis.HTMLElement || class {}) {
+  onState = (e) => {
+    const field = e.detail as FormFieldElement;
+    const input = field.getInput();
+
+    if (input && field.valid === false) {
+      this.textContent = input.validationMessage;
+    } else {
+      this.textContent = "";
+    }
+  };
+
+  connectedCallback() {
+    const formField = this.closest("a-form-field");
+    formField?.addEventListener("field-state", this.onState);
+  }
+
+  disconnectedCallback() {
+    const formField = this.closest("a-form-field");
+    formField?.removeEventListener("field-state", this.onState);
+  }
 }

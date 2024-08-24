@@ -4,4 +4,14 @@
  * SPDX-License-Identifier: MIT
  */
 
-export { Popover } from "./Popover.js";
+import { PopoverTrigger, Popover, PopoverPortal } from "./Popover.js";
+
+try {
+  customElements.define("a-popover-portal", PopoverPortal);
+  customElements.define("a-popover", Popover);
+  customElements.define("a-popover-trigger", PopoverTrigger);
+} catch (err) {
+  console.warn("a-popover already defined");
+}
+
+export { PopoverTrigger, Popover, PopoverPortal };

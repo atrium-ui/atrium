@@ -12,6 +12,7 @@ export { default as Lit } from "./Lit.astro";
 export { default as Rive } from "./Rive.astro";
 export { default as Vue } from "./Vue.astro";
 export { default as Git } from "./Git.astro";
+export { default as Accessibility } from "./Accessibility.astro";
 
 export { default as ComponentHeader } from "./ComponentHeader.astro";
 export { default as Projects } from "./Projects.astro";

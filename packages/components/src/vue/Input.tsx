@@ -1,4 +1,5 @@
 /* @jsxImportSource vue */
+import { defineComponent } from "vue";
 import { twMerge } from "tailwind-merge";
 
 const inputVariants = {
@@ -9,40 +10,38 @@ const inputVariants = {
   error: ["border-red-600"],
 };
 
-import { defineComponent, ref } from "vue";
-
 export const Input = defineComponent(
-  (
-    props: {
-      slot?: string;
-      class?: string;
-      autofocus?: boolean;
-      placeholder?: string;
-      label?: string;
-      name?: string;
-      id?: string;
-      value?: string;
-      error?: string;
-      required?: boolean;
-      readonly?: boolean;
-      type?: "password" | "text" | "email";
-      multiline?: boolean;
-      onInvalid?: (e: Event) => undefined | string | Error;
-      onInput?: (e: Event) => void;
-      onChange?: (e: Event) => void;
-      onKeydown?: (e: KeyboardEvent) => void;
-    },
-    { slots },
-  ) => {
+  (props: {
+    slot?: string;
+    class?: string | string[];
+    autofocus?: boolean;
+    autocomplete?: string;
+    placeholder?: string;
+    label?: string;
+    name?: string;
+    id?: string;
+    value?: string;
+    error?: string;
+    required?: boolean;
+    readonly?: boolean;
+    type?: "password" | "text" | "email" | "search" | "number";
+    multiline?: boolean;
+    onInvalid?: (e: Event) => undefined | string | Error;
+    onInput?: (e: Event) => void;
+    onChange?: (e: Event) => void;
+    onKeydown?: (e: KeyboardEvent) => void;
+  }) => {
     return () => (
       <div
         // @ts-ignore
         slot={props.slot}
         class={props.class}
       >
-        <div class="text-sm">
-          <label>{props.label}</label>
-        </div>
+        {props.label && (
+          <div class="pb-1 text-sm">
+            <label for={props.id}>{props.label}</label>
+          </div>
+        )}
 
         {props.multiline ? (
           <textarea
@@ -51,6 +50,7 @@ export const Input = defineComponent(
             name={props.name}
             readonly={props.readonly}
             required={props.required || undefined}
+            aria-label={props.label}
             placeholder={props.placeholder}
             value={props.value}
             class={twMerge(inputVariants.default, props.error && inputVariants.error)}
@@ -64,11 +64,13 @@ export const Input = defineComponent(
         ) : (
           <input
             autofocus={props.autofocus}
+            autocomplete={props.autocomplete}
             type={props.type}
             id={props.id}
             name={props.name}
             readonly={props.readonly}
             required={props.required || undefined}
+            aria-label={props.label}
             placeholder={props.placeholder}
             value={props.value}
             class={twMerge(inputVariants.default, props.error && inputVariants.error)}
