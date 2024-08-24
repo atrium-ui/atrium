@@ -43,7 +43,7 @@
       "require": "./packages/expandable/dist/index.cjs",
       "types": "./packages/expandable/src/index.ts"
     },
-    "./audio-meter": {
+    "./layout": {
       "import": "./packages/dropdown/dist/index.js",
       "require": "./packages/dropdown/dist/index.cjs",
       "types": "./packages/dropdown/src/index.ts"

@@ -130,6 +130,11 @@
       "import": "./packages/chart/dist/index.js",
       "require": "./packages/chart/dist/index.cjs",
       "types": "./packages/chart/src/index.ts"
+    },
+    "./dropzone": {
+      "import": "./packages/dropzone/dist/index.js",
+      "require": "./packages/dropzone/dist/index.cjs",
+      "types": "./packages/dropzone/src/index.ts"
     }
   }
 }
