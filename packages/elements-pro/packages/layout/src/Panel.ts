@@ -356,8 +356,6 @@ export class Panel extends HTMLElement {
   layoutUpdate() {
     const children = this.childElements;
 
-    console.log(children);
-
     this.columns = [];
     this.rows = [];
 

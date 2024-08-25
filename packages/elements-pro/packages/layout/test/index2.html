@@ -2,10 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=0.7" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Layout</title>
 
-    <script type="module" src="./src/index.ts"></script>
+    <script type="module" src="../src/index.ts"></script>
 
     <style>
       body {
@@ -34,8 +34,8 @@
 
       a-layout {
         display: grid;
-        /* grid-template-columns: 1fr 2fr;
-        grid-template-rows: 1fr 1fr; */
+        grid-template-columns: 1fr 2fr;
+        grid-template-rows: 1fr 1fr;
       }
 
       @media (prefers-color-scheme: light) {
@@ -62,7 +62,7 @@
   </head>
 
   <body>
-    <!-- <a-layout>
+    <a-layout>
       <a-layout-column>
         <a-layout-group tabs>
           <placeholder tab="Component 1">1</placeholder>
@@ -78,19 +78,6 @@
         </a-layout-group>
         <a-layout-group tabs>
           <placeholder tab="Component 4">4</placeholder>
-        </a-layout-group>
-      </a-layout-column>
-    </a-layout> -->
-
-    <a-layout>
-      <a-layout-column>
-        <a-layout-group tabs>
-          <placeholder tab="A1">
-            <a-tab>ABC</a-tab>
-            1
-          </placeholder>
-          <placeholder tab="A2">2</placeholder>
-          <placeholder tab="A3">3</placeholder>
         </a-layout-group>
       </a-layout-column>
     </a-layout>

@@ -86,7 +86,7 @@ const styles = `
 		opacity: 1;
 	}
 
-	slot {
+	.content slot {
 		display: block;
 		position: absolute;
 		top: 0;
@@ -119,7 +119,7 @@ const styles = `
 		pointer-events: none;
 	}
 
-	::slotted(*) {
+	::slotted([tab]) {
    	width: 100%;
    	height: 100%;
    	position: absolute;
@@ -206,7 +206,7 @@ export class Group extends Column {
     super.slotChangeCallback();
 
     this.renderTabs();
-    this.setActiveTab(this.components.length - 1);
+    this.activeTab = 0;
   }
 
   insertPosition = 0;
@@ -344,7 +344,7 @@ export class Group extends Column {
 
     // creates tab ele for component
     const createTab = (component) => {
-      const tab = document.createElement("span");
+      const tab = document.createElement("button");
       tab.setAttribute("draggable", "true");
       tab.className = "tab";
       tab.part = "tab";
@@ -353,12 +353,12 @@ export class Group extends Column {
         const groupid = component.getAttribute("tab");
 
         if (groupid) {
-          const tabContent = component.querySelector("a-tab")?.innerHTML;
-          tab.innerHTML = tabContent || component.name || groupid;
+          const id = component.name || groupid;
+          tab.innerHTML = `<slot name="${id}">${id}</slot>`;
           tab.dataset.groupid = groupid;
         }
 
-        tab.onmousedown = (e) => {
+        tab.onclick = (e) => {
           const index = [...tab.parentNode.children].indexOf(tab);
           this.activeTab = index;
         };
