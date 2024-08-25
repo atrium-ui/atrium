@@ -2,19 +2,15 @@ import { Column } from "./Column.js";
 
 const styles = `
   :host {
-		position: relative;
-		overflow: hidden;
-		z-index: 1000;
 		display: flex;
 		flex-direction: column;
-		color: inherit;
+		gap: 0;
 
-		--tab-height: 28px;
 		--tab-width: auto;
 		--tab-font-color: #ffffff;
 		--tab-font-size: 0.8em;
 		--tab-border-radius: 3px;
-		--tab-padding: 0px 18px;
+		--tab-padding: 8px 18px;
 		--tab-border: none;
 
     --tab-background: #1C1C1C;
@@ -41,6 +37,7 @@ const styles = `
     user-select: none;
     font-size: var(--tab-font-size);
     padding: 3px 3px 0 3px;
+    gap: 1px;
   }
 
 	.tab {
@@ -48,8 +45,6 @@ const styles = `
 		align-items: center;
 		justify-content: center;
 		background: var(--tab-background);
-		margin: 0 1px 0 0;
-		height: var(--tab-height);
 		cursor: pointer;
 		position: relative;
 		min-width: var(--tab-width);
@@ -100,10 +95,6 @@ const styles = `
 		right: 0;
 	}
 
-	:host([tabs]) slot {
-		top: calc(var(--tab-height) + 3px);
-	}
-
 	:host([drag-over]) {
 		--left: 0;
 		--top: 0;
@@ -143,6 +134,12 @@ const styles = `
     transition: none;
     pointer-events: none;
 	}
+
+	.content {
+		position: relative;
+		width: 100%;
+		height: 100%;
+	}
 `;
 
 export class Group extends Column {
@@ -153,7 +150,9 @@ export class Group extends Column {
   template() {
     return `
       <div part="tabs" class="tabs"></div>
-      ${super.template()}
+      <div class="content">
+        ${super.template()}
+      </div>
     `;
   }
 
@@ -354,7 +353,8 @@ export class Group extends Column {
         const groupid = component.getAttribute("tab");
 
         if (groupid) {
-          tab.innerText = component.name || groupid;
+          const tabContent = component.querySelector("a-tab")?.innerHTML;
+          tab.innerHTML = tabContent || component.name || groupid;
           tab.dataset.groupid = groupid;
         }
 
