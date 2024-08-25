@@ -20,6 +20,7 @@
 	"workspaces": [
 		"packages/*",
 		"packages/elements/packages/*",
+		"packages/elements-pro/packages/*",
 		"packages/slider/packages/*",
 		"docs"
 	],
