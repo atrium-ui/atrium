@@ -71,10 +71,7 @@ export class Panel extends HTMLElement {
   }
 
   get shadowSlot() {
-    for (const child of this.shadowRoot?.children || []) {
-      if (child instanceof HTMLSlotElement) return child;
-    }
-    return null;
+    return this.shadowRoot?.querySelector("slot");
   }
 
   columns: number[] = [];
@@ -358,6 +355,8 @@ export class Panel extends HTMLElement {
 
   layoutUpdate() {
     const children = this.childElements;
+
+    console.log(children);
 
     this.columns = [];
     this.rows = [];
