@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.6.0 (2024-09-03)
+
+### Features
+
+- display selected items in combobox
+
 ## 1.5.0 (2024-08-22)
 
 ### Features
