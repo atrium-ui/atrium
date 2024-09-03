@@ -26,9 +26,9 @@ export function ThemeSelector(props) {
                 type="button"
                 class={twMerge(
                   "h-6 w-6 cursor-pointer rounded-full shadow-md ring-zinc-200 hover:ring-1",
-                  `bg-[${theme}]`,
                   currentTheme.value === theme ? "ring-1 ring-zinc-200" : "",
                 )}
+                style={{ backgroundColor: theme }}
                 onClick={() => setTheme(theme)}
               />
             ))}

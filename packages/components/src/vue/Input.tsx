@@ -2,7 +2,7 @@
 import { defineComponent } from "vue";
 import { twMerge } from "tailwind-merge";
 
-const inputVariants = {
+const variants = {
   default: [
     "group w-full resize-y rounded-md border border-zinc-700 bg-transparent leading-normal px-3 py-1 hover:border-zinc-600 focus:border-zinc-500",
     "outline-none focus-visible:ring focus-visible:ring-zinc-500",
@@ -10,82 +10,106 @@ const inputVariants = {
   error: ["border-red-600"],
 };
 
-export const Input = defineComponent(
-  (props: {
-    slot?: string;
-    class?: string | string[];
-    autofocus?: boolean;
-    autocomplete?: string;
-    placeholder?: string;
-    label?: string;
-    name?: string;
-    id?: string;
-    value?: string;
-    error?: string;
-    required?: boolean;
-    readonly?: boolean;
-    type?: "password" | "text" | "email" | "search" | "number";
-    multiline?: boolean;
-    onInvalid?: (e: Event) => undefined | string | Error;
-    onInput?: (e: Event) => void;
-    onChange?: (e: Event) => void;
-    onKeydown?: (e: KeyboardEvent) => void;
-  }) => {
-    return () => (
-      <div
-        // @ts-ignore
-        slot={props.slot}
-        class={props.class}
-      >
-        {props.label && (
-          <div class="pb-1 text-sm">
-            <label for={props.id}>{props.label}</label>
-          </div>
-        )}
+export type InputProps = {
+  class?: string;
+  autofocus?: boolean;
+  placeholder?: string;
+  label?: string;
+  prefix?: VNode | string;
+  suffix?: VNode | string;
+  name?: string;
+  id?: string;
+  value?: string;
+  type?: string;
+  error?: string;
+  required?: boolean;
+  autocomplete?: string;
+  minlength?: number;
+  readonly?: boolean;
+  multiline?: boolean;
+  onInvalid?: (e: Event) => undefined | string | Error;
+  onInput?: (e: Event) => void;
+  onChange?: (e: Event) => void;
+  onKeydown?: (e: KeyboardEvent) => void;
+  onKeyup?: (e: KeyboardEvent) => void;
+};
 
-        {props.multiline ? (
-          <textarea
-            autofocus={props.autofocus}
-            id={props.id}
-            name={props.name}
-            readonly={props.readonly}
-            required={props.required || undefined}
-            aria-label={props.label}
-            placeholder={props.placeholder}
-            value={props.value}
-            class={twMerge(inputVariants.default, props.error && inputVariants.error)}
-            onChange={props.onChange}
-            onInput={props.onInput}
-            onInvalid={(e) => {
-              const err = props.onInvalid?.(e);
-              e.preventDefault();
-            }}
-          />
-        ) : (
-          <input
-            autofocus={props.autofocus}
-            autocomplete={props.autocomplete}
-            type={props.type}
-            id={props.id}
-            name={props.name}
-            readonly={props.readonly}
-            required={props.required || undefined}
-            aria-label={props.label}
-            placeholder={props.placeholder}
-            value={props.value}
-            class={twMerge(inputVariants.default, props.error && inputVariants.error)}
-            onChange={props.onChange}
-            onKeydown={props.onKeydown}
-            onInput={props.onInput}
-            onInvalid={(e) => {
-              const err = props.onInvalid?.(e);
-              e.preventDefault();
-            }}
-          />
-        )}
+export const Input = defineComponent(
+  (props: InputProps, context) => {
+    return () => (
+      <div class={props.class}>
+        <div class="text-sm">
+          <label
+            class={[
+              "pb-5 font-bold text-green-200 text-xs uppercase",
+              props.multiline ? "mx-5 lg:mx-0" : "",
+            ]}
+            for={props.id}
+          >
+            <span>{props.label}</span>
+            {props.required && <span> *</span>}
+          </label>
+        </div>
+
+        <div
+          class={twMerge(
+            "flex",
+            variants.default,
+            props.error && variants.error,
+            props.multiline && "mt-4 min-h-10 px-5 lg:px-2",
+          )}
+        >
+          {context.slots.default?.()}
+
+          {props.prefix}
+
+          {props.multiline ? (
+            <textarea
+              rows={6}
+              id={props.id}
+              name={props.name}
+              autofocus={props.autofocus}
+              readonly={props.readonly}
+              required={props.required || undefined}
+              placeholder={props.placeholder}
+              class="m-0 flex-1 border-none bg-transparent p-0 outline-none"
+              onChange={props.onChange}
+              onInput={props.onInput}
+              onInvalid={(e) => {
+                const err = props.onInvalid?.(e);
+                // e.preventDefault();
+              }}
+              {...(props.value ? { value: props.value } : {})}
+            />
+          ) : (
+            <input
+              type={props.type}
+              id={props.id}
+              name={props.name}
+              autocomplete={props.autocomplete}
+              autofocus={props.autofocus}
+              readonly={props.readonly}
+              required={props.required || undefined}
+              placeholder={props.placeholder}
+              class="m-0 flex-1 border-none bg-transparent p-0 outline-none"
+              onChange={props.onChange}
+              onKeydown={props.onKeydown}
+              onKeyup={props.onKeyup}
+              onInput={props.onInput}
+              minlength={props.minlength}
+              onInvalid={(e) => {
+                const err = props.onInvalid?.(e);
+                // e.preventDefault();
+              }}
+              {...(props.value ? { value: props.value } : {})}
+            />
+          )}
+
+          {props.suffix}
+        </div>
 
         {props.error ? (
-          <div class="mt-1 text-red-600 text-sm">
+          <div class="pt-2 text-md text-yellow">
             <label>{props.error}</label>
           </div>
         ) : null}
@@ -94,7 +118,6 @@ export const Input = defineComponent(
   },
   {
     props: [
-      "slot",
       "class",
       "autofocus",
       "placeholder",
@@ -102,15 +125,20 @@ export const Input = defineComponent(
       "name",
       "id",
       "value",
+      "type",
       "error",
       "required",
+      "autocomplete",
       "readonly",
-      "type",
       "multiline",
       "onInvalid",
       "onInput",
       "onChange",
       "onKeydown",
+      "onKeyup",
+      "prefix",
+      "suffix",
+      "minlength",
     ],
   },
 );
