@@ -44,6 +44,7 @@ export const Combobox = defineComponent(
           }}
           class="relative inline-block w-full"
         >
+          {/* @ts-ignore */}
           <div slot="trigger" class="w-full">
             <Input placeholder={props.placeholder} onKeyup={onKeyup}>
               <div class="flex pr-2">

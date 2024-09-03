@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import { defineComponent } from "vue";
+import { defineComponent, type VNode } from "vue";
 import { twMerge } from "tailwind-merge";
 
 const variants = {
@@ -11,7 +11,7 @@ const variants = {
 };
 
 export type InputProps = {
-  class?: string;
+  class?: string | string[];
   autofocus?: boolean;
   placeholder?: string;
   label?: string;
