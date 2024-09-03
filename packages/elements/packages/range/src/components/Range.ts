@@ -28,8 +28,8 @@ export class Range extends LitElement {
       :host {
         display: inline-block;
 
-        --slider-handle-background: orange;
-        --slider-progress-background: orange;
+        --slider-handle-background: var(--theme-color, #bfa188);
+        --slider-progress-background: var(--theme-color, #bfa188);
         --slider-progress-backdrop: #eee;
         --slider-outline-color: grey;
       }

@@ -38,7 +38,7 @@ export const Switch = defineComponent(
         >
           <div
             class={[
-              "relative block h-6 w-12 rounded-full bg-accent-200 transition-transform",
+              "relative block h-6 w-12 rounded-full bg-[var(--theme-color,#bfa188)] transition-transform",
               "after:absolute after:top-0 after:right-0 after:h-6 after:w-6 after:rounded-full after:bg-[currentColor] after:content-['']",
               "-translate-x-1/2 group-[&[value='true']]:translate-x-0",
             ]}
