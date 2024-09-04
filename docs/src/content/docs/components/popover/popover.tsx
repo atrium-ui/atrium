@@ -1,6 +1,5 @@
 /* @jsxImportSource vue */
 import { Button } from "@components/src/vue/Button";
-import { Combobox, ComboboxItem } from "@components/src/vue/Combobox";
 import { Popover } from "@components/src/vue/Popover";
 
 export default function () {

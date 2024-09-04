@@ -3,24 +3,41 @@ import "@sv/elements/select";
 import "@sv/elements/expandable";
 import { defineComponent, ref } from "vue";
 import { twMerge } from "tailwind-merge";
-import { Input } from "./Input.jsx";
+import { InputSearch } from "./InputSearch.jsx";
+import type { OptionElement, Select } from "@sv/elements/select";
+
+const ComboboxItem = function Item(props: { value: string; class?: string }, { slots }) {
+  return (
+    <a-option
+      class={twMerge(
+        "block cursor-pointer rounded px-2",
+        "hover:bg-zinc-100 active:bg-zinc-200 [&[selected]]:bg-zinc-200",
+        "dark:active:bg-zinc-700 dark:hover:bg-zinc-600 dark:[&[selected]]:bg-zinc-700",
+        props.class,
+      )}
+      value={props.value}
+    >
+      <div>{slots.default?.() || props.value}</div>
+    </a-option>
+  );
+};
 
 export const Combobox = defineComponent(
-  (
-    props: {
-      placeholder?: string;
-      name?: string;
-      value?: string;
-      required?: boolean;
-      onChange?: (e: CustomEvent) => void;
-    },
-    { slots },
-  ) => {
+  (props: {
+    placeholder?: string;
+    name?: string;
+    value?: string;
+    required?: boolean;
+    onChange?: (e: CustomEvent) => void;
+    options: Array<{ label: string; value: string }>;
+  }) => {
     const value = ref(props.value);
-    const values = ref<Array<string>>([]);
+    const values = ref<Array<OptionElement>>([]);
+    const filter = ref("");
+    const select = ref<Select>();
 
-    const onKeyup = (e: KeyboardEvent) => {
-      if (e.key === "Backspace") {
+    const onKeydown = (e: KeyboardEvent) => {
+      if (e.key === "Backspace" && e.target?.value?.length === 0) {
         const set = values.value;
         set.pop();
         values.value = set;
@@ -31,35 +48,45 @@ export const Combobox = defineComponent(
       <div>
         <a-select
           multiple={true}
+          ref={select}
           required={props.required}
           value={value.value}
           name={props.name}
           onChange={async (ev) => {
-            const val = ev.option?.value;
-            value.value = val;
+            value.value = ev.option;
             props.onChange?.(ev);
-            if (val && values.value.indexOf(val) === -1) {
-              values.value.push(val);
+            if (ev.option && values.value.indexOf(ev.option) === -1) {
+              values.value.push(ev.option);
             }
+            filter.value = "";
           }}
           class="relative inline-block w-full"
         >
           {/* @ts-ignore */}
           <div slot="trigger" class="w-full">
-            <Input placeholder={props.placeholder} onKeyup={onKeyup}>
+            <InputSearch
+              class="px-1"
+              placeholder={props.placeholder}
+              value={filter.value}
+              onKeydown={onKeydown}
+              onInput={(e) => {
+                filter.value = e.target?.value;
+                select.value?.open();
+              }}
+            >
               <div class="flex pr-2">
-                {[...values.value].map((value) => (
+                {[...values.value].map((option) => (
                   <div
-                    key={value}
+                    key={option.value}
                     class="mr-1 flex items-center gap-1 whitespace-nowrap rounded bg-zinc-50 pr-1 pl-2 text-left text-sm leading-none dark:bg-zinc-800"
                   >
-                    <span>{value}</span>
+                    <span>{option.innerText}</span>
 
                     <button
                       type="button"
                       onClick={() => {
                         const arr = values.value;
-                        arr.splice(arr.indexOf(value), 1);
+                        arr.splice(arr.indexOf(option), 1);
                         values.value = arr;
                       }}
                       class="flex items-center justify-center rounded-full bg-zinc-50 p-0 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
@@ -82,36 +109,23 @@ export const Combobox = defineComponent(
                   </div>
                 ))}
               </div>
-            </Input>
+            </InputSearch>
           </div>
 
           <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-50 p-1 dark:bg-zinc-800">
-            {slots.default?.()}
+            {props.options
+              .filter((opt) => !filter.value || opt.label.match(filter.value))
+              .map((option) => (
+                <ComboboxItem key={option.value} value={option.value}>
+                  {option.label}
+                </ComboboxItem>
+              ))}
           </div>
         </a-select>
       </div>
     );
   },
   {
-    props: ["value", "placeholder", "required", "name", "onChange"],
+    props: ["value", "placeholder", "required", "name", "onChange", "options"],
   },
 );
-
-export const ComboboxItem = function Item(
-  props: { value: string; class?: string },
-  { slots },
-) {
-  return (
-    <a-option
-      class={twMerge(
-        "block cursor-pointer rounded px-2",
-        "hover:bg-zinc-100 active:bg-zinc-200 [&[selected]]:bg-zinc-200",
-        "dark:active:bg-zinc-700 dark:hover:bg-zinc-600 dark:[&[selected]]:bg-zinc-700",
-        props.class,
-      )}
-      value={props.value}
-    >
-      <div>{slots.default?.() || props.value}</div>
-    </a-option>
-  );
-};

@@ -37,7 +37,7 @@ export type InputProps = {
 export const Input = defineComponent(
   (props: InputProps, context) => {
     return () => (
-      <div class={props.class}>
+      <div>
         <div class="text-sm">
           <label
             class={[
@@ -57,6 +57,7 @@ export const Input = defineComponent(
             variants.default,
             props.error && variants.error,
             props.multiline && "mt-4 min-h-10 px-5 lg:px-2",
+            props.class,
           )}
         >
           {context.slots.default?.()}
