@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.14.3 (2024-09-04)
+
+### Fixes
+
+- fix form fields validating on inputs
+
 ## 1.14.2 (2024-08-23)
 
 ### Fixes
