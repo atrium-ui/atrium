@@ -59,6 +59,7 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
     this.valid = false;
 
     this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
+    this.scrollIntoView({ block: "center" });
   };
 
   change = (e: Event) => {
@@ -77,10 +78,11 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
 
   handleError = (e: CustomEvent) => {
     const input = this.getInput();
-
+    
     if (input && e.detail.name === input.name) {
       input.setCustomValidity(e.detail.message[0]);
       input.focus();
+      this.scrollIntoView({ block: "center" });
     }
 
     this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
