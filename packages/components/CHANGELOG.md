@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.6.1 (2024-09-04)
+
+### Fixes
+
+- make combobox filterable
+
 ## 1.6.0 (2024-09-03)
 
 ### Features
