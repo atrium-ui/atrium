@@ -20,7 +20,7 @@ declare global {
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-form-field/
  */
-export class FormFieldElement extends (globalThis.HTMLElement || class { }) {
+export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
   valid = true;
 
   getInput() {
@@ -107,7 +107,7 @@ export class FormFieldElement extends (globalThis.HTMLElement || class { }) {
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-form-field/
  */
-export class FormFieldErrorElement extends (globalThis.HTMLElement || class { }) {
+export class FormFieldErrorElement extends (globalThis.HTMLElement || class {}) {
   onState = (e) => {
     const field = e.detail as FormFieldElement;
     const input = field.getInput();
