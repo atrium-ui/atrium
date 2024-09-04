@@ -78,7 +78,7 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
 
   handleError = (e: CustomEvent) => {
     const input = this.getInput();
-    
+
     if (input && e.detail.name === input.name) {
       input.setCustomValidity(e.detail.message[0]);
       input.focus();
