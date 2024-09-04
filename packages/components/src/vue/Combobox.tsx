@@ -37,7 +37,8 @@ export const Combobox = defineComponent(
     const select = ref<Select>();
 
     const onKeydown = (e: KeyboardEvent) => {
-      if (e.key === "Backspace" && e.target?.value?.length === 0) {
+      const target = e.target as HTMLInputElement;
+      if (e.key === "Backspace" && target.value?.length === 0) {
         const set = values.value;
         set.pop();
         values.value = set;
@@ -70,7 +71,8 @@ export const Combobox = defineComponent(
               value={filter.value}
               onKeydown={onKeydown}
               onInput={(e) => {
-                filter.value = e.target?.value;
+                const target = e.target as HTMLInputElement;
+                filter.value = target.value;
                 select.value?.open();
               }}
             >
