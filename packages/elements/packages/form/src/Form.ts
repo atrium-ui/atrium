@@ -20,7 +20,7 @@ declare global {
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-form-field/
  */
-export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
+export class FormFieldElement extends (globalThis.HTMLElement || class { }) {
   valid = true;
 
   getInput() {
@@ -39,7 +39,7 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
     this.getForm()?.addEventListener("reset", this.handleReset as EventListener, true);
 
     this.addEventListener("invalid", this.invalid, { capture: true });
-    this.addEventListener("change", this.input, { capture: true });
+    this.addEventListener("change", this.change, { capture: true });
     this.addEventListener("input", this.input, { capture: true });
   }
 
@@ -48,7 +48,7 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
     this.getForm()?.removeEventListener("reset", this.handleReset as EventListener, true);
 
     this.removeEventListener("invalid", this.invalid, { capture: true });
-    this.removeEventListener("change", this.input, { capture: true });
+    this.removeEventListener("change", this.change, { capture: true });
     this.removeEventListener("input", this.input, { capture: true });
   }
 
@@ -61,11 +61,16 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
     this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
   };
 
-  input = (e: Event) => {
-    const input = this.getInput();
-    input?.setCustomValidity("");
+  change = (e: Event) => {
+    this.getInput()?.setCustomValidity("");
 
     this.valid = (e?.target as HTMLInputElement)?.reportValidity();
+
+    this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
+  };
+
+  input = (e: Event) => {
+    this.getInput()?.setCustomValidity("");
 
     this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
   };
@@ -102,7 +107,7 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-form-field/
  */
-export class FormFieldErrorElement extends (globalThis.HTMLElement || class {}) {
+export class FormFieldErrorElement extends (globalThis.HTMLElement || class { }) {
   onState = (e) => {
     const field = e.detail as FormFieldElement;
     const input = field.getInput();
