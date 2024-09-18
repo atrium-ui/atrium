@@ -1,5 +1,13 @@
 # @sv/elements
 
+## 1.14.4 (2024-09-18)
+
+### Fixes
+
+- a-select: scroll into view on invalid
+- a-select: fix scrollIntoView on invalid, even if already in view
+- fix form fields validating on inputs
+
 ## 1.14.3 (2024-09-04)
 
 ### Fixes
