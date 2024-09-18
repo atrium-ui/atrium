@@ -173,12 +173,12 @@ test("offsetWidth", async () => {
   track.moveBy(2);
 
   const int = setInterval(() => {
-    console.log(track.currentPosition);
+    console.info(track.currentPosition);
   }, track.transitionTime / 10);
 
   await sleep(track.transitionTime + 100);
 
-  console.log(track.currentItem);
+  console.info(track.currentItem);
 
   clearInterval(int);
 });
