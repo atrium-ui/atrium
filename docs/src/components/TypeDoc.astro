@@ -21,6 +21,10 @@ export interface Props {
 
 const props = Astro.props;
 
+function sourceToUrl(path: string, source) {
+  return `https://gitlab.s-v.de/svp/atrium/-/blob/main/rec/${path}/${source.fileName}#L${source.line}`;
+}
+
 async function parse(options: { pkg: string; entry: string; config?: string }) {
   const base = path.resolve(options.pkg);
   const app = await Application.bootstrap({
@@ -166,11 +170,15 @@ async function Methods({ doc, symbol }: { doc: ProjectReflection; symbol: string
       return `
           <div class="not-content grid grid-cols-[1fr_auto]">
             <h4>
-              <code class="text-lg">${symbol}.${child.name}</code>
+              <code class="text-lg">${symbol}.${child.name}(${child.parameters
+                ?.map((param) => {
+                  return `${param.name}: ${param.type}`;
+                })
+                .join(", ")})</code>
             </h4>
-            <span class="text-xs opacity-50">
+            <a target="_blank" href="${sourceToUrl(props.source, source)}" class="text-xs opacity-50">
               ${source?.fileName}:${source?.line}
-            </span>
+            </a>
             <div class="text-base opacity-70">${await toHtml(child.comment?.summary)}</div>
           </div>
         `;
@@ -210,9 +218,7 @@ const source = dec?.sources?.[0];
 </script>
 
 <div class="typedoc pb-12 pt-10">
-  <a
-   href={`https://gitlab.s-v.de/svp/atrium/-/blob/main/rec/${props.source}/${source.fileName}#L${source.line}`}
-  >
+  <a target="_blank" href={sourceToUrl(props.source, source)}>
     <h2 class="font-mono pb-2">{props.symbol}</h2>
   </a>
 
@@ -275,7 +281,7 @@ const source = dec?.sources?.[0];
                 <span class="text-xl hidden group-[&[opened]]:block">↶</span>
             </button>
 
-            <div class="p-4" ssr-hidden>
+            <div class="py-4 px-1" ssr-hidden>
                 <div set:html={methods} />
             </div >
         </a-expandable>
