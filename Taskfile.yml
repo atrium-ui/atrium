@@ -111,10 +111,10 @@ tasks:
 
   prerelease:
     deps: [build]
-    vars:
+    env:
       PRERELEASE_LABEL: "dev"
     cmds:
-      - PRERELEASE_LABEL={{.PRERELEASE_LABEL}} knope -v release --prerelease-label=$PRERELEASE_LABEL
+      - PRERELEASE_LABEL=$PRERELEASE_LABEL knope -v release --prerelease-label=$PRERELEASE_LABEL
 
   release:preview:
     cmds:
@@ -124,7 +124,6 @@ tasks:
     dir: "{{.USER_WORKING_DIR}}"
     vars:
       PRERELEASE_LABEL:
-        sh: echo $PRERELEASE_LABEL
       NAME:
         sh: bun x npm version --json | jq "keys[0]"
       VERSION:

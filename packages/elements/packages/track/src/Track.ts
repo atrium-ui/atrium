@@ -18,7 +18,7 @@ import { Vec2 } from "./Vec.js";
  *     // satefies the "Trait" interface
  *     {
  *       id: "custom-trait",
- *       input(track: DrawerTrack, inputState: InputState) {
+ *       input(track: Track, inputState: InputState) {
  *         if (inputState.release.value) {
  *           // log track posiiton on pointer/touch release
  *           console.log(track.posiiton);
@@ -172,35 +172,27 @@ export class PointerTrait implements Trait {
   getClapmedPosition(e: Track, pos: Vec2) {
     let clampedPos = pos;
 
-    const stopTop = 0;
-    const stopLeft = 0;
-    let stopBottom = 0;
-    let stopRight = 0;
+    const bounds = e.scrollBounds;
 
-    stopBottom = e.trackHeight - e.height;
-    stopRight = e.trackWidth - e.width;
-
-    const align = e.align || "start";
-
-    switch (align) {
-      case "end":
+    switch (e.align) {
+      case "center":
         clampedPos = new Vec2(
-          Math.max(stopLeft, clampedPos.x),
-          Math.max(stopTop, clampedPos.y),
+          Math.min(bounds.right, clampedPos.x),
+          Math.min(bounds.bottom, clampedPos.y),
         );
         clampedPos = new Vec2(
-          Math.min(stopRight, clampedPos.x),
-          Math.min(stopBottom, clampedPos.y),
+          Math.max(bounds.left, clampedPos.x),
+          Math.max(bounds.top, clampedPos.y),
         );
         break;
       default:
         clampedPos = new Vec2(
-          Math.min(stopRight, clampedPos.x),
-          Math.min(stopBottom, clampedPos.y),
+          Math.min(bounds.right, clampedPos.x),
+          Math.min(bounds.bottom, clampedPos.y),
         );
         clampedPos = new Vec2(
-          Math.max(stopLeft, clampedPos.x),
-          Math.max(stopTop, clampedPos.y),
+          Math.max(bounds.left, clampedPos.x),
+          Math.max(bounds.top, clampedPos.y),
         );
         break;
     }
@@ -229,16 +221,20 @@ export class SnapTrait implements Trait {
     if (track.grabbing || track.scrolling || track.target) return;
 
     // Only when decelerating
-    if (!track.vertical && track.deltaVelocity.x >= 0) return;
-    if (track.vertical && track.deltaVelocity.y >= 0) return;
+    if (track.deltaVelocity[track.currentAxis] > 0) return;
 
-    if (!track.loop) {
-      // Ignore if target is out of bounds
-      if (!track.vertical && track.position.x - track.overflowWidth > 0) return;
-      if (track.vertical && track.position.y - track.overflowHeight > 0) return;
+    switch (track.align) {
+      case "center":
+        break;
+      default:
+        if (!track.loop) {
+          // Ignore if target is out of bounds
+          if (!track.vertical && track.position.x - track.overflowWidth > 0) return;
+          if (track.vertical && track.position.y - track.overflowHeight > 0) return;
 
-      // dont snap if at the beginning
-      if (track.position.x <= 0 && track.position.y <= 0) return;
+          // dont snap if at the beginning
+          if (track.position.x <= 0 && track.position.y <= 0) return;
+        }
     }
 
     // Project the current velocity to determine the target item.
@@ -474,18 +470,56 @@ export class Track extends LitElement {
   }
 
   public get maxIndex() {
-    const lastItem = this.getItemAtPosition(
-      new Vec2(this.overflowWidth, this.overflowHeight),
-    );
-    if (lastItem) {
-      // last index plus the child behind it, to reach the end of the track
-      return lastItem.index;
+    // get index of item at the end of the track
+    if (this.vertical) {
+      const lastItem = this.getItemAtPosition(new Vec2(0, this.trackHeight - 10));
+      if (lastItem) return lastItem.index;
+    } else {
+      const lastItem = this.getItemAtPosition(new Vec2(this.trackWidth - 10, 0));
+      if (lastItem) return lastItem.index;
     }
     return 0;
   }
 
   public get minIndex() {
     return 0;
+  }
+
+  get scrollBounds() {
+    let stopTop = 0;
+    let stopLeft = 0;
+    let stopBottom = 0;
+    let stopRight = 0;
+
+    stopBottom = this.overflowHeight;
+    stopRight = this.overflowWidth;
+
+    const firstItemHeight = this.itemHeights[0] || 0;
+    const firstItemWidth = this.itemWidths[0] || 0;
+
+    const lastItemWidth = this.itemWidths[this.itemCount - 1] || 0;
+    const lastItemHeight = this.itemHeights[this.itemCount - 1] || 0;
+
+    switch (this.align) {
+      case "center":
+        // horizontal
+        stopLeft -= this.width / 2 - firstItemWidth / 2;
+        stopRight += this.width / 2 - lastItemWidth / 2;
+
+        // vertical
+        stopTop -= this.height / 2 - firstItemHeight / 2;
+        stopBottom += this.height / 2 - lastItemHeight / 2;
+        break;
+      default:
+        break;
+    }
+
+    return {
+      top: stopTop,
+      left: stopLeft,
+      bottom: stopBottom,
+      right: stopRight,
+    };
   }
 
   private animation: number | undefined;
@@ -579,8 +613,8 @@ export class Track extends LitElement {
   /** Whether the track should snap to the closest child element. */
   @property({ type: Boolean, reflect: true }) snap = false;
 
-  // /** Item alignment in the track. "start" (left/top) or "end" (right/bottom) */
-  @property({ type: String }) align: "start" | "end" = "start";
+  /** Item alignment in the track. "start" (left/top) or "center" */
+  @property({ type: String }) align: "start" | "center" = "start";
 
   /** Only scroll when items are overflown. Like "overflow: auto". */
   @property({ type: Boolean, reflect: true }) overflowscroll = false;
@@ -627,11 +661,11 @@ export class Track extends LitElement {
       case "start":
         this.origin.set([0, 0]);
         break;
-      case "end":
+      case "center":
         if (this.vertical) {
-          this.origin.set([0, this.height]);
+          this.origin.set([0, -this.height / 2]);
         } else {
-          this.origin.set([this.width, 0]);
+          this.origin.set([-this.width / 2, 0]);
         }
         break;
     }
@@ -679,30 +713,24 @@ export class Track extends LitElement {
     if (currentIndex < 0) {
       // only happens when loop is enabled
       for (let i = 0; i > currentIndex; i--) {
-        if (this.vertical) {
-          pos.y -= rects[i]?.y || 0;
-        } else {
-          pos.x -= rects[i]?.x || 0;
-        }
+        pos[this.currentAxis] -= rects[i]?.[this.currentAxis] || 0;
       }
     } else if (currentIndex > this.itemCount) {
       // only happens when loop is enabled
       for (let i = 0; i < currentIndex; i++) {
-        if (this.vertical) {
-          pos.y += rects[i % this.itemCount]?.y || 0;
-        } else {
-          pos.x += rects[i % this.itemCount]?.x || 0;
-        }
+        pos[this.currentAxis] += rects[i % this.itemCount]?.[this.currentAxis] || 0;
       }
     } else {
+      let lastIndex = 0;
       for (let i = 0; i < currentIndex; i++) {
-        if (this.vertical) {
-          // is vertical not looping
-          pos.y += rects[i]?.y || 0;
-        } else {
-          // not vertical not looping
-          pos.x += rects[i]?.x || 0;
-        }
+        pos[this.currentAxis] += rects[i]?.[this.currentAxis] || 0;
+        lastIndex = i;
+      }
+
+      if (this.align === "center") {
+        // adds half of the current item to the position to center it
+        pos[this.currentAxis] +=
+          (rects[Math.min(lastIndex + 1, currentIndex)]?.[this.currentAxis] || 0) / 2;
       }
     }
 
@@ -964,6 +992,8 @@ export class Track extends LitElement {
 
     const PI2 = Math.PI * 2;
 
+    const originAngle = (this.origin[this.currentAxis] / trackSize || 0) * PI2;
+
     const axes = this.vertical ? 1 : 0;
     // all items angles
     const angles = rects.reduce((acc, rect, i) => {
@@ -978,16 +1008,24 @@ export class Track extends LitElement {
       // when -1 is nothing go next (with loop enabled, its the last item)
       if (!rect) continue;
 
-      const itemAngle = angles.reduce((acc, angle, j) => {
+      let itemAngle = originAngle;
+
+      let lastIndex = 0;
+      for (let j = 0; j < itemIndex; j++) {
         if (j < itemIndex) {
-          return acc + angle;
+          itemAngle += angles[j] || 0;
         }
-        return acc;
-      }, 0);
+        lastIndex = j;
+      }
+
+      if (this.align === "center") {
+        // adds half of the current item to the position to center it
+        itemAngle += (angles[Math.min(lastIndex + 1, this.currentIndex)] || 0) / 2;
+      }
 
       if (this.debug && ctx) {
         // draw a line from the center to the current position with angle
-        ctx.strokeStyle = "#eee";
+        ctx.strokeStyle = `hsl(0, 0%, ${(i / this.itemCount) * 100}%)`;
         ctx.beginPath();
         ctx.moveTo(100, 100);
         ctx.lineTo(100 + Math.cos(itemAngle) * 69, 100 + Math.sin(itemAngle) * 69);
@@ -1015,8 +1053,17 @@ export class Track extends LitElement {
       ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
       ctx.beginPath();
       ctx.moveTo(100, 100);
-      ctx.lineTo(100 + Math.cos(currentAngle) * 69, 100 + Math.sin(currentAngle) * 69);
-      ctx.arc(100, 100, 69, currentAngle, currentAngle + (this.width / trackSize) * PI2);
+      ctx.lineTo(
+        100 + Math.cos(currentAngle + originAngle) * 69,
+        100 + Math.sin(currentAngle + originAngle) * 69,
+      );
+      ctx.arc(
+        100,
+        100,
+        69,
+        currentAngle + originAngle,
+        currentAngle + originAngle + (this.width / trackSize) * PI2,
+      );
       ctx.lineTo(100, 100);
       ctx.fill();
 
@@ -1059,6 +1106,16 @@ export class Track extends LitElement {
       }
     }
 
+    if (this.debug && ctx) {
+      // draw a line from the center to the current position with angle
+      ctx.strokeStyle = "lime";
+      ctx.beginPath();
+      ctx.moveTo(100, 100);
+      ctx.lineTo(100 + Math.cos(originAngle) * 69, 100 + Math.sin(originAngle) * 69);
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    }
+
     return closestIndex;
   }
 
@@ -1069,11 +1126,13 @@ export class Track extends LitElement {
     const rects = this.getItemRects();
     let px = 0;
 
-    if (pos.x > 0) {
+    if (pos[0] > 0) {
       for (const item of rects) {
-        if (px + item.x > pos.x % this.trackWidth) {
-          const offset = Math.floor(pos.x / this.trackWidth) * this.itemCount;
+        if (px + item.x > pos[0] % this.trackWidth) {
+          const offset = Math.floor(pos[0] / this.trackWidth) * this.itemCount;
           return {
+            width: item.x,
+            height: item.y,
             domIndex: offset + rects.indexOf(item),
             index: rects.indexOf(item),
           };
@@ -1082,9 +1141,11 @@ export class Track extends LitElement {
       }
     } else {
       for (const item of [...rects].reverse()) {
-        if (px - item.x < pos.x % -this.trackWidth) {
-          const offset = Math.floor(pos.x / this.trackWidth) * this.itemCount;
+        if (px - item.x < pos[0] % -this.trackWidth) {
+          const offset = Math.floor(pos[0] / this.trackWidth) * this.itemCount;
           return {
+            width: item.x,
+            height: item.y,
             domIndex: offset + rects.indexOf(item),
             index: rects.indexOf(item),
           };
@@ -1295,14 +1356,16 @@ export class Track extends LitElement {
           if (this.loop) {
             this.inputForce.add(delta);
           } else {
+            const bounds = this.scrollBounds;
+
             if (this.vertical) {
               const pos = this.position.y + wheelEvent.deltaY;
               this.inputForce.y =
-                Math.max(Math.min(pos, this.overflowHeight), 0) - this.position.y;
+                Math.max(Math.min(pos, bounds.bottom), bounds.top) - this.position.y;
             } else {
               const pos = this.position.x + wheelEvent.deltaX;
               this.inputForce.x =
-                Math.max(Math.min(pos, this.overflowWidth), 0) - this.position.x;
+                Math.max(Math.min(pos, bounds.right), bounds.left) - this.position.x;
             }
           }
 

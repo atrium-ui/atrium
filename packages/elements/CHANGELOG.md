@@ -1,5 +1,32 @@
 # @sv/elements
 
+## 1.15.0-dev.2 (2024-09-20)
+
+### Features
+
+- a-track: added centered attribute and handling
+
+### Fixes
+
+- a-track: uses wrong item to center itself
+- a-track: first element not cetnered correctly when align=center
+
+## 1.15.0-dev.1 (2024-09-20)
+
+### Features
+
+- a-track: added centered attribute and handling
+
+### Fixes
+
+- a-track: uses wrong item to center itself
+
+## 1.15.0-dev.0 (2024-09-19)
+
+### Features
+
+- a-track: added centered attribute and handling
+
 ## 1.14.4 (2024-09-18)
 
 ### Fixes
