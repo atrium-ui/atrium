@@ -145,7 +145,7 @@ test("moveBy", async () => {
   expect(positions.length > 5).toBeTrue();
 });
 
-test("centered", async () => {
+test("centered index 1", async () => {
   const track = await trackWithChildren(10, {
     align: "center",
   });
@@ -169,10 +169,43 @@ test("centered", async () => {
   expect(track.currentPosition).toBe(offset - track.width / 2);
 });
 
-// TODO: test snap at specific position
-// TODO:  +loop
-//
+test("centered index 0", async () => {
+  const track = await trackWithChildren(10, {
+    align: "center",
+  });
+
+  expect(track.align).toBe("center");
+
+  track.moveBy(0);
+  await sleep(track.transitionTime + 20);
+
+  expect(track.currentItem).toBe(0);
+
+  // @ts-ignore
+  const offset = track.itemWidths[track.currentItem] / 2;
+  expect(track.currentPosition).toBe(offset - track.width / 2);
+});
+
+test("snap", async () => {
+  const track = await trackWithChildren(10, { snap: true });
+
+  expect(track.snap).toBe(true);
+
+  // @ts-ignore
+  const widths = track.itemWidths;
+
+  track.setTarget([widths[0] + widths[1] + 10, 0]);
+  await sleep(track.transitionTime);
+  track.setTarget(undefined);
+  await sleep(track.transitionTime);
+
+  expect(Math.floor(track.currentPosition)).toBeGreaterThanOrEqual(widths[0] + widths[1]);
+
+  expect(track.currentIndex).toBeGreaterThanOrEqual(2);
+});
+
 // TODO: snap with inertia to the correct position
+// TODO: loop
 
 async function sleep(ms = 0) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -194,7 +227,7 @@ async function fixElementSizes(ele: Element, width: number, height: number) {
 
 async function trackWithChildren(
   itemCount = 10,
-  attributes: Record<string, string> = {},
+  attributes: Record<string, string | boolean | number> = {},
 ) {
   await import("@sv/elements/track");
 

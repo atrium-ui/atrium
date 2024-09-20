@@ -729,7 +729,8 @@ export class Track extends LitElement {
 
       if (this.align === "center") {
         // adds half of the current item to the position to center it
-        pos[this.currentAxis] += (rects[lastIndex + 1]?.[this.currentAxis] || 0) / 2;
+        pos[this.currentAxis] +=
+          (rects[Math.min(lastIndex + 1, currentIndex)]?.[this.currentAxis] || 0) / 2;
       }
     }
 
@@ -1019,7 +1020,7 @@ export class Track extends LitElement {
 
       if (this.align === "center") {
         // adds half of the current item to the position to center it
-        itemAngle += (angles[lastIndex + 1] || 0) / 2;
+        itemAngle += (angles[Math.min(lastIndex + 1, this.currentIndex)] || 0) / 2;
       }
 
       if (this.debug && ctx) {
