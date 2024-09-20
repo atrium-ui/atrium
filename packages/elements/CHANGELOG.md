@@ -1,5 +1,15 @@
 # @sv/elements
 
+## 1.15.0-dev.1 (2024-09-20)
+
+### Features
+
+- a-track: added centered attribute and handling
+
+### Fixes
+
+- a-track: uses wrong item to center itself
+
 ## 1.15.0-dev.0 (2024-09-19)
 
 ### Features
