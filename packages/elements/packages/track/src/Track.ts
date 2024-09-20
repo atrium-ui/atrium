@@ -18,7 +18,7 @@ import { Vec2 } from "./Vec.js";
  *     // satefies the "Trait" interface
  *     {
  *       id: "custom-trait",
- *       input(track: DrawerTrack, inputState: InputState) {
+ *       input(track: Track, inputState: InputState) {
  *         if (inputState.release.value) {
  *           // log track posiiton on pointer/touch release
  *           console.log(track.posiiton);
@@ -730,9 +730,7 @@ export class Track extends LitElement {
 
       if (this.align === "center") {
         // adds half of the current item to the position to center it
-        pos[this.currentAxis] +=
-          (rects[lastIndex === 0 ? lastIndex : lastIndex + 1]?.[this.currentAxis] || 0) /
-          2;
+        pos[this.currentAxis] += (rects[lastIndex + 1]?.[this.currentAxis] || 0) / 2;
       }
     }
 
@@ -1022,7 +1020,7 @@ export class Track extends LitElement {
 
       if (this.align === "center") {
         // adds half of the current item to the position to center it
-        itemAngle += (angles[lastIndex] || 0) / 2;
+        itemAngle += (angles[lastIndex + 1] || 0) / 2;
       }
 
       if (this.debug && ctx) {
