@@ -152,11 +152,21 @@ test("centered", async () => {
 
   expect(track.align).toBe("center");
 
-  track.moveBy(0);
-  await sleep(track.transitionTime);
+  track.moveBy(1);
+  await sleep(track.transitionTime + 20);
 
-  expect(track.currentItem).toBe(0);
-  expect(track.currentPosition > 0).toBeTrue();
+  expect(track.currentItem).toBe(1);
+  expect(track.currentPosition !== 0).toBeTrue();
+
+  let offset = 0;
+  for (let i = 0; i < track.currentItem; i++) {
+    // @ts-ignore
+    offset += track.itemWidths[i];
+  }
+  // @ts-ignore
+  offset += track.itemWidths[track.currentItem] / 2;
+
+  expect(track.currentPosition).toBe(offset - track.width / 2);
 });
 
 // TODO: test snap at specific position
@@ -177,9 +187,9 @@ async function fixElementSizes(ele: Element, width: number, height: number) {
   });
 
   // @ts-ignore
-  ele.offsetWidth = 800;
+  ele.offsetWidth = width;
   // @ts-ignore
-  ele.offsetHeight = 200;
+  ele.offsetHeight = height;
 }
 
 async function trackWithChildren(
@@ -188,14 +198,18 @@ async function trackWithChildren(
 ) {
   await import("@sv/elements/track");
 
+  const widths = new Array(itemCount)
+    .fill(0)
+    .map(() => Math.floor(Math.random() * 500 + 150));
+
+  console.info(widths);
+
   const div = document.createElement("div");
   const markup = `
     <a-track width="800" height="200" ${Object.entries(attributes)
       .map(([key, value]) => `${key}="${value}"`)
       .join(" ")}>
-      ${Array.from({ length: itemCount })
-        .map(() => `<canvas width="200" height="200"></canvas>`)
-        .join("")}
+      ${widths.map((w) => `<canvas width="${w}" height="300"></canvas>`).join("")}
     </a-track>
   `;
   div.innerHTML = markup;
@@ -203,12 +217,22 @@ async function trackWithChildren(
   const track = div.children[0] as TrackElement;
   fixElementSizes(track, 800, 200);
 
+  // increase animation speed for testing
+  track.transitionTime = 150;
+
   for (let i = 0; i < itemCount; i++) {
     const child = track.children[i] as HTMLCanvasElement;
-    fixElementSizes(child, child.width, child.height);
+    fixElementSizes(
+      child,
+      Number.parseInt(child.getAttribute("width") || "0"),
+      Number.parseInt(child.getAttribute("height") || "0"),
+    );
   }
 
   document.body.append(div);
+
+  // @ts-ignore
+  track.format();
 
   return track;
 }

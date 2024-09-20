@@ -221,8 +221,7 @@ export class SnapTrait implements Trait {
     if (track.grabbing || track.scrolling || track.target) return;
 
     // Only when decelerating
-    if (!track.vertical && track.deltaVelocity.x >= 0) return;
-    if (track.vertical && track.deltaVelocity.y >= 0) return;
+    if (track.deltaVelocity[track.currentAxis] > 0) return;
 
     switch (track.align) {
       case "center":
