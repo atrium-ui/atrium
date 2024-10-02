@@ -1,4 +1,4 @@
-<img width="100%" height="auto" src="docs/assets/header.png" alt="atrium header">
+<img width="100%" height="auto" src="docs/assets/atrium-dark.png" alt="atrium header">
 
 <p align="center" style="text-align:cetner;">
 	<h1 align="center" style="text-align:cetner;"><b>Atrium</b></h1>
