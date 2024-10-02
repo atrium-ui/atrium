@@ -1,9 +1,11 @@
-<img width="100%" height="auto" src="docs/assets/atrium-dark.png" alt="atrium header">
+<p align="center">
+  <img width="180px" height="auto" src="docs/assets/atrium-dark.png" alt="atrium header">
+</p>
 
 <p align="center" style="text-align:cetner;">
 	<h1 align="center" style="text-align:cetner;"><b>Atrium</b></h1>
 	<p align="center" style="text-align:cetner;">
-    A curated collection of libraries, Custom-elements and components for different frameworks for building Websites.
+    A curated collection of libraries, Custom-elements and components for different frameworks for building websites.
     <br />
     <br />
     <a href="https://svp.pages.s-v.de/atrium/">Docs</a> ·
@@ -12,6 +14,7 @@
     <br />
   </p>
 </p>
+
 <br />
 
 ## Use in other projects
