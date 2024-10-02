@@ -3,7 +3,7 @@
 <p align="center" style="text-align:cetner;">
 	<h1 align="center" style="text-align:cetner;"><b>Atrium</b></h1>
 	<p align="center" style="text-align:cetner;">
-    A collection of framework agnostic and functional web-components and templates for building Websites.
+    A curated collection of libraries, Custom-elements and components for different frameworks for building Websites.
     <br />
     <br />
     <a href="https://svp.pages.s-v.de/atrium/">Docs</a> ·
