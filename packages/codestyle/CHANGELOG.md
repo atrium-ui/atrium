@@ -1,4 +1,4 @@
-# @sv/codestyle
+# @atrium-ui/codestyle
 
 ## 1.2.0 (2024-07-18)
 

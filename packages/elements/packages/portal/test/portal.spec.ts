@@ -3,7 +3,7 @@ import { test, expect, describe } from "bun:test";
 const NODE_NAME = "a-portal";
 
 test("import a-portal element", async () => {
-  const { Portal } = await import("@sv/elements/portal");
+  const { Portal } = await import("@atrium-ui/elements/portal");
   expect(Portal).toBeDefined();
 
   // is defined in custom element registry
@@ -11,7 +11,7 @@ test("import a-portal element", async () => {
 });
 
 test("construct a-portal element", async () => {
-  const { Portal } = await import("@sv/elements/portal");
+  const { Portal } = await import("@atrium-ui/elements/portal");
 
   // is constructable
   expect(new Portal()).toBeInstanceOf(Portal);

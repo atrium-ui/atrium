@@ -1,4 +1,4 @@
-# @sv/html-to-custom-tag-replacement
+# @atrium-ui/html-to-custom-tag-replacement
 
 ## 0.1.1 (2024-04-13)
 

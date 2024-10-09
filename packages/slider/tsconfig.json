@@ -1,4 +1,4 @@
 {
-  "extends": "@sv/codestyle/tsconfig.json",
+  "extends": "@atrium-ui/codestyle/tsconfig.json",
   "exclude": ["."]
 }

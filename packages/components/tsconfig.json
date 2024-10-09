@@ -1,5 +1,5 @@
 {
-  "extends": "@sv/codestyle/tsconfig.json",
+  "extends": "@atrium-ui/codestyle/tsconfig.json",
   "compilerOptions": {
     "target": "ES2020",
     "useDefineForClassFields": false,
@@ -8,7 +8,7 @@
     "types": [
       "@types/bun",
       "vite/client",
-      "@sv/elements"
+      "@atrium-ui/elements"
     ]
   },
   "exclude": [

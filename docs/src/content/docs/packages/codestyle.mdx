@@ -1,5 +1,5 @@
 ---
-title: "@sv/codestyle"
+title: "@atrium-ui/codestyle"
 description: Codestyle and configuration for all projects.
 ---
 
@@ -14,9 +14,9 @@ This package includes confugration files for different tools used to enforce a c
 Make sure your project is set up with access to the registry as described in [Setup](/atrium/setup).
 
 <Command
-  pnpm="pnpm add @sv/codestyle --save-exact"
-  npm="npm i @sv/codestyle --save-exact"
-  bun="bun add @sv/codestyle --exact"
+  pnpm="pnpm add @atrium-ui/codestyle --save-exact"
+  npm="npm i @atrium-ui/codestyle --save-exact"
+  bun="bun add @atrium-ui/codestyle --exact"
 />
 
 ## Usage
@@ -39,7 +39,7 @@ For the biome configuration to work with your editior, the `biome.json` file nee
 // biome.json
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": ["@sv/codestyle/biome"]
+  "extends": ["@atrium-ui/codestyle/biome"]
 }
 ```
 
@@ -52,7 +52,7 @@ We should use Biome for js formatting but Prettier is still useful for many othe
 {
   "name": "your-package",
   ...
-  "prettier": "@sv/codestyle/.prettierrc.json"
+  "prettier": "@atrium-ui/codestyle/.prettierrc.json"
 }
 ```
 
@@ -64,7 +64,7 @@ Prettier [docs](https://prettier.io/docs/en/configuration.html).
 // tsconfig.json
 {
   "$schema": "http://json.schemastore.org/tsconfig",
-  "extends": ["@sv/codestyle/tsconfig.json"]
+  "extends": ["@atrium-ui/codestyle/tsconfig.json"]
 }
 ```
 
@@ -73,7 +73,7 @@ Prettier [docs](https://prettier.io/docs/en/configuration.html).
 ```javascript
 // commitlint.config.js
 module.exports = {
-  extends: ["@sv/codestyle/commitlint.cjs"],
+  extends: ["@atrium-ui/codestyle/commitlint.cjs"],
 };
 ```
 
@@ -88,7 +88,7 @@ Reccomended for a new setup is biome instead of eslint and stylelint.
 ```json
 // .eslintrc.json
 {
-  "extends": ["@sv/codestyle/.eslintrc.json"]
+  "extends": ["@atrium-ui/codestyle/.eslintrc.json"]
 }
 ```
 
@@ -97,7 +97,7 @@ Reccomended for a new setup is biome instead of eslint and stylelint.
 ```javascript
 // stylelint.config.cjs
 module.exports = {
-  extends: ["@sv/codestyle/stylelint.config.cjs"],
+  extends: ["@atrium-ui/codestyle/stylelint.config.cjs"],
 };
 ```
 

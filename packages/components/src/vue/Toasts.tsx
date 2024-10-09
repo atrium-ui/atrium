@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import { Toast, ToastFeed } from "@sv/elements/toast";
+import { Toast, ToastFeed } from "@atrium-ui/elements/toast";
 import { defineCustomElement } from "vue";
 import { Button } from "./Button";
 import { Icon, type IconName } from "./Icon";

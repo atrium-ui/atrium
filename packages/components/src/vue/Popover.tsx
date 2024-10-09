@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import "@sv/elements/popover";
+import "@atrium-ui/elements/popover";
 import { Button } from "./Button";
 
 export function Popover(props: { label?: string }, { slots }) {

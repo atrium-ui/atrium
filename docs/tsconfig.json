@@ -2,7 +2,7 @@
   "$schema": "http://json.schemastore.org/tsconfig",
   "extends": [
     "astro/tsconfigs/strict",
-    "@sv/codestyle/tsconfig.json"
+    "@atrium-ui/codestyle/tsconfig.json"
   ],
   "compilerOptions": {
     "paths": {

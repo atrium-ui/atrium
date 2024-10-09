@@ -1,8 +1,8 @@
 import { beforeAll, test, expect } from "bun:test";
-import type { AnimationElement } from "@sv/elements/animation";
+import type { AnimationElement } from "@atrium-ui/elements/animation";
 
 beforeAll(async () => {
-  const { AnimationElement } = await import("@sv/elements/animation");
+  const { AnimationElement } = await import("@atrium-ui/elements/animation");
   expect(AnimationElement).toBeDefined();
 
   const ele = new AnimationElement();

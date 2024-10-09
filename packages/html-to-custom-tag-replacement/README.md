@@ -5,5 +5,5 @@
 ### Install
 
 ```bash
-npm i @sv/html-to-custom-tag-replacement
+npm i @atrium-ui/html-to-custom-tag-replacement
 ```

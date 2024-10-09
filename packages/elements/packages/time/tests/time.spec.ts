@@ -4,7 +4,7 @@ const NODE_NAME = "a-time";
 
 describe(NODE_NAME, () => {
   it("import element", async () => {
-    const { Time } = await import("@sv/elements/time");
+    const { Time } = await import("@atrium-ui/elements/time");
     expect(Time).toBeDefined();
 
     // is defined in custom element registry

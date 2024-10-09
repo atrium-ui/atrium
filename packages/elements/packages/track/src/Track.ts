@@ -10,7 +10,7 @@ import { Vec2 } from "./Vec.js";
  * Or the Track class can be extended to override add new behaviours entirely.
  * @example
  * ```js
- * import { type InputState, PointerTrait, Track, type Trait } from "@sv/elements/track";
+ * import { type InputState, PointerTrait, Track, type Trait } from "@atrium-ui/elements/track";
  *
  * export class CustomTrack extends Track {
  *   public traits: Trait[] = [

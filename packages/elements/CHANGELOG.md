@@ -1,4 +1,4 @@
-# @sv/elements
+# @atrium-ui/elements
 
 ## 1.15.0 (2024-09-23)
 
@@ -139,9 +139,9 @@
 
 - a-popover: real popover with top-level positioning
 
-#### - Rewrote popover to propperly render on top of other content using floating-ui. 
+#### - Rewrote popover to propperly render on top of other content using floating-ui.
 
-- Add Event proxying to a-portal. 
+- Add Event proxying to a-portal.
 - Fixed a-blur not focusing the correct elements and listen for Esc keydown on window instead of the element directly.
 
 ## 1.7.2 (2024-07-09)

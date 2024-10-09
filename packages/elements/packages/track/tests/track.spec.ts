@@ -5,7 +5,7 @@ import type { Track as TrackElement } from "../src/Track";
 const NODE_NAME = "a-track";
 
 test("import track element", async () => {
-  const { Track } = await import("@sv/elements/track");
+  const { Track } = await import("@atrium-ui/elements/track");
   expect(Track).toBeDefined();
 
   // is defined in custom element registry
@@ -13,7 +13,7 @@ test("import track element", async () => {
 });
 
 test("construct track element", async () => {
-  const { Track } = await import("@sv/elements/track");
+  const { Track } = await import("@atrium-ui/elements/track");
 
   // is constructable
   expect(new Track()).toBeInstanceOf(Track);
@@ -229,7 +229,7 @@ async function trackWithChildren(
   itemCount = 10,
   attributes: Record<string, string | boolean | number> = {},
 ) {
-  await import("@sv/elements/track");
+  await import("@atrium-ui/elements/track");
 
   const widths = new Array(itemCount)
     .fill(0)

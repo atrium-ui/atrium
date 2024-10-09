@@ -7,5 +7,5 @@
 ### Install
 
 ```bash
-npm i @sv/slider
+npm i @atrium-ui/slider
 ```

@@ -1,4 +1,4 @@
-# @sv/slider
+# @atrium-ui/slider
 
 ## 1.1.2 (2024-07-09)
 
