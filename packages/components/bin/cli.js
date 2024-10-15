@@ -51,7 +51,7 @@ export async function peers(file) {
     filename: file,
     directory: componentRoot,
     filter(mod) {
-      return mod.match("components/src");
+      return !!mod.match("components/src");
     },
   });
   return list;
