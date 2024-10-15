@@ -92,15 +92,3 @@
 ### Minor Changes
 
 - ad5b85d: Framework specific components
-
-## 0.7.1
-
-### Patch Changes
-
-- 00fd8a1: Update scrollLock to apply passed options
-
-## 0.7.0
-
-### Minor Changes
-
-- 2a85ce6: Regular js cli
