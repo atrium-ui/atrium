@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 1.16.0 (2024-10-15)
+
+### Features
+
+- a-expandable: add css part to expandable container
+- add option to add arrow to popover
+
 ## 1.16.0-dev.0 (2024-09-24)
 
 ### Features

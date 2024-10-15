@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.7.2 (2024-10-15)
+
+### Fixes
+
+- search input slots not working
+
 ## 1.7.1 (2024-10-15)
 
 ### Fixes
