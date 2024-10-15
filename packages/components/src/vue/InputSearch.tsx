@@ -23,7 +23,7 @@ export const InputSearch = defineComponent(
         onInput={props.onInput}
         value={props.value}
       >
-        {context.slots}
+        {context.slots.default?.()}
       </Input>
     );
   },
