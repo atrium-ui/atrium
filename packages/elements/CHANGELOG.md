@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.16.0-dev.0 (2024-09-24)
+
+### Features
+
+- a-expandable: add css part to expandable container
+
 ## 1.15.0 (2024-09-23)
 
 ### Features

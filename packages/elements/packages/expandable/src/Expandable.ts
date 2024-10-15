@@ -155,7 +155,7 @@ export class Expandable extends LitElement {
   protected render(): HTMLTemplateResult {
     return html`
       ${this.direction === "down" ? this.renderToggle() : undefined}
-      <div class="container">
+      <div class="container" part="container">
         <slot @slotchange=${this.onSlotChange} class="content"></slot>
       </div>
       ${this.direction === "up" ? this.renderToggle() : undefined}
