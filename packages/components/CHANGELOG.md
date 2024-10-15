@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.7.1 (2024-10-15)
+
+### Fixes
+
+- peers are not copied
+
 ## 1.7.0 (2024-10-15)
 
 ### Features
