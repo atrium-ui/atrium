@@ -9,7 +9,13 @@ import {
 import { property, query } from "lit/decorators.js";
 import { Portal } from "@sv/elements/portal";
 import { Blur } from "@sv/elements/blur";
-import { computePosition, autoUpdate, autoPlacement, shift } from "@floating-ui/dom";
+import {
+  computePosition,
+  autoUpdate,
+  autoPlacement,
+  shift,
+  arrow,
+} from "@floating-ui/dom";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -107,6 +113,10 @@ export class Popover extends Portal {
     });
   }
 
+  get arrowElement() {
+    return this.children[0]?.querySelector<HTMLElement>("a-popover-arrow");
+  }
+
   /**
    * Show the popover.
    */
@@ -124,9 +134,23 @@ export class Popover extends Portal {
               allowedPlacements: ["bottom", "top"],
             }),
             shift(),
+            this.arrowElement && arrow({ element: this.arrowElement }),
           ],
-        }).then(({ x, y }) => {
+        }).then(({ x, y, middlewareData, placement }) => {
           if (content) content.style.transform = `translate(${x}px, ${y}px)`;
+
+          if (middlewareData.arrow) {
+            const { x, y } = middlewareData.arrow;
+
+            const arrow = this.arrowElement;
+            if (arrow) {
+              Object.assign(arrow.style, {
+                left: x != null ? `${x}px` : "",
+                top: placement === "top" ? (y != null ? `${y}px` : "") : "0",
+                bottom: placement === "top" ? "0" : "",
+              });
+            }
+          }
         });
     });
 
@@ -281,3 +305,18 @@ export class PopoverTrigger extends LitElement {
     }
   }
 }
+
+class PopoverArrow extends LitElement {
+  static styles = css`
+    :host {
+      position: absolute;
+      z-index: -1;
+    }
+  `;
+
+  render() {
+    return html`<slot></slot>`;
+  }
+}
+
+customElements.define("a-popover-arrow", PopoverArrow);

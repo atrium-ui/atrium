@@ -9,5 +9,15 @@
       "./packages/slider/src",
       "./packages/html-to-custom-tag-replacement/src"
     ]
+  },
+  "linter": {
+    "rules": {
+      "nursery": {
+        "useSortedClasses": {
+          "level": "warn",
+          "fix": "safe"
+        }
+      }
+    }
   }
 }

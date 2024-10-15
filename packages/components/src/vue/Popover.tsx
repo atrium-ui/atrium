@@ -17,12 +17,7 @@ export function Popover(props: { label?: string }, { slots }) {
       </div>
 
       <a-popover class="group">
-        <div
-          class={[
-            "w-[max-content] p-2",
-            "opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100",
-          ]}
-        >
+        <div class="w-[max-content] p-2 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100">
           <div
             class={[
               "min-w-[100px] rounded-md border border-zinc-700 bg-zinc-50 p-1 dark:bg-zinc-800",
