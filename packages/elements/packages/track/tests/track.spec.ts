@@ -1,6 +1,16 @@
 import { test, expect } from "bun:test";
 import type { MoveEvent } from "../src/Track";
 import type { Track as TrackElement } from "../src/Track";
+import Rand from "rand-seed";
+
+const seed = process.env.TEST_SEED || crypto.randomUUID();
+const rand = new Rand(seed);
+
+function random() {
+  return rand.next();
+}
+
+console.info("\nTest run seed:", seed, "\n");
 
 const NODE_NAME = "a-track";
 
@@ -231,9 +241,9 @@ async function trackWithChildren(
 ) {
   await import("@sv/elements/track");
 
-  const widths = new Array(itemCount)
+  const widths = new Array<number>(itemCount)
     .fill(0)
-    .map(() => Math.floor(Math.random() * 500 + 150));
+    .map(() => Math.floor(random() * 500 + 150));
 
   console.info(widths);
 
