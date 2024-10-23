@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 1.3.0 (2024-10-23)
+
+### Features
+
+- update commitlint config with sane defaults
+
 ## 1.2.0 (2024-07-18)
 
 ### Features
