@@ -21,6 +21,7 @@
     "@sv/elements": "workspace:",
     "air-datepicker": "^3.5.3",
     "astro": "^4.14.2",
+    "@sv/icons": "workspace:",
     "lit": "^3.1.4",
     "pinch-zoom-element": "^1.1.1",
     "react": "^18.3.1",

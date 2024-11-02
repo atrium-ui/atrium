@@ -1,0 +1,14 @@
+{
+  "extends": "@sv/codestyle/tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "@types/bun",
+      "@types/node",
+      "vite/client"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "**/dist"
+  ]
+}

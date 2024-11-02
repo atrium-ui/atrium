@@ -1,0 +1,21 @@
+{
+  "name": "@sv/icons",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "vite build"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/icons.js",
+      "require": "./dist/icons.cjs",
+      "types": "./index.ts"
+    }
+  },
+  "dependencies": {
+    "svg-sprites": "^0.3.0"
+  },
+  "files": ["dist", "index.ts", "assets"]
+}
