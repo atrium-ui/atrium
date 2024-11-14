@@ -1,4 +1,4 @@
-import * as Rive from "@rive-app/canvas-advanced";
+import * as Rive from "@rive-app/canvas-advanced-lite";
 import {
   LitElement,
   css,
@@ -6,6 +6,9 @@ import {
   type HTMLTemplateResult,
   type PropertyValueMap,
 } from "lit";
+import pkg from "../../../package.json";
+
+const RIVE_VERSION = pkg.peerDependencies["@rive-app/canvas-advanced-lite"];
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -164,7 +167,25 @@ export class AnimationElement extends LitElement {
    */
   public trigger(name: string) {
     const input = this.input(name);
-    if (input) input.fire();
+    if (input) input.asTrigger().fire();
+  }
+
+  /**
+   * Get or set the text of a rive textrun by name
+   */
+  public text(name: string, text?: string) {
+    const textRun: Rive.TextValueRun | undefined = this.artboardInstance?.textRun(name);
+
+    if (!textRun) {
+      throw new Error(`No text run with name found ${name}`);
+    }
+
+    if (text) {
+      textRun.text = text;
+      return;
+    }
+
+    return textRun ? textRun.text : undefined;
   }
 
   /**
@@ -184,7 +205,8 @@ export class AnimationElement extends LitElement {
   }
 
   static instanceCache = new Set<AnimationElement>();
-  static riveWasm = "https://unpkg.com/@rive-app/canvas-advanced@2.7.8/rive.wasm";
+  static riveWasm =
+    `https://unpkg.com/@rive-app/canvas-advanced-lite@${RIVE_VERSION}/rive.wasm`;
   static wasm?: Promise<Blob>;
 
   //
