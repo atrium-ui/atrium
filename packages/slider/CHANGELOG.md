@@ -1,5 +1,11 @@
 # @sv/slider
 
+## 1.1.3 (2024-11-14)
+
+### Fixes
+
+- Make accordion content inert if closed
+
 ## 1.1.2 (2024-07-09)
 
 ### Fixes

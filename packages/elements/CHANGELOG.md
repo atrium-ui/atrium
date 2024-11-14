@@ -1,5 +1,15 @@
 # @sv/elements
 
+## 1.17.0 (2024-11-14)
+
+### Features
+
+- Update rive for text and layout support (svp/atrium!21)
+
+### Fixes
+
+- Make accordion content inert if closed
+
 ## 1.16.0 (2024-10-15)
 
 ### Features

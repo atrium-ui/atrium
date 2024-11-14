@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.7.3 (2024-11-14)
+
+### Fixes
+
+- Make accordion content inert if closed
+
 ## 1.7.2 (2024-10-15)
 
 ### Fixes

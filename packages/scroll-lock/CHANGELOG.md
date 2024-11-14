@@ -1,5 +1,11 @@
 # @sv/scroll-lock
 
+## 1.0.2 (2024-11-14)
+
+### Fixes
+
+- Make accordion content inert if closed
+
 ## 1.0.1 (2024-06-28)
 
 ### Fixes

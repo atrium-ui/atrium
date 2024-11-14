@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 1.3.1 (2024-11-14)
+
+### Fixes
+
+- Make accordion content inert if closed
+
 ## 1.3.0 (2024-10-23)
 
 ### Features
