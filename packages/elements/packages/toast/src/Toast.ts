@@ -181,7 +181,7 @@ export class Toast extends LitElement {
     super();
 
     this.message = options?.message;
-    this.time = options?.time ?? 4000;
+    this.time = options?.time;
 
     this.addEventListener("click", (e) => {
       options.onClick?.(e);
