@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.18.0 (2024-12-03)
+
+### Features
+
+- Remove arbitrary default time for toast
+
 ## 1.17.0 (2024-11-14)
 
 ### Features
