@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 1.18.1 (2024-12-04)
+
+### Fixes
+
+- Do not move the focus automatically on invalid fields, just scroll to it
+
 ## 1.18.0 (2024-12-03)
 
 ### Features
