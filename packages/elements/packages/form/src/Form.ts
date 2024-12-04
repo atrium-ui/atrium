@@ -54,12 +54,14 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
 
   invalid = (e: Event) => {
     e.preventDefault();
-    (e?.target as HTMLInputElement)?.focus();
-
     this.valid = false;
 
     this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
-    this.scrollIntoView({ block: "center" });
+
+    // dont steal the focus of the user
+    // const target = e?.target as HTMLInputElement;
+    // target?.focus();
+    this.scrollIntoView({ block: "nearest" });
   };
 
   change = (e: Event) => {
@@ -81,8 +83,9 @@ export class FormFieldElement extends (globalThis.HTMLElement || class {}) {
 
     if (input && e.detail.name === input.name) {
       input.setCustomValidity(e.detail.message[0]);
+
       input.focus();
-      this.scrollIntoView({ block: "center" });
+      this.scrollIntoView({ block: "nearest" });
     }
 
     this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
