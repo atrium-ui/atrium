@@ -20,5 +20,12 @@
         dolores atque illum sit quam dicta.
       </div>
     </a-box>
+
+    <script>
+      const box = document.querySelector("a-box");
+      box.addEventListener("resize", ev => {
+        console.log("box resize", ev);
+      });
+    </script>
   </body>
 </html>

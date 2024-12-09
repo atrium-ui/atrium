@@ -5,16 +5,14 @@ const boxes = new Set<BoxElement>();
 let eventCount = 0;
 let eventCountResolved = 0;
 
-window.addEventListener("resize", (ev) => {
+const resizeObserver = new ResizeObserver((entries) => {
   eventCount++;
   console.debug("resize");
 
-  if (ev instanceof CustomEvent) {
-    return;
-  }
-
-  for (const box of boxes) {
-    box.resize();
+  for (const entry of entries) {
+    if (entry.target instanceof BoxElement) {
+      entry.target.resize();
+    }
   }
 });
 
@@ -34,14 +32,14 @@ class BoxElement extends LitElement {
 
     this.ele.style.width = `${this.offsetWidth}px`;
     this.ele.style.height = `${this.offsetHeight}px`;
-    this.ele.style.overflow = "hidden";
     this.ele.style.backgroundColor = "red";
+    this.style.overflow = "hidden";
   }
 
   private unlock() {
     this.ele.style.width = "";
     this.ele.style.height = "";
-    this.ele.style.overflow = "";
+    this.style.overflow = "";
     this.ele.style.backgroundColor = "";
     this.debounceTime = this.baseDebounceTime;
   }
@@ -88,11 +86,13 @@ class BoxElement extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     boxes.add(this);
+    resizeObserver.observe(this);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     boxes.delete(this);
+    resizeObserver.unobserve(this);
   }
 
   static styles = css`
