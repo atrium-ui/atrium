@@ -18,7 +18,7 @@ const resizeObserver = new ResizeObserver((entries) => {
 
 class BoxElement extends LitElement {
   private baseDebounceTime = 25;
-  private maxDebounceTime = 250;
+  private maxDebounceTime = 150;
   private debounceTime = this.baseDebounceTime;
   private timer: Timer | undefined;
   private timerResolved = false;
@@ -45,7 +45,6 @@ class BoxElement extends LitElement {
   }
 
   public resize() {
-    // TODO: lock dimensions
     this.lock();
 
     if (this.timer) {
@@ -73,7 +72,6 @@ class BoxElement extends LitElement {
 
     eventCountResolved++;
 
-    // TODO: free dimensions
     const ev = new CustomEvent("resize", { cancelable: true });
     this.dispatchEvent(ev);
 
