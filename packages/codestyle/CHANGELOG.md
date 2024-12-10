@@ -1,5 +1,20 @@
 # @sv/codestyle
 
+## 1.4.0-dev.7 (2024-12-10)
+
+### Features
+
+- Add tabs element
+- create a-box
+
+### Fixes
+
+- Tabs type check
+- Blur test adhere to new defaults
+- use resize observer for box
+- export box package in elements
+- Remove a-box background
+
 ## 1.4.0-dev.6 (2024-12-10)
 
 ### Features
