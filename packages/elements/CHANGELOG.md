@@ -1,5 +1,25 @@
 # @sv/elements
 
+## 2.0.0-dev.2 (2024-12-10)
+
+### Breaking Changes
+
+- Change the blur to *not* scrollock by default
+
+### Features
+
+- create a-box
+- Expandable open on anchor link
+- Add tabs element
+
+### Fixes
+
+- Delete dropdown and pager components
+- use resize observer for box
+- Give a-select dropdown full height
+- Tabs type check
+- Blur test adhere to new defaults
+
 ## 2.0.0-dev.1 (2024-12-10)
 
 ### Breaking Changes
