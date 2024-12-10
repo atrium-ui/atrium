@@ -24,7 +24,6 @@ export class BoxElement extends LitElement {
 
     this.ele.style.width = `${this.offsetWidth}px`;
     this.ele.style.height = `${this.offsetHeight}px`;
-    this.ele.style.backgroundColor = "red";
     this.style.overflow = "hidden";
   }
 
@@ -32,7 +31,6 @@ export class BoxElement extends LitElement {
     this.ele.style.width = "";
     this.ele.style.height = "";
     this.style.overflow = "";
-    this.ele.style.backgroundColor = "";
     this.debounceTime = this.baseDebounceTime;
   }
 
@@ -79,6 +77,9 @@ export class BoxElement extends LitElement {
   static styles = css`
     :host {
       display: block;
+    }
+    div {
+      display: inehrit;
     }
   `;
 
