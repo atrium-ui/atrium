@@ -79,7 +79,7 @@ export class BoxElement extends LitElement {
       display: block;
     }
     div {
-      display: inherit;
+      all: inherit;
       width: 100%;
       height: 100%;
     }
