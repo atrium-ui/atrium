@@ -1,3 +1,17 @@
+## 1.2.0-dev.5 (2024-12-10)
+
+### Features
+
+- create a-box
+- Add tabs element
+
+### Fixes
+
+- Delete dropdown and pager components
+- use resize observer for box
+- Tabs type check
+- Blur test adhere to new defaults
+
 ## 1.2.0-dev.4 (2024-12-10)
 
 ### Features
