@@ -1,5 +1,19 @@
 # @sv/codestyle
 
+## 1.4.0-dev.6 (2024-12-10)
+
+### Features
+
+- Add tabs element
+
+### Fixes
+
+- Delete dropdown and pager components
+- use resize observer for box
+- Tabs type check
+- Blur test adhere to new defaults
+- export box package in elements
+
 ## 1.4.0-dev.5 (2024-12-10)
 
 ### Features
