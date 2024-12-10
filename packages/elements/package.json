@@ -120,6 +120,11 @@
       "import": "./packages/tabs/dist/index.js",
       "require": "./packages/tabs/dist/index.cjs",
       "types": "./packages/tabs/src/index.ts"
+    },
+    "./box": {
+      "import": "./packages/box/dist/index.js",
+      "require": "./packages/box/dist/index.cjs",
+      "types": "./packages/box/src/index.ts"
     }
   }
 }
