@@ -1,5 +1,21 @@
 # @sv/slider
 
+## 1.2.0-dev.9 (2024-12-10)
+
+### Features
+
+- create a-box
+
+### Fixes
+
+- Blur test adhere to new defaults
+- export box package in elements
+- use resize observer for box
+- Typo
+- Remove a-box background
+- Inharit all properties in box container
+- Inharit all properties in box container
+
 ## 1.2.0-dev.8 (2024-12-10)
 
 ### Features
