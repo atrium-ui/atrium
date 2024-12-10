@@ -2,6 +2,18 @@
 
 version: "3"
 
+vars:
+  PACKAGES:
+    [
+      "packages/a11y",
+      "packages/codestyle",
+      "packages/components",
+      "packages/elements",
+      "packages/html-to-custom-tag-replacement",
+      "packages/scroll-lock",
+      "packages/slider",
+    ]
+
 includes:
   docs:
     taskfile: docs/Taskfile.yml
@@ -124,7 +136,8 @@ tasks:
   publish-packages:
     cmds:
       - "echo Packages release tag: $RELEASE_LABEL"
-      - bun x turbo run publish-package
+      - for: { var: PACKAGES }
+        cmd: cd {{.ITEM}} && task publish
 
   publish:
     dir: "{{.USER_WORKING_DIR}}"
