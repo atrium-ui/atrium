@@ -14,7 +14,7 @@ import { LitElement, type TemplateResult, css, html, unsafeCSS } from "lit";
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-tabs/
  */
-export class TabsElements extends LitElement {
+export class TabsElement extends LitElement {
   static styles = css`
     :host {
       display: block;
@@ -90,7 +90,7 @@ export class TabsContentElement extends LitElement {
 }
 
 if (!customElements.get("a-tabs")) {
-  customElements.define("a-tabs", TabsElements);
+  customElements.define("a-tabs", TabsElement);
 }
 if (!customElements.get("a-tabs-item")) {
   customElements.define("a-tabs-item", TabsItemElement);
@@ -103,7 +103,7 @@ if (!customElements.get("a-tabs-content")) {
 // define global interface for typescript check
 declare global {
   interface HTMLElementTagNameMap {
-    "a-tabs": TabsElements;
+    "a-tabs": TabsElement;
     "a-tabs-item": TabsItemElement;
     "a-tabs-content": TabsContentElement;
   }
