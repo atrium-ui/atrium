@@ -130,6 +130,7 @@ tasks:
       VERSION:
         sh: bun x npm version --json | jq ".[keys[0]]"
     cmds:
+      - "echo Release tag: $RELEASE_LABEL"
       - bun x npm publish --tag $RELEASE_LABEL && echo info Publishing \"{{.NAME}}\" at \"{{.VERSION}}\" || true
 
   notify:
