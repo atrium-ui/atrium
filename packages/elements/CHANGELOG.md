@@ -1,5 +1,25 @@
 # @sv/elements
 
+## 2.0.0-dev.8 (2024-12-10)
+
+### Breaking Changes
+
+- Change the blur to *not* scrollock by default
+
+### Features
+
+- Add tabs element
+- create a-box
+
+### Fixes
+
+- Tabs type check
+- Blur test adhere to new defaults
+- use resize observer for box
+- export box package in elements
+- Remove a-box background
+- Typo
+
 ## 2.0.0-dev.7 (2024-12-10)
 
 ### Breaking Changes

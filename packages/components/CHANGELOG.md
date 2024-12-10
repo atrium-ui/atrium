@@ -1,5 +1,21 @@
 # @sv/components
 
+## 1.8.0-dev.8 (2024-12-10)
+
+### Features
+
+- Add tabs element
+- create a-box
+
+### Fixes
+
+- Tabs type check
+- Blur test adhere to new defaults
+- use resize observer for box
+- export box package in elements
+- Remove a-box background
+- Typo
+
 ## 1.8.0-dev.7 (2024-12-10)
 
 ### Features
