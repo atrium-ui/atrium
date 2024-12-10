@@ -55,7 +55,7 @@ type = "Release"
 
 [[workflows.steps]]
 type = "Command"
-command = "bun x turbo run publish-package"
+command = "task publish-packages"
 shell = true
 
 [[workflows.steps]]

@@ -109,28 +109,32 @@ tasks:
       - knope -v release | tee .task/publish.txt
       - task notify || true
 
-  prerelease:
-    deps: [build]
-    vars:
-      PRERELEASE_LABEL: "dev"
-    cmds:
-      - export RELEASE_LABEL={{.PRERELEASE_LABEL}}
-      - knope -v release --prerelease-label={{.PRERELEASE_LABEL}}
-
   release:preview:
     cmds:
       - knope release --dry-run
 
+  prerelease:
+    deps: [build]
+    env:
+      RELEASE_LABEL: "dev"
+    cmds:
+      - "echo Prerelease tag: $RELEASE_LABEL"
+      - knope -v release --prerelease-label=$RELEASE_LABEL
+
+  publish-packages:
+    cmds:
+      - "echo Packages release tag: $RELEASE_LABEL"
+      - bun x turbo run publish-package
+
   publish:
     dir: "{{.USER_WORKING_DIR}}"
     vars:
-      RELEASE_LABEL: "latest"
       NAME:
         sh: bun x npm version --json | jq "keys[0]"
       VERSION:
         sh: bun x npm version --json | jq ".[keys[0]]"
     cmds:
-      - "echo Release tag: $RELEASE_LABEL"
+      - "echo Publish tag: $RELEASE_LABEL"
       - bun x npm publish --tag $RELEASE_LABEL && echo info Publishing \"{{.NAME}}\" at \"{{.VERSION}}\" || true
 
   notify:
