@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { Tabs } from "./Tabs.js";
+import { TabsElement } from "./Tabs.js";
 
 try {
-  customElements.define("a-tabs", Tabs);
+  customElements.define("a-tabs", TabsElement);
 } catch (err) {
   console.warn("a-tabs already defined");
 }
 
-export { Tabs };
+export { TabsElement as Tabs };
