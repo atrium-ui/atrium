@@ -48,6 +48,28 @@ Different example confugrations of expandables.
   </a-expandable>
 </div>
 
+### An anchor link into a expandable, opens it
+
+<div class="not-content box">
+  <a href="#exampleanchor">To expandable</a>
+  <br/>
+
+  <a-expandable class="accordion" data-id="three">
+    <div slot="toggle">
+      <button class="w-full text-left rounded-md my-1">
+        <div class="headline">Expand</div>
+      </button>
+    </div>
+
+    <div>
+      <p>{paragraph(4)}</p>
+      <p>{paragraph(4)}</p>
+      <a id="exampleanchor" href="/">Home</a>
+      <p>{paragraph(4)}</p>
+    </div>
+  </a-expandable>
+</div>
+
 ### Expand a Paragraph
 
 <div class="not-content box">
