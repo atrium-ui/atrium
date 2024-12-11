@@ -71,21 +71,21 @@ export class Blur extends LitElement {
   /**
    * Whether the blur should lock scrolling when shown.
    */
-  @property({ type: Boolean, reflect: true, attribute: "scroll-lock" })
-  public scrollLock = true;
+  @property({ type: Boolean, reflect: true })
+  public scrolllock = false;
 
   public lock = new ScrollLock({
     allowElements: ["a-blur *"],
   });
 
   private tryLock() {
-    if (this.scrollLock) {
+    if (this.scrolllock) {
       this.lock.enable();
     }
   }
 
   private tryUnlock() {
-    if (this.scrollLock) {
+    if (this.scrolllock) {
       this.lock.disable();
     }
   }

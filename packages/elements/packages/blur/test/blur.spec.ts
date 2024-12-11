@@ -76,6 +76,7 @@ test("focus first focusable element", async () => {
 test("scroll lock", async () => {
   const root = await createBlur();
   const blur = root.querySelector("a-blur");
+  blur.setAttribute("scrolllock", "");
   blur.enable();
 
   // blur is scroll locked
@@ -85,7 +86,7 @@ test("scroll lock", async () => {
   expect(blur.lock.enabled).toBe(false);
 
   // disable scroll lock
-  blur.removeAttribute("scroll-lock");
+  blur.removeAttribute("scrolllock");
 
   blur.enable();
   expect(blur.lock.enabled).toBe(false);
