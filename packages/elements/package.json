@@ -125,6 +125,11 @@
       "import": "./packages/chart/dist/index.js",
       "require": "./packages/chart/dist/index.cjs",
       "types": "./packages/chart/src/index.ts"
+    },
+    "./box": {
+      "import": "./packages/box/dist/index.js",
+      "require": "./packages/box/dist/index.cjs",
+      "types": "./packages/box/src/index.ts"
     }
   }
 }
