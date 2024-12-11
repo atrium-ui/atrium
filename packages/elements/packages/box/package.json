@@ -1,0 +1,25 @@
+{
+  "name": "@atrium-ui/box",
+  "author": "atrium",
+  "contributors": [],
+  "private": true,
+  "description": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "tsup": {
+    "entry": ["src/index.ts"],
+    "format": ["esm", "cjs"],
+    "external": [
+      "lit",
+      "@sv/elements",
+      "@sv/scroll-lock"
+    ],
+    "sourcemap": true,
+    "clean": true
+  }
+}
