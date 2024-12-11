@@ -1,5 +1,16 @@
 # @sv/elements
 
+## 2.0.0-dev.0 (2024-12-11)
+
+### Breaking Changes
+
+- Change the blur to *not* scrollock by default (svp/atrium!22)
+
+### Features
+
+- Expandable open on anchor link (svp/atrium!23)
+- Add a-box component (svp/atrium!26)
+
 ## 1.18.1 (2024-12-04)
 
 ### Fixes
