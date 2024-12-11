@@ -2,6 +2,18 @@
 
 version: "3"
 
+vars:
+  PACKAGES:
+    [
+      "packages/a11y",
+      "packages/codestyle",
+      "packages/components",
+      "packages/elements",
+      "packages/html-to-custom-tag-replacement",
+      "packages/scroll-lock",
+      "packages/slider",
+    ]
+
 includes:
   docs:
     taskfile: docs/Taskfile.yml
@@ -109,27 +121,34 @@ tasks:
       - knope -v release | tee .task/publish.txt
       - task notify || true
 
-  prerelease:
-    deps: [build]
-    env:
-      PRERELEASE_LABEL: "dev"
-    cmds:
-      - PRERELEASE_LABEL=$PRERELEASE_LABEL knope -v release --prerelease-label=$PRERELEASE_LABEL
-
   release:preview:
     cmds:
       - knope release --dry-run
 
+  prerelease:
+    deps: [build]
+    env:
+      RELEASE_LABEL: "dev"
+    cmds:
+      - "echo Prerelease tag: $RELEASE_LABEL"
+      - knope -v release --prerelease-label=$RELEASE_LABEL
+
+  publish-packages:
+    cmds:
+      - "echo Packages release tag: $RELEASE_LABEL"
+      - for: { var: PACKAGES }
+        cmd: cd {{.ITEM}} && task publish
+
   publish:
     dir: "{{.USER_WORKING_DIR}}"
     vars:
-      PRERELEASE_LABEL:
       NAME:
         sh: bun x npm version --json | jq "keys[0]"
       VERSION:
         sh: bun x npm version --json | jq ".[keys[0]]"
     cmds:
-      - bun x npm publish --tag {{.PRERELEASE_LABEL | default "latest"}} && echo info Publishing \"{{.NAME}}\" at \"{{.VERSION}}\" || true
+      - "echo Publish tag: $RELEASE_LABEL"
+      - bun x npm publish --tag $RELEASE_LABEL && echo info Publishing \"{{.NAME}}\" at \"{{.VERSION}}\" || true
 
   notify:
     silent: true
