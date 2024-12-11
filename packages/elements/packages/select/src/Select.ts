@@ -85,6 +85,7 @@ export class Select extends LitElement {
       .dropdown {
         max-height: var(--dropdown-max-height);
         overflow: auto;
+        height: 100%;
         width: 100%;
       }
     `;
