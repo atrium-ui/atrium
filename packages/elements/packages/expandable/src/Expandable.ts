@@ -157,12 +157,36 @@ export class Expandable extends LitElement {
     if (this.trigger?.contains(e.target as HTMLElement)) this.toggle();
   }
 
-  private onDeeplink = () => {
-    if (!this.opened && location.hash) {
-      const deeplink = this.querySelector(location.hash) as HTMLElement;
-      if (deeplink) {
-        this.open();
+  private findDeeplink() {
+    if (!location.hash) {
+      return undefined;
+    }
+
+    const ele = this.querySelector<HTMLElement>(location.hash);
+    if (ele) {
+      return ele;
+    }
+
+    const slots = this.querySelectorAll("slot");
+    if (!slots) {
+      return undefined;
+    }
+
+    for (const slot of slots) {
+      for (const ele of slot.assignedElements()) {
+        const link = ele?.querySelector<HTMLElement>(location.hash);
+        if (link) {
+          return link;
+        }
       }
+    }
+
+    return undefined;
+  }
+
+  private onDeeplink = () => {
+    if (!this.opened && this.findDeeplink()) {
+      this.open();
     }
   };
 
