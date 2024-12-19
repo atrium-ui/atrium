@@ -172,9 +172,15 @@ export class Expandable extends LitElement {
       return undefined;
     }
 
+    const hash = location.hash.substring(1);
+
     for (const slot of slots) {
       for (const ele of slot.assignedElements()) {
-        const link = ele?.querySelector<HTMLElement>(location.hash);
+        if (ele.id === hash) {
+          return ele;
+        }
+
+        const link = ele?.querySelector<HTMLElement>(`#${hash}`);
         if (link) {
           return link;
         }
