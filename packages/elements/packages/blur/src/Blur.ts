@@ -28,6 +28,13 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
   );
 }
 
+function findActiveElement(element: HTMLElement) {
+  if (element.shadowRoot) {
+    return findActiveElement(element.shadowRoot.activeElement as HTMLElement);
+  }
+  return element;
+}
+
 /**
  * An a-blur functions like a low-level dialog, it manages the focus and scrolling,
  * and provides events for when clicked outside of its children.
@@ -90,7 +97,7 @@ export class Blur extends LitElement {
     }
   }
 
-  private lastActiveElement: HTMLElement | null = null;
+  private lastActiveElement: HTMLElement | null | undefined = null;
 
   /** Disable the blur element */
   public disable() {
@@ -110,8 +117,9 @@ export class Blur extends LitElement {
     this.enabled = true;
 
     // in the case enable is called after the element is already enabled, dont set the last active element
-    if (!this.contains(document.activeElement)) {
-      this.lastActiveElement = document.activeElement as HTMLElement;
+    const activeElement = document.activeElement as HTMLElement;
+    if (!this.contains(activeElement)) {
+      this.lastActiveElement = findActiveElement(activeElement);
     }
 
     // Do not focus elements, when using a mouse,
