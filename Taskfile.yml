@@ -117,6 +117,8 @@ tasks:
 
   release:
     deps: [build]
+    env:
+      RELEASE_LABEL: "latest"
     cmds:
       - knope -v release | tee .task/publish.txt
       - task notify || true
