@@ -1,5 +1,22 @@
 # @sv/elements
 
+## 2.0.0 (2024-12-23)
+
+### Breaking Changes
+
+- Change the blur to *not* scrollock by default (svp/atrium!22)
+
+### Features
+
+- Expandable open on anchor link (svp/atrium!23)
+- Add a-box component (svp/atrium!26)
+
+### Fixes
+
+- Fix expandable deeplink not working, if link is inside a slot
+- Expandable find deeplinks of direct children of slots
+- Find active element of trigger button, within a shadowDOM
+
 ## 2.0.0-dev.1 (2024-12-11)
 
 ### Breaking Changes
