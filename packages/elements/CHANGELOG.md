@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 2.0.1 (2024-12-26)
+
+### Fixes
+
+- a-blur: Find focusable elements within shadowRoots
+- a-transition: Animate size to 0
+
 ## 2.0.0 (2024-12-23)
 
 ### Breaking Changes
