@@ -44,13 +44,38 @@
         transform: translateX(-100%);
       }
     </style>
+
+    <script>
+      customElements.define(
+        "a-blur-trigger",
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: "open" });
+            this.shadowRoot.innerHTML = `
+              <button>
+                <slot></slot>
+              </button>
+            `;
+          }
+
+          connectedCallback() {
+            this.addEventListener("click", () => {
+              const blur = document.getElementById(this.getAttribute("data-id"));
+              blur.enabled = !blur.enabled;
+            });
+          }
+        },
+      );
+    </script>
   </head>
   <body>
-    <a-blur-trigger></a-blur-trigger>
+    <a-blur-trigger data-id="blura">Open</a-blur-trigger>
 
-    <a-blur scrolllock>
+    <a-blur id="blura" scrolllock>
       <div class="menu">
-        <button onclick="document.querySelector('a-blur').enabled = false">Close</button>
+        <a-blur-trigger data-id="blura">Close</a-blur-trigger>
+        <!-- <button>Fake</button> -->
 
         <div>
           <p>

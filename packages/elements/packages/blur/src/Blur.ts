@@ -2,6 +2,12 @@ import { LitElement, type PropertyValueMap, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
 import { ScrollLock } from "@sv/scroll-lock";
 
+const SELECTOR_CUSTOM_ELEMENT =
+  "*:not(br,span,script,p,style,div,slot,pre,h1,h2,h3,h4,h5,img,svg)";
+
+const SELECTOR_FOCUSABLE =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 declare global {
   interface HTMLElementTagNameMap {
     "a-blur": Blur;
@@ -34,6 +40,38 @@ function findActiveElement(element: HTMLElement) {
   }
   return element;
 }
+
+/**
+ * Traverse DOM tree including shadowRoots.
+ */
+function traverseShadowRealm(
+  rootNode: HTMLElement | ShadowRoot,
+  filter: (el: HTMLElement | ShadowRoot) => HTMLElement[],
+) {
+  const elements: HTMLElement[] = [];
+
+  elements.push(...filter(rootNode));
+
+  for (const el of rootNode.querySelectorAll<HTMLElement>(SELECTOR_CUSTOM_ELEMENT)) {
+    if (el.shadowRoot) {
+      elements.push(...traverseShadowRealm(el.shadowRoot, filter));
+    }
+  }
+
+  return elements;
+}
+
+const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
+  const children: HTMLElement[] = [];
+
+  if (!(el instanceof ShadowRoot) && el.matches?.(SELECTOR_FOCUSABLE)) {
+    children.push(el);
+  } else {
+    children.push(...el.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE));
+  }
+
+  return children;
+};
 
 /**
  * An a-blur functions like a low-level dialog, it manages the focus and scrolling,
@@ -140,11 +178,9 @@ export class Blur extends LitElement {
   }
 
   private focusableElements() {
-    return [
-      ...this.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      ),
-    ].filter((element) => element.offsetWidth > 0);
+    return traverseShadowRealm(this, findFocusableElements).filter(
+      (element) => element.offsetWidth > 0,
+    );
   }
 
   protected updated(changed: PropertyValueMap<any>): void {
@@ -165,6 +201,10 @@ export class Blur extends LitElement {
     this.role = "dialog";
 
     this.listener(window, "keydown", (e: KeyboardEvent) => {
+      if (!this.enabled) {
+        return;
+      }
+
       if (e.key === "Escape") {
         this.tryBlur();
       }
