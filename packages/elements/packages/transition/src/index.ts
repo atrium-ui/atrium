@@ -171,24 +171,22 @@ class Transition extends LitElement {
     const height = this.offsetHeight;
     const width = this.offsetWidth;
 
-    if (height && width) {
-      await this.animate(
-        [
-          {
-            height: `${this.lastHeight}px`,
-            width: `${this.lastWidth}px`,
-          },
-          {
-            height: `${height}px`,
-            width: `${width}px`,
-          },
-        ],
+    await this.animate(
+      [
         {
-          duration: 200,
-          easing: "ease-out",
+          height: `${this.lastHeight}px`,
+          width: `${this.lastWidth}px`,
         },
-      ).finished;
-    }
+        {
+          height: `${height}px`,
+          width: `${width}px`,
+        },
+      ],
+      {
+        duration: 200,
+        easing: "ease-out",
+      },
+    ).finished;
 
     this.lastHeight = height;
     this.lastWidth = width;
