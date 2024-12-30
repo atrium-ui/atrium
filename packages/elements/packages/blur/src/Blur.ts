@@ -35,7 +35,7 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
 }
 
 function findActiveElement(element: HTMLElement) {
-  if (element.shadowRoot) {
+  if (element?.shadowRoot) {
     return findActiveElement(element.shadowRoot.activeElement as HTMLElement);
   }
   return element;
