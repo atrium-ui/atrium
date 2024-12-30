@@ -14,8 +14,8 @@ export const DrawerDemo = defineComponent(() => {
   next();
 
   return () => (
-    <Drawer>
-      <div class="px-6 pt-4">
+    <Drawer dynamicHeight>
+      <div class="px-6 pt-4 pb-12">
         <p>{text.value}</p>
       </div>
     </Drawer>

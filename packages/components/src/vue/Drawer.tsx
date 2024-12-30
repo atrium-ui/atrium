@@ -163,7 +163,7 @@ export class DrawerTrack extends Track {
   drag = 0.98;
   isOpen = false;
 
-  declare contentheight?: number;
+  contentheight?: number;
 
   get isStatic() {
     return !!this.contentheight;
