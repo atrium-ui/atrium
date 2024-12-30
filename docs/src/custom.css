@@ -11,15 +11,13 @@
 
 @font-face {
   font-family: "NotoSans";
-  src: url("/atrium/fonts/NotoSans-VariableFont_wdth,wght.woff2")
-    format("woff2");
+  src: url("/atrium/fonts/NotoSans-VariableFont_wdth,wght.woff2") format("woff2");
   font-style: normal;
 }
 
 @font-face {
   font-family: "NotoSans";
-  src: url("/atrium/fonts/NotoSans-Italic-VariableFont_wdth,wght.woff2")
-    format("woff2");
+  src: url("/atrium/fonts/NotoSans-Italic-VariableFont_wdth,wght.woff2") format("woff2");
   font-style: italic;
 }
 

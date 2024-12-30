@@ -50,11 +50,11 @@ export function SettingsCard() {
 
       <div class="grid gap-6 px-6">
         <div>
-          <h3 class="text-lg font-medium">General</h3>
-          <div class="grid gap-4 mt-4">
+          <h3 class="font-medium text-lg">General</h3>
+          <div class="mt-4 grid gap-4">
             <div class="flex items-center justify-between">
               <label
-                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                class="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 for="dark-mode"
               >
                 Dark Mode
@@ -63,7 +63,7 @@ export function SettingsCard() {
             </div>
             <div class="flex items-center justify-between">
               <label
-                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                class="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 for="notifications"
               >
                 Notifications
@@ -72,7 +72,7 @@ export function SettingsCard() {
             </div>
             <div class="flex items-center justify-between">
               <label
-                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                class="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 for="password-manager"
               >
                 Password Manager

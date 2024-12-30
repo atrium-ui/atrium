@@ -17,12 +17,12 @@ export const Showcase = defineComponent(() => {
 
       <div class="shoawcase pt-12 lg:p-8">
         <div class="grid gap-4 lg:grid-cols-3">
-          <div class="flex flex-col gap-4 -translate-y-5">
+          <div class="-translate-y-5 flex flex-col gap-4">
             <ChartCard />
             <PropertiesCard />
           </div>
 
-          <div class="flex flex-col gap-4 translate-y-5">
+          <div class="flex translate-y-5 flex-col gap-4">
             <SliderCard />
             <LoginCard />
           </div>

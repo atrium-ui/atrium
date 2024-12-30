@@ -60,7 +60,7 @@ export const Slider = defineComponent(
             variant="ghost"
             disabled={!showPrev.value}
             class={[
-              "-translate-y-1/2 absolute top-1/2 left-[12px] z-10 hidden transform transition-all lg:block focus-visible:opacity-100",
+              "-translate-y-1/2 absolute top-1/2 left-[12px] z-10 hidden transform transition-all focus-visible:opacity-100 lg:block",
               showPrev.value ? "group-hover:opacity-100" : "opacity-0",
               "text-black dark:text-white",
             ]}
@@ -73,7 +73,7 @@ export const Slider = defineComponent(
             variant="ghost"
             disabled={!showNext.value}
             class={[
-              "-translate-y-1/2 absolute top-1/2 right-[12px] z-10 hidden transform transition-all lg:block focus-visible:opacity-100",
+              "-translate-y-1/2 absolute top-1/2 right-[12px] z-10 hidden transform transition-all focus-visible:opacity-100 lg:block",
               showNext.value ? "group-hover:opacity-100" : "opacity-0",
               "text-black dark:text-white",
             ]}
@@ -102,10 +102,10 @@ export const Slider = defineComponent(
           </a-track>
         </div>
 
-        <div class="flex justify-center pt-5 pb-2 @lg:py-8">
+        <div class="flex justify-center @lg:py-8 pt-5 pb-2">
           <div
             class={twMerge(
-              "relative flex h-[2px] w-[200px] items-center bg-[rgba(255,255,255,30%)] @lg:w-[400px]",
+              "relative flex h-[2px] @lg:w-[400px] w-[200px] items-center bg-[rgba(255,255,255,30%)]",
               overflowWidth.value > 0 ? "opacity-100" : "opacity-0",
             )}
             style={{

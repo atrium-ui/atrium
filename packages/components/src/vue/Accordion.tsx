@@ -31,7 +31,7 @@ export const AccordionItem = defineComponent(
             // @ts-ignore
             slot="toggle"
             type="button"
-            class="flex w-full cursor-pointer items-center justify-between bg-transparent px-6 py-2 active:bg-[rgba(150,150,150,0.1)] hover:bg-[rgba(150,150,150,0.0125)]"
+            class="flex w-full cursor-pointer items-center justify-between bg-transparent px-6 py-2 hover:bg-[rgba(150,150,150,0.0125)] active:bg-[rgba(150,150,150,0.1)]"
           >
             <div class="text-left">{props.title}</div>
 

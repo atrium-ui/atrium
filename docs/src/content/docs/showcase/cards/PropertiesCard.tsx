@@ -24,7 +24,7 @@ export function PropertiesCard() {
           <div class="grid gap-4">
             <div>
               <label
-                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                class="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 for="range"
               >
                 Quantity
@@ -36,7 +36,7 @@ export function PropertiesCard() {
           <div class="grid gap-4 pb-4">
             <div>
               <label
-                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                class="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 for="option"
               >
                 Option
