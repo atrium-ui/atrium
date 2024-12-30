@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* trying to prevent layout shift with unstyled elements */
-*:not(:defined):not(astro-slot) {
+.main-pane *:not(:defined):not(astro-slot) {
   display: none;
 }
 

@@ -98,8 +98,10 @@ async function Attributes({ doc, symbol }) {
       <th>Default value</th>
       <th>Description</th>
     </tr>`,
-    ...fields.map(async (field) => {
-      const html = `
+    ...fields
+      .filter((field) => !["styles", "properties"].includes(field.name))
+      .map(async (field) => {
+        const html = `
         <tr class="pt-2">
           <td style="min-width: 120px;">
             <code>${field.name}</code>
@@ -115,8 +117,8 @@ async function Attributes({ doc, symbol }) {
           </td>
         </tr>
       `;
-      return html;
-    }),
+        return html;
+      }),
   ]);
 }
 
@@ -156,6 +158,9 @@ async function Methods({ doc, symbol }: { doc: ProjectReflection; symbol: string
   const methods = dec.groups
     ?.find((g) => g.title === "Methods")
     ?.children.filter((child) => child.flags.hasFlag(ReflectionFlag.Public))
+    .filter(
+      (field) => !["connectedCallback", "disconnectedCallback"].includes(field.name),
+    )
     .map((method) => {
       return method.signatures?.[0];
     });
@@ -281,7 +286,7 @@ const source = dec?.sources?.[0];
                 <span class="text-xl hidden group-[&[opened]]:block">↶</span>
             </button>
 
-            <div class="py-4 px-1" ssr-hidden>
+            <div class="py-4 px-1">
                 <div set:html={methods} />
             </div >
         </a-expandable>

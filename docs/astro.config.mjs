@@ -4,16 +4,27 @@ import starlight from "@astrojs/starlight";
 import tailwind from "@astrojs/tailwind";
 import vue from "@astrojs/vue";
 import { defineConfig } from "astro/config";
-import starlightConfig from "./.config/starlight.config";
-import viteConfig from "./.config/vite.config";
+import starlightConfig from "./starlight.config";
 
 export default defineConfig({
   base: "/atrium/",
   site: "https://sv.pages.s-v.de",
   publicDir: "assets",
-  vite: viteConfig,
+  vite: {
+    resolve: {
+      alias: {
+        "package:": "/src",
+        "@components": "@sv/components",
+      },
+    },
+    server: {
+      fs: {
+        allow: [".."],
+      },
+    },
+    plugins: [],
+  },
   experimental: {
-    contentLayer: true,
     contentIntellisense: true,
   },
   integrations: [
@@ -32,7 +43,7 @@ export default defineConfig({
       jsx: true,
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.includes("-"),
+          isCustomElement: tag => tag.includes("-"),
         },
       },
     }),
