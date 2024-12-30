@@ -102,6 +102,7 @@ export const FormField = defineComponent(
         <div>
           {props.field.label && (
             <div class="text-sm">
+              {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
               <label>{!props.field.description ? `${props.field.label}` : null}</label>
             </div>
           )}

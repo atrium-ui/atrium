@@ -111,6 +111,7 @@ export const Input = defineComponent(
 
         {props.error ? (
           <div class="pt-2 text-md text-yellow">
+            {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
             <label>{props.error}</label>
           </div>
         ) : null}

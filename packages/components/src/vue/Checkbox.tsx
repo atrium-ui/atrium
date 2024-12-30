@@ -31,6 +31,7 @@ export const Checkbox = defineComponent(
     return () => (
       <div class="flex items-start gap-3">
         <button
+          // biome-ignore lint/a11y/useSemanticElements: <explanation>
           role="checkbox"
           aria-checked={checked.value}
           aria-label={props.label}

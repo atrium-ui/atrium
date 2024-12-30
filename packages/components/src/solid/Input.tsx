@@ -30,6 +30,7 @@ export function Input(props: {
   return (
     <div class={props.class}>
       <div class="text-sm">
+        {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
         <label>{props.label}</label>
       </div>
 
@@ -73,6 +74,7 @@ export function Input(props: {
 
       {props.error ? (
         <div class="mt-1 text-red-600 text-sm">
+          {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
           <label>{props.error}</label>
         </div>
       ) : null}
