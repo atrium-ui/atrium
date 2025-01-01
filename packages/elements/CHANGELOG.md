@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.0.2 (2025-01-01)
+
+### Fixes
+
+- Rename blur event to "exit"
+
 ## 2.0.1 (2024-12-26)
 
 ### Fixes
