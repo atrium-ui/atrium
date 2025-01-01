@@ -77,7 +77,7 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
  * An a-blur functions like a low-level dialog, it manages the focus and scrolling,
  * and provides events for when clicked outside of its children.
  *
- * @customEvent blur - Emitted when the elements is blurred / closed.
+ * @customEvent exit - Emitted when the elements is blurred / closed.
  *
  * @example
  * ```html
@@ -188,10 +188,10 @@ export class Blur extends LitElement {
   }
 
   private tryBlur() {
-    const blurEvent = new CustomEvent("blur", { cancelable: true, bubbles: true });
-    this.dispatchEvent(blurEvent);
+    const closeEvent = new CustomEvent("exit", { cancelable: true, bubbles: true });
+    this.dispatchEvent(closeEvent);
 
-    if (blurEvent.defaultPrevented) return;
+    if (closeEvent.defaultPrevented) return;
     this.disable();
   }
 

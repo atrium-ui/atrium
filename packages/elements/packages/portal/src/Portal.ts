@@ -15,7 +15,7 @@
  * @see https://svp.pages.s-v.de/atrium/elements/a-portal/
  */
 export class Portal extends (globalThis.HTMLElement || class {}) {
-  private proxiedEvents = ["blur", "change"];
+  private proxiedEvents = ["blur", "change", "exit"];
 
   private createPortal: () => HTMLElement = () => {
     const ele = this.portalGun();
