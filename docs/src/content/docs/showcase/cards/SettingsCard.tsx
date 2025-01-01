@@ -7,6 +7,7 @@ import { Popover } from "@components/src/vue/Popover";
 import { Card } from "../Card";
 import { Switch } from "@components/src/vue/Switch";
 import { Dialog } from "@components/src/vue/Dialog";
+import "@sv/elements/toggle";
 
 export function SettingsCard() {
   return (

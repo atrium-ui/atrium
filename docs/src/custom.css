@@ -28,6 +28,8 @@
   --sl-color-hairline: #8080804d;
 
   -webkit-tap-highlight-color: transparent;
+  scrollbar-gutter: stable;
+  scrollbar-color: #26262a transparent;
 }
 
 .header {
@@ -39,6 +41,8 @@
 
 .sidebar-pane {
   border-top-right-radius: 9px;
+  scrollbar-width: thin;
+  scrollbar-color: #18181a transparent;
 }
 
 .sl-markdown-content p {

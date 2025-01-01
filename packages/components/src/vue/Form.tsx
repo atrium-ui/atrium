@@ -101,9 +101,10 @@ export const FormField = defineComponent(
       <a-form-field>
         <div>
           {props.field.label && (
-            <div class="text-sm">
-              {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
-              <label>{!props.field.description ? `${props.field.label}` : null}</label>
+            <div class="pb-1">
+              <label for={props.field.name} class="font-bold text-xs uppercase">
+                {!props.field.description ? `${props.field.label}` : null}
+              </label>
             </div>
           )}
 
@@ -116,7 +117,7 @@ export const FormField = defineComponent(
           ) : null}
         </div>
 
-        <div class="text-red-400 text-xs">
+        <div class="pt-1 text-red-400 text-xs">
           <a-form-field-error />
         </div>
       </a-form-field>

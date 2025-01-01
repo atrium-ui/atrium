@@ -8,6 +8,8 @@ import { SettingsCard } from "./cards/SettingsCard";
 import { LoginCard } from "./cards/LoginCard";
 import { PropertiesCard } from "./cards/PropertiesCard";
 import { AnimationCard } from "./cards/AnimationCard";
+import { LightboxCard } from "./cards/LightboxCard";
+import { FilterCard } from "./cards/FilterCard";
 import { ThemeSelector } from "../../../components/ThemeSelector";
 
 export const Showcase = defineComponent(() => {
@@ -20,6 +22,7 @@ export const Showcase = defineComponent(() => {
           <div class="-translate-y-5 flex flex-col gap-4">
             <ChartCard />
             <PropertiesCard />
+            <FilterCard />
           </div>
 
           <div class="flex translate-y-5 flex-col gap-4">
@@ -30,7 +33,7 @@ export const Showcase = defineComponent(() => {
           <div class="flex flex-col gap-4">
             <AccordionCard />
             <SettingsCard />
-            {/* <AnimationCard /> */}
+            <LightboxCard />
           </div>
         </div>
 

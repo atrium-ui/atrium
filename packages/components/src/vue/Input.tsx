@@ -14,7 +14,6 @@ export type InputProps = {
   class?: string | string[];
   autofocus?: boolean;
   placeholder?: string;
-  label?: string;
   prefix?: VNode | string;
   suffix?: VNode | string;
   name?: string;
@@ -38,19 +37,6 @@ export const Input = defineComponent(
   (props: InputProps, context) => {
     return () => (
       <div>
-        <div class="text-sm">
-          <label
-            class={[
-              "pb-5 font-bold text-green-200 text-xs uppercase",
-              props.multiline ? "mx-5 lg:mx-0" : "",
-            ]}
-            for={props.id}
-          >
-            <span>{props.label}</span>
-            {props.required && <span> *</span>}
-          </label>
-        </div>
-
         <div
           class={twMerge(
             "flex",
@@ -123,7 +109,6 @@ export const Input = defineComponent(
       "class",
       "autofocus",
       "placeholder",
-      "label",
       "name",
       "id",
       "value",

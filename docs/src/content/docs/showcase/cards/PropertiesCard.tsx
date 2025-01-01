@@ -29,7 +29,7 @@ export function PropertiesCard() {
               >
                 Quantity
               </label>
-              <a-range class="w-full" value="0.33" />
+              <a-range class="w-full" />
             </div>
           </div>
 

@@ -19,35 +19,24 @@ export function LoginCard() {
           class="space-y-4"
           submitClass="w-full justify-center"
           submitLabel="Login"
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(d) => {
+            return "Success";
+          }}
         >
           <FormField
             field={{
               name: "username",
+              label: "Username *",
             }}
-            class="space-y-2"
           >
-            <label
-              class="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              for="username"
-            >
-              Username
-            </label>
             <Input required name="username" placeholder="Enter your username" />
           </FormField>
           <FormField
             field={{
               name: "password",
+              label: "Password *",
             }}
-            class="space-y-2"
           >
-            <label
-              class="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              for="password"
-            >
-              Password
-            </label>
-
             <Input required name="password" placeholder="Password" />
           </FormField>
         </Form>
