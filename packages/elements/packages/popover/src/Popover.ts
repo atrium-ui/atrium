@@ -319,4 +319,6 @@ class PopoverArrow extends LitElement {
   }
 }
 
-customElements.define("a-popover-arrow", PopoverArrow);
+if (!customElements.get("a-popover-arrow")) {
+  customElements.define("a-popover-arrow", PopoverArrow);
+}
