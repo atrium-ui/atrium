@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.0.3 (2025-01-01)
+
+### Fixes
+
+- Fix popover-arrow double define exception
+
 ## 2.0.2 (2025-01-01)
 
 ### Fixes
