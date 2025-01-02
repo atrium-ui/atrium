@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.0.5 (2025-01-02)
+
+### Fixes
+
+- Portal event proxy improvments
+
 ## 2.0.4 (2025-01-02)
 
 ### Fixes
