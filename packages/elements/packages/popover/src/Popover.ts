@@ -105,7 +105,7 @@ export class Popover extends Portal {
   constructor() {
     super();
 
-    this.addEventListener("blur", (e) => {
+    this.addEventListener("exit", (e) => {
       const trigger = this.closest("a-popover-trigger");
       if (e instanceof CustomEvent) {
         trigger?.close();
