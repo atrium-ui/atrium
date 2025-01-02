@@ -15,7 +15,7 @@
  * @see https://svp.pages.s-v.de/atrium/elements/a-portal/
  */
 export class Portal extends (globalThis.HTMLElement || class {}) {
-  private proxiedEvents = ["blur", "change", "exit"];
+  private proxiedEvents = ["blur", "focus", "change", "exit", "keyup", "keydown"];
 
   private createPortal: () => HTMLElement = () => {
     const ele = this.portalGun();
@@ -44,10 +44,16 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
 
   proxyEvent(name: string) {
     return (e: Event) => {
+      const bubbles = true;
+
       if (e instanceof CustomEvent) {
-        this.dispatchEvent(new CustomEvent(name, { detail: e.detail, bubbles: true }));
+        this.dispatchEvent(new CustomEvent(name, e));
+      } else if (e instanceof MouseEvent) {
+        this.dispatchEvent(new MouseEvent(name, e));
+      } else if (e instanceof KeyboardEvent) {
+        this.dispatchEvent(new KeyboardEvent(name, e));
       } else {
-        this.dispatchEvent(new Event(name));
+        this.dispatchEvent(new Event(name, { bubbles }));
       }
     };
   }
