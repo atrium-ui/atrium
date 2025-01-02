@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.0.4 (2025-01-02)
+
+### Fixes
+
+- Popover blur listening on wrong event
+
 ## 2.0.3 (2025-01-01)
 
 ### Fixes
