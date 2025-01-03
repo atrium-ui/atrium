@@ -1,3 +1,5 @@
+let portalIdIncrement = 10000;
+
 /**
  * The a-portal element is used to render elements (its children) in a different location in the DOM.
  * Most frameworks have their own primitives for this. Vue has [Teleports](https://vuejs.org/guide/built-ins/teleport.html),
@@ -27,8 +29,7 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
     return ele;
   };
 
-  // TODO: make simpler id generator
-  public portalId = crypto.randomUUID();
+  public portalId = (++portalIdIncrement).toString();
   public portal!: HTMLElement;
 
   // TODO: try to find existing portal with this.dataset.portal
