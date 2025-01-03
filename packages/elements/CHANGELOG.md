@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.0.6 (2025-01-03)
+
+### Fixes
+
+- Dont use crypto api for portal ids
+
 ## 2.0.5 (2025-01-02)
 
 ### Fixes
