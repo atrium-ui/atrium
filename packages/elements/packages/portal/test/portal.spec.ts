@@ -27,10 +27,10 @@ test("construct a-portal element", async () => {
 test("portal events", async () => {
   const ele = await newElement();
   const portal = ele.querySelector("a-portal");
-  const button = portal.querySelector("button");
+  const button = portal.children[0];
 
   let blurEvent = false;
-  portal.addEventListener("blur", (e) => {
+  portal.addEventListener("exit", (e) => {
     blurEvent = true;
   });
   let changeEvent = false;
@@ -38,11 +38,31 @@ test("portal events", async () => {
     changeEvent = true;
   });
 
-  button.dispatchEvent(new Event("blur", { bubbles: true }));
+  button.dispatchEvent(new Event("exit", { bubbles: true }));
   button.dispatchEvent(new Event("change", { bubbles: true }));
 
   expect(blurEvent).toBe(true);
   expect(changeEvent).toBe(true);
+
+  console.info(document.body.innerHTML);
+
+  ele.remove();
+});
+
+// No proxied doulbe events
+test("no duplicate events", async () => {
+  const ele = await newElement();
+  const portal = ele.querySelector("a-portal");
+  const button = portal.children[0];
+
+  let eventCount = 0;
+  window.addEventListener("keydown", (e) => {
+    eventCount++;
+  });
+
+  button.dispatchEvent(new Event("keydown", { bubbles: true }));
+
+  expect(eventCount).toBe(1);
 
   ele.remove();
 });

@@ -12,6 +12,7 @@ vars:
       "packages/html-to-custom-tag-replacement",
       "packages/scroll-lock",
       "packages/slider",
+      "packages/svg-sprites",
     ]
 
 includes:

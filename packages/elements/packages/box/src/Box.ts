@@ -1,4 +1,5 @@
 import { LitElement, html, css } from "lit";
+import { property } from "lit/decorators.js";
 
 const resizeObserver = new ResizeObserver((entries) => {
   for (const entry of entries) {
@@ -8,6 +9,13 @@ const resizeObserver = new ResizeObserver((entries) => {
   }
 });
 
+/**
+ * An a-box element provides an interface to the resize events of a single element.
+ * For performance reasons, it uses a single ResizeObserver to observe all a-box elements on the page.
+ * Resize events are debounced by default.
+ *
+ * @customEvent resize - Dispatched when the element is resized.
+ */
 export class BoxElement extends LitElement {
   private baseDebounceTime = 25;
   private maxDebounceTime = 150;
@@ -15,12 +23,18 @@ export class BoxElement extends LitElement {
   private timer: Timer | undefined;
   private timerResolved = false;
 
+  /**
+   * Whether to retain the size of the element while resizing.
+   */
+  @property({ type: Boolean }) retain = false;
+
   private get ele() {
     return this.shadowRoot?.children[0] as HTMLElement;
   }
 
   private freeze() {
     if (!this.timerResolved) return;
+    if (!this.retain) return;
 
     this.ele.style.width = `${this.offsetWidth}px`;
     this.ele.style.height = `${this.offsetHeight}px`;
@@ -34,6 +48,9 @@ export class BoxElement extends LitElement {
     this.debounceTime = this.baseDebounceTime;
   }
 
+  /**
+   * Called for a resize event.
+   */
   public resize() {
     this.freeze();
 
@@ -78,14 +95,14 @@ export class BoxElement extends LitElement {
     :host {
       display: block;
     }
-    div {
-      all: inherit;
+    slot {
+      display: block;
       width: 100%;
       height: 100%;
     }
   `;
 
   render() {
-    return html`<div><slot></slot></div>`;
+    return html`<slot></slot>`;
   }
 }

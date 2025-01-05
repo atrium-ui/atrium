@@ -1,0 +1,64 @@
+{
+  "name": "@sv/svg-sprites",
+  "version": "0.5.0",
+  "description": "",
+  "main": "dist/sprite-sheet.js",
+  "module": "dist/sprite-sheet.js",
+  "type": "module",
+  "exports": {
+    "./sheet": {
+      "import": "./dist/sprite-sheet.js",
+      "require": "./dist/sprite-sheet.cjs",
+      "types": "./dist/sprite-sheet.d.ts"
+    },
+    "./svg-icon": {
+      "import": "./dist/Icon.js",
+      "require": "./dist/Icon.cjs",
+      "types": "./dist/Icon.d.ts"
+    },
+    "./loader": {
+      "import": "./dist/webpack-loader.js",
+      "require": "./dist/webpack-loader.cjs",
+      "types": "./dist/webpack-loader.d.ts"
+    },
+    "./vite": {
+      "import": "./dist/vite-plugin.js",
+      "require": "./dist/vite-plugin.cjs",
+      "types": "./dist/vite-plugin.d.ts"
+    }
+  },
+  "keywords": [
+    "svg",
+    "sprite",
+    "icons"
+  ],
+  "author": "Tim Havlicek",
+  "license": "ISC",
+  "scripts": {
+    "test": "vite build test/vite && webpack -c test/wp/webpack.config.js",
+    "test:vite": "vite test/vite",
+    "test:webpack": "webpack watch -c test/wp/webpack.config.js",
+    "build": "npm run build:main && npm run build:component && npm run build:vite && npm run build:webpack",
+    "build:main": "tsup src/sprite-sheet.ts -d dist --format esm,cjs --dts",
+    "build:component": "tsup src/component/Icon.ts -d dist --format esm,cjs --dts --external svg-sprites/sheet",
+    "build:vite": "tsup src/plugin/vite-plugin.ts -d dist --format esm,cjs --dts --external chokidar",
+    "build:webpack": "tsup src/loader/webpack-loader.ts -d dist --format esm,cjs --dts"
+  },
+  "dependencies": {
+    "fast-glob": "^3.3.2",
+    "svg-sprite": "^2.0.4"
+  },
+  "devDependencies": {
+    "@sv/codestyle": "^1.1.1",
+    "@biomejs/biome": "^1.8.3",
+    "@types/node": "^18.19.49",
+    "@types/svg-sprite": "^0.0.34",
+    "happy-dom": "^15.7.4",
+    "tsup": "^6.7.0",
+    "typescript": "^4.9.5",
+    "vite": "^4.5.3",
+    "vitest": "^2.1.1",
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

@@ -19,6 +19,14 @@ let portalIdIncrement = 10000;
 export class Portal extends (globalThis.HTMLElement || class {}) {
   private proxiedEvents = ["blur", "focus", "change", "exit", "keyup", "keydown"];
 
+  constructor() {
+    super();
+
+    for (const event of this.proxiedEvents) {
+      this.addEventListener(event, (e: Event) => e.stopPropagation());
+    }
+  }
+
   private createPortal: () => HTMLElement = () => {
     const ele = this.portalGun();
 
@@ -43,8 +51,16 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
     return ele;
   }
 
+  protected onEventProxy(ev: Event) {}
+
   proxyEvent(name: string) {
     return (e: Event) => {
+      this.onEventProxy(e);
+
+      if (e.defaultPrevented) {
+        return;
+      }
+
       const bubbles = true;
 
       if (e instanceof CustomEvent) {
@@ -63,12 +79,16 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
     return this.portal.children;
   }
 
+  private onMutation() {
+    if (this.childNodes.length) {
+      this.portal.innerHTML = "";
+      this.portal.append(...this.childNodes);
+    }
+  }
+
   observer = new MutationObserver(() => {
     requestAnimationFrame(() => {
-      if (this.childNodes.length) {
-        this.portal.innerHTML = "";
-        this.portal.append(...this.childNodes);
-      }
+      this.onMutation();
     });
   });
 
@@ -90,5 +110,7 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
     document.body.append(this.portal);
 
     this.dataset.portal = this.portalId;
+
+    this.onMutation();
   }
 }

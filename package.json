@@ -19,8 +19,8 @@
 	"packageManager": "bun@1.1.12",
 	"workspaces": [
 		"packages/*",
+		"packages/slider",
 		"packages/elements/packages/*",
-		"packages/slider/packages/*",
 		"docs"
 	],
 	"prettier": "@sv/codestyle/.prettierrc.json"

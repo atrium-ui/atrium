@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32">
+  <g id="Group_1" data-name="Group 1" transform="translate(-346 -248)">
+    <g id="Rectangle_1" data-name="Rectangle 1" transform="translate(346 248)" fill="transparent"
+      stroke="currentColor" stroke-width="1">
+      <rect width="32" height="32" stroke="none" />
+      <rect x="0.5" y="0.5" width="31" height="31" fill="none" />
+    </g>
+    <line id="Line_1" data-name="Line 1" y1="30" x2="30" transform="translate(347 249)" fill="none"
+      stroke="currentColor" stroke-width="1" />
+    <line id="Line_2" data-name="Line 2" x2="30" y2="30" transform="translate(347 249)" fill="none"
+      stroke="currentColor" stroke-width="1" />
+  </g>
+</svg>

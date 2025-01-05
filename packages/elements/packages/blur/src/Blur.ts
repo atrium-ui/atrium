@@ -26,7 +26,7 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
   );
 
   document.addEventListener(
-    "mousedown",
+    "pointerdown",
     (event) => {
       isKeyboard = false;
     },
@@ -195,52 +195,54 @@ export class Blur extends LitElement {
     this.disable();
   }
 
-  public connectedCallback() {
-    super.connectedCallback();
+  private keyDownListener = (e: KeyboardEvent) => {
+    if (!this.enabled) return;
 
-    this.role = "dialog";
+    if (e.key === "Tab") {
+      const elements = this.focusableElements();
 
-    this.listener(window, "keydown", (e: KeyboardEvent) => {
-      if (!this.enabled) {
-        return;
-      }
-
-      if (e.key === "Escape") {
-        this.tryBlur();
-      }
-
-      if (e.key === "Tab") {
-        const elements = this.focusableElements();
-
-        if (e.shiftKey) {
-          if (document.activeElement === elements[0]) {
-            elements[elements.length - 1]?.focus();
-            e.preventDefault();
-          }
-        } else {
-          if (document.activeElement === elements[elements.length - 1]) {
-            elements[0]?.focus();
-            e.preventDefault();
-          }
+      if (e.shiftKey) {
+        if (document.activeElement === elements[0]) {
+          elements[elements.length - 1]?.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === elements[elements.length - 1]) {
+          elements[0]?.focus();
+          e.preventDefault();
         }
       }
-    });
+    }
 
-    this.listener(this, "mousedown", (e: MouseEvent) => {
+    if (e.key === "Escape") {
+      this.tryBlur();
+    }
+  };
+
+  constructor() {
+    super();
+
+    this.addEventListener("pointerdown", (e: PointerEvent) => {
       if (!this.shouldBlur(e)) return;
-
       this.tryBlur();
     });
 
     // capture close events coming from inside the blur
-    this.listener(
-      this,
-      "close",
+    this.addEventListener(
+      "exit",
       () => {
         this.disable();
       },
       { capture: true },
     );
+  }
+
+  public connectedCallback() {
+    super.connectedCallback();
+
+    this.role = "dialog";
+
+    window.addEventListener("keydown", this.keyDownListener);
   }
 
   public disconnectedCallback(): void {
@@ -250,22 +252,7 @@ export class Blur extends LitElement {
     this.tryUnlock();
 
     super.disconnectedCallback();
-  }
 
-  private listener<T extends Event>(
-    host: HTMLElement | typeof globalThis,
-    events: string | string[],
-    handler: (ev: T) => void,
-    options?: AddEventListenerOptions,
-  ) {
-    for (const event of Array.isArray(events) ? events : [events]) {
-      // A controller is just a hook into lifecycle functions (connected, disconnected, update, updated);
-      this.addController({
-        hostConnected: () =>
-          host.addEventListener(event, handler as EventListener, options),
-        hostDisconnected: () =>
-          host.removeEventListener(event, handler as EventListener, options),
-      });
-    }
+    window.removeEventListener("keydown", this.keyDownListener);
   }
 }

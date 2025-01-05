@@ -52,8 +52,6 @@ export class ElementEventListener<
 }
 
 export class PopoverPortal extends Blur {
-  public scrollLock = false;
-
   static styles = css`
     :host {
       display: block;
@@ -78,6 +76,17 @@ export class PopoverPortal extends Blur {
   `;
 }
 
+type Alignment = "start" | "end";
+type Placements =
+  | "top"
+  | "top-end"
+  | "top-start"
+  | "bottom"
+  | "bottom-start"
+  | "bottom-end"
+  | "left"
+  | "right";
+
 /**
  * A popover element.
  * It positions itself relative to the trigger element using
@@ -93,6 +102,10 @@ export class PopoverPortal extends Blur {
  * @see https://svp.pages.s-v.de/atrium/elements/a-popover/
  */
 export class Popover extends Portal {
+  static get observedAttributes() {
+    return ["alignment", "placements"];
+  }
+
   protected portalGun() {
     const ele = document.createElement("a-popover-portal");
     ele.className = this.className;
@@ -102,19 +115,33 @@ export class Popover extends Portal {
 
   private cleanup?: () => void;
 
-  constructor() {
-    super();
+  protected onEventProxy(ev: Event) {
+    if (ev.type !== "exit") {
+      return;
+    }
 
-    this.addEventListener("exit", (e) => {
-      const trigger = this.closest("a-popover-trigger");
-      if (e instanceof CustomEvent) {
-        trigger?.close();
-      }
-    });
+    const trigger = this.closest("a-popover-trigger");
+    if (ev instanceof CustomEvent) {
+      trigger?.close();
+    }
   }
 
   get arrowElement() {
     return this.children[0]?.querySelector<HTMLElement>("a-popover-arrow");
+  }
+
+  public get alignment(): Alignment | undefined {
+    if (this.hasAttribute("alignment")) {
+      return this.getAttribute("alignment") as Alignment;
+    }
+    return undefined;
+  }
+
+  public get allowedPlacements(): Placements[] {
+    if (this.hasAttribute("placements")) {
+      return this.getAttribute("placements")?.split(",") as Placements[];
+    }
+    return ["top", "bottom"];
   }
 
   /**
@@ -131,7 +158,8 @@ export class Popover extends Portal {
         computePosition(trigger, content, {
           middleware: [
             autoPlacement({
-              allowedPlacements: ["bottom", "top"],
+              alignment: this.alignment,
+              allowedPlacements: this.allowedPlacements,
             }),
             shift(),
             this.arrowElement && arrow({ element: this.arrowElement }),
