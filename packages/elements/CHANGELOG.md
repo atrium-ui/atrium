@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.0.7 (2025-01-05)
+
+### Fixes
+
+- Fix portal proxied events being duplicated (svp/atrium!29)
+
 ## 2.0.6 (2025-01-03)
 
 ### Fixes
