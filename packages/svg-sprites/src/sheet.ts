@@ -15,13 +15,13 @@ export function replacePlaceholder(code: string, svg: string) {
 export function createSheetCode(svg: string) {
   return `
     const Blob = globalThis.Blob || class {};
+    const sheetSource = \`${svg}\`;
 
     export function blob() {
-      return new Blob([\`${svg}\`], { type: "image/svg+xml" });
+      return new Blob([sheetSource], { type: "image/svg+xml" });
     }
-
     export function svg() {
-      return \`${svg}\`;
+      return sheetSource;
     }
   `;
 }
