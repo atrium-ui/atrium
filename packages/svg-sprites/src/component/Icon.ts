@@ -1,10 +1,9 @@
-import { svg } from "svg-sprites/sheet";
-
 let svgSheet: HTMLDivElement;
 let supportsAdoptingStyleSheets = true;
 let loaded: Promise<void>;
 
 async function loadSvgSheet() {
+  const { svg } = await import("svg-sprites/sheet");
   svgSheet = document.createElement("div");
   svgSheet.innerHTML = await svg();
 }
@@ -18,19 +17,18 @@ if (typeof window !== "undefined") {
     "replace" in CSSStyleSheet.prototype;
 }
 
-export class SvgIcon extends (globalThis.HTMLElement || {}) {
+export class FraIcon extends HTMLElement {
   static sheet?: CSSStyleSheet;
 
-  static elementProperties = new Map([["name", { type: String, reflect: true }]]);
+  static elementProperties = new Map([["name", { type: String }]]);
 
   static get styles() {
     return /*css*/ `
       :host {
-        margin: 0 2px 0.1em 2px;
+        font-size: 1.5rem;
         color: inherit;
         display: inline-block;
-        vertical-align: middle;
-        aspect-ratio: 1 / 1;
+        vertical-align: top;
         width: 1em;
         height: 1em;
       }
@@ -44,37 +42,59 @@ export class SvgIcon extends (globalThis.HTMLElement || {}) {
   }
 
   static getStyleSheet(): CSSStyleSheet {
-    if (!SvgIcon.sheet) {
+    if (!FraIcon.sheet) {
       const sheet = new CSSStyleSheet();
-      sheet.replaceSync(SvgIcon.styles);
-      SvgIcon.sheet = sheet;
+      sheet.replaceSync(FraIcon.styles);
+      FraIcon.sheet = sheet;
     }
-    return SvgIcon.sheet;
+    return FraIcon.sheet;
   }
 
   static get observedAttributes() {
     return ["name"];
   }
 
-  public get name(): SvgIconName | null {
-    return this.getAttribute("name") as SvgIconName;
+  _name: string | undefined = undefined;
+
+  attributeChangedCallback() {
+    this.updateIcon();
+
+    this._name = this.getAttribute("name") || "unknown";
   }
 
-  public set name(icon: SvgIconName | null) {
-    if (icon !== null) this.setAttribute("name", icon);
+  get name() {
+    return this._name;
   }
 
-  async attributeChangedCallback() {
+  async updateIcon() {
     await loaded;
 
-    const symbol = svgSheet.querySelector(`#${this.name?.replace(/\//g, "\\/")}`);
+    let symbol: SVGSymbolElement | null;
 
+    if (!this.name) return;
+
+    const escapedName = this.name?.replace(/\//g, "\\/");
+    symbol = svgSheet.querySelector(`[id="${escapedName}"]`);
+    this.dataset.icon = escapedName;
+
+    if (symbol) {
+      this.useSymbol(symbol);
+    } else {
+      console.warn(`Could not find icon "${this.name}"`);
+      symbol = svgSheet.querySelector("#unknown");
+    }
+  }
+
+  useSymbol(symbol: SVGSymbolElement) {
     if (this.shadowRoot && symbol) {
-      this.shadowRoot.innerHTML = /*html*/ `
-        <svg viewBox="${symbol.getAttribute("viewBox")}" aria-hidden="true">
-          ${symbol.innerHTML}
-        </svg>
-      `;
+      const node = symbol.cloneNode(true) as SVGElement;
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("viewBox", symbol.getAttribute("viewBox") || "");
+      svg.setAttribute("aria-hidden", "true");
+      for (const child of node.children) {
+        svg.appendChild(child);
+      }
+      this.shadowRoot.appendChild(svg);
     }
   }
 
@@ -84,10 +104,10 @@ export class SvgIcon extends (globalThis.HTMLElement || {}) {
     const shadow = this.attachShadow({ mode: "open" });
 
     if (supportsAdoptingStyleSheets) {
-      shadow.adoptedStyleSheets = [SvgIcon.getStyleSheet()];
+      shadow.adoptedStyleSheets = [FraIcon.getStyleSheet()];
     } else {
       const style = document.createElement("style");
-      style.textContent = SvgIcon.styles;
+      style.textContent = FraIcon.styles;
       shadow.appendChild(style);
     }
   }
@@ -95,10 +115,10 @@ export class SvgIcon extends (globalThis.HTMLElement || {}) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "svg-icon": SvgIcon;
+    "svg-icon": FraIcon;
   }
 }
 
 if ("customElements" in globalThis && !customElements.get("svg-icon")) {
-  customElements.define("svg-icon", SvgIcon);
+  customElements.define("svg-icon", FraIcon);
 }
