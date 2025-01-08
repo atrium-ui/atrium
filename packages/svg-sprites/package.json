@@ -1,7 +1,12 @@
 {
   "name": "@sv/svg-sprites",
-  "version": "0.5.2",
-  "description": "",
+  "version": "0.5.1",
+  "description": "Utility to compile svgs from a directory to a spritesheet and make it available as text or blob.",
+  "author": "atrium",
+  "contributors": [
+    "luckydye"
+  ],
+  "license": "MIT",
   "main": "dist/sprite-sheet.js",
   "module": "dist/sprite-sheet.js",
   "type": "module",
@@ -32,8 +37,6 @@
     "sprite",
     "icons"
   ],
-  "author": "Tim Havlicek",
-  "license": "ISC",
   "scripts": {
     "test": "vite build test/vite && webpack -c test/wp/webpack.config.js",
     "test:vite": "vite test/vite",
