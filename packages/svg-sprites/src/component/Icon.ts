@@ -3,6 +3,7 @@ let supportsAdoptingStyleSheets = true;
 let loaded: Promise<void>;
 
 async function loadSvgSheet() {
+  // @ts-ignore
   const { svg } = await import("svg-sprites/sheet");
   svgSheet = document.createElement("div");
   svgSheet.innerHTML = await svg();

@@ -55,6 +55,7 @@ export default function svgSprite(
 
     async resolveId(source, importer, options) {
       if (isComponentImport(source)) {
+        // @ts-ignore
         const resolved = await this.resolve(source, importer, {
           skipSelf: true,
           ...options,

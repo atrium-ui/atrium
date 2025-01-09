@@ -1,23 +1,20 @@
 {
-  "extends": "@sv/codestyle/tsconfig.json",
   "compilerOptions": {
-    "useDefineForClassFields": false,
-    "experimentalDecorators": true,
-    "types": ["@types/bun"],
-    "plugins": [
-      {
-        "name": "ts-lit-plugin"
-      }
-    ]
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "NodeNext",
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true
   },
   "exclude": [
+    "node_modules",
     "dist",
     "plugin",
     "component",
     "loader",
-    "test",
-    "node_modules",
-    "**/dist",
-    "**/*.spec.ts"
+    "test"
   ]
 }
