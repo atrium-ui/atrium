@@ -10,7 +10,6 @@ export default {
     "footer-max-line-length": [RuleConfigSeverity.Error, "always", 100],
     "header-max-length": [RuleConfigSeverity.Error, "always", 100],
     "header-trim": [RuleConfigSeverity.Error, "always"],
-    "subject-case": [RuleConfigSeverity.Error, "always", ["sentence-case"]],
     "subject-empty": [RuleConfigSeverity.Warning, "never"],
     "subject-full-stop": [RuleConfigSeverity.Error, "never", "."],
     "subject-max-length": [RuleConfigSeverity.Error, "always", 50],
