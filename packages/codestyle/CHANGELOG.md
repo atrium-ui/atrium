@@ -1,5 +1,11 @@
 # @sv/codestyle
 
+## 1.4.0 (2025-01-10)
+
+### Features
+
+- commitlint: dont enforce subject case in commit message
+
 ## 1.3.1 (2024-11-14)
 
 ### Fixes
