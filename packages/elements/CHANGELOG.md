@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.0.8 (2025-01-22)
+
+### Fixes
+
+- a-track: Overflowscroll off by one error
+
 ## 2.0.7 (2025-01-05)
 
 ### Fixes
