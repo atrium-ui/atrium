@@ -86,7 +86,7 @@ export class PointerTrait implements Trait {
   moveVelocity = new Vec2();
 
   input(track: Track, inputState: InputState) {
-    if (track.overflowscroll && track.overflowWidth < 0) {
+    if (track.overflowscroll && track.overflowWidth <= 0) {
       return;
     }
 
