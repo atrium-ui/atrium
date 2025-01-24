@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, type PropertyValues, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
 import { Vec2 } from "./Vec.js";
 
@@ -213,7 +213,12 @@ export class SnapTrait implements Trait {
       track.position.x < track.overflowWidth
     ) {
       // only when it was on a child already
-      track.setTarget(track.getClosestItemPosition(), "ease");
+      track.setTarget(
+        track.current !== undefined
+          ? track.getToItemPosition(track.current)
+          : track.getClosestItemPosition(),
+        "ease",
+      );
     }
   }
 
@@ -349,12 +354,18 @@ export class Track extends LitElement {
 
   public traits: Trait[] = [new PointerTrait()];
 
-  protected updated(): void {
-    if (this.snap) {
-      this.addTrait(new SnapTrait());
-    } else {
-      const snapTrait = this.findTrait<SnapTrait>("snap");
-      if (snapTrait) this.removeTrait(snapTrait);
+  protected updated(_changedProperties: PropertyValues): void {
+    if (_changedProperties.has("current") && this.current !== undefined) {
+      this.setTarget(this.getToItemPosition(this.current), "ease");
+    }
+
+    if (_changedProperties.has("snap")) {
+      if (this.snap) {
+        this.addTrait(new SnapTrait());
+      } else {
+        const snapTrait = this.findTrait<SnapTrait>("snap");
+        if (snapTrait) this.removeTrait(snapTrait);
+      }
     }
   }
 
@@ -471,15 +482,22 @@ export class Track extends LitElement {
   }
 
   public get maxIndex() {
-    // get index of item at the end of the track
-    if (this.vertical) {
-      const lastItem = this.getItemAtPosition(new Vec2(0, this.overflowHeight));
-      if (lastItem) return lastItem.index;
-    } else {
-      const lastItem = this.getItemAtPosition(new Vec2(this.overflowWidth, 0));
-      if (lastItem) return lastItem.index;
+    if (this.align === "start") {
+      // get index of item at the end of the track
+      if (this.vertical) {
+        const lastItem = this.getItemAtPosition(
+          new Vec2(0, this.overflowHeight - this.origin.y),
+        );
+        if (lastItem) return lastItem.index;
+      } else {
+        const lastItem = this.getItemAtPosition(
+          new Vec2(this.overflowWidth - this.origin.x, 0),
+        );
+        if (lastItem) return lastItem.index;
+      }
     }
-    return 0;
+
+    return this.itemCount - 1;
   }
 
   public get minIndex() {
@@ -604,6 +622,9 @@ export class Track extends LitElement {
     }
     return undefined;
   }
+
+  /** The index of the current item. */
+  @property({ type: Number, reflect: true }) current: number | undefined;
 
   /** Whether the track should scroll vertically, instead of horizontally. */
   @property({ type: Boolean, reflect: true }) vertical = false;
