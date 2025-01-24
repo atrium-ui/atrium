@@ -245,7 +245,8 @@ export class SnapTrait implements Trait {
 
     if (!track.loop) {
       // disable snap when past maxIndex
-      if (track.maxIndex && track.currentIndex >= track.maxIndex && power > 0) return;
+      if (track.maxIndex && power > 0 && track.currentIndex + power >= track.maxIndex)
+        return;
     }
 
     if (Math.abs(vel) > 8) {
@@ -472,10 +473,10 @@ export class Track extends LitElement {
   public get maxIndex() {
     // get index of item at the end of the track
     if (this.vertical) {
-      const lastItem = this.getItemAtPosition(new Vec2(0, this.trackHeight - 10));
+      const lastItem = this.getItemAtPosition(new Vec2(0, this.overflowHeight));
       if (lastItem) return lastItem.index;
     } else {
-      const lastItem = this.getItemAtPosition(new Vec2(this.trackWidth - 10, 0));
+      const lastItem = this.getItemAtPosition(new Vec2(this.overflowWidth, 0));
       if (lastItem) return lastItem.index;
     }
     return 0;
