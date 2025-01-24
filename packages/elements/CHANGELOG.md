@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.0.9 (2025-01-24)
+
+### Fixes
+
+- a-track: Calculate maxIndex based on overflowWidth
+
 ## 2.0.8 (2025-01-22)
 
 ### Fixes
