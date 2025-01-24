@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.0.10 (2025-01-24)
+
+### Fixes
+
+- a-track: Added `current` attribute to dynamically set current item
+
 ## 2.0.9 (2025-01-24)
 
 ### Fixes
