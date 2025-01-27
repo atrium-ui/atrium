@@ -1,0 +1,44 @@
+# Simple workflow for deploying static content to GitHub Pages
+name: Main workflow
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["atrium-ui"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+        with:
+          install: true
+      - name: Run Linting
+        run: task check
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+        with:
+          install: true
+      - name: Run Tests
+        run: task test
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+        with:
+          install: true
+      - name: Publish packages
+        run: task release
