@@ -43,3 +43,5 @@ jobs:
       - uses: knope-dev/action@v2.0.0
       - name: Publish packages
         run: task release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
