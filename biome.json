@@ -5,9 +5,7 @@
   ],
   "files": {
     "ignore": [
-      "**/package.json",
-      "./packages/slider/src",
-      "./packages/html-to-custom-tag-replacement/src"
+      "**/package.json"
     ]
   },
   "linter": {

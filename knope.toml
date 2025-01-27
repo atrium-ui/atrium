@@ -18,20 +18,10 @@ versioned_files = ["packages/elements/package.json"]
 changelog = "packages/elements/CHANGELOG.md"
 scopes = ["elements"]
 
-[packages.html-to-custom-tag-replacement]
-versioned_files = ["packages/html-to-custom-tag-replacement/package.json"]
-changelog = "packages/html-to-custom-tag-replacement/CHANGELOG.md"
-scopes = ["htctr"]
-
 [packages.scroll-lock]
 versioned_files = ["packages/scroll-lock/package.json"]
 changelog = "packages/scroll-lock/CHANGELOG.md"
 scopes = ["scroll-lock"]
-
-[packages.slider]
-versioned_files = ["packages/slider/package.json"]
-changelog = "packages/slider/CHANGELOG.md"
-scopes = ["slider"]
 
 [packages.svg-sprites]
 versioned_files = ["packages/svg-sprites/package.json"]
