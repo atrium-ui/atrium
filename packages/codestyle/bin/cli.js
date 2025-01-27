@@ -141,7 +141,7 @@ function detectPackageManager() {
     return "npm";
   }
 
-  if (fs.existsSync("bun.lockb")) {
+  if (fs.existsSync("bun.lock")) {
     return "bun";
   }
 
