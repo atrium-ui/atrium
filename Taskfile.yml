@@ -9,9 +9,7 @@ vars:
       "packages/codestyle",
       "packages/components",
       "packages/elements",
-      "packages/html-to-custom-tag-replacement",
       "packages/scroll-lock",
-      "packages/slider",
       "packages/svg-sprites",
     ]
 
