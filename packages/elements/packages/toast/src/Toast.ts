@@ -5,7 +5,7 @@ import { LitElement, css, html } from "lit";
  *
  * @example
  * ```tsx
- * import "@sv/elements/toast";
+ * import "@atrium-ui/elements/toast";
  *
  * <a-portal>
  *   <a-toast-feed class="fixed right-12 bottom-12 text-base" />
@@ -127,7 +127,7 @@ export interface ToastOptions {
  *
  * @example
  * ```tsx
- * import "@sv/elements/toast";
+ * import "@atrium-ui/elements/toast";
  *
  * // create a toas and keep a reference to it
  * const toast = new Toast({ message: "A Message" });

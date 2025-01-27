@@ -3,7 +3,7 @@ import { test, expect, describe } from "bun:test";
 const NODE_NAME = "a-toast-feed";
 
 test("import element", async () => {
-  const { ToastFeed } = await import("@sv/elements/toast");
+  const { ToastFeed } = await import("@atrium-ui/elements/toast");
   expect(ToastFeed).toBeDefined();
 
   // is defined in custom element registry
@@ -11,7 +11,7 @@ test("import element", async () => {
 });
 
 test("construct element", async () => {
-  const { ToastFeed } = await import("@sv/elements/toast");
+  const { ToastFeed } = await import("@atrium-ui/elements/toast");
 
   // is constructable
   expect(new ToastFeed()).toBeInstanceOf(ToastFeed);

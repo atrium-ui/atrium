@@ -20,7 +20,7 @@
     "format": ["esm", "cjs"],
     "external": [
       "lit",
-      "@sv/elements"
+      "@atrium-ui/elements"
     ],
     "sourcemap": true,
     "clean": true

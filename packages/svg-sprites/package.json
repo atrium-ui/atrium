@@ -1,5 +1,5 @@
 {
-  "name": "@sv/svg-sprites",
+  "name": "@atrium-ui/svg-sprites",
   "version": "0.5.2",
   "description": "Utility to compile svgs from a directory to a spritesheet and make it available as text or blob.",
   "author": "atrium",
@@ -52,7 +52,7 @@
     "svg-sprite": "^2.0.4"
   },
   "devDependencies": {
-    "@sv/codestyle": "^1.1.1",
+    "@atrium-ui/codestyle": "^1.1.1",
     "@biomejs/biome": "^1.8.3",
     "@types/node": "^18.19.49",
     "@types/svg-sprite": "^0.0.34",
