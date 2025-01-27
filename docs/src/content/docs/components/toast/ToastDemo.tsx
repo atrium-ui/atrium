@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import "@sv/elements/portal";
+import "@atrium-ui/elements/portal";
 import { Button } from "@components/src/vue/Button";
 import { Toasts, toast } from "@components/src/vue/Toasts";
 import { paragraph } from "txtgen";
