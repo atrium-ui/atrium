@@ -40,6 +40,6 @@ jobs:
       - uses: jdx/mise-action@v2
         with:
           install: true
-      - uses: knope-dev/action@v1
+      - uses: knope-dev/action@v2.0.0
       - name: Publish packages
         run: task release
