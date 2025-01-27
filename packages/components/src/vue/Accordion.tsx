@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import "@sv/elements/expandable";
+import "@atrium-ui/elements/expandable";
 import { defineComponent } from "vue";
 import { Icon } from "./Icon.jsx";
 

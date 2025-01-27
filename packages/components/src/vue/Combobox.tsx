@@ -1,10 +1,10 @@
 /* @jsxImportSource vue */
-import "@sv/elements/select";
-import "@sv/elements/expandable";
+import "@atrium-ui/elements/select";
+import "@atrium-ui/elements/expandable";
 import { defineComponent, ref } from "vue";
 import { twMerge } from "tailwind-merge";
 import { InputSearch } from "./InputSearch.jsx";
-import type { OptionElement, Select } from "@sv/elements/select";
+import type { OptionElement, Select } from "@atrium-ui/elements/select";
 
 const ComboboxItem = function Item(props: { value: string; class?: string }, { slots }) {
   return (

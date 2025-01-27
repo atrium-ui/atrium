@@ -16,8 +16,8 @@
     "format": ["esm", "cjs"],
     "external": [
       "lit",
-      "@sv/elements",
-      "@sv/scroll-lock"
+      "@atrium-ui/elements",
+      "@atrium-ui/scroll-lock"
     ],
     "sourcemap": true,
     "clean": true

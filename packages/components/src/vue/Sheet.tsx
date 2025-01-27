@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
-import "@sv/elements/portal";
-import "@sv/elements/blur";
+import "@atrium-ui/elements/portal";
+import "@atrium-ui/elements/blur";
 
 interface Props {
   enabled?: boolean | undefined;

@@ -1,5 +1,5 @@
 {
-  "name": "@sv/elements",
+  "name": "@atrium-ui/elements",
   "author": "atrium",
   "contributors": [
     "luckydye"
@@ -33,7 +33,7 @@
   "peerDependencies": {
     "@floating-ui/dom": "^1.6.7",
     "@rive-app/canvas-advanced-lite": "^2.23.3",
-    "@sv/scroll-lock": "^1.0.1",
+    "@atrium-ui/scroll-lock": "^1.0.1",
     "chart.js": "^4.4.3"
   },
   "exports": {

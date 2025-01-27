@@ -32,7 +32,7 @@ export default function () {
         </div>
       </form>
 
-      <Input readonly value={`npx @sv/codestyle ${args.value.join(" ")}`} />
+      <Input readonly value={`npx @atrium-ui/codestyle ${args.value.join(" ")}`} />
     </div>
   );
 }

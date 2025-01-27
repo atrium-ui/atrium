@@ -103,7 +103,7 @@ function generateMessage() {
 
   for (const [_, pkg, version] of publishedPackages) {
     const changes = versionChanges(pkg, version);
-    const pkgWithoutScope = pkg.replace("@sv/", "");
+    const pkgWithoutScope = pkg.replace("@atrium-ui/", "");
     const changelogUrl = `https://svp.pages.s-v.de/atrium/packages/${pkgWithoutScope}/#changelog`;
     const packageUrl = `https://gitlab.s-v.de/svp/atrium/-/packages/?orderBy=created_at&sort=desc&search%5B%5D=${pkg}`;
     const user = process.env.GITLAB_USER_NAME || undefined;
