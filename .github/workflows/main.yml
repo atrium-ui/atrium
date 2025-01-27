@@ -42,6 +42,6 @@ jobs:
           install: true
       - uses: knope-dev/action@v1
         with:
-          version: 0.18.0
+          version: 0.18.3
       - name: Publish packages
         run: task release
