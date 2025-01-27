@@ -40,5 +40,8 @@ jobs:
       - uses: jdx/mise-action@v2
         with:
           install: true
+      - uses: knope-dev/action@v1
+        with:
+          version: 0.18.0
       - name: Publish packages
         run: task release
