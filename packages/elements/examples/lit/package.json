@@ -20,7 +20,7 @@
       "cjs"
     ],
     "external": [
-      "@sv/*"
+      "@atrium-ui/*"
     ],
     "sourcemap": true,
     "clean": true

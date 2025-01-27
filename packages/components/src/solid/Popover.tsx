@@ -1,7 +1,7 @@
 /* @jsxImportSource solis-js */
 import type { ParentProps } from "solid-js";
 import { Button } from "./Button";
-import "@sv/elements/popover";
+import "@atrium-ui/elements/popover";
 
 export function Popover(props: { label?: string } & ParentProps) {
   return (

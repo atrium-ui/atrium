@@ -22,5 +22,5 @@
 		"packages/elements/packages/*",
 		"docs"
 	],
-	"prettier": "@sv/codestyle/.prettierrc.json"
+	"prettier": "@atrium-ui/codestyle/.prettierrc.json"
 }

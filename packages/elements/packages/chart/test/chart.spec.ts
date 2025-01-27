@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 const NODE_NAME = "a-chart";
 
 test("import a-chart element", async () => {
-  const { ChartElement } = await import("@sv/elements/chart");
+  const { ChartElement } = await import("@atrium-ui/elements/chart");
   expect(ChartElement).toBeDefined();
 
   // is defined in custom element registry
@@ -12,7 +12,7 @@ test("import a-chart element", async () => {
 });
 
 test("construct a-chart element", async () => {
-  const { ChartElement } = await import("@sv/elements/chart");
+  const { ChartElement } = await import("@atrium-ui/elements/chart");
 
   // is constructable
   expect(new ChartElement()).toBeInstanceOf(ChartElement);
@@ -50,7 +50,7 @@ test("chart load and cleanup", async () => {
 });
 
 async function newChartElement() {
-  await import("@sv/elements/chart");
+  await import("@atrium-ui/elements/chart");
   const ele = document.createElement(NODE_NAME);
   document.body.appendChild(ele);
   return ele;

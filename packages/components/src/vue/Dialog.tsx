@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 import { defineComponent, ref } from "vue";
-import "@sv/elements/blur";
-import "@sv/elements/portal";
+import "@atrium-ui/elements/blur";
+import "@atrium-ui/elements/portal";
 import { Button } from "./Button";
 
 export const Dialog = defineComponent(
