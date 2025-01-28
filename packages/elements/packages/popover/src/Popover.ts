@@ -210,6 +210,10 @@ export class Popover extends Portal {
 
 /**
  * A wrapper element that shows content when the user clicks with the slotted input element.
+ * Calls `.show()` on the target when the trigger is clicked.
+ * Calls `.hide()` on the target when the trigger is clicked outside of the popover.
+ *
+ * TODO: Generalized a-trigger. Also add a target prop where targets outside of its children can be triggered.
  *
  * @example
  * ```html
@@ -221,7 +225,7 @@ export class Popover extends Portal {
  *   <a-popover>
  *     <div>Content</div>
  *   </a-popover>
- * </a-popover>
+ * </a-popover-trigger>
  * ```
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-popover/
