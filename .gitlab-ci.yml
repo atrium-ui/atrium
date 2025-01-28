@@ -102,5 +102,5 @@ pages:
     url: https://svp.pages.s-v.de/atrium
   artifacts:
     paths:
-      - public
+      - docs/public
   script: task docs:build
