@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "check": "tsc --pretty",
-    "test": "bun test --rerun-each 5 .",
+    "test": "bun test --rerun-each 5",
     "publish-package": "task publish"
   },
   "files": [

@@ -1,6 +1,5 @@
 import { LitElement, html, css } from "lit";
 import { property, state } from "lit/decorators.js";
-import "./Field.css";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -173,6 +172,3 @@ export class FormFieldErrorElement extends LitElement {
     `;
   }
 }
-
-customElements.define("a-form-field", FormFieldElement);
-customElements.define("a-form-field-error", FormFieldErrorElement);
