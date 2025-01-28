@@ -24,4 +24,4 @@ tasks:
     cmds:
       - cd .. && task build
       - bun x astro build
-      - mv dist ../public
+      - mv dist public
