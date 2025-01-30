@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.1.0 (2025-01-30)
+
+### Features
+
+- a-form-field: Add invalid prop for styling of invalid states (#4)
+
 ## 2.0.10 (2025-01-24)
 
 ### Fixes
