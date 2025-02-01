@@ -52,7 +52,6 @@
     "svg-sprite": "^2.0.4"
   },
   "devDependencies": {
-    "@atrium-ui/codestyle": "^1.1.1",
     "@biomejs/biome": "^1.8.3",
     "@types/node": "^18.19.49",
     "@types/svg-sprite": "^0.0.34",

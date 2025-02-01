@@ -8,6 +8,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"@biomejs/biome": "^1.9.4",
+		"@total-typescript/ts-reset": "^0.6.1",
 		"@types/bun": "^1.1.0",
 		"@types/node": "^20.11.0",
 		"@types/web": "^0.0.123",
@@ -22,5 +23,5 @@
 		"packages/elements/packages/*",
 		"docs"
 	],
-	"prettier": "@atrium-ui/codestyle/.prettierrc.json"
+	"prettier": "./.prettierrc.json"
 }
