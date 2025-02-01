@@ -6,7 +6,6 @@ vars:
   PACKAGES:
     [
       "packages/a11y",
-      "packages/codestyle",
       "packages/components",
       "packages/elements",
       "packages/scroll-lock",

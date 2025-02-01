@@ -1,5 +1,5 @@
 {
-  "extends": "@atrium-ui/codestyle/tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "useDefineForClassFields": false,
     "experimentalDecorators": true,
