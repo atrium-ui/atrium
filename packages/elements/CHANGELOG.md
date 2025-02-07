@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.1.1 (2025-02-07)
+
+### Fixes
+
+- a-transition: Make transition timing configruable through css
+
 ## 2.1.0 (2025-01-30)
 
 ### Features
