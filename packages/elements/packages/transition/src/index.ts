@@ -13,7 +13,14 @@ declare global {
   }
 }
 
-let globalStyles: HTMLStyleElement;
+function msFromCSS(string: string) {
+  const unit = string.match(/m?s/)?.[0];
+  let ms = Number.parseFloat(string);
+  if (unit === "s") {
+    ms *= 1000;
+  }
+  return ms;
+}
 
 /**
  * Transitions dom elements between two state automatically.
@@ -34,6 +41,8 @@ class Transition extends LitElement {
     return css`
       :host {
         display: block;
+        transition-duration: 0.3s;
+        transition-timing-function: ease-in-out;
       }
       slot {
         display: inherit;
@@ -171,6 +180,11 @@ class Transition extends LitElement {
     const height = this.offsetHeight;
     const width = this.offsetWidth;
 
+    const easing = getComputedStyle(this).getPropertyValue("transition-timing-function");
+    const duration = msFromCSS(
+      getComputedStyle(this).getPropertyValue("transition-duration"),
+    );
+
     await this.animate(
       [
         {
@@ -183,8 +197,8 @@ class Transition extends LitElement {
         },
       ],
       {
-        duration: 200,
-        easing: "ease-out",
+        duration,
+        easing,
       },
     ).finished;
 
