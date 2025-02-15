@@ -4,7 +4,6 @@ import starlight from "@astrojs/starlight";
 import tailwind from "@astrojs/tailwind";
 import vue from "@astrojs/vue";
 import { defineConfig } from "astro/config";
-import starlightConfig from "./starlight.config";
 
 export default defineConfig({
   base: "/atrium/",
@@ -31,7 +30,24 @@ export default defineConfig({
     tailwind({
       configFile: "./tailwind.config.js",
     }),
-    starlight(starlightConfig),
+    starlight({
+      favicon: "favicon.png",
+      title: "Atrium",
+      customCss: ["./src/custom.css"],
+      logo: {
+        dark: "./assets/logo-dark.svg",
+        light: "./assets/logo-light.svg",
+        replacesTitle: true,
+        alt: "Atrium Logo",
+      },
+      social: {
+        gitlab: "https://gitlab.s-v.de/svp/atrium",
+      },
+      tableOfContents: false,
+      components: {
+        Header: "./src/components/starlight/Header.astro",
+      },
+    }),
     solid({
       include: ["**/solid/*.{tsx}"],
     }),
@@ -43,7 +59,7 @@ export default defineConfig({
       jsx: true,
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.includes("-"),
+          isCustomElement: tag => tag.includes("-"),
         },
       },
     }),
