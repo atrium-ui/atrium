@@ -5,10 +5,13 @@ import SocialIcons from "virtual:starlight/components/SocialIcons";
 import ThemeSelect from "virtual:starlight/components/ThemeSelect";
 
 const basePath = "/atrium";
-
-const slug = Astro.props.slug;
+const rootSlug = Astro.url.pathname.split("/")[2];
 
 const navItems = [
+  {
+    title: "Introduction",
+    slug: "introduction",
+  },
   {
     title: "Components",
     slug: "components",
@@ -16,10 +19,6 @@ const navItems = [
   {
     title: "Elements",
     slug: "elements",
-  },
-  {
-    title: "Packages",
-    slug: "packages",
   },
 ];
 ---
@@ -34,7 +33,7 @@ const navItems = [
         <a
           href={`${basePath}/${item.slug}`}
           class="no-underline text-slate-200 hover:text-slate-50 active:text-slate-300 py-2 block aria-selected:text-white aria-selected:underline"
-          aria-selected={slug === item.slug ? "true" : undefined}
+          aria-selected={rootSlug === item.slug ? "true" : undefined}
         >
           {item.title}
         </a>

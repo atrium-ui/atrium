@@ -52,6 +52,14 @@ table {
   width: 100%;
 }
 
+.sidebar-pane a[href] {
+  font-weight: normal;
+}
+
+.sidebar-pane a[href]:not([aria-current="page"]):hover {
+  background-color: #454a5c;
+}
+
 /* Slides count for Slider */
 
 .not-content {
@@ -73,4 +81,16 @@ table {
   color: white;
   opacity: 0.5;
   font-family: monospace;
+}
+
+/* Pill */
+
+.pill {
+  @apply border border-zinc-700 flex gap-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 px-3 py-2 leading-none no-underline items-center hover:bg-zinc-300 dark:hover:bg-zinc-700;
+
+  color: currentColor !important;
+}
+
+.pill span {
+  @apply text-xs font-bold;
 }
