@@ -10,13 +10,10 @@ import { PropertiesCard } from "./cards/PropertiesCard";
 import { AnimationCard } from "./cards/AnimationCard";
 import { LightboxCard } from "./cards/LightboxCard";
 import { FilterCard } from "./cards/FilterCard";
-import { ThemeSelector } from "../../../components/ThemeSelector";
 
 export const Showcase = defineComponent(() => {
   return () => (
     <>
-      <ThemeSelector />
-
       <div class="shoawcase pt-12 lg:p-8">
         <div class="grid gap-4 lg:grid-cols-3">
           <div class="-translate-y-5 flex flex-col gap-4">

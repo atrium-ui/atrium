@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --theme-color: #ccc;
+}
+
 /* trying to prevent layout shift with unstyled elements */
 .main-pane *:not(:defined):not(astro-slot) {
   display: none;

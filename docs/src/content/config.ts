@@ -1,13 +1,17 @@
 import { docsSchema } from "@astrojs/starlight/schema";
 import { defineCollection } from "astro:content";
-import { glob } from "astro/loaders";
 
 export const collections = {
+  components: defineCollection({
+    schema: docsSchema(),
+  }),
+  elements: defineCollection({
+    schema: docsSchema(),
+  }),
+  packages: defineCollection({
+    schema: docsSchema(),
+  }),
   docs: defineCollection({
-    // loader: glob({
-    //   pattern: "**/*.md",
-    //   base: "./test",
-    // }),
     schema: docsSchema(),
   }),
 };
