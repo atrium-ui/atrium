@@ -6,8 +6,6 @@ import { Image } from "package:/components/Image";
 import "@atrium-ui/elements/range";
 
 export function SliderCard() {
-  const data = new Array(10).fill(0);
-
   return (
     <Card class="p-3">
       <div class="flex flex-col space-y-1.5 pb-8">
@@ -18,7 +16,7 @@ export function SliderCard() {
       </div>
       <div class="flex justify-center">
         <Slider class="w-[300px] overflow-visible">
-          {data.map((n, i) => {
+          {new Array(10).fill(0).map((n, i) => {
             return (
               <div key={n} class="pr-4">
                 <Image

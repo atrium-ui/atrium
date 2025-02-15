@@ -33,6 +33,7 @@ export default defineConfig({
     starlight({
       favicon: "favicon.png",
       title: "Atrium",
+      routeMiddleware: "./src/routeData.ts",
       customCss: ["./src/custom.css"],
       logo: {
         dark: "./assets/logo-dark.svg",

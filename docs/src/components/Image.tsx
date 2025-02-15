@@ -3,14 +3,14 @@
 import { Lightbox } from "@components/src/vue/Lightbox";
 import { twMerge } from "tailwind-merge";
 
-const landscape = import.meta.glob("../../assets/images/landscape/*.webp", {
+const landscape = import.meta.glob("../assets/images/landscape/*.webp", {
   eager: true,
-  as: "url",
+  query: "?url",
 });
 
-const portrait = import.meta.glob("../../assets/images/portrait/*.webp", {
+const portrait = import.meta.glob("../assets/images/portrait/*.webp", {
   eager: true,
-  as: "url",
+  query: "?url",
 });
 
 const images = Object.assign(landscape, portrait);
@@ -19,8 +19,7 @@ export function randomImage() {
   const keys = Object.keys(images);
   const uid = Math.floor(Math.random() * keys.length);
   const src = images[keys[uid] || 0];
-
-  return src;
+  return src?.default;
 }
 
 export function Image(props: {

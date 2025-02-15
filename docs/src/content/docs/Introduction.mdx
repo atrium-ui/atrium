@@ -1,13 +1,38 @@
 ---
 group: "docs"
-icon: "carbon:template"
-title: "Usage"
+icon: "carbon:share"
+title: "Introduction"
 ---
 
 import { Command } from "package:/components"
 import { Steps, FileTree } from '@astrojs/starlight/components';
+import { AccordionDemo } from "./components/accordion/AccordionDemo";
 
-## Requirements
+This library serves as a place to collect and share code between projects and developers.
+
+It includes libraries, Custom-elements and components for different frameworks to use in website creation and provides tooling to build and publish packages.
+
+The components in this library are composed of two layers:
+
+- The first layer are **[Components](./components)**. they ready to use, framework specific and pre-styled Components that give you a solid starting point. You do not import Components as dependencies, they are copied into your projects codebase like templates.
+
+- The second layer is the **[Elements](./elements)** layer. Elements are "Headless" custom-elements that only implement behavior with accessibility in mind, with as little styling as possible.
+
+![diagram](./images/concept-diagram.png)
+
+<div class="not-content max-w-[800px]">
+  <p>
+    For example, this Accordion **Vue** Component, uses the `<a-expandable/>` custom-element to implement the animated expanding behaviour.
+  </p>
+  <AccordionDemo class="pt-4" client:only="vue" />
+</div>
+
+<br/>
+
+This approach gives the given project ownership over the components design. We start with sensible defaults, then change the design for the projects needs.
+
+
+## Usage
 
 Components require **tailwindcss** to be installed in the project. Here links for [NuxtJS](https://www.npmjs.com/package/@nuxtjs/tailwindcss), [Vite](https://tailwindcss.com/docs/guides/vite) or [Tailwind cli](https://tailwindcss.com/docs/installation).
 
