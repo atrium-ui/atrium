@@ -1,9 +1,6 @@
 ---
 title: Elements
 description: Elements overview
-sidebar:
-  label: Overview
-  order: 1
 ---
 
 To keep the amount of logic in Components small, Elements are built as unstyled [custom-elements](https://web.dev/articles/custom-elements-v1#prestyle) using [Lit](https://lit.dev/docs/) which makes them framework agnostic, so they can be reused within many requirements and with any framework.
@@ -14,14 +11,14 @@ The lower-level API of custom-elements, compared to frameworks, also gives you t
 
 ## Limitations of Custom-elements
 
-[Use custom-elements for what they are good at.](https://nolanlawson.com/2023/08/23/use-web-components-for-what-theyre-good-at/)  
-[Web Components Are Not the Future](https://dev.to/ryansolid/web-components-are-not-the-future-48bh)  
-[Web Components are not Framework Components — and That’s Okay](https://lea.verou.me/blog/2024/wcs-vs-frameworks/)  
+[Use custom-elements for what they are good at.](https://nolanlawson.com/2023/08/23/use-web-components-for-what-theyre-good-at/)
+[Web Components Are Not the Future](https://dev.to/ryansolid/web-components-are-not-the-future-48bh)
+[Web Components are not Framework Components — and That’s Okay](https://lea.verou.me/blog/2024/wcs-vs-frameworks/)
 
-- Custom-elements work best when they are completely self-contained.  
-- They should not effect elements around itself.  
-- Do not create DOM elements in custom-elements to avoid layout-shifts.  
-- When fully client-side rendered, most of these limitations are not relevant.  
+- Custom-elements work best when they are completely self-contained.
+- They should not effect elements around itself.
+- Do not create DOM elements in custom-elements to avoid layout-shifts.
+- When fully client-side rendered, most of these limitations are not relevant.
 
 ## Server side rendering
 
@@ -33,7 +30,7 @@ This does not apply for the children of the Element, those are still rendered by
 
 Ship less code with less dependencies.
 
-![Dependency tree](../images/elements-dependencies.png)
+![Dependency tree](./images/elements-dependencies.png)
 
 ## Common Issues
 
