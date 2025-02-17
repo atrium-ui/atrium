@@ -7,21 +7,8 @@
 	<p align="center" style="text-align:cetner;">
     A curated collection of libraries, Custom-elements and components for different frameworks for building websites.
     <br />
-    <br />
-    <a href="https://svp.pages.s-v.de/atrium/">Docs</a> ·
-    <a href="https://gitlab.s-v.de/svp/atrium/-/issues">Issues</a> ·
-    <a href="https://gitlab.s-v.de/svp/atrium/-/packages">Packages</a>
-    <br />
   </p>
 </p>
-
-<br />
-
-## Use in other projects
-
-See [Usage](https://svp.pages.s-v.de/atrium/usage/) in the docs for instructions.
-
-<br />
 
 ## Packages
 
