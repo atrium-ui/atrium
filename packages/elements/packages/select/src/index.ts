@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import "@atrium-ui/elements/expandable";
+import "@sv/elements/expandable";
 import { OptionElement } from "./Option";
 import { Select } from "./Select";
 

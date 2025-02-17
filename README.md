@@ -13,11 +13,11 @@
 
 ## Packages
 
-### @atrium-ui/components
+### @sv/components
 
 This package contains all component templates and the cli for use.
 
-### @atrium-ui/elements
+### @sv/elements
 
 The elements package distributes all the custom-elements that are used in the components or external projects.
 All elements share the same dependencies from the packages/elements/package.json.

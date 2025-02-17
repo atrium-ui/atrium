@@ -75,7 +75,7 @@ tasks:
     dir: "docs"
     deps: [setup]
     cmds:
-      - 'npx @atrium-ui/a11y ./a11y.json "task preview"'
+      - 'npx @sv/a11y ./a11y.json "task preview"'
 
   test:watch:
     desc: "Run tests on current packages (Run specific test: t test --  -t prettier)"

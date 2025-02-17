@@ -1,5 +1,5 @@
 {
-  "name": "@atrium-ui/blur",
+  "name": "@sv/blur",
   "author": "atrium",
   "contributors": [],
   "private": true,
@@ -16,8 +16,8 @@
     "format": ["esm", "cjs"],
     "external": [
       "lit",
-      "@atrium-ui/elements",
-      "@atrium-ui/scroll-lock"
+      "@sv/elements",
+      "@sv/scroll-lock"
     ],
     "sourcemap": true,
     "clean": true

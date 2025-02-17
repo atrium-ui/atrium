@@ -1,7 +1,7 @@
 /* @jsx React */
 import type { PropsWithChildren } from "react";
 import { Button } from "./Button";
-import "@atrium-ui/elements/popover";
+import "@sv/elements/popover";
 
 export function Popover(props: { label?: string } & PropsWithChildren) {
   return (

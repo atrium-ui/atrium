@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
-import "@atrium-ui/elements/select";
-import "@atrium-ui/elements/expandable";
+import "@sv/elements/select";
+import "@sv/elements/expandable";
 import { Button } from "./Button.jsx";
 import { defineComponent, ref } from "vue";
 import { twMerge } from "tailwind-merge";

@@ -14,7 +14,7 @@ type ScrollLockOptions = {
  *
  * @example
  * ```js
- * import { ScrollLock } from '@atrium-ui/scroll-lock';
+ * import { ScrollLock } from '@sv/scroll-lock';
  * const scrollLock = new ScrollLock();
  *
  * // lock page scrolling

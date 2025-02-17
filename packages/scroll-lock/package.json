@@ -1,5 +1,5 @@
 {
-  "name": "@atrium-ui/scroll-lock",
+  "name": "@sv/scroll-lock",
   "version": "1.0.2",
   "description": "universal scroll-lock",
   "main": "dist/index.js",
@@ -20,7 +20,7 @@
       "esm"
     ],
     "external": [
-      "@atrium-ui/*"
+      "@sv/*"
     ],
     "sourcemap": true,
     "clean": true

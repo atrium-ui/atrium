@@ -8,7 +8,7 @@
     "types": [
       "@types/bun",
       "vite/client",
-      "@atrium-ui/elements"
+      "@sv/elements"
     ]
   },
   "exclude": [

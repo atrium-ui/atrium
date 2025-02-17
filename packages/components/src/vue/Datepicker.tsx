@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import "@atrium-ui/elements/popover";
+import "@sv/elements/popover";
 import { Button } from "./Button";
 import { defineComponent, ref } from "vue";
 import AirDatepicker from "air-datepicker";

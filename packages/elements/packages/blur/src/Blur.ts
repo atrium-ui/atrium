@@ -1,6 +1,6 @@
 import { LitElement, type PropertyValueMap, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
-import { ScrollLock } from "@atrium-ui/scroll-lock";
+import { ScrollLock } from "@sv/scroll-lock";
 
 const SELECTOR_CUSTOM_ELEMENT =
   "*:not(br,span,script,p,style,div,slot,pre,h1,h2,h3,h4,h5,img,svg)";

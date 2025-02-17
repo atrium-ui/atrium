@@ -1,5 +1,5 @@
 {
-  "name": "@atrium-ui/box",
+  "name": "@sv/box",
   "author": "atrium",
   "contributors": [],
   "private": true,
@@ -16,8 +16,8 @@
     "format": ["esm", "cjs"],
     "external": [
       "lit",
-      "@atrium-ui/elements",
-      "@atrium-ui/scroll-lock"
+      "@sv/elements",
+      "@sv/scroll-lock"
     ],
     "sourcemap": true,
     "clean": true

@@ -7,8 +7,8 @@ import {
   type ReactiveControllerHost,
 } from "lit";
 import { property, query } from "lit/decorators.js";
-import { Portal } from "@atrium-ui/elements/portal";
-import { Blur } from "@atrium-ui/elements/blur";
+import { Portal } from "@sv/elements/portal";
+import { Blur } from "@sv/elements/blur";
 import {
   computePosition,
   autoUpdate,

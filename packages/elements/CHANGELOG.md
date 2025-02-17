@@ -1,4 +1,4 @@
-# @atrium-ui/elements
+# @sv/elements
 
 ## 2.1.1 (2025-02-07)
 

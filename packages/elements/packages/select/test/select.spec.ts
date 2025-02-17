@@ -4,7 +4,7 @@ import { SelectEvent } from "../src/Select";
 const NODE_NAME = "a-select";
 
 test("import a-select element", async () => {
-  const { Select } = await import("@atrium-ui/elements/select");
+  const { Select } = await import("@sv/elements/select");
   expect(Select).toBeDefined();
 
   // is defined in custom element registry
@@ -12,7 +12,7 @@ test("import a-select element", async () => {
 });
 
 test("construct a-select element", async () => {
-  const { Select } = await import("@atrium-ui/elements/select");
+  const { Select } = await import("@sv/elements/select");
 
   // is constructable
   expect(new Select()).toBeInstanceOf(Select);

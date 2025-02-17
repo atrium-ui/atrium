@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
-import "@atrium-ui/elements/track";
-import type { Track } from "@atrium-ui/elements/track";
+import "@sv/elements/track";
+import type { Track } from "@sv/elements/track";
 import { twMerge } from "tailwind-merge";
 import { computed, defineComponent, onMounted, ref } from "vue";
 import { Button } from "./Button";
