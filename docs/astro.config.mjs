@@ -44,7 +44,6 @@ export default defineConfig({
       social: {
         gitlab: "https://gitlab.s-v.de/svp/atrium",
       },
-      tableOfContents: false,
       components: {
         Header: "./src/components/starlight/Header.astro",
       },
