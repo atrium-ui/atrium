@@ -1,5 +1,5 @@
 {
-  "name": "@atrium-ui/time",
+  "name": "@sv/time",
   "author": "atrium",
   "contributors": [],
   "private": true,
@@ -15,7 +15,7 @@
     "format": ["esm", "cjs"],
     "external": [
       "lit",
-      "@atrium-ui/elements"
+      "@sv/elements"
     ],
     "sourcemap": true,
     "clean": true

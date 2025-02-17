@@ -1,5 +1,5 @@
 {
-  "name": "@atrium-ui/popover",
+  "name": "@sv/popover",
   "author": "atrium",
   "contributors": [],
   "private": true,
@@ -21,7 +21,7 @@
     ],
     "external": [
       "lit",
-      "@atrium-ui/elements"
+      "@sv/elements"
     ],
     "sourcemap": true,
     "clean": true

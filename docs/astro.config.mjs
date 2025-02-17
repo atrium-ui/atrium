@@ -13,7 +13,7 @@ export default defineConfig({
     resolve: {
       alias: {
         "package:": "/src",
-        "@components": "@atrium-ui/components",
+        "@components": "@sv/components",
       },
     },
     server: {

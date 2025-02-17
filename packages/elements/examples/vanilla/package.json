@@ -1,5 +1,5 @@
 {
-  "name": "@atrium-ui/example",
+  "name": "@sv/example",
   "version": "0.0.1",
   "description": "",
   "type": "module",
@@ -20,7 +20,7 @@
       "cjs"
     ],
     "external": [
-      "@atrium-ui/*"
+      "@sv/*"
     ],
     "sourcemap": true,
     "clean": true

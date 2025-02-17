@@ -3,7 +3,7 @@ import { test, expect, describe } from "bun:test";
 const NODE_NAME = "a-scroll";
 
 test("import element", async () => {
-  const { ScrollElement } = await import("@atrium-ui/elements/scroll");
+  const { ScrollElement } = await import("@sv/elements/scroll");
   expect(ScrollElement).toBeDefined();
 
   // is defined in custom element registry
@@ -11,7 +11,7 @@ test("import element", async () => {
 });
 
 test("construct element", async () => {
-  const { ScrollElement } = await import("@atrium-ui/elements/scroll");
+  const { ScrollElement } = await import("@sv/elements/scroll");
 
   // is constructable
   expect(new ScrollElement()).toBeInstanceOf(ScrollElement);

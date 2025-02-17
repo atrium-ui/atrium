@@ -6,7 +6,7 @@ import {
   type InputState,
   type Easing,
   type Trait,
-} from "@atrium-ui/elements/track";
+} from "@sv/elements/track";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
 

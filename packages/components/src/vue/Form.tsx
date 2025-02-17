@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 import { ref, defineComponent } from "vue";
-import "@atrium-ui/elements/transition";
-import "@atrium-ui/elements/form";
+import "@sv/elements/transition";
+import "@sv/elements/form";
 import { Button } from "./Button.jsx";
 import { twMerge } from "tailwind-merge";
 
