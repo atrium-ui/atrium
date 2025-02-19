@@ -65,7 +65,7 @@ tasks:
       - bun x turbo dev --filter "./packages/**"
 
   test:
-    desc: "Run tests on all packages (Run specific test: t test --  -t prettier)"
+    desc: "Run tests on all packages (Run specific test: t test -- -t prettier)"
     deps: [build]
     cmds:
       - bun x turbo test -- {{.CLI_ARGS}}

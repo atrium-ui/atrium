@@ -100,11 +100,11 @@ test("aria attributes", async () => {
   expect(blur.getAttribute("role")).toBe("dialog");
 
   expect(blur.hasAttribute("inert")).toBe(false);
-  expect(blur.getAttribute("aria-hidden")).toBe("false");
+  expect(blur.hasAttribute("aria-hidden")).toBe(false);
 
   blur.disable();
   expect(blur.hasAttribute("inert")).toBe(true);
-  expect(blur.getAttribute("aria-hidden")).toBe("true");
+  expect(blur.hasAttribute("aria-hidden")).toBe(true);
 });
 
 test("allowed scroll elements match content", async () => {
@@ -166,3 +166,17 @@ async function createBlur() {
 
   return ele;
 }
+
+test("allowinert attribute disables inert", async () => {
+  const root = await createBlur();
+  const blur = root.querySelector("a-blur");
+  blur.setAttribute("allowinert", "false");
+
+  blur.enable();
+  expect(blur.hasAttribute("inert")).toBe(false);
+  expect(blur.hasAttribute("aria-hidden")).toBe(false);
+
+  blur.disable();
+  expect(blur.hasAttribute("inert")).toBe(false);
+  expect(blur.hasAttribute("aria-hidden")).toBe(false);
+});
