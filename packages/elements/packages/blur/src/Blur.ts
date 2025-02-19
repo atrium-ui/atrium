@@ -114,6 +114,13 @@ export class Blur extends LitElement {
   @property({ type: Boolean, reflect: true }) public enabled = false;
 
   /**
+   * (experimental)
+   * Whether the blur should be set to inert, when not enabled.
+   */
+  @property({ type: String })
+  public allowinert = "true";
+
+  /**
    * Whether the blur should lock scrolling when shown.
    */
   @property({ type: Boolean, reflect: true })
@@ -140,8 +147,12 @@ export class Blur extends LitElement {
   /** Disable the blur element */
   public disable() {
     this.tryUnlock();
-    this.setAttribute("inert", "");
-    this.setAttribute("aria-hidden", "true");
+
+    if (this.allowinert === "true") {
+      this.setAttribute("inert", "");
+      this.setAttribute("aria-hidden", "true");
+    }
+
     this.enabled = false;
 
     this.lastActiveElement?.focus();
@@ -150,8 +161,10 @@ export class Blur extends LitElement {
   /** Enable the blur element */
   public enable() {
     this.tryLock();
+
     this.removeAttribute("inert");
-    this.setAttribute("aria-hidden", "false");
+    this.removeAttribute("aria-hidden");
+
     this.enabled = true;
 
     // in the case enable is called after the element is already enabled, dont set the last active element
