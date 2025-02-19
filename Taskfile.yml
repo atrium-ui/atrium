@@ -122,7 +122,7 @@ tasks:
       - git config user.name "CI"
       - git fetch --prune --prune-tags -f
       - knope -v release | tee .task/publish.txt
-      # - task notify || true
+      - task notify || true
 
   release:preview:
     cmds:
