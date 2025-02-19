@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.1.2 (2025-02-19)
+
+### Fixes
+
+- Give `a-blur` the option to not inert when disabled
+
 ## 2.1.1 (2025-02-07)
 
 ### Fixes
