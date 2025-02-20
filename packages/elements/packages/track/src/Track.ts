@@ -383,6 +383,10 @@ export class Track extends LitElement {
         if (snapTrait) this.removeTrait(snapTrait);
       }
     }
+
+    if (_changedProperties.has("align")) {
+      this.format();
+    }
   }
 
   private _children: Element[] = [];
@@ -1383,8 +1387,6 @@ export class Track extends LitElement {
         pointerEvent.stopPropagation();
       }
     });
-
-    let scrollTimeout: number | undefined;
 
     // TODO: put this in a trait so it can be disabled
     this.listener(
