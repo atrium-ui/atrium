@@ -84,6 +84,7 @@ export const Slider = defineComponent(
           </Button>
 
           <a-track
+            debug
             ref={track}
             class="flex w-full overflow-visible"
             overflowscroll

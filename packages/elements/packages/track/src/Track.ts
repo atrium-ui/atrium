@@ -137,8 +137,6 @@ export class PointerTrait implements Trait {
   update(track: Track) {
     this.moveVelocity.mul(this.moveDrag);
 
-    if (track.scrolling) return;
-
     if (this.grabbing) {
       track.drag = 0;
     } else {
@@ -223,7 +221,7 @@ export class SnapTrait implements Trait {
   }
 
   input(track: Track) {
-    if (track.grabbing || track.scrolling || track.target) return;
+    if (track.grabbing || track.target) return;
 
     // Only when decelerating
     if (track.deltaVelocity[track.currentAxis] > 0) return;
@@ -533,7 +531,7 @@ export class Track extends LitElement {
     return 0;
   }
 
-  get scrollBounds() {
+  private getScrollBounds() {
     let stopTop = 0;
     let stopLeft = 0;
     let stopBottom = 0;
@@ -570,15 +568,20 @@ export class Track extends LitElement {
     };
   }
 
+  scrollBounds = {
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+  };
+
   private animation: number | undefined;
   private tickRate = 1000 / 144;
   private lastTick = 0;
   private accumulator = 0;
 
   public grabbing = false;
-  private scrollTimeout;
 
-  public scrolling = false;
   public mousePos = new Vec2();
   public inputForce = new Vec2();
 
@@ -675,16 +678,16 @@ export class Track extends LitElement {
   private observedChildren = new Set<Node>();
 
   private onSlotChange = () => {
-    const nodes = this.items;
+    this.updateItems();
 
     for (const node of this.observedChildren) {
-      if (node instanceof HTMLElement && !nodes.includes(node)) {
+      if (node instanceof HTMLElement && !this.items.includes(node)) {
         this.resizeObserver?.unobserve(node);
         this.observedChildren.delete(node);
       }
     }
 
-    for (const node of nodes) {
+    for (const node of this.items) {
       if (node instanceof HTMLElement) {
         node.ariaRoleDescription = "slide";
       }
@@ -694,8 +697,6 @@ export class Track extends LitElement {
         this.resizeObserver?.observe(node);
       }
     }
-
-    this.format();
   };
 
   private format = () => {
@@ -718,6 +719,8 @@ export class Track extends LitElement {
         }
         break;
     }
+
+    this.scrollBounds = this.getScrollBounds();
 
     const formatEvent = new CustomEvent("format", {
       bubbles: true,
@@ -1383,44 +1386,41 @@ export class Track extends LitElement {
       this,
       "wheel",
       (wheelEvent: WheelEvent) => {
+        if (wheelEvent.ctrlKey === true) {
+          // its a pinch zoom gesture
+          return;
+        }
+
         const delta = new Vec2(wheelEvent.deltaX, wheelEvent.deltaY);
 
         if (!this.canMove(delta)) return;
 
         if (wheelEvent.target !== this) {
           this.setTarget(undefined);
-          clearTimeout(this.scrollTimeout);
-
-          this.scrolling = true;
-          this.scrollTimeout = setTimeout(() => {
-            this.scrolling = false;
-          }, 200);
         }
+
+        const deltaThreshold = Vec2.abs(delta);
 
         const threshold = this.vertical
           ? Math.abs(delta.x) < Math.abs(delta.y)
           : Math.abs(delta.x) > Math.abs(delta.y);
 
-        if (threshold) {
+        if (deltaThreshold > 2) {
+          this.grabbing = true;
+          this.inputState.grab.value = true;
+
           this.acceleration.mul(0);
 
-          if (this.loop) {
-            this.inputForce.add(delta);
+          if (this.vertical) {
+            this.inputForce.y = wheelEvent.deltaY;
           } else {
-            const bounds = this.scrollBounds;
-
-            if (this.vertical) {
-              const pos = this.position.y + wheelEvent.deltaY;
-              this.inputForce.y =
-                Math.max(Math.min(pos, bounds.bottom), bounds.top) - this.position.y;
-            } else {
-              const pos = this.position.x + wheelEvent.deltaX;
-              this.inputForce.x =
-                Math.max(Math.min(pos, bounds.right), bounds.left) - this.position.x;
-            }
+            this.inputForce.x = wheelEvent.deltaX;
           }
 
           wheelEvent.preventDefault();
+        } else {
+          this.grabbing = false;
+          this.inputState.release.value = true;
         }
       },
       { passive: false },
