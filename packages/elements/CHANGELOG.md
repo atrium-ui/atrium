@@ -1,5 +1,18 @@
 # @sv/elements
 
+## 2.2.0-dev.3 (2025-02-20)
+
+### Features
+
+- a-track: find items through slots
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+- reformat on align prop change
+- track moves on both axis at the same time
+
 ## 2.2.0-dev.2 (2025-02-20)
 
 ### Features
