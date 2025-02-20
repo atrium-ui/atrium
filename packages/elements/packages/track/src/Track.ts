@@ -264,6 +264,24 @@ export class SnapTrait implements Trait {
   }
 }
 
+function getCSSChildren(element: Element) {
+  const children: Element[] = [];
+  for (const child of element.children) {
+    const display = window.getComputedStyle(child, null).display;
+    if (display === "contents") {
+      if (child instanceof HTMLSlotElement) {
+        children.push(...child.assignedElements());
+      } else {
+        // could be recursive
+        children.push(...child.children);
+      }
+    } else {
+      children.push(child);
+    }
+  }
+  return children;
+}
+
 /**
  * A Track is a custom element that provides a interface for scrolling content.
  * It can be used to create carousels, slideshows, and other scrolling elements.
@@ -369,10 +387,21 @@ export class Track extends LitElement {
     }
   }
 
+  private _children: Element[] = [];
+
+  public get items() {
+    return this._children;
+  }
+
+  private updateItems() {
+    this._children = getCSSChildren(this);
+    this.format();
+  }
+
   public get itemCount() {
-    if (this.children) {
+    if (this.items) {
       // TODO: respect left clones too
-      return this.children.length - this.clones.length;
+      return this.items.length - this.clones.length;
     }
     return 0;
   }
@@ -412,7 +441,7 @@ export class Track extends LitElement {
       // TODO: respect left children too
       this._widths = new Array(this.itemCount).fill(1).map((_, i) => {
         // TODO: offsetWidth doesn't take transforms in consideration, so we use. Maybe use getBoundingClientRect
-        return (this.children[i] as HTMLElement)?.offsetWidth || 0;
+        return (this.items[i] as HTMLElement)?.offsetWidth || 0;
       });
     }
     return this._widths;
@@ -423,7 +452,7 @@ export class Track extends LitElement {
     if (!this._heights) {
       // TODO: respect left children too
       this._heights = new Array(this.itemCount).fill(1).map((_, i) => {
-        return (this.children[i] as HTMLElement)?.offsetHeight || 0;
+        return (this.items[i] as HTMLElement)?.offsetHeight || 0;
       });
     }
     return this._heights;
@@ -646,25 +675,23 @@ export class Track extends LitElement {
   private observedChildren = new Set<Node>();
 
   private onSlotChange = () => {
-    const nodes = this.slotElement?.assignedNodes();
+    const nodes = this.items;
 
-    if (nodes) {
-      for (const node of this.observedChildren) {
-        if (node instanceof HTMLElement && !nodes.includes(node)) {
-          this.resizeObserver?.unobserve(node);
-          this.observedChildren.delete(node);
-        }
+    for (const node of this.observedChildren) {
+      if (node instanceof HTMLElement && !nodes.includes(node)) {
+        this.resizeObserver?.unobserve(node);
+        this.observedChildren.delete(node);
+      }
+    }
+
+    for (const node of nodes) {
+      if (node instanceof HTMLElement) {
+        node.ariaRoleDescription = "slide";
       }
 
-      for (const node of nodes) {
-        if (node instanceof HTMLElement) {
-          node.ariaRoleDescription = "slide";
-        }
-
-        if (node instanceof HTMLElement && !this.observedChildren.has(node)) {
-          this.observedChildren.add(node);
-          this.resizeObserver?.observe(node);
-        }
+      if (node instanceof HTMLElement && !this.observedChildren.has(node)) {
+        this.observedChildren.add(node);
+        this.resizeObserver?.observe(node);
       }
     }
 
@@ -712,7 +739,7 @@ export class Track extends LitElement {
    */
   public elementItemIndex(ele: HTMLElement) {
     let index = 0;
-    for (const child of this.children) {
+    for (const child of this.items) {
       if (child.contains(ele)) return index;
       index++;
     }
@@ -862,7 +889,7 @@ export class Track extends LitElement {
     this.currentItem = currItem;
 
     let i = 0;
-    for (const child of this.children) {
+    for (const child of this.items) {
       if (i === this.currentItem) {
         child.setAttribute("active", "");
       } else {
@@ -1202,8 +1229,8 @@ export class Track extends LitElement {
         if (item != null && item.index !== lastItem) {
           // clone nodes if possible
           if (item.domIndex >= 0) {
-            const child = this.children[item.domIndex];
-            const realChild = this.children[item.index];
+            const child = this.items[item.domIndex];
+            const realChild = this.items[item.index];
 
             if (!child && realChild) {
               const clone = realChild.cloneNode(true) as HTMLElement;
@@ -1215,8 +1242,8 @@ export class Track extends LitElement {
             }
           } else {
             // TODO: generate ghots on the left side; need to be position with transforms
-            const child = this.children[item.domIndex];
-            const realChild = this.children[item.index];
+            const child = this.items[item.domIndex];
+            const realChild = this.items[item.index];
             // console.log(item.index);
 
             // if (!child && realChild) {
@@ -1262,6 +1289,8 @@ export class Track extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
+
+    this.updateItems();
 
     this.ariaRoleDescription = "carousel";
     this.role = "region";
