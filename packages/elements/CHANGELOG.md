@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.2.0-dev.0 (2025-02-20)
+
+### Features
+
+- a-track: find items through slots
+
 ## 2.1.2 (2025-02-19)
 
 ### Fixes
