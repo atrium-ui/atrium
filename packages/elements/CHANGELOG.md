@@ -1,5 +1,16 @@
 # @sv/elements
 
+## 2.2.0-dev.1 (2025-02-20)
+
+### Features
+
+- a-track: find items through slots
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+
 ## 2.2.0-dev.0 (2025-02-20)
 
 ### Features
