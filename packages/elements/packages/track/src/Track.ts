@@ -608,6 +608,9 @@ export class Track extends LitElement {
     grab: {
       value: false,
     },
+    scroll: {
+      value: false,
+    },
     release: {
       value: false,
     },
@@ -1381,6 +1384,8 @@ export class Track extends LitElement {
       }
     });
 
+    let scrollTimeout: number | undefined;
+
     // TODO: put this in a trait so it can be disabled
     this.listener(
       this,
@@ -1395,19 +1400,21 @@ export class Track extends LitElement {
 
         if (!this.canMove(delta)) return;
 
-        if (wheelEvent.target !== this) {
-          this.setTarget(undefined);
-        }
-
         const deltaThreshold = Vec2.abs(delta);
 
         const threshold = this.vertical
           ? Math.abs(delta.x) < Math.abs(delta.y)
           : Math.abs(delta.x) > Math.abs(delta.y);
 
+        if (threshold) {
+          wheelEvent.preventDefault();
+        }
+
         if (deltaThreshold > 2) {
+          this.setTarget(undefined);
+
           this.grabbing = true;
-          this.inputState.grab.value = true;
+          this.inputState.scroll.value = true;
 
           this.acceleration.mul(0);
 
@@ -1416,11 +1423,8 @@ export class Track extends LitElement {
           } else {
             this.inputForce.x = wheelEvent.deltaX;
           }
-
-          wheelEvent.preventDefault();
         } else {
           this.grabbing = false;
-          this.inputState.release.value = true;
         }
       },
       { passive: false },
@@ -1503,6 +1507,9 @@ export function timer(start: number, time: number) {
 
 export type InputState = {
   grab: {
+    value: boolean;
+  };
+  scroll: {
     value: boolean;
   };
   move: {
