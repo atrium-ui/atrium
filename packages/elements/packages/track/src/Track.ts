@@ -1403,16 +1403,13 @@ export class Track extends LitElement {
         if (!this.canMove(delta)) return;
 
         const deltaThreshold = Vec2.abs(delta);
-
-        const threshold = this.vertical
+        const axisThreshold = this.vertical
           ? Math.abs(delta.x) < Math.abs(delta.y)
           : Math.abs(delta.x) > Math.abs(delta.y);
 
-        if (threshold) {
+        if (axisThreshold && deltaThreshold > 2) {
           wheelEvent.preventDefault();
-        }
 
-        if (deltaThreshold > 2) {
           this.setTarget(undefined);
 
           this.grabbing = true;
