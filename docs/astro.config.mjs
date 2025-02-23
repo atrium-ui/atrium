@@ -47,7 +47,7 @@ export default defineConfig({
       jsx: true,
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.includes("-"),
+          isCustomElement: tag => tag.includes("-"),
         },
       },
     }),
@@ -119,7 +119,7 @@ function atriumDocsIntegration(starlightConfig) {
         Head: "@docs/Head.astro",
         // Hero: "@docs/Hero.astro",
         PageFrame: "@docs/PageFrame.astro",
-        Sidebar: "@docs/sidebar.astro",
+        Sidebar: "@docs/Sidebar.astro",
       },
     }),
   ];
