@@ -1,0 +1,121 @@
+---
+import Default from "@astrojs/starlight/components/Sidebar.astro";
+
+const storiesImports = import.meta.glob("/src/**/*.stories.*", { eager: true });
+
+const stories: any[] = [];
+
+const routeData = Astro.locals.starlightRoute;
+const subpath = routeData.subpath as string;
+const basePath = "atrium";
+
+for (const key in storiesImports) {
+  const story = {
+    name: key.split("/").pop()?.replace(".stories.ts", ""),
+    slug: key.split("/").pop()?.replace(".stories.ts", "").toLowerCase(),
+    entries: [] as any[],
+  };
+  const module = storiesImports[key] as any;
+
+  if (!key.match(subpath)) continue;
+
+  const exports = Object.keys(module).filter((key) => !["default", "_id"].includes(key));
+  for (const key of exports) {
+    story.entries.push({
+      name: key,
+      slug: key.toLowerCase(),
+      path: key,
+    });
+  }
+  stories.push(story);
+}
+
+const currentPageSlug = Astro.url.pathname.split("/").pop();
+
+function currentPage(page?: string) {
+  return currentPageSlug === page;
+}
+---
+
+<script>
+  import "@atrium-ui/elements/expandable";
+
+  document.addEventListener('astro:before-preparation', (event) => {
+    updateCurrentPage(event.to);
+
+    const originalLoader = event.loader;
+    event.loader = async function() {
+      const frame = document.querySelector(".main-frame");
+      frame?.classList.add("docs-story-loading");
+
+      await originalLoader();
+    };
+  });
+
+  document.addEventListener('astro:page-load', () => {
+    updateCurrentPage(window.location);
+  });
+
+  function updateCurrentPage(location: Location | URL) {
+    const loc = location.href.replace(location.origin, "");
+    const oldPages = document.querySelectorAll('[aria-current="page"]');
+    const newPages = document.querySelectorAll(`[href="${loc}"]`);
+
+    for (const oldPage of oldPages) {
+      oldPage.setAttribute("aria-current", "false");
+    }
+
+    for (const newPage of newPages) {
+      newPage.setAttribute("aria-current", "page");
+    }
+  }
+</script>
+
+<style>
+.sidebar-pane a[href]:not([aria-current="page"]):hover {
+	background-color: #d3dffc;
+}
+.docs-nav-link-variant[aria-current="page"] {
+	background-color: #d3dffc;
+}
+</style>
+
+<Default></Default>
+
+{stories.length > 0 ? (
+  <div class="opacity-50 text-sm font-bold text-gray-500 px-2">
+    Components
+  </div>
+
+  <nav>
+   	<ul class="p-0 m-0 list-none">
+  	 {stories.map((story) => (
+  		<li class="pb-2">
+        <a-expandable opened={currentPage(story.slug) || undefined}>
+          <div slot="toggle" class="relative">
+            <a
+              class="docs-nav-link"
+              href={`/${basePath}/${subpath}/${story.slug}`}
+              aria-current={currentPage(story.slug) ? "page" : undefined}
+            >{story.name}</a>
+
+            <button class="absolute right-0 top-0">▼</button>
+          </div>
+
+          <ul class="p-0 m-0 list-none">
+            {story.entries.map((entry) => (
+              <li>
+                <a
+                  class="docs-nav-link-variant"
+                  aria-current={currentPage(story.slug) ? "page" : undefined}
+                  href={`/${basePath}/${subpath}/${story.slug}?id=${story.slug}--${entry.slug}`}
+                >{entry.name}</a>
+              </li>
+            ))}
+          </ul>
+        </a-expandable>
+  		</li>
+  	 ))}
+   	</ul>
+  </nav>
+) : null}

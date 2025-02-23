@@ -2,7 +2,7 @@
 
 import { Slider } from "@components/src/vue/Slider";
 import { Card } from "../Card";
-import { Image } from "package:/components/Image";
+import { Image } from "package:/components/atrium/Image";
 import "@atrium-ui/elements/range";
 
 export function SliderCard() {
@@ -18,7 +18,7 @@ export function SliderCard() {
         <Slider class="w-[300px] overflow-visible">
           {new Array(10).fill(0).map((n, i) => {
             return (
-              <div key={n} class="pr-4">
+              <div key={n} class="pr-4 last:pr-0">
                 <Image
                   lightbox={true}
                   class="flex-none overflow-hidden rounded-md bg-black object-cover"

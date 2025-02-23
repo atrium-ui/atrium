@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 
-import { Image } from "package:/components/Image";
+import { Image } from "package:/components/atrium/Image.jsx";
 import { Slider } from "@components/src/vue/Slider";
 
 export const SomeSlider = () => (

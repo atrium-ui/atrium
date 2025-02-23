@@ -1,0 +1,125 @@
+---
+import MobileMenuToggle from "virtual:starlight/components/MobileMenuToggle";
+import { Preview } from "./Preview.jsx";
+import Stage from "./Stage.astro";
+
+const { hasSidebar, subpath } = Astro.locals.starlightRoute;
+const { data: meta } = Astro.locals.starlightRoute.entry;
+---
+
+<!-- TODO: needs to be injectable from outside of integration -->
+<!-- <link rel="stylesheet" href="/dist/assets/index.css">
+<script type="module" src="/dist/index.js"></script> -->
+
+<script>
+  import "@atrium-ui/elements/scroll";
+  import "@atrium-ui/elements/box";
+</script>
+
+<style>
+.resize-nav {
+  display: block;
+  resize: inline;
+  position: relative;
+  overflow: auto;
+}
+</style>
+
+<div class="page sl-flex">
+  <header class="header"><slot name="header" /></header>
+	{
+		hasSidebar && (
+			<a-scroll transition:persist={`navigation.${subpath}`} class="sidebar print:hidden" aria-label={Astro.locals.t('sidebarNav.accessibleLabel')}>
+				<MobileMenuToggle />
+				<div id="starlight__sidebar" class="sidebar-pane">
+				  <a-box class="resize-nav">
+  					<div class="sidebar-content sl-flex">
+  						<slot name="sidebar" />
+  					</div>
+          </a-box>
+          <script is:inline>
+            const box = document.querySelector('.resize-nav');
+            box.addEventListener('resize', (event) => {
+              document.documentElement.style.setProperty('--sl-sidebar-width', `${box.clientWidth + 1}px`);
+            });
+          </script>
+				</div>
+			</a-scroll>
+		)
+	}
+	<div class="main-frame">
+	  {meta.stage ? <Stage /> : ""}
+		<Preview client:load><slot /></Preview>
+	</div>
+</div>
+
+<style>
+	.page {
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
+	.header {
+		z-index: var(--sl-z-index-navbar);
+		position: fixed;
+		inset-inline-start: 0;
+		inset-block-start: 0;
+		width: 100%;
+		height: var(--sl-nav-height);
+		border-bottom: 1px solid var(--sl-color-hairline-shade);
+		padding: var(--sl-nav-pad-y) var(--sl-nav-pad-x);
+		padding-inline-end: var(--sl-nav-pad-x);
+		background-color: var(--sl-color-bg-nav);
+	}
+
+	:global([data-has-sidebar]) .header {
+		padding-inline-end: calc(var(--sl-nav-gap) + var(--sl-nav-pad-x) + var(--sl-menu-button-size));
+	}
+
+	.sidebar-pane {
+		visibility: var(--sl-sidebar-visibility, hidden);
+		position: fixed;
+		z-index: var(--sl-z-index-menu);
+		inset-block: var(--sl-nav-height) 0;
+		inset-inline-start: 0;
+		width: 100%;
+		background-color: var(--sl-color-black);
+		overflow-y: auto;
+	}
+
+	:global([aria-expanded='true']) ~ .sidebar-pane {
+		--sl-sidebar-visibility: visible;
+	}
+
+	.sidebar-content {
+		height: 100%;
+		min-height: max-content;
+		padding: 1rem var(--sl-sidebar-pad-x) 0;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	@media (min-width: 50rem) {
+		.sidebar-content::after {
+			content: '';
+			padding-bottom: 1px;
+		}
+	}
+
+	.main-frame {
+		padding-top: calc(var(--sl-nav-height) + var(--sl-mobile-toc-height));
+		padding-inline-start: var(--sl-content-inline-start);
+	}
+
+	@media (min-width: 50rem) {
+		:global([data-has-sidebar]) .header {
+			padding-inline-end: var(--sl-nav-pad-x);
+		}
+		.sidebar-pane {
+			--sl-sidebar-visibility: visible;
+			width: var(--sl-sidebar-width);
+			background-color: var(--sl-color-bg-sidebar);
+			border-inline-end: 1px solid var(--sl-color-hairline-shade);
+		}
+	}
+</style>

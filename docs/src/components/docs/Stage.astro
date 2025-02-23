@@ -1,0 +1,23 @@
+---
+import { Image } from "astro:assets";
+
+const { data } = Astro.locals.starlightRoute.entry;
+const { title = data.title, tagline, image, actions = [] } = data.stage || {};
+---
+
+<div class="stage">
+  <div class="p-6">
+    Hero
+  </div>
+</div>
+
+<style>
+  .stage {
+  	/* margin-top: -1.5rem;
+  	margin-left: calc(var(--sl-content-pad-x) * -1);
+  	margin-right: calc(var(--sl-content-pad-x) * -1); */
+    background-color: #6666BD;
+    color: white;
+    width: 100%;
+  }
+</style>

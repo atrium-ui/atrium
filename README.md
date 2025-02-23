@@ -5,7 +5,7 @@
 <p align="center" style="text-align:cetner;">
 	<h1 align="center" style="text-align:cetner;"><b>Atrium</b></h1>
 	<p align="center" style="text-align:cetner;">
-    A curated collection of libraries, Custom-elements and components for different frameworks for building websites.
+    A curated collection of libraries, custom-elements and components for different frameworks for building websites.
   </p>
 </p>
 <br />

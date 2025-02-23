@@ -8,5 +8,6 @@ export const onRequest = defineRouteMiddleware((context) => {
   const sidebar = context.locals.starlightRoute.sidebar;
   const subSidebar = sidebar.find((item) => item.label === slug);
 
+  context.locals.starlightRoute.subpath = slug;
   context.locals.starlightRoute.sidebar = subSidebar?.entries || [];
 });

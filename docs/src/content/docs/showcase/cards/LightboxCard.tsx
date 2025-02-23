@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
 import { Card } from "../Card";
-import { Image } from "package:/components/Image";
+import { Image } from "package:/components/atrium/Image";
 
 export function LightboxCard() {
   return (

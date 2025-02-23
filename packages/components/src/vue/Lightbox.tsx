@@ -28,7 +28,7 @@ export const Lightbox = defineComponent((_, { slots }) => {
             "group/dialog fixed top-0 left-0 z-50 block h-screen w-screen opacity-0 transition-all",
             "[&[enabled]]:bg-[#33333333] [&[enabled]]:opacity-100 [&[enabled]]:backdrop-blur-md",
           ]}
-          onBlur={() => {
+          onExit={() => {
             open.value = false;
           }}
         >

@@ -7,7 +7,7 @@ import ThemeSelect from "virtual:starlight/components/ThemeSelect";
 const basePath = "/atrium";
 const rootSlug = Astro.url.pathname.split("/")[2];
 
-const navItems = [
+const navigation = [
   {
     title: "Introduction",
     slug: "introduction",
@@ -27,16 +27,17 @@ const navItems = [
 ];
 ---
 
+
 <div class="header sl-flex">
 	<div class="title-wrapper sl-flex">
 		<SiteTitle />
 	</div>
 	<div class="sl-flex print:hidden">
-   	<nav class="sl-flex flex-1 print:hidden gap-10">
-      {navItems.map((item) => (
+   	<nav class="sl-flex flex-1 print:hidden gap-10 pr-6">
+      {navigation.map((item) => (
         <a
           href={`${basePath}/${item.slug}`}
-          class="no-underline text-slate-200 hover:text-slate-50 active:text-slate-300 py-2 block aria-selected:text-white aria-selected:underline"
+          class="no-underline text-[var(--sl-color-text-accent)] py-2 block aria-selected:underline"
           aria-selected={rootSlug === item.slug ? "true" : undefined}
         >
           {item.title}
@@ -56,10 +57,10 @@ const navItems = [
 
 <style>
 	.header {
-		gap: var(--sl-nav-gap);
-		justify-content: space-between;
-		align-items: center;
-		height: 100%;
+    gap: var(--sl-nav-gap);
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
 	}
 
 	.title-wrapper {

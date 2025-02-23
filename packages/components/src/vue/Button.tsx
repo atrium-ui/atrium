@@ -3,9 +3,10 @@ import { twMerge } from "tailwind-merge";
 
 export const buttonVariants = {
   base: [
-    "flex cursor-pointer items-center gap-2 leading-normal",
-    "rounded-lg px-3 py-1 transition-all active:transition-none",
-    "outline-none focus-visible:ring focus-visible:ring-[currentColor] dark:focus-visible:ring-white",
+    "text-base leading-none",
+    "flex cursor-pointer items-center gap-2",
+    "rounded-lg px-3 py-2 transition-all active:transition-none",
+    "outline-none focus-visible:ring focus-visible:ring-[currentColor]",
   ],
   default: [
     "bg-[var(--theme-color,#bfa188)] text-black",
@@ -81,7 +82,7 @@ export function Link(
   return (
     <a
       class={twMerge(
-        "inline text-inherit no-underline",
+        "inline text-base leading-4 no-underline",
         "transition-all active:transition-none",
         props.variant && buttonVariants.base,
         buttonVariants[props.variant ?? "default"],

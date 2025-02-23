@@ -26,7 +26,7 @@ export const Dialog = defineComponent(
               "group/dialog fixed top-0 left-0 z-50 block h-full w-full transition-all",
               "[&[enabled]]:bg-[#00000033]",
             ]}
-            onBlur={() => {
+            onExit={() => {
               open.value = false;
             }}
           >

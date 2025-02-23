@@ -6,6 +6,11 @@
   --theme-color: #ccc;
 }
 
+main {
+  position: relative;
+  min-height: calc(100vh - var(--sl-nav-height) - 3vh);
+}
+
 /* trying to prevent layout shift with unstyled elements */
 .main-pane *:not(:defined):not(astro-slot) {
   display: none;
@@ -26,21 +31,32 @@
 }
 
 :root {
-  --sl-font: "NotoSans", sans-serif;
-  --sl-content-width: 1000px;
-  --sl-sidebar-width: 16rem;
-  --sl-color-hairline: #8080804d;
-
   -webkit-tap-highlight-color: transparent;
   scrollbar-gutter: stable;
   scrollbar-color: #888 transparent;
+
+  --sl-content-width: 1184px;
+  /* --sl-content-width: 1440px; */
+  --sl-sidebar-width: 16rem;
+  --sl-color-bg-nav: transparent !important;
 }
 
-.header {
+header {
   --sl-color-bg-nav: transparent;
 
-  border-bottom: none;
-  backdrop-filter: blur(8px);
+  border-bottom: none !important;
+  backdrop-filter: blur(24px);
+}
+
+footer {
+  background: transparent !important;
+}
+
+.content-panel h1 {
+  font-size: 2.5rem;
+  line-height: 3rem;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
 }
 
 .sl-markdown-content p {
@@ -57,7 +73,7 @@ table {
 }
 
 .sidebar-pane a[href]:not([aria-current="page"]):hover {
-  background-color: #454a5c;
+  background-color: #c1caf5;
 }
 
 /* Slides count for Slider */

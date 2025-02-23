@@ -1,0 +1,40 @@
+---
+import { Stories } from "./Stories.jsx";
+---
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- TODO: needs to be injectable from outside of integration -->
+    <!-- <link rel="stylesheet" href="/dist/assets/index.css">
+    <script type="module" src="/dist/index.js"></script> -->
+
+    <style>
+      html, body {
+        background: none;
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+
+    <script>
+      const searchParams = new URLSearchParams(location.search);
+
+      new ResizeObserver((entries) => {
+        const height = document.body.scrollHeight;
+        if(height) {
+          parent.postMessage({
+            id: searchParams.get("id"),
+            height: height
+          }, "*");
+        }
+      }).observe(document.body);
+    </script>
+  </head>
+  <body>
+    <Stories client:only="solid" />
+  </body>
+</html>

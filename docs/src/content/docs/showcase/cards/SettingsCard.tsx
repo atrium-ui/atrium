@@ -84,7 +84,7 @@ export function SettingsCard() {
         </div>
       </div>
 
-      <div class="mt-6 border-zinc-950 border-t p-6" data-id="34">
+      <div class="mt-6 border-t p-6 dark:border-zinc-950" data-id="34">
         <div class="flex justify-end gap-2" data-id="35">
           <Button variant="outline">Cancel</Button>
           <Dialog label="Save Changes">Are you sure you want to save changes?</Dialog>

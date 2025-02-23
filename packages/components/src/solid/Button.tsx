@@ -5,7 +5,7 @@ export const buttonVariants = {
   base: [
     "flex cursor-pointer items-center gap-2 leading-normal",
     "rounded-lg px-3 py-1 transition-all active:transition-none",
-    "outline-none focus-visible:ring focus-visible:ring-[currentColor] dark:focus-visible:ring-white",
+    "outline-none focus:ring focus:ring-[currentColor]",
   ],
   default: [
     "bg-[var(--theme-color,#bfa188)]",

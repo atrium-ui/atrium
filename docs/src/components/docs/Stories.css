@@ -1,0 +1,8 @@
+.story-root {
+  padding: 1.5rem;
+}
+
+.story-root.story-layout-fullscreen {
+  padding-left: 0rem;
+  padding-right: 0rem;
+}

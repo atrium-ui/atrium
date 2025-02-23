@@ -55,7 +55,7 @@ export function PropertiesCard() {
         </div>
       </div>
 
-      <div class="mt-6 border-zinc-950 border-t p-6" data-id="34">
+      <div class="mt-6 border-t p-6 dark:border-zinc-950" data-id="34">
         <div class="flex justify-end gap-2" data-id="35">
           <Dialog label="Add to Cart">Really add to Cart?</Dialog>
         </div>

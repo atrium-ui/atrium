@@ -38,7 +38,10 @@ export const Checkbox = defineComponent(
           type="button"
           aria-labelledby={`label_${props.name}`}
           onClick={() => handleChange(!checked.value)}
-          class="mt-[2px] h-6 w-6 cursor-pointer rounded-md border border-zinc-700 bg-transparent p-0 align-bottom hover:border-zinc-600"
+          class={[
+            "mt-[2px] h-6 w-6 cursor-pointer rounded-md border border-zinc-700 bg-transparent p-0 align-bottom hover:border-zinc-600",
+            "outline-none focus:ring-2 focus:ring-[currentColor]",
+          ]}
         >
           <div
             aria-hidden="true"

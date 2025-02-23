@@ -29,7 +29,7 @@ export const Switch = defineComponent(
           class={[
             "group inline-flex",
             "mt-[2px] w-12 cursor-pointer overflow-hidden rounded-full border border-zinc-700 bg-transparent",
-            "outline-none focus:ring focus:ring-white",
+            "outline-none focus:ring-2 focus:ring-[currentColor]",
           ]}
           name={props.name}
           value={props.value?.toString()}
