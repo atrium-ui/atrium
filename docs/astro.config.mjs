@@ -58,6 +58,7 @@ export default defineConfig({
         "**/docs/Preview.tsx",
         "**/docs/Stories.tsx",
         "**/docs/Docs.tsx",
+        "**/docs/Playground.tsx",
       ],
     }),
     atriumDocsIntegration({
