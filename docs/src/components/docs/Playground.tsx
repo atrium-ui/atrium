@@ -1,5 +1,5 @@
 export function Playground() {
-  console.log("PLayground loaded");
+  // console.log("PLayground loaded");
 
   return (
     <div>
