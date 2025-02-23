@@ -1,3 +1,5 @@
+import "./Playground.css";
+
 export function Playground() {
   async function init() {
     const monaco = await import("monaco-editor/esm/vs/editor/editor.main.js");
@@ -6,7 +8,6 @@ export function Playground() {
       "code-view-monaco",
       class CodeViewMonaco extends HTMLElement {
         _monacoEditor;
-        /** @type HTMLElement */
         _editor;
 
         constructor() {
@@ -26,7 +27,7 @@ export function Playground() {
           template.innerHTML = `
             <div
           		id="container"
-          		style="overflow: hidden; width: 100%; height: 100%; position: absolute"
+          		style="width: 100%; height: 100%; position: absolute"
            	></div>
           `;
           shadowRoot.appendChild(template.content.cloneNode(true));
@@ -36,7 +37,6 @@ export function Playground() {
             automaticLayout: true,
             language: "html",
 
-            // biome-ignore lint/style/noUnusedTemplateLiteral: <explanation>
             value: `<div>Hello World</div>`,
           });
         }

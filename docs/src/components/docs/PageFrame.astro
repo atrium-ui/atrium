@@ -16,33 +16,16 @@ const { data: meta } = Astro.locals.starlightRoute.entry;
   import "@atrium-ui/elements/box";
 </script>
 
-<style>
-.resize-nav {
-  display: block;
-  resize: inline;
-  position: relative;
-  overflow: auto;
-}
-</style>
-
 <div class="page sl-flex">
   <header class="header"><slot name="header" /></header>
 	{
-		hasSidebar && (
+		hasSidebar && !meta.fullscreen && (
 			<a-scroll transition:persist={`navigation.${subpath}`} class="sidebar print:hidden" aria-label={Astro.locals.t('sidebarNav.accessibleLabel')}>
 				<MobileMenuToggle />
 				<div id="starlight__sidebar" class="sidebar-pane">
-				  <a-box class="resize-nav">
-  					<div class="sidebar-content sl-flex">
-  						<slot name="sidebar" />
-  					</div>
-          </a-box>
-          <script is:inline>
-            const box = document.querySelector('.resize-nav');
-            box.addEventListener('resize', (event) => {
-              document.documentElement.style.setProperty('--sl-sidebar-width', `${box.clientWidth + 1}px`);
-            });
-          </script>
+ 					<div class="sidebar-content sl-flex">
+						<slot name="sidebar" />
+ 					</div>
 				</div>
 			</a-scroll>
 		)

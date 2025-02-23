@@ -6,6 +6,7 @@ export const collections = {
     schema: docsSchema({
       extend: z.object({
         // Add a new field to the schema.
+        fullscreen: z.boolean().optional(),
         stage: z
           .object({
             headline: z.string().optional(),
