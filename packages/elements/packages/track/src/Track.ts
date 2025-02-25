@@ -517,12 +517,14 @@ export class Track extends LitElement {
       // get index of item at the end of the track
       if (this.vertical) {
         const lastItem = this.getItemAtPosition(
-          new Vec2(0, this.overflowHeight - this.origin.y),
+          // adds a buffer of 3 for margin of error for layout
+          new Vec2(0, this.overflowHeight + 3 - this.origin.y),
         );
         if (lastItem) return lastItem.index;
       } else {
         const lastItem = this.getItemAtPosition(
-          new Vec2(this.overflowWidth - this.origin.x, 0),
+          // adds a buffer of 3 for margin of error for layout
+          new Vec2(this.overflowWidth + 3 - this.origin.x, 0),
         );
         if (lastItem) return lastItem.index;
       }
@@ -677,6 +679,7 @@ export class Track extends LitElement {
   /** Item alignment in the track. "start" (left/top) or "center" */
   @property({ type: String }) align: "start" | "center" = "start";
 
+  // TODO: simpler interface for behaviour configuration like this, maybe this should just be default behaviour?
   /** Only scroll when items are overflown. Like "overflow: auto". */
   @property({ type: Boolean, reflect: true }) overflowscroll = false;
 
@@ -766,7 +769,9 @@ export class Track extends LitElement {
     let currentIndex = index;
 
     if (!this.loop) {
-      currentIndex = Math.min(Math.max(this.minIndex, currentIndex), this.maxIndex);
+      // TODO: config to respect maxIndex, if we dont want to scroll past the overflowidth, when moving to an item index target
+      const maxIndex = this.maxIndex;
+      currentIndex = Math.min(Math.max(this.minIndex, currentIndex), maxIndex);
     }
 
     if (currentIndex < 0) {
