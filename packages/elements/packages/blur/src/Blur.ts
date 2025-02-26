@@ -119,6 +119,13 @@ export class Blur extends LitElement {
    */
   @property({ type: String })
   public allowinert = "true";
+  
+  /**
+   * (experimental)
+   * Whether the blur should set the focus to the first focusable element, when enabled.
+   */
+  @property({ type: String })
+  public setinitialfocus = "true";
 
   /**
    * Whether the blur should lock scrolling when shown.
@@ -154,7 +161,6 @@ export class Blur extends LitElement {
     }
 
     this.enabled = false;
-
     this.lastActiveElement?.focus();
   }
 
@@ -177,7 +183,7 @@ export class Blur extends LitElement {
     // because *some* browsers in *some* situations will mark the element as "focus-visible",
     // even though the click was made with the mouse.
     // TODO: idk
-    if (isKeyboard) {
+    if (isKeyboard && this.setinitialfocus === "true") {
       const elements = this.focusableElements();
       elements[0]?.focus();
     }
