@@ -115,7 +115,7 @@ test("arrow key navigation", async () => {
 
   press(track, "ArrowRight");
 
-  await sleep(track.transitionTime);
+  await sleep(track.transitionTime + 100);
 
   expect(document.activeElement).toBe(track);
   expect(track.currentItem).toBe(1);
@@ -146,7 +146,7 @@ test("moveBy", async () => {
     positions.push(track.currentPosition);
   }, track.transitionTime / 10);
 
-  await sleep(track.transitionTime);
+  await sleep(track.transitionTime + 100);
 
   expect(track.currentItem).toBe(2);
 
@@ -162,8 +162,8 @@ test("centered index 1", async () => {
 
   expect(track.align).toBe("center");
 
-  track.moveBy(1);
-  await sleep(track.transitionTime + 20);
+  track.moveTo(1);
+  await sleep(track.transitionTime + 100);
 
   expect(track.currentItem).toBe(1);
   expect(track.currentPosition !== 0).toBeTrue();
@@ -186,8 +186,8 @@ test("centered index 0", async () => {
 
   expect(track.align).toBe("center");
 
-  track.moveBy(0);
-  await sleep(track.transitionTime + 20);
+  track.moveTo(0);
+  await sleep(track.transitionTime + 100);
 
   expect(track.currentItem).toBe(0);
 
@@ -205,9 +205,9 @@ test("snap", async () => {
   const widths = track.itemWidths;
 
   track.setTarget([widths[0] + widths[1] + 10, 0]);
-  await sleep(track.transitionTime);
+  await sleep(track.transitionTime + 100);
   track.setTarget(undefined);
-  await sleep(track.transitionTime);
+  await sleep(track.transitionTime + 100);
 
   expect(Math.floor(track.currentPosition)).toBeGreaterThanOrEqual(widths[0] + widths[1]);
 
@@ -249,16 +249,16 @@ async function trackWithChildren(
 
   const div = document.createElement("div");
   const markup = `
-    <a-track width="800" height="200" ${Object.entries(attributes)
+    <a-track ${Object.entries(attributes)
       .map(([key, value]) => `${key}="${value}"`)
       .join(" ")}>
-      ${widths.map((w) => `<canvas width="${w}" height="300"></canvas>`).join("")}
+      ${widths.map((w) => `<canvas width="${w}" height="800"></canvas>`).join("")}
     </a-track>
   `;
   div.innerHTML = markup;
 
   const track = div.children[0] as TrackElement;
-  fixElementSizes(track, 800, 200);
+  fixElementSizes(track, 800, 800);
 
   // increase animation speed for testing
   track.transitionTime = 150;

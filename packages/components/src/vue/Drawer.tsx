@@ -135,7 +135,7 @@ export class DrawerTrack extends Track {
           track.setOpen(false);
         }
 
-        if (track.grabbing || track.scrolling || track.target) return;
+        if (track.grabbing || track.target) return;
         if (track.deltaVelocity.y >= 0) return;
         if (track.isStatic) return;
 

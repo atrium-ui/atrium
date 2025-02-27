@@ -137,8 +137,6 @@ export class PointerTrait implements Trait {
   update(track: Track) {
     this.moveVelocity.mul(this.moveDrag);
 
-    if (track.scrolling) return;
-
     if (this.grabbing) {
       track.drag = 0;
     } else {
@@ -223,7 +221,7 @@ export class SnapTrait implements Trait {
   }
 
   input(track: Track) {
-    if (track.grabbing || track.scrolling || track.target) return;
+    if (track.grabbing || track.target) return;
 
     // Only when decelerating
     if (track.deltaVelocity[track.currentAxis] > 0) return;
@@ -262,6 +260,24 @@ export class SnapTrait implements Trait {
       track.setTarget(track.getToItemPosition(track.currentItem), "linear");
     }
   }
+}
+
+function getCSSChildren(element: Element) {
+  const children: Element[] = [];
+  for (const child of element.children) {
+    const display = window.getComputedStyle(child, null).display;
+    if (display === "contents") {
+      if (child instanceof HTMLSlotElement) {
+        children.push(...child.assignedElements());
+      } else {
+        // could be recursive
+        children.push(...child.children);
+      }
+    } else {
+      children.push(child);
+    }
+  }
+  return children;
 }
 
 /**
@@ -367,12 +383,27 @@ export class Track extends LitElement {
         if (snapTrait) this.removeTrait(snapTrait);
       }
     }
+
+    if (_changedProperties.has("align")) {
+      this.format();
+    }
+  }
+
+  private _children: Element[] = [];
+
+  public get items() {
+    return this._children;
+  }
+
+  private updateItems() {
+    this._children = getCSSChildren(this);
+    this.format();
   }
 
   public get itemCount() {
-    if (this.children) {
+    if (this.items) {
       // TODO: respect left clones too
-      return this.children.length - this.clones.length;
+      return this.items.length - this.clones.length;
     }
     return 0;
   }
@@ -412,7 +443,7 @@ export class Track extends LitElement {
       // TODO: respect left children too
       this._widths = new Array(this.itemCount).fill(1).map((_, i) => {
         // TODO: offsetWidth doesn't take transforms in consideration, so we use. Maybe use getBoundingClientRect
-        return (this.children[i] as HTMLElement)?.offsetWidth || 0;
+        return (this.items[i] as HTMLElement)?.offsetWidth || 0;
       });
     }
     return this._widths;
@@ -423,7 +454,7 @@ export class Track extends LitElement {
     if (!this._heights) {
       // TODO: respect left children too
       this._heights = new Array(this.itemCount).fill(1).map((_, i) => {
-        return (this.children[i] as HTMLElement)?.offsetHeight || 0;
+        return (this.items[i] as HTMLElement)?.offsetHeight || 0;
       });
     }
     return this._heights;
@@ -486,12 +517,14 @@ export class Track extends LitElement {
       // get index of item at the end of the track
       if (this.vertical) {
         const lastItem = this.getItemAtPosition(
-          new Vec2(0, this.overflowHeight - this.origin.y),
+          // adds a buffer of 3 for margin of error for layout
+          new Vec2(0, this.overflowHeight + 3 - this.origin.y),
         );
         if (lastItem) return lastItem.index;
       } else {
         const lastItem = this.getItemAtPosition(
-          new Vec2(this.overflowWidth - this.origin.x, 0),
+          // adds a buffer of 3 for margin of error for layout
+          new Vec2(this.overflowWidth + 3 - this.origin.x, 0),
         );
         if (lastItem) return lastItem.index;
       }
@@ -504,7 +537,7 @@ export class Track extends LitElement {
     return 0;
   }
 
-  get scrollBounds() {
+  private getScrollBounds() {
     let stopTop = 0;
     let stopLeft = 0;
     let stopBottom = 0;
@@ -541,15 +574,20 @@ export class Track extends LitElement {
     };
   }
 
+  scrollBounds = {
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+  };
+
   private animation: number | undefined;
   private tickRate = 1000 / 144;
   private lastTick = 0;
   private accumulator = 0;
 
   public grabbing = false;
-  private scrollTimeout;
 
-  public scrolling = false;
   public mousePos = new Vec2();
   public inputForce = new Vec2();
 
@@ -574,6 +612,9 @@ export class Track extends LitElement {
 
   private inputState: InputState = {
     grab: {
+      value: false,
+    },
+    scroll: {
       value: false,
     },
     release: {
@@ -638,6 +679,7 @@ export class Track extends LitElement {
   /** Item alignment in the track. "start" (left/top) or "center" */
   @property({ type: String }) align: "start" | "center" = "start";
 
+  // TODO: simpler interface for behaviour configuration like this, maybe this should just be default behaviour?
   /** Only scroll when items are overflown. Like "overflow: auto". */
   @property({ type: Boolean, reflect: true }) overflowscroll = false;
 
@@ -646,29 +688,25 @@ export class Track extends LitElement {
   private observedChildren = new Set<Node>();
 
   private onSlotChange = () => {
-    const nodes = this.slotElement?.assignedNodes();
+    this.updateItems();
 
-    if (nodes) {
-      for (const node of this.observedChildren) {
-        if (node instanceof HTMLElement && !nodes.includes(node)) {
-          this.resizeObserver?.unobserve(node);
-          this.observedChildren.delete(node);
-        }
-      }
-
-      for (const node of nodes) {
-        if (node instanceof HTMLElement) {
-          node.ariaRoleDescription = "slide";
-        }
-
-        if (node instanceof HTMLElement && !this.observedChildren.has(node)) {
-          this.observedChildren.add(node);
-          this.resizeObserver?.observe(node);
-        }
+    for (const node of this.observedChildren) {
+      if (node instanceof HTMLElement && !this.items.includes(node)) {
+        this.resizeObserver?.unobserve(node);
+        this.observedChildren.delete(node);
       }
     }
 
-    this.format();
+    for (const node of this.items) {
+      if (node instanceof HTMLElement) {
+        node.ariaRoleDescription = "slide";
+      }
+
+      if (node instanceof HTMLElement && !this.observedChildren.has(node)) {
+        this.observedChildren.add(node);
+        this.resizeObserver?.observe(node);
+      }
+    }
   };
 
   private format = () => {
@@ -692,6 +730,8 @@ export class Track extends LitElement {
         break;
     }
 
+    this.scrollBounds = this.getScrollBounds();
+
     const formatEvent = new CustomEvent("format", {
       bubbles: true,
       cancelable: true,
@@ -712,7 +752,7 @@ export class Track extends LitElement {
    */
   public elementItemIndex(ele: HTMLElement) {
     let index = 0;
-    for (const child of this.children) {
+    for (const child of this.items) {
       if (child.contains(ele)) return index;
       index++;
     }
@@ -729,7 +769,9 @@ export class Track extends LitElement {
     let currentIndex = index;
 
     if (!this.loop) {
-      currentIndex = Math.min(Math.max(this.minIndex, currentIndex), this.maxIndex);
+      // TODO: config to respect maxIndex, if we dont want to scroll past the overflowidth, when moving to an item index target
+      const maxIndex = this.maxIndex;
+      currentIndex = Math.min(Math.max(this.minIndex, currentIndex), maxIndex);
     }
 
     if (currentIndex < 0) {
@@ -862,7 +904,7 @@ export class Track extends LitElement {
     this.currentItem = currItem;
 
     let i = 0;
-    for (const child of this.children) {
+    for (const child of this.items) {
       if (i === this.currentItem) {
         child.setAttribute("active", "");
       } else {
@@ -1202,8 +1244,8 @@ export class Track extends LitElement {
         if (item != null && item.index !== lastItem) {
           // clone nodes if possible
           if (item.domIndex >= 0) {
-            const child = this.children[item.domIndex];
-            const realChild = this.children[item.index];
+            const child = this.items[item.domIndex];
+            const realChild = this.items[item.index];
 
             if (!child && realChild) {
               const clone = realChild.cloneNode(true) as HTMLElement;
@@ -1215,8 +1257,8 @@ export class Track extends LitElement {
             }
           } else {
             // TODO: generate ghots on the left side; need to be position with transforms
-            const child = this.children[item.domIndex];
-            const realChild = this.children[item.index];
+            const child = this.items[item.domIndex];
+            const realChild = this.items[item.index];
             // console.log(item.index);
 
             // if (!child && realChild) {
@@ -1262,6 +1304,8 @@ export class Track extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
+
+    this.updateItems();
 
     this.ariaRoleDescription = "carousel";
     this.role = "region";
@@ -1354,44 +1398,41 @@ export class Track extends LitElement {
       this,
       "wheel",
       (wheelEvent: WheelEvent) => {
+        if (wheelEvent.ctrlKey === true) {
+          // its a pinch zoom gesture
+          return;
+        }
+        if (this.overflowscroll && this.overflowWidth <= 0) {
+          // respect overflowscroll
+          return;
+        }
+
         const delta = new Vec2(wheelEvent.deltaX, wheelEvent.deltaY);
 
         if (!this.canMove(delta)) return;
 
-        if (wheelEvent.target !== this) {
-          this.setTarget(undefined);
-          clearTimeout(this.scrollTimeout);
-
-          this.scrolling = true;
-          this.scrollTimeout = setTimeout(() => {
-            this.scrolling = false;
-          }, 200);
-        }
-
-        const threshold = this.vertical
+        const deltaThreshold = Vec2.abs(delta);
+        const axisThreshold = this.vertical
           ? Math.abs(delta.x) < Math.abs(delta.y)
           : Math.abs(delta.x) > Math.abs(delta.y);
 
-        if (threshold) {
+        if (axisThreshold && deltaThreshold > 2) {
+          wheelEvent.preventDefault();
+
+          this.setTarget(undefined);
+
+          this.grabbing = true;
+          this.inputState.scroll.value = true;
+
           this.acceleration.mul(0);
 
-          if (this.loop) {
-            this.inputForce.add(delta);
+          if (this.vertical) {
+            this.inputForce.y = wheelEvent.deltaY;
           } else {
-            const bounds = this.scrollBounds;
-
-            if (this.vertical) {
-              const pos = this.position.y + wheelEvent.deltaY;
-              this.inputForce.y =
-                Math.max(Math.min(pos, bounds.bottom), bounds.top) - this.position.y;
-            } else {
-              const pos = this.position.x + wheelEvent.deltaX;
-              this.inputForce.x =
-                Math.max(Math.min(pos, bounds.right), bounds.left) - this.position.x;
-            }
+            this.inputForce.x = wheelEvent.deltaX;
           }
-
-          wheelEvent.preventDefault();
+        } else {
+          this.grabbing = false;
         }
       },
       { passive: false },
@@ -1474,6 +1515,9 @@ export function timer(start: number, time: number) {
 
 export type InputState = {
   grab: {
+    value: boolean;
+  };
+  scroll: {
     value: boolean;
   };
   move: {
