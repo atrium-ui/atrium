@@ -1,5 +1,21 @@
 # @sv/elements
 
+## 2.2.0-dev.6 (2025-02-27)
+
+### Features
+
+- a-track: find items through slots
+- Give 'a-blur' the option  to disable automatic focus on first focusable element
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+- reformat on align prop change
+- track moves on both axis at the same time
+- Add a some buffer pixels to maxIndex calculation
+- add allowscroll attribute, rename allowinert to `autoinert`, added test for new attributes
+
 ## 2.2.0-dev.5 (2025-02-27)
 
 ### Features
