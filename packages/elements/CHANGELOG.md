@@ -1,5 +1,93 @@
 # @sv/elements
 
+## 2.2.0-dev.6 (2025-02-27)
+
+### Features
+
+- a-track: find items through slots
+- Give 'a-blur' the option  to disable automatic focus on first focusable element
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+- reformat on align prop change
+- track moves on both axis at the same time
+- Add a some buffer pixels to maxIndex calculation
+- add allowscroll attribute, rename allowinert to `autoinert`, added test for new attributes
+
+## 2.2.0-dev.5 (2025-02-27)
+
+### Features
+
+- a-track: find items through slots
+- Give 'a-blur' the option  to disable automatic focus on first focusable element
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+- reformat on align prop change
+- track moves on both axis at the same time
+- Add a some buffer pixels to maxIndex calculation
+- add allowscroll attribute, rename allowinert to `autoinert`, added test for new attributes
+
+## 2.2.0-dev.4 (2025-02-25)
+
+### Features
+
+- a-track: find items through slots
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+- reformat on align prop change
+- track moves on both axis at the same time
+- Add a some buffer pixels to maxIndex calculation
+
+## 2.2.0-dev.3 (2025-02-20)
+
+### Features
+
+- a-track: find items through slots
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+- reformat on align prop change
+- track moves on both axis at the same time
+
+## 2.2.0-dev.2 (2025-02-20)
+
+### Features
+
+- a-track: find items through slots
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+- reformat on align prop change
+
+## 2.2.0-dev.1 (2025-02-20)
+
+### Features
+
+- a-track: find items through slots
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+
+## 2.2.0-dev.0 (2025-02-20)
+
+### Features
+
+- a-track: find items through slots
+
 ## 2.1.2 (2025-02-19)
 
 ### Fixes

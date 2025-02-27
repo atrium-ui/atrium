@@ -109,25 +109,40 @@ export class Blur extends LitElement {
   }
 
   /**
-   * Whether the blur is enabled or not.
-   */
-  @property({ type: Boolean, reflect: true }) public enabled = false;
-
-  /**
    * (experimental)
    * Whether the blur should be set to inert, when not enabled.
    */
   @property({ type: String })
-  public allowinert = "true";
+  public autoinert: "true" | "false" = "true";
 
   /**
-   * Whether the blur should lock scrolling when shown.
+   * (experimental)
+   * Whether the blur should set the focus to the first focusable element, when enabled.
+   */
+  @property({ type: String })
+  public initialfocus: "auto" | "false" = "auto";
+
+  /**
+   * (experimental)
+   * Comma separated list of selectors to exclude from the scroll-lock.
+   */
+  @property({ type: String })
+  public allowscroll = "";
+
+  /**
+   * Whether the blur is enabled or not.
+   */
+  @property({ type: Boolean, reflect: true })
+  public enabled = false;
+
+  /**
+   * Whether the blur should lock scrolling, when enabled.
    */
   @property({ type: Boolean, reflect: true })
   public scrolllock = false;
 
   public lock = new ScrollLock({
-    allowElements: ["a-blur *"],
+    allowElements: ["a-blur *", ...this.allowscroll.split(",").filter(Boolean)],
   });
 
   private tryLock() {
@@ -148,13 +163,12 @@ export class Blur extends LitElement {
   public disable() {
     this.tryUnlock();
 
-    if (this.allowinert === "true") {
+    if (this.autoinert === "true") {
       this.setAttribute("inert", "");
       this.setAttribute("aria-hidden", "true");
     }
 
     this.enabled = false;
-
     this.lastActiveElement?.focus();
   }
 
@@ -177,7 +191,7 @@ export class Blur extends LitElement {
     // because *some* browsers in *some* situations will mark the element as "focus-visible",
     // even though the click was made with the mouse.
     // TODO: idk
-    if (isKeyboard) {
+    if (isKeyboard && this.initialfocus === "auto") {
       const elements = this.focusableElements();
       elements[0]?.focus();
     }

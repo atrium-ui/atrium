@@ -167,10 +167,10 @@ async function createBlur() {
   return ele;
 }
 
-test("allowinert attribute disables inert", async () => {
+test("autoinert attribute disables inert", async () => {
   const root = await createBlur();
   const blur = root.querySelector("a-blur");
-  blur.setAttribute("allowinert", "false");
+  blur.setAttribute("autoinert", "false");
 
   blur.enable();
   expect(blur.hasAttribute("inert")).toBe(false);
@@ -179,4 +179,19 @@ test("allowinert attribute disables inert", async () => {
   blur.disable();
   expect(blur.hasAttribute("inert")).toBe(false);
   expect(blur.hasAttribute("aria-hidden")).toBe(false);
+});
+
+test("initialfocus=false prevent autofocusing", async () => {
+  const root = await createBlur();
+  const blur = root.querySelector("a-blur");
+  blur.setAttribute("initialfocus", "false");
+
+  const trigger = document.querySelector("button.trigger");
+  trigger.focus();
+
+  blur.enable();
+  expect(document.activeElement.className).toBe("trigger");
+
+  blur.disable();
+  expect(document.activeElement.className).toBe("trigger");
 });
