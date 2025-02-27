@@ -1402,6 +1402,10 @@ export class Track extends LitElement {
           // its a pinch zoom gesture
           return;
         }
+        if (this.overflowscroll && this.overflowWidth <= 0) {
+          // respect overflowscroll
+          return;
+        }
 
         const delta = new Vec2(wheelEvent.deltaX, wheelEvent.deltaY);
 
