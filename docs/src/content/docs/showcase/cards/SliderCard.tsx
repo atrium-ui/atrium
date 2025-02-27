@@ -3,7 +3,7 @@
 import { Slider } from "@components/src/vue/Slider";
 import { Card } from "../Card";
 import { Image } from "package:/components/atrium/Image";
-import "@atrium-ui/elements/range";
+import "@sv/elements/range";
 
 export function SliderCard() {
   return (
