@@ -37,7 +37,7 @@ export function Playground() {
             automaticLayout: true,
             language: "html",
 
-            value: `<div>Hello World</div>`,
+            value: "<div>Hello World</div>",
           });
         }
       },
