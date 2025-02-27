@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.2.0 (2025-02-27)
+
+### Features
+
+- Multiple fixes for a-track and adds `initialfocus` ans `allowscroll` attributes to a-blur (svp/atrium!31)
+
 ## 2.2.0-dev.6 (2025-02-27)
 
 ### Features
