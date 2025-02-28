@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.8.0 (2025-02-28)
+
+### Features
+
+- Minor fixes to component styling
+
 ## 1.7.3 (2024-11-14)
 
 ### Fixes
