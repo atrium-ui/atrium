@@ -7,7 +7,7 @@ type Props = {
 
 export function ImageText(props: Props) {
   return (
-    <div class="grid-gap gap-y-10! grid grid-cols-10 xl:grid-cols-8">
+    <div class="grid-gap grid grid-cols-10 gap-y-10! xl:grid-cols-8">
       <div class="col-span-10 md:col-span-6 lg:col-span-7 xl:col-span-5">
         <h3 class="pb-6 text-4xl">Image Text</h3>
         <p>

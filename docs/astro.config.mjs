@@ -44,7 +44,7 @@ export default defineConfig({
       jsx: true,
       template: {
         compilerOptions: {
-          isCustomElement: tag => tag.includes("-"),
+          isCustomElement: (tag) => tag.includes("-"),
         },
       },
     }),
