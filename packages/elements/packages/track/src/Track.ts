@@ -86,7 +86,7 @@ export class PointerTrait implements Trait {
   moveVelocity = new Vec2();
 
   input(track: Track, inputState: InputState) {
-    if (track.overflowscroll && track.overflowWidth <= 0) {
+    if (track.overflow === "auto" && track.overflowWidth <= 0) {
       return;
     }
 
@@ -679,9 +679,11 @@ export class Track extends LitElement {
   /** Item alignment in the track. "start" (left/top) or "center" */
   @property({ type: String }) align: "start" | "center" = "start";
 
-  // TODO: simpler interface for behaviour configuration like this, maybe this should just be default behaviour?
-  /** Only scroll when items are overflown. Like "overflow: auto". */
-  @property({ type: Boolean, reflect: true }) overflowscroll = false;
+  /** Change the overflow behavior.
+   * - "auto" - Only scrollable when necessary.
+   * - "scroll" - Always scrollable.
+   */
+  @property({ type: String }) overflow: "auto" | "scroll" = "auto";
 
   @property({ type: Boolean }) debug = false;
 
@@ -1402,7 +1404,7 @@ export class Track extends LitElement {
           // its a pinch zoom gesture
           return;
         }
-        if (this.overflowscroll && this.overflowWidth <= 0) {
+        if (this.overflow === "auto" && this.overflowWidth <= 0) {
           // respect overflowscroll
           return;
         }
