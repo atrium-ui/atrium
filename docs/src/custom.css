@@ -1,6 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@plugin '@astrojs/starlight-tailwind';
+
+@source '../../packages/components/src/vue/*.tsx';
 
 :root {
   --theme-color: #ccc;

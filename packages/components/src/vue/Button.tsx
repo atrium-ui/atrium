@@ -6,7 +6,7 @@ export const buttonVariants = {
     "text-base leading-none",
     "flex cursor-pointer items-center gap-2",
     "rounded-lg px-3 py-2 transition-all active:transition-none",
-    "outline-none focus-visible:ring focus-visible:ring-[currentColor]",
+    "outline-hidden focus-visible:ring-3 focus-visible:ring-[currentColor]",
   ],
   default: [
     "bg-[var(--theme-color,#bfa188)] text-black",
@@ -22,7 +22,7 @@ export const buttonVariants = {
     "bg-transparent active:bg-[rgba(150,150,150,0.1)]",
     "filter hover:brightness-110",
   ],
-  disabled: ["cursor-not-allowed opacity-50"],
+  disabled: ["cursor-not-allowed filter filter-[opacity(50%)]"],
 };
 
 export function Button(

@@ -1,3 +1,5 @@
+@reference "../../custom.css";
+
 .docs-story-preview {
   position: relative;
   overflow: hidden;

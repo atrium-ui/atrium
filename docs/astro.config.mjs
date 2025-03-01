@@ -1,7 +1,7 @@
 import react from "@astrojs/react";
 import solid from "@astrojs/solid-js";
 import starlight from "@astrojs/starlight";
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from "@tailwindcss/vite";
 import vue from "@astrojs/vue";
 import { defineConfig } from "astro/config";
 import { basename } from "node:path";
@@ -27,7 +27,7 @@ export default defineConfig({
         allow: [".."],
       },
     },
-    plugins: [],
+    plugins: [tailwindcss()],
   },
   experimental: {
     contentIntellisense: true,
@@ -36,9 +36,6 @@ export default defineConfig({
     rehypePlugins: [[rehypeShiftHeading, { shift: 1 }]],
   },
   integrations: [
-    tailwind({
-      configFile: "./tailwind.config.js",
-    }),
     react({
       include: ["**/react/*.{tsx}"],
     }),
@@ -47,7 +44,7 @@ export default defineConfig({
       jsx: true,
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.includes("-"),
+          isCustomElement: tag => tag.includes("-"),
         },
       },
     }),

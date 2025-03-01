@@ -50,16 +50,15 @@ export const Slider = defineComponent(
 
     return () => (
       <div
-        class={twMerge("@container group relative w-full overflow-hidden", props.class)}
+        class={twMerge(
+          "@container group/slider relative w-full overflow-hidden",
+          props.class,
+        )}
       >
         <div class="relative w-full">
           <Button
             disabled={!showPrev.value}
-            class={[
-              "-translate-y-1/2 absolute top-1/2 left-[12px] z-10 hidden transform transition-all focus-visible:opacity-100 lg:block",
-              showPrev.value ? "group-hover:opacity-100" : "opacity-0",
-              "text-black dark:text-white",
-            ]}
+            class="-translate-y-1/2 absolute top-1/2 left-[12px] z-10 hidden transform text-black opacity-0 transition-opacity group-hover/slider:opacity-100 lg:block"
             onClick={prev}
             label="Previous page"
           >
@@ -67,11 +66,7 @@ export const Slider = defineComponent(
           </Button>
           <Button
             disabled={!showNext.value}
-            class={[
-              "-translate-y-1/2 absolute top-1/2 right-[12px] z-10 hidden transform transition-all focus-visible:opacity-100 lg:block",
-              showNext.value ? "group-hover:opacity-100" : "opacity-0",
-              "text-black dark:text-white",
-            ]}
+            class="-translate-y-1/2 absolute top-1/2 right-[12px] z-10 hidden transform text-black opacity-0 transition-opacity group-hover/slider:opacity-100 lg:block"
             onClick={next}
             label="Next page"
           >
@@ -80,9 +75,8 @@ export const Slider = defineComponent(
 
           <a-track
             ref={track}
-            class="flex w-full overflow-visible"
-            overflowscroll
             snap
+            class="flex w-full overflow-visible"
             onScroll={() => {
               position.value = track.value?.position.x || 0;
             }}
@@ -115,7 +109,7 @@ export const Slider = defineComponent(
             <div
               class={[
                 "-top-[1px] absolute left-[calc(var(--value)*100%-var(--value)*75px)] h-[4px] w-[75px]",
-                "rounded-md bg-black transition-none dark:bg-white",
+                "rounded-md bg-black transition-none",
               ]}
             />
           </div>
