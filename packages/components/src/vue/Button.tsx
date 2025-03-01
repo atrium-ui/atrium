@@ -22,7 +22,7 @@ export const buttonVariants = {
     "bg-transparent active:bg-[rgba(150,150,150,0.1)]",
     "filter hover:brightness-110",
   ],
-  disabled: ["cursor-not-allowed opacity-50"],
+  disabled: ["cursor-not-allowed filter filter-[opacity(50%)]"],
 };
 
 export function Button(
