@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.8.1 (2025-03-01)
+
+### Fixes
+
+- Make slider buttons appear on hover
+
 ## 1.8.0 (2025-02-28)
 
 ### Features

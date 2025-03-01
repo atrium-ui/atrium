@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.4.0 (2025-03-01)
+
+### Features
+
+- Make `overflowscroll` default behaviour and add `overflow` attribute.
+
 ## 2.3.0 (2025-02-28)
 
 ### Features
