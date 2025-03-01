@@ -21,7 +21,7 @@ export const AccordionItem = defineComponent(
             type="button"
             class={[
               "flex w-full cursor-pointer items-center justify-between rounded-lg bg-transparent px-4 py-2 hover:bg-[rgba(150,150,150,0.2)] active:bg-[rgba(150,150,150,0.1)]",
-              "outline-none focus-visible:ring-2 focus-visible:ring-[currentColor]",
+              "outline-hidden focus-visible:ring-2 focus-visible:ring-[currentColor]",
             ]}
           >
             <div class="text-left">{props.title}</div>

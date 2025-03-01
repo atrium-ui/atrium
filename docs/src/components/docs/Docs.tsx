@@ -86,7 +86,7 @@ export function Canvas(props: { of: string }) {
 
   return (
     <div class="not-content docs-story-canvas" data-story={canvasId()}>
-      <div class="absolute top-1 right-1 z-[1]">
+      <div class="absolute top-1 right-1 z-1">
         <OpenStoryButton query={`id=${canvasId()}&${searchParams()}`} />
       </div>
 

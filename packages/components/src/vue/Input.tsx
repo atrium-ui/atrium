@@ -5,7 +5,7 @@ import { twMerge } from "tailwind-merge";
 const variants = {
   default: [
     "group w-full resize-y rounded-md border border-zinc-700 bg-transparent leading-normal px-3 py-1 hover:border-zinc-400",
-    "outline-none focus-within:ring-2 focus-within:ring-[currentColor]",
+    "outline-hidden focus-within:ring-2 focus-within:ring-[currentColor]",
   ],
   error: ["border-red-600"],
 };
@@ -59,7 +59,7 @@ export const Input = defineComponent(
               readonly={props.readonly}
               required={props.required || undefined}
               placeholder={props.placeholder}
-              class="m-0 flex-1 border-none bg-transparent p-0 outline-none"
+              class="m-0 flex-1 border-none bg-transparent p-0 outline-hidden"
               onChange={props.onChange}
               onInput={props.onInput}
               onInvalid={(e) => {
@@ -78,7 +78,7 @@ export const Input = defineComponent(
               readonly={props.readonly}
               required={props.required || undefined}
               placeholder={props.placeholder}
-              class="m-0 flex-1 border-none bg-transparent p-0 outline-none"
+              class="m-0 flex-1 border-none bg-transparent p-0 outline-hidden"
               onChange={props.onChange}
               onKeydown={props.onKeydown}
               onKeyup={props.onKeyup}

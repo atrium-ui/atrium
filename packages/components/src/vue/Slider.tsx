@@ -109,7 +109,7 @@ export const Slider = defineComponent(
             <div
               class={[
                 "-top-[1px] absolute left-[calc(var(--value)*100%-var(--value)*75px)] h-[4px] w-[75px]",
-                "rounded-md bg-black transition-none dark:bg-white",
+                "rounded-md bg-black transition-none",
               ]}
             />
           </div>

@@ -122,7 +122,7 @@ customElements.define("toast-content", ToastContent);
 export function Toasts() {
   return (
     <div class="pointer-events-none absolute right-0 bottom-4 z-100 w-full md:max-w-[460px] lg:right-4">
-      <a-toast-feed class="px-4 text-base [&>*]:pointer-events-auto" />
+      <a-toast-feed class="px-4 text-base *:pointer-events-auto" />
     </div>
   );
 }

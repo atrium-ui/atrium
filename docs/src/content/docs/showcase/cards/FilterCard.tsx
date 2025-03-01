@@ -26,10 +26,10 @@ export function FilterCard() {
       </div>
 
       <div class="grid grid-cols-2 gap-2 pt-4">
-        <div class="h-full min-h-[100px] w-full rounded-sm bg-gray-500" />
-        <div class="h-full min-h-[100px] w-full rounded-sm bg-gray-500" />
-        <div class="h-full min-h-[100px] w-full rounded-sm bg-gray-500" />
-        <div class="h-full min-h-[100px] w-full rounded-sm bg-gray-500" />
+        <div class="h-full min-h-[100px] w-full rounded-xs bg-gray-500" />
+        <div class="h-full min-h-[100px] w-full rounded-xs bg-gray-500" />
+        <div class="h-full min-h-[100px] w-full rounded-xs bg-gray-500" />
+        <div class="h-full min-h-[100px] w-full rounded-xs bg-gray-500" />
       </div>
     </Card>
   );

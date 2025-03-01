@@ -1,3 +1,5 @@
+@reference "../../custom.css";
+
 .docs-story-canvas {
   position: relative;
   border: 1px solid #eee;
