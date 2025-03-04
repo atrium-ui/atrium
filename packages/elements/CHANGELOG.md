@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.4.1 (2025-03-04)
+
+### Fixes
+
+- a-track: vertical track not interactable
+
 ## 2.4.0 (2025-03-01)
 
 ### Features
