@@ -214,7 +214,10 @@ test("snap", async () => {
   expect(track.currentIndex).toBeGreaterThanOrEqual(2);
 });
 
+// TODO: Test actual mouse movement with events
+
 // TODO: snap with inertia to the correct position
+//
 // TODO: loop
 
 async function sleep(ms = 0) {

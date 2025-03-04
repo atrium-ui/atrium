@@ -86,10 +86,6 @@ export class PointerTrait implements Trait {
   moveVelocity = new Vec2();
 
   input(track: Track, inputState: InputState) {
-    if (track.overflow === "auto" && track.overflowWidth <= 0) {
-      return;
-    }
-
     if (inputState.grab.value && !this.grabbing) {
       this.grabbing = true;
       this.grabbedStart.set(track.mousePos);
@@ -127,8 +123,6 @@ export class PointerTrait implements Trait {
     }
 
     if (track.slotElement) {
-      track.slotElement.style.pointerEvents = this.grabbing ? "none" : "";
-      // TOOD: maybe the inert is enough here, not sure how browser support is.
       track.slotElement.inert = this.grabbing;
     }
     if (!isTouch()) track.style.cursor = this.grabbing ? "grabbing" : "";
@@ -500,6 +494,10 @@ export class Track extends LitElement {
 
   public get overflowHeight() {
     return this.trackHeight - this.height;
+  }
+
+  public get hasOverflow() {
+    return this.overflowWidth > 0 || this.overflowHeight > 0;
   }
 
   public currentItem = 0;
@@ -1301,6 +1299,11 @@ export class Track extends LitElement {
   }
 
   private canMove(delta: Vec2) {
+    if (this.overflow === "auto" && !this.hasOverflow) {
+      // respect overflowscroll
+      return false;
+    }
+
     return this.dispatchEvent(new MoveEvent(this, delta));
   }
 
@@ -1404,10 +1407,6 @@ export class Track extends LitElement {
           // its a pinch zoom gesture
           return;
         }
-        if (this.overflow === "auto" && this.overflowWidth <= 0) {
-          // respect overflowscroll
-          return;
-        }
 
         const delta = new Vec2(wheelEvent.deltaX, wheelEvent.deltaY);
 
@@ -1418,9 +1417,11 @@ export class Track extends LitElement {
           ? Math.abs(delta.x) < Math.abs(delta.y)
           : Math.abs(delta.x) > Math.abs(delta.y);
 
-        if (axisThreshold && deltaThreshold > 2) {
+        if (axisThreshold) {
           wheelEvent.preventDefault();
+        }
 
+        if (axisThreshold && deltaThreshold > 2) {
           this.setTarget(undefined);
 
           this.grabbing = true;
