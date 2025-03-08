@@ -70,8 +70,8 @@ export async function drag<
   const pos = [300, 300] as [number, number];
   const start = [...track.position];
   const step = [
-    Math.abs(dist[0]) > 0 ? 10 + random() * dist[0] : 0,
-    Math.abs(dist[1]) > 0 ? 10 + random() * dist[1] : 0,
+    Math.abs(dist[0]) > 0 ? 1 + random() * dist[0] : 0,
+    Math.abs(dist[1]) > 0 ? 1 + random() * dist[1] : 0,
   ] as [number, number];
 
   console.info("drag", "dist", dist, "step", step, "start", start);
@@ -90,7 +90,7 @@ export async function drag<
 
     window.dispatchEvent(new FakePointerEvent("pointermove", ...pos));
 
-    await sleep();
+    await sleep(8);
   }
 
   // has moved at all?

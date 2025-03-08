@@ -304,7 +304,7 @@ describe("Track", () => {
     track.moveTo(8, "ease");
     await sleep(track.transitionTime * 2);
 
-    await drag(track, [900, 0]);
+    await drag(track, [200, 0]);
     await sleep(track.transitionTime * 2);
 
     const pos = track.position[0];
