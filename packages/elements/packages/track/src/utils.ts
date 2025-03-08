@@ -1,3 +1,39 @@
+export type Easing = "ease" | "linear" | "none";
+
+export const Ease = {
+  easeInOutCirc(x: number) {
+    return x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2;
+  },
+  easeOutSine(x: number) {
+    return Math.sin((x * Math.PI) / 2);
+  },
+};
+
+export function isTouch() {
+  return !!navigator.maxTouchPoints || "ontouchstart" in window;
+}
+
+export function debounce<T>(callback: (arg: T) => void) {
+  let timeout: Timer;
+
+  return (arg: T) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => callback(arg), 80);
+  };
+}
+
+export function mod(a: number, n: number) {
+  return a - Math.floor(a / n) * n;
+}
+
+export function angleDist(a: number, b: number) {
+  return mod(b - a + 180, 360) - 180;
+}
+
+export function timer(start: number, time: number) {
+  return Math.min((Date.now() - start) / time, 1);
+}
+
 type VecOrNumber = Vec2 | number[] | number;
 
 export class Vec2 extends Array {
@@ -116,6 +152,7 @@ export class Vec2 extends Array {
   precision(precision: number) {
     this[0] = Math.floor(this[0] / precision) * precision;
     this[1] = Math.floor(this[1] / precision) * precision;
+    return this;
   }
 
   floor() {

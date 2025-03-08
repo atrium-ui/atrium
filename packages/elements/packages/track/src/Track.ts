@@ -1,6 +1,9 @@
 import { LitElement, type PropertyValues, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
-import { Vec2 } from "./Vec.js";
+import { Vec2, debounce, type Easing, Ease, isTouch, angleDist, timer } from "./utils.js";
+import { DebugTrait } from "./debug.js";
+
+const PI2 = Math.PI * 2;
 
 /**
  * The Track implements a trait system, which can be used to add new behaviours to the track.
@@ -48,6 +51,9 @@ export interface Trait<T extends Track = Track> {
 
   /** update tick (fixed tickrate) */
   update?(track: T): void;
+
+  /** draw (variable tickrate) */
+  draw?(track: T): void;
 }
 
 /**
@@ -217,8 +223,9 @@ export class SnapTrait implements Trait {
   input(track: Track) {
     if (track.grabbing || track.target) return;
 
-    // Only when decelerating
-    if (track.deltaVelocity[track.currentAxis] > 0) return;
+    // only when decelerating, but also when not moving
+    const movement = track.velocity.clone().precision(0.1).abs();
+    if (movement !== 0 && movement < 0.1) return;
 
     switch (track.align) {
       case "center":
@@ -235,14 +242,13 @@ export class SnapTrait implements Trait {
     }
 
     // Project the current velocity to determine the target item.
-    // This checks lastVelocity, because I don't know why velocity is 0,0 at random points.
-    const vel = Math.round(track.lastVelocity[track.currentAxis] * 10) / 10;
+    const vel = Math.round(track.velocity[track.currentAxis] * 10) / 10;
     const dir = Math.sign(vel);
-    const power = Math.max(Math.round(track.lastVelocity.abs() / 40), 1) * dir;
+    const power = Math.max(Math.round(track.velocity.abs() / 40), 1) * dir;
 
     if (!track.loop) {
       // disable snap when past maxIndex
-      if (track.maxIndex && power > 0 && track.currentIndex + power >= track.maxIndex)
+      if (track.maxIndex && power > 0 && track.currentIndex + power > track.maxIndex)
         return;
     }
 
@@ -310,9 +316,8 @@ export class Track extends LitElement {
 
       .debug {
         position: absolute;
-        z-index: 100;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(4px);
+        z-index: 10;
+        pointer-events: none;
       }
 
       slot {
@@ -362,7 +367,7 @@ export class Track extends LitElement {
     return this.shadowRoot?.children?.[0] as HTMLSlotElement | undefined;
   }
 
-  public traits: Trait[] = [new PointerTrait()];
+  public traits: Trait[] = [new PointerTrait(), new DebugTrait()];
 
   protected updated(_changedProperties: PropertyValues): void {
     if (_changedProperties.has("current") && this.current !== undefined) {
@@ -587,24 +592,35 @@ export class Track extends LitElement {
   public grabbing = false;
 
   public mousePos = new Vec2();
+
+  // Force applied to the acceleration every frame
   public inputForce = new Vec2();
 
   public drag = 0.95;
   public origin = new Vec2();
   public position = new Vec2();
+
+  // Delta of position compared to the last frame
+  public deltaPosition = new Vec2();
+
+  // Average velocity over multiple frames
   public velocity = new Vec2();
+
+  // Delta of velocity compared to the last frame
+  public deltaVelocity = new Vec2();
+
+  // Direction of the inputForce
   public direction = new Vec2();
+
+  // Acceleration that is applied to the position every frame
   public acceleration = new Vec2();
-  public lastVelocity = new Vec2();
-  private lastPosition = new Vec2();
 
   public target?: Vec2;
   public targetEasing: Easing = "linear";
   private targetForce = new Vec2();
   private targetStart = new Vec2();
 
-  public transitionTime = 350;
-
+  public transitionTime = 500;
   private transitionAt = 0;
   private transition = 0;
 
@@ -871,8 +887,9 @@ export class Track extends LitElement {
 
     const deltaTick = ms - this.lastTick;
     this.lastTick = ms;
-
     this.accumulator += deltaTick;
+
+    this.trait((t) => t.draw?.(this));
 
     const lastPosition = this.position.clone();
 
@@ -940,13 +957,12 @@ export class Track extends LitElement {
     state.release.value = false;
   }
 
-  public get deltaVelocity() {
-    return Vec2.sub(this.velocity.abs(), this.lastVelocity.abs());
-  }
-
   private updateTick() {
-    this.lastPosition = this.position.clone();
-    this.lastVelocity = this.velocity.clone();
+    const lastPosition = this.position.clone();
+    const lastVelocity = this.velocity.clone();
+
+    this.velocity = Vec2.add(this.velocity.clone().mul(0.5), this.deltaPosition);
+    this.deltaVelocity = Vec2.sub(this.velocity, lastVelocity);
 
     this.acceleration.mul(this.drag);
 
@@ -1029,34 +1045,39 @@ export class Track extends LitElement {
     this.position.add(this.targetForce);
     this.targetForce.set(0);
 
-    this.velocity = Vec2.sub(this.position, this.lastPosition);
+    this.deltaPosition = Vec2.sub(this.position, lastPosition);
   }
 
   debugCanvas = document.createElement("canvas");
 
-  private getCurrentItem() {
-    let ctx: CanvasRenderingContext2D | null = null;
-    if (this.debug) {
-      ctx = this.debugCanvas.getContext("2d");
-      ctx?.translate(0.5, 0.5);
-      this.debugCanvas.width = 200;
-      this.debugCanvas.height = 200;
-      this.debugCanvas.style.width = "100px";
-      this.debugCanvas.style.height = "100px";
-    }
+  public get trackSize() {
+    return this.vertical ? this.trackHeight : this.trackWidth;
+  }
 
-    const trackSize = this.vertical ? this.trackHeight : this.trackWidth;
-    const currentAngle = (this.currentPosition / trackSize) * Math.PI * 2;
+  public get currentAngle() {
+    return (this.currentPosition / this.trackSize) * Math.PI * 2;
+  }
+
+  public get originAngle() {
+    return (this.origin[this.currentAxis] / this.trackSize || 0) * PI2;
+  }
+
+  public get targetAngle() {
+    return this.target ? (this.target.x / this.trackSize) * PI2 : undefined;
+  }
+
+  public itemAngles: number[] = [];
+
+  private getCurrentItem() {
+    const trackSize = this.trackSize;
+    const currentAngle = this.currentAngle;
 
     let minDist = Number.POSITIVE_INFINITY;
-    let closestAngle = 0;
     let closestIndex = 0;
 
     const rects = this.getItemRects();
 
-    const PI2 = Math.PI * 2;
-
-    const originAngle = (this.origin[this.currentAxis] / trackSize || 0) * PI2;
+    const originAngle = this.originAngle;
 
     const axes = this.vertical ? 1 : 0;
     // all items angles
@@ -1064,6 +1085,8 @@ export class Track extends LitElement {
       acc[i] = (rect[axes] / trackSize) * PI2;
       return acc;
     }, [] as number[]);
+
+    this.itemAngles = [];
 
     for (let i = -1; i < this.itemCount + 1; i++) {
       const itemIndex = i % this.itemCount;
@@ -1087,15 +1110,7 @@ export class Track extends LitElement {
         itemAngle += (angles[Math.min(lastIndex + 1, this.currentIndex)] || 0) / 2;
       }
 
-      if (this.debug && ctx) {
-        // draw a line from the center to the current position with angle
-        ctx.strokeStyle = `hsl(0, 0%, ${(i / this.itemCount) * 100}%)`;
-        ctx.beginPath();
-        ctx.moveTo(100, 100);
-        ctx.lineTo(100 + Math.cos(itemAngle) * 69, 100 + Math.sin(itemAngle) * 69);
-        ctx.lineWidth = 3;
-        ctx.stroke();
-      }
+      this.itemAngles[itemIndex] = itemAngle;
 
       const deltaAngle = angleDist(itemAngle, currentAngle);
 
@@ -1107,77 +1122,7 @@ export class Track extends LitElement {
         if (currentAngle > PI2 / 2) {
           closestIndex += offset;
         }
-
-        closestAngle = itemAngle;
       }
-    }
-
-    if (this.debug && ctx) {
-      // draw a line from the center to the current position with angle
-      ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
-      ctx.beginPath();
-      ctx.moveTo(100, 100);
-      ctx.lineTo(
-        100 + Math.cos(currentAngle + originAngle) * 69,
-        100 + Math.sin(currentAngle + originAngle) * 69,
-      );
-      ctx.arc(
-        100,
-        100,
-        69,
-        currentAngle + originAngle,
-        currentAngle + originAngle + (this.width / trackSize) * PI2,
-      );
-      ctx.lineTo(100, 100);
-      ctx.fill();
-
-      // print current position
-      ctx.font = "24px sans-serif";
-      ctx.fillStyle = "#fff";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "middle";
-      ctx.fillText(
-        `${this.currentPosition.toFixed(1)} / ${trackSize.toFixed(1)}`,
-        42,
-        18,
-      );
-
-      // print current position index
-      ctx.font = "24px sans-serif";
-      ctx.fillStyle = "#fff";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "middle";
-      ctx.fillText(closestIndex.toString(), 6, 18);
-
-      // draw a line from the center to the current position with angle
-      ctx.strokeStyle = "yellow";
-      ctx.beginPath();
-      ctx.moveTo(100, 100);
-      ctx.lineTo(100 + Math.cos(closestAngle) * 69, 100 + Math.sin(closestAngle) * 69);
-      ctx.lineWidth = 3;
-      ctx.stroke();
-
-      const targetAngle = this.target ? (this.target.x / trackSize) * PI2 : undefined;
-
-      if (targetAngle) {
-        // draw a line from the center to the current position with angle
-        ctx.strokeStyle = "blue";
-        ctx.beginPath();
-        ctx.moveTo(100, 100);
-        ctx.lineTo(100 + Math.cos(closestAngle) * 50, 100 + Math.sin(closestAngle) * 50);
-        ctx.lineWidth = 3;
-        ctx.stroke();
-      }
-    }
-
-    if (this.debug && ctx) {
-      // draw a line from the center to the current position with angle
-      ctx.strokeStyle = "lime";
-      ctx.beginPath();
-      ctx.moveTo(100, 100);
-      ctx.lineTo(100 + Math.cos(originAngle) * 69, 100 + Math.sin(originAngle) * 69);
-      ctx.lineWidth = 3;
-      ctx.stroke();
     }
 
     return closestIndex;
@@ -1358,6 +1303,10 @@ export class Track extends LitElement {
       this.mousePos.x = pointerEvent.x;
       this.mousePos.y = pointerEvent.y;
 
+      // stop moving when grabbing
+      this.grabbing = true;
+      this.inputState.grab.value = true;
+
       this.setTarget(undefined);
       this.acceleration.set(0);
 
@@ -1501,23 +1450,11 @@ export class MoveEvent extends CustomEvent<{
       detail: {
         delta: delta,
         direction: track.direction.clone(),
-        velocity: track.velocity.clone(),
+        velocity: track.deltaPosition.clone(),
         position: track.position.clone(),
       },
     });
   }
-}
-
-function mod(a: number, n: number) {
-  return a - Math.floor(a / n) * n;
-}
-
-function angleDist(a: number, b: number) {
-  return mod(b - a + 180, 360) - 180;
-}
-
-export function timer(start: number, time: number) {
-  return Math.min((Date.now() - start) / time, 1);
 }
 
 export type InputState = {
@@ -1543,27 +1480,3 @@ export type InputState = {
     value: boolean;
   };
 };
-
-export type Easing = "ease" | "linear" | "none";
-
-export const Ease = {
-  easeInOutCirc(x: number) {
-    return x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2;
-  },
-  easeOutSine(x: number) {
-    return Math.sin((x * Math.PI) / 2);
-  },
-};
-
-export function isTouch() {
-  return !!navigator.maxTouchPoints || "ontouchstart" in window;
-}
-
-function debounce<T>(callback: (arg: T) => void) {
-  let timeout: Timer;
-
-  return (arg: T) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => callback(arg), 80);
-  };
-}
