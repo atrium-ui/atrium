@@ -221,7 +221,6 @@ test("snap", async () => {
 });
 
 test("drag with snap", async () => {
-  let int: Timer;
   (() => {
     int = setInterval(() => {
       console.info(track.position, track.target);
@@ -241,7 +240,6 @@ test("drag with snap", async () => {
 });
 
 test("drag with snap negative", async () => {
-  let int: Timer;
   (() => {
     int = setInterval(() => {
       console.info(track.position, track.target);
@@ -261,7 +259,6 @@ test("drag with snap negative", async () => {
 });
 
 test("stop when grabbing", async () => {
-  let int: Timer;
   (() => {
     int = setInterval(() => {
       console.info(track.position, track.target);
@@ -273,11 +270,12 @@ test("stop when grabbing", async () => {
   track.moveTo(8, "ease");
   await sleep(track.transitionTime / 2);
 
-  const pos = track.position[0];
-
   // grab it bevore transition ends
   track.dispatchEvent(new FakePointerEvent("pointerdown", 0, 0));
   console.info("Grabbed track");
+
+  await sleep(16);
+  const pos = track.position[0];
 
   // wait
   await sleep(track.transitionTime);
@@ -332,7 +330,7 @@ async function drag(track: TrackElement, dist: [number, number], speed: number) 
   track.dispatchEvent(new FakePointerEvent("pointerdown", ...pos));
   console.info("down");
 
-  await sleep(16);
+  await sleep(32);
 
   expect(track.target).toBeUndefined();
 
