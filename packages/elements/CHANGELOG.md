@@ -1,5 +1,13 @@
 # @sv/elements
 
+## 2.4.2-dev.1 (2025-03-08)
+
+### Fixes
+
+- Improve track behaviour on different variable hardware
+- Fix check
+- Bug whre snap with align center did not snap to the last item
+
 ## 2.4.2-dev.0 (2025-03-08)
 
 ### Fixes
