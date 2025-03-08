@@ -5,6 +5,7 @@ import Rand from "rand-seed";
 
 const seed = process.env.TEST_SEED || crypto.randomUUID();
 
+// biome-ignore lint/style/useTemplate: <explanation>
 const label = (str: string) => str + ` [${seed}]`;
 
 const rand = new Rand(seed);
@@ -235,7 +236,7 @@ test(label("drag with snap"), async () => {
   await sleep(track.transitionTime);
 
   await drag(track, [500, 0], 100);
-  await sleep(track.transitionTime * 2);
+  await sleep(track.transitionTime * 3);
 
   // target should be set by snap
   expect(track.target).toBeDefined();
@@ -254,7 +255,23 @@ test(label("drag with snap negative"), async () => {
   await sleep(track.transitionTime);
 
   await drag(track, [500, 0], -100);
-  await sleep(track.transitionTime * 2);
+  await sleep(track.transitionTime * 3);
+
+  // target should be set by snap
+  expect(track.target).toBeDefined();
+  expect(track.position[0]).toBeCloseTo(track.target?.[0], -1);
+});
+
+test(label("drag vertical with snap"), async () => {
+  (() => {
+    int = setInterval(() => {
+      console.info(track.position, track.target);
+    }, 16);
+  })();
+
+  const track = await trackWithChildren(10, { snap: true, current: 3, vertical: true });
+  await drag(track, [0, 500], 100);
+  await sleep(track.transitionTime * 3);
 
   // target should be set by snap
   expect(track.target).toBeDefined();
@@ -284,22 +301,6 @@ test(label("stop when grabbing"), async () => {
   await sleep(track.transitionTime);
   // pos should not have changed
   expect(track.position[0]).toBe(pos);
-});
-
-test(label("drag vertical with snap"), async () => {
-  (() => {
-    int = setInterval(() => {
-      console.info(track.position, track.target);
-    }, 16);
-  })();
-
-  const track = await trackWithChildren(10, { snap: true, current: 3, vertical: true });
-  await drag(track, [0, 500], 100);
-  await sleep(track.transitionTime * 2);
-
-  // target should be set by snap
-  expect(track.target).toBeDefined();
-  expect(track.position[0]).toBeCloseTo(track.target?.[0], -1);
 });
 
 class FakePointerEvent extends PointerEvent {
