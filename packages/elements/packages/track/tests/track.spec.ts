@@ -298,8 +298,8 @@ test(label("drag with snap negative"), async () => {
   })();
 
   const track = await trackWithChildren(10, { snap: true, current: 2 });
-  track.moveTo(4, "none");
-  await sleep(track.transitionTime);
+  track.moveTo(6, "linear");
+  await sleep(track.transitionTime * 2);
 
   await drag(track, [500, 0], -100);
   await sleep(track.transitionTime * 2);
