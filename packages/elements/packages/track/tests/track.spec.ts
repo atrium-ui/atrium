@@ -4,6 +4,9 @@ import type { Track as TrackElement } from "../src/Track";
 import Rand from "rand-seed";
 
 const seed = process.env.TEST_SEED || crypto.randomUUID();
+
+const label = (str: string) => str + ` [${seed}]`;
+
 const rand = new Rand(seed);
 
 let int: Timer;
@@ -20,7 +23,7 @@ console.info("\nTest run seed:", seed, "\n");
 
 const NODE_NAME = "a-track";
 
-test("import track element", async () => {
+test(label("import track element"), async () => {
   const { Track } = await import("@sv/elements/track");
   expect(Track).toBeDefined();
 
@@ -41,24 +44,24 @@ test("construct track element", async () => {
   expect(ele.children[0]).toBeInstanceOf(Track);
 });
 
-test("deconstruct track element", async () => {
+test(label("deconstruct track element"), async () => {
   const track = await trackWithChildren();
   track.remove();
   // @ts-ignore
   expect(track.animation).toBeUndefined();
 });
 
-test("check default traits", async () => {
+test(label("check default traits"), async () => {
   const track = await trackWithChildren();
   expect(track.findTrait("pointer")).toBeDefined();
 });
 
-test("item count", async () => {
+test(label("item count"), async () => {
   const track = await trackWithChildren(10);
   expect(track.itemCount).toBe(10);
 });
 
-test("custom trait", async () => {
+test(label("custom trait"), async () => {
   const track = await trackWithChildren();
 
   let input = false;
@@ -107,14 +110,14 @@ test("custom trait", async () => {
   expect(stop).toBeTrue();
 });
 
-test("check snap trait", async () => {
+test(label("check snap trait"), async () => {
   const track = await trackWithChildren();
   track.snap = true;
   await track.updateComplete;
   expect(track.findTrait("snap")).toBeDefined();
 });
 
-test("arrow key navigation", async () => {
+test(label("arrow key navigation"), async () => {
   const track = await trackWithChildren();
   track.tabIndex = 0;
   track.focus();
@@ -127,7 +130,7 @@ test("arrow key navigation", async () => {
   expect(track.currentItem).toBe(1);
 });
 
-test("move event details", async () => {
+test(label("move event details"), async () => {
   const track = await trackWithChildren();
   track.addEventListener("move", ((e: MoveEvent) => {
     expect(e.detail.direction).toBeDefined();
@@ -141,7 +144,7 @@ test("move event details", async () => {
   expect(track.canMove()).toBeFalse();
 });
 
-test("moveBy", async () => {
+test(label("moveBy"), async () => {
   const track = await trackWithChildren();
 
   track.moveBy(2);
@@ -161,7 +164,7 @@ test("moveBy", async () => {
   expect(positions.length > 5).toBeTrue();
 });
 
-test("centered index 1", async () => {
+test(label("centered index 1"), async () => {
   const track = await trackWithChildren(10, {
     align: "center",
   });
@@ -185,7 +188,7 @@ test("centered index 1", async () => {
   expect(track.currentPosition).toBe(offset - track.width / 2);
 });
 
-test("centered index 0", async () => {
+test(label("centered index 0"), async () => {
   const track = await trackWithChildren(10, {
     align: "center",
   });
@@ -202,7 +205,7 @@ test("centered index 0", async () => {
   expect(track.currentPosition).toBe(offset - track.width / 2);
 });
 
-test("snap", async () => {
+test(label("snap"), async () => {
   const track = await trackWithChildren(10, { snap: true });
 
   expect(track.snap).toBe(true);
@@ -220,7 +223,7 @@ test("snap", async () => {
   expect(track.currentIndex).toBeGreaterThanOrEqual(2);
 });
 
-test("drag with snap", async () => {
+test(label("drag with snap"), async () => {
   (() => {
     int = setInterval(() => {
       console.info(track.position, track.target);
@@ -239,7 +242,7 @@ test("drag with snap", async () => {
   expect(track.position[0]).toBeCloseTo(track.target?.[0], -1);
 });
 
-test("drag with snap negative", async () => {
+test(label("drag with snap negative"), async () => {
   (() => {
     int = setInterval(() => {
       console.info(track.position, track.target);
@@ -258,7 +261,7 @@ test("drag with snap negative", async () => {
   expect(track.position[0]).toBeCloseTo(track.target?.[0], -1);
 });
 
-test("stop when grabbing", async () => {
+test(label("stop when grabbing"), async () => {
   (() => {
     int = setInterval(() => {
       console.info(track.position, track.target);
@@ -283,7 +286,7 @@ test("stop when grabbing", async () => {
   expect(track.position[0]).toBe(pos);
 });
 
-test("drag vertical with snap", async () => {
+test(label("drag vertical with snap"), async () => {
   (() => {
     int = setInterval(() => {
       console.info(track.position, track.target);
