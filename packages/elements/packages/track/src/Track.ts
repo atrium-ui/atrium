@@ -95,7 +95,8 @@ export class PointerTrait implements Trait {
   moveVelocity = new Vec2();
 
   input(track: Track, inputState: InputState) {
-    if (inputState.grab.value && !this.grabbing) {
+    if (track.grabbing && !this.grabbing) {
+      // grab change
       this.grabbing = true;
       this.grabbedStart.set(track.mousePos);
       track.dispatchEvent(new Event("pointer:grab"));
@@ -224,7 +225,7 @@ export class SnapTrait implements Trait {
   }
 
   input(track: Track) {
-    if (track.grabbing || track.target) return;
+    if (track.grabbing || track.mouseDown || track.target) return;
 
     // only when decelerating, but also when not moving
     const movement = track.velocity.clone().precision(0.1).abs();
@@ -596,6 +597,7 @@ export class Track extends LitElement {
 
   public grabbing = false;
 
+  public mouseDown = false;
   public mousePos = new Vec2();
 
   // Force applied to the acceleration every frame
@@ -1306,13 +1308,11 @@ export class Track extends LitElement {
       // will only work when tabindex=0.
       this.focus();
 
+      this.mouseDown = true;
       this.mousePos.x = pointerEvent.x;
       this.mousePos.y = pointerEvent.y;
 
       // stop moving when grabbing
-      this.grabbing = true;
-      this.inputState.grab.value = true;
-
       this.setTarget(undefined);
       this.acceleration.set(0);
 
@@ -1400,14 +1400,15 @@ export class Track extends LitElement {
       window,
       ["pointerup", "pointercancel"],
       (pointerEvent: PointerEvent) => {
+        this.mouseDown = false;
         this.mousePos.mul(0);
 
         if (this.grabbing) {
           this.grabbing = false;
+          this.inputState.release.value = true;
+
           pointerEvent.preventDefault();
           pointerEvent.stopPropagation();
-
-          this.inputState.release.value = true;
         }
       },
     );
