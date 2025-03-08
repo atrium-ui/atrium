@@ -1348,21 +1348,21 @@ export class Track extends LitElement {
       }
     });
 
-    this.listener(this, "pointerdown", (e: PointerEvent) => {
-      if (e.button !== 0) return; // only left click
+    this.listener(this, "pointerdown", (pointerEvent: PointerEvent) => {
+      if (pointerEvent.button !== 0) return; // only left click
 
       // Try to focus this element when clicked on for arrow key navigation,
       // will only work when tabindex=0.
       this.focus();
 
-      this.mousePos.x = e.x;
-      this.mousePos.y = e.y;
+      this.mousePos.x = pointerEvent.x;
+      this.mousePos.y = pointerEvent.y;
 
       this.setTarget(undefined);
       this.acceleration.set(0);
 
-      e.preventDefault();
-      e.stopPropagation();
+      pointerEvent.preventDefault();
+      pointerEvent.stopPropagation();
     });
 
     this.listener(this, "pointerleave", () => {
@@ -1441,17 +1441,21 @@ export class Track extends LitElement {
       { passive: false },
     );
 
-    this.listener(window, ["pointerup", "pointercancel"], (e: PointerEvent) => {
-      this.mousePos.mul(0);
+    this.listener(
+      window,
+      ["pointerup", "pointercancel"],
+      (pointerEvent: PointerEvent) => {
+        this.mousePos.mul(0);
 
-      if (this.grabbing) {
-        this.grabbing = false;
-        e.preventDefault();
-        e.stopPropagation();
+        if (this.grabbing) {
+          this.grabbing = false;
+          pointerEvent.preventDefault();
+          pointerEvent.stopPropagation();
 
-        this.inputState.release.value = true;
-      }
-    });
+          this.inputState.release.value = true;
+        }
+      },
+    );
 
     const intersectionObserver = new IntersectionObserver((intersections) => {
       for (const entry of intersections) {

@@ -214,10 +214,70 @@ test("snap", async () => {
   expect(track.currentIndex).toBeGreaterThanOrEqual(2);
 });
 
-// TODO: Test actual mouse movement with events
+test("drag with snap", async () => {
+  const track = await trackWithChildren(10, { snap: true, current: 2 });
+
+  let int: Timer;
+  (() => {
+    int = setInterval(() => {
+      console.info(track.position, track.target);
+    }, 16);
+  })();
+
+  await sleep(100);
+  await drag(track, 500, 100);
+
+  clearInterval(int);
+});
+
+class FakePointerEvent extends PointerEvent {
+  constructor(
+    type: string,
+    public x: number,
+    public y: number,
+    init?: PointerEventInit,
+  ) {
+    super(type, {
+      button: 0,
+      bubbles: true,
+      ...init,
+    });
+  }
+}
+
+async function drag(ele: TrackElement, dist: number, speed: number) {
+  const pos = [500, 0] as [number, number];
+  const start = [...ele.position];
+
+  ele.dispatchEvent(new FakePointerEvent("pointerdown", ...pos));
+  console.info("down");
+
+  await sleep(10);
+
+  const step = 5 + random() * speed;
+
+  for (let i = 0; i < dist; i += step) {
+    pos[0] -= step;
+    pos[1] -= random();
+
+    window.dispatchEvent(new FakePointerEvent("pointermove", ...pos));
+
+    await sleep(16);
+  }
+
+  console.info("pos", ele.position);
+  expect(ele.position[0] !== start[0]).toBeTrue();
+
+  window.dispatchEvent(new FakePointerEvent("pointerup", ...pos));
+  console.info("up");
+
+  await sleep(ele.transitionTime + 300);
+
+  expect(ele.target).toBeDefined();
+  expect(ele.position[0]).toBeCloseTo(ele.target?.[0], -1);
+}
 
 // TODO: snap with inertia to the correct position
-//
 // TODO: loop
 
 async function sleep(ms = 0) {
