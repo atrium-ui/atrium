@@ -42,7 +42,7 @@ export async function fixElementSizes(ele: Element, width: number, height: numbe
   ele.offsetHeight = height;
 }
 
-export async function sleep(ms = 0) {
+export async function sleep(ms = 24) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -74,13 +74,13 @@ export async function drag<
     Math.abs(dist[1]) > 0 ? 10 + random() * speed : 0,
   ] as [number, number];
 
-  console.info("step", step);
+  console.info("drag", "speed", speed, "dist", dist, "step", step, "start", start);
 
   // start moving
   track.dispatchEvent(new FakePointerEvent("pointerdown", ...pos));
   console.info("down");
 
-  await sleep(32);
+  await sleep();
 
   expect(track.target).toBeUndefined();
 
@@ -90,7 +90,7 @@ export async function drag<
 
     window.dispatchEvent(new FakePointerEvent("pointermove", ...pos));
 
-    await sleep(16);
+    await sleep();
   }
 
   // has moved at all?
@@ -99,7 +99,7 @@ export async function drag<
   window.dispatchEvent(new FakePointerEvent("pointerup", ...pos));
   console.info("up");
 
-  await sleep(16);
+  await sleep();
 }
 
 export async function trackWithChildren(

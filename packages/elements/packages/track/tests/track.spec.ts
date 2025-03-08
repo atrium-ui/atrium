@@ -288,7 +288,7 @@ describe("Track", () => {
     track.dispatchEvent(new FakePointerEvent("pointerdown", 0, 0));
     console.info("Grabbed track");
 
-    await sleep(16);
+    await sleep();
     const pos = track.position[0];
 
     // wait
@@ -310,6 +310,34 @@ describe("Track", () => {
     const pos = track.position[0];
     console.info("pos", pos, track.getToItemPosition(track.items.length - 1));
     expect(pos).toBeCloseTo(track.getToItemPosition(track.items.length - 1)[0], -2);
+  });
+
+  test(label("click without move should not result in a cancled click"), async () => {
+    const track = await trackWithChildren(10, { snap: true, align: "center" });
+
+    track.dispatchEvent(new FakePointerEvent("pointerdown", 100, 100));
+    console.info("down");
+
+    await sleep();
+
+    const ev = new FakePointerEvent("pointerup", 100, 100);
+    track.dispatchEvent(ev);
+    console.info("up");
+
+    expect(ev.defaultPrevented).toBe(false);
+
+    track.dispatchEvent(new FakePointerEvent("pointerdown", 100, 100));
+    console.info("down");
+
+    await sleep(100);
+    window.dispatchEvent(new FakePointerEvent("pointermove", 150, 110));
+    await sleep(100);
+
+    const ev2 = new FakePointerEvent("pointerup", 100, 100);
+    track.dispatchEvent(ev2);
+    console.info("up");
+
+    expect(ev2.defaultPrevented).toBe(true);
   });
 
   // TODO: loop
