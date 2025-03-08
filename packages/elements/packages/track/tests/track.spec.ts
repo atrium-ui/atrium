@@ -241,7 +241,7 @@ describe("Track", () => {
 
     console.info(track.position, track.overflowWidth, track.target);
 
-    await drag(track, [500, 0], 200);
+    await drag(track, [200, 0]);
     await sleep(track.transitionTime * 2);
 
     // target should be set by snap
@@ -256,7 +256,7 @@ describe("Track", () => {
     track.moveTo(6, "linear");
     await sleep(track.transitionTime * 2);
 
-    await drag(track, [500, 0], -100);
+    await drag(track, [-100, 0]);
     await sleep(track.transitionTime * 2);
 
     // target should be set by snap
@@ -268,7 +268,7 @@ describe("Track", () => {
     const track = await trackWithChildren(10, { snap: true, current: 3, vertical: true });
     logRun(track);
 
-    await drag(track, [0, 500], 100);
+    await drag(track, [0, 100]);
     await sleep(track.transitionTime);
 
     // target should be set by snap
@@ -304,7 +304,7 @@ describe("Track", () => {
     track.moveTo(8, "ease");
     await sleep(track.transitionTime * 2);
 
-    await drag(track, [1000, 0], 200);
+    await drag(track, [900, 0]);
     await sleep(track.transitionTime * 2);
 
     const pos = track.position[0];

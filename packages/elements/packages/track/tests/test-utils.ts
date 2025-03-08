@@ -66,15 +66,15 @@ export async function drag<
     position: Vec2;
     target?: Vec2;
   },
->(track: T, dist: [number, number], speed: number) {
+>(track: T, dist: [number, number]) {
   const pos = [300, 300] as [number, number];
   const start = [...track.position];
   const step = [
-    Math.abs(dist[0]) > 0 ? 10 + random() * speed : 0,
-    Math.abs(dist[1]) > 0 ? 10 + random() * speed : 0,
+    Math.abs(dist[0]) > 0 ? 10 + random() * dist[0] : 0,
+    Math.abs(dist[1]) > 0 ? 10 + random() * dist[1] : 0,
   ] as [number, number];
 
-  console.info("drag", "speed", speed, "dist", dist, "step", step, "start", start);
+  console.info("drag", "dist", dist, "step", step, "start", start);
 
   // start moving
   track.dispatchEvent(new FakePointerEvent("pointerdown", ...pos));
