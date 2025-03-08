@@ -1,5 +1,14 @@
 # @sv/elements
 
+## 2.4.2-dev.3 (2025-03-08)
+
+### Fixes
+
+- Improve track behaviour on different variable hardware
+- Fix check
+- Bug whre snap with align center did not snap to the last item
+- Grab wont allow clicking on items
+
 ## 2.4.2-dev.2 (2025-03-08)
 
 ### Fixes
