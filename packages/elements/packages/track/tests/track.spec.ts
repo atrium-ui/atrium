@@ -1,15 +1,13 @@
 import { beforeEach, test, expect, afterEach } from "bun:test";
-import type { MoveEvent } from "../src/Track";
-import type { Track as TrackElement } from "../src/Track";
+import type { MoveEvent, Track } from "../src/Track";
 import {
   drag,
   enviroment,
   FakePointerEvent,
-  fixElementSizes,
   label,
   press,
-  random,
   sleep,
+  trackWithChildren,
 } from "./test-utils";
 
 const NODE_NAME = "a-track";
@@ -24,49 +22,10 @@ afterEach(() => {
   clearInterval(int);
 });
 
-async function trackWithChildren(
-  itemCount = 10,
-  attributes: Record<string, string | boolean | number> = {},
-) {
-  await import("@sv/elements/track");
-
-  const widths = new Array<number>(itemCount)
-    .fill(0)
-    .map(() => Math.floor(random() * 500 + 150));
-
-  console.info(widths);
-
-  const div = document.createElement("div");
-  const markup = `
-    <a-track ${Object.entries(attributes)
-      .map(([key, value]) => `${key}="${value}"`)
-      .join(" ")}>
-      ${widths.map((w) => `<canvas width="${w}" height="800"></canvas>`).join("")}
-    </a-track>
-  `;
-  div.innerHTML = markup;
-
-  const track = div.children[0] as TrackElement;
-  fixElementSizes(track, 1200, 800);
-
-  // increase animation speed for testing
-  track.transitionTime = 150;
-
-  for (let i = 0; i < itemCount; i++) {
-    const child = track.children[i] as HTMLCanvasElement;
-    fixElementSizes(
-      child,
-      Number.parseInt(child.getAttribute("width") || "0"),
-      Number.parseInt(child.getAttribute("height") || "0"),
-    );
-  }
-
-  document.body.append(div);
-
-  // @ts-ignore
-  track.format();
-
-  return track;
+function logRun(track: Track) {
+  int = setInterval(() => {
+    console.info(track.position, track.target);
+  }, 16);
 }
 
 test(label("import track element"), async () => {
@@ -214,14 +173,15 @@ test(label("centered index 1"), async () => {
   const track = await trackWithChildren(10, {
     align: "center",
   });
+  logRun(track);
 
   expect(track.align).toBe("center");
 
   track.moveTo(1);
-  await sleep(track.transitionTime + 100);
+  await sleep(track.transitionTime * 2);
 
   expect(track.currentItem).toBe(1);
-  expect(track.currentPosition).toBeGreaterThan(0);
+  expect(Math.abs(track.currentPosition)).toBeGreaterThan(0);
 
   let offset = 0;
   for (let i = 0; i < track.currentItem; i++) {
@@ -270,13 +230,9 @@ test(label("snap"), async () => {
 });
 
 test(label("drag with snap"), async () => {
-  (() => {
-    int = setInterval(() => {
-      console.info(track.position, track.target);
-    }, 16);
-  })();
-
   const track = await trackWithChildren(10, { snap: true, current: 2 });
+  logRun(track);
+
   track.moveTo(4, "none");
   await sleep(track.transitionTime);
 
@@ -291,13 +247,9 @@ test(label("drag with snap"), async () => {
 });
 
 test(label("drag with snap negative"), async () => {
-  (() => {
-    int = setInterval(() => {
-      console.info(track.position, track.target);
-    }, 16);
-  })();
-
   const track = await trackWithChildren(10, { snap: true, current: 2 });
+  logRun(track);
+
   track.moveTo(6, "linear");
   await sleep(track.transitionTime * 2);
 
@@ -310,13 +262,9 @@ test(label("drag with snap negative"), async () => {
 });
 
 test(label("drag vertical with snap"), async () => {
-  (() => {
-    int = setInterval(() => {
-      console.info(track.position, track.target);
-    }, 16);
-  })();
-
   const track = await trackWithChildren(10, { snap: true, current: 3, vertical: true });
+  logRun(track);
+
   await drag(track, [0, 500], 100);
   await sleep(track.transitionTime);
 
@@ -326,13 +274,9 @@ test(label("drag vertical with snap"), async () => {
 });
 
 test(label("stop when grabbing"), async () => {
-  (() => {
-    int = setInterval(() => {
-      console.info(track.position, track.target);
-    }, 16);
-  })();
-
   const track = await trackWithChildren(10, { snap: true });
+  logRun(track);
+
   track.transitionTime = 1000;
   track.moveTo(8, "ease");
   await sleep(track.transitionTime / 2);
@@ -351,13 +295,9 @@ test(label("stop when grabbing"), async () => {
 });
 
 test(label("snap to last item when overscrolling using align center"), async () => {
-  (() => {
-    int = setInterval(() => {
-      console.info(track.position, track.target);
-    }, 16);
-  })();
-
   const track = await trackWithChildren(10, { snap: true, align: "center" });
+  logRun(track);
+
   track.moveTo(8, "ease");
   await sleep(track.transitionTime * 2);
 

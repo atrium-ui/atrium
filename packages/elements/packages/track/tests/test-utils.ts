@@ -1,13 +1,12 @@
 import Rand from "rand-seed";
 import { expect } from "bun:test";
 import type { Vec2 } from "../src";
-
-const seed = process.env.TEST_SEED || crypto.randomUUID();
-
-console.info("\nTest run seed:", seed, "\n");
+import type { Track as TrackElement } from "../src/Track";
 
 export function enviroment() {
-  globalThis.rand = new Rand(seed);
+  globalThis.seed = process.env.TEST_SEED || crypto.randomUUID();
+  globalThis.rand = new Rand(globalThis.seed);
+  console.info("\nTest run seed:", globalThis.seed, "\n");
 }
 
 export function random() {
@@ -15,7 +14,7 @@ export function random() {
 }
 
 export function label(str: string) {
-  return `${str} [${seed}]`;
+  return `${str} [${globalThis.seed}]`;
 }
 
 export function press(ele: Element, key: string) {
@@ -98,4 +97,49 @@ export async function drag<
   console.info("up");
 
   await sleep(16);
+}
+
+export async function trackWithChildren(
+  itemCount = 10,
+  attributes: Record<string, string | boolean | number> = {},
+) {
+  await import("@sv/elements/track");
+
+  const widths = new Array<number>(itemCount)
+    .fill(0)
+    .map(() => Math.floor(random() * 500 + 150));
+
+  console.info(widths);
+
+  const div = document.createElement("div");
+  const markup = `
+    <a-track ${Object.entries(attributes)
+      .map(([key, value]) => `${key}="${value}"`)
+      .join(" ")}>
+      ${widths.map((w) => `<canvas width="${w}" height="800"></canvas>`).join("")}
+    </a-track>
+  `;
+  div.innerHTML = markup;
+
+  const track = div.children[0] as TrackElement;
+  fixElementSizes(track, 1200, 800);
+
+  // increase animation speed for testing
+  track.transitionTime = 150;
+
+  for (let i = 0; i < itemCount; i++) {
+    const child = track.children[i] as HTMLCanvasElement;
+    fixElementSizes(
+      child,
+      Number.parseInt(child.getAttribute("width") || "0"),
+      Number.parseInt(child.getAttribute("height") || "0"),
+    );
+  }
+
+  document.body.append(div);
+
+  // @ts-ignore
+  track.format();
+
+  return track;
 }
