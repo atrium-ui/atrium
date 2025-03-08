@@ -139,7 +139,7 @@ export class DrawerTrack extends Track {
         if (track.deltaVelocity.y >= 0) return;
         if (track.isStatic) return;
 
-        const vel = Math.round(track.lastVelocity[track.currentAxis] * 10) / 10;
+        const vel = Math.round(track.velocity[track.currentAxis] * 10) / 10;
         const power = Math.round(vel / 15);
 
         if (power < 0) {

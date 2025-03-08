@@ -1,6 +1,9 @@
 import { LitElement, type PropertyValues, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
 import { Vec2, debounce, type Easing, Ease, isTouch, angleDist, timer } from "./utils.js";
+
+export { Ease, type Easing, Vec2 };
+
 import { DebugTrait } from "./debug.js";
 
 const PI2 = Math.PI * 2;
