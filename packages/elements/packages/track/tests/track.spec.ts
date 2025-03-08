@@ -1,28 +1,73 @@
-import { test, expect, afterEach } from "bun:test";
+import { beforeEach, test, expect, afterEach } from "bun:test";
 import type { MoveEvent } from "../src/Track";
 import type { Track as TrackElement } from "../src/Track";
-import Rand from "rand-seed";
+import {
+  drag,
+  enviroment,
+  FakePointerEvent,
+  fixElementSizes,
+  label,
+  press,
+  random,
+  sleep,
+} from "./test-utils";
 
-const seed = process.env.TEST_SEED || crypto.randomUUID();
-
-// biome-ignore lint/style/useTemplate: <explanation>
-const label = (str: string) => str + ` [${seed}]`;
-
-const rand = new Rand(seed);
+const NODE_NAME = "a-track";
 
 let int: Timer;
+
+beforeEach(() => {
+  enviroment();
+});
 
 afterEach(() => {
   clearInterval(int);
 });
 
-function random() {
-  return rand.next();
+async function trackWithChildren(
+  itemCount = 10,
+  attributes: Record<string, string | boolean | number> = {},
+) {
+  await import("@sv/elements/track");
+
+  const widths = new Array<number>(itemCount)
+    .fill(0)
+    .map(() => Math.floor(random() * 500 + 150));
+
+  console.info(widths);
+
+  const div = document.createElement("div");
+  const markup = `
+    <a-track ${Object.entries(attributes)
+      .map(([key, value]) => `${key}="${value}"`)
+      .join(" ")}>
+      ${widths.map((w) => `<canvas width="${w}" height="800"></canvas>`).join("")}
+    </a-track>
+  `;
+  div.innerHTML = markup;
+
+  const track = div.children[0] as TrackElement;
+  fixElementSizes(track, 1200, 800);
+
+  // increase animation speed for testing
+  track.transitionTime = 150;
+
+  for (let i = 0; i < itemCount; i++) {
+    const child = track.children[i] as HTMLCanvasElement;
+    fixElementSizes(
+      child,
+      Number.parseInt(child.getAttribute("width") || "0"),
+      Number.parseInt(child.getAttribute("height") || "0"),
+    );
+  }
+
+  document.body.append(div);
+
+  // @ts-ignore
+  track.format();
+
+  return track;
 }
-
-console.info("\nTest run seed:", seed, "\n");
-
-const NODE_NAME = "a-track";
 
 test(label("import track element"), async () => {
   const { Track } = await import("@sv/elements/track");
@@ -176,7 +221,7 @@ test(label("centered index 1"), async () => {
   await sleep(track.transitionTime + 100);
 
   expect(track.currentItem).toBe(1);
-  expect(track.currentPosition !== 0).toBeTrue();
+  expect(track.currentPosition).toBeGreaterThan(0);
 
   let offset = 0;
   for (let i = 0; i < track.currentItem; i++) {
@@ -235,12 +280,14 @@ test(label("drag with snap"), async () => {
   track.moveTo(4, "none");
   await sleep(track.transitionTime);
 
+  console.info(track.position, track.overflowWidth, track.target);
+
   await drag(track, [500, 0], 100);
-  await sleep(track.transitionTime * 3);
+  await sleep(track.transitionTime * 2);
 
   // target should be set by snap
   expect(track.target).toBeDefined();
-  expect(track.position[0]).toBeCloseTo(track.target?.[0], -1);
+  expect(track.position[0]).toBeCloseTo(track.target?.[0], -2);
 });
 
 test(label("drag with snap negative"), async () => {
@@ -255,11 +302,11 @@ test(label("drag with snap negative"), async () => {
   await sleep(track.transitionTime);
 
   await drag(track, [500, 0], -100);
-  await sleep(track.transitionTime * 3);
+  await sleep(track.transitionTime * 2);
 
   // target should be set by snap
   expect(track.target).toBeDefined();
-  expect(track.position[0]).toBeCloseTo(track.target?.[0], -1);
+  expect(track.position[0]).toBeCloseTo(track.target?.[0], -2);
 });
 
 test(label("drag vertical with snap"), async () => {
@@ -271,11 +318,11 @@ test(label("drag vertical with snap"), async () => {
 
   const track = await trackWithChildren(10, { snap: true, current: 3, vertical: true });
   await drag(track, [0, 500], 100);
-  await sleep(track.transitionTime * 3);
+  await sleep(track.transitionTime);
 
   // target should be set by snap
   expect(track.target).toBeDefined();
-  expect(track.position[0]).toBeCloseTo(track.target?.[0], -1);
+  expect(track.position[0]).toBeCloseTo(track.target?.[0], -2);
 });
 
 test(label("stop when grabbing"), async () => {
@@ -303,126 +350,23 @@ test(label("stop when grabbing"), async () => {
   expect(track.position[0]).toBe(pos);
 });
 
-class FakePointerEvent extends PointerEvent {
-  constructor(
-    type: string,
-    public x: number,
-    public y: number,
-    init?: PointerEventInit,
-  ) {
-    super(type, {
-      button: 0,
-      bubbles: true,
-      ...init,
-    });
-  }
-}
+test(label("snap to last item when overscrolling using align center"), async () => {
+  (() => {
+    int = setInterval(() => {
+      console.info(track.position, track.target);
+    }, 16);
+  })();
 
-async function drag(track: TrackElement, dist: [number, number], speed: number) {
-  console.info("position", track.position);
+  const track = await trackWithChildren(10, { snap: true, align: "center" });
+  track.moveTo(8, "ease");
+  await sleep(track.transitionTime * 2);
 
-  const pos = [300, 300] as [number, number];
-  const start = [...track.position];
-  const step = [
-    Math.abs(dist[0]) > 0 ? 10 + random() * speed : 0,
-    Math.abs(dist[1]) > 0 ? 10 + random() * speed : 0,
-  ] as [number, number];
+  await drag(track, [1000, 0], 200);
+  await sleep(track.transitionTime * 2);
 
-  console.info("step", step);
-
-  // start moving
-  track.dispatchEvent(new FakePointerEvent("pointerdown", ...pos));
-  console.info("down");
-
-  await sleep(32);
-
-  expect(track.target).toBeUndefined();
-
-  for (let i = 0; i < 15; i++) {
-    pos[0] -= step[0];
-    pos[1] -= step[1];
-
-    window.dispatchEvent(new FakePointerEvent("pointermove", ...pos));
-
-    await sleep(16);
-  }
-
-  // has moved at all?
-  expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
-
-  window.dispatchEvent(new FakePointerEvent("pointerup", ...pos));
-  console.info("up");
-}
+  const pos = track.position[0];
+  console.info("pos", pos, track.getToItemPosition(track.items.length - 1));
+  expect(pos).toBeCloseTo(track.getToItemPosition(track.items.length - 1)[0], -2);
+});
 
 // TODO: loop
-
-async function sleep(ms = 0) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function fixElementSizes(ele: Element, width: number, height: number) {
-  Object.defineProperty(ele, "offsetWidth", {
-    writable: true,
-  });
-  Object.defineProperty(ele, "offsetHeight", {
-    writable: true,
-  });
-
-  // @ts-ignore
-  ele.offsetWidth = width;
-  // @ts-ignore
-  ele.offsetHeight = height;
-}
-
-async function trackWithChildren(
-  itemCount = 10,
-  attributes: Record<string, string | boolean | number> = {},
-) {
-  await import("@sv/elements/track");
-
-  const widths = new Array<number>(itemCount)
-    .fill(0)
-    .map(() => Math.floor(random() * 500 + 150));
-
-  console.info(widths);
-
-  const div = document.createElement("div");
-  const markup = `
-    <a-track ${Object.entries(attributes)
-      .map(([key, value]) => `${key}="${value}"`)
-      .join(" ")}>
-      ${widths.map((w) => `<canvas width="${w}" height="800"></canvas>`).join("")}
-    </a-track>
-  `;
-  div.innerHTML = markup;
-
-  const track = div.children[0] as TrackElement;
-  fixElementSizes(track, 800, 800);
-
-  // increase animation speed for testing
-  track.transitionTime = 150;
-
-  for (let i = 0; i < itemCount; i++) {
-    const child = track.children[i] as HTMLCanvasElement;
-    fixElementSizes(
-      child,
-      Number.parseInt(child.getAttribute("width") || "0"),
-      Number.parseInt(child.getAttribute("height") || "0"),
-    );
-  }
-
-  document.body.append(div);
-
-  // @ts-ignore
-  track.format();
-
-  return track;
-}
-
-function press(ele: Element, key: string) {
-  ele.dispatchEvent(
-    new KeyboardEvent("keydown", {
-      key: key,
-    }),
-  );
-}

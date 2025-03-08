@@ -251,16 +251,24 @@ export class SnapTrait implements Trait {
 
     if (!track.loop) {
       // disable snap when past maxIndex
-      if (track.maxIndex && power > 0 && track.currentIndex + power > track.maxIndex)
+      if (track.maxIndex && power > 0 && track.currentIndex + power > track.maxIndex) {
+        // instead, snap to the end
+        track.setTarget(track.getToItemPosition(track.itemCount - 1), "linear");
         return;
+      }
     }
 
     if (Math.abs(vel) > 8) {
+      // apply inertia to snap target
       track.acceleration.mul(0.25);
       track.inputForce.mul(0.125);
       track.setTarget(track.getToItemPosition(track.currentItem + power), "linear");
     } else {
       track.setTarget(track.getToItemPosition(track.currentItem), "linear");
+    }
+
+    if (!track.target) {
+      throw new Error("Track target not set, but snap");
     }
   }
 }
@@ -315,15 +323,18 @@ export class Track extends LitElement {
         display: flex;
         outline: none;
         overflow: hidden;
+        touch-action: pan-y;
+        overscroll-behavior: none;
+        scrollbar-width: none;
       }
-
-      .debug {
-        position: absolute;
-        z-index: 10;
-        pointer-events: none;
+      :host([vertical]) {
+        flex-direction: column;
       }
-
+      :host([vertical]) {
+        touch-action: pan-x;
+      }
       slot {
+        will-change: transform;
         display: inherit;
         flex-direction: inherit;
         flex-flow: inherit;
@@ -332,29 +343,16 @@ export class Track extends LitElement {
         will-change: transform;
         min-width: 100%;
       }
-
-      :host([vertical]) {
-        flex-direction: column;
-      }
-
-      :host {
-        touch-action: pan-y;
-      }
-
-      :host([vertical]) {
-        touch-action: pan-x;
-      }
-
-      :host {
-        overscroll-behavior: none;
-        scrollbar-width: none;
-      }
-
       ::-webkit-scrollbar {
         width: 0px;
         height: 0px;
         background: transparent;
         display: none;
+      }
+      .debug {
+        position: absolute;
+        z-index: 10;
+        pointer-events: none;
       }
     `;
   }
@@ -519,6 +517,10 @@ export class Track extends LitElement {
   }
 
   public get maxIndex() {
+    if (this.overflow === "ignore") {
+      return this.itemCount - 1;
+    }
+
     if (this.align === "start") {
       // get index of item at the end of the track
       if (this.vertical) {
@@ -699,8 +701,9 @@ export class Track extends LitElement {
   /** Change the overflow behavior.
    * - "auto" - Only scrollable when necessary.
    * - "scroll" - Always scrollable.
+   * - "ignore" - Ignore any overflow.
    */
-  @property({ type: String }) overflow: "auto" | "scroll" = "auto";
+  @property({ type: String }) overflow: "auto" | "scroll" | "ignore" = "auto";
 
   @property({ type: Boolean }) debug = false;
 
