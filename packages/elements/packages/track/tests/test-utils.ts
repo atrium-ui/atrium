@@ -5,8 +5,11 @@ import type { Track as TrackElement } from "../src/Track";
 
 export function enviroment() {
   globalThis.seed = process.env.TEST_SEED || crypto.randomUUID();
-  globalThis.rand = new Rand(globalThis.seed);
   console.info("\nTest run seed:", globalThis.seed, "\n");
+}
+
+export function setup() {
+  globalThis.rand = new Rand(globalThis.seed);
 }
 
 export function random() {
@@ -14,7 +17,7 @@ export function random() {
 }
 
 export function label(str: string) {
-  return `${str} [${globalThis.seed}]`;
+  return `${str} [TEST_SEED=${globalThis.seed} bun test track]`;
 }
 
 export function press(ele: Element, key: string) {

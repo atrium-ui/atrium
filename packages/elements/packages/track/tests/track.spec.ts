@@ -6,6 +6,7 @@ import {
   FakePointerEvent,
   label,
   press,
+  setup,
   sleep,
   trackWithChildren,
 } from "./test-utils";
@@ -22,6 +23,10 @@ describe("Track", () => {
 
   afterEach(() => {
     clearInterval(int);
+  });
+
+  beforeEach(() => {
+    setup();
   });
 
   test(label("import track element"), async () => {
@@ -236,7 +241,7 @@ describe("Track", () => {
 
     console.info(track.position, track.overflowWidth, track.target);
 
-    await drag(track, [500, 0], 100);
+    await drag(track, [500, 0], 200);
     await sleep(track.transitionTime * 2);
 
     // target should be set by snap
