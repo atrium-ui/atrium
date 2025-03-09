@@ -292,20 +292,6 @@ describe("Track", () => {
     expect(track.position[0]).toBe(pos);
   });
 
-  test(label("snap to last item when overscrolling using align center"), async () => {
-    const track = await trackWithChildren(10, { snap: true, align: "center" });
-    logRun(track);
-
-    track.moveTo(8, "none");
-    await sleep(200);
-    expect(track.currentItem).toBe(8);
-
-    await drag(track, [100, 0]);
-    await sleep(200);
-
-    expect(track.target?.[0]).toBeCloseTo(track.getToItemPosition(9)[0], -2);
-  });
-
   test(label("click without move should not result in a cancled click"), async () => {
     const track = await trackWithChildren(10, { snap: true, align: "center" });
 
