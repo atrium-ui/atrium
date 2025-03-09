@@ -1,12 +1,6 @@
 /* @jsxImportSource vue */
 import { defineComponent, ref, onMounted, effect, nextTick } from "vue";
-import {
-  PointerTrait,
-  Track,
-  type InputState,
-  type Easing,
-  type Trait,
-} from "@sv/elements/track";
+import { Track, type InputState, type Easing, type Trait } from "@sv/elements/track";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
 
@@ -121,7 +115,6 @@ export const Drawer = defineComponent(
 
 export class DrawerTrack extends Track {
   public traits: Trait[] = [
-    new PointerTrait(),
     {
       id: "drawer",
       input(track: DrawerTrack, inputState: InputState) {
