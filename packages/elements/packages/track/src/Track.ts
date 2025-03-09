@@ -1001,7 +1001,7 @@ export class Track extends LitElement {
 
     this.trait((t) => t.update?.(this));
 
-    const interacting = this.inputForce.abs() > 0;
+    const interacting = this.grabbing || this.target;
 
     this.moveVelocity.mul(this.moveDrag);
 
