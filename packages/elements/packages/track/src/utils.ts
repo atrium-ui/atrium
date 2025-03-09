@@ -170,7 +170,7 @@ export class Vec2 extends Array {
   }
 
   toString(): string {
-    return `Vec{${this.join(",")}}`;
+    return `Vec{${this.map((v) => v.toFixed(2)).join(",")}}`;
   }
 
   static add(vec1: VecOrNumber, vec2: VecOrNumber) {

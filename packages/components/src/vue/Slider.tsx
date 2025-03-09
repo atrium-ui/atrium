@@ -75,7 +75,7 @@ export const Slider = defineComponent(
 
           <a-track
             ref={track}
-            snap
+            debug
             class="flex w-full overflow-visible"
             onScroll={() => {
               position.value = track.value?.position.x || 0;

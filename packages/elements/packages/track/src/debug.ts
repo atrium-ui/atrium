@@ -11,6 +11,18 @@ export class DebugTrait implements Trait {
   update(track: Track): void {
     if (!track.debug) return;
 
+    const meta = {
+      mouseDown: track.mouseDown,
+      grabbing: track.grabbing,
+      acceleration: track.acceleration,
+      velocity: track.velocity,
+      drag: track.drag,
+      moveVelocity: track.moveVelocity,
+      inputForce: track.inputForce,
+      mousePos: track.mousePos,
+      target: track.target,
+    };
+
     const trackSize = track.trackSize;
     const currentAngle = track.currentAngle;
 
@@ -25,7 +37,7 @@ export class DebugTrait implements Trait {
     canvas.style.height = `${track.height}px`;
 
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-    ctx.fillRect(0, 0, 400, 400);
+    ctx.fillRect(0, 0, 400, 600);
 
     const originAngle = track.originAngle;
 
@@ -93,5 +105,14 @@ export class DebugTrait implements Trait {
     ctx.lineTo(100 + Math.cos(originAngle) * 69, 100 + Math.sin(originAngle) * 69);
     ctx.lineWidth = 3;
     ctx.stroke();
+
+    let line = 6;
+    ctx.font = "24px sans-serif";
+    ctx.fillStyle = "#fff";
+    ctx.textAlign = "left";
+    for (const key in meta) {
+      ctx.fillText(`${key}: ${meta[key]}`, 6, 24 * 1.5 * line);
+      line++;
+    }
   }
 }
