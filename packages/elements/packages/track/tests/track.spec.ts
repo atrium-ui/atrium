@@ -345,7 +345,7 @@ describe("Track", () => {
     const start = [...track.position];
 
     const ev = new WheelEvent("wheel", {
-      deltaX: -100,
+      deltaX: 100,
       deltaY: 0,
     });
     track.dispatchEvent(ev);

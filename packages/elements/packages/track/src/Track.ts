@@ -581,7 +581,7 @@ export class Track extends LitElement {
   };
 
   private animation: number | undefined;
-  private tickRate = 1000 / 144;
+  private tickRate = 1000 / 120;
   private lastTick = 0;
   private accumulator = 0;
 
@@ -629,7 +629,7 @@ export class Track extends LitElement {
   private targetForce = new Vec2();
   private targetStart = new Vec2();
 
-  public transitionTime = 500;
+  public transitionTime = 420;
   private transitionAt = 0;
   private transition = 0;
 
@@ -888,8 +888,6 @@ export class Track extends LitElement {
 
     const lastPosition = this.position.clone();
 
-    this.updateInputs();
-
     let ticks = 0;
     const maxTicks = 10;
     while (this.accumulator >= this.tickRate && ticks < maxTicks) {
@@ -898,6 +896,8 @@ export class Track extends LitElement {
 
       this.updateTick();
     }
+
+    this.updateInputs();
 
     const deltaPosition = Vec2.sub(this.position, lastPosition);
 
@@ -986,6 +986,7 @@ export class Track extends LitElement {
     const state = this.inputState;
     state.move.value.mul(0);
     state.grab.value = false;
+    state.scroll.value = false;
     state.format.value = false;
     state.leave.value = false;
     state.enter.value = false;
@@ -1001,7 +1002,7 @@ export class Track extends LitElement {
 
     this.trait((t) => t.update?.(this));
 
-    const interacting = this.grabbing || this.target;
+    const interacting = this.target || this.inputForce.abs() > 0;
 
     this.moveVelocity.mul(this.moveDrag);
 
@@ -1340,7 +1341,10 @@ export class Track extends LitElement {
     }
   };
 
+  private scrollForce = new Vec2();
+
   private onWheel = (wheelEvent: WheelEvent) => {
+    // TODO: if there is a tick without a scroll event, it will jitter
     if (wheelEvent.ctrlKey === true) {
       // its a pinch zoom gesture
       return;
@@ -1364,12 +1368,10 @@ export class Track extends LitElement {
 
       this.inputState.scroll.value = true;
 
-      this.acceleration.mul(0);
-
       if (this.vertical) {
-        this.inputForce.y = wheelEvent.deltaY;
+        this.inputForce.y = delta.y;
       } else {
-        this.inputForce.x = wheelEvent.deltaX;
+        this.inputForce.x = delta.x;
       }
     }
   };
