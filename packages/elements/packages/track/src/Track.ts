@@ -147,8 +147,6 @@ export class SnapTrait implements Trait {
     const dir = Math.sign(vel);
     const power = Math.max(Math.round(track.velocity.abs() / 40), 1) * dir;
 
-    console.log("power", power, track.velocity);
-
     if (!track.loop) {
       // disable snap when past maxIndex
       if (track.maxIndex && power > 0 && track.currentIndex + power > track.maxIndex) {
