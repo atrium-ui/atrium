@@ -335,17 +335,14 @@ describe("Track", () => {
   });
 
   test(label("wheel event works"), async () => {
-    const track = await trackWithChildren(10, { snap: true, align: "center" });
-
-    track.dispatchEvent(new FakePointerEvent("pointerdown", 100, 100));
-    console.info("down");
-
-    await sleep();
+    const track = await trackWithChildren(10, {});
+    track.moveTo(8, "none");
+    await sleep(200);
 
     const start = [...track.position];
 
     const ev = new WheelEvent("wheel", {
-      deltaX: 100,
+      deltaX: -200,
       deltaY: 0,
     });
     track.dispatchEvent(ev);
@@ -355,7 +352,7 @@ describe("Track", () => {
 
     await sleep(100);
 
-    expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
+    expect(track.position[0]).not.toBe(start[0]);
   });
 
   // TODO: loop

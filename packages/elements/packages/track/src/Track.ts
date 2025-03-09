@@ -677,7 +677,7 @@ export class Track extends LitElement {
    */
   @property({ type: String }) public overflow: "auto" | "scroll" | "ignore" = "auto";
 
-  @property({ type: Boolean }) public debug = true;
+  @property({ type: Boolean }) public debug = false;
 
   private trait(callback: (t: Trait) => void) {
     for (const t of this.traits) {
