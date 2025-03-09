@@ -309,7 +309,7 @@ export class Track extends LitElement {
     });
 
     // TODO: diff the container size and appliy to position of track
-    this.resizeObserver = new ResizeObserver(debounce(() => this.format()));
+    this.resizeObserver = new ResizeObserver(debounce(() => this.onFormat()));
 
     this.addController({
       hostConnected: () => this.resizeObserver?.observe(this),
@@ -352,7 +352,7 @@ export class Track extends LitElement {
     }
 
     if (_changedProperties.has("align")) {
-      this.format();
+      this.onFormat();
     }
   }
 
@@ -364,7 +364,7 @@ export class Track extends LitElement {
 
   private updateItems() {
     this._children = getCSSChildren(this);
-    this.format();
+    this.onFormat();
   }
 
   public get itemCount() {
@@ -379,29 +379,6 @@ export class Track extends LitElement {
     return new Array(this.itemCount)
       .fill(0)
       .map((_, i) => new Vec2(this.itemWidths[i], this.itemHeights[i]));
-  }
-
-  /**
-   * Get the absolute position of the closest item to the current position.
-   * @argument offset - offset the position by a number
-   */
-  public getClosestItemPosition(offset = 0) {
-    const posPrev = this.getToItemPosition(this.currentItem + -offset);
-    const posCurr = this.getToItemPosition(this.currentItem + offset);
-    const posNext = this.getToItemPosition(this.currentItem + (offset + 1));
-
-    const prev = posPrev.clone().sub(this.position).abs();
-    const curr = posCurr.clone().sub(this.position).abs();
-    const next = posNext.clone().sub(this.position).abs();
-
-    switch (Math.min(curr, next, prev)) {
-      case prev:
-        return posPrev;
-      case next:
-        return posNext;
-      default:
-        return posCurr;
-    }
   }
 
   private _widths: number[] | undefined = undefined;
@@ -510,6 +487,24 @@ export class Track extends LitElement {
     return 0;
   }
 
+  public get trackSize() {
+    return this.vertical ? this.trackHeight : this.trackWidth;
+  }
+
+  public get currentAngle() {
+    return (this.currentPosition / this.trackSize) * Math.PI * 2;
+  }
+
+  public get originAngle() {
+    return (this.origin[this.currentAxis] / this.trackSize || 0) * PI2;
+  }
+
+  public get targetAngle() {
+    return this.target ? (this.target.x / this.trackSize) * PI2 : undefined;
+  }
+
+  public itemAngles: number[] = [];
+
   private getScrollBounds() {
     let stopTop = 0;
     let stopLeft = 0;
@@ -547,12 +542,12 @@ export class Track extends LitElement {
     };
   }
 
-  private getClapmedPosition(e: Track, pos: Vec2) {
+  private toClapmedPosition(pos: Vec2) {
     let clampedPos = pos;
 
-    const bounds = e.scrollBounds;
+    const bounds = this.scrollBounds;
 
-    switch (e.align) {
+    switch (this.align) {
       case "center":
         clampedPos = new Vec2(
           Math.min(bounds.right, clampedPos.x),
@@ -578,7 +573,7 @@ export class Track extends LitElement {
     return clampedPos;
   }
 
-  scrollBounds = {
+  private scrollBounds = {
     top: 0,
     left: 0,
     bottom: 0,
@@ -662,6 +657,30 @@ export class Track extends LitElement {
     },
   };
 
+  /** The index of the current item. */
+  @property({ type: Number, reflect: true }) public current: number | undefined;
+
+  /** Whether the track should scroll vertically, instead of horizontally. */
+  @property({ type: Boolean, reflect: true }) public vertical = false;
+
+  /** Whether the track should loop back to the start when reaching the end. */
+  @property({ type: Boolean, reflect: true }) public loop = false;
+
+  /** Whether the track should snap to the closest child element. */
+  @property({ type: Boolean, reflect: true }) public snap = false;
+
+  /** Item alignment in the track. "start" (left/top) or "center" */
+  @property({ type: String }) public align: "start" | "center" = "start";
+
+  /** Change the overflow behavior.
+   * - "auto" - Only scrollable when necessary.
+   * - "scroll" - Always scrollable.
+   * - "ignore" - Ignore any overflow.
+   */
+  @property({ type: String }) public overflow: "auto" | "scroll" | "ignore" = "auto";
+
+  @property({ type: Boolean }) public debug = false;
+
   private trait(callback: (t: Trait) => void) {
     for (const t of this.traits) {
       try {
@@ -692,30 +711,6 @@ export class Track extends LitElement {
     return undefined;
   }
 
-  /** The index of the current item. */
-  @property({ type: Number, reflect: true }) current: number | undefined;
-
-  /** Whether the track should scroll vertically, instead of horizontally. */
-  @property({ type: Boolean, reflect: true }) vertical = false;
-
-  /** Whether the track should loop back to the start when reaching the end. */
-  @property({ type: Boolean, reflect: true }) loop = false;
-
-  /** Whether the track should snap to the closest child element. */
-  @property({ type: Boolean, reflect: true }) snap = false;
-
-  /** Item alignment in the track. "start" (left/top) or "center" */
-  @property({ type: String }) align: "start" | "center" = "start";
-
-  /** Change the overflow behavior.
-   * - "auto" - Only scrollable when necessary.
-   * - "scroll" - Always scrollable.
-   * - "ignore" - Ignore any overflow.
-   */
-  @property({ type: String }) overflow: "auto" | "scroll" | "ignore" = "auto";
-
-  @property({ type: Boolean }) debug = false;
-
   private observedChildren = new Set<Node>();
 
   private onSlotChange = () => {
@@ -740,43 +735,28 @@ export class Track extends LitElement {
     }
   };
 
-  private format = () => {
-    this.inputState.format.value = true;
-    this._width = undefined;
-    this._height = undefined;
-    this._widths = undefined;
-    this._heights = undefined;
+  /**
+   * Get the absolute position of the closest item to the current position.
+   * @argument offset - offset the position by a number
+   */
+  public getClosestItemPosition(offset = 0) {
+    const posPrev = this.getToItemPosition(this.currentItem + -offset);
+    const posCurr = this.getToItemPosition(this.currentItem + offset);
+    const posNext = this.getToItemPosition(this.currentItem + (offset + 1));
 
-    // apply align prop
-    switch (this.align) {
-      case "start":
-        this.origin.set([0, 0]);
-        break;
-      case "center":
-        if (this.vertical) {
-          this.origin.set([0, -this.height / 2]);
-        } else {
-          this.origin.set([-this.width / 2, 0]);
-        }
-        break;
+    const prev = posPrev.clone().sub(this.position).abs();
+    const curr = posCurr.clone().sub(this.position).abs();
+    const next = posNext.clone().sub(this.position).abs();
+
+    switch (Math.min(curr, next, prev)) {
+      case prev:
+        return posPrev;
+      case next:
+        return posNext;
+      default:
+        return posCurr;
     }
-
-    this.scrollBounds = this.getScrollBounds();
-
-    const formatEvent = new CustomEvent("format", {
-      bubbles: true,
-      cancelable: true,
-    });
-    this.dispatchEvent(formatEvent);
-
-    if (!formatEvent.defaultPrevented) {
-      this.trait((t) => t.format?.(this));
-
-      if (this.position.x > this.overflowWidth || this.position.y > this.overflowHeight) {
-        this.setTarget(undefined);
-      }
-    }
-  };
+  }
 
   /**
    * Get the index of the item that contains given element. Returns -1 if it is not in any item.
@@ -960,7 +940,7 @@ export class Track extends LitElement {
   private updateInputs() {
     this.trait((t) => t.input?.(this, this.inputState));
 
-    if (this.grabbing && !this.grabbing) {
+    if (this.inputState.grab.value === true) {
       // grab change
       this.grabbing = true;
       this.grabbedStart.set(this.mousePos);
@@ -971,8 +951,6 @@ export class Track extends LitElement {
     if (this.mousePos.abs()) {
       this.grabDelta.set(this.mousePos).sub(this.grabbedStart);
     }
-
-    // TODO: might want to give every trait a "inputForce", so I dont have to mutate the tracks fields.
 
     if (this.grabbing) {
       if (this.inputState.move.value.abs()) {
@@ -1031,7 +1009,7 @@ export class Track extends LitElement {
 
     // clamp input force
     const pos = Vec2.add(this.position, this.inputForce);
-    const clamped = this.getClapmedPosition(this, pos);
+    const clamped = this.toClapmedPosition(pos);
     const diff = Vec2.sub(pos, clamped);
 
     if (interacting) {
@@ -1138,25 +1116,7 @@ export class Track extends LitElement {
     this.deltaPosition = Vec2.sub(this.position, lastPosition);
   }
 
-  debugCanvas = document.createElement("canvas");
-
-  public get trackSize() {
-    return this.vertical ? this.trackHeight : this.trackWidth;
-  }
-
-  public get currentAngle() {
-    return (this.currentPosition / this.trackSize) * Math.PI * 2;
-  }
-
-  public get originAngle() {
-    return (this.origin[this.currentAxis] / this.trackSize || 0) * PI2;
-  }
-
-  public get targetAngle() {
-    return this.target ? (this.target.x / this.trackSize) * PI2 : undefined;
-  }
-
-  public itemAngles: number[] = [];
+  public debugCanvas = document.createElement("canvas");
 
   private getCurrentItem() {
     const trackSize = this.trackSize;
@@ -1341,6 +1301,44 @@ export class Track extends LitElement {
       });
     }
   }
+
+  private onFormat = () => {
+    this.inputState.format.value = true;
+    this._width = undefined;
+    this._height = undefined;
+    this._widths = undefined;
+    this._heights = undefined;
+
+    // apply align prop
+    switch (this.align) {
+      case "start":
+        this.origin.set([0, 0]);
+        break;
+      case "center":
+        if (this.vertical) {
+          this.origin.set([0, -this.height / 2]);
+        } else {
+          this.origin.set([-this.width / 2, 0]);
+        }
+        break;
+    }
+
+    this.scrollBounds = this.getScrollBounds();
+
+    const formatEvent = new CustomEvent("format", {
+      bubbles: true,
+      cancelable: true,
+    });
+    this.dispatchEvent(formatEvent);
+
+    if (!formatEvent.defaultPrevented) {
+      this.trait((t) => t.format?.(this));
+
+      if (this.position.x > this.overflowWidth || this.position.y > this.overflowHeight) {
+        this.setTarget(undefined);
+      }
+    }
+  };
 
   private onWheel = (wheelEvent: WheelEvent) => {
     if (wheelEvent.ctrlKey === true) {
