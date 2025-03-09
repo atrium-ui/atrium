@@ -5,7 +5,6 @@ import type { Track as TrackElement } from "../src/Track";
 
 export function enviroment() {
   globalThis.seed = process.env.TEST_SEED || crypto.randomUUID();
-  console.info("\nTest run seed:", globalThis.seed, "\n");
 }
 
 export function setup() {
@@ -17,7 +16,7 @@ export function random() {
 }
 
 export function label(str: string) {
-  return `${str} [TEST_SEED=${globalThis.seed} bun test track]`;
+  return `[TEST_SEED=${globalThis.seed} bun test track -t "${str}"]`;
 }
 
 export function press(ele: Element, key: string) {
@@ -42,7 +41,7 @@ export async function fixElementSizes(ele: Element, width: number, height: numbe
   ele.offsetHeight = height;
 }
 
-export async function sleep(ms = 24) {
+export async function sleep(ms = 16) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -67,14 +66,15 @@ export async function drag<
     target?: Vec2;
   },
 >(track: T, dist: [number, number]) {
-  const pos = [300, 300] as [number, number];
+  const multiplier = 1 + random();
+  const pos = [10, 10] as [number, number];
   const start = [...track.position];
   const step = [
-    Math.abs(dist[0]) > 0 ? 1 + random() * dist[0] : 0,
-    Math.abs(dist[1]) > 0 ? 1 + random() * dist[1] : 0,
+    Math.abs(dist[0]) > 0 ? multiplier * dist[0] : 0,
+    Math.abs(dist[1]) > 0 ? multiplier * dist[1] : 0,
   ] as [number, number];
 
-  console.info("drag", "dist", dist, "step", step, "start", start);
+  console.info("drag", multiplier, "dist", dist, "step", step, "start", start);
 
   // start moving
   track.dispatchEvent(new FakePointerEvent("pointerdown", ...pos));
@@ -84,15 +84,14 @@ export async function drag<
 
   expect(track.target).toBeUndefined();
 
-  for (let i = 0; i < 15; i++) {
-    pos[0] -= step[0];
-    pos[1] -= step[1];
-
+  for (let i = 0; i < 10; i++) {
     window.dispatchEvent(new FakePointerEvent("pointermove", ...pos));
 
-    await sleep(8);
-  }
+    await sleep();
 
+    pos[0] -= step[0];
+    pos[1] -= step[1];
+  }
   // has moved at all?
   expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
 
@@ -106,13 +105,13 @@ export async function trackWithChildren(
   itemCount = 10,
   attributes: Record<string, string | boolean | number> = {},
 ) {
-  await import("@sv/elements/track");
+  await import("../src/index.js");
 
   const widths = new Array<number>(itemCount)
     .fill(0)
     .map(() => Math.floor(random() * 500 + 150));
 
-  console.info(widths);
+  console.info("items", widths);
 
   const div = document.createElement("div");
   const markup = `
@@ -125,10 +124,10 @@ export async function trackWithChildren(
   div.innerHTML = markup;
 
   const track = div.children[0] as TrackElement;
-  fixElementSizes(track, 1200, 800);
+  fixElementSizes(track, random() * 1000 + 200, random() * 800 + 200);
 
   // increase animation speed for testing
-  track.transitionTime = 150;
+  track.transitionTime = 100;
 
   for (let i = 0; i < itemCount; i++) {
     const child = track.children[i] as HTMLCanvasElement;
@@ -140,6 +139,14 @@ export async function trackWithChildren(
   }
 
   document.body.append(div);
+
+  if (track.vertical) {
+    track.position.y = random() * track.overflowWidth;
+  } else {
+    track.position.x = random() * track.overflowWidth;
+  }
+
+  console.info("track", track.width, track.height, track.trackWidth, track.position);
 
   // @ts-ignore
   track.format();

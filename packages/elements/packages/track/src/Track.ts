@@ -1,12 +1,54 @@
 import { LitElement, type PropertyValues, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
 import { Vec2, debounce, type Easing, Ease, isTouch, angleDist, timer } from "./utils.js";
+import { DebugTrait } from "./debug.js";
 
 export { Ease, type Easing, Vec2 };
 
-import { DebugTrait } from "./debug.js";
-
 const PI2 = Math.PI * 2;
+
+export class MoveEvent extends CustomEvent<{
+  delta: Vec2;
+  direction: Vec2;
+  velocity: Vec2;
+  position: Vec2;
+}> {
+  constructor(track: Track, delta: Vec2) {
+    super("move", {
+      cancelable: true,
+      detail: {
+        delta: delta,
+        direction: track.direction.clone(),
+        velocity: track.deltaPosition.clone(),
+        position: track.position.clone(),
+      },
+    });
+  }
+}
+
+export type InputState = {
+  grab: {
+    value: boolean;
+  };
+  scroll: {
+    value: boolean;
+  };
+  move: {
+    value: Vec2;
+  };
+  release: {
+    value: boolean;
+  };
+  format: {
+    value: boolean;
+  };
+  leave: {
+    value: boolean;
+  };
+  enter: {
+    value: boolean;
+  };
+};
 
 /**
  * The Track implements a trait system, which can be used to add new behaviours to the track.
@@ -60,150 +102,6 @@ export interface Trait<T extends Track = Track> {
 }
 
 /**
- * The PointerTrait addes the ability to move the track with the mouse or touch inputs by dragging.
- *
- * @example
- * ```js
- * new PointerTrait({
- *   borderBounce?: number;
- *   borderResistance?: number;
- * })
- * ```
- */
-export class PointerTrait implements Trait {
-  id = "pointer";
-
-  grabbing = false;
-  grabbedStart = new Vec2();
-  grabDelta = new Vec2();
-
-  borderBounce = 0.1;
-  borderResistance = 0.3;
-
-  moveDrag = 0.5;
-
-  constructor(
-    options: {
-      borderBounce?: number;
-      borderResistance?: number;
-    } = {},
-  ) {
-    this.borderBounce = options.borderBounce ?? this.borderBounce;
-    this.borderResistance = options.borderResistance ?? this.borderResistance;
-  }
-
-  moveVelocity = new Vec2();
-
-  input(track: Track, inputState: InputState) {
-    if (track.grabbing && !this.grabbing) {
-      // grab change
-      this.grabbing = true;
-      this.grabbedStart.set(track.mousePos);
-      track.dispatchEvent(new Event("pointer:grab"));
-      track.setTarget(undefined);
-    }
-
-    if (track.mousePos.abs()) {
-      this.grabDelta.set(track.mousePos).sub(this.grabbedStart);
-    }
-
-    // TODO: might want to give every trait a "inputForce", so I dont have to mutate the tracks fields.
-
-    if (this.grabbing) {
-      if (inputState.move.value.abs()) {
-        this.moveVelocity.add(inputState.move.value);
-        track.inputForce.set(inputState.move.value.clone().mul(-1));
-      } else {
-        track.inputForce.mul(0);
-      }
-    }
-
-    if (inputState.release.value) {
-      this.grabbing = false;
-      track.dispatchEvent(new Event("pointer:release"));
-
-      track.inputForce.set(this.moveVelocity.clone().mul(-1));
-    }
-
-    // prevent moving in wrong direction
-    if (track.vertical) {
-      track.inputForce.x = 0;
-    } else {
-      track.inputForce.y = 0;
-    }
-
-    if (track.slotElement) {
-      track.slotElement.inert = this.grabbing;
-    }
-    if (!isTouch()) track.style.cursor = this.grabbing ? "grabbing" : "";
-  }
-
-  update(track: Track) {
-    this.moveVelocity.mul(this.moveDrag);
-
-    if (this.grabbing) {
-      track.drag = 0;
-    } else {
-      track.drag = 0.95;
-    }
-
-    // clamp input force
-    const pos = Vec2.add(track.position, track.inputForce);
-    const clamped = this.getClapmedPosition(track, pos);
-    const diff = Vec2.sub(pos, clamped);
-
-    if (!track.loop && diff.abs() && this.grabbing) {
-      const resitance = this.borderResistance * (1 - diff.abs() / 200);
-
-      if (track.vertical) {
-        track.inputForce.mul(resitance);
-      } else {
-        track.inputForce.mul(resitance);
-      }
-    }
-
-    const bounce = this.borderBounce;
-    if (!track.loop && bounce && diff.abs() && !this.grabbing) {
-      if ((track.vertical && Math.abs(diff.y)) || Math.abs(diff.x)) {
-        track.inputForce.sub(diff.mul(bounce));
-        track.acceleration.mul(0);
-      }
-    }
-  }
-
-  getClapmedPosition(e: Track, pos: Vec2) {
-    let clampedPos = pos;
-
-    const bounds = e.scrollBounds;
-
-    switch (e.align) {
-      case "center":
-        clampedPos = new Vec2(
-          Math.min(bounds.right, clampedPos.x),
-          Math.min(bounds.bottom, clampedPos.y),
-        );
-        clampedPos = new Vec2(
-          Math.max(bounds.left, clampedPos.x),
-          Math.max(bounds.top, clampedPos.y),
-        );
-        break;
-      default:
-        clampedPos = new Vec2(
-          Math.min(bounds.right, clampedPos.x),
-          Math.min(bounds.bottom, clampedPos.y),
-        );
-        clampedPos = new Vec2(
-          Math.max(bounds.left, clampedPos.x),
-          Math.max(bounds.top, clampedPos.y),
-        );
-        break;
-    }
-
-    return clampedPos;
-  }
-}
-
-/**
  * The SnapTrait addes the snapping of items to the track.
  */
 export class SnapTrait implements Trait {
@@ -225,7 +123,9 @@ export class SnapTrait implements Trait {
   }
 
   input(track: Track) {
-    if (track.grabbing || track.mouseDown || track.target) return;
+    const interacting = track.inputForce.abs() > 0;
+
+    if (interacting || track.mouseDown || track.target) return;
 
     // only when decelerating, but also when not moving
     const movement = track.velocity.clone().precision(0.1).abs();
@@ -249,6 +149,8 @@ export class SnapTrait implements Trait {
     const vel = Math.round(track.velocity[track.currentAxis] * 10) / 10;
     const dir = Math.sign(vel);
     const power = Math.max(Math.round(track.velocity.abs() / 40), 1) * dir;
+
+    console.log("power", power, track.velocity);
 
     if (!track.loop) {
       // disable snap when past maxIndex
@@ -358,6 +260,70 @@ export class Track extends LitElement {
     `;
   }
 
+  constructor() {
+    super();
+
+    // TODO: put this in a trait so it can be disabled
+    // TODO: sync it to screen?
+    this.addEventListener("wheel", this.onWheel, { passive: false });
+
+    this.addEventListener("focusin", this.onFocusIn);
+
+    this.addEventListener("keydown", this.onKeyDown);
+
+    this.addEventListener("pointerdown", this.onPointerDown);
+
+    this.addEventListener("pointerleave", () => {
+      this.inputState.leave.value = true;
+    });
+
+    this.addEventListener("pointerenter", () => {
+      this.inputState.enter.value = true;
+    });
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+
+    this.updateItems();
+
+    this.ariaRoleDescription = "carousel";
+    this.role = "region";
+
+    this.listener(window, "pointermove", this.onPointerMove);
+    this.listener(window, ["pointerup", "pointercancel"], this.onPointerUpOrCancel);
+
+    const intersectionObserver = new IntersectionObserver((intersections) => {
+      for (const entry of intersections) {
+        if (entry.isIntersecting) {
+          this.startAnimate();
+        } else {
+          this.stopAnimate();
+        }
+      }
+    });
+
+    this.addController({
+      hostConnected: () => intersectionObserver.observe(this),
+      hostDisconnected: () => intersectionObserver.disconnect(),
+    });
+
+    // TODO: diff the container size and appliy to position of track
+    this.resizeObserver = new ResizeObserver(debounce(() => this.format()));
+
+    this.addController({
+      hostConnected: () => this.resizeObserver?.observe(this),
+      hostDisconnected: () => this.resizeObserver?.disconnect(),
+    });
+
+    this.computeCurrentItem();
+  }
+
+  disconnectedCallback(): void {
+    this.stopAnimate();
+    super.disconnectedCallback();
+  }
+
   render() {
     return html`
       <slot @slotchange=${this.onSlotChange}></slot>
@@ -369,7 +335,7 @@ export class Track extends LitElement {
     return this.shadowRoot?.children?.[0] as HTMLSlotElement | undefined;
   }
 
-  public traits: Trait[] = [new PointerTrait(), new DebugTrait()];
+  public traits: Trait[] = [new DebugTrait()];
 
   protected updated(_changedProperties: PropertyValues): void {
     if (_changedProperties.has("current") && this.current !== undefined) {
@@ -507,8 +473,6 @@ export class Track extends LitElement {
     return this.overflowWidth > 0 || this.overflowHeight > 0;
   }
 
-  public currentItem = 0;
-
   public get currentIndex() {
     return this.currentItem % this.itemCount;
   }
@@ -583,6 +547,37 @@ export class Track extends LitElement {
     };
   }
 
+  private getClapmedPosition(e: Track, pos: Vec2) {
+    let clampedPos = pos;
+
+    const bounds = e.scrollBounds;
+
+    switch (e.align) {
+      case "center":
+        clampedPos = new Vec2(
+          Math.min(bounds.right, clampedPos.x),
+          Math.min(bounds.bottom, clampedPos.y),
+        );
+        clampedPos = new Vec2(
+          Math.max(bounds.left, clampedPos.x),
+          Math.max(bounds.top, clampedPos.y),
+        );
+        break;
+      default:
+        clampedPos = new Vec2(
+          Math.min(bounds.right, clampedPos.x),
+          Math.min(bounds.bottom, clampedPos.y),
+        );
+        clampedPos = new Vec2(
+          Math.max(bounds.left, clampedPos.x),
+          Math.max(bounds.top, clampedPos.y),
+        );
+        break;
+    }
+
+    return clampedPos;
+  }
+
   scrollBounds = {
     top: 0,
     left: 0,
@@ -595,6 +590,8 @@ export class Track extends LitElement {
   private lastTick = 0;
   private accumulator = 0;
 
+  public currentItem = 0;
+
   public grabbing = false;
 
   public mouseDown = false;
@@ -606,6 +603,16 @@ export class Track extends LitElement {
   public drag = 0.95;
   public origin = new Vec2();
   public position = new Vec2();
+
+  public grabbedStart = new Vec2();
+  public grabDelta = new Vec2();
+
+  public moveDrag = 0.5;
+
+  public borderBounce = 0.1;
+  public borderResistance = 0.3;
+
+  public moveVelocity = new Vec2();
 
   // Delta of position compared to the last frame
   public deltaPosition = new Vec2();
@@ -953,6 +960,48 @@ export class Track extends LitElement {
   private updateInputs() {
     this.trait((t) => t.input?.(this, this.inputState));
 
+    if (this.grabbing && !this.grabbing) {
+      // grab change
+      this.grabbing = true;
+      this.grabbedStart.set(this.mousePos);
+      this.dispatchEvent(new Event("pointer:grab"));
+      this.setTarget(undefined);
+    }
+
+    if (this.mousePos.abs()) {
+      this.grabDelta.set(this.mousePos).sub(this.grabbedStart);
+    }
+
+    // TODO: might want to give every trait a "inputForce", so I dont have to mutate the tracks fields.
+
+    if (this.grabbing) {
+      if (this.inputState.move.value.abs()) {
+        this.moveVelocity.add(this.inputState.move.value);
+        this.inputForce.set(this.inputState.move.value.clone().mul(-1));
+      } else {
+        this.inputForce.mul(0);
+      }
+    }
+
+    if (this.inputState.release.value) {
+      this.grabbing = false;
+      this.dispatchEvent(new Event("pointer:release"));
+
+      this.inputForce.set(this.moveVelocity.clone().mul(-1));
+    }
+
+    // prevent moving in wrong direction
+    if (this.vertical) {
+      this.inputForce.x = 0;
+    } else {
+      this.inputForce.y = 0;
+    }
+
+    if (this.slotElement) {
+      this.slotElement.inert = this.grabbing;
+    }
+    if (!isTouch()) this.style.cursor = this.grabbing ? "grabbing" : "";
+
     this.direction.add(this.inputForce).sign();
 
     // clear
@@ -975,6 +1024,39 @@ export class Track extends LitElement {
     this.acceleration.mul(this.drag);
 
     this.trait((t) => t.update?.(this));
+
+    const interacting = this.inputForce.abs() > 0;
+
+    this.moveVelocity.mul(this.moveDrag);
+
+    // clamp input force
+    const pos = Vec2.add(this.position, this.inputForce);
+    const clamped = this.getClapmedPosition(this, pos);
+    const diff = Vec2.sub(pos, clamped);
+
+    if (interacting) {
+      this.drag = 0;
+
+      if (!this.loop && diff.abs()) {
+        const resitance = this.borderResistance * (1 - diff.abs() / 200);
+
+        if (this.vertical) {
+          this.inputForce.mul(resitance);
+        } else {
+          this.inputForce.mul(resitance);
+        }
+      }
+    } else {
+      this.drag = 0.95;
+
+      const bounce = this.borderBounce;
+      if (!this.loop && bounce && diff.abs()) {
+        if ((this.vertical && Math.abs(diff.y)) || Math.abs(diff.x)) {
+          this.inputForce.sub(diff.mul(bounce));
+          this.acceleration.mul(0);
+        }
+      }
+    }
 
     this.acceleration.add(this.inputForce);
     this.inputForce.mul(0);
@@ -1234,6 +1316,15 @@ export class Track extends LitElement {
 
   private resizeObserver?: ResizeObserver;
 
+  private canMove(delta: Vec2) {
+    if (this.overflow === "auto" && !this.hasOverflow) {
+      // respect overflowscroll
+      return false;
+    }
+
+    return this.dispatchEvent(new MoveEvent(this, delta));
+  }
+
   listener<T extends Event>(
     host: HTMLElement | typeof globalThis,
     events: string | string[],
@@ -1251,239 +1342,127 @@ export class Track extends LitElement {
     }
   }
 
-  private canMove(delta: Vec2) {
-    if (this.overflow === "auto" && !this.hasOverflow) {
-      // respect overflowscroll
-      return false;
+  private onWheel = (wheelEvent: WheelEvent) => {
+    if (wheelEvent.ctrlKey === true) {
+      // its a pinch zoom gesture
+      return;
     }
 
-    return this.dispatchEvent(new MoveEvent(this, delta));
-  }
+    const delta = new Vec2(wheelEvent.deltaX, wheelEvent.deltaY);
 
-  connectedCallback(): void {
-    super.connectedCallback();
+    if (!this.canMove(delta)) return;
 
-    this.updateItems();
+    const deltaThreshold = Vec2.abs(delta);
+    const axisThreshold = this.vertical
+      ? Math.abs(delta.x) < Math.abs(delta.y)
+      : Math.abs(delta.x) > Math.abs(delta.y);
 
-    this.ariaRoleDescription = "carousel";
-    this.role = "region";
+    if (axisThreshold) {
+      wheelEvent.preventDefault();
+    }
 
-    this.listener(this, "focusin", (e: FocusEvent) => {
-      const item = this.elementItemIndex(e.target as HTMLElement);
-      const dist = Vec2.dist2(this.getToItemPosition(item), this.position);
-      const rect = this.getItemRects()[item];
-
-      if (!rect) return;
-
-      if (
-        dist.x + rect.x > this.width ||
-        dist.x < 0 ||
-        dist.y + rect.y > this.height ||
-        dist.y < 0
-      ) {
-        this.moveTo(item);
-      }
-    });
-
-    this.listener(this, "keydown", (e: KeyboardEvent) => {
-      const Key = {
-        prev: this.vertical ? "ArrowUp" : "ArrowLeft",
-        next: this.vertical ? "ArrowDown" : "ArrowRight",
-      };
-
-      if (e.key === Key.prev) {
-        this.moveBy(-1, "linear");
-        e.preventDefault();
-      }
-      if (e.key === Key.next) {
-        this.moveBy(1, "linear");
-        e.preventDefault();
-      }
-    });
-
-    this.listener(this, "pointerdown", (pointerEvent: PointerEvent) => {
-      if (pointerEvent.button !== 0) return; // only left click
-
-      // Try to focus this element when clicked on for arrow key navigation,
-      // will only work when tabindex=0.
-      this.focus();
-
-      this.mouseDown = true;
-      this.mousePos.x = pointerEvent.x;
-      this.mousePos.y = pointerEvent.y;
-
-      // stop moving when grabbing
+    if (axisThreshold && deltaThreshold > 2) {
       this.setTarget(undefined);
-      this.acceleration.set(0);
+
+      this.inputState.scroll.value = true;
+
+      this.acceleration.mul(0);
+
+      if (this.vertical) {
+        this.inputForce.y = wheelEvent.deltaY;
+      } else {
+        this.inputForce.x = wheelEvent.deltaX;
+      }
+    }
+  };
+
+  private onKeyDown = (e: KeyboardEvent) => {
+    const Key = {
+      prev: this.vertical ? "ArrowUp" : "ArrowLeft",
+      next: this.vertical ? "ArrowDown" : "ArrowRight",
+    };
+
+    if (e.key === Key.prev) {
+      this.moveBy(-1, "linear");
+      e.preventDefault();
+    }
+    if (e.key === Key.next) {
+      this.moveBy(1, "linear");
+      e.preventDefault();
+    }
+  };
+
+  private onFocusIn = (e: FocusEvent) => {
+    const item = this.elementItemIndex(e.target as HTMLElement);
+    const dist = Vec2.dist2(this.getToItemPosition(item), this.position);
+    const rect = this.getItemRects()[item];
+
+    if (!rect) return;
+
+    if (
+      dist.x + rect.x > this.width ||
+      dist.x < 0 ||
+      dist.y + rect.y > this.height ||
+      dist.y < 0
+    ) {
+      this.moveTo(item);
+    }
+  };
+
+  private onPointerDown = (pointerEvent: PointerEvent) => {
+    if (pointerEvent.button !== 0) return; // only left click
+
+    // Try to focus this element when clicked on for arrow key navigation,
+    // will only work when tabindex=0.
+    this.focus();
+
+    this.mouseDown = true;
+    this.mousePos.x = pointerEvent.x;
+    this.mousePos.y = pointerEvent.y;
+
+    // stop moving when grabbing
+    this.setTarget(undefined);
+    this.acceleration.set(0);
+
+    pointerEvent.preventDefault();
+    pointerEvent.stopPropagation();
+  };
+
+  private onPointerUpOrCancel = (pointerEvent: PointerEvent) => {
+    this.mouseDown = false;
+    this.mousePos.mul(0);
+
+    if (this.grabbing) {
+      this.grabbing = false;
+      this.inputState.release.value = true;
 
       pointerEvent.preventDefault();
       pointerEvent.stopPropagation();
-    });
+    }
+  };
 
-    this.listener(this, "pointerleave", () => {
-      this.inputState.leave.value = true;
-    });
+  private onPointerMove = (pointerEvent: PointerEvent) => {
+    const pos = new Vec2(pointerEvent.x, pointerEvent.y);
+    const delta = Vec2.sub(pos, this.mousePos);
 
-    this.listener(this, "pointerenter", () => {
-      this.inputState.enter.value = true;
-    });
+    if (!this.canMove(delta)) return;
 
-    this.listener(window, "pointermove", (pointerEvent: PointerEvent) => {
-      const pos = new Vec2(pointerEvent.x, pointerEvent.y);
-      const delta = Vec2.sub(pos, this.mousePos);
-
-      if (!this.canMove(delta)) return;
-
-      if (!this.grabbing && delta.abs() > 3) {
-        if (this.vertical && this.mousePos.y && Math.abs(delta.x) < Math.abs(delta.y)) {
-          this.grabbing = true;
-          this.inputState.grab.value = true;
-        } else if (this.mousePos.x && Math.abs(delta.y) < Math.abs(delta.x)) {
-          this.grabbing = true;
-          this.inputState.grab.value = true;
-        }
+    if (!this.grabbing && delta.abs() > 3) {
+      if (this.vertical && this.mousePos.y && Math.abs(delta.x) < Math.abs(delta.y)) {
+        this.grabbing = true;
+        this.inputState.grab.value = true;
+      } else if (this.mousePos.x && Math.abs(delta.y) < Math.abs(delta.x)) {
+        this.grabbing = true;
+        this.inputState.grab.value = true;
       }
+    }
 
-      if (this.grabbing) {
-        this.inputState.move.value.add(delta.clone());
-        this.mousePos.set(pos);
+    if (this.grabbing) {
+      this.inputState.move.value.add(delta.clone());
+      this.mousePos.set(pos);
 
-        pointerEvent.preventDefault();
-        pointerEvent.stopPropagation();
-      }
-    });
-
-    // TODO: put this in a trait so it can be disabled
-    this.listener(
-      this,
-      "wheel",
-      (wheelEvent: WheelEvent) => {
-        if (wheelEvent.ctrlKey === true) {
-          // its a pinch zoom gesture
-          return;
-        }
-
-        const delta = new Vec2(wheelEvent.deltaX, wheelEvent.deltaY);
-
-        if (!this.canMove(delta)) return;
-
-        const deltaThreshold = Vec2.abs(delta);
-        const axisThreshold = this.vertical
-          ? Math.abs(delta.x) < Math.abs(delta.y)
-          : Math.abs(delta.x) > Math.abs(delta.y);
-
-        if (axisThreshold) {
-          wheelEvent.preventDefault();
-        }
-
-        if (axisThreshold && deltaThreshold > 2) {
-          this.setTarget(undefined);
-
-          this.grabbing = true;
-          this.inputState.scroll.value = true;
-
-          this.acceleration.mul(0);
-
-          if (this.vertical) {
-            this.inputForce.y = wheelEvent.deltaY;
-          } else {
-            this.inputForce.x = wheelEvent.deltaX;
-          }
-        } else {
-          this.grabbing = false;
-        }
-      },
-      { passive: false },
-    );
-
-    this.listener(
-      window,
-      ["pointerup", "pointercancel"],
-      (pointerEvent: PointerEvent) => {
-        this.mouseDown = false;
-        this.mousePos.mul(0);
-
-        if (this.grabbing) {
-          this.grabbing = false;
-          this.inputState.release.value = true;
-
-          pointerEvent.preventDefault();
-          pointerEvent.stopPropagation();
-        }
-      },
-    );
-
-    const intersectionObserver = new IntersectionObserver((intersections) => {
-      for (const entry of intersections) {
-        if (entry.isIntersecting) {
-          this.startAnimate();
-        } else {
-          this.stopAnimate();
-        }
-      }
-    });
-
-    this.addController({
-      hostConnected: () => intersectionObserver.observe(this),
-      hostDisconnected: () => intersectionObserver.disconnect(),
-    });
-
-    // TODO: diff the container size and appliy to position of track
-    this.resizeObserver = new ResizeObserver(debounce(() => this.format()));
-
-    this.addController({
-      hostConnected: () => this.resizeObserver?.observe(this),
-      hostDisconnected: () => this.resizeObserver?.disconnect(),
-    });
-
-    this.computeCurrentItem();
-  }
-
-  disconnectedCallback(): void {
-    this.stopAnimate();
-    super.disconnectedCallback();
-  }
+      pointerEvent.preventDefault();
+      pointerEvent.stopPropagation();
+    }
+  };
 }
-
-export class MoveEvent extends CustomEvent<{
-  delta: Vec2;
-  direction: Vec2;
-  velocity: Vec2;
-  position: Vec2;
-}> {
-  constructor(track: Track, delta: Vec2) {
-    super("move", {
-      cancelable: true,
-      detail: {
-        delta: delta,
-        direction: track.direction.clone(),
-        velocity: track.deltaPosition.clone(),
-        position: track.position.clone(),
-      },
-    });
-  }
-}
-
-export type InputState = {
-  grab: {
-    value: boolean;
-  };
-  scroll: {
-    value: boolean;
-  };
-  move: {
-    value: Vec2;
-  };
-  release: {
-    value: boolean;
-  };
-  format: {
-    value: boolean;
-  };
-  leave: {
-    value: boolean;
-  };
-  enter: {
-    value: boolean;
-  };
-};

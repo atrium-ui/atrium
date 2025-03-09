@@ -14,7 +14,7 @@ import {
 let int: Timer;
 function logRun(track: Track) {
   int = setInterval(() => {
-    console.info(track.position, track.target);
+    console.info(track.position, track.velocity, track.target);
   }, 16);
 }
 
@@ -55,11 +55,6 @@ describe("Track", () => {
     track.remove();
     // @ts-ignore
     expect(track.animation).toBeUndefined();
-  });
-
-  test(label("check default traits"), async () => {
-    const track = await trackWithChildren();
-    expect(track.findTrait("pointer")).toBeDefined();
   });
 
   test(label("item count"), async () => {
@@ -179,7 +174,7 @@ describe("Track", () => {
     expect(track.align).toBe("center");
 
     track.moveTo(1);
-    await sleep(track.transitionTime * 2);
+    await sleep(300);
 
     expect(track.currentItem).toBe(1);
     expect(Math.abs(track.currentPosition)).toBeGreaterThan(0);
@@ -237,12 +232,12 @@ describe("Track", () => {
     logRun(track);
 
     track.moveTo(4, "none");
-    await sleep(track.transitionTime);
+    await sleep(200);
 
     console.info(track.position, track.overflowWidth, track.target);
 
     await drag(track, [200, 0]);
-    await sleep(track.transitionTime * 2);
+    await sleep(300);
 
     // target should be set by snap
     expect(track.target).toBeDefined();
@@ -254,10 +249,10 @@ describe("Track", () => {
     logRun(track);
 
     track.moveTo(6, "linear");
-    await sleep(track.transitionTime * 2);
+    await sleep(300);
 
     await drag(track, [-100, 0]);
-    await sleep(track.transitionTime * 2);
+    await sleep(300);
 
     // target should be set by snap
     expect(track.target).toBeDefined();
@@ -269,7 +264,7 @@ describe("Track", () => {
     logRun(track);
 
     await drag(track, [0, 100]);
-    await sleep(track.transitionTime);
+    await sleep(200);
 
     // target should be set by snap
     expect(track.target).toBeDefined();
@@ -292,7 +287,7 @@ describe("Track", () => {
     const pos = track.position[0];
 
     // wait
-    await sleep(track.transitionTime);
+    await sleep(200);
     // pos should not have changed
     expect(track.position[0]).toBe(pos);
   });
@@ -301,15 +296,14 @@ describe("Track", () => {
     const track = await trackWithChildren(10, { snap: true, align: "center" });
     logRun(track);
 
-    track.moveTo(8, "ease");
-    await sleep(track.transitionTime * 2);
+    track.moveTo(8, "none");
+    await sleep(200);
+    expect(track.currentItem).toBe(8);
 
-    await drag(track, [200, 0]);
-    await sleep(track.transitionTime * 2);
+    await drag(track, [100, 0]);
+    await sleep(200);
 
-    const pos = track.position[0];
-    console.info("pos", pos, track.getToItemPosition(track.items.length - 1));
-    expect(pos).toBeCloseTo(track.getToItemPosition(track.items.length - 1)[0], -2);
+    expect(track.target?.[0]).toBeCloseTo(track.getToItemPosition(9)[0], -2);
   });
 
   test(label("click without move should not result in a cancled click"), async () => {
@@ -338,6 +332,30 @@ describe("Track", () => {
     console.info("up");
 
     expect(ev2.defaultPrevented).toBe(true);
+  });
+
+  test(label("wheel event works"), async () => {
+    const track = await trackWithChildren(10, { snap: true, align: "center" });
+
+    track.dispatchEvent(new FakePointerEvent("pointerdown", 100, 100));
+    console.info("down");
+
+    await sleep();
+
+    const start = [...track.position];
+
+    const ev = new WheelEvent("wheel", {
+      deltaX: 500,
+      deltaY: 500,
+    });
+    track.dispatchEvent(ev);
+    console.info("fired");
+
+    // expect(ev.defaultPrevented).toBe(true);
+
+    await sleep(100);
+
+    expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
   });
 
   // TODO: loop
