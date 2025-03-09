@@ -999,8 +999,6 @@ export class Track extends LitElement {
     this.velocity = Vec2.add(this.velocity.clone().mul(0.5), this.deltaPosition);
     this.deltaVelocity = Vec2.sub(this.velocity, lastVelocity);
 
-    this.acceleration.mul(this.drag);
-
     this.trait((t) => t.update?.(this));
 
     const interacting = this.inputForce.abs() > 0;
@@ -1035,6 +1033,8 @@ export class Track extends LitElement {
         }
       }
     }
+
+    this.acceleration.mul(this.drag);
 
     this.acceleration.add(this.inputForce);
     this.inputForce.mul(0);
