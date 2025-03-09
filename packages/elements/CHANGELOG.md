@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.0.1-dev.3 (2025-03-09)
+
+### Fixes
+
+- package version
+
 ## 0.0.1-dev.2 (2025-03-09)
 
 ### Fixes
