@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 0.0.1-dev.1 (2025-03-09)
+
+### Fixes
+
+- Grab wont allow clicking on items
+
 ## 0.0.1-dev.0 (2025-03-09)
 
 ### Fixes
