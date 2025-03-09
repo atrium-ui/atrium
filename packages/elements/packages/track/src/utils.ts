@@ -22,7 +22,7 @@ export function debounce<T>(callback: (arg: T) => void) {
   };
 }
 
-export function mod(a: number, n: number) {
+function mod(a: number, n: number) {
   return a - Math.floor(a / n) * n;
 }
 
@@ -141,12 +141,6 @@ export class Vec2 extends Array {
 
   abs() {
     return Math.sqrt(this[0] ** 2 + this[1] ** 2);
-  }
-
-  abs2() {
-    this[0] = Math.abs(this[0]);
-    this[1] = Math.abs(this[1]);
-    return this;
   }
 
   precision(precision: number) {

@@ -1,7 +1,7 @@
 import { LitElement, type PropertyValues, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
 import { Vec2, debounce, type Easing, Ease, isTouch, angleDist, timer } from "./utils.js";
-import { DebugTrait } from "./debug.js";
+// import { DebugTrait } from "./debug.js";
 
 export { Ease, type Easing, Vec2 };
 
@@ -330,7 +330,9 @@ export class Track extends LitElement {
     return this.shadowRoot?.children?.[0] as HTMLSlotElement | undefined;
   }
 
-  public traits: Trait[] = [new DebugTrait()];
+  public traits: Trait[] = [
+    // new DebugTrait()
+  ];
 
   protected updated(_changedProperties: PropertyValues): void {
     if (_changedProperties.has("current") && this.current !== undefined) {
@@ -593,9 +595,6 @@ export class Track extends LitElement {
   public drag = 0.95;
   public origin = new Vec2();
   public position = new Vec2();
-
-  public grabbedStart = new Vec2();
-  public grabDelta = new Vec2();
 
   public moveDrag = 0.5;
 
@@ -938,13 +937,8 @@ export class Track extends LitElement {
     if (this.inputState.grab.value === true) {
       // grab change
       this.grabbing = true;
-      this.grabbedStart.set(this.mousePos);
       this.dispatchEvent(new Event("pointer:grab"));
       this.setTarget(undefined);
-    }
-
-    if (this.mousePos.abs()) {
-      this.grabDelta.set(this.mousePos).sub(this.grabbedStart);
     }
 
     if (this.grabbing) {
