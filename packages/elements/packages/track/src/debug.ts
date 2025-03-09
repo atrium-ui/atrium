@@ -19,6 +19,7 @@ export class DebugTrait implements Trait {
       drag: track.drag,
       moveVelocity: track.moveVelocity,
       inputForce: track.inputForce,
+      scrollDebounce: track.scrollDebounce,
       mousePos: track.mousePos,
       target: track.target,
     };

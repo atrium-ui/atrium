@@ -123,9 +123,7 @@ export class SnapTrait implements Trait {
   }
 
   input(track: Track) {
-    const interacting = track.inputForce.abs() > 0;
-
-    if (interacting || track.mouseDown || track.target) return;
+    if (track.interacting || track.target) return;
 
     // only when decelerating, but also when not moving
     const movement = track.velocity.clone().precision(0.1).abs();
@@ -679,7 +677,7 @@ export class Track extends LitElement {
    */
   @property({ type: String }) public overflow: "auto" | "scroll" | "ignore" = "auto";
 
-  @property({ type: Boolean }) public debug = false;
+  @property({ type: Boolean }) public debug = true;
 
   private trait(callback: (t: Trait) => void) {
     for (const t of this.traits) {
@@ -993,6 +991,10 @@ export class Track extends LitElement {
     state.release.value = false;
   }
 
+  public get interacting() {
+    return this.inputForce.abs() > 0.5 || this.mouseDown;
+  }
+
   private updateTick() {
     const lastPosition = this.position.clone();
     const lastVelocity = this.velocity.clone();
@@ -1002,7 +1004,7 @@ export class Track extends LitElement {
 
     this.trait((t) => t.update?.(this));
 
-    const interacting = this.target || this.inputForce.abs() > 0;
+    const interacting = this.target || this.interacting;
 
     this.moveVelocity.mul(this.moveDrag);
 
@@ -1341,7 +1343,7 @@ export class Track extends LitElement {
     }
   };
 
-  private scrollForce = new Vec2();
+  public scrollDebounce?: Timer;
 
   private onWheel = (wheelEvent: WheelEvent) => {
     // TODO: if there is a tick without a scroll event, it will jitter
@@ -1367,6 +1369,21 @@ export class Track extends LitElement {
       this.setTarget(undefined);
 
       this.inputState.scroll.value = true;
+
+      if (
+        this.position.x < this.scrollBounds.left - 20 ||
+        this.position.y < this.scrollBounds.top - 20 ||
+        this.position.x > this.scrollBounds.right + 20 ||
+        this.position.y > this.scrollBounds.bottom + 20 ||
+        this.scrollDebounce
+      ) {
+        clearTimeout(this.scrollDebounce);
+        this.scrollDebounce = setTimeout(() => {
+          this.scrollDebounce = undefined;
+        }, 32);
+
+        return;
+      }
 
       if (this.vertical) {
         this.inputForce.y = delta.y;
