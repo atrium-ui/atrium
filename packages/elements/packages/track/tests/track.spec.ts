@@ -96,7 +96,7 @@ describe("Track", () => {
     });
 
     // @ts-ignore
-    track.format();
+    track.onFormat();
     track.startAnimate();
     // @ts-ignore Force update tick
     track.updateTick();
@@ -345,13 +345,13 @@ describe("Track", () => {
     const start = [...track.position];
 
     const ev = new WheelEvent("wheel", {
-      deltaX: 500,
-      deltaY: 500,
+      deltaX: -100,
+      deltaY: 0,
     });
     track.dispatchEvent(ev);
     console.info("fired");
 
-    // expect(ev.defaultPrevented).toBe(true);
+    expect(ev.defaultPrevented).toBe(true);
 
     await sleep(100);
 

@@ -149,7 +149,7 @@ export async function trackWithChildren(
   console.info("track", track.width, track.height, track.trackWidth, track.position);
 
   // @ts-ignore
-  track.format();
+  track.onFormat();
 
   return track;
 }
