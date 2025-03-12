@@ -61,7 +61,8 @@ publish-dev:
     - bun x npm config set //gitlab.s-v.de/api/v4/projects/1560/packages/npm/:_authToken="$CI_JOB_TOKEN"
     - bun x npm config list
     - task prerelease
-    - git push origin -o ci.skip origin $CI_COMMIT_REF_NAME && git push --tags
+    - git push origin -o ci.skip $CI_COMMIT_REF_NAME
+    - git push origin --tags
 
 publish:
   stage: publish
@@ -76,7 +77,8 @@ publish:
     - bun x npm config set //gitlab.s-v.de/api/v4/projects/1560/packages/npm/:_authToken="$CI_JOB_TOKEN"
     - bun x npm config list
     - task release
-    - git push origin -o ci.skip origin $CI_COMMIT_REF_NAME && git push --tags
+    - git push origin -o ci.skip $CI_COMMIT_REF_NAME
+    - git push origin --tags
 
 pages:
   stage: docs
