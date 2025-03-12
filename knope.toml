@@ -48,11 +48,6 @@ type = "Command"
 command = "task publish-packages"
 shell = true
 
-[[workflows.steps]]
-type = "Command"
-command = "git push origin -o ci.skip && git push --tags"
-shell = true
-
 [[workflows]]
 name = "document-change"
 

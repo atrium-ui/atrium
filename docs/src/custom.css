@@ -82,6 +82,7 @@ table {
 
 .not-content {
   counter-reset: content-counter;
+  overflow: hidden;
 }
 
 .counted {

@@ -1,12 +1,6 @@
 /* @jsxImportSource vue */
 import { defineComponent, ref, onMounted, effect, nextTick } from "vue";
-import {
-  PointerTrait,
-  Track,
-  type InputState,
-  type Easing,
-  type Trait,
-} from "@sv/elements/track";
+import { Track, type InputState, type Easing, type Trait } from "@sv/elements/track";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
 
@@ -121,7 +115,6 @@ export const Drawer = defineComponent(
 
 export class DrawerTrack extends Track {
   public traits: Trait[] = [
-    new PointerTrait(),
     {
       id: "drawer",
       input(track: DrawerTrack, inputState: InputState) {
@@ -139,7 +132,7 @@ export class DrawerTrack extends Track {
         if (track.deltaVelocity.y >= 0) return;
         if (track.isStatic) return;
 
-        const vel = Math.round(track.lastVelocity[track.currentAxis] * 10) / 10;
+        const vel = Math.round(track.velocity[track.currentAxis] * 10) / 10;
         const power = Math.round(vel / 15);
 
         if (power < 0) {

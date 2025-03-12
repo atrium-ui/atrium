@@ -4,12 +4,12 @@
   "contributors": [
     "luckydye"
   ],
-  "version": "2.4.1",
+  "version": "2.4.2-dev.4",
   "description": "Atrium Elements",
   "type": "module",
   "scripts": {
     "check": "tsc --pretty",
-    "test": "bun test --rerun-each 5",
+    "test": "bun test --rerun-each 3 --coverage",
     "publish-package": "task publish"
   },
   "files": [

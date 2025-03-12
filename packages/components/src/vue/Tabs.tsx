@@ -20,7 +20,7 @@ export const Tabs = defineComponent(
 
     return () => (
       <div class="w-full p-1">
-        <a-track overflowscroll>
+        <a-track>
           <ul class="flex list-none gap-1 p-0">
             {slots.default?.()?.map((item, i) => {
               return (
