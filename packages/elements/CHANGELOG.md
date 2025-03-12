@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.5.0 (2025-03-12)
+
+### Features
+
+- Several a-track improvements (svp/atrium!33)
+
 ## 0.0.1-dev.3 (2025-03-09)
 
 ### Fixes
