@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.5.1 (2025-03-13)
+
+### Fixes
+
+- a-track: Fix bug where inputs where skipping frames on high refreshrate displays
+
 ## 2.5.0 (2025-03-12)
 
 ### Features
