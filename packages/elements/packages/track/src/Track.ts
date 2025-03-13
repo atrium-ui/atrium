@@ -142,7 +142,8 @@ export class SnapTrait implements Trait {
     // Project the current velocity to determine the target item.
     const vel = Math.round(track.velocity[track.currentAxis] * 10) / 10;
     const dir = Math.sign(vel);
-    const power = Math.max(Math.round(track.velocity.abs() / 40), 1) * dir;
+    const powerThreshold = 100;
+    const power = Math.max(Math.round(track.velocity.abs() / powerThreshold), 1) * dir;
 
     if (!track.loop) {
       // disable snap when past maxIndex
@@ -153,7 +154,9 @@ export class SnapTrait implements Trait {
       }
     }
 
-    if (Math.abs(vel) > 8) {
+    const velocityThreshold = 8;
+
+    if (Math.abs(vel) > velocityThreshold) {
       // apply inertia to snap target
       track.acceleration.mul(0.25);
       track.inputForce.mul(0.125);
@@ -573,7 +576,7 @@ export class Track extends LitElement {
   };
 
   private animation: number | undefined;
-  private tickRate = 1000 / 120;
+  private tickRate = 1000 / 145;
   private lastTick = 0;
   private accumulator = 0;
 
@@ -587,12 +590,10 @@ export class Track extends LitElement {
   // Force applied to the acceleration every frame
   public inputForce = new Vec2();
 
-  public drag = 0.95;
   public origin = new Vec2();
   public position = new Vec2();
 
-  public moveDrag = 0.5;
-
+  public drag = 0.95;
   public borderBounce = 0.1;
   public borderResistance = 0.3;
 
@@ -617,6 +618,8 @@ export class Track extends LitElement {
   public targetEasing: Easing = "linear";
   private targetForce = new Vec2();
   private targetStart = new Vec2();
+
+  private dragMultiplier = 0.95;
 
   public transitionTime = 420;
   private transitionAt = 0;
@@ -852,7 +855,6 @@ export class Track extends LitElement {
     if (!this.animation) {
       this.tick();
       this.trait((t) => t.start?.(this));
-      this.drawUpdate();
     }
   }
 
@@ -864,6 +866,8 @@ export class Track extends LitElement {
       this.trait((t) => t.stop?.(this));
     }
   }
+
+  private frames: number[] = [];
 
   private tick(ms = 0) {
     if (!this.lastTick) this.lastTick = ms;
@@ -877,22 +881,26 @@ export class Track extends LitElement {
 
     const lastPosition = this.position.clone();
 
+    if (this.frames.length > 0) {
+      this.frames.length = 0;
+      this.updateInputs();
+    }
+
     let ticks = 0;
-    const maxTicks = 10;
+    const maxTicks = 100;
     while (this.accumulator >= this.tickRate && ticks < maxTicks) {
       ticks++;
       this.accumulator -= this.tickRate;
+      this.frames.push(this.tickRate);
 
-      this.updateTick();
+      this.updateTick(this.tickRate);
     }
 
-    this.updateInputs();
-
     const deltaPosition = Vec2.sub(this.position, lastPosition);
-
     const currItem = this.getCurrentItem();
     if (deltaPosition.abs() > 0.01 || currItem !== this.currentItem) {
       this.computeCurrentItem();
+      this.drawUpdate();
     }
 
     this.animation = requestAnimationFrame(this.tick.bind(this));
@@ -913,8 +921,6 @@ export class Track extends LitElement {
       }
       i++;
     }
-
-    this.drawUpdate();
 
     if (changed) {
       this.dispatchEvent(
@@ -939,7 +945,7 @@ export class Track extends LitElement {
     if (this.grabbing) {
       if (this.inputState.move.value.abs()) {
         this.moveVelocity.add(this.inputState.move.value);
-        this.inputForce.set(this.inputState.move.value.clone().mul(-1));
+        this.inputForce.set(this.inputState.move.value.inverse());
       } else {
         this.inputForce.mul(0);
       }
@@ -949,7 +955,7 @@ export class Track extends LitElement {
       this.grabbing = false;
       this.dispatchEvent(new Event("pointer:release"));
 
-      this.inputForce.set(this.moveVelocity.clone().mul(-1));
+      this.inputForce.set(this.moveVelocity.inverse());
     }
 
     // prevent moving in wrong direction
@@ -981,18 +987,18 @@ export class Track extends LitElement {
     return this.inputForce.abs() > 0.5 || this.mouseDown;
   }
 
-  private updateTick() {
+  private updateTick(_ms = 0) {
     const lastPosition = this.position.clone();
     const lastVelocity = this.velocity.clone();
 
-    this.velocity = Vec2.add(this.velocity.clone().mul(0.5), this.deltaPosition);
+    this.velocity = Vec2.add(this.velocity.mul(0.5), this.deltaPosition);
     this.deltaVelocity = Vec2.sub(this.velocity, lastVelocity);
 
     this.trait((t) => t.update?.(this));
 
     const interacting = this.target || this.interacting;
 
-    this.moveVelocity.mul(this.moveDrag);
+    this.moveVelocity.mul(this.dragMultiplier);
 
     // clamp input force
     const pos = Vec2.add(this.position, this.inputForce);
@@ -1000,7 +1006,7 @@ export class Track extends LitElement {
     const diff = Vec2.sub(pos, clamped);
 
     if (interacting) {
-      this.drag = 0;
+      this.dragMultiplier = 0;
 
       if (!this.loop && diff.abs()) {
         const resitance = this.borderResistance * (1 - diff.abs() / 200);
@@ -1012,7 +1018,7 @@ export class Track extends LitElement {
         }
       }
     } else {
-      this.drag = 0.95;
+      this.dragMultiplier = this.drag;
 
       const bounce = this.borderBounce;
       if (!this.loop && bounce && diff.abs()) {
@@ -1023,7 +1029,7 @@ export class Track extends LitElement {
       }
     }
 
-    this.acceleration.mul(this.drag);
+    this.acceleration.mul(this.dragMultiplier);
 
     this.acceleration.add(this.inputForce);
     this.inputForce.mul(0);
@@ -1224,7 +1230,7 @@ export class Track extends LitElement {
       const visibleItems: number[] = [];
       let lastItem: number | null = null;
       for (let x = -this.width; x < this.width + this.width; x += 100) {
-        const item = this.getItemAtPosition(this.position.clone().add([x, 0]));
+        const item = this.getItemAtPosition(Vec2.add(this.position, [x, 0]));
         if (item != null && item.index !== lastItem) {
           // clone nodes if possible
           if (item.domIndex >= 0) {
@@ -1577,6 +1583,13 @@ export class Vec2 extends Array {
       this[1] *= vec;
     }
     return this;
+  }
+
+  /**
+   * Return a new vector inverse of the vector
+   */
+  inverse() {
+    return new Vec2(-this[0], -this[1]);
   }
 
   set(vec: VecOrNumber) {

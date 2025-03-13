@@ -70,7 +70,7 @@ export const VariableTrack = defineComponent(() => {
               type="button"
               class={[position.value < 10 ? "hidden" : "block", "pointer-events-auto"]}
               onClick={() => {
-                track.value?.moveBy(-1, "linear");
+                track.value?.moveBy(-1);
               }}
             >
               {"<"}
@@ -87,7 +87,7 @@ export const VariableTrack = defineComponent(() => {
                 if (track.value?.currentIndex >= track.value?.maxIndex) {
                   track.value?.setTarget([track.value?.overflowWidth, 0]);
                 } else {
-                  track.value?.moveBy(1, "linear");
+                  track.value?.moveBy(1);
                 }
               }}
             >

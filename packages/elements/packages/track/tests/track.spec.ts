@@ -106,8 +106,8 @@ describe("Track", () => {
     // @ts-ignore
     track.onFormat();
     track.startAnimate();
-    // @ts-ignore Force update tick
-    track.updateTick();
+
+    await sleep(100);
 
     expect(start).toBeTrue();
     expect(input).toBeTrue();
@@ -215,7 +215,7 @@ describe("Track", () => {
     expect(track.currentPosition).toBeCloseTo(offset - track.width / 2);
   });
 
-  test(label("snap"), async () => {
+  test(label("just snap"), async () => {
     const track = await trackWithChildren(10, { snap: true });
 
     expect(track.snap).toBe(true);
