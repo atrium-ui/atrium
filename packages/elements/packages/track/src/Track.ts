@@ -33,6 +33,9 @@ export type InputState = {
   move: {
     value: Vec2;
   };
+  resize: {
+    value: Vec2;
+  };
   release: {
     value: boolean;
   };
@@ -103,21 +106,6 @@ export interface Trait<T extends Track = Track> {
 export class SnapTrait implements Trait {
   id = "snap";
 
-  format(track: Track) {
-    if (
-      (track.vertical && track.position.y < track.overflowHeight) ||
-      track.position.x < track.overflowWidth
-    ) {
-      // only when it was on a child already
-      track.setTarget(
-        track.current !== undefined
-          ? track.getToItemPosition(track.current)
-          : track.getClosestItemPosition(),
-        "ease",
-      );
-    }
-  }
-
   input(track: Track) {
     if (track.interacting || track.target) return;
 
@@ -131,8 +119,8 @@ export class SnapTrait implements Trait {
       default:
         if (!track.loop) {
           // Ignore if target is out of bounds
-          if (!track.vertical && track.position.x - track.overflowWidth > 0) return;
-          if (track.vertical && track.position.y - track.overflowHeight > 0) return;
+          if (!track.vertical && track.position.x - track.scrollBounds.right > 0) return;
+          if (track.vertical && track.position.y - track.scrollBounds.bottom > 0) return;
 
           // dont snap if at the beginning
           if (track.position.x <= 0 && track.position.y <= 0) return;
@@ -301,8 +289,10 @@ export class Track extends LitElement {
       hostDisconnected: () => intersectionObserver.disconnect(),
     });
 
-    // TODO: diff the container size and appliy to position of track
-    this.resizeObserver = new ResizeObserver(debounce(() => this.onFormat()));
+    // const debouncedFormat = debounce(() => this.onFormat(), 10);
+    this.resizeObserver = new ResizeObserver((e) => {
+      this.onFormat();
+    });
 
     this.addController({
       hostConnected: () => this.resizeObserver?.observe(this),
@@ -506,14 +496,19 @@ export class Track extends LitElement {
     let stopBottom = 0;
     let stopRight = 0;
 
-    stopBottom = this.overflowHeight;
-    stopRight = this.overflowWidth;
-
     const firstItemHeight = this.itemHeights[0] || 0;
     const firstItemWidth = this.itemWidths[0] || 0;
 
     const lastItemWidth = this.itemWidths[this.itemCount - 1] || 0;
     const lastItemHeight = this.itemHeights[this.itemCount - 1] || 0;
+
+    stopBottom = this.overflowHeight;
+    stopRight = this.overflowWidth;
+
+    if (this.overflow === "ignore") {
+      stopBottom += this.height - lastItemHeight;
+      stopRight += this.width - lastItemWidth;
+    }
 
     switch (this.align) {
       case "center":
@@ -568,7 +563,7 @@ export class Track extends LitElement {
     return clampedPos;
   }
 
-  private scrollBounds = {
+  public scrollBounds = {
     top: 0,
     left: 0,
     bottom: 0,
@@ -636,6 +631,9 @@ export class Track extends LitElement {
       value: false,
     },
     move: {
+      value: new Vec2(), // delta
+    },
+    resize: {
       value: new Vec2(), // delta
     },
     format: {
@@ -877,8 +875,6 @@ export class Track extends LitElement {
     this.lastTick = ms;
     this.accumulator += deltaTick;
 
-    this.trait((t) => t.draw?.(this));
-
     const lastPosition = this.position.clone();
 
     if (this.frames.length > 0) {
@@ -902,6 +898,8 @@ export class Track extends LitElement {
       this.computeCurrentItem();
       this.drawUpdate();
     }
+
+    this.trait((t) => t.draw?.(this));
 
     this.animation = requestAnimationFrame(this.tick.bind(this));
   }
@@ -933,8 +931,6 @@ export class Track extends LitElement {
   }
 
   private updateInputs() {
-    this.trait((t) => t.input?.(this, this.inputState));
-
     if (this.inputState.grab.value === true) {
       // grab change
       this.grabbing = true;
@@ -972,9 +968,20 @@ export class Track extends LitElement {
 
     this.direction.add(this.inputForce).sign();
 
+    this.trait((t) => t.input?.(this, this.inputState));
+
+    if (this.inputState.resize.value.abs()) {
+      if (this.target) {
+        this.target.add(this.inputState.resize.value);
+      } else {
+        this.position.add(this.inputState.resize.value);
+      }
+    }
+
     // clear
     const state = this.inputState;
     state.move.value.mul(0);
+    state.resize.value.mul(0);
     state.grab.value = false;
     state.scroll.value = false;
     state.format.value = false;
@@ -997,8 +1004,6 @@ export class Track extends LitElement {
     this.trait((t) => t.update?.(this));
 
     const interacting = this.target || this.interacting;
-
-    this.moveVelocity.mul(this.dragMultiplier);
 
     // clamp input force
     const pos = Vec2.add(this.position, this.inputForce);
@@ -1028,6 +1033,8 @@ export class Track extends LitElement {
         }
       }
     }
+
+    this.moveVelocity.mul(0.6);
 
     this.acceleration.mul(this.dragMultiplier);
 
@@ -1298,7 +1305,9 @@ export class Track extends LitElement {
   }
 
   private onFormat = () => {
-    this.inputState.format.value = true;
+    const lastWidths = this._widths;
+    const lastHeights = this._heights;
+
     this._width = undefined;
     this._height = undefined;
     this._widths = undefined;
@@ -1318,6 +1327,23 @@ export class Track extends LitElement {
         break;
     }
 
+    const deltaWidths = lastWidths?.map(diffArray(this.itemWidths));
+    const deltaHeights = lastHeights?.map(diffArray(this.itemHeights));
+
+    const deltaX =
+      deltaWidths?.reduce(
+        (acc, val, i) => (i < this.currentIndex ? acc + val : acc),
+        0,
+      ) || 0;
+    const deltaY =
+      deltaHeights?.reduce(
+        (acc, val, i) => (i < this.currentIndex ? acc + val : acc),
+        0,
+      ) || 0;
+
+    this.inputState.format.value = true;
+    this.inputState.resize.value.add(deltaX, deltaY);
+
     this.scrollBounds = this.getScrollBounds();
 
     const formatEvent = new CustomEvent("format", {
@@ -1326,13 +1352,14 @@ export class Track extends LitElement {
     });
     this.dispatchEvent(formatEvent);
 
-    if (!formatEvent.defaultPrevented) {
-      this.trait((t) => t.format?.(this));
+    if (formatEvent.defaultPrevented) return;
 
-      if (this.position.x > this.overflowWidth || this.position.y > this.overflowHeight) {
-        this.setTarget(undefined);
-      }
+    if (this.position.x > this.overflowWidth || this.position.y > this.overflowHeight) {
+      // TODO: why?
+      this.setTarget(undefined);
     }
+
+    this.trait((t) => t.format?.(this));
   };
 
   public scrollDebounce?: Timer;
@@ -1487,16 +1514,16 @@ export const Ease = {
   },
 };
 
-export function isTouch() {
+function isTouch() {
   return !!navigator.maxTouchPoints || "ontouchstart" in window;
 }
 
-export function debounce<T>(callback: (arg: T) => void) {
+function debounce<T>(callback: (arg: T) => void, ms = 80) {
   let timeout: Timer;
 
   return (arg: T) => {
     clearTimeout(timeout);
-    timeout = setTimeout(() => callback(arg), 80);
+    timeout = setTimeout(() => callback(arg), ms);
   };
 }
 
@@ -1504,12 +1531,16 @@ function mod(a: number, n: number) {
   return a - Math.floor(a / n) * n;
 }
 
-export function angleDist(a: number, b: number) {
+function angleDist(a: number, b: number) {
   return mod(b - a + 180, 360) - 180;
 }
 
-export function timer(start: number, time: number) {
+function timer(start: number, time: number) {
   return Math.min((Date.now() - start) / time, 1);
+}
+
+function diffArray(arr) {
+  return (w, i) => arr[i] - w;
 }
 
 type VecOrNumber = Vec2 | number[] | number;
@@ -1552,24 +1583,24 @@ export class Vec2 extends Array {
     this[1] = xy[1];
   }
 
-  add(vec: VecOrNumber) {
-    if (Vec2.isVec(vec)) {
-      this[0] += vec[0];
-      this[1] += vec[1];
+  add(x: VecOrNumber, y?: number) {
+    if (Vec2.isVec(x)) {
+      this[0] += x[0];
+      this[1] += x[1];
     } else {
-      this[0] += vec;
-      this[1] += vec;
+      this[0] += x;
+      this[1] += y === undefined ? x : y;
     }
     return this;
   }
 
-  sub(vec: VecOrNumber) {
-    if (Vec2.isVec(vec)) {
-      this[0] -= vec[0];
-      this[1] -= vec[1];
+  sub(x: VecOrNumber, y?: number) {
+    if (Vec2.isVec(x)) {
+      this[0] -= x[0];
+      this[1] -= x[1];
     } else {
-      this[0] -= vec;
-      this[1] -= vec;
+      this[0] -= x;
+      this[1] -= y === undefined ? x : y;
     }
     return this;
   }
@@ -1592,13 +1623,13 @@ export class Vec2 extends Array {
     return new Vec2(-this[0], -this[1]);
   }
 
-  set(vec: VecOrNumber) {
-    if (Vec2.isVec(vec)) {
-      this[0] = vec[0];
-      this[1] = vec[1];
+  set(x: VecOrNumber, y?: number) {
+    if (Vec2.isVec(x)) {
+      this[0] = x[0];
+      this[1] = x[1];
     } else {
-      this[0] = vec;
-      this[1] = vec;
+      this[0] = x;
+      this[1] = y === undefined ? x : y;
     }
     return this;
   }
