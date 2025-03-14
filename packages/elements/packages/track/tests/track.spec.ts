@@ -65,6 +65,11 @@ describe("Track", () => {
     expect(track.animation).toBeUndefined();
   });
 
+  test(label("debug is false"), async () => {
+    const track = await trackWithChildren();
+    expect(track.debug).toBe(false);
+  });
+
   test(label("item count"), async () => {
     const track = await trackWithChildren(10);
     expect(track.itemCount).toBe(10);
