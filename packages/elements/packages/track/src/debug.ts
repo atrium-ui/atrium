@@ -42,14 +42,16 @@ export class DebugTrait implements Trait {
 
     const originAngle = track.originAngle;
 
+    let angle = 0;
     for (let i = -1; i < track.itemCount + 1; i++) {
       const itemAngle = track.itemAngles[i] || 0;
+      angle += itemAngle;
 
       // draw a line from the center to the current position with angle
       ctx.strokeStyle = `hsl(0, 0%, ${(i / track.itemCount) * 100}%)`;
       ctx.beginPath();
       ctx.moveTo(100, 100);
-      ctx.lineTo(100 + Math.cos(itemAngle) * 69, 100 + Math.sin(itemAngle) * 69);
+      ctx.lineTo(100 + Math.cos(angle) * 69, 100 + Math.sin(angle) * 69);
       ctx.lineWidth = 3;
       ctx.stroke();
     }
