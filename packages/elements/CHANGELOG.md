@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.6.0-dev.0 (2025-03-14)
+
+### Features
+
+- a-track: major refactor
+
 ## 2.5.1 (2025-03-13)
 
 ### Fixes
