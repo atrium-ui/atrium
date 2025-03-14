@@ -1,10 +1,10 @@
 # @sv/elements
 
-## 2.5.2 (2025-03-21)
+## 2.6.0-dev.0 (2025-03-14)
 
-### Fixes
+### Features
 
-- a-popover: set placement as data attribute for styling
+- a-track: major refactor
 
 ## 2.5.1 (2025-03-13)
 
