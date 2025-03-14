@@ -406,7 +406,7 @@ export class Track extends LitElement {
   private _width;
   public get width() {
     if (this._width === undefined) {
-      this._width = this.clientWidth;
+      this._width = this.offsetWidth;
     }
     return this._width;
   }
@@ -414,7 +414,7 @@ export class Track extends LitElement {
   private _height;
   public get height() {
     if (this._height === undefined) {
-      this._height = this.clientHeight;
+      this._height = this.offsetHeight;
     }
     return this._height;
   }
@@ -798,6 +798,7 @@ export class Track extends LitElement {
       targetIndex,
       sizes,
       this.trackSize,
+      this.loop,
     );
 
     pos[this.currentAxis] += this.origin[this.currentAxis];
@@ -1559,6 +1560,7 @@ function findMinDistance(
   targetIndex: number,
   itemWidths: number[],
   totalWidth: number,
+  wrap: boolean,
 ) {
   // Normalize negative indices
   const normalizedIndex =
@@ -1578,7 +1580,10 @@ function findMinDistance(
   // 1. The base position
   // 2. One wrap backwards (base - totalWidth)
   // 3. One wrap forwards (base + totalWidth)
-  const positions = [basePosition, basePosition - totalWidth, basePosition + totalWidth];
+  const positions = wrap
+    ? [basePosition, basePosition - totalWidth, basePosition + totalWidth]
+    : [basePosition];
+
   const pos = positions[0];
   if (pos === undefined) {
     throw new Error("Position is undefined");
