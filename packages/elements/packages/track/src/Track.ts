@@ -1,6 +1,6 @@
 import { LitElement, type PropertyValues, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
-// import { DebugTrait } from "./debug.js";
+import { DebugTrait } from "./debug.js";
 
 const PI2 = Math.PI * 2;
 
@@ -241,11 +241,14 @@ export class Track extends LitElement {
     `;
   }
 
+  public traits: Trait[] = [
+    //
+    new DebugTrait(),
+  ];
+
   constructor() {
     super();
 
-    // TODO: put this in a trait so it can be disabled
-    // TODO: sync it to screen?
     this.addEventListener("wheel", this.onWheel, { passive: false });
 
     this.addEventListener("focusin", this.onFocusIn);
@@ -289,9 +292,10 @@ export class Track extends LitElement {
       hostDisconnected: () => intersectionObserver.disconnect(),
     });
 
-    // const debouncedFormat = debounce(() => this.onFormat(), 10);
+    const debouncedFormat = debounce(() => this.onFormat());
     this.resizeObserver = new ResizeObserver((e) => {
-      this.onFormat();
+      this.updateLayout();
+      debouncedFormat(e);
     });
 
     this.addController({
@@ -318,10 +322,6 @@ export class Track extends LitElement {
     return this.shadowRoot?.children?.[0] as HTMLSlotElement | undefined;
   }
 
-  public traits: Trait[] = [
-    // new DebugTrait()
-  ];
-
   protected updated(_changedProperties: PropertyValues): void {
     if (_changedProperties.has("current") && this.current !== undefined) {
       this.setTarget(this.getToItemPosition(this.current), "ease");
@@ -337,6 +337,7 @@ export class Track extends LitElement {
     }
 
     if (_changedProperties.has("align")) {
+      this.updateLayout();
       this.onFormat();
     }
   }
@@ -349,6 +350,7 @@ export class Track extends LitElement {
 
   private updateItems() {
     this._children = getCSSChildren(this);
+    this.updateLayout();
     this.onFormat();
   }
 
@@ -406,7 +408,7 @@ export class Track extends LitElement {
   private _width;
   public get width() {
     if (this._width === undefined) {
-      this._width = this.offsetWidth;
+      this._width = this.clientWidth;
     }
     return this._width;
   }
@@ -414,7 +416,7 @@ export class Track extends LitElement {
   private _height;
   public get height() {
     if (this._height === undefined) {
-      this._height = this.offsetHeight;
+      this._height = this.clientHeight;
     }
     return this._height;
   }
@@ -477,15 +479,17 @@ export class Track extends LitElement {
   }
 
   public get currentAngle() {
-    return (this.currentPosition / this.trackSize) * Math.PI * 2;
+    return (this.currentPosition / this.trackSize) * PI2;
   }
 
   public get originAngle() {
-    return (this.origin[this.currentAxis] / this.trackSize || 0) * PI2;
+    return (this.origin[this.currentAxis] / this.trackSize) * PI2;
   }
 
   public get targetAngle() {
-    return this.target ? (this.target.x / this.trackSize) * PI2 : undefined;
+    return this.target
+      ? (this.target[this.currentAxis] / this.trackSize) * PI2
+      : undefined;
   }
 
   public itemAngles: number[] = [];
@@ -767,10 +771,11 @@ export class Track extends LitElement {
     const rects = this.getItemRects();
     const pos = this.origin.clone();
 
+    // TODO: this behaves glitchy with loop enabled
+
     let currentIndex = index;
 
     if (!this.loop) {
-      // TODO: config to respect maxIndex, if we dont want to scroll past the overflowidth, when moving to an item index target
       const maxIndex = this.maxIndex;
       currentIndex = Math.min(Math.max(this.minIndex, currentIndex), maxIndex);
     }
@@ -907,12 +912,9 @@ export class Track extends LitElement {
   private computeCurrentItem() {
     const currItem = this.getCurrentItem();
 
-    const changed = this.currentItem !== currItem;
-    this.currentItem = currItem;
-
     let i = 0;
     for (const child of this.items) {
-      if (i === this.currentItem) {
+      if (i % this.itemCount === currItem) {
         child.setAttribute("active", "");
       } else {
         child.removeAttribute("active");
@@ -920,7 +922,9 @@ export class Track extends LitElement {
       i++;
     }
 
-    if (changed) {
+    if (this.currentItem !== currItem) {
+      this.currentItem = currItem;
+
       this.dispatchEvent(
         new CustomEvent<number | string>("change", {
           detail: this.currentItem,
@@ -1069,9 +1073,7 @@ export class Track extends LitElement {
 
             const a = delta.mod([this.trackWidth, this.trackHeight]);
             if (a.isNaN()) {
-              // TODO: fix this
-              a.x = a.x || 0;
-              a.y = a.y || 0;
+              throw new Error("NaN");
             }
 
             this.targetForce.set(a.mul(42 / this.transitionTime));
@@ -1122,62 +1124,29 @@ export class Track extends LitElement {
 
   private getCurrentItem() {
     const trackSize = this.trackSize;
-    const currentAngle = this.currentAngle;
-
-    let minDist = Number.POSITIVE_INFINITY;
-    let closestIndex = 0;
-
     const rects = this.getItemRects();
 
-    const originAngle = this.originAngle;
-
     const axes = this.vertical ? 1 : 0;
-    // all items angles
-    const angles = rects.reduce((acc, rect, i) => {
+    this.itemAngles = rects.reduce((acc, rect, i) => {
       acc[i] = (rect[axes] / trackSize) * PI2;
       return acc;
     }, [] as number[]);
 
-    this.itemAngles = [];
+    let offsetAngle = this.originAngle;
 
-    for (let i = -1; i < this.itemCount + 1; i++) {
-      const itemIndex = i % this.itemCount;
-      const rect = rects[itemIndex];
-
-      // when -1 is nothing go next (with loop enabled, its the last item)
-      if (!rect) continue;
-
-      let itemAngle = originAngle;
-
-      let lastIndex = 0;
-      for (let j = 0; j < itemIndex; j++) {
-        if (j < itemIndex) {
-          itemAngle += angles[j] || 0;
-        }
-        lastIndex = j;
-      }
-
-      if (this.align === "center") {
-        // adds half of the current item to the position to center it
-        itemAngle += (angles[Math.min(lastIndex + 1, this.currentIndex)] || 0) / 2;
-      }
-
-      this.itemAngles[itemIndex] = itemAngle;
-
-      const deltaAngle = angleDist(itemAngle, currentAngle);
-
-      const offset = Math.floor(i / this.itemCount) * this.itemCount;
-
-      if (Math.abs(deltaAngle) <= minDist) {
-        minDist = Math.abs(deltaAngle);
-        closestIndex = itemIndex;
-        if (currentAngle > PI2 / 2) {
-          closestIndex += offset;
-        }
-      }
+    if (this.align === "center") {
+      // adds half of the current item to the position to center it
+      const index =
+        Math.round(((this.currentAngle - offsetAngle) / PI2) * this.itemCount) %
+        this.itemCount;
+      const currentItemAngle = this.itemAngles[index] || 0;
+      offsetAngle += currentItemAngle / 2;
     }
 
-    return closestIndex;
+    return (
+      Math.round(((this.currentAngle - offsetAngle) / PI2) * this.itemCount) %
+      this.itemCount
+    );
   }
 
   /**
@@ -1304,7 +1273,9 @@ export class Track extends LitElement {
     }
   }
 
-  private onFormat = () => {
+  private updateLayout = () => {
+    const lastWidth = this._width;
+    const lastHeight = this._height;
     const lastWidths = this._widths;
     const lastHeights = this._heights;
 
@@ -1327,25 +1298,46 @@ export class Track extends LitElement {
         break;
     }
 
+    const deltaWidth = this.width - lastWidth;
+    const deltaHeight = this.height - lastHeight;
+
     const deltaWidths = lastWidths?.map(diffArray(this.itemWidths));
     const deltaHeights = lastHeights?.map(diffArray(this.itemHeights));
 
-    const deltaX =
-      deltaWidths?.reduce(
-        (acc, val, i) => (i < this.currentIndex ? acc + val : acc),
-        0,
-      ) || 0;
-    const deltaY =
-      deltaHeights?.reduce(
-        (acc, val, i) => (i < this.currentIndex ? acc + val : acc),
-        0,
-      ) || 0;
-
     this.inputState.format.value = true;
-    this.inputState.resize.value.add(deltaX, deltaY);
+
+    if (this.vertical) {
+      let deltaY =
+        deltaHeights?.reduce(
+          (acc, val, i) => (i < this.currentIndex ? acc + val : acc),
+          0,
+        ) || 0;
+
+      // Ignore this resize event, if the delta is equal to the current height
+      if (this.target && this.align === "center" && deltaHeight !== this.height) {
+        deltaY -= deltaHeight / 2;
+      }
+
+      if (deltaY) this.inputState.resize.value.add(0, deltaY);
+    } else {
+      let deltaX =
+        deltaWidths?.reduce(
+          (acc, val, i) => (i < this.currentIndex ? acc + val : acc),
+          0,
+        ) || 0;
+
+      // Ignore this resize event, if the delta is equal to the current width
+      if (this.target && this.align === "center" && deltaWidth !== this.width) {
+        deltaX -= deltaWidth / 2;
+      }
+
+      if (deltaX) this.inputState.resize.value.add(deltaX, 0);
+    }
 
     this.scrollBounds = this.getScrollBounds();
+  };
 
+  private onFormat = () => {
     const formatEvent = new CustomEvent("format", {
       bubbles: true,
       cancelable: true,
@@ -1354,10 +1346,10 @@ export class Track extends LitElement {
 
     if (formatEvent.defaultPrevented) return;
 
-    if (this.position.x > this.overflowWidth || this.position.y > this.overflowHeight) {
-      // TODO: why?
-      this.setTarget(undefined);
-    }
+    // TODO: why?
+    // if (this.position.x > this.overflowWidth || this.position.y > this.overflowHeight) {
+    //   this.setTarget(undefined);
+    // }
 
     this.trait((t) => t.format?.(this));
   };
@@ -1365,7 +1357,6 @@ export class Track extends LitElement {
   public scrollDebounce?: Timer;
 
   private onWheel = (wheelEvent: WheelEvent) => {
-    // TODO: if there is a tick without a scroll event, it will jitter
     if (wheelEvent.ctrlKey === true) {
       // its a pinch zoom gesture
       return;
