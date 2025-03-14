@@ -121,12 +121,8 @@ export class SnapTrait implements Trait {
     // Ignore if target is out of bounds
     if (!track.vertical && track.position.x - track.scrollBounds.right > 0) return;
     if (track.vertical && track.position.y - track.scrollBounds.bottom > 0) return;
-    // dont snap if at the beginning
-    if (
-      track.position.x <= track.scrollBounds.left &&
-      track.position.y <= track.scrollBounds.top
-    )
-      return;
+    if (!track.vertical && track.position.x <= track.scrollBounds.left) return;
+    if (track.vertical && track.position.y <= track.scrollBounds.top) return;
 
     // Project the current velocity to determine the target item.
     const velocity = Math.round(track.velocity[track.currentAxis] * 10) / 10;

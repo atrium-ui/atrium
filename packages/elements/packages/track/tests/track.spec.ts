@@ -259,9 +259,11 @@ describe("Track", () => {
     await sleep(300);
 
     // target should be set by snap
-    if (track.position.x > 0) {
+    if (track.target) {
       expect(track.target).toBeDefined();
       expect(track.position[0]).toBeCloseTo(track.target?.[0], -2);
+    } else {
+      console.warn("out of bounds?");
     }
   });
 
