@@ -90,12 +90,12 @@ tasks:
       - bun x turbo check
       - bun x biome check --diagnostic-level=error .
 
-  fix:
+  check:fix:
     desc: Apply all (unsafe) autofixes
     cmds:
       - bun x biome check --apply .
 
-  fix:unsafe:
+  check:fix:unsafe:
     desc: Apply all (unsafe) autofixes
     cmds:
       - bun x biome check --apply-unsafe .

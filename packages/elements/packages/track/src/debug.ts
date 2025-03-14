@@ -81,7 +81,11 @@ export class DebugTrait implements Trait {
     ctx.fillStyle = "#fff";
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
-    ctx.fillText(`${track.currentPosition?.toFixed(1)} / ${trackSize?.toFixed(1)}`, 42, 18);
+    ctx.fillText(
+      `${track.currentPosition?.toFixed(1)} / ${trackSize?.toFixed(1)}`,
+      42,
+      18,
+    );
 
     // print current position index
     ctx.font = "24px sans-serif";
