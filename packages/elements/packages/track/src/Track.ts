@@ -113,41 +113,37 @@ export class SnapTrait implements Trait {
     const movement = track.velocity.clone().precision(0.1).abs();
     if (movement !== 0 && movement < 0.1) return;
 
-    switch (track.align) {
-      case "center":
-        break;
-      default:
-        if (!track.loop) {
-          // Ignore if target is out of bounds
-          if (!track.vertical && track.position.x - track.scrollBounds.right > 0) return;
-          if (track.vertical && track.position.y - track.scrollBounds.bottom > 0) return;
-
-          // dont snap if at the beginning
-          if (track.position.x <= 0 && track.position.y <= 0) return;
-        }
-    }
+    // Ignore if target is out of bounds
+    if (!track.vertical && track.position.x - track.scrollBounds.right > 0) return;
+    if (track.vertical && track.position.y - track.scrollBounds.bottom > 0) return;
+    // dont snap if at the beginning
+    if (
+      track.position.x <= track.scrollBounds.left &&
+      track.position.y <= track.scrollBounds.top
+    )
+      return;
 
     // Project the current velocity to determine the target item.
-    const vel = Math.round(track.velocity[track.currentAxis] * 10) / 10;
-    const dir = Math.sign(vel);
-    const powerThreshold = 100;
-    const power = Math.max(Math.round(track.velocity.abs() / powerThreshold), 1) * dir;
+    const velocity = Math.round(track.velocity[track.currentAxis] * 10) / 10;
 
-    if (!track.loop) {
-      // disable snap when past maxIndex
-      if (track.maxIndex && power > 0 && track.currentIndex + power > track.maxIndex) {
-        // instead, snap to the end
-        track.setTarget(track.getToItemPosition(track.itemCount - 1), "linear");
-        return;
-      }
+    const powerThreshold = 100;
+    const power =
+      Math.max(Math.round(track.velocity.abs() / powerThreshold), 1) *
+      Math.sign(velocity);
+
+    if (track.maxIndex && power > 0 && track.currentIndex + power > track.maxIndex) {
+      // instead, snap to the end
+      track.setTarget(track.getToItemPosition(track.itemCount - 1), "linear");
+      return;
     }
 
     const velocityThreshold = 8;
 
-    if (Math.abs(vel) > velocityThreshold) {
+    if (Math.abs(velocity) > velocityThreshold) {
       // apply inertia to snap target
       track.acceleration.mul(0.25);
       track.inputForce.mul(0.125);
+
       track.setTarget(track.getToItemPosition(track.currentItem + power), "linear");
     } else {
       track.setTarget(track.getToItemPosition(track.currentItem), "linear");
@@ -446,6 +442,10 @@ export class Track extends LitElement {
   }
 
   public get maxIndex() {
+    if (this.loop) {
+      return Number.POSITIVE_INFINITY;
+    }
+
     if (this.overflow === "ignore") {
       return this.itemCount - 1;
     }
@@ -471,6 +471,9 @@ export class Track extends LitElement {
   }
 
   public get minIndex() {
+    if (this.loop) {
+      return Number.NEGATIVE_INFINITY;
+    }
     return 0;
   }
 
@@ -479,22 +482,34 @@ export class Track extends LitElement {
   }
 
   public get currentAngle() {
-    return (this.currentPosition / this.trackSize) * PI2;
+    if (!this.trackSize) return 0;
+    return (this.currentPosition / this.trackSize) * PI2 || 0;
   }
 
   public get originAngle() {
-    return (this.origin[this.currentAxis] / this.trackSize) * PI2;
+    if (!this.trackSize) return 0;
+    return (this.origin[this.currentAxis] / this.trackSize) * PI2 || 0;
   }
 
   public get targetAngle() {
+    if (!this.trackSize) return 0;
     return this.target
-      ? (this.target[this.currentAxis] / this.trackSize) * PI2
+      ? (this.target[this.currentAxis] / this.trackSize) * PI2 || 0
       : undefined;
   }
 
   public itemAngles: number[] = [];
 
   private getScrollBounds() {
+    if (this.loop) {
+      return {
+        top: Number.NEGATIVE_INFINITY,
+        left: Number.NEGATIVE_INFINITY,
+        bottom: Number.POSITIVE_INFINITY,
+        right: Number.POSITIVE_INFINITY,
+      };
+    }
+
     let stopTop = 0;
     let stopLeft = 0;
     let stopBottom = 0;
@@ -673,7 +688,7 @@ export class Track extends LitElement {
    */
   @property({ type: String }) public overflow: "auto" | "scroll" | "ignore" = "auto";
 
-  @property({ type: Boolean }) public debug = false;
+  @property({ type: Boolean }) public debug = true;
 
   private trait(callback: (t: Trait) => void) {
     for (const t of this.traits) {
@@ -765,43 +780,29 @@ export class Track extends LitElement {
   }
 
   /**
-   * Get the position of the item at the given index, relative to the current item.
+   * Get the position of the item to the given index, relative to the current item.
    */
   public getToItemPosition(index = 0) {
-    const rects = this.getItemRects();
-    const pos = this.origin.clone();
-
-    // TODO: this behaves glitchy with loop enabled
-
-    let currentIndex = index;
-
-    if (!this.loop) {
-      const maxIndex = this.maxIndex;
-      currentIndex = Math.min(Math.max(this.minIndex, currentIndex), maxIndex);
+    if (Number.isNaN(index)) {
+      throw new Error("Invalid index");
     }
 
-    if (currentIndex < 0) {
-      // only happens when loop is enabled
-      for (let i = 0; i > currentIndex; i--) {
-        pos[this.currentAxis] -= rects[i]?.[this.currentAxis] || 0;
-      }
-    } else if (currentIndex > this.itemCount) {
-      // only happens when loop is enabled
-      for (let i = 0; i < currentIndex; i++) {
-        pos[this.currentAxis] += rects[i % this.itemCount]?.[this.currentAxis] || 0;
-      }
-    } else {
-      let lastIndex = 0;
-      for (let i = 0; i < currentIndex; i++) {
-        pos[this.currentAxis] += rects[i]?.[this.currentAxis] || 0;
-        lastIndex = i;
-      }
+    const targetIndex = Math.max(this.minIndex, Math.min(index, this.maxIndex));
+    const sizes = this.vertical ? this.itemHeights : this.itemWidths;
+    const pos = new Vec2();
 
-      if (this.align === "center") {
-        // adds half of the current item to the position to center it
-        pos[this.currentAxis] +=
-          (rects[Math.min(lastIndex + 1, currentIndex)]?.[this.currentAxis] || 0) / 2;
-      }
+    pos[this.currentAxis] = findMinDistance(
+      this.position[this.currentAxis] - this.origin[this.currentAxis],
+      targetIndex,
+      sizes,
+      this.trackSize,
+    );
+
+    pos[this.currentAxis] += this.origin[this.currentAxis];
+
+    if (this.align === "center") {
+      // adds half of the current item to the position to center it
+      pos[this.currentAxis] += (sizes[targetIndex] || 0) / 2;
     }
 
     return pos;
@@ -911,6 +912,10 @@ export class Track extends LitElement {
 
   private computeCurrentItem() {
     const currItem = this.getCurrentItem();
+
+    if (Number.isNaN(currItem)) {
+      throw new Error("Invalid index");
+    }
 
     let i = 0;
     for (const child of this.items) {
@@ -1094,21 +1099,23 @@ export class Track extends LitElement {
 
       if (this.vertical) {
         // y
-        if (this.position.y >= max.y) {
-          this.position.y = start.y;
-          if (this.target) this.target.y -= max.y - start.y;
-        } else if (this.position.y < start.y) {
+        if (this.position.y < start.y) {
           this.position.y = max.y;
           if (this.target) this.target.y += max.y - start.y;
+        } else if (this.position.y > max.y) {
+          this.position.y = start.y;
+          if (this.target) this.target.y -= max.y - start.y;
         }
       } else {
         // x
-        if (Math.round(this.position.x) >= max.x) {
-          this.position.x = start.x;
-          if (this.target) this.target.x -= max.x - start.x;
-        } else if (Math.round(this.position.x) < start.x) {
+        if (this.position.x < start.x) {
+          console.log("swap to max");
           this.position.x = max.x;
           if (this.target) this.target.x += max.x - start.x;
+        } else if (this.position.x > max.x) {
+          console.log("swap to start");
+          this.position.x = start.x;
+          if (this.target) this.target.x -= max.x - start.x;
         }
       }
     }
@@ -1139,14 +1146,25 @@ export class Track extends LitElement {
       const index =
         Math.round(((this.currentAngle - offsetAngle) / PI2) * this.itemCount) %
         this.itemCount;
+
       const currentItemAngle = this.itemAngles[index] || 0;
       offsetAngle += currentItemAngle / 2;
     }
 
-    return (
-      Math.round(((this.currentAngle - offsetAngle) / PI2) * this.itemCount) %
-      this.itemCount
+    const index = Math.min(
+      Math.max(
+        0,
+        Math.round(((this.currentAngle - offsetAngle) / PI2) * this.itemCount) %
+          this.itemCount,
+      ),
+      this.itemCount - 1,
     );
+
+    if (Number.isNaN(index)) {
+      throw new Error("Invalid index");
+    }
+
+    return index;
   }
 
   /**
@@ -1532,6 +1550,38 @@ function timer(start: number, time: number) {
 
 function diffArray(arr) {
   return (w, i) => arr[i] - w;
+}
+
+function findMinDistance(targetPoint, targetIndex, itemWidths, totalWidth) {
+  // Normalize negative indices
+  const normalizedIndex =
+    ((targetIndex % itemWidths.length) + itemWidths.length) % itemWidths.length;
+
+  // Calculate the base position of the target index
+  let basePosition = 0;
+  for (let i = 0; i < normalizedIndex; i++) {
+    basePosition += itemWidths[i];
+  }
+
+  // Consider three possible positions:
+  // 1. The base position
+  // 2. One wrap backwards (base - totalWidth)
+  // 3. One wrap forwards (base + totalWidth)
+  const positions = [basePosition, basePosition - totalWidth, basePosition + totalWidth];
+
+  // Find the position with the shortest distance to the target point
+  let closestPosition = positions[0];
+  let minDistance = Math.abs(targetPoint - positions[0]);
+
+  for (const position of positions) {
+    const distance = Math.abs(targetPoint - position);
+    if (distance < minDistance) {
+      minDistance = distance;
+      closestPosition = position;
+    }
+  }
+
+  return closestPosition;
 }
 
 type VecOrNumber = Vec2 | number[] | number;

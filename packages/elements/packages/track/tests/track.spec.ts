@@ -1,5 +1,5 @@
 import { beforeEach, test, expect, afterEach, describe } from "bun:test";
-import type { MoveEvent, Track } from "../src/Track";
+import { findClosestItemIndex, type MoveEvent, type Track } from "../src/Track";
 import {
   drag,
   enviroment,
