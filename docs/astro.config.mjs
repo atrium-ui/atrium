@@ -74,6 +74,7 @@ export default defineConfig({
       },
       components: {
         Header: "./src/components/starlight/Header.astro",
+        ThemeProvider: "./src/components/starlight/ThemeProvider.astro",
       },
     }),
   ],
