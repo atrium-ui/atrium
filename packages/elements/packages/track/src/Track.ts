@@ -1,6 +1,11 @@
 import { LitElement, type PropertyValues, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
-import { DebugTrait } from "./debug.js";
+// import { DebugTrait } from "./debug.js";
+
+const defaultTraits = [
+  //
+  // new DebugTrait(),
+];
 
 const PI2 = Math.PI * 2;
 
@@ -237,10 +242,7 @@ export class Track extends LitElement {
     `;
   }
 
-  public traits: Trait[] = [
-    //
-    new DebugTrait(),
-  ];
+  public traits: Trait[] = [...defaultTraits];
 
   constructor() {
     super();
@@ -688,7 +690,7 @@ export class Track extends LitElement {
    */
   @property({ type: String }) public overflow: "auto" | "scroll" | "ignore" = "auto";
 
-  @property({ type: Boolean }) public debug = true;
+  @property({ type: Boolean }) public debug = false;
 
   private trait(callback: (t: Trait) => void) {
     for (const t of this.traits) {
@@ -1109,11 +1111,9 @@ export class Track extends LitElement {
       } else {
         // x
         if (this.position.x < start.x) {
-          console.log("swap to max");
           this.position.x = max.x;
           if (this.target) this.target.x += max.x - start.x;
         } else if (this.position.x > max.x) {
-          console.log("swap to start");
           this.position.x = start.x;
           if (this.target) this.target.x -= max.x - start.x;
         }
@@ -1130,34 +1130,32 @@ export class Track extends LitElement {
   public debugCanvas = document.createElement("canvas");
 
   private getCurrentItem() {
-    const trackSize = this.trackSize;
-    const rects = this.getItemRects();
+    if (this.debug) {
+      // this is only for debug information
+      this.itemAngles = this.getItemRects().reduce((acc, rect, i) => {
+        acc[i] = (rect[this.currentAxis] / this.trackSize) * PI2;
+        return acc;
+      }, [] as number[]);
+    }
 
-    const axes = this.vertical ? 1 : 0;
-    this.itemAngles = rects.reduce((acc, rect, i) => {
-      acc[i] = (rect[axes] / trackSize) * PI2;
-      return acc;
-    }, [] as number[]);
-
-    let offsetAngle = this.originAngle;
+    let positionOffset = 0;
+    const sizes = this.vertical ? this.itemHeights : this.itemWidths;
 
     if (this.align === "center") {
       // adds half of the current item to the position to center it
-      const index =
-        Math.round(((this.currentAngle - offsetAngle) / PI2) * this.itemCount) %
-        this.itemCount;
+      const index = findClosestItemIndex(
+        this.position[this.currentAxis] - this.origin[this.currentAxis],
+        sizes,
+        this.trackSize,
+      );
 
-      const currentItemAngle = this.itemAngles[index] || 0;
-      offsetAngle += currentItemAngle / 2;
+      positionOffset += (sizes[index] || 0) / 2;
     }
 
-    const index = Math.min(
-      Math.max(
-        0,
-        Math.round(((this.currentAngle - offsetAngle) / PI2) * this.itemCount) %
-          this.itemCount,
-      ),
-      this.itemCount - 1,
+    const index = findClosestItemIndex(
+      this.position[this.currentAxis] - this.origin[this.currentAxis] - positionOffset,
+      sizes,
+      this.trackSize,
     );
 
     if (Number.isNaN(index)) {
@@ -1171,6 +1169,7 @@ export class Track extends LitElement {
    * Get the item at a specific position.
    */
   public getItemAtPosition(pos: Vec2) {
+    // TODO: dupliacte of getCurrentItem ?
     const rects = this.getItemRects();
     let px = 0;
 
@@ -1548,11 +1547,19 @@ function timer(start: number, time: number) {
   return Math.min((Date.now() - start) / time, 1);
 }
 
-function diffArray(arr) {
-  return (w, i) => arr[i] - w;
+function diffArray(arr: number[]) {
+  return (w: number, i: number) => {
+    if (arr[i] === undefined) throw new Error("Array index out of bounds");
+    return arr[i] - w;
+  };
 }
 
-function findMinDistance(targetPoint, targetIndex, itemWidths, totalWidth) {
+function findMinDistance(
+  targetPoint: number,
+  targetIndex: number,
+  itemWidths: number[],
+  totalWidth: number,
+) {
   // Normalize negative indices
   const normalizedIndex =
     ((targetIndex % itemWidths.length) + itemWidths.length) % itemWidths.length;
@@ -1560,7 +1567,11 @@ function findMinDistance(targetPoint, targetIndex, itemWidths, totalWidth) {
   // Calculate the base position of the target index
   let basePosition = 0;
   for (let i = 0; i < normalizedIndex; i++) {
-    basePosition += itemWidths[i];
+    const width = itemWidths[i];
+    if (width === undefined) {
+      throw new Error("Item width is undefined");
+    }
+    basePosition += width;
   }
 
   // Consider three possible positions:
@@ -1568,10 +1579,14 @@ function findMinDistance(targetPoint, targetIndex, itemWidths, totalWidth) {
   // 2. One wrap backwards (base - totalWidth)
   // 3. One wrap forwards (base + totalWidth)
   const positions = [basePosition, basePosition - totalWidth, basePosition + totalWidth];
+  const pos = positions[0];
+  if (pos === undefined) {
+    throw new Error("Position is undefined");
+  }
 
   // Find the position with the shortest distance to the target point
   let closestPosition = positions[0];
-  let minDistance = Math.abs(targetPoint - positions[0]);
+  let minDistance = Math.abs(targetPoint - pos);
 
   for (const position of positions) {
     const distance = Math.abs(targetPoint - position);
@@ -1582,6 +1597,46 @@ function findMinDistance(targetPoint, targetIndex, itemWidths, totalWidth) {
   }
 
   return closestPosition;
+}
+
+function findClosestItemIndex(
+  point: number,
+  itemWidths: number[],
+  totalWidth: number,
+): number {
+  // Calculate cumulative positions of items
+  const positions: number[] = [];
+  let currentPosition = 0;
+
+  for (const width of itemWidths) {
+    positions.push(currentPosition);
+    currentPosition += width;
+  }
+
+  // Find the closest item
+  let closestIndex = 0;
+  let minDistance = Number.POSITIVE_INFINITY;
+
+  for (let i = 0; i < positions.length; i++) {
+    // Calculate distances considering wrapping
+    const itemPosition = positions[i];
+    if (itemPosition === undefined) {
+      throw new Error("Item position is undefined");
+    }
+
+    const distance = Math.min(
+      Math.abs(point - itemPosition),
+      Math.abs(point - (itemPosition + totalWidth)),
+      Math.abs(point + totalWidth - itemPosition),
+    );
+
+    if (distance < minDistance) {
+      minDistance = distance;
+      closestIndex = i;
+    }
+  }
+
+  return closestIndex;
 }
 
 type VecOrNumber = Vec2 | number[] | number;
