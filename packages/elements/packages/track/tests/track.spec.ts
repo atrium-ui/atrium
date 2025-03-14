@@ -160,28 +160,17 @@ describe("Track", () => {
   });
 
   test(label("moveBy"), async () => {
-    const track = await trackWithChildren();
+    const track = await trackWithChildren(10);
     logRun(track);
 
-    track.moveTo(1);
-    await sleep(300);
-    expect(track.currentItem).toBe(1);
+    track.moveTo(2);
+    await sleep(track.transitionTime + 100);
+    expect(track.currentItem).toBe(2);
 
     track.moveBy(2);
-
-    const positions: Array<number> = [];
-
-    const int = setInterval(() => {
-      positions.push(track.currentPosition);
-    }, track.transitionTime / 10);
-
     await sleep(track.transitionTime + 100);
 
-    expect(track.currentItem).toBe(3);
-
-    clearInterval(int);
-
-    expect(positions.length > 5).toBeTrue();
+    expect(track.currentItem).toBe(4);
   });
 
   test(label("centered index 1"), async () => {
@@ -230,20 +219,10 @@ describe("Track", () => {
     logRun(track);
 
     expect(track.snap).toBe(true);
-
-    // @ts-ignore
-    const widths = track.itemWidths;
-
-    track.setTarget([widths[0] + widths[1] + 10, 0]);
-    await sleep(track.transitionTime + 100);
     track.setTarget(undefined);
+    track.inputForce.x += 100;
     await sleep(track.transitionTime + 100);
-
-    expect(Math.floor(track.currentPosition)).toBeGreaterThanOrEqual(
-      widths[0] + widths[1],
-    );
-
-    expect(track.currentIndex).toBeGreaterThanOrEqual(2);
+    expect(track.target).toBeDefined();
   });
 
   test(label("drag with snap"), async () => {

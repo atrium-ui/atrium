@@ -125,7 +125,7 @@ export async function trackWithChildren(
 
   const totalSize = widths.reduce((acc, w) => acc + w, 0);
   const track = div.children[0] as TrackElement;
-  fixElementSizes(track, random() * totalSize, random() * 800);
+  fixElementSizes(track, random() * (totalSize / 4), random() * 800);
 
   // increase animation speed for testing
   track.transitionTime = 100;
