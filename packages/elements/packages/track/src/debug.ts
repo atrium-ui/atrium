@@ -12,6 +12,8 @@ export class DebugTrait implements Trait {
     if (!track.debug) return;
 
     const meta = {
+      position: track.position,
+      origin: track.origin,
       mouseDown: track.mouseDown,
       grabbing: track.grabbing,
       acceleration: track.acceleration,
@@ -19,9 +21,9 @@ export class DebugTrait implements Trait {
       drag: track.drag,
       moveVelocity: track.moveVelocity,
       inputForce: track.inputForce,
-      scrollDebounce: track.scrollDebounce,
       mousePos: track.mousePos,
       target: track.target,
+      scrollDebounce: track.scrollDebounce,
     };
 
     const trackSize = track.trackSize;
@@ -38,18 +40,20 @@ export class DebugTrait implements Trait {
     canvas.style.height = `${track.height}px`;
 
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-    ctx.fillRect(0, 0, 400, 600);
+    ctx.fillRect(0, 0, 400, 700);
 
     const originAngle = track.originAngle;
 
+    let angle = 0;
     for (let i = -1; i < track.itemCount + 1; i++) {
       const itemAngle = track.itemAngles[i] || 0;
+      angle += itemAngle;
 
       // draw a line from the center to the current position with angle
       ctx.strokeStyle = `hsl(0, 0%, ${(i / track.itemCount) * 100}%)`;
       ctx.beginPath();
       ctx.moveTo(100, 100);
-      ctx.lineTo(100 + Math.cos(itemAngle) * 69, 100 + Math.sin(itemAngle) * 69);
+      ctx.lineTo(100 + Math.cos(angle) * 69, 100 + Math.sin(angle) * 69);
       ctx.lineWidth = 3;
       ctx.stroke();
     }
@@ -77,7 +81,11 @@ export class DebugTrait implements Trait {
     ctx.fillStyle = "#fff";
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
-    ctx.fillText(`${track.currentPosition.toFixed(1)} / ${trackSize.toFixed(1)}`, 42, 18);
+    ctx.fillText(
+      `${track.currentPosition?.toFixed(1)} / ${trackSize?.toFixed(1)}`,
+      42,
+      18,
+    );
 
     // print current position index
     ctx.font = "24px sans-serif";
