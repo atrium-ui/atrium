@@ -72,7 +72,8 @@ export const Slider = defineComponent(
             snap
             // loop
             debug
-            align="center"
+            // align="center"
+            overflow="ignore"
             class="flex w-full overflow-visible"
             onScroll={() => {
               position.value = track.value?.position.x || 0;

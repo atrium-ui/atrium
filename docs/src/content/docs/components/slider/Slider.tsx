@@ -27,22 +27,22 @@ export const SomeSlider = () => (
     </Slider>
 
     <Slider>
-      <div class="h-[300px] w-[300px] flex-none p-2">
+      <div class="h-[300px] flex-none p-2">
         <Image class="h-full w-full" />
       </div>
-      <div class="h-[300px] w-[300px] flex-none p-2">
+      <div class="h-[300px] flex-none p-2">
         <Image class="h-full w-full" />
       </div>
-      <div class="h-[300px] w-[300px] flex-none p-2">
+      <div class="h-[300px] flex-none p-2">
         <Image class="h-full w-full" />
       </div>
-      <div class="h-[300px] w-[300px] flex-none p-2">
+      <div class="h-[300px] flex-none p-2">
         <Image class="h-full w-full" />
       </div>
-      <div class="h-[300px] w-[300px] flex-none p-2">
+      <div class="h-[300px] flex-none p-2">
         <Image class="h-full w-full" />
       </div>
-      <div class="h-[300px] w-[300px] flex-none p-2">
+      <div class="h-[300px] flex-none p-2">
         <Image class="h-full w-full" />
       </div>
     </Slider>
