@@ -28,34 +28,6 @@ import { LightboxCard } from "./showcase/cards/LightboxCard";
 import { FilterCard } from "./showcase/cards/FilterCard";
 
 
-<div class="not-content pb-12 min-h-[700px]">
-  <div class="relative 2xl:mx-[-220px] xl:mx-[-80px]">
-  <div class="shoawcase pt-12 lg:p-8">
-    <div class="grid gap-4 lg:grid-cols-3">
-      <div class="-translate-y-5 flex flex-col gap-4">
-        <ChartCard client:only="vue" />
-        <PropertiesCard client:only="vue" />
-        <FilterCard client:only="vue" />
-      </div>
-
-      <div class="flex translate-y-5 flex-col gap-4">
-        <SliderCard client:only="vue" />
-        <LoginCard client:only="vue" />
-      </div>
-
-      <div class="flex flex-col gap-4">
-        <AccordionCard client:only="vue" />
-        <SettingsCard client:only="vue" />
-      </div>
-    </div>
-
-    <a-portal>
-      <a-toast-feed class="fixed right-12 bottom-12" />
-    </a-portal>
-  </div>
-  </div>
-</div>
-
 <CardGrid>
   <Card title="Not opinionated about styling" icon="star">
     Components come pre-styled with TailwindCSS classes, but you can style them however you like.
