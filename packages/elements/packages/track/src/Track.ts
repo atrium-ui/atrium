@@ -1144,6 +1144,7 @@ export class Track extends LitElement {
         this.position[this.currentAxis] - this.origin[this.currentAxis],
         sizes,
         this.trackSize,
+        this.loop,
       );
 
       positionOffset += (sizes[index] || 0) / 2;
@@ -1153,6 +1154,7 @@ export class Track extends LitElement {
       this.position[this.currentAxis] - this.origin[this.currentAxis] - positionOffset,
       sizes,
       this.trackSize,
+      this.loop,
     );
 
     if (Number.isNaN(index)) {
@@ -1604,6 +1606,7 @@ function findClosestItemIndex(
   point: number,
   itemWidths: number[],
   totalWidth: number,
+  wrap: boolean,
 ): number {
   // Calculate cumulative positions of items
   const positions: number[] = [];
@@ -1625,11 +1628,16 @@ function findClosestItemIndex(
       throw new Error("Item position is undefined");
     }
 
-    const distance = Math.min(
-      Math.abs(point - itemPosition),
-      Math.abs(point - (itemPosition + totalWidth)),
-      Math.abs(point + totalWidth - itemPosition),
-    );
+    let distance: number;
+    if (wrap) {
+      distance = Math.min(
+        Math.abs(point - itemPosition),
+        Math.abs(point - (itemPosition + totalWidth)),
+        Math.abs(point + totalWidth - itemPosition),
+      );
+    } else {
+      distance = Math.min(Math.abs(point - itemPosition));
+    }
 
     if (distance < minDistance) {
       minDistance = distance;
