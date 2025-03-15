@@ -1,5 +1,15 @@
 # @sv/elements
 
+## 2.6.0-dev.1 (2025-03-15)
+
+### Features
+
+- a-track: major refactor
+
+### Fixes
+
+- Add wrap param for findIndex
+
 ## 2.6.0-dev.0 (2025-03-14)
 
 ### Features
