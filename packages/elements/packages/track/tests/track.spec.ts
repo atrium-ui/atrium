@@ -1,15 +1,112 @@
 import { beforeEach, test, expect, afterEach, describe } from "bun:test";
-import { findClosestItemIndex, type MoveEvent, type Track } from "../src/Track";
-import {
-  drag,
-  enviroment,
-  FakePointerEvent,
-  label,
-  press,
-  setup,
-  sleep,
-  trackWithChildren,
-} from "./test-utils";
+import type { MoveEvent, Track } from "../src/Track";
+import type { Vec2 } from "../src";
+import type { Track as TrackElement } from "../src/Track";
+import { FakePointerEvent, fixElementSizes, label, random, setup, sleep } from "@sv/test";
+
+async function drag<
+  T extends HTMLElement & {
+    position: Vec2;
+    target?: Vec2;
+  },
+>(track: T, dist: [number, number]) {
+  const multiplier = 1 + random();
+  const pos = [10, 10] as [number, number];
+  const start = [...track.position];
+  const step = [
+    Math.abs(dist[0]) > 0 ? multiplier * dist[0] : 0,
+    Math.abs(dist[1]) > 0 ? multiplier * dist[1] : 0,
+  ] as [number, number];
+
+  console.info("drag", multiplier, "dist", dist, "step", step, "start", start);
+
+  // start moving
+  track.dispatchEvent(new FakePointerEvent("pointerdown", ...pos));
+  console.info("down");
+
+  await sleep();
+
+  expect(track.target).toBeUndefined();
+
+  for (let i = 0; i < 10; i++) {
+    window.dispatchEvent(new FakePointerEvent("pointermove", ...pos));
+
+    await sleep();
+
+    pos[0] -= step[0];
+    pos[1] -= step[1];
+  }
+  // has moved at all?
+  expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
+
+  window.dispatchEvent(new FakePointerEvent("pointerup", ...pos));
+  console.info("drag end");
+
+  await sleep();
+}
+
+async function trackWithChildren(
+  itemCount = 10,
+  attributes: Record<string, string | boolean | number> = {},
+) {
+  await import("../src/index.js");
+
+  const widths = new Array<number>(itemCount)
+    .fill(0)
+    .map(() => Math.floor(random() * 500 + 150));
+
+  console.info("items", widths);
+
+  const div = document.createElement("div");
+  const markup = `
+    <a-track ${Object.entries(attributes)
+      .map(([key, value]) => `${key}="${value}"`)
+      .join(" ")}>
+      ${widths.map((w) => `<canvas width="${w}" height="800"></canvas>`).join("")}
+    </a-track>
+  `;
+  div.innerHTML = markup;
+
+  const totalSize = widths.reduce((acc, w) => acc + w, 0);
+  const track = div.children[0] as TrackElement;
+  fixElementSizes(track, random() * (totalSize / 4), random() * 800);
+
+  // increase animation speed for testing
+  track.transitionTime = 100;
+
+  for (let i = 0; i < itemCount; i++) {
+    const child = track.children[i] as HTMLCanvasElement;
+    fixElementSizes(
+      child,
+      Number.parseInt(child.getAttribute("width") || "0"),
+      Number.parseInt(child.getAttribute("height") || "0"),
+    );
+  }
+
+  document.body.append(div);
+
+  if (track.vertical) {
+    track.position.y = random() * track.overflowWidth;
+  } else {
+    track.position.x = random() * track.overflowWidth;
+  }
+
+  // @ts-ignore
+  track.updateLayout();
+  // @ts-ignore
+  track.onFormat();
+
+  console.info(
+    "track",
+    track.width,
+    track.height,
+    track.trackWidth,
+    track.trackHeight,
+    track.position,
+  );
+
+  return track;
+}
 
 let int: Timer;
 function logRun(track: Track) {
@@ -18,23 +115,10 @@ function logRun(track: Track) {
   }, 16);
 }
 
-window.requestAnimationFrame = (callback: () => void) => {
-  const timer = setTimeout(() => callback(Date.now()), 16.6666666667);
-  return timer;
-};
-window.cancelAnimationFrame = (timer: Timer) => {
-  clearTimeout(timer);
-};
-
 describe("Track", () => {
-  enviroment();
-
+  beforeEach(() => setup());
   afterEach(() => {
     clearInterval(int);
-  });
-
-  beforeEach(() => {
-    setup();
   });
 
   test(label("import track element"), async () => {
