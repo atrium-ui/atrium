@@ -1,3 +1,4 @@
+import { afterEach } from "bun:test";
 import Rand from "rand-seed";
 import { GlobalRegistrator } from "@happy-dom/global-registrator";
 
@@ -5,11 +6,41 @@ GlobalRegistrator.register();
 
 const log = console.log;
 globalThis.console.log = (...args: any[]) => {
-  log((performance.now() - globalThis.firstFrame).toFixed(2), ...args);
+  log(
+    (globalThis.currentFrame - globalThis.lastFrame).toFixed(2).padStart(6, "0"),
+    globalThis.frameTime.toFixed(2).padStart(5, "0"),
+    ...args,
+  );
 };
-globalThis.console.info = (...args: any[]) => {
-  log((performance.now() - globalThis.firstFrame).toFixed(2), ...args);
-};
+globalThis.console.info = globalThis.console.log;
+
+const frameHooks = new Set<(ms: number) => void>();
+
+// log each frame tick
+// frameHooks.add((ms) => console.info(ms));
+
+/**
+ * Wait for a specified amount of time passed in frame loop.
+ */
+export function wait(time = 0) {
+  const timestamp = performance.now();
+  return new Promise<void>((resolve) => {
+    const remove = onFrame((ms) => {
+      if (ms - timestamp >= time) {
+        resolve();
+        remove();
+      }
+    });
+  });
+}
+
+/**
+ * Register a callback to be called on each frame.
+ */
+export function onFrame(callback: (ms: number) => void) {
+  frameHooks.add(callback);
+  return () => frameHooks.delete(callback);
+}
 
 /**
  * Setup the test environment for a test-run.
@@ -20,24 +51,37 @@ export function enviroment() {
   require("intersection-observer");
   globalThis.IntersectionObserver = window.IntersectionObserver;
 
-  const tickTimes = [];
+  const tickTimes: number[] = [];
 
-  let timer: Timer;
+  let frameTimer: Timer;
 
   const avrgFrameTime = 16.6666666667; // 60 hz
 
-  window.requestAnimationFrame = (callback: () => void) => {
+  // @ts-ignore
+  window.requestAnimationFrame = (callback: (ms: number) => void) => {
     const tickTime = avrgFrameTime / 2 + randomRaf() * (avrgFrameTime / 2);
-    timer = setTimeout(() => {
+
+    frameTimer = setTimeout(() => {
+      globalThis.lastFrame = globalThis.currentFrame;
+      globalThis.currentFrame = performance.now();
+
       tickTimes.push(tickTime);
-      console.log(tickTime);
       callback(Date.now());
+
+      globalThis.frameTime = tickTime;
+      for (const callback of frameHooks) callback(globalThis.currentFrame);
     }, tickTime);
-    return timer;
+    return frameTimer;
   };
+  // @ts-ignore
   window.cancelAnimationFrame = (timer: Timer) => {
     clearTimeout(timer);
   };
+
+  afterEach(() => {
+    frameHooks.clear();
+    clearTimeout(frameTimer);
+  });
 }
 
 /**
@@ -45,6 +89,9 @@ export function enviroment() {
  */
 export function setup() {
   globalThis.firstFrame = performance.now();
+  globalThis.lastFrame = globalThis.firstFrame;
+  globalThis.currentFrame = globalThis.firstFrame;
+  globalThis.frameTime = 0;
   globalThis.rand = new Rand(globalThis.seed);
   globalThis.rand_raf = new Rand(globalThis.seed);
 }

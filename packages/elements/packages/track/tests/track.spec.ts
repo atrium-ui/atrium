@@ -1,49 +1,16 @@
 import { beforeEach, test, expect, afterEach, describe } from "bun:test";
 import type { MoveEvent, Track } from "../src/Track";
-import type { Vec2 } from "../src";
 import type { Track as TrackElement } from "../src/Track";
-import { FakePointerEvent, fixElementSizes, label, random, setup, sleep } from "@sv/test";
-
-async function drag<
-  T extends HTMLElement & {
-    position: Vec2;
-    target?: Vec2;
-  },
->(track: T, dist: [number, number]) {
-  const multiplier = 1 + random();
-  const pos = [10, 10] as [number, number];
-  const start = [...track.position];
-  const step = [
-    Math.abs(dist[0]) > 0 ? multiplier * dist[0] : 0,
-    Math.abs(dist[1]) > 0 ? multiplier * dist[1] : 0,
-  ] as [number, number];
-
-  console.info("drag", multiplier, "dist", dist, "step", step, "start", start);
-
-  // start moving
-  track.dispatchEvent(new FakePointerEvent("pointerdown", ...pos));
-  console.info("down");
-
-  await sleep();
-
-  expect(track.target).toBeUndefined();
-
-  for (let i = 0; i < 10; i++) {
-    window.dispatchEvent(new FakePointerEvent("pointermove", ...pos));
-
-    await sleep();
-
-    pos[0] -= step[0];
-    pos[1] -= step[1];
-  }
-  // has moved at all?
-  expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
-
-  window.dispatchEvent(new FakePointerEvent("pointerup", ...pos));
-  console.info("drag end");
-
-  await sleep();
-}
+import {
+  FakePointerEvent,
+  fixElementSizes,
+  label,
+  random,
+  setup,
+  sleep,
+  drag as _drag,
+  onFrame,
+} from "@sv/test";
 
 async function trackWithChildren(
   itemCount = 10,
@@ -108,18 +75,26 @@ async function trackWithChildren(
   return track;
 }
 
-let int: Timer;
+async function drag<
+  T extends HTMLElement & {
+    position: [number, number];
+    target?: [number, number];
+  },
+>(track: T, dist: [number, number]) {
+  const start = [...track.position];
+  await _drag(track, dist);
+  // has moved at all?
+  expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
+}
+
 function logRun(track: Track) {
-  int = setInterval(() => {
-    console.info(track.position, track.currentItem, track.velocity, track.target);
-  }, 16);
+  onFrame(() => {
+    console.info(">", track.position, track.currentItem, track.velocity, track.target);
+  });
 }
 
 describe("Track", () => {
   beforeEach(() => setup());
-  afterEach(() => {
-    clearInterval(int);
-  });
 
   test(label("import track element"), async () => {
     const { Track } = await import("@sv/elements/track");
@@ -417,13 +392,12 @@ describe("Track", () => {
       deltaX: -200,
       deltaY: 0,
     });
-    track.dispatchEvent(ev);
     console.info("fired");
-
-    expect(ev.defaultPrevented).toBe(true);
+    track.dispatchEvent(ev);
 
     await sleep(100);
 
+    expect(ev.defaultPrevented).toBe(true);
     expect(track.position[0]).not.toBe(start[0]);
   });
 
