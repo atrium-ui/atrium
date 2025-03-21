@@ -1,5 +1,11 @@
 # @sv/scroll-lock
 
+## 0.0.1-dev.0 (2025-03-21)
+
+### Fixes
+
+- Add wrap param for findIndex
+
 ## 1.0.3-dev.0 (2025-03-15)
 
 ### Fixes
