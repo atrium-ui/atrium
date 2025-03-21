@@ -96,7 +96,7 @@ export async function drag<
   expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
 
   window.dispatchEvent(new FakePointerEvent("pointerup", ...pos));
-  console.info("up");
+  console.info("drag end");
 
   await sleep();
 }
@@ -123,8 +123,9 @@ export async function trackWithChildren(
   `;
   div.innerHTML = markup;
 
+  const totalSize = widths.reduce((acc, w) => acc + w, 0);
   const track = div.children[0] as TrackElement;
-  fixElementSizes(track, random() * 1000 + 200, random() * 800 + 200);
+  fixElementSizes(track, random() * (totalSize / 4), random() * 800);
 
   // increase animation speed for testing
   track.transitionTime = 100;
@@ -146,10 +147,19 @@ export async function trackWithChildren(
     track.position.x = random() * track.overflowWidth;
   }
 
-  console.info("track", track.width, track.height, track.trackWidth, track.position);
-
+  // @ts-ignore
+  track.updateLayout();
   // @ts-ignore
   track.onFormat();
+
+  console.info(
+    "track",
+    track.width,
+    track.height,
+    track.trackWidth,
+    track.trackHeight,
+    track.position,
+  );
 
   return track;
 }
