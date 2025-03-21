@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.5.2 (2025-03-21)
+
+### Fixes
+
+- a-popover: set placement as data attribute for styling
+
 ## 2.5.1 (2025-03-13)
 
 ### Fixes
