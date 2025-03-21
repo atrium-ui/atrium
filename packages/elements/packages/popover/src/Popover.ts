@@ -167,6 +167,9 @@ export class Popover extends Portal {
         }).then(({ x, y, middlewareData, placement }) => {
           if (content) content.style.transform = `translate(${x}px, ${y}px)`;
 
+          // set placement data for styling purposes
+          content.dataset.placement = placement;
+
           if (middlewareData.arrow) {
             const { x, y } = middlewareData.arrow;
 
