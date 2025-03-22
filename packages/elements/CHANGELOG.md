@@ -4,8 +4,6 @@
 
 ### Fixes
 
-- Add wrap param for findIndex
-- Add wrap param for findIndex
 - Dont calculate velocity on position
 
 ## 2.6.0-dev.2 (2025-03-21)
