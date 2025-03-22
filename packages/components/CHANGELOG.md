@@ -1,5 +1,13 @@
 # @sv/components
 
+## 1.8.2-dev.2 (2025-03-22)
+
+### Fixes
+
+- Add wrap param for findIndex
+- Add wrap param for findIndex
+- Dont calculate velocity on position
+
 ## 1.8.2-dev.1 (2025-03-21)
 
 ### Fixes
