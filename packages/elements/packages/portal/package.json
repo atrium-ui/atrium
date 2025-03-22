@@ -8,18 +8,7 @@
   "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
-  "tsup": {
-    "entry": [
-      "src/index.ts"
-    ],
-    "format": [
-      "esm",
-      "cjs"
-    ],
-    "sourcemap": true,
-    "clean": true
+    "build": "bun ./build.ts",
+    "dev": "watchexec -e ts bun ./build.ts"
   }
 }

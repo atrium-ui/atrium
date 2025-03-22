@@ -15,7 +15,7 @@ import "./a-track/track.css";
 
 
 <div class="not-content box overflow-hidden">
-  <a-track snap class="flex overflow-visible" current="0">
+  <a-track snap class="flex overflow-visible">
     <a href="#" class="counted block flex-none p-4">
       <canvas width="500" height="280" class="bg-slate-500" />
     </a>
@@ -109,7 +109,7 @@ Different example confugrations of tracks.
 ### Snap scroll
 
 <div class="not-content box">
-  <a-track snap class="flex overflow-visible">
+  <a-track snap overflow="ignore" class="flex overflow-visible">
     <a href="#" class="block flex-none pr-4">
       <canvas width="260" height="280" class="bg-slate-500" />
     </a>
@@ -233,7 +233,8 @@ Different example confugrations of tracks.
 
 <div class="not-content box">
   <a-track snap
-        class="flex h-[450px] w-[250px] flex-col overflow-hidden"
+        debug
+        class="flex h-[800px] w-[250px] flex-col overflow-hidden"
         vertical align="center">
     <div class="flex-none py-2 font-bold">
       <canvas width="200" height="200" class="bg-slate-500" />
@@ -290,7 +291,7 @@ track.addEventListener("format", e => {
       <canvas width="260" height="280" class="bg-slate-500" />
     </div>
     <div class="flex-none pr-4">
-      <a-track align="center" vertical snap class="flex h-[280px] flex-col overflow-hidden">
+      <a-track id="nested" debug align="center" current="0" vertical snap class="flex h-[280px] flex-col overflow-hidden">
         <div class="flex-none pb-2 font-bold">
           <canvas width="200" height="180" class="bg-slate-500" />
         </div>
@@ -342,22 +343,22 @@ track.addEventListener("format", e => {
 
 <div class="not-content box">
   <a-track debug snap loop class="flex">
-    <div class="counted flex-none w-full">
-      <canvas width={720} height={480} class="w-full bg-slate-500" />
+    <div class="flex-none w-full">
+      <canvas width={720} height={480} class="w-full bg-red-500" />
     </div>
-    <div class="counted flex-none w-full">
+    <div class="flex-none w-full">
       <canvas width={720} height={480} class="w-full bg-slate-400" />
     </div>
-    <div class="counted flex-none w-full">
+    <div class="flex-none w-full">
       <canvas width={720} height={480} class="w-full bg-slate-300" />
     </div>
-    <div class="counted flex-none w-full">
+    <div class="flex-none w-full">
       <canvas width={720} height={480} class="w-full bg-slate-200" />
     </div>
-    <div class="counted flex-none w-full">
+    <div class="flex-none w-full">
       <canvas width={720} height={480} class="w-full bg-slate-100" />
     </div>
-    <div class="counted flex-none w-full">
+    <div class="flex-none w-full">
       <canvas width={720} height={480} class="w-full bg-slate-600" />
     </div>
   </a-track>

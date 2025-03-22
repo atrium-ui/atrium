@@ -35,17 +35,11 @@ export const Slider = defineComponent(
       });
     });
 
-    const next = () => {
-      const itemWidth = (track.value?.children[0] as HTMLElement)?.offsetWidth;
-      const pageItemCount = Math.round((track.value?.width || 0) / itemWidth);
-      track.value?.moveTo(
-        Math.min(current.value + pageItemCount, meta.value.itemCount - pageItemCount),
-      );
-    };
     const prev = () => {
-      const itemWidth = (track.value?.children[0] as HTMLElement)?.offsetWidth;
-      const pageItemCount = Math.round((track.value?.width || 0) / itemWidth) * -1;
-      track.value?.moveBy(pageItemCount);
+      track.value?.moveBy(-1);
+    };
+    const next = () => {
+      track.value?.moveBy(1);
     };
 
     return () => (
@@ -76,6 +70,10 @@ export const Slider = defineComponent(
           <a-track
             ref={track}
             snap
+            // loop
+            debug
+            // align="center"
+            overflow="ignore"
             class="flex w-full overflow-visible"
             onScroll={() => {
               position.value = track.value?.position.x || 0;
