@@ -1,8 +1,9 @@
-import { afterEach, beforeEach } from "bun:test";
 import Rand from "rand-seed";
 import { GlobalRegistrator } from "@happy-dom/global-registrator";
 
-GlobalRegistrator.register();
+const frameHooks = new Set<(ms: number) => void>();
+
+setup();
 
 const log = console.log;
 globalThis.console.log = (...args: any[]) => {
@@ -14,7 +15,46 @@ globalThis.console.log = (...args: any[]) => {
 };
 globalThis.console.info = globalThis.console.log;
 
-const frameHooks = new Set<(ms: number) => void>();
+/**
+ * Setup the test environment for a test-run.
+ */
+export function preload() {
+  console.info("Init preload.");
+
+  GlobalRegistrator.register();
+
+  require("intersection-observer");
+  globalThis.IntersectionObserver = window.IntersectionObserver;
+
+  globalThis.seed = process.env.TEST_SEED || crypto.randomUUID();
+
+  const tickTimes: number[] = [];
+
+  let frameTimer: Timer;
+
+  const avrgFrameTime = 16.6666666667; // 60 hz
+
+  // @ts-ignore
+  window.requestAnimationFrame = (callback: (ms: number) => void) => {
+    const tickTime = avrgFrameTime / 2 + randomRaf() * (avrgFrameTime / 2);
+
+    frameTimer = setTimeout(() => {
+      globalThis.lastFrame = globalThis.currentFrame;
+      globalThis.currentFrame = performance.now();
+
+      tickTimes.push(tickTime);
+      callback(Date.now());
+
+      globalThis.frameTime = tickTime;
+      for (const callback of frameHooks) callback(globalThis.currentFrame);
+    }, tickTime);
+    return frameTimer;
+  };
+  // @ts-ignore
+  window.cancelAnimationFrame = (timer: Timer) => {
+    clearTimeout(timer);
+  };
+}
 
 // log each frame tick
 // frameHooks.add((ms) => console.info(ms));
@@ -43,51 +83,12 @@ export function onFrame(callback: (ms: number) => void) {
 }
 
 /**
- * Setup the test environment for a test-run.
- */
-export function enviroment() {
-  globalThis.seed = process.env.TEST_SEED || crypto.randomUUID();
-
-  require("intersection-observer");
-  globalThis.IntersectionObserver = window.IntersectionObserver;
-
-  const tickTimes: number[] = [];
-
-  let frameTimer: Timer;
-
-  const avrgFrameTime = 16.6666666667; // 60 hz
-
-  // @ts-ignore
-  window.requestAnimationFrame = (callback: (ms: number) => void) => {
-    const tickTime = avrgFrameTime / 2 + randomRaf() * (avrgFrameTime / 2);
-
-    frameTimer = setTimeout(() => {
-      globalThis.lastFrame = globalThis.currentFrame;
-      globalThis.currentFrame = performance.now();
-
-      tickTimes.push(tickTime);
-      callback(Date.now());
-
-      globalThis.frameTime = tickTime;
-      for (const callback of frameHooks) callback(globalThis.currentFrame);
-    }, tickTime);
-    return frameTimer;
-  };
-  // @ts-ignore
-  window.cancelAnimationFrame = (timer: Timer) => {
-    clearTimeout(timer);
-  };
-
-  afterEach(() => {
-    frameHooks.clear();
-    clearTimeout(frameTimer);
-  });
-}
-
-/**
  * Setup the test environment for a single test.
  */
 export function setup() {
+  console.info("Setting up test environment.");
+
+  frameHooks.clear();
   globalThis.firstFrame = performance.now();
   globalThis.lastFrame = globalThis.firstFrame;
   globalThis.currentFrame = globalThis.firstFrame;
@@ -95,10 +96,6 @@ export function setup() {
   globalThis.rand = new Rand(globalThis.seed);
   globalThis.rand_raf = new Rand(globalThis.seed);
 }
-
-beforeEach(() => {
-  setup();
-});
 
 /**
  * Generate a seeded random number.
@@ -147,27 +144,27 @@ export async function sleep(ms = 16) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export class FakePointerEvent extends PointerEvent {
-  constructor(
-    type: string,
-    public x: number,
-    public y: number,
-    init?: PointerEventInit,
-  ) {
-    super(type, {
-      button: 0,
-      bubbles: true,
-      ...init,
-    });
-  }
-}
-
 export async function drag<
   T extends HTMLElement & {
     position: [number, number];
     target?: [number, number];
   },
 >(ele: T, dist: [number, number]) {
+  globalThis.FakePointerEvent = class FakePointerEvent extends PointerEvent {
+    constructor(
+      type: string,
+      public x: number,
+      public y: number,
+      init?: PointerEventInit,
+    ) {
+      super(type, {
+        button: 0,
+        bubbles: true,
+        ...init,
+      });
+    }
+  };
+
   const multiplier = 1 + random();
   const pos = [10, 10] as [number, number];
   const step = [

@@ -1,17 +1,18 @@
-import { beforeEach, test, expect, afterEach, describe } from "bun:test";
+import { beforeEach, test, expect, describe } from "bun:test";
 import type { MoveEvent, Track } from "../src/Track";
 import type { Track as TrackElement } from "../src/Track";
 import {
-  FakePointerEvent,
   fixElementSizes,
   label,
   random,
-  setup,
   sleep,
   drag as _drag,
   onFrame,
   press,
+  setup,
 } from "@sv/test";
+
+beforeEach(() => setup());
 
 async function trackWithChildren(
   itemCount = 10,
