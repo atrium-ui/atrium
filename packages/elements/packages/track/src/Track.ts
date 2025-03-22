@@ -2,6 +2,11 @@ import { LitElement, type PropertyValues, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
 // import { DebugTrait } from "./debug.js";
 
+const defaultTraits = [
+  //
+  // new DebugTrait(),
+];
+
 const PI2 = Math.PI * 2;
 
 export class MoveEvent extends CustomEvent<{
@@ -16,7 +21,7 @@ export class MoveEvent extends CustomEvent<{
       detail: {
         delta: delta,
         direction: track.direction.clone(),
-        velocity: track.deltaPosition.clone(),
+        velocity: track.velocity.clone(),
         position: track.position.clone(),
       },
     });
@@ -31,6 +36,9 @@ export type InputState = {
     value: boolean;
   };
   move: {
+    value: Vec2;
+  };
+  resize: {
     value: Vec2;
   };
   release: {
@@ -103,21 +111,6 @@ export interface Trait<T extends Track = Track> {
 export class SnapTrait implements Trait {
   id = "snap";
 
-  format(track: Track) {
-    if (
-      (track.vertical && track.position.y < track.overflowHeight) ||
-      track.position.x < track.overflowWidth
-    ) {
-      // only when it was on a child already
-      track.setTarget(
-        track.current !== undefined
-          ? track.getToItemPosition(track.current)
-          : track.getClosestItemPosition(),
-        "ease",
-      );
-    }
-  }
-
   input(track: Track) {
     if (track.interacting || track.target) return;
 
@@ -125,41 +118,33 @@ export class SnapTrait implements Trait {
     const movement = track.velocity.clone().precision(0.1).abs();
     if (movement !== 0 && movement < 0.1) return;
 
-    switch (track.align) {
-      case "center":
-        break;
-      default:
-        if (!track.loop) {
-          // Ignore if target is out of bounds
-          if (!track.vertical && track.position.x - track.overflowWidth > 0) return;
-          if (track.vertical && track.position.y - track.overflowHeight > 0) return;
-
-          // dont snap if at the beginning
-          if (track.position.x <= 0 && track.position.y <= 0) return;
-        }
-    }
+    // Ignore if target is out of bounds
+    if (!track.vertical && track.position.x - track.scrollBounds.right > 0) return;
+    if (track.vertical && track.position.y - track.scrollBounds.bottom > 0) return;
+    if (!track.vertical && track.position.x <= track.scrollBounds.left) return;
+    if (track.vertical && track.position.y <= track.scrollBounds.top) return;
 
     // Project the current velocity to determine the target item.
-    const vel = Math.round(track.velocity[track.currentAxis] * 10) / 10;
-    const dir = Math.sign(vel);
-    const powerThreshold = 100;
-    const power = Math.max(Math.round(track.velocity.abs() / powerThreshold), 1) * dir;
+    const velocity = Math.round(track.velocity[track.currentAxis] * 10) / 10;
 
-    if (!track.loop) {
-      // disable snap when past maxIndex
-      if (track.maxIndex && power > 0 && track.currentIndex + power > track.maxIndex) {
-        // instead, snap to the end
-        track.setTarget(track.getToItemPosition(track.itemCount - 1), "linear");
-        return;
-      }
+    const powerThreshold = 100;
+    const power =
+      Math.max(Math.round(track.velocity.abs() / powerThreshold), 1) *
+      Math.sign(velocity);
+
+    if (track.maxIndex && power > 0 && track.currentIndex + power > track.maxIndex) {
+      // instead, snap to the end
+      track.setTarget(track.getToItemPosition(track.itemCount - 1), "linear");
+      return;
     }
 
     const velocityThreshold = 8;
 
-    if (Math.abs(vel) > velocityThreshold) {
+    if (Math.abs(velocity) > velocityThreshold) {
       // apply inertia to snap target
       track.acceleration.mul(0.25);
       track.inputForce.mul(0.125);
+
       track.setTarget(track.getToItemPosition(track.currentItem + power), "linear");
     } else {
       track.setTarget(track.getToItemPosition(track.currentItem), "linear");
@@ -253,11 +238,11 @@ export class Track extends LitElement {
     `;
   }
 
+  public traits: Trait[] = [...defaultTraits];
+
   constructor() {
     super();
 
-    // TODO: put this in a trait so it can be disabled
-    // TODO: sync it to screen?
     this.addEventListener("wheel", this.onWheel, { passive: false });
 
     this.addEventListener("focusin", this.onFocusIn);
@@ -301,8 +286,11 @@ export class Track extends LitElement {
       hostDisconnected: () => intersectionObserver.disconnect(),
     });
 
-    // TODO: diff the container size and appliy to position of track
-    this.resizeObserver = new ResizeObserver(debounce(() => this.onFormat()));
+    const debouncedFormat = debounce(() => this.onFormat());
+    this.resizeObserver = new ResizeObserver((e) => {
+      this.updateLayout();
+      debouncedFormat(e);
+    });
 
     this.addController({
       hostConnected: () => this.resizeObserver?.observe(this),
@@ -328,10 +316,6 @@ export class Track extends LitElement {
     return this.shadowRoot?.children?.[0] as HTMLSlotElement | undefined;
   }
 
-  public traits: Trait[] = [
-    // new DebugTrait()
-  ];
-
   protected updated(_changedProperties: PropertyValues): void {
     if (_changedProperties.has("current") && this.current !== undefined) {
       this.setTarget(this.getToItemPosition(this.current), "ease");
@@ -347,6 +331,7 @@ export class Track extends LitElement {
     }
 
     if (_changedProperties.has("align")) {
+      this.updateLayout();
       this.onFormat();
     }
   }
@@ -359,6 +344,7 @@ export class Track extends LitElement {
 
   private updateItems() {
     this._children = getCSSChildren(this);
+    this.updateLayout();
     this.onFormat();
   }
 
@@ -454,6 +440,10 @@ export class Track extends LitElement {
   }
 
   public get maxIndex() {
+    if (this.loop) {
+      return Number.POSITIVE_INFINITY;
+    }
+
     if (this.overflow === "ignore") {
       return this.itemCount - 1;
     }
@@ -479,6 +469,9 @@ export class Track extends LitElement {
   }
 
   public get minIndex() {
+    if (this.loop) {
+      return Number.NEGATIVE_INFINITY;
+    }
     return 0;
   }
 
@@ -487,33 +480,52 @@ export class Track extends LitElement {
   }
 
   public get currentAngle() {
-    return (this.currentPosition / this.trackSize) * Math.PI * 2;
+    if (!this.trackSize) return 0;
+    return (this.currentPosition / this.trackSize) * PI2 || 0;
   }
 
   public get originAngle() {
-    return (this.origin[this.currentAxis] / this.trackSize || 0) * PI2;
+    if (!this.trackSize) return 0;
+    return (this.origin[this.currentAxis] / this.trackSize) * PI2 || 0;
   }
 
   public get targetAngle() {
-    return this.target ? (this.target.x / this.trackSize) * PI2 : undefined;
+    if (!this.trackSize) return 0;
+    return this.target
+      ? (this.target[this.currentAxis] / this.trackSize) * PI2 || 0
+      : undefined;
   }
 
   public itemAngles: number[] = [];
 
   private getScrollBounds() {
+    if (this.loop) {
+      return {
+        top: Number.NEGATIVE_INFINITY,
+        left: Number.NEGATIVE_INFINITY,
+        bottom: Number.POSITIVE_INFINITY,
+        right: Number.POSITIVE_INFINITY,
+      };
+    }
+
     let stopTop = 0;
     let stopLeft = 0;
     let stopBottom = 0;
     let stopRight = 0;
-
-    stopBottom = this.overflowHeight;
-    stopRight = this.overflowWidth;
 
     const firstItemHeight = this.itemHeights[0] || 0;
     const firstItemWidth = this.itemWidths[0] || 0;
 
     const lastItemWidth = this.itemWidths[this.itemCount - 1] || 0;
     const lastItemHeight = this.itemHeights[this.itemCount - 1] || 0;
+
+    stopBottom = this.overflowHeight;
+    stopRight = this.overflowWidth;
+
+    if (this.overflow === "ignore") {
+      stopBottom += this.height - lastItemHeight;
+      stopRight += this.width - lastItemWidth;
+    }
 
     switch (this.align) {
       case "center":
@@ -568,7 +580,7 @@ export class Track extends LitElement {
     return clampedPos;
   }
 
-  private scrollBounds = {
+  public scrollBounds = {
     top: 0,
     left: 0,
     bottom: 0,
@@ -598,9 +610,6 @@ export class Track extends LitElement {
   public borderResistance = 0.3;
 
   public moveVelocity = new Vec2();
-
-  // Delta of position compared to the last frame
-  public deltaPosition = new Vec2();
 
   // Average velocity over multiple frames
   public velocity = new Vec2();
@@ -636,6 +645,9 @@ export class Track extends LitElement {
       value: false,
     },
     move: {
+      value: new Vec2(), // delta
+    },
+    resize: {
       value: new Vec2(), // delta
     },
     format: {
@@ -763,42 +775,30 @@ export class Track extends LitElement {
   }
 
   /**
-   * Get the position of the item at the given index, relative to the current item.
+   * Get the position of the item to the given index, relative to the current item.
    */
   public getToItemPosition(index = 0) {
-    const rects = this.getItemRects();
-    const pos = this.origin.clone();
-
-    let currentIndex = index;
-
-    if (!this.loop) {
-      // TODO: config to respect maxIndex, if we dont want to scroll past the overflowidth, when moving to an item index target
-      const maxIndex = this.maxIndex;
-      currentIndex = Math.min(Math.max(this.minIndex, currentIndex), maxIndex);
+    if (Number.isNaN(index)) {
+      throw new Error("Invalid index");
     }
 
-    if (currentIndex < 0) {
-      // only happens when loop is enabled
-      for (let i = 0; i > currentIndex; i--) {
-        pos[this.currentAxis] -= rects[i]?.[this.currentAxis] || 0;
-      }
-    } else if (currentIndex > this.itemCount) {
-      // only happens when loop is enabled
-      for (let i = 0; i < currentIndex; i++) {
-        pos[this.currentAxis] += rects[i % this.itemCount]?.[this.currentAxis] || 0;
-      }
-    } else {
-      let lastIndex = 0;
-      for (let i = 0; i < currentIndex; i++) {
-        pos[this.currentAxis] += rects[i]?.[this.currentAxis] || 0;
-        lastIndex = i;
-      }
+    const targetIndex = Math.max(this.minIndex, Math.min(index, this.maxIndex));
+    const sizes = this.vertical ? this.itemHeights : this.itemWidths;
+    const pos = new Vec2();
 
-      if (this.align === "center") {
-        // adds half of the current item to the position to center it
-        pos[this.currentAxis] +=
-          (rects[Math.min(lastIndex + 1, currentIndex)]?.[this.currentAxis] || 0) / 2;
-      }
+    pos[this.currentAxis] = findMinDistance(
+      this.position[this.currentAxis] - this.origin[this.currentAxis],
+      targetIndex,
+      sizes,
+      this.trackSize,
+      this.loop,
+    );
+
+    pos[this.currentAxis] += this.origin[this.currentAxis];
+
+    if (this.align === "center") {
+      // adds half of the current item to the position to center it
+      pos[this.currentAxis] += (sizes[targetIndex] || 0) / 2;
     }
 
     return pos;
@@ -877,8 +877,6 @@ export class Track extends LitElement {
     this.lastTick = ms;
     this.accumulator += deltaTick;
 
-    this.trait((t) => t.draw?.(this));
-
     const lastPosition = this.position.clone();
 
     if (this.frames.length > 0) {
@@ -903,18 +901,21 @@ export class Track extends LitElement {
       this.drawUpdate();
     }
 
+    this.trait((t) => t.draw?.(this));
+
     this.animation = requestAnimationFrame(this.tick.bind(this));
   }
 
   private computeCurrentItem() {
     const currItem = this.getCurrentItem();
 
-    const changed = this.currentItem !== currItem;
-    this.currentItem = currItem;
+    if (Number.isNaN(currItem)) {
+      throw new Error("Invalid index");
+    }
 
     let i = 0;
     for (const child of this.items) {
-      if (i === this.currentItem) {
+      if (i % this.itemCount === currItem) {
         child.setAttribute("active", "");
       } else {
         child.removeAttribute("active");
@@ -922,7 +923,9 @@ export class Track extends LitElement {
       i++;
     }
 
-    if (changed) {
+    if (this.currentItem !== currItem) {
+      this.currentItem = currItem;
+
       this.dispatchEvent(
         new CustomEvent<number | string>("change", {
           detail: this.currentItem,
@@ -933,8 +936,6 @@ export class Track extends LitElement {
   }
 
   private updateInputs() {
-    this.trait((t) => t.input?.(this, this.inputState));
-
     if (this.inputState.grab.value === true) {
       // grab change
       this.grabbing = true;
@@ -972,9 +973,20 @@ export class Track extends LitElement {
 
     this.direction.add(this.inputForce).sign();
 
+    this.trait((t) => t.input?.(this, this.inputState));
+
+    if (this.inputState.resize.value.abs()) {
+      if (this.target) {
+        this.target.add(this.inputState.resize.value);
+      } else {
+        this.position.add(this.inputState.resize.value);
+      }
+    }
+
     // clear
     const state = this.inputState;
     state.move.value.mul(0);
+    state.resize.value.mul(0);
     state.grab.value = false;
     state.scroll.value = false;
     state.format.value = false;
@@ -991,14 +1003,9 @@ export class Track extends LitElement {
     const lastPosition = this.position.clone();
     const lastVelocity = this.velocity.clone();
 
-    this.velocity = Vec2.add(this.velocity.mul(0.5), this.deltaPosition);
-    this.deltaVelocity = Vec2.sub(this.velocity, lastVelocity);
-
     this.trait((t) => t.update?.(this));
 
     const interacting = this.target || this.interacting;
-
-    this.moveVelocity.mul(this.dragMultiplier);
 
     // clamp input force
     const pos = Vec2.add(this.position, this.inputForce);
@@ -1029,10 +1036,17 @@ export class Track extends LitElement {
       }
     }
 
+    this.moveVelocity.mul(0.6);
+
     this.acceleration.mul(this.dragMultiplier);
 
     this.acceleration.add(this.inputForce);
     this.inputForce.mul(0);
+
+    this.velocity.mul(0.5);
+    this.velocity.add(this.acceleration);
+
+    this.deltaVelocity = Vec2.sub(this.velocity, lastVelocity);
 
     this.position.add(this.acceleration);
 
@@ -1062,9 +1076,7 @@ export class Track extends LitElement {
 
             const a = delta.mod([this.trackWidth, this.trackHeight]);
             if (a.isNaN()) {
-              // TODO: fix this
-              a.x = a.x || 0;
-              a.y = a.y || 0;
+              throw new Error("NaN");
             }
 
             this.targetForce.set(a.mul(42 / this.transitionTime));
@@ -1085,21 +1097,21 @@ export class Track extends LitElement {
 
       if (this.vertical) {
         // y
-        if (this.position.y >= max.y) {
-          this.position.y = start.y;
-          if (this.target) this.target.y -= max.y - start.y;
-        } else if (this.position.y < start.y) {
+        if (this.position.y < start.y) {
           this.position.y = max.y;
           if (this.target) this.target.y += max.y - start.y;
+        } else if (this.position.y > max.y) {
+          this.position.y = start.y;
+          if (this.target) this.target.y -= max.y - start.y;
         }
       } else {
         // x
-        if (Math.round(this.position.x) >= max.x) {
-          this.position.x = start.x;
-          if (this.target) this.target.x -= max.x - start.x;
-        } else if (Math.round(this.position.x) < start.x) {
+        if (this.position.x < start.x) {
           this.position.x = max.x;
           if (this.target) this.target.x += max.x - start.x;
+        } else if (this.position.x > max.x) {
+          this.position.x = start.x;
+          if (this.target) this.target.x -= max.x - start.x;
         }
       }
     }
@@ -1107,76 +1119,53 @@ export class Track extends LitElement {
     // update final position
     this.position.add(this.targetForce);
     this.targetForce.set(0);
-
-    this.deltaPosition = Vec2.sub(this.position, lastPosition);
   }
 
   public debugCanvas = document.createElement("canvas");
 
   private getCurrentItem() {
-    const trackSize = this.trackSize;
-    const currentAngle = this.currentAngle;
-
-    let minDist = Number.POSITIVE_INFINITY;
-    let closestIndex = 0;
-
-    const rects = this.getItemRects();
-
-    const originAngle = this.originAngle;
-
-    const axes = this.vertical ? 1 : 0;
-    // all items angles
-    const angles = rects.reduce((acc, rect, i) => {
-      acc[i] = (rect[axes] / trackSize) * PI2;
-      return acc;
-    }, [] as number[]);
-
-    this.itemAngles = [];
-
-    for (let i = -1; i < this.itemCount + 1; i++) {
-      const itemIndex = i % this.itemCount;
-      const rect = rects[itemIndex];
-
-      // when -1 is nothing go next (with loop enabled, its the last item)
-      if (!rect) continue;
-
-      let itemAngle = originAngle;
-
-      let lastIndex = 0;
-      for (let j = 0; j < itemIndex; j++) {
-        if (j < itemIndex) {
-          itemAngle += angles[j] || 0;
-        }
-        lastIndex = j;
-      }
-
-      if (this.align === "center") {
-        // adds half of the current item to the position to center it
-        itemAngle += (angles[Math.min(lastIndex + 1, this.currentIndex)] || 0) / 2;
-      }
-
-      this.itemAngles[itemIndex] = itemAngle;
-
-      const deltaAngle = angleDist(itemAngle, currentAngle);
-
-      const offset = Math.floor(i / this.itemCount) * this.itemCount;
-
-      if (Math.abs(deltaAngle) <= minDist) {
-        minDist = Math.abs(deltaAngle);
-        closestIndex = itemIndex;
-        if (currentAngle > PI2 / 2) {
-          closestIndex += offset;
-        }
-      }
+    if (this.debug) {
+      // this is only for debug information
+      this.itemAngles = this.getItemRects().reduce((acc, rect, i) => {
+        acc[i] = (rect[this.currentAxis] / this.trackSize) * PI2;
+        return acc;
+      }, [] as number[]);
     }
 
-    return closestIndex;
+    let positionOffset = 0;
+    const sizes = this.vertical ? this.itemHeights : this.itemWidths;
+
+    if (this.align === "center") {
+      // adds half of the current item to the position to center it
+      const index = findClosestItemIndex(
+        this.position[this.currentAxis] - this.origin[this.currentAxis],
+        sizes,
+        this.trackSize,
+        this.loop,
+      );
+
+      positionOffset += (sizes[index] || 0) / 2;
+    }
+
+    const index = findClosestItemIndex(
+      this.position[this.currentAxis] - this.origin[this.currentAxis] - positionOffset,
+      sizes,
+      this.trackSize,
+      this.loop,
+    );
+
+    if (Number.isNaN(index)) {
+      throw new Error("Invalid index");
+    }
+
+    return index;
   }
 
   /**
    * Get the item at a specific position.
    */
   public getItemAtPosition(pos: Vec2) {
+    // TODO: dupliacte of getCurrentItem ?
     const rects = this.getItemRects();
     let px = 0;
 
@@ -1297,8 +1286,12 @@ export class Track extends LitElement {
     }
   }
 
-  private onFormat = () => {
-    this.inputState.format.value = true;
+  private updateLayout = () => {
+    const lastWidth = this._width;
+    const lastHeight = this._height;
+    const lastWidths = this._widths;
+    const lastHeights = this._heights;
+
     this._width = undefined;
     this._height = undefined;
     this._widths = undefined;
@@ -1318,27 +1311,65 @@ export class Track extends LitElement {
         break;
     }
 
-    this.scrollBounds = this.getScrollBounds();
+    const deltaWidth = this.width - lastWidth;
+    const deltaHeight = this.height - lastHeight;
 
+    const deltaWidths = lastWidths?.map(diffArray(this.itemWidths));
+    const deltaHeights = lastHeights?.map(diffArray(this.itemHeights));
+
+    this.inputState.format.value = true;
+
+    if (this.vertical) {
+      let deltaY =
+        deltaHeights?.reduce(
+          (acc, val, i) => (i < this.currentIndex ? acc + val : acc),
+          0,
+        ) || 0;
+
+      // Ignore this resize event, if the delta is equal to the current height
+      if (this.target && this.align === "center" && deltaHeight !== this.height) {
+        deltaY -= deltaHeight / 2;
+      }
+
+      if (deltaY) this.inputState.resize.value.add(0, deltaY);
+    } else {
+      let deltaX =
+        deltaWidths?.reduce(
+          (acc, val, i) => (i < this.currentIndex ? acc + val : acc),
+          0,
+        ) || 0;
+
+      // Ignore this resize event, if the delta is equal to the current width
+      if (this.target && this.align === "center" && deltaWidth !== this.width) {
+        deltaX -= deltaWidth / 2;
+      }
+
+      if (deltaX) this.inputState.resize.value.add(deltaX, 0);
+    }
+
+    this.scrollBounds = this.getScrollBounds();
+  };
+
+  private onFormat = () => {
     const formatEvent = new CustomEvent("format", {
       bubbles: true,
       cancelable: true,
     });
     this.dispatchEvent(formatEvent);
 
-    if (!formatEvent.defaultPrevented) {
-      this.trait((t) => t.format?.(this));
+    if (formatEvent.defaultPrevented) return;
 
-      if (this.position.x > this.overflowWidth || this.position.y > this.overflowHeight) {
-        this.setTarget(undefined);
-      }
-    }
+    // TODO: why?
+    // if (this.position.x > this.overflowWidth || this.position.y > this.overflowHeight) {
+    //   this.setTarget(undefined);
+    // }
+
+    this.trait((t) => t.format?.(this));
   };
 
   public scrollDebounce?: Timer;
 
   private onWheel = (wheelEvent: WheelEvent) => {
-    // TODO: if there is a tick without a scroll event, it will jitter
     if (wheelEvent.ctrlKey === true) {
       // its a pinch zoom gesture
       return;
@@ -1487,16 +1518,16 @@ export const Ease = {
   },
 };
 
-export function isTouch() {
+function isTouch() {
   return !!navigator.maxTouchPoints || "ontouchstart" in window;
 }
 
-export function debounce<T>(callback: (arg: T) => void) {
+function debounce<T>(callback: (arg: T) => void, ms = 80) {
   let timeout: Timer;
 
   return (arg: T) => {
     clearTimeout(timeout);
-    timeout = setTimeout(() => callback(arg), 80);
+    timeout = setTimeout(() => callback(arg), ms);
   };
 }
 
@@ -1504,12 +1535,114 @@ function mod(a: number, n: number) {
   return a - Math.floor(a / n) * n;
 }
 
-export function angleDist(a: number, b: number) {
+function angleDist(a: number, b: number) {
   return mod(b - a + 180, 360) - 180;
 }
 
-export function timer(start: number, time: number) {
+function timer(start: number, time: number) {
   return Math.min((Date.now() - start) / time, 1);
+}
+
+function diffArray(arr: number[]) {
+  return (w: number, i: number) => {
+    if (arr[i] === undefined) throw new Error("Array index out of bounds");
+    return arr[i] - w;
+  };
+}
+
+function findMinDistance(
+  targetPoint: number,
+  targetIndex: number,
+  itemWidths: number[],
+  totalWidth: number,
+  wrap: boolean,
+) {
+  // Normalize negative indices
+  const normalizedIndex =
+    ((targetIndex % itemWidths.length) + itemWidths.length) % itemWidths.length;
+
+  // Calculate the base position of the target index
+  let basePosition = 0;
+  for (let i = 0; i < normalizedIndex; i++) {
+    const width = itemWidths[i];
+    if (width === undefined) {
+      throw new Error("Item width is undefined");
+    }
+    basePosition += width;
+  }
+
+  // Consider three possible positions:
+  // 1. The base position
+  // 2. One wrap backwards (base - totalWidth)
+  // 3. One wrap forwards (base + totalWidth)
+  const positions = wrap
+    ? [basePosition, basePosition - totalWidth, basePosition + totalWidth]
+    : [basePosition];
+
+  const pos = positions[0];
+  if (pos === undefined) {
+    throw new Error("Position is undefined");
+  }
+
+  // Find the position with the shortest distance to the target point
+  let closestPosition = positions[0];
+  let minDistance = Math.abs(targetPoint - pos);
+
+  for (const position of positions) {
+    const distance = Math.abs(targetPoint - position);
+    if (distance < minDistance) {
+      minDistance = distance;
+      closestPosition = position;
+    }
+  }
+
+  return closestPosition;
+}
+
+function findClosestItemIndex(
+  point: number,
+  itemWidths: number[],
+  totalWidth: number,
+  wrap: boolean,
+): number {
+  // Calculate cumulative positions of items
+  const positions: number[] = [];
+  let currentPosition = 0;
+
+  for (const width of itemWidths) {
+    positions.push(currentPosition);
+    currentPosition += width;
+  }
+
+  // Find the closest item
+  let closestIndex = 0;
+  let minDistance = Number.POSITIVE_INFINITY;
+
+  for (let i = 0; i < positions.length; i++) {
+    // Calculate distances considering wrapping
+    const itemPosition = positions[i];
+    if (itemPosition === undefined) {
+      throw new Error("Item position is undefined");
+    }
+
+    let distance: number;
+    if (wrap) {
+      distance = Math.min(
+        Math.abs(point - itemPosition),
+        Math.abs(point - (itemPosition + totalWidth)),
+        Math.abs(point + totalWidth - itemPosition),
+      );
+    } else {
+      distance = Math.min(Math.abs(point - itemPosition));
+    }
+
+    if (distance < minDistance) {
+      minDistance = distance;
+      closestIndex = i;
+    }
+  }
+
+  return closestIndex;
 }
 
 type VecOrNumber = Vec2 | number[] | number;
@@ -1552,24 +1685,24 @@ export class Vec2 extends Array {
     this[1] = xy[1];
   }
 
-  add(vec: VecOrNumber) {
-    if (Vec2.isVec(vec)) {
-      this[0] += vec[0];
-      this[1] += vec[1];
+  add(x: VecOrNumber, y?: number) {
+    if (Vec2.isVec(x)) {
+      this[0] += x[0];
+      this[1] += x[1];
     } else {
-      this[0] += vec;
-      this[1] += vec;
+      this[0] += x;
+      this[1] += y === undefined ? x : y;
     }
     return this;
   }
 
-  sub(vec: VecOrNumber) {
-    if (Vec2.isVec(vec)) {
-      this[0] -= vec[0];
-      this[1] -= vec[1];
+  sub(x: VecOrNumber, y?: number) {
+    if (Vec2.isVec(x)) {
+      this[0] -= x[0];
+      this[1] -= x[1];
     } else {
-      this[0] -= vec;
-      this[1] -= vec;
+      this[0] -= x;
+      this[1] -= y === undefined ? x : y;
     }
     return this;
   }
@@ -1592,13 +1725,13 @@ export class Vec2 extends Array {
     return new Vec2(-this[0], -this[1]);
   }
 
-  set(vec: VecOrNumber) {
-    if (Vec2.isVec(vec)) {
-      this[0] = vec[0];
-      this[1] = vec[1];
+  set(x: VecOrNumber, y?: number) {
+    if (Vec2.isVec(x)) {
+      this[0] = x[0];
+      this[1] = x[1];
     } else {
-      this[0] = vec;
-      this[1] = vec;
+      this[0] = x;
+      this[1] = y === undefined ? x : y;
     }
     return this;
   }
