@@ -1,10 +1,10 @@
 import { LitElement, type PropertyValues, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
-import { DebugTrait } from "./debug.js";
+// import { DebugTrait } from "./debug.js";
 
 const defaultTraits = [
   //
-  new DebugTrait(),
+  // new DebugTrait(),
 ];
 
 const PI2 = Math.PI * 2;
