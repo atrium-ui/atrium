@@ -1,5 +1,15 @@
 # @sv/elements
 
+## 2.6.0-dev.4 (2025-03-22)
+
+### Features
+
+- Fix package version
+
+### Fixes
+
+- Dont calculate velocity on position
+
 ## 2.5.3-dev.0 (2025-03-22)
 
 ### Fixes

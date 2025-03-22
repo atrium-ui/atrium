@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.8.2-dev.3 (2025-03-22)
+
+### Fixes
+
+- Dont calculate velocity on position
+
 ## 1.8.2-dev.2 (2025-03-22)
 
 ### Fixes
