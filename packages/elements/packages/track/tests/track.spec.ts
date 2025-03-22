@@ -10,6 +10,7 @@ import {
   sleep,
   drag as _drag,
   onFrame,
+  press,
 } from "@sv/test";
 
 async function trackWithChildren(
@@ -94,8 +95,6 @@ function logRun(track: Track) {
 }
 
 describe("Track", () => {
-  beforeEach(() => setup());
-
   test(label("import track element"), async () => {
     const { Track } = await import("@sv/elements/track");
     expect(Track).toBeDefined();

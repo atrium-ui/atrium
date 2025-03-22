@@ -1,4 +1,4 @@
-import { afterEach } from "bun:test";
+import { afterEach, beforeEach } from "bun:test";
 import Rand from "rand-seed";
 import { GlobalRegistrator } from "@happy-dom/global-registrator";
 
@@ -95,6 +95,10 @@ export function setup() {
   globalThis.rand = new Rand(globalThis.seed);
   globalThis.rand_raf = new Rand(globalThis.seed);
 }
+
+beforeEach(() => {
+  setup();
+});
 
 /**
  * Generate a seeded random number.
