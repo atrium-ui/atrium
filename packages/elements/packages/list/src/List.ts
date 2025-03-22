@@ -1,5 +1,5 @@
 import { LitElement, css, html } from "lit";
-import { property, query } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -61,7 +61,12 @@ export class List extends LitElement {
     }
   }
 
+  private observer = new MutationObserver(() => {
+    this.onSlotChange();
+  });
+
   private onSlotChange() {
+    console.log("Slot changed");
     // update dom image
     this.options = [...this.querySelectorAll("a-list-item")] as ListItem[];
   }
@@ -105,13 +110,18 @@ export class List extends LitElement {
 
     this.addEventListener("keydown", this.onKeyDown);
     this.addEventListener("keyup", this.onKeyUp);
+
+    this.observer.observe(this, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
   }
 
   public connectedCallback(): void {
     super.connectedCallback();
 
     this.role = "listbox";
-    this.tabIndex = 0;
   }
 
   private onKeyDown(event: KeyboardEvent) {
