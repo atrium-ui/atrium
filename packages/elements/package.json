@@ -128,6 +128,11 @@
       "types": "./packages/box/src/index.ts",
       "import": "./packages/box/dist/index.js",
       "require": "./packages/box/dist/index.cjs"
+    },
+    "./list": {
+      "types": "./packages/list/src/index.ts",
+      "import": "./packages/list/dist/index.js",
+      "require": "./packages/list/dist/index.cjs"
     }
   }
 }
