@@ -26,8 +26,7 @@
   },
   "devDependencies": {
     "@sv/test": "workspace:",
-    "ts-lit-plugin": "^2.0.2",
-    "tsup": "^8.4.0"
+    "ts-lit-plugin": "^2.0.2"
   },
   "peerDependencies": {
     "@floating-ui/dom": "^1.6.7",
