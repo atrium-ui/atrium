@@ -21,7 +21,7 @@ export class MoveEvent extends CustomEvent<{
       detail: {
         delta: delta,
         direction: track.direction.clone(),
-        velocity: track.deltaPosition.clone(),
+        velocity: track.velocity.clone(),
         position: track.position.clone(),
       },
     });
@@ -611,9 +611,6 @@ export class Track extends LitElement {
 
   public moveVelocity = new Vec2();
 
-  // Delta of position compared to the last frame
-  public deltaPosition = new Vec2();
-
   // Average velocity over multiple frames
   public velocity = new Vec2();
 
@@ -1006,9 +1003,6 @@ export class Track extends LitElement {
     const lastPosition = this.position.clone();
     const lastVelocity = this.velocity.clone();
 
-    this.velocity = Vec2.add(this.velocity.mul(0.5), this.deltaPosition);
-    this.deltaVelocity = Vec2.sub(this.velocity, lastVelocity);
-
     this.trait((t) => t.update?.(this));
 
     const interacting = this.target || this.interacting;
@@ -1048,6 +1042,11 @@ export class Track extends LitElement {
 
     this.acceleration.add(this.inputForce);
     this.inputForce.mul(0);
+
+    this.velocity.mul(0.5);
+    this.velocity.add(this.acceleration);
+
+    this.deltaVelocity = Vec2.sub(this.velocity, lastVelocity);
 
     this.position.add(this.acceleration);
 
@@ -1120,8 +1119,6 @@ export class Track extends LitElement {
     // update final position
     this.position.add(this.targetForce);
     this.targetForce.set(0);
-
-    this.deltaPosition = Vec2.sub(this.position, lastPosition);
   }
 
   public debugCanvas = document.createElement("canvas");
