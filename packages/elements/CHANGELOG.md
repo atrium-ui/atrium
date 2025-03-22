@@ -1,10 +1,46 @@
 # @sv/elements
 
-## 2.5.2 (2025-03-21)
+## 2.6.0-dev.4 (2025-03-22)
+
+### Features
+
+- Fix package version
 
 ### Fixes
 
-- a-popover: set placement as data attribute for styling
+- Dont calculate velocity on position
+
+## 2.5.3-dev.0 (2025-03-22)
+
+### Fixes
+
+- Dont calculate velocity on position
+
+## 2.6.0-dev.2 (2025-03-21)
+
+### Features
+
+- a-track: major refactor
+
+### Fixes
+
+- Add wrap param for findIndex
+
+## 2.6.0-dev.1 (2025-03-15)
+
+### Features
+
+- a-track: major refactor
+
+### Fixes
+
+- Add wrap param for findIndex
+
+## 2.6.0-dev.0 (2025-03-14)
+
+### Features
+
+- a-track: major refactor
 
 ## 2.5.1 (2025-03-13)
 

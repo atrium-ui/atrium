@@ -9,9 +9,9 @@
   },
   "exports": {
     ".": {
+      "types": "./index.ts",
       "import": "./dist/icons.js",
-      "require": "./dist/icons.cjs",
-      "types": "./index.ts"
+      "require": "./dist/icons.cjs"
     }
   },
   "dependencies": {

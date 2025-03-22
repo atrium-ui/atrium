@@ -141,9 +141,7 @@ export class Blur extends LitElement {
   @property({ type: Boolean, reflect: true })
   public scrolllock = false;
 
-  public lock = new ScrollLock({
-    allowElements: ["a-blur *", ...this.allowscroll.split(",").filter(Boolean)],
-  });
+  public lock: ScrollLock;
 
   private tryLock() {
     if (this.scrolllock) {
@@ -248,6 +246,10 @@ export class Blur extends LitElement {
 
   constructor() {
     super();
+
+    this.lock = new ScrollLock({
+      allowElements: ["a-blur *", ...this.allowscroll.split(",").filter(Boolean)],
+    });
 
     this.addEventListener("pointerdown", (e: PointerEvent) => {
       if (!this.shouldBlur(e)) return;

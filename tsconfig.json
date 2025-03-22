@@ -2,7 +2,7 @@
   "$schema": "http://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "target": "ES2018",
-    "module": "ES2020",
+    "module": "ES2022",
     "moduleResolution": "Bundler",
 
     // typing

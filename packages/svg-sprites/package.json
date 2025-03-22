@@ -1,6 +1,6 @@
 {
   "name": "@sv/svg-sprites",
-  "version": "0.5.2",
+  "version": "0.0.1-dev.0",
   "description": "Utility to compile svgs from a directory to a spritesheet and make it available as text or blob.",
   "author": "atrium",
   "contributors": [
@@ -12,24 +12,24 @@
   "type": "module",
   "exports": {
     "./sheet": {
+      "types": "./dist/sprite-sheet.d.ts",
       "import": "./dist/sprite-sheet.js",
-      "require": "./dist/sprite-sheet.cjs",
-      "types": "./dist/sprite-sheet.d.ts"
+      "require": "./dist/sprite-sheet.cjs"
     },
     "./svg-icon": {
+      "types": "./dist/Icon.d.ts",
       "import": "./dist/Icon.js",
-      "require": "./dist/Icon.cjs",
-      "types": "./dist/Icon.d.ts"
+      "require": "./dist/Icon.cjs"
     },
     "./loader": {
+      "types": "./dist/webpack-loader.d.ts",
       "import": "./dist/webpack-loader.js",
-      "require": "./dist/webpack-loader.cjs",
-      "types": "./dist/webpack-loader.d.ts"
+      "require": "./dist/webpack-loader.cjs"
     },
     "./vite": {
+      "types": "./dist/vite-plugin.d.ts",
       "import": "./dist/vite-plugin.js",
-      "require": "./dist/vite-plugin.cjs",
-      "types": "./dist/vite-plugin.d.ts"
+      "require": "./dist/vite-plugin.cjs"
     }
   },
   "keywords": [

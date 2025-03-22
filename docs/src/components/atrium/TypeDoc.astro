@@ -1,7 +1,6 @@
 ---
 import path from "node:path";
 import { Code } from "@astrojs/starlight/components";
-import { Markdown } from "astro/components";
 import {
   Application,
   type DeclarationReflection,
@@ -22,7 +21,7 @@ export interface Props {
 const props = Astro.props;
 
 function sourceToUrl(path: string, source) {
-  return `https://gitlab.s-v.de/svp/atrium/-/blob/main/rec/${path}/${source.fileName}#L${source.line}`;
+  return `https://gitlab.s-v.de/svp/atrium/-/blob/main/rec/${path}/${source?.fileName}#L${source?.line}`;
 }
 
 async function parse(options: { pkg: string; entry: string; config?: string }) {
@@ -43,7 +42,7 @@ async function parse(options: { pkg: string; entry: string; config?: string }) {
 }
 
 function declaration(obj: ProjectReflection, name) {
-  return obj.getChildByName(name);
+  return obj?.getChildByName(name);
 }
 
 function childrenWithComments(
@@ -154,8 +153,8 @@ function Events({ doc, symbol }) {
 }
 
 async function Methods({ doc, symbol }: { doc: ProjectReflection; symbol: string }) {
-  const dec = doc.getChildByName(symbol) as DeclarationReflection;
-  const methods = dec.groups
+  const dec = doc?.getChildByName(symbol) as DeclarationReflection;
+  const methods = dec?.groups
     ?.find((g) => g.title === "Methods")
     ?.children.filter((child) => child.flags.hasFlag(ReflectionFlag.Public))
     .filter(

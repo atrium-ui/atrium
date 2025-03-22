@@ -1,29 +1,16 @@
 {
   "name": "@sv/scroll-lock",
-  "version": "1.0.2",
+  "version": "0.0.1-dev.0",
   "description": "universal scroll-lock",
   "main": "dist/index.js",
   "type": "module",
   "types": "src/index.ts",
   "scripts": {
     "test": "bun test",
-    "dev": "tsup --watch",
-    "build": "tsup",
+    "dev": "watchexec -e ts bun ./build.ts",
+    "build": "bun ./build.ts",
     "publish-package": "task publish"
   },
   "author": "f.kretschmer@s-v.de",
-  "tsup": {
-    "entry": [
-      "src/index.ts"
-    ],
-    "format": [
-      "esm"
-    ],
-    "external": [
-      "@sv/*"
-    ],
-    "sourcemap": true,
-    "clean": true
-  },
   "license": "MIT"
 }

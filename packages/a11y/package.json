@@ -1,7 +1,7 @@
 {
   "name": "@sv/a11y",
   "author": "atrium",
-  "version": "1.1.1",
+  "version": "0.0.1-dev.0",
   "description": "Accessibility testing",
   "bin": "./bin/cli.js",
   "type": "module",

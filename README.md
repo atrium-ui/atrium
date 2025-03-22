@@ -1,7 +1,7 @@
 <p align="center">
   <img width="180px" height="auto" src="docs/assets/atrium-dark.png" alt="atrium header">
 </p>
-
+ 
 <p align="center" style="text-align:cetner;">
 	<h1 align="center" style="text-align:cetner;"><b>atrium</b></h1>
 	<p align="center" style="text-align:cetner;">
