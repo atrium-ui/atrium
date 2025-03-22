@@ -66,7 +66,6 @@ export class List extends LitElement {
   });
 
   private onSlotChange() {
-    console.log("Slot changed");
     // update dom image
     this.options = [...this.querySelectorAll("a-list-item")] as ListItem[];
   }
