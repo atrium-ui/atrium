@@ -1,19 +1,19 @@
 import { LitElement, css, html } from "lit";
 import { property, query } from "lit/decorators.js";
-import type { OptionElement } from "./Option";
 
 declare global {
   interface HTMLElementTagNameMap {
     "a-list": List;
+    "a-list-item": ListItem;
   }
 }
 
-export class SelectEvent extends CustomEvent<{ selected: OptionElement }> {
+export class SelectEvent extends CustomEvent<{ selected: ListItem }> {
   get option() {
     return this.detail.selected;
   }
 
-  constructor(selectedItem: OptionElement) {
+  constructor(selectedItem: ListItem) {
     super("change", {
       bubbles: true,
       detail: {
@@ -24,30 +24,7 @@ export class SelectEvent extends CustomEvent<{ selected: OptionElement }> {
 }
 
 /**
- * Accessible and styleable select component.
- *
- * @customEvent change - Fired when the value changes.
- * @customEvent input - Fired when the selected value changes.
- * @customEvent open - Fired when the dropdown is opened.
- * @customEvent close - Fired when the dropdown is closed.
- *
- * @example List
- * ```html
- * <form onchange="console.log(event.target.value)" onsubmit="event.preventDefault()">
- *  <a-list name="test" class="text-base">
- *   <button type="button" slot="trigger" class="cursor-pointer">
- *     <div class="w-[150px] text-left">Select</div>
- *   </button>
- *
- *   <div class="mt-1 border border-zinc-700 bg-zinc-800 p-1">
- *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-1">Option 1</a-option>
- *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-2">Option 2</a-option>
- *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-3">Option 3</a-option>
- *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-4">Option 4</a-option>
- *   </div>
- *  </a-list>
- * </form>
- * ```
+ * Accessible and styleable list component.
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-list/
  */
@@ -55,74 +32,53 @@ export class List extends LitElement {
   static get styles() {
     return css`
       :host {
-        display: inline-block;
-        position: relative;
-        outline: none;
-
-        --dropdown-max-height: 200px;
-        --dropdown-speed: 75ms;
-				--dropdown-position: absolute;
-      }
-      :host([opened]) {
-        z-index: 10;
-      }
-      .dropdown-container {
-        position: var(--dropdown-position);
-        top: 100%;
-        width: 100%;
-        background: inherit;
-      }
-      :host([direction="up"]) .dropdown-container {
-        bottom: 100%;
-        top: auto;
-        width: 100%;
-      }
-      a-expandable {
         display: block;
-
-        --transition-speed: var(--dropdown-speed);
-      }
-      .dropdown {
-        max-height: var(--dropdown-max-height);
-        overflow: auto;
-        height: 100%;
-        width: 100%;
       }
     `;
   }
 
   render() {
     return html`
-      <slot name="trigger" @click=${this.onClick}></slot>
-      <div class="dropdown-container" part="dropdown">
-        <a-expandable ?opened="${this.opened}">
-          <div class="dropdown" part="options">
-            <slot @click=${(ev) => this.onOptionsClick(ev.target)} @slotchange=${this.onSlotChange}></slot>
-          </div>
-        </a-expandable>
-      </div>
+      <slot
+        @click=${(ev) => this.onOptionsClick(ev)}
+        @dblclick=${(ev) => this.onOptionsClick(ev)}
+        @slotchange=${this.onSlotChange}
+      ></slot>
     `;
   }
 
-  /**
-   * In what direction the dropdown openes.
-   */
-  @property({ type: String, reflect: true })
-  public direction: "up" | "down" = "down";
+  private updateOptionsDOM() {
+    const options = this.options;
+    for (const option of options) {
+      const optionValue = this.getValueOfOption(option);
+      if (optionValue === this.selected) {
+        option.ariaSelected = "true";
+        option.setAttribute("selected", "");
+      } else {
+        option.ariaSelected = "false";
+        option.removeAttribute("selected");
+      }
+    }
+  }
+
+  private onSlotChange() {
+    // update dom image
+    this.options = [...this.querySelectorAll("a-list-item")] as ListItem[];
+  }
+
+  public selected?: string;
+
+  protected updated(): void {
+    this.updateOptionsDOM();
+
+    this.selected = this.value;
+  }
 
   /**
    * The selected option.
    */
   @property({ type: String })
   public value?: string;
-
-  public selected?: string;
-
-  /**
-   * Whether the dropdown is open.
-   */
-  @property({ type: Boolean, reflect: true })
-  public opened = false;
 
   /**
    * Whether the dropdown is disabled.
@@ -131,63 +87,78 @@ export class List extends LitElement {
   public disabled = false;
 
   /**
-   * Wether the input is required.
-   */
-  @property({ type: Boolean, reflect: true })
-  public required = false;
-
-  /**
    * The name or key used in form data.
    */
   @property({ type: String, reflect: true })
   public name?: string;
 
-  @query(".dropdown")
-  public dropdown!: HTMLElement;
+  /**
+   * Direction of the list.
+   */
+  @property({ type: String, reflect: true })
+  public direction: "up" | "down" = "up";
 
-  private options: OptionElement[] = [];
+  private options: ListItem[] = [];
 
-  private input = document.createElement("input");
+  constructor() {
+    super();
 
-  private observer?: MutationObserver;
+    this.addEventListener("keydown", this.onKeyDown);
+    this.addEventListener("keyup", this.onKeyUp);
+  }
 
   public connectedCallback(): void {
     super.connectedCallback();
 
-    this.addEventListener("keydown", this.onKeyDown);
-    this.addEventListener("keyup", this.onKeyUp);
-    window.addEventListener("keyup", this.globalOnKeyUp);
-    window.addEventListener("click", this.onOutsideClick);
-
-    if (this.name) {
-      this.append(this.input);
-    }
-
-    this.form?.addEventListener("reset", this.onFormReset);
-
-    this.observer = new MutationObserver(() => {
-      this.onSlotChange();
-    });
-
-    this.observer.observe(this, {
-      childList: true,
-      subtree: true,
-      characterData: true,
-    });
+    this.role = "listbox";
+    this.tabIndex = 0;
   }
 
-  public disconnectedCallback(): void {
-    super.disconnectedCallback();
+  private onKeyDown(event: KeyboardEvent) {
+    switch (event.key) {
+      case "ArrowDown":
+        if (this.direction === "up") {
+          this.selectNext();
+        } else {
+          this.selectPrev();
+        }
+        this.scrollToSelected();
+        event.preventDefault();
+        break;
+      case "ArrowUp":
+        if (this.direction === "up") {
+          this.selectPrev();
+        } else {
+          this.selectNext();
+        }
+        this.scrollToSelected();
+        event.preventDefault();
+        break;
+    }
+  }
 
-    this.form?.removeEventListener("reset", this.onFormReset);
-    this.removeEventListener("keydown", this.onKeyDown);
-    this.removeEventListener("keyup", this.onKeyUp);
-    window.removeEventListener("keyup", this.globalOnKeyUp);
-    window.removeEventListener("click", this.onOutsideClick);
+  private onKeyUp(event: KeyboardEvent) {
+    switch (event.key) {
+      case "Enter":
+        this.submitSelected();
+        break;
+      default:
+        this.keyPressed(event.key);
+        break;
+    }
+  }
 
-    this.observer?.disconnect();
+  private keyPressed(key: string) {
+    if (key.length > 1) return;
 
-    this.input.remove();
+    const opt = this.options.find(
+      (option) =>
+        (option.value || option.innerText)?.charAt(0).toLowerCase() === key.toLowerCase(),
+    );
+    if (opt) {
+      this.setValue(this.getValueOfOption(opt));
+      opt.scrollIntoView({ block: "nearest" });
+    }
   }
 
   /**
@@ -196,7 +167,7 @@ export class List extends LitElement {
   public selectNext() {
     const selectedElement = this.getOptionByValue(this.selected);
     const index = selectedElement ? this.options.indexOf(selectedElement) : -1;
-    const nextIndex = Math.max(index - 1, 0);
+    const nextIndex = Math.max(index + 1, 0);
     const opt = this.options[nextIndex];
     if (opt) {
       this.setSelected(this.getValueOfOption(opt));
@@ -209,7 +180,7 @@ export class List extends LitElement {
   public selectPrev() {
     const selectedElement = this.getOptionByValue(this.selected);
     const index = selectedElement ? this.options.indexOf(selectedElement) : -1;
-    const nextIndex = Math.min(index + 1, this.options.length - 1);
+    const nextIndex = Math.min(index - 1, this.options.length - 1);
     const opt = this.options[nextIndex];
     if (opt) {
       this.setSelected(this.getValueOfOption(opt));
@@ -220,94 +191,13 @@ export class List extends LitElement {
     this.dispatchEvent(new CustomEvent("input", { detail: value }));
     this.value = value;
     this.selected = value;
-    this.updateOptionSelection();
+    this.updateOptionsDOM();
   }
 
   private setSelected(value: string | undefined) {
     this.dispatchEvent(new CustomEvent("input", { detail: value }));
     this.selected = value;
-    this.updateOptionSelection();
-  }
-
-  public reportValidity() {
-    return this.input.reportValidity();
-  }
-
-  /**
-   * Resets the value of the select to undefined.
-   */
-  public reset() {
-    const defaultValue = this.getAttribute("value") || undefined;
-    this.setValue(defaultValue);
-    this.dispatchEvent(new CustomEvent("change", { detail: defaultValue }));
-  }
-
-  public get form() {
-    return this.input?.form;
-  }
-
-  private submitSelected() {
-    if (this.selected !== undefined) {
-      this.value = this.selected;
-      this.input.value = this.value;
-      const selectedOptionElement = this.getOptionByValue(this.selected);
-      if (selectedOptionElement) {
-        this.close();
-        this.dispatchEvent(new SelectEvent(selectedOptionElement));
-      }
-    }
-  }
-
-  /**
-   * Close the dropdown.
-   */
-  public close() {
-    this.dispatchEvent(new Event("close"));
-    this.opened = false;
-    this.selected = this.value;
-  }
-
-  /**
-   * Open the dropdown.
-   */
-  public open() {
-    if (this.disabled) return;
-
-    this.selected = this.value;
-
-    this.dispatchEvent(new Event("open"));
-    this.opened = true;
-
-    const inputElement = this.querySelector(`[slot="trigger"]`) as HTMLElement;
-    if (inputElement) inputElement.focus();
-    if (this.direction === "up") {
-      this.dropdown.scrollTo(0, this.dropdown.scrollHeight);
-    }
-  }
-
-  private onOutsideClick = (e: Event) => {
-    if (!this.contains(e.target as HTMLElement)) {
-      this.close();
-    }
-  };
-
-  private onInvalid = (e: Event) => {
-    this.scrollIntoView({
-      block: "nearest",
-      inline: "nearest",
-    });
-  };
-
-  private onFormReset = (e: Event) => {
-    this.reset();
-  };
-
-  private onClick(event: PointerEvent) {
-    if (this.opened) {
-      this.close();
-    } else {
-      this.open();
-    }
+    this.updateOptionsDOM();
   }
 
   private scrollToSelected() {
@@ -317,105 +207,34 @@ export class List extends LitElement {
     }
   }
 
-  private onKeyDown(event: KeyboardEvent) {
-    switch (event.key) {
-      case "ArrowUp":
-        if (this.opened) {
-          if (this.direction === "up") {
-            this.selectPrev();
-          } else {
-            this.selectNext();
-          }
-        } else {
-          this.open();
-        }
-        this.scrollToSelected();
-        event.preventDefault();
-        break;
-      case "ArrowDown":
-        if (this.opened) {
-          if (this.direction === "up") {
-            this.selectNext();
-          } else {
-            this.selectPrev();
-          }
-        } else {
-          this.open();
-        }
-        this.scrollToSelected();
-        event.preventDefault();
-        break;
-      case "Tab":
-        setTimeout(() => {
-          this.close();
-        }, 10);
-        break;
-      case "Enter":
-        event.preventDefault();
-        break;
-      default:
-        // if (event.key) {
-        // TODO: implement search
-        //   console.log("search for item with", event.key);
-        // }
-        break;
-    }
-  }
+  private onOptionsClick(event: Event) {
+    const target = event.target as HTMLElement;
 
-  private globalOnKeyUp = (event: KeyboardEvent) => {
-    switch (event.key) {
-      case "Escape":
-        this.close();
-        break;
-    }
-  };
-
-  private onKeyUp(event: KeyboardEvent) {
-    switch (event.key) {
-      case "Enter":
-        if (this.opened) {
-          this.submitSelected();
-        }
-        break;
-      default:
-        this.keyPressed(event.key);
-        break;
-    }
-  }
-
-  private keyPressed(key: string) {
-    const opt = this.options.find(
-      (option) => option.value.charAt(0).toLowerCase() === key.toLowerCase(),
-    );
-    if (opt) {
-      this.setValue(this.getValueOfOption(opt));
-      opt.scrollIntoView({ block: "nearest" });
-    }
-  }
-
-  private onSlotChange() {
-    // update dom image
-    this.options = [...this.querySelectorAll("a-option")] as OptionElement[];
-
-    if (this.direction === "up") {
-      this.options.reverse();
-    }
-  }
-
-  private onOptionsClick(target: HTMLElement) {
     let index = 0;
     for (const child of this.options) {
       if (child === target || child.contains(target)) {
-        const value = child.getAttribute("value") || index.toString();
-        this.setValue(value);
-        this.submitSelected();
+        this.setValue(child.getAttribute("value") || index.toString());
         break;
       }
       index++;
     }
+
+    if (event.type === "dblclick") {
+      this.submitSelected();
+    }
   }
 
-  private getValueOfOption(optionElement: OptionElement) {
+  private submitSelected() {
+    if (this.selected !== undefined) {
+      this.value = this.selected;
+      const selectedOptionElement = this.getOptionByValue(this.selected);
+      if (selectedOptionElement) {
+        this.dispatchEvent(new SelectEvent(selectedOptionElement));
+      }
+    }
+  }
+
+  private getValueOfOption(optionElement: ListItem) {
     return (
       optionElement.getAttribute("value") ||
       this.options.indexOf(optionElement).toString()
@@ -432,33 +251,27 @@ export class List extends LitElement {
 
     return;
   }
+}
 
-  protected updated(): void {
-    this.updateOptionSelection();
-
-    if (this.name) {
-      this.input.style.display = "none";
-      this.input.ariaHidden = "true";
-      this.input.name = this.name;
-      this.input.required = this.required;
-      this.input.oninvalid = this.onInvalid;
-
-      // set value from attributes
-      this.input.value = this.value || "";
-
-      this.selected = this.value;
-    }
+export class ListItem extends LitElement {
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
+    `;
   }
 
-  private updateOptionSelection() {
-    const options = this.options;
-    for (const option of options) {
-      const optionValue = this.getValueOfOption(option);
-      if (optionValue === this.selected) {
-        option.setAttribute("selected", "");
-      } else {
-        option.removeAttribute("selected");
-      }
-    }
+  connectedCallback() {
+    super.connectedCallback();
+    // this.tabIndex = 0;
+    this.role = "option";
+  }
+
+  @property({ type: String })
+  public value!: string;
+
+  render() {
+    return html`<slot></slot>`;
   }
 }

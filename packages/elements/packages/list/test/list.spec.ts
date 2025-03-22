@@ -1,5 +1,4 @@
 import { test, expect, describe } from "bun:test";
-import { SelectEvent } from "../src/Select";
 
 const NODE_NAME = "a-list";
 

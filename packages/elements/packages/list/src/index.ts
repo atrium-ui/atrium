@@ -5,14 +5,13 @@
  */
 
 import "@sv/elements/expandable";
-import { OptionElement } from "./Option";
-import { List } from "./List";
+import { ListItem, List } from "./List";
 
 if (!customElements.get("a-list")) {
-  customElements.define("a-option", OptionElement);
+  customElements.define("a-list-item", ListItem);
   customElements.define("a-list", List);
 } else {
   console.warn("a-list already defined");
 }
 
-export { OptionElement, List };
+export { ListItem, List };
