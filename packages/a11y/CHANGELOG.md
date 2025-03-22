@@ -1,9 +1,3 @@
-## 1.1.2-dev.0 (2025-03-15)
-
-### Fixes
-
-- Add wrap param for findIndex
-
 ## 1.1.1 (2024-11-14)
 
 ### Fixes
