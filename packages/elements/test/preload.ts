@@ -1,7 +1,3 @@
-import { GlobalRegistrator } from "@happy-dom/global-registrator";
+import { enviroment } from "@sv/test";
 
-GlobalRegistrator.register();
-
-require("intersection-observer");
-
-globalThis.IntersectionObserver = window.IntersectionObserver;
+enviroment();

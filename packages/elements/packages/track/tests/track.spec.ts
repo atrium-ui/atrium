@@ -1,41 +1,100 @@
 import { beforeEach, test, expect, afterEach, describe } from "bun:test";
-import { findClosestItemIndex, type MoveEvent, type Track } from "../src/Track";
+import type { MoveEvent, Track } from "../src/Track";
+import type { Track as TrackElement } from "../src/Track";
 import {
-  drag,
-  enviroment,
   FakePointerEvent,
+  fixElementSizes,
   label,
-  press,
+  random,
   setup,
   sleep,
-  trackWithChildren,
-} from "./test-utils";
+  drag as _drag,
+  onFrame,
+} from "@sv/test";
 
-let int: Timer;
-function logRun(track: Track) {
-  int = setInterval(() => {
-    console.info(track.position, track.currentItem, track.velocity, track.target);
-  }, 16);
+async function trackWithChildren(
+  itemCount = 10,
+  attributes: Record<string, string | boolean | number> = {},
+) {
+  await import("../src/index.js");
+
+  const widths = new Array<number>(itemCount)
+    .fill(0)
+    .map(() => Math.floor(random() * 500 + 150));
+
+  console.info("items", widths);
+
+  const div = document.createElement("div");
+  const markup = `
+    <a-track ${Object.entries(attributes)
+      .map(([key, value]) => `${key}="${value}"`)
+      .join(" ")}>
+      ${widths.map((w) => `<canvas width="${w}" height="800"></canvas>`).join("")}
+    </a-track>
+  `;
+  div.innerHTML = markup;
+
+  const totalSize = widths.reduce((acc, w) => acc + w, 0);
+  const track = div.children[0] as TrackElement;
+  fixElementSizes(track, random() * (totalSize / 4), random() * 800);
+
+  // increase animation speed for testing
+  track.transitionTime = 100;
+
+  for (let i = 0; i < itemCount; i++) {
+    const child = track.children[i] as HTMLCanvasElement;
+    fixElementSizes(
+      child,
+      Number.parseInt(child.getAttribute("width") || "0"),
+      Number.parseInt(child.getAttribute("height") || "0"),
+    );
+  }
+
+  document.body.append(div);
+
+  if (track.vertical) {
+    track.position.y = random() * track.overflowWidth;
+  } else {
+    track.position.x = random() * track.overflowWidth;
+  }
+
+  // @ts-ignore
+  track.updateLayout();
+  // @ts-ignore
+  track.onFormat();
+
+  console.info(
+    "track",
+    track.width,
+    track.height,
+    track.trackWidth,
+    track.trackHeight,
+    track.position,
+  );
+
+  return track;
 }
 
-window.requestAnimationFrame = (callback: () => void) => {
-  const timer = setTimeout(() => callback(Date.now()), 16.6666666667);
-  return timer;
-};
-window.cancelAnimationFrame = (timer: Timer) => {
-  clearTimeout(timer);
-};
+async function drag<
+  T extends HTMLElement & {
+    position: [number, number];
+    target?: [number, number];
+  },
+>(track: T, dist: [number, number]) {
+  const start = [...track.position];
+  await _drag(track, dist);
+  // has moved at all?
+  expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
+}
+
+function logRun(track: Track) {
+  onFrame(() => {
+    console.info(">", track.position, track.currentItem, track.velocity, track.target);
+  });
+}
 
 describe("Track", () => {
-  enviroment();
-
-  afterEach(() => {
-    clearInterval(int);
-  });
-
-  beforeEach(() => {
-    setup();
-  });
+  beforeEach(() => setup());
 
   test(label("import track element"), async () => {
     const { Track } = await import("@sv/elements/track");
@@ -333,13 +392,12 @@ describe("Track", () => {
       deltaX: -200,
       deltaY: 0,
     });
-    track.dispatchEvent(ev);
     console.info("fired");
-
-    expect(ev.defaultPrevented).toBe(true);
+    track.dispatchEvent(ev);
 
     await sleep(100);
 
+    expect(ev.defaultPrevented).toBe(true);
     expect(track.position[0]).not.toBe(start[0]);
   });
 
