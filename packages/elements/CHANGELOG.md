@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.6.0 (2025-03-22)
+
+### Features
+
+- Fix bugs in a-track, add a-list element (svp/atrium!34)
+
 ## 2.6.0-dev.4 (2025-03-22)
 
 ### Features
