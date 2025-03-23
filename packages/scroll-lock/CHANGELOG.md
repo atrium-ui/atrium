@@ -1,19 +1,5 @@
 # @sv/scroll-lock
 
-## 0.0.1-dev.0 (2025-03-22)
-
-### Fixes
-
-- Dont calculate velocity on position
-
-## 1.0.3-dev.1 (2025-03-22)
-
-### Fixes
-
-- Add wrap param for findIndex
-- Add wrap param for findIndex
-- Dont calculate velocity on position
-
 ## 1.0.2 (2024-11-14)
 
 ### Fixes

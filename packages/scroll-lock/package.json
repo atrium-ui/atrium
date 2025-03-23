@@ -1,6 +1,6 @@
 {
   "name": "@sv/scroll-lock",
-  "version": "0.0.1-dev.0",
+  "version": "1.0.2",
   "description": "universal scroll-lock",
   "main": "dist/index.js",
   "type": "module",
