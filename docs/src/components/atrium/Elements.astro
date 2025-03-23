@@ -14,32 +14,3 @@
   import "@sv/elements/scroll";
   import "@sv/elements/chart";
 </script>
-
-
-<style is:global>
-a-pinch-zoom {
-  display: block;
-  overflow: visible;
-  touch-action: none;
-  transform: translate(var(--x), var(--y)) scale(var(--scale));
-  transform-origin: 0 0;
-  will-change: transform;
-}
-</style>
-<script>
-  import PinchZoom from "pinch-zoom-element";
-
-
-  customElements.define("a-pinch-zoom", class extends PinchZoom {
-    constructor() {
-      super();
-
-
-      this.addEventListener("wheel", (e) => {
-          e.preventDefault();
-        }, {
-          passive: false,
-        });
-    }
-  });
-</script>

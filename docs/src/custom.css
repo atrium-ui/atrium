@@ -55,10 +55,9 @@ footer {
 }
 
 .content-panel h1 {
-  font-size: 2.5rem;
+  font-size: 1.75rem;
   line-height: 3rem;
-  margin-bottom: 1rem;
-  margin-top: 2rem;
+  margin-top: 0rem;
 }
 
 .sl-markdown-content p {
@@ -82,7 +81,6 @@ table {
 
 .not-content {
   counter-reset: content-counter;
-  overflow: hidden;
 }
 
 .counted {

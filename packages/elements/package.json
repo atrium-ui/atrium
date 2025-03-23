@@ -74,20 +74,10 @@
       "import": "./packages/time/dist/index.js",
       "require": "./packages/time/dist/index.cjs"
     },
-    "./pager": {
-      "types": "./packages/pager/src/index.ts",
-      "import": "./packages/pager/dist/index.js",
-      "require": "./packages/pager/dist/index.cjs"
-    },
     "./range": {
       "types": "./packages/range/src/index.ts",
       "import": "./packages/range/dist/index.js",
       "require": "./packages/range/dist/index.cjs"
-    },
-    "./filter": {
-      "types": "./packages/filter/src/index.ts",
-      "import": "./packages/filter/dist/index.js",
-      "require": "./packages/filter/dist/index.cjs"
     },
     "./toast": {
       "types": "./packages/toast/src/index.ts",

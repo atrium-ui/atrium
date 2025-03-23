@@ -91,17 +91,14 @@ function currentPage(page?: string) {
    	<ul class="p-0 m-0 list-none">
   	 {stories.map((story) => (
   		<li class="pb-2">
-        <a-expandable opened={currentPage(story.slug) || undefined}>
-          <div slot="toggle" class="relative">
-            <a
-              class="docs-nav-link"
-              href={`/${basePath}/${subpath}/${story.slug}`}
-              aria-current={currentPage(story.slug) ? "page" : undefined}
-            >{story.name}</a>
-
-            <button class="absolute right-0 top-0">▼</button>
-          </div>
-
+        <div class="relative">
+          <a
+            class="docs-nav-link"
+            href={`/${basePath}/${subpath}/${story.slug}`}
+            aria-current={currentPage(story.slug) ? "page" : undefined}
+          >{story.name}</a>
+        </div>
+        <a-expandable opened>
           <ul class="p-0 m-0 list-none">
             {story.entries.map((entry) => (
               <li>

@@ -1,6 +1,6 @@
 ---
 import { Tabs, TabItem, Code } from "@astrojs/starlight/components";
-import { Headline, Icon } from "package:/components";
+import { Icon } from "package:/components";
 
 export interface Props {
   title?: string;
@@ -10,7 +10,7 @@ export interface Props {
 const file = Astro.props.code?.trim();
 ---
 
-<Headline>{Astro.props.title || "Example"}</Headline>
+<h2>{Astro.props.title || "Example"}</h2>
 
 <div class="not-content box w-full flex flex-col items-left justify-center">
   <div class="p-4">

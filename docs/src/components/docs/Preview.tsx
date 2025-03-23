@@ -2,7 +2,7 @@
 
 import "./Preview.css";
 import { type ParentProps, createSignal, onMount } from "solid-js";
-import { OpenStoryButton, StoryFrame } from "./Docs";
+import { Controls, Meta, OpenStoryButton, StoryFrame } from "./Docs";
 
 export function Preview(props: ParentProps) {
   const [id, setId] = createSignal<string>("");
@@ -32,6 +32,10 @@ export function Preview(props: ParentProps) {
           </div>
 
           <StoryFrame canvasId={id()} />
+
+          <div class="docs-story-controls-container">
+            <Controls of={variantId()} />
+          </div>
         </div>
       ) : (
         props.children

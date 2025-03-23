@@ -19,7 +19,7 @@ const { data: meta } = Astro.locals.starlightRoute.entry;
 <div class="page sl-flex">
   <header class="header"><slot name="header" /></header>
 	{
-		hasSidebar && !meta.fullscreen && (
+		hasSidebar && (
 			<a-scroll transition:persist={`navigation.${subpath}`} class="sidebar print:hidden" aria-label={Astro.locals.t('sidebarNav.accessibleLabel')}>
 				<MobileMenuToggle />
 				<div id="starlight__sidebar" class="sidebar-pane">
@@ -30,7 +30,7 @@ const { data: meta } = Astro.locals.starlightRoute.entry;
 			</a-scroll>
 		)
 	}
-	<div class="main-frame">
+	<div class="main-frame" data-layout-fullscreen={meta.fullscreen}>
 	  {meta.stage ? <Stage /> : ""}
 		<Preview client:load><slot /></Preview>
 	</div>

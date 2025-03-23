@@ -12,7 +12,6 @@ const ComboboxItem = function Item(props: { value: string; class?: string }, { s
       class={twMerge(
         "block cursor-pointer rounded-sm px-2",
         "hover:bg-zinc-100 active:bg-zinc-200 [&[selected]]:bg-zinc-200",
-        "dark:active:bg-zinc-700 dark:hover:bg-zinc-600 dark:[&[selected]]:bg-zinc-700",
         props.class,
       )}
       value={props.value}
@@ -80,7 +79,7 @@ export const Combobox = defineComponent(
                 {[...values.value].map((option) => (
                   <div
                     key={option.value}
-                    class="mr-1 flex items-center gap-1 whitespace-nowrap rounded-sm bg-zinc-50 pr-1 pl-2 text-left text-sm leading-none dark:bg-zinc-800"
+                    class="mr-1 flex items-center gap-1 whitespace-nowrap rounded-sm bg-zinc-50 pr-1 pl-2 text-left text-sm leading-none"
                   >
                     <span>{option.innerText}</span>
 
@@ -91,7 +90,7 @@ export const Combobox = defineComponent(
                         arr.splice(arr.indexOf(option), 1);
                         values.value = arr;
                       }}
-                      class="flex items-center justify-center rounded-full bg-zinc-50 p-0 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 focus:outline-hidden focus:ring-2 focus:ring-[currentColor] dark:bg-zinc-800 dark:text-zinc-500 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
+                      class="flex items-center justify-center rounded-full bg-zinc-50 p-0 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 focus:outline-hidden focus:ring-2 focus:ring-[currentColor]"
                     >
                       <svg
                         fill="none"
@@ -114,7 +113,7 @@ export const Combobox = defineComponent(
             </InputSearch>
           </div>
 
-          <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-50 p-1 dark:bg-zinc-800">
+          <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-50 p-1">
             {props.options
               .filter((opt) => !filter.value || opt.label.match(filter.value))
               .map((option) => (

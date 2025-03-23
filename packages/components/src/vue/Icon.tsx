@@ -7,7 +7,7 @@ export function Icon(props: {
     <span
       aria-hidden="true"
       class={[
-        "inline-block align-sub leading-none [&>svg]:block [&>svg]:h-[1em] [&>svg]:w-[1em]",
+        "align-sub leading-none [&>svg]:block [&>svg]:h-[1em] [&>svg]:w-[1em]",
         props.class,
       ]}
     >

@@ -54,7 +54,7 @@ export function Stories() {
     }
 
     const args = storyDefinition.args;
-    const parameters = storyDefinition.parameters;
+    const parameters = storyDefinition.parameters || {};
     const globals = storyDefinition.globals || {};
 
     const vars = variant();
@@ -74,7 +74,7 @@ export function Stories() {
     }
 
     setGlobals(globals || {});
-    setLayout(parameters.layout || "default");
+    setLayout(parameters?.layout || "default");
 
     // framework specific
     render(renderStory(args), root);

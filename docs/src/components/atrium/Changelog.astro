@@ -1,20 +1,15 @@
 ---
-import { join } from "node:path";
-import fs from "node:fs";
-import { remark } from "remark";
-import remarkHtml from "remark-html";
+import { join, resolve } from "node:path";
 
 export interface Props {
   package: string;
 }
 
-const path = join("../packages/", Astro.props.package, "/CHANGELOG.md");
-const content = fs.readFileSync(path, "utf-8");
-const txt = `${content.split("\n").slice(1, 25).join("\n")}\n\n...`;
-const html = await remark().use(remarkHtml).process(txt);
+const path = join(resolve("../"), "packages", Astro.props.package, "/CHANGELOG.md");
+const { Content } = await import(path);
 ---
 
 <br>
-<div set:html={html} />
+<Content />
 <br>
 <a target="_blank" href={`https://gitlab.s-v.de/svp/atrium/-/blob/main/packages/${Astro.props.package}/CHANGELOG.md`}>Full changelog</a>

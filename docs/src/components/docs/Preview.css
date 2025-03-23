@@ -87,3 +87,17 @@
 .docs-story-loading * {
   opacity: 0;
 }
+
+.docs-story-preview .docs-story-controls-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: auto;
+  height: auto;
+  margin: 0.75rem 1rem;
+  padding: 0.33rem var(--toolbar-padding-x);
+  border: 1px solid #eee;
+  border-radius: 0.33rem;
+  background-color: #f8f8f8;
+}
