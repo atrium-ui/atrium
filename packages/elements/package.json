@@ -35,6 +35,9 @@
     "chart.js": "^4.4.3"
   },
   "exports": {
+    "./CHANGELOG.md": {
+      "import": "./CHANGELOG.md"
+    },
     ".": {
       "types": "./index.d.ts",
       "import": "./index.js"

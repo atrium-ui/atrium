@@ -11,6 +11,9 @@
   "module": "dist/sprite-sheet.js",
   "type": "module",
   "exports": {
+    "./CHANGELOG.md": {
+      "import": "./CHANGELOG.md"
+    },
     "./sheet": {
       "types": "./dist/sprite-sheet.d.ts",
       "import": "./dist/sprite-sheet.js",

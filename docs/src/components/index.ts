@@ -1,5 +1,4 @@
 export { default as Elements } from "./atrium/Elements.astro";
-export { default as Changelog } from "./atrium/Changelog.astro";
 export { default as Command } from "./atrium/Command.astro";
 export { default as Example } from "./atrium/Example.astro";
 export { default as File } from "./atrium/File.astro";

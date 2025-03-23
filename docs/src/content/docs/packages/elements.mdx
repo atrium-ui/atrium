@@ -3,7 +3,8 @@ title: "@sv/elements"
 description: A reference page in my new Starlight docs site.
 ---
 
-import { Pills, Lit, Changelog, Command } from "package:/components";
+import { Pills, Lit, Command } from "package:/components";
+import Changelog from "@sv/elements/CHANGELOG.md";
 
 This package includes all custom-elements used in components.
 
@@ -23,4 +24,7 @@ Make sure your project is set up with access to the registry as described in [Se
 
 ## Changelog
 
-<Changelog package="elements" />
+<br/>
+<Changelog />
+<br/>
+<a target="_blank" href={`https://gitlab.s-v.de/svp/atrium/-/blob/main/packages/elements/CHANGELOG.md`}>Full changelog</a>
