@@ -1,3 +1,9 @@
+## 0.5.3 (2025-03-28)
+
+### Features
+
+- Support using icons from other packages (svp/atrium!36)
+
 ## 0.5.2 (2025-01-07)
 
 ### Fixes
