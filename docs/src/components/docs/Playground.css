@@ -2,6 +2,13 @@ a-layout {
   height: calc(100vh - 11rem);
 }
 
+a-layout-group {
+  --tab-background: white;
+  --tab-hover-background: #eee;
+  --tab-active-background: #eee;
+  --tab-font-color: black;
+}
+
 monaco-editor {
   display: block;
   width: 100%;
@@ -17,4 +24,62 @@ iframe {
 
 .content-panel:has(a-layout) {
   padding: 0rem;
+}
+
+a-list {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  max-width: 600px;
+  padding: 8px 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+a-list-item {
+  padding: 16px 24px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+a-list-item[selected] {
+  background-color: #f0f0f0;
+}
+
+.commandmenu-wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.commandmenu-wrapper:not([enabled]) {
+  display: none;
+}
+
+.commandmenu {
+  margin-top: 2rem;
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  max-width: 600px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.commandmenu input {
+  display: block;
+  font-size: 24px;
+  padding: 16px 24px;
+}
+
+.commandmenu-list {
+  max-height: 300px;
+  overflow-y: auto;
 }

@@ -9,6 +9,7 @@ vars:
       "packages/components",
       "packages/elements",
       "packages/scroll-lock",
+      "packages/icons",
       "packages/svg-sprites",
     ]
 
