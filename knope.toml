@@ -23,6 +23,11 @@ versioned_files = ["packages/svg-sprites/package.json"]
 changelog = "packages/svg-sprites/CHANGELOG.md"
 scopes = ["svg-sprites"]
 
+[packages.icons]
+versioned_files = ["packages/icons/package.json"]
+changelog = "packages/icons/CHANGELOG.md"
+scopes = ["icons"]
+
 [[workflows]]
 name = "release"
 
