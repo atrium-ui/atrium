@@ -7,13 +7,13 @@ import {
 import chokidar from "chokidar";
 
 function isComponentImport(id: string) {
-  return id.match("svg-sprites_svg-icon") || id.match("svg-sprites/svg-icon");
+  return id.match("svg-sprites_svg-icon") || id.match("@sv/svg-sprites/svg-icon");
 }
 
 function isSheetImport(id: string) {
   return (
     id.match("svg-sprites_sheet") ||
-    id.match("svg-sprites/sheet") ||
+    id.match("@sv/svg-sprites/sheet") ||
     id === "svg-sprites:sheet"
   );
 }

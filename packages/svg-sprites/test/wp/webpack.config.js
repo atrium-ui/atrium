@@ -11,7 +11,7 @@ export default {
       {
         use: [
           {
-            loader: "svg-sprites/loader",
+            loader: "@sv/svg-sprites/loader",
             options: {
               dir: [dir1, dir2],
             },

@@ -46,7 +46,7 @@
     "test:webpack": "webpack watch -c test/wp/webpack.config.js",
     "build": "npm run build:main && npm run build:component && npm run build:vite && npm run build:webpack",
     "build:main": "tsup src/sprite-sheet.ts -d dist --format esm,cjs --dts",
-    "build:component": "tsup src/component/Icon.ts -d dist --format esm,cjs --dts --external svg-sprites/sheet",
+    "build:component": "tsup src/component/Icon.ts -d dist --format esm,cjs --dts --external @sv/svg-sprites/sheet",
     "build:vite": "tsup src/plugin/vite-plugin.ts -d dist --format esm,cjs --dts --external chokidar",
     "build:webpack": "tsup src/loader/webpack-loader.ts -d dist --format esm,cjs --dts"
   },

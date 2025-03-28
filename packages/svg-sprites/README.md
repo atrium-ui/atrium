@@ -11,7 +11,7 @@ Includes a CustomElement that makes it easy to use any icon.
 Or SSR the SVG symbols into the page.
 
 ```typescript
-import { svg } from 'svg-sprites/sheet';
+import { svg } from '@sv/svg-sprites/sheet';
 ```
 
 ```html
@@ -28,7 +28,7 @@ import { svg } from 'svg-sprites/sheet';
 ## Vite configuration
 
 ```typescript
-import svgSprite from "svg-sprites/vite";
+import svgSprite from "@sv/svg-sprites/vite";
 
 export default {
   plugins: [
@@ -46,7 +46,7 @@ module.exports = {
     config.module.rules.push({
       use: [
         {
-          loader: "svg-sprites/loader",
+          loader: "@sv/svg-sprites/loader",
           options: {
             dir: "./assets/icons/*.svg",
           },
@@ -65,7 +65,7 @@ Place your SVG files in a directory of choice, by default `/assets/icons/**/*.sv
 
 ```typescript
 // import component
-import "svg-sprites/svg-icon";
+import "@sv/svg-sprites/svg-icon";
 // ...
 ```
 

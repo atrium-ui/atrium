@@ -1,5 +1,5 @@
-import "svg-sprites/svg-icon";
-import { svg, blob } from "svg-sprites/sheet";
+import "@sv/svg-sprites/svg-icon";
+import { svg, blob } from "@sv/svg-sprites/sheet";
 
 window.addEventListener("DOMContentLoaded", () => {
   console.info(blob());

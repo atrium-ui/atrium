@@ -2,16 +2,12 @@
   "name": "vite",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "happy-dom": "^15.7.4",
+    "@sv/icons": "../../../icons",
     "svg-sprites": "file:../../",
-    "vite": "^5.4.3",
-    "vitest": "^2.1.1"
+    "vite": "^5.4.3"
   }
 }

@@ -18,7 +18,7 @@ Or SSR the SVG symbols into the page, for use with `<use href="..."/>` tags.
 
 ```astro
 ---
-import { svg } from 'svg-sprites/sheet';
+import { svg } from '@sv/svg-sprites/sheet';
 ---
 <div class="hidden" set:html={await svg()}></div>
 ```
@@ -38,7 +38,7 @@ Make sure your project is set up with access to the registry as described in [Se
 ### Vite configuration
 
 ```ts
-import svgSprite from "svg-sprites/vite";
+import svgSprite from "@sv/svg-sprites/vite";
 
 export default {
   plugins: [
@@ -56,7 +56,7 @@ module.exports = {
     config.module.rules.push({
       use: [
         {
-          loader: "svg-sprites/loader",
+          loader: "@sv/svg-sprites/loader",
           options: {
             dir: "./assets/icons/*.svg",
           },
@@ -72,7 +72,7 @@ module.exports = {
 ### Component Usage
 
 ```ts
-import "svg-sprites/svg-icon";
+import "@sv/svg-sprites/svg-icon";
 ```
 
 ```html
