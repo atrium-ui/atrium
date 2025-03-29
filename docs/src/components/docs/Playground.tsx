@@ -105,20 +105,31 @@ async function init() {
   }
 
   async function share() {
-    const value = files["index.tsx"]?.model.getValue();
-    const uid = await fetch(SHARE_SERVICE_URL, {
-      method: "POST",
-      body: value,
-    }).then((response) => response.text());
+    try {
+      const value = files["index.tsx"]?.model.getValue();
+      const uid = await fetch(SHARE_SERVICE_URL, {
+        method: "POST",
+        body: value,
+      }).then((response) => response.text());
 
-    const url = `${location.origin}${location.pathname}?${uid}`;
-    const toast = new Toast({
-      message: url,
-      onClick: () => {
-        navigator.clipboard.writeText(url);
-      },
-    });
-    toastfeed.append(toast);
+      const url = `${location.origin}${location.pathname}?${uid}`;
+      const toast = new Toast({
+        message: url,
+        onClick: () => {
+          navigator.clipboard.writeText(url);
+        },
+      });
+      toastfeed.append(toast);
+    } catch (error) {
+      const toast = new Toast({
+        message: error.message,
+        onClick: () => {
+          navigator.clipboard.writeText(url);
+        },
+      });
+      toastfeed.append(toast);
+      console.error(error);
+    }
   }
 
   function initCommandMenu() {
@@ -249,7 +260,7 @@ export function Playground() {
         </a-layout-column>
       </a-layout>
 
-      <div class="absolute top-4 right-4 z-50">
+      <div class="-top-16 absolute right-4 z-50">
         <button
           type="button"
           class="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
