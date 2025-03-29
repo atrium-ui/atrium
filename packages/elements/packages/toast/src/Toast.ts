@@ -150,9 +150,14 @@ export class Toast extends LitElement {
         position: relative;
         transition: opacity .5s ease, transform .5s ease, height 0.5s ease, padding 0.5s ease, margin 0.5s ease;
         overflow: hidden;
-        margin: 4px 0 0 0;
         min-width: 220px;
         max-width: 500px;
+
+        margin: 4px 0 0 0;
+        box-shadow: 0 4px 8px rgba(0, 2px, 8px, 0.07);
+        background: rgb(39 39 42 / 1);
+        border: 1px solid rgb(24 24 27 / 1);
+        padding: 10px 24px;
       }
 
       :host(:hover) {
@@ -161,15 +166,6 @@ export class Toast extends LitElement {
 
       :host(:active) {
         filter: brightness(0.95);
-      }
-
-      .default-container {
-        padding: 10px 24px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 2px, 8px, 0.07);
-        background: rgb(39 39 42 / 1);
-        border: 1px solid rgb(24 24 27 / 1);
-        margin: 4px 0 0 0;
       }
     `;
   }
@@ -225,9 +221,7 @@ export class Toast extends LitElement {
   protected render() {
     return html`
       <slot>
-        <div class="default-container">
-          <span>${this.message}</span>
-        </div>
+        <span>${this.message}</span>
       </slot>
     `;
   }

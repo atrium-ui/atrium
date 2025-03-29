@@ -83,3 +83,15 @@ a-list-item[selected] {
   max-height: 300px;
   overflow-y: auto;
 }
+
+/* Toasts */
+
+a-toast {
+  background: white;
+  margin: 4px 0 0 0;
+  box-shadow: 0 4px 8px rgba(0, 2px, 8px, 0.07);
+  background: white;
+  border: 1px solid rgb(24 24 27 / 1);
+  padding: 10px 24px;
+  border-radius: 8px;
+}

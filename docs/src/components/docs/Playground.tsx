@@ -12,6 +12,9 @@ import tsEditorWorker from "monaco-editor/esm/vs/language/typescript/ts.worker.j
 
 import exampleCodeHtml from "./playground/Examplecode.html.txt?raw";
 import exampleCodeTsx from "./playground/Examplecode.tsx.txt?raw";
+import { Toast } from "@sv/elements/toast";
+
+const SHARE_SERVICE_URL = "https://lkydy-sharing.deno.dev/";
 
 globalThis.MonacoEnvironment = {
   getWorkerUrl: (moduleId, label) => {
@@ -53,19 +56,36 @@ async function transform(code: string) {
 
 let iframe: HTMLIFrameElement;
 
-const files = {
-  "index.html": {
-    default: exampleCodeHtml,
-    model: null,
-  },
-  "index.tsx": {
-    default: exampleCodeTsx,
-    model: null,
-  },
-} as Record<string, { default: string; model: any }>;
+async function init() {
+  iframe = document.createElement("iframe");
+  iframe.src = "/atrium/story";
 
-async function pushCode(iframe: HTMLIFrameElement, _files: typeof files) {
-  if (iframe.contentWindow) {
+  await import("@atrium-ui/layout");
+  await esbuild.initialize({ wasmURL: esbuildUrl });
+  const monaco: typeof import("monaco-editor") = await import(
+    "monaco-editor/esm/vs/editor/editor.main.js"
+  );
+
+  const files = {
+    "index.html": {
+      default: exampleCodeHtml,
+      model: null,
+    },
+    "index.tsx": {
+      default: exampleCodeTsx,
+      model: null,
+    },
+  } as Record<string, { default: string; model: any }>;
+
+  const query = location.search.slice(1);
+  if (query) {
+    const remotePreset = await fetch(`${SHARE_SERVICE_URL}${query}`).then((response) =>
+      response.text(),
+    );
+    files["index.tsx"].default = remotePreset;
+  }
+
+  async function pushCode(iframe: HTMLIFrameElement, _files: typeof files) {
     iframe.contentWindow.location.reload();
 
     await new Promise((resolve) => {
@@ -83,60 +103,68 @@ async function pushCode(iframe: HTMLIFrameElement, _files: typeof files) {
       iframe.contentWindow.document.body.appendChild(script);
     }
   }
-}
 
-async function init() {
-  iframe = document.createElement("iframe");
-  iframe.src = "/atrium/story";
+  async function share() {
+    const value = files["index.tsx"]?.model.getValue();
+    const uid = await fetch(SHARE_SERVICE_URL, {
+      method: "POST",
+      body: value,
+    }).then((response) => response.text());
 
-  await import("@atrium-ui/layout");
-
-  await esbuild.initialize({ wasmURL: esbuildUrl });
-
-  const monaco: typeof import("monaco-editor") = await import(
-    "monaco-editor/esm/vs/editor/editor.main.js"
-  );
-
-  const menu = document.querySelector(".commandmenu-wrapper");
-  const menuList = document.querySelector(".commandmenu");
-  window.addEventListener("keydown", (event) => {
-    if (event.key === "p" && event.metaKey) {
-      menu?.enable();
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  });
-  menuList?.addEventListener("change", async (event) => {
-    const value = menuList.getValueOfOption(event.option);
-    menu?.disable();
-
-    // copy component code
-    const module = await allComponentsCode[value]();
-    navigator.clipboard.writeText(module.default);
-  });
-
-  const input = document.querySelector("input");
-  const list = document.querySelector(".commandmenu-list");
-
-  if (input && list) {
-    const renderList = () => {
-      const filter = input?.value.toLowerCase();
-      list.innerHTML = "";
-
-      for (const item of Object.keys(allComponentsCode)) {
-        if (!item.toLowerCase().match(filter)) continue;
-
-        const itemElement = document.createElement("a-list-item");
-        itemElement.setAttribute("value", item);
-        itemElement.innerHTML = item;
-        list.appendChild(itemElement);
-      }
-    };
-
-    input?.addEventListener("input", renderList);
-
-    renderList();
+    const url = `${location.origin}${location.pathname}?${uid}`;
+    const toast = new Toast({
+      message: url,
+      onClick: () => {
+        navigator.clipboard.writeText(url);
+      },
+    });
+    toastfeed.append(toast);
   }
+
+  function initCommandMenu() {
+    const menu = document.querySelector(".commandmenu-wrapper");
+    const menuList = document.querySelector(".commandmenu");
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "p" && event.metaKey) {
+        menu?.enable();
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    });
+    menuList?.addEventListener("change", async (event) => {
+      const value = menuList.getValueOfOption(event.option);
+      menu?.disable();
+
+      // copy component code
+      const module = await allComponentsCode[value]();
+      navigator.clipboard.writeText(module.default);
+    });
+
+    const input = document.querySelector("input");
+    const list = document.querySelector(".commandmenu-list");
+
+    if (input && list) {
+      const renderList = () => {
+        const filter = input?.value.toLowerCase();
+        list.innerHTML = "";
+
+        for (const item of Object.keys(allComponentsCode)) {
+          if (!item.toLowerCase().match(filter)) continue;
+
+          const itemElement = document.createElement("a-list-item");
+          itemElement.setAttribute("value", item);
+          itemElement.innerHTML = item;
+          list.appendChild(itemElement);
+        }
+      };
+
+      input?.addEventListener("input", renderList);
+
+      renderList();
+    }
+  }
+
+  initCommandMenu();
 
   customElements.define(
     "monaco-editor",
@@ -178,31 +206,36 @@ async function init() {
           pushCode(iframe, files);
         });
 
-        pushCode(iframe, files);
-
         this._model = model;
 
-        this.loadPreset();
+        this.load();
+
+        pushCode(iframe, files);
       }
 
-      async loadPreset() {
-        // const code = (await allComponentsCode.Accordion()).default;
+      async load() {
         const code = files[this.dataset.file].default;
         this._model.setValue(`${code}\n`);
         files[this.dataset.file].model = this._model;
       }
     },
   );
+
+  return {
+    share,
+  };
 }
 
 export function Playground() {
-  console.info("init playground");
+  let share: () => Promise<string>;
 
-  init();
+  init().then((exp) => {
+    share = exp.share;
+  });
 
   return (
-    <div class={["not-content"].join(" ")}>
-      <a-layout>
+    <div class={["relative", "not-content"].join(" ")}>
+      <a-layout class="z-0">
         <a-layout-column>
           <a-layout-group tabs>
             <monaco-editor data-file="index.html" tab="index.html" />
@@ -216,12 +249,26 @@ export function Playground() {
         </a-layout-column>
       </a-layout>
 
+      <div class="absolute top-4 right-4 z-50">
+        <button
+          type="button"
+          class="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+          onClick={() => {
+            share();
+          }}
+        >
+          Share
+        </button>
+      </div>
+
       <a-blur class="commandmenu-wrapper">
         <a-list class="commandmenu">
           <input type="text" placeholder="Search..." />
           <div class="commandmenu-list" />
         </a-list>
       </a-blur>
+
+      <a-toast-feed id="toastfeed" class="absolute right-4 bottom-4 z-50" />
     </div>
   );
 }
