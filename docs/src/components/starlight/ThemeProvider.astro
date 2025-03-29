@@ -4,4 +4,8 @@
   };
 
   document.documentElement.dataset.theme = 'light'
+
+  document.addEventListener('astro:page-load', () => {
+    document.documentElement.dataset.theme = 'light'
+  });
 </script>
