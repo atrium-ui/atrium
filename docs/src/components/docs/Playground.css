@@ -1,5 +1,7 @@
+@reference "../../custom.css";
+
 a-layout {
-  height: calc(100vh - 11rem);
+  height: calc(100vh - 4.45rem);
 }
 
 a-layout-group {
@@ -20,6 +22,10 @@ iframe {
   height: 100%;
   width: 100%;
   border: 1px solid #e0e0e0;
+}
+
+.content-panel:not(:has(a-layout)) {
+  display: none;
 }
 
 .content-panel:has(a-layout) {
@@ -86,12 +92,6 @@ a-list-item[selected] {
 
 /* Toasts */
 
-a-toast {
-  background: white;
-  margin: 4px 0 0 0;
-  box-shadow: 0 4px 8px rgba(0, 2px, 8px, 0.07);
-  background: white;
-  border: 1px solid rgb(24 24 27 / 1);
-  padding: 10px 24px;
-  border-radius: 8px;
+custom-toast {
+  @apply bg-green-200 border border-gray-300 rounded-md shadow-md overflow-hidden my-2 px-4 cursor-pointer;
 }
