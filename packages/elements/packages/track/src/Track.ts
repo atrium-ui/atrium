@@ -1210,8 +1210,6 @@ export class Track extends LitElement {
     if (this.slotElement) {
       if (diff.abs() > 1.5) {
         this.slotElement.style.transform = `translateX(${diff.x}px) translateY(${diff.y}px)`;
-      } else {
-        this.slotElement.style.transform = "translateX(0px) translateY(0px)";
       }
     }
 
