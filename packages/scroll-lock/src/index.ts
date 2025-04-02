@@ -1,14 +1,3 @@
-/*
- *  @todo: firefox is blocking scroll area during overflow scrolling. is running because of non-passive eventlisteners and async scrolling.
- *  @todo: magic mouse seams to scroll even if the mouse is not hover the browser window
- *  @todo: maybe use https://github.com/d4nyll/lethargy to normalize scrollevent in different browsers with different input devices
- */
-
-type ScrollLockOptions = {
-  debug?: boolean;
-  allowElements?: string[];
-};
-
 /**
  * # scroll-lock
  *
@@ -29,38 +18,21 @@ export class ScrollLock {
   private initialClientY = 0;
   private initialScrollX = 0;
   private initialScrollY = 0;
-  private hasPassiveEvents = false;
 
   private options = {
-    debug: false,
     allowElements: ["textarea", "iframe"],
   };
 
-  constructor(options?: ScrollLockOptions) {
+  constructor(options?: {
+    allowElements?: string[];
+  }) {
     if (options) {
       this.options = {
-        debug: options.debug || false,
         allowElements: options.allowElements
           ? [...this.options.allowElements, ...options.allowElements]
           : this.options.allowElements,
       };
     }
-
-    if (typeof window !== "undefined") {
-      this.checkForPassiveEvents();
-    }
-  }
-
-  private checkForPassiveEvents() {
-    const passiveTestCallback = () => {};
-    const passiveTestOptions = Object.defineProperty({}, "passive", {
-      get: () => {
-        this.hasPassiveEvents = true;
-      },
-    });
-
-    window.addEventListener("testPassive", passiveTestCallback, passiveTestOptions);
-    window.removeEventListener("testPassive", passiveTestCallback, passiveTestOptions);
   }
 
   private getDirection(event) {
@@ -81,27 +53,19 @@ export class ScrollLock {
     }
   };
 
-  private handleScroll = (event, element) => {
-    const e = event || window.event;
-    const direction = this.getDirection(e);
+  private handleScroll = (event: TouchEvent | WheelEvent, element?: HTMLElement) => {
+    const direction = this.getDirection(event);
 
-    if (e.targetTouches && e.targetTouches.length > 1) {
-      if (this.options.debug) {
-        console.warn(
-          "Scrolllock: prevent scrolling because it seems to be multi touch",
-          e,
-        );
-      }
-
-      return this.handlePrevent(e);
+    if (
+      event instanceof TouchEvent &&
+      event.targetTouches &&
+      event.targetTouches.length > 1
+    ) {
+      return this.handlePrevent(event);
     }
 
     if (element && element.scrollTop === 0 && direction === "up") {
-      if (this.options.debug) {
-        console.warn("Scrolllock: prevent scrolling because scrollTop is reached", e);
-      }
-
-      return this.handlePrevent(e);
+      return this.handlePrevent(event);
     }
 
     if (
@@ -109,46 +73,40 @@ export class ScrollLock {
       element.scrollHeight - element.scrollTop <= element.clientHeight &&
       direction === "down"
     ) {
-      if (this.options.debug) {
-        console.warn("Scrolllock: prevent scrolling because scrollBottom is reached", e);
-      }
-
-      return this.handlePrevent(e);
+      return this.handlePrevent(event);
     }
 
-    e.stopPropagation();
+    event.stopPropagation();
 
     return true;
   };
 
-  private handlePrevent = (event) => {
-    const e = event || window.event;
-    const element = e.target || e.srcElement;
+  private handlePrevent = (event: Event) => {
+    const element = event.target;
 
     if (this.enabled) {
       // if target is allowed to scroll do so
       for (const allowElement of this.options.allowElements) {
-        if (element.matches && e.target.matches(allowElement)) {
+        // @ts-ignore
+        if (element.matches && event.target.matches(allowElement)) {
           return false;
         }
       }
 
       // prevent scroll on multi touch
-      if (e.touches && e.touches.length > 1) {
+      if (event instanceof TouchEvent && event.touches && event.touches.length > 1) {
         return true;
       }
 
       // magic mouse occurs scroll event even if window was leaving so scroll back to inital scroll position. it works but opera seams to be flickering sometimes.
-      if (e.type === "scroll") {
+      if (event.type === "scroll") {
         window.scrollTo(this.initialScrollX, this.initialScrollY);
       }
 
       // try to prevent default event
-      if (e.preventDefault && e.cancelable) {
-        e.preventDefault();
+      if (event.preventDefault && event.cancelable) {
+        event.preventDefault();
       }
-
-      e.returnValue = false;
 
       return false;
     }
@@ -161,34 +119,9 @@ export class ScrollLock {
       this.initialScrollX = window.scrollX;
       this.initialScrollY = window.scrollY;
 
-      window.addEventListener(
-        "scroll",
-        this.handlePrevent,
-        this.hasPassiveEvents
-          ? {
-              passive: false,
-            }
-          : undefined,
-      );
-
-      window.addEventListener(
-        "wheel",
-        this.handlePrevent,
-        this.hasPassiveEvents
-          ? {
-              passive: false,
-            }
-          : undefined,
-      );
-      document.addEventListener(
-        "touchmove",
-        this.handlePrevent,
-        this.hasPassiveEvents
-          ? {
-              passive: false,
-            }
-          : undefined,
-      );
+      window.addEventListener("scroll", this.handlePrevent, { passive: true });
+      window.addEventListener("wheel", this.handlePrevent, { passive: true });
+      document.addEventListener("touchmove", this.handlePrevent, { passive: true });
 
       // biome-ignore lint/complexity/noForEach: <explanation>
       this.options.allowElements.forEach((elementSelector) => {
@@ -200,45 +133,32 @@ export class ScrollLock {
               (event) => {
                 this.handleScroll(event, elementNode);
               },
-              this.hasPassiveEvents
-                ? {
-                    passive: false,
-                  }
-                : undefined,
+              { passive: true },
             );
             elementNode.addEventListener(
               "touchmove",
               (event) => {
                 this.handleScroll(event, elementNode);
               },
-              this.hasPassiveEvents
-                ? {
-                    passive: false,
-                  }
-                : undefined,
+              { passive: true },
             );
-
-            elementNode.addEventListener(
-              "touchstart",
-              this.handleScrollStart,
-              this.hasPassiveEvents
-                ? {
-                    passive: false,
-                  }
-                : undefined,
-            );
+            elementNode.addEventListener("touchstart", this.handleScrollStart, {
+              passive: true,
+            });
           },
         );
       });
 
       this.enabled = true;
+
+      document.body.style.overflow = "clip";
+      document.body.style.scrollbarGutter = "stable";
     }
   }
 
   public disable() {
     if (this.enabled) {
-      window.removeEventListener("scroll", this.handlePrevent); // useless?
-
+      window.removeEventListener("scroll", this.handlePrevent);
       window.removeEventListener("wheel", this.handlePrevent);
       document.removeEventListener("touchmove", this.handlePrevent);
 
@@ -247,17 +167,17 @@ export class ScrollLock {
         [].forEach.call(
           document.querySelectorAll(elementSelector),
           (elementNode: HTMLElement) => {
-            // @ts-ignore
-            elementNode.removeEventListener("wheel", this.handleScroll); // doesn't do anything?
-            // @ts-ignore
-            elementNode.removeEventListener("touchmove", this.handleScroll); // doesn't do anything?
-
+            elementNode.removeEventListener("wheel", this.handleScroll);
+            elementNode.removeEventListener("touchmove", this.handleScroll);
             elementNode.removeEventListener("touchstart", this.handleScrollStart);
           },
         );
       });
 
       this.enabled = false;
+
+      document.body.style.overflow = "";
+      document.body.style.scrollbarGutter = "";
     }
   }
 }
