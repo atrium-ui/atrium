@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.6.1-dev.0 (2025-04-02)
+
+### Fixes
+
+- a-track: Reduce reflows
+
 ## 2.6.0 (2025-03-22)
 
 ### Features
