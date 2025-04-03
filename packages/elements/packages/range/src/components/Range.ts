@@ -43,6 +43,7 @@ export class Range extends LitElement {
         user-drag: none;
         cursor: pointer;
         padding: var(--range-track-padding);
+        margin-right: var(--range-handle-size);
       }
 
       .progress {
@@ -104,6 +105,10 @@ export class Range extends LitElement {
   @property({ type: Number })
   public value = 0;
 
+  public get valueAsNumber(): number {
+    return this.value;
+  }
+
   /** Minimum value of the range. */
   @property({ type: Number })
   public min = 0;
@@ -128,7 +133,7 @@ export class Range extends LitElement {
   private lastProgress = 0;
 
   protected onHandleMouseDown(event: MouseEvent): void {
-    this.lastProgress = this.value;
+    this.lastProgress = this.progress;
     this.dragStartPosition = event.clientX;
   }
 
@@ -138,9 +143,11 @@ export class Range extends LitElement {
 
   protected onMouseMove(e: MouseEvent): void {
     if (this.dragStartPosition) {
-      const deltaPixels = (e.x - this.dragStartPosition) / window.devicePixelRatio;
-      const deltaProgress =
-        (deltaPixels / this.progressElement.clientWidth) * devicePixelRatio;
+      const deltaPixels = e.x - this.dragStartPosition;
+      const rect = this.progressElement.getClientRects()[0];
+      if (!rect) throw new Error("Progress element not found");
+
+      const deltaProgress = deltaPixels / rect.width;
 
       const progress = Math.min(1, Math.max(this.lastProgress + deltaProgress, 0));
 
@@ -155,10 +162,10 @@ export class Range extends LitElement {
     }
 
     const rect = this.progressElement.getClientRects()[0];
-    if (!rect) return;
+    if (!rect) throw new Error("Progress element not found");
 
     const handleWidth = 5;
-    const progress = (event.x - handleWidth - rect.x) / this.progressElement.clientWidth;
+    const progress = (event.x - handleWidth - rect.x) / rect.width;
     this.updateProgress(progress);
 
     this.onHandleMouseDown(event);
