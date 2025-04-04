@@ -1,5 +1,18 @@
 # @sv/elements
 
+## 2.7.0-dev.1 (2025-04-03)
+
+### Features
+
+- Customizable range slider
+- Customizable range slider
+
+## 2.7.0-dev.0 (2025-04-03)
+
+### Features
+
+- Customizable range slider
+
 ## 2.6.0 (2025-03-22)
 
 ### Features
