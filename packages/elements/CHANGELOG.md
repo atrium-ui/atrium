@@ -1,5 +1,16 @@
 # @sv/elements
 
+## 2.7.0 (2025-04-04)
+
+### Features
+
+- Customizable range slider (svp/atrium!42)
+
+### Fixes
+
+- Blur focus-trap not working in shadowDOM (svp/atrium!43)
+- Improve toast animations (svp/atrium!38)
+
 ## 2.7.0-dev.1 (2025-04-03)
 
 ### Features
