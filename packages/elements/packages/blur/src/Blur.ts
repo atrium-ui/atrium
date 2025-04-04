@@ -34,9 +34,11 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
   );
 }
 
-function findActiveElement(element: HTMLElement) {
-  if (element?.shadowRoot) {
-    return findActiveElement(element.shadowRoot.activeElement as HTMLElement);
+function findActiveElement(element: Element | null) {
+  if (element === null) return null;
+
+  if (element.shadowRoot) {
+    return findActiveElement(element.shadowRoot.activeElement);
   }
   return element;
 }
@@ -155,7 +157,7 @@ export class Blur extends LitElement {
     }
   }
 
-  private lastActiveElement: HTMLElement | null | undefined = null;
+  private lastActiveElement: Element | null | undefined = null;
 
   /** Disable the blur element */
   public disable() {
@@ -167,7 +169,7 @@ export class Blur extends LitElement {
     }
 
     this.enabled = false;
-    this.lastActiveElement?.focus();
+    (this.lastActiveElement as HTMLElement)?.focus();
   }
 
   /** Enable the blur element */
@@ -225,14 +227,15 @@ export class Blur extends LitElement {
 
     if (e.key === "Tab") {
       const elements = this.focusableElements();
+      const activeElement = findActiveElement(document.activeElement);
 
       if (e.shiftKey) {
-        if (document.activeElement === elements[0]) {
+        if (activeElement === elements[0]) {
           elements[elements.length - 1]?.focus();
           e.preventDefault();
         }
       } else {
-        if (document.activeElement === elements[elements.length - 1]) {
+        if (activeElement === elements[elements.length - 1]) {
           elements[0]?.focus();
           e.preventDefault();
         }
