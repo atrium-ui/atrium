@@ -16,7 +16,6 @@ import { LitElement, css, html } from "lit";
  */
 export class ToastFeed extends LitElement {
   static instance: ToastFeed | null = null;
-  observer: MutationObserver;
 
   static get styles() {
     return css`
@@ -25,9 +24,7 @@ export class ToastFeed extends LitElement {
         --transition-duration: 0.5s;
         --transition-timing-function: ease;
       }
-
-      .add-toast-transition
-      {
+      .add-toast-transition {
         transition: transform var(--transition-duration) var(--transition-timing-function);
       }
     `;
@@ -43,62 +40,14 @@ export class ToastFeed extends LitElement {
   constructor() {
     super();
     ToastFeed.instance = this;
-    this.observer = new MutationObserver((mutations) => this.handleMutations(mutations));
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.startObserving();
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.stopObserving();
-  }
-
-  startObserving() {
-    const config = { childList: true, subtree: true };
-    this.observer.observe(this, config);
-  }
-
-  stopObserving() {
-    this.observer.disconnect();
-  }
-
-  firstUpdated() {
-    this.element?.addEventListener("transitionend", () => {
-      if (this.element) {
-        this.element.classList.remove("add-toast-transition");
-      }
-    });
-  }
-
-  handleMutations(mutations) {
-    for (const mutation of mutations) {
-      if (mutation.type === "childList") {
-        for (const node of mutation.addedNodes) {
-          if (node.nodeType === Node.ELEMENT_NODE) {
-            if (!this.element) return;
-            const element = this.element;
-            requestAnimationFrame(() => {
-              element.style.transform = `translateY(${node.clientHeight}px)`;
-              requestAnimationFrame(() => {
-                element.classList.add("add-toast-transition");
-                element.style.transform = "translateY(0px)";
-              });
-            });
-          }
-        }
-      }
-    }
-  }
-
-  get element() {
-    return this.shadowRoot?.children[0] as HTMLElement;
+  handleSlotChange() {
+    //
   }
 
   protected render() {
-    return html`<div><slot></slot></div>`;
+    return html`<div><slot @slotchange="${this.handleSlotChange}"></slot></div>`;
   }
 }
 
@@ -148,24 +97,11 @@ export class Toast extends LitElement {
       :host {
         display: block;
         position: relative;
-        transition: opacity .5s ease, transform .5s ease, height 0.5s ease, padding 0.5s ease, margin 0.5s ease;
-        overflow: hidden;
+        transition: opacity .5s ease, height 0.5s ease, margin 0.5s ease, transform 0.5s ease;
         min-width: 220px;
         max-width: 500px;
-
-        margin: 4px 0 0 0;
-        box-shadow: 0 4px 8px rgba(0, 2px, 8px, 0.07);
-        background: rgb(39 39 42 / 1);
-        border: 1px solid rgb(24 24 27 / 1);
-        padding: 10px 24px;
-      }
-
-      :host(:hover) {
-        filter: brightness(0.98);
-      }
-
-      :host(:active) {
-        filter: brightness(0.95);
+        margin-top: 1rem;
+        margin-bottom: 1rem;
       }
     `;
   }
@@ -173,57 +109,137 @@ export class Toast extends LitElement {
   message?: string;
   time?: number;
 
-  constructor(options: ToastOptions) {
+  private killed = false;
+
+  constructor(public options: ToastOptions) {
     super();
 
     this.message = options?.message;
     this.time = options?.time;
 
     this.addEventListener("click", (e) => {
-      options.onClick?.(e);
+      this.options.onClick?.(e);
 
       if (e.defaultPrevented) return;
+    });
 
-      setTimeout(() => this.kill(), 100);
+    this.addEventListener("transitionend", (e) => {
+      if (this.killed) {
+        this.remove();
+        this.dispatchEvent(new CustomEvent("killed"));
+        return;
+      }
+
+      this.style.height = "";
+    });
+
+    this.addEventListener("pointerdown", (event) => {
+      this.start = [event.clientX, event.clientY];
+      this.style.transition = "none";
     });
   }
 
   connectedCallback(): void {
     super.connectedCallback();
 
+    requestAnimationFrame(() => this.onShow());
+
+    window.addEventListener("pointerup", this.onPointerUp);
+    window.addEventListener("pointermove", this.onPointerMove);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+
+    window.removeEventListener("pointerup", this.onPointerUp);
+    window.removeEventListener("pointermove", this.onPointerMove);
+  }
+
+  private start: [number, number] | undefined;
+  private velocity: [number, number] = [0, 0];
+
+  private onPointerUp = () => {
+    this.start = undefined;
+
+    this.style.transition = "";
+
+    if (!this.killed) {
+      this.style.transform = "";
+    }
+  };
+
+  private onPointerMove = (event: PointerEvent) => {
+    if (!this.start || this.killed) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+
+    const absoluteDelta = [
+      event.clientX - this.start[0],
+      event.clientY - this.start[1],
+    ] as const;
+
+    this.velocity[0] += event.movementX;
+    this.velocity[0] *= 0.8;
+
+    if (Math.abs(absoluteDelta[0]) > 5) {
+      this.style.transform = `translateX(${absoluteDelta[0]}px)`;
+    }
+    if (Math.abs(this.velocity[0]) > 100) {
+      this.dismiss();
+    }
+  };
+
+  private onShow() {
+    const height = this.offsetHeight;
+
+    this.style.transition = "none";
+
+    this.style.height = "0px";
+    this.style.opacity = "0";
+    this.style.margin = "0";
+    this.offsetHeight; // trigger reflow
+
+    this.style.transition = "";
+
+    this.style.height = `${height}px`;
+    this.style.opacity = "";
+    this.style.margin = "";
+
     if (this.time !== undefined && this.time > 0) {
       setTimeout(() => this.kill(), this.time);
     }
+  }
+
+  public dismiss() {
+    if (this.killed) return;
+    this.killed = true;
+
+    this.style.transition = "";
+
+    this.style.opacity = "0";
   }
 
   /**
    * Kills the toast and removes it from the DOM.
    */
   public kill() {
+    if (this.killed) return;
+    this.killed = true;
+
+    this.style.transition = "";
+
     this.style.height = `${this.offsetHeight}px`;
     this.offsetHeight; // trigger reflow
 
-    this.style.transform = "translateY(10px)";
+    this.style.margin = "0";
     this.style.height = "0px";
-    this.style.paddingTop = "0";
-    this.style.paddingBottom = "0";
-    this.style.marginTop = "0";
-    this.style.marginBottom = "0";
     this.style.opacity = "0";
-
-    this.ontransitionend = (e) => {
-      if (e.propertyName !== "height") return;
-      this.remove();
-      this.dispatchEvent(new CustomEvent("killed"));
-    };
   }
 
   protected render() {
-    return html`
-      <slot>
-        <span>${this.message}</span>
-      </slot>
-    `;
+    return html`<slot><div>${this.message}</div></slot>`;
   }
 }
 

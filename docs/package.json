@@ -12,7 +12,7 @@
     "@astrojs/react": "^4.2.0",
     "@astrojs/solid-js": "^5.0.4",
     "@astrojs/starlight": "^0.32.0",
-    "@astrojs/starlight-tailwind": "^3.0.0",
+    "@astrojs/starlight-tailwind": "^3.0.1",
     "@astrojs/tailwind": "^6.0.0",
     "@astrojs/vue": "^5.0.6",
     "@atrium-ui/layout": "^2.0.0",

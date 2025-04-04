@@ -52,43 +52,6 @@ export function toast(options: ToastOptions) {
   return toast;
 }
 
-const toastContentStyles = `
-  .content {
-    display: flex;
-    margin-top: 0.5rem;
-    padding: 1rem 1.5rem;
-    font-weight: 300;
-    background: #333;
-    color: white;
-    border-radius: 0.5rem;
-    max-width: 100%;
-  }
-
-  .status-icon {
-    margin-top: 0.15rem;
-    margin-right: 1em;
-    width: 1em;
-    height: 1em;
-    flex: none;
-  }
-
-  button {
-    all: inherit;
-    cursor: pointer;
-    pointer-events: auto;
-  }
-
-  button:hover {
-    color: blue;
-  }
-
-  .text-button {
-    margin-top: 0.8rem;
-    text-decoration: underline;
-  }
-`;
-
-// @ts-ignore
 export const ToastContent = defineCustomElement(
   (props: {
     message: string;
@@ -96,24 +59,22 @@ export const ToastContent = defineCustomElement(
     button?: ToastButton;
   }) => {
     return () => (
-      <div style="pointer-events: none">
-        <div class="content">
-          {props.icon && <Icon class="status-icon" name={props.icon} />}
-          <div>
-            <div>{props.message}</div>
-            {props.button && (
-              <Button class="text-button" onClick={props.button.onClick}>
-                {props.button.label}
-              </Button>
-            )}
-          </div>
+      <div class="flex gap-4 rounded-lg bg-white px-6 py-4 text-black shadow-md">
+        {props.icon && <Icon class="flex-none text-xl" name={props.icon} />}
+        <div>
+          <div class="pointer-events-none pb-4">{props.message}</div>
+          {props.button && (
+            <Button class="text-button" onClick={(e) => props.button?.onClick()}>
+              {props.button.label}
+            </Button>
+          )}
         </div>
       </div>
     );
   },
   {
+    shadowRoot: false,
     props: ["message", "icon", "button"],
-    styles: [toastContentStyles],
   },
 );
 

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
-@plugin '@astrojs/starlight-tailwind';
-
 @source '../../packages/components/src/vue/*.tsx';
+
+@plugin '@astrojs/starlight-tailwind';
 
 :root {
   --theme-color: #ccc;
@@ -48,6 +48,10 @@ header {
 
   border-bottom: none !important;
   backdrop-filter: blur(24px);
+}
+
+.header {
+  grid-template-columns: 170px 1fr auto;
 }
 
 footer {
