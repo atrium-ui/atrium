@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
 import { Card } from "../Card";
-import "@sv/elements/chart";
+import "@atrium-ui/elements/chart";
 
 export function ChartCard() {
   return (

@@ -7,7 +7,7 @@ const LICENSE = `/**
 function options(format: "esm" | "cjs" | undefined) {
   return {
     entrypoints: ["./src/index.ts"],
-    external: ["lit", "@sv/elements", "@sv/scroll-lock"],
+    external: ["lit", "@atrium-ui/elements", "@atrium-ui/scroll-lock"],
     footer: LICENSE,
     outdir: "./dist",
     format: format,

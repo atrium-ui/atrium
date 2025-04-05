@@ -5,7 +5,7 @@ const locks = new Set();
  *
  * @example
  * ```js
- * import { ScrollLock } from '@sv/scroll-lock';
+ * import { ScrollLock } from '@atrium-ui/scroll-lock';
  * const scrollLock = new ScrollLock();
  *
  * // lock page scrolling
