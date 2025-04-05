@@ -10,7 +10,7 @@ import {
   onFrame,
   press,
   setup,
-} from "@sv/test";
+} from "@atrium-ui/test";
 
 beforeEach(() => setup());
 
@@ -97,7 +97,7 @@ function logRun(track: Track) {
 
 describe("Track", () => {
   test(label("import track element"), async () => {
-    const { Track } = await import("@sv/elements/track");
+    const { Track } = await import("@atrium-ui/elements/track");
     expect(Track).toBeDefined();
 
     // is defined in custom element registry
@@ -105,7 +105,7 @@ describe("Track", () => {
   });
 
   test("construct track element", async () => {
-    const { Track } = await import("@sv/elements/track");
+    const { Track } = await import("@atrium-ui/elements/track");
 
     // is constructable
     expect(new Track()).toBeInstanceOf(Track);

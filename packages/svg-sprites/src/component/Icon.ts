@@ -3,7 +3,7 @@ let supportsAdoptingStyleSheets = true;
 let loaded: Promise<void>;
 
 async function loadSvgSheet() {
-  const { svg } = await import("@sv/svg-sprites/sheet");
+  const { svg } = await import("@atrium-ui/svg-sprites/sheet");
   svgSheet = document.createElement("div");
   svgSheet.innerHTML = await svg();
   if (svgSheet.children[0]) {

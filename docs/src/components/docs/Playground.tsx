@@ -1,7 +1,7 @@
 import "./Playground.css";
 
-import "@sv/elements/blur";
-import "@sv/elements/list";
+import "@atrium-ui/elements/blur";
+import "@atrium-ui/elements/list";
 
 // esbuild
 import * as esbuild from "esbuild-wasm";
@@ -12,9 +12,9 @@ import tsEditorWorker from "monaco-editor/esm/vs/language/typescript/ts.worker.j
 
 import exampleCodeHtml from "./playground/Examplecode.html.txt?raw";
 import exampleCodeTsx from "./playground/Examplecode.tsx.txt?raw";
-import { Toast } from "@sv/elements/toast";
+import { Toast } from "@atrium-ui/elements/toast";
 import { createSignal, onMount } from "solid-js";
-import { Blur } from "@sv/elements/blur";
+import { Blur } from "@atrium-ui/elements/blur";
 import { css, html } from "lit";
 
 const componentsImports = import.meta.glob(

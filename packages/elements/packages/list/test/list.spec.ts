@@ -3,7 +3,7 @@ import { test, expect, describe } from "bun:test";
 const NODE_NAME = "a-list";
 
 test("import a-list element", async () => {
-  const { List } = await import("@sv/elements/list");
+  const { List } = await import("@atrium-ui/elements/list");
   expect(List).toBeDefined();
 
   // is defined in custom element registry
@@ -11,7 +11,7 @@ test("import a-list element", async () => {
 });
 
 test("construct a-list element", async () => {
-  const { List } = await import("@sv/elements/list");
+  const { List } = await import("@atrium-ui/elements/list");
 
   // is constructable
   expect(new List()).toBeInstanceOf(List);

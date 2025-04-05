@@ -4,7 +4,7 @@ import type { Blur } from "../src/Blur.js";
 const NODE_NAME = "a-blur";
 
 test("import element", async () => {
-  const { Blur } = await import("@sv/elements/blur");
+  const { Blur } = await import("@atrium-ui/elements/blur");
   expect(Blur).toBeDefined();
 
   // is defined in custom element registry
@@ -134,7 +134,7 @@ function click(ele: HTMLElement) {
 }
 
 async function createBlur() {
-  await import("@sv/elements/blur");
+  await import("@atrium-ui/elements/blur");
   const ele = document.createElement("div");
   document.body.appendChild(ele);
 

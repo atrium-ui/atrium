@@ -18,7 +18,7 @@ export default defineConfig({
     resolve: {
       alias: {
         "package:": "/src",
-        "@components": "@sv/components",
+        "@components": "@atrium-ui/components",
         "@docs": "/src/components/docs",
       },
     },

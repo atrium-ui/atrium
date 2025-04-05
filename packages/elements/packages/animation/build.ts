@@ -7,7 +7,7 @@ const LICENSE = `/**
 function options(format: "esm" | "cjs" | undefined) {
   return {
     entrypoints: ["./src/index.ts"],
-    external: ["lit", "@sv/elements", "@rive-app/canvas-advanced"],
+    external: ["lit", "@atrium-ui/elements", "@rive-app/canvas-advanced"],
     footer: LICENSE,
     outdir: "./dist",
     format: format,

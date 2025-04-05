@@ -19,7 +19,7 @@ async function newElement(
 }
 
 test("import a-toggle element", async () => {
-  const { ToggleElement } = await import("@sv/elements/toggle");
+  const { ToggleElement } = await import("@atrium-ui/elements/toggle");
   expect(ToggleElement).toBeDefined();
 
   // is defined in custom element registry
@@ -27,7 +27,7 @@ test("import a-toggle element", async () => {
 });
 
 test("construct a-toggle element", async () => {
-  const { ToggleElement } = await import("@sv/elements/toggle");
+  const { ToggleElement } = await import("@atrium-ui/elements/toggle");
 
   // is constructable
   expect(new ToggleElement()).toBeInstanceOf(ToggleElement);

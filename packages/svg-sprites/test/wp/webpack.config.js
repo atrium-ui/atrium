@@ -11,7 +11,7 @@ export default {
       {
         use: [
           {
-            loader: "@sv/svg-sprites/loader",
+            loader: "@atrium-ui/svg-sprites/loader",
             options: {
               dir: [dir1, dir2],
             },

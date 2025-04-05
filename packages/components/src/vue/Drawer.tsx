@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 import { defineComponent, ref, onMounted, effect, nextTick } from "vue";
-import { Track, type InputState, type Easing, type Trait } from "@sv/elements/track";
+import { Track, type InputState, type Easing, type Trait } from "@atrium-ui/elements/track";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
 
