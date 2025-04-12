@@ -129,8 +129,7 @@ function press(ele: HTMLElement, key: string) {
 }
 
 function click(ele: HTMLElement) {
-  ele.dispatchEvent(new MouseEvent("pointerdown", { bubbles: true }));
-  ele.dispatchEvent(new MouseEvent("pointerup", { bubbles: true }));
+  ele.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 }
 
 async function createBlur() {
