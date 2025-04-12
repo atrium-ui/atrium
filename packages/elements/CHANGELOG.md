@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.7.1 (2025-04-12)
+
+### Fixes
+
+- Blur outside click should cancel click event propagation
+
 ## 2.7.0 (2025-04-04)
 
 ### Features
