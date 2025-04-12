@@ -254,9 +254,14 @@ export class Blur extends LitElement {
       allowElements: ["a-blur *", ...this.allowscroll.split(",").filter(Boolean)],
     });
 
-    this.addEventListener("pointerdown", (e: PointerEvent) => {
+    this.addEventListener("click", (e: MouseEvent) => {
       if (!this.shouldBlur(e)) return;
       this.tryBlur();
+
+      // cancel click events, when clicking outside to blur
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
     });
 
     // capture close events coming from inside the blur

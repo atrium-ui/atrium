@@ -264,6 +264,14 @@ export class PopoverTrigger extends LitElement {
   constructor() {
     super();
 
+    new ElementEventListener(this, window, "click", (e) => {
+      if (this.content instanceof Popover) return;
+
+      if (this.opened && !this.contains(e.target)) {
+        this.close();
+      }
+    });
+
     this.addEventListener("click", (e) => {
       if (this.trigger?.contains(e.target as Node)) {
         this.toggle();
@@ -286,14 +294,6 @@ export class PopoverTrigger extends LitElement {
     }
     return undefined;
   }
-
-  private clickFallback = new ElementEventListener(this, window, "click", (e) => {
-    if (this.content instanceof Popover) return;
-
-    if (this.opened && !this.contains(e.target)) {
-      this.close();
-    }
-  });
 
   /**
    * Show the inner popover.
