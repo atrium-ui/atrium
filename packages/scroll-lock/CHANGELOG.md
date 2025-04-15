@@ -1,5 +1,11 @@
 # @sv/scroll-lock
 
+## 1.1.1 (2025-04-15)
+
+### Fixes
+
+- Use overflow-hidden for scroll-locking
+
 ## 1.0.2 (2024-11-14)
 
 ### Fixes
