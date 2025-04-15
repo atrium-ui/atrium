@@ -156,7 +156,7 @@ export class ScrollLock {
     locks.add(this);
     this.enabled = true;
 
-    this.rootElement.style.overflow = "clip";
+    this.rootElement.style.overflow = "hidden";
     this.rootElement.style.scrollbarGutter = "stable";
   }
 
