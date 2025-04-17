@@ -56,7 +56,7 @@ class Transition extends LitElement {
 
   /**
    * What type of transition to use.
-   * - size: Just transition the size of the element.
+   * - size: Transition just the size of the element.
    * - transition: Usees the View-Transitions API
    * - animation: Animate layout changes using CSS animations with the FLIP technique.
    */
