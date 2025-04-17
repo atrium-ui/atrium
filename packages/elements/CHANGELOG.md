@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.8.0-dev.0 (2025-04-17)
+
+### Features
+
+- Add flip animation to a-transition
+
 ## 2.7.1 (2025-04-12)
 
 ### Fixes
