@@ -1,5 +1,15 @@
 # @sv/elements
 
+## 2.8.0-dev.1 (2025-04-19)
+
+### Features
+
+- Add flip animation to a-transition
+
+### Fixes
+
+- Blur regards any element with href as focusable
+
 ## 2.8.0-dev.0 (2025-04-17)
 
 ### Features
