@@ -3,10 +3,10 @@ import { property } from "lit/decorators/property.js";
 import { ScrollLock } from "@sv/scroll-lock";
 
 const SELECTOR_CUSTOM_ELEMENT =
-  "*:not(br,span,script,p,style,div,slot,pre,h1,h2,h3,h4,h5,img,svg)";
+  "*:not(br,span,script,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)";
 
 const SELECTOR_FOCUSABLE =
-  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+  'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -56,6 +56,7 @@ function traverseShadowRealm(
 
   for (const el of rootNode.querySelectorAll<HTMLElement>(SELECTOR_CUSTOM_ELEMENT)) {
     if (el.shadowRoot) {
+      // how to handle elements with a shadowRoot
       elements.push(...traverseShadowRealm(el.shadowRoot, filter));
     }
   }
@@ -68,6 +69,12 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
 
   if (!(el instanceof ShadowRoot) && el.matches?.(SELECTOR_FOCUSABLE)) {
     children.push(el);
+  } else if (el instanceof HTMLSlotElement) {
+    // how to handle a slot element
+    const eles = [...(el.assignedElements() as HTMLElement[])].map((child) => [
+      ...child.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE),
+    ]);
+    children.push(...eles.flat());
   } else {
     children.push(...el.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE));
   }
