@@ -3,7 +3,7 @@ import { property } from "lit/decorators/property.js";
 import { ScrollLock } from "@sv/scroll-lock";
 
 const SELECTOR_CUSTOM_ELEMENT =
-  "*:not(br,span,script,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)";
+  "*:not(br,span,script,slot,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)";
 
 const SELECTOR_FOCUSABLE =
   'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
@@ -69,14 +69,17 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
 
   if (!(el instanceof ShadowRoot) && el.matches?.(SELECTOR_FOCUSABLE)) {
     children.push(el);
-  } else if (el instanceof HTMLSlotElement) {
-    // how to handle a slot element
-    const eles = [...(el.assignedElements() as HTMLElement[])].map((child) => [
-      ...child.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE),
-    ]);
-    children.push(...eles.flat());
   } else {
     children.push(...el.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE));
+  }
+
+  const slots = el.querySelectorAll<HTMLSlotElement>("slot");
+
+  for (const slot of slots) {
+    const assignedElements = slot.assignedElements({ flatten: true }) as HTMLElement[];
+    for (const assignedElement of assignedElements) {
+      children.push(...assignedElement.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE));
+    }
   }
 
   return children;
