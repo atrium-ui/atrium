@@ -1,5 +1,18 @@
 # @sv/elements
 
+## 2.8.0-dev.3 (2025-04-19)
+
+### Features
+
+- Add flip animation to a-transition
+
+### Fixes
+
+- Blur regards any element with href as focusable
+- Blur does not see children in slots
+- Blur does not see children in slots
+- Fix check
+
 ## 2.8.0-dev.2 (2025-04-19)
 
 ### Features
