@@ -58,9 +58,6 @@ function traverseShadowRealm(
     if (el.shadowRoot) {
       // how to handle elements with a shadowRoot
       elements.push(...traverseShadowRealm(el.shadowRoot, filter));
-    } else if (el instanceof HTMLSlotElement) {
-      // how to handle a slot element
-      elements.push(...(el.assignedElements() as HTMLElement[]));
     }
   }
 
@@ -72,6 +69,10 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
 
   if (!(el instanceof ShadowRoot) && el.matches?.(SELECTOR_FOCUSABLE)) {
     children.push(el);
+  } else if (el instanceof HTMLSlotElement) {
+    // how to handle a slot element
+    const eles = [...(el.assignedElements() as HTMLElement[])].map(child => [...child.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE)]);
+    children.push(...eles.flat());
   } else {
     children.push(...el.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE));
   }
