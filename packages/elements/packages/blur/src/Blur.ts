@@ -71,7 +71,9 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
     children.push(el);
   } else if (el instanceof HTMLSlotElement) {
     // how to handle a slot element
-    const eles = [...(el.assignedElements() as HTMLElement[])].map(child => [...child.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE)]);
+    const eles = [...(el.assignedElements() as HTMLElement[])].map((child) => [
+      ...child.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE),
+    ]);
     children.push(...eles.flat());
   } else {
     children.push(...el.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE));
