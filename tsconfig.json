@@ -1,7 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "target": "ES2018",
+    "target": "ES2019",
     "module": "ES2022",
     "moduleResolution": "Bundler",
 
