@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.8.0 (2025-04-24)
+
+### Features
+
+- Fix a-blur expecting anchor without href to be focusable, Adds a-blur to be aware of slots, Adds a-transition animation with using FLIP (svp/atrium!44)
+
 ## 2.8.0-dev.4 (2025-04-19)
 
 ### Features
