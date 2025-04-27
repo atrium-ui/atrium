@@ -44,7 +44,7 @@ export default defineConfig({
       jsx: true,
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.includes("-"),
+          isCustomElement: tag => tag.includes("-"),
         },
       },
     }),
@@ -74,7 +74,6 @@ export default defineConfig({
       },
       components: {
         Header: "./src/components/starlight/Header.astro",
-        ThemeProvider: "./src/components/starlight/ThemeProvider.astro",
       },
     }),
   ],
