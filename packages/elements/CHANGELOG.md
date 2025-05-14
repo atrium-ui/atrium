@@ -6,6 +6,12 @@
 
 - Type fixes
 
+## 2.9.0-dev.0 (2025-05-14)
+
+### Features
+
+- a-track: Listen to touch events too
+
 ## 2.8.0 (2025-04-24)
 
 ### Features
