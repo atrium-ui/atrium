@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.8.1 (2025-05-20)
+
+### Fixes
+
+- Type fixes
+
 ## 2.8.0 (2025-04-24)
 
 ### Features
