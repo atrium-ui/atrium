@@ -8,7 +8,7 @@
   "description": "Atrium Elements",
   "type": "module",
   "scripts": {
-    "check": "tsc --pretty",
+    "check": "tsc",
     "test": "bun test --rerun-each 3 --coverage",
     "publish-package": "task publish"
   },
@@ -25,8 +25,8 @@
     "lit": "^3.1.3"
   },
   "devDependencies": {
-    "@sv/test": "workspace:",
-    "ts-lit-plugin": "^2.0.2"
+    "ts-lit-plugin": "^2.0.2",
+    "@types/bun": "^1.1.0"
   },
   "peerDependencies": {
     "@floating-ui/dom": "^1.6.7",

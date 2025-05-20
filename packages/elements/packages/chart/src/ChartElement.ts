@@ -218,7 +218,7 @@ export class ChartElement extends LitElement {
         this.chart = new Chart(this.canvas, {
           type: this.type,
           options: this.options(),
-          data,
+          data: data as any,
         });
 
         this.loaded = true;

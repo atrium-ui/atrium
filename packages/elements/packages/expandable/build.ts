@@ -1,3 +1,4 @@
+/// <reference types="@types/bun" />
 const LICENSE = `/**
 * @license
 * Copyright (c) 2024 Atrium Contributors

@@ -20,7 +20,7 @@ export class BoxElement extends LitElement {
   private baseDebounceTime = 25;
   private maxDebounceTime = 150;
   private debounceTime = this.baseDebounceTime;
-  private timer: Timer | undefined;
+  private timer: ReturnType<typeof setTimeout> | undefined;
   private timerResolved = false;
 
   /**

@@ -267,7 +267,7 @@ export class PopoverTrigger extends LitElement {
     new ElementEventListener(this, window, "click", (e) => {
       if (this.content instanceof Popover) return;
 
-      if (this.opened && !this.contains(e.target)) {
+      if (this.opened && !this.contains(e.target as Node)) {
         this.close();
       }
     });

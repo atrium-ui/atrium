@@ -1367,7 +1367,7 @@ export class Track extends LitElement {
     this.trait((t) => t.format?.(this));
   };
 
-  public scrollDebounce?: Timer;
+  public scrollDebounce?: ReturnType<typeof setTimeout>;
 
   private onWheel = (wheelEvent: WheelEvent) => {
     if (wheelEvent.ctrlKey === true) {
@@ -1523,7 +1523,7 @@ function isTouch() {
 }
 
 function debounce<T>(callback: (arg: T) => void, ms = 80) {
-  let timeout: Timer;
+  let timeout: ReturnType<typeof setTimeout>;
 
   return (arg: T) => {
     clearTimeout(timeout);
