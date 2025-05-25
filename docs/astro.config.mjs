@@ -1,11 +1,10 @@
 import react from "@astrojs/react";
 import solid from "@astrojs/solid-js";
-import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@astrojs/vue";
 import { defineConfig } from "astro/config";
 import rehypeShiftHeading from "rehype-shift-heading";
-import { atriumDocsIntegration } from "./src/components/docs/integration";
+import mdx from "@astrojs/mdx";
 
 export default defineConfig({
   base: "/atrium/",
@@ -36,6 +35,7 @@ export default defineConfig({
     rehypePlugins: [[rehypeShiftHeading, { shift: 1 }]],
   },
   integrations: [
+    mdx(),
     react({
       include: ["**/react/*.{tsx}"],
     }),
@@ -44,7 +44,7 @@ export default defineConfig({
       jsx: true,
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.includes("-"),
+          isCustomElement: tag => tag.includes("-"),
         },
       },
     }),
@@ -57,24 +57,6 @@ export default defineConfig({
         "**/docs/Docs.tsx",
         "**/docs/Playground.tsx",
       ],
-    }),
-    atriumDocsIntegration({
-      favicon: "favicon.png",
-      title: "Atrium",
-      routeMiddleware: "./src/routeData.ts",
-      customCss: ["./src/custom.css"],
-      logo: {
-        dark: "./assets/logo-dark.svg",
-        light: "./assets/logo-light.svg",
-        replacesTitle: true,
-        alt: "Atrium Logo",
-      },
-      social: {
-        gitlab: "https://gitlab.s-v.de/svp/atrium",
-      },
-      components: {
-        Header: "./src/components/starlight/Header.astro",
-      },
     }),
   ],
 });
