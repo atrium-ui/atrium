@@ -2,12 +2,6 @@
 
 @source '../../packages/components/src/vue/*.tsx';
 
-@plugin '@astrojs/starlight-tailwind';
-
-:root {
-  --theme-color: #ccc;
-}
-
 main {
   position: relative;
   min-height: calc(100vh - var(--sl-nav-height) - 3vh);
@@ -36,16 +30,9 @@ main {
   -webkit-tap-highlight-color: transparent;
   scrollbar-gutter: stable;
   scrollbar-color: #888 transparent;
-
-  --sl-content-width: 1184px;
-  /* --sl-content-width: 1440px; */
-  --sl-sidebar-width: 16rem;
-  --sl-color-bg-nav: transparent !important;
 }
 
 header {
-  --sl-color-bg-nav: transparent;
-
   border-bottom: none !important;
   backdrop-filter: blur(24px);
 }

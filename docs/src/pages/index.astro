@@ -1,3 +1,30 @@
-<html>
+---
+import { getEntry } from "astro:content";
+import "../main.css";
+import { getCollection, render } from "astro:content";
 
+const allDocs = await getCollection("docs");
+
+const entry = await getEntry("docs", "index");
+
+const { Content, headings, remarkPluginFrontmatter } = await render(entry);
+---
+
+<html>
+  <head>
+
+  </head>
+  <body>
+    <nav>
+      <ul>
+        {allDocs.map(doc => {
+          return <li>{doc.data.title} [{doc.id}]</li>
+        })}
+      </ul>
+    </nav>
+
+    <main>
+      <Content />
+    </main>
+  </body>
 </html>

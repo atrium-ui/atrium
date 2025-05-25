@@ -1,19 +1,21 @@
+import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
-import { docsSchema } from "@astrojs/starlight/schema";
 
 export const collections = {
   docs: defineCollection({
-    schema: docsSchema({
-      extend: z.object({
-        // Add a new field to the schema.
-        fullscreen: z.boolean().optional(),
-        stage: z
-          .object({
-            headline: z.string().optional(),
-            subline: z.string().optional(),
-          })
-          .optional(),
-      }),
+    loader: glob({ pattern: "**/*.mdx", base: "./src/content" }),
+    schema: z.object({
+      title: z.string().optional(),
+      group: z.string().optional(),
+      icon: z.string().optional(),
+      template: z.string().optional(),
+      fullscreen: z.boolean().optional(),
+      stage: z
+        .object({
+          headline: z.string().optional(),
+          subline: z.string().optional(),
+        })
+        .optional(),
     }),
   }),
 };
