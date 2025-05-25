@@ -6,6 +6,7 @@ export const collections = {
     loader: glob({ pattern: "**/*.mdx", base: "./src/content" }),
     schema: z.object({
       title: z.string().optional(),
+      description: z.string().optional(),
       group: z.string().optional(),
       icon: z.string().optional(),
       template: z.string().optional(),

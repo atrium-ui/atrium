@@ -1,0 +1,27 @@
+---
+import { getEntry } from "astro:content";
+import { getCollection, render } from "astro:content";
+import Layout from "../layout.astro";
+
+export async function getStaticPaths() {
+  const allDocs = await getCollection("docs");
+  return allDocs.map((doc) => {
+    return {
+      params: { uri: doc.id },
+    };
+  });
+}
+
+const { uri } = Astro.params;
+const entry = await getEntry("docs", uri || "index");
+
+if (!entry) {
+  throw new Error("404");
+}
+
+const { Content, headings, remarkPluginFrontmatter } = await render(entry);
+---
+
+<Layout>
+  <Content />
+</Layout>

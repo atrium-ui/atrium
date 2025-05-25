@@ -3,7 +3,7 @@ import { LinkCard, CardGrid, Aside } from "@astrojs/starlight/components";
 import fs from "node:fs";
 import matter from "gray-matter";
 
-const basePath = "./src/content/docs/components";
+const basePath = "./src/content/components";
 const files = fs.readdirSync(basePath).filter((p) => {
   return p.endsWith(".mdx") && !p.includes("---") && !p.includes("index");
 });

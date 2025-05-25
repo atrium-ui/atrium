@@ -12,6 +12,10 @@ main {
   display: none;
 }
 
+a[href] {
+  text-decoration: underline;
+}
+
 /* Fonts */
 
 @font-face {
