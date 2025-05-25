@@ -1,5 +1,4 @@
 ---
-import { Tabs, TabItem, Code } from "@astrojs/starlight/components";
 import { Icon } from "package:/components";
 
 export interface Props {
@@ -30,7 +29,7 @@ const file = Astro.props.code?.trim();
     </button>
 
     <div>
-      <Code code={file} lang="tsx" />
+      <code lang="tsx">{file}</code>
     </div>
   </a-expandable>
 </div>

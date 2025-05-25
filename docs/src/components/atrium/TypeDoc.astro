@@ -1,6 +1,5 @@
 ---
 import path from "node:path";
-import { Code } from "@astrojs/starlight/components";
 import {
   Application,
   type DeclarationReflection,
@@ -237,7 +236,7 @@ const source = dec?.sources?.[0];
           <Fragment set:html={example} />
         </div> -->
         {example.map(exp => {
-          return <Code code={exp} lang="js" />;
+          return <code lang="js">{exp}</code>;
         })}
       </div >
     ) : (
