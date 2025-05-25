@@ -5,6 +5,10 @@
 main {
   position: relative;
   min-height: calc(100vh - var(--sl-nav-height) - 3vh);
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 2rem;
+  box-sizing: content-box;
 }
 
 /* trying to prevent layout shift with unstyled elements */

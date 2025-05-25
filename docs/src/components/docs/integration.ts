@@ -1,7 +1,6 @@
-import starlight from "@astrojs/starlight";
 import { basename } from "node:path";
 
-export function atriumDocsIntegration(starlightConfig) {
+export function atriumDocsIntegration() {
   return [
     {
       name: "astro-atrium-docs",
@@ -30,16 +29,5 @@ export function atriumDocsIntegration(starlightConfig) {
         },
       },
     },
-    starlight({
-      ...starlightConfig,
-      pagination: false,
-      components: {
-        ...(starlightConfig.components || {}),
-        Head: "@docs/Head.astro",
-        // Hero: "@docs/Hero.astro",
-        PageFrame: "@docs/PageFrame.astro",
-        Sidebar: "@docs/Sidebar.astro",
-      },
-    }),
   ];
 }

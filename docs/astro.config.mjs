@@ -5,10 +5,9 @@ import vue from "@astrojs/vue";
 import { defineConfig } from "astro/config";
 import rehypeShiftHeading from "rehype-shift-heading";
 import mdx from "@astrojs/mdx";
+import { atriumDocsIntegration } from "./src/components/docs/integration";
 
 export default defineConfig({
-  base: "/atrium/",
-  site: "https://sv.pages.s-v.de",
   publicDir: "assets",
   devToolbar: {
     enabled: false,
@@ -35,6 +34,7 @@ export default defineConfig({
     rehypePlugins: [[rehypeShiftHeading, { shift: 1 }]],
   },
   integrations: [
+    atriumDocsIntegration(),
     mdx(),
     react({
       include: ["**/react/*.{tsx}"],

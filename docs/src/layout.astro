@@ -13,13 +13,21 @@ const base = import.meta.env.BASE_URL;
     <ClientRouter />
   </head>
   <body>
-    <nav>
-      <ul>
-        {allDocs.map(doc => {
-          return <li><a href={`/${[...base.split("/"), ...doc.id.split("/")].filter(Boolean).join("/")}`}>{doc.data.title} [{doc.id}]</a></li>
-        })}
-      </ul>
-    </nav>
+    <header>
+      <div>
+        <a href={base}>
+          <img src="../../../assets/atrium-light.png" class="h-12" />
+        </a>
+      </div>
+
+      <nav class="pb-12">
+        <ul class="flex gap-4 flex-wrap">
+          {allDocs.map(doc => {
+            return <li><a href={`/${[...base.split("/"), ...doc.id.split("/")].filter(Boolean).join("/")}`}>{doc.data.title} [{doc.id}]</a></li>
+          })}
+        </ul>
+      </nav>
+    </header>
 
     <main>
       <slot />
