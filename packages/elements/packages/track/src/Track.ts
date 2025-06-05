@@ -250,6 +250,7 @@ export class Track extends LitElement {
     this.addEventListener("keydown", this.onKeyDown);
 
     this.addEventListener("pointerdown", this.onPointerDown);
+    this.addEventListener("touchstart", this.onPointerDown);
 
     this.addEventListener("pointerleave", () => {
       this.inputState.leave.value = true;
@@ -269,6 +270,7 @@ export class Track extends LitElement {
     this.role = "region";
 
     this.listener(window, "pointermove", this.onPointerMove);
+    this.listener(window, "touchmove", this.onPointerMove);
     this.listener(window, ["pointerup", "pointercancel"], this.onPointerUpOrCancel);
 
     const intersectionObserver = new IntersectionObserver((intersections) => {
@@ -1449,23 +1451,31 @@ export class Track extends LitElement {
     }
   };
 
-  private onPointerDown = (pointerEvent: PointerEvent) => {
-    if (pointerEvent.button !== 0) return; // only left click
+  private onPointerDown = (pointerEvent: PointerEvent | TouchEvent) => {
+    if (pointerEvent instanceof PointerEvent) {
+      if (pointerEvent.button !== 0) return; // only left click
+    }
 
     // Try to focus this element when clicked on for arrow key navigation,
     // will only work when tabindex=0.
     this.focus();
 
     this.mouseDown = true;
-    this.mousePos.x = pointerEvent.x;
-    this.mousePos.y = pointerEvent.y;
+
+    if (pointerEvent instanceof PointerEvent) {
+      this.mousePos.x = pointerEvent.x;
+      this.mousePos.y = pointerEvent.y;
+
+      pointerEvent.preventDefault();
+      pointerEvent.stopPropagation();
+    } else if (pointerEvent instanceof TouchEvent) {
+      this.mousePos.x = pointerEvent.touches[0]?.clientX || 0;
+      this.mousePos.y = pointerEvent.touches[0]?.clientY || 0;
+    }
 
     // stop moving when grabbing
     this.setTarget(undefined);
     this.acceleration.set(0);
-
-    pointerEvent.preventDefault();
-    pointerEvent.stopPropagation();
   };
 
   private onPointerUpOrCancel = (pointerEvent: PointerEvent) => {
@@ -1481,8 +1491,19 @@ export class Track extends LitElement {
     }
   };
 
-  private onPointerMove = (pointerEvent: PointerEvent) => {
-    const pos = new Vec2(pointerEvent.x, pointerEvent.y);
+  private onPointerMove = (pointerEvent: PointerEvent | TouchEvent) => {
+    let x = 0;
+    let y = 0;
+
+    if (pointerEvent instanceof PointerEvent) {
+      x = pointerEvent.x;
+      y = pointerEvent.y;
+    } else if (pointerEvent instanceof TouchEvent) {
+      x = pointerEvent.touches[0]?.clientX || 0;
+      y = pointerEvent.touches[0]?.clientY || 0;
+    }
+
+    const pos = new Vec2(x, y);
     const delta = Vec2.sub(pos, this.mousePos);
 
     if (!this.canMove(delta)) return;
