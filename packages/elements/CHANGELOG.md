@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.9.0 (2025-06-05)
+
+### Features
+
+- a-track: listen to touch events for better touch responsiveness (svp/atrium!45)
+
 ## 2.9.0-dev.1 (2025-06-05)
 
 ### Features
