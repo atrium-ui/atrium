@@ -1,10 +1,26 @@
 # @sv/elements
 
+## 2.9.0-dev.1 (2025-06-05)
+
+### Features
+
+- a-track: Listen to touch events too
+
+### Fixes
+
+- a-track: Click not working
+
 ## 2.8.1 (2025-05-20)
 
 ### Fixes
 
 - Type fixes
+
+## 2.9.0-dev.0 (2025-05-14)
+
+### Features
+
+- a-track: Listen to touch events too
 
 ## 2.8.0 (2025-04-24)
 
