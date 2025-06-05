@@ -1465,6 +1465,9 @@ export class Track extends LitElement {
     if (pointerEvent instanceof PointerEvent) {
       this.mousePos.x = pointerEvent.x;
       this.mousePos.y = pointerEvent.y;
+
+      pointerEvent.preventDefault();
+      pointerEvent.stopPropagation();
     } else if (pointerEvent instanceof TouchEvent) {
       this.mousePos.x = pointerEvent.touches[0]?.clientX || 0;
       this.mousePos.y = pointerEvent.touches[0]?.clientY || 0;
@@ -1473,9 +1476,6 @@ export class Track extends LitElement {
     // stop moving when grabbing
     this.setTarget(undefined);
     this.acceleration.set(0);
-
-    pointerEvent.preventDefault();
-    pointerEvent.stopPropagation();
   };
 
   private onPointerUpOrCancel = (pointerEvent: PointerEvent) => {
