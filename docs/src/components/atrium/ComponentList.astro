@@ -2,6 +2,8 @@
 import fs from "node:fs";
 import matter from "gray-matter";
 
+const base = import.meta.env.BASE_URL;
+
 const basePath = "./src/content/components";
 const files = fs.readdirSync(basePath).filter((p) => {
   return p.endsWith(".mdx") && !p.includes("---") && !p.includes("index");
@@ -25,7 +27,7 @@ for (const file of files) {
     components.map(comp => {
       return (
         <a
-          href={`./components/${comp.id}/`}
+          href={`${base}components/${comp.id}/`}
           class="not-content block relative rounded-md border dark:border-zinc-700 text-inherit overflow-hidden no-underline"
         >
           <!-- <div>
