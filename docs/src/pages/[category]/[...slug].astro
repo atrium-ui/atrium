@@ -1,19 +1,20 @@
 ---
 import { getEntry } from "astro:content";
 import { getCollection, render } from "astro:content";
-import Layout from "../layout.astro";
+import Layout from "../../layout.astro";
 
 export async function getStaticPaths() {
   const allDocs = await getCollection("docs");
   return allDocs.map((doc) => {
+    const [category, ...slug] = doc.id.split("/");
     return {
-      params: { uri: doc.id },
+      params: { category, slug: slug.join("/") },
     };
   });
 }
 
-const { uri } = Astro.params;
-const entry = await getEntry("docs", uri || "index");
+const { category, slug } = Astro.params;
+const entry = await getEntry("docs", [category, slug].join("/"));
 
 if (!entry) {
   throw new Error("404");
@@ -23,5 +24,13 @@ const { Content, headings, remarkPluginFrontmatter } = await render(entry);
 ---
 
 <Layout>
-  <Content />
+  <div class="grid grid-cols-[auto_1fr]">
+    <div class="sidebar">
+      Test
+    </div>
+
+    <div>
+      <Content />
+    </div>
+  </div>
 </Layout>

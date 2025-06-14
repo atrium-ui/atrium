@@ -263,14 +263,13 @@
 }
 
 @utility typo-button-s {
-  @apply text-base leading-[135%]; /* leading matching the default icon height of 22px */
+  @apply text-sm leading-[135%]; /* leading matching the default icon height of 22px */
 }
 @utility typo-textlink-s {
-  @apply text-base leading-[135%]; /* leading matching the default icon height of 22px */
+  @apply text-sm leading-[135%]; /* leading matching the default icon height of 22px */
 }
 @utility typo-textlink-m {
-  @apply text-[1.375rem] md:text-[1.8125rem] lg:text-[2.4375rem] xl:text-[2.875rem];
-  @apply leading-[135%];
+  @apply text-base leading-[135%];
 }
 
 @utility style-fill-* {
@@ -558,12 +557,12 @@
 }
 
 @utility fade-in {
-  animation: fadeIn 1s ease both;
+  animation: fadeIn 1.5s .25s ease both;
 }
 
 @keyframes moveIn {
   from {
-    transform: translateY(-10vh);
+    transform: translateY(-4rem);
   }
   to {
     transform: translateY(0);

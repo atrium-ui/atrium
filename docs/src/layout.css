@@ -40,6 +40,18 @@ main {
   padding-inline: var(--site-padding);
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+ol,
+p {
+  @apply max-w-[880px];
+}
+
 /* trying to prevent layout shift with unstyled elements */
 
 main :not(:defined) > *:not([slot="toggle"]):not([slot="trigger"]):not(astro-slot) {

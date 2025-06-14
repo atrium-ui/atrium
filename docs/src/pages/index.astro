@@ -1,17 +1,102 @@
 ---
-import { getEntry } from "astro:content";
-import { render } from "astro:content";
 import Layout from "../layout.astro";
-
-const entry = await getEntry("docs", "index");
-
-if (!entry) {
-  throw new Error("404");
-}
-
-const { Content, headings, remarkPluginFrontmatter } = await render(entry);
 ---
 
+<style>
+  @reference "../layout.css";
+
+  .home-card {
+    @apply p-12 bg-grey-50 rounded-md;
+  }
+</style>
+
 <Layout>
-  <Content />
+  <section class="flex flex-col md:flex-row items-center gap-module-2xl mb-module-8xl move-in lg:px-module-3xl">
+    <div>
+      <img width="600" src="../../../assets/atrium-light.png" />
+    </div>
+
+    <div class="pb-module-4xl move-in">
+      <h1 class="typo-title-2 pb-module-l">Quality without thinking about it.</h1>
+      <p>
+        A curated collection of Libraries, Custom-Elements and Components for different Frameworks for building high quality websites.
+      </p>
+    </div>
+  </section>
+
+  <section class="fade-in">
+    <div class="lg:px-module-3xl pb-module-4xl">
+      <h2 class="typo-title-3 pb-element-xs">
+        <span>19 Components ready for production</span>
+      </h2>
+      <p class="typo-body">Fully styled components included, ready to use.</p>
+    </div>
+
+    <div class="grid grid-cols-4 gap-module-m pb-module-4xl">
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+    </div>
+
+    <div class="lg:px-module-3xl pb-module-4xl flex justify-end">
+      <a href="/components" class="button-secondary typo-body flex items-center">
+        <span>All components</span>
+        <svg-icon name="arrow-right" class="ml-4 typo-body" />
+      </a>
+    </div>
+  </section>
+
+  <section class="fade-in py-12 lg:px-module-3xl">
+    <div>
+      <div class="pb-module-4xl">
+        <h3 class="typo-headline pb-element-xs">Not opinionated about styling</h3>
+        <p>Components come pre-styled with TailwindCSS classes, but you can style them however you like.</p>
+      </div>
+      <div class="pb-module-4xl">
+        <h3 class="typo-headline pb-element-xs">Ship less JavaScript</h3>
+        <p>Components use custom-elements that are written with a focus on small bundle sizes.</p>
+      </div>
+      <div class="pb-module-4xl">
+        <h3 class="typo-headline pb-element-xs">Protable and easy to use</h3>
+        <p>Use with any framework, or event without one.</p>
+      </div>
+      <div class="pb-module-4xl">
+        <h3 class="typo-headline pb-element-xs">Performant and accessible</h3>
+        <p>Minimal framework code, optimized for performance and accessibility.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="fade-in py-12">
+    <div class="lg:px-module-3xl pb-module-4xl">
+      <h2 class="typo-title-3 pb-element-xs">
+        <span>Using Elements built from scratch to the highest quality</span>
+      </h2>
+      <p class="typo-body">Lorem Upsum.</p>
+    </div>
+
+    <div class="grid grid-cols-4 gap-module-m pb-module-4xl">
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+      <div class="home-card">Card</div>
+    </div>
+
+    <div class="lg:px-module-3xl pb-module-4xl flex justify-end">
+      <a href="/elements" class="button-secondary typo-body flex items-center">
+        <span>All elements</span>
+        <svg-icon name="arrow-right" class="ml-4 typo-body" />
+      </a>
+    </div>
+  </section>
 </Layout>

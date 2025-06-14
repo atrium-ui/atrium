@@ -19,13 +19,12 @@ const base = import.meta.env.BASE_URL;
       const candidateUrl = new URL(candidate.href);
       if (candidateUrl.pathname == toUrl.pathname) {
         candidate.setAttribute("aria-current", "page");
-        break;
       }
     }
   }
 
   document.addEventListener("astro:after-swap", () => updateLinks(location))
-  updateLinks(location);
+  window.addEventListener("DOMContentLoaded", () => updateLinks(location));
 </script>
 
 <header class="mb-module-4xl">
