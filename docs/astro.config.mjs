@@ -6,6 +6,7 @@ import { defineConfig } from "astro/config";
 import rehypeShiftHeading from "rehype-shift-heading";
 import mdx from "@astrojs/mdx";
 import { atriumDocsIntegration } from "./src/components/docs/integration";
+import pagefind from "astro-pagefind";
 
 export default defineConfig({
   publicDir: "assets",
@@ -34,6 +35,7 @@ export default defineConfig({
     rehypePlugins: [[rehypeShiftHeading, { shift: 1 }]],
   },
   integrations: [
+    pagefind(),
     atriumDocsIntegration(),
     mdx(),
     react({

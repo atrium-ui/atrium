@@ -1,4 +1,4 @@
-@reference "../../custom.css";
+@reference "../../layout.css";
 
 a-layout {
   height: calc(100vh - 4.45rem);
