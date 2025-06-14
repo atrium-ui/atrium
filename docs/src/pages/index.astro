@@ -6,14 +6,14 @@ import Layout from "../layout.astro";
   @reference "../layout.css";
 
   .home-card {
-    @apply p-12 bg-grey-50 rounded-md;
+    @apply p-12 bg-grey-50;
   }
 </style>
 
 <Layout>
   <section class="flex flex-col md:flex-row items-center gap-module-2xl mb-module-8xl move-in lg:px-module-3xl">
     <div>
-      <img width="600" src="../../../assets/atrium-light.png" />
+      <img width="600" src="/atrium-light.png" />
     </div>
 
     <div class="pb-module-4xl move-in">
@@ -32,7 +32,7 @@ import Layout from "../layout.astro";
       <p class="typo-body">Fully styled components included, ready to use.</p>
     </div>
 
-    <div class="grid grid-cols-4 gap-module-m pb-module-4xl">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-element-xs pb-module-4xl">
       <div class="home-card">Card</div>
       <div class="home-card">Card</div>
       <div class="home-card">Card</div>
@@ -47,13 +47,13 @@ import Layout from "../layout.astro";
 
     <div class="lg:px-module-3xl pb-module-4xl flex justify-end">
       <a href="/components" class="button-secondary typo-body flex items-center">
-        <span>All components</span>
+        <span>See all components</span>
         <svg-icon name="arrow-right" class="ml-4 typo-body" />
       </a>
     </div>
   </section>
 
-  <section class="fade-in py-12 lg:px-module-3xl">
+  <section class="fade-in py-12 lg:px-module-7xl">
     <div>
       <div class="pb-module-4xl">
         <h3 class="typo-headline pb-element-xs">Not opinionated about styling</h3>
@@ -82,7 +82,7 @@ import Layout from "../layout.astro";
       <p class="typo-body">Lorem Upsum.</p>
     </div>
 
-    <div class="grid grid-cols-4 gap-module-m pb-module-4xl">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-element-xs pb-module-4xl">
       <div class="home-card">Card</div>
       <div class="home-card">Card</div>
       <div class="home-card">Card</div>
@@ -94,7 +94,7 @@ import Layout from "../layout.astro";
 
     <div class="lg:px-module-3xl pb-module-4xl flex justify-end">
       <a href="/elements" class="button-secondary typo-body flex items-center">
-        <span>All elements</span>
+        <span>See all elements</span>
         <svg-icon name="arrow-right" class="ml-4 typo-body" />
       </a>
     </div>

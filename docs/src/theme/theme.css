@@ -228,14 +228,14 @@
 /* Typography Styles */
 
 @utility typo-body {
-  @apply text-base leading-[135%];
+  @apply text-base leading-24;
 }
 @utility typo-caption {
   @apply text-md md:text-lg lg:text-lg xl:text-lg;
-  @apply leading-[125%];
+  @apply leading-24;
 }
 @utility typo-footnote {
-  @apply text-1xs leading-[135%];
+  @apply text-1xs leading-24;
 }
 
 @utility typo-topline {
@@ -263,13 +263,13 @@
 }
 
 @utility typo-button-s {
-  @apply text-sm leading-[135%]; /* leading matching the default icon height of 22px */
+  @apply text-sm leading-24; /* leading matching the default icon height of 22px */
 }
 @utility typo-textlink-s {
-  @apply text-sm leading-[135%]; /* leading matching the default icon height of 22px */
+  @apply text-sm leading-24; /* leading matching the default icon height of 22px */
 }
 @utility typo-textlink-m {
-  @apply text-base leading-[135%];
+  @apply text-base leading-24;
 }
 
 @utility style-fill-* {
