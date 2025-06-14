@@ -7,7 +7,7 @@ template: splash
 
 import { Command } from "package:/components"
 import { Steps, FileTree } from '@astrojs/starlight/components';
-import { AccordionDemo } from "./components/accordion/AccordionDemo";
+import { AccordionDemo } from "../components/accordion/AccordionDemo";
 
 This library serves as a place to collect and share code between projects and developers.
 
@@ -19,7 +19,7 @@ The components in this library are composed of two layers:
 
 - The second layer is the **[Elements](./elements)** layer. Elements are "Headless" custom-elements that only implement behavior with accessibility in mind, with as little styling as possible.
 
-![diagram](./images/concept-diagram.png)
+![diagram](../images/concept-diagram.png)
 
 <div class="not-content max-w-[800px]">
   <p>
@@ -117,6 +117,6 @@ Components require **tailwindcss** to be installed in the project. Here links fo
 
 [Can I use](https://caniuse.com/mdn-api_window_customelements) Support for WebComponents exists in major browsers since around 2018.
 
-![Support table](./images/support.jpg)
+![Support table](../images/support.jpg)
 
 [More information here](https://www.webcomponents.org/)
