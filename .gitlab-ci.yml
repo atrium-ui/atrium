@@ -1,8 +1,8 @@
 stages:
   - test
   - merge
-  - publish
   - docs
+  - publish
 
 image: luckydye/atrium:latest
 
