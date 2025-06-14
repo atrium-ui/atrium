@@ -23,5 +23,5 @@ tasks:
     dir: ./
     cmds:
       - cd .. && task build
-      - bun x astro build
+      - bun x astro build {{.CLI_ARGS}}
       - mv dist ../public

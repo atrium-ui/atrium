@@ -94,4 +94,4 @@ pages:
   artifacts:
     paths:
       - public
-  script: task docs:build
+  script: task docs:build -- --base /atrium

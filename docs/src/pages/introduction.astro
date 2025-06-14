@@ -1,0 +1,19 @@
+---
+import { getEntry } from "astro:content";
+import { render } from "astro:content";
+import Layout from "../layout.astro";
+
+const entry = await getEntry("docs", "introduction");
+
+if (!entry) {
+  throw new Error("404");
+}
+
+const { Content, headings, remarkPluginFrontmatter } = await render(entry);
+---
+
+<Layout>
+  <section class="markdown-content max-w-[900px] mx-auto">
+    <Content />
+  </section>
+</Layout>

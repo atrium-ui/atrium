@@ -11,6 +11,14 @@ const props: {
 const { category } = Astro.params;
 
 const base = import.meta.env.BASE_URL;
+
+const menuItemOrder = ["Introduction", "Components", "Elements", "Packages"];
+
+const menuItemsSorted = (a, b) => {
+  return (
+    menuItemOrder.indexOf(a.data.title || "") - menuItemOrder.indexOf(b.data.title || "")
+  );
+};
 ---
 
 <script is:inline>
@@ -58,7 +66,7 @@ function closeMenu() {
 <div class={twMerge("group flex overflow-auto h-[calc(100%-var(--module-6xl))] mt-module-6xl md:mt-0 relative", props.class)}>
   <nav class="flex-none w-full group-[&.open]:hidden">
     <ul class="block md:hidden gap-module-2xl">
-      {allDocs.map(doc => {
+      {allDocs.sort(menuItemsSorted).map(doc => {
         const parts = doc.id.split("/");
 
         if(parts.length === 1) {
@@ -79,7 +87,7 @@ function closeMenu() {
     </ul>
 
     <ul class="hidden md:flex gap-module-2xl">
-      {allDocs.map(doc => {
+      {allDocs.sort(menuItemsSorted).map(doc => {
         const parts = doc.id.split("/");
 
         if(parts.length === 1) {

@@ -31,8 +31,8 @@ const base = import.meta.env.BASE_URL;
   <div class="max-w-(--site-width) px-(--site-padding) mx-auto flex items-center justify-between gap-6 py-8">
     <div class="flex-none">
       <a href={base}>
-        <img class="light-mode-only w-12 aspect-square" width="600" src="/atrium-light.png" />
-        <img class="dark-mode-only w-12 aspect-square" width="600" src="/atrium-dark.png" />
+        <img class="light-mode-only w-12 aspect-square" width="600" src={`${base}/atrium-light.png`}  />
+        <img class="dark-mode-only w-12 aspect-square" width="600" src={`${base}/atrium-dark.png`}  />
       </a>
     </div>
 
