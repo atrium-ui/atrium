@@ -27,24 +27,24 @@ export const SomeSlider = () => (
     </Slider>
 
     <Slider>
-      <div class="h-[300px] flex-none p-2">
+      <a href="/" class="block h-[300px] flex-none p-2 active:ring-2">
         <Image class="h-full w-full" />
-      </div>
-      <div class="h-[300px] flex-none p-2">
+      </a>
+      <a href="/" class="block h-[300px] flex-none p-2 active:ring-2">
         <Image class="h-full w-full" />
-      </div>
-      <div class="h-[300px] flex-none p-2">
+      </a>
+      <a href="/" class="block h-[300px] flex-none p-2 active:ring-2">
         <Image class="h-full w-full" />
-      </div>
-      <div class="h-[300px] flex-none p-2">
+      </a>
+      <a href="/" class="block h-[300px] flex-none p-2 active:ring-2">
         <Image class="h-full w-full" />
-      </div>
-      <div class="h-[300px] flex-none p-2">
+      </a>
+      <a href="/" class="block h-[300px] flex-none p-2 active:ring-2">
         <Image class="h-full w-full" />
-      </div>
-      <div class="h-[300px] flex-none p-2">
+      </a>
+      <a href="/" class="block h-[300px] flex-none p-2 active:ring-2">
         <Image class="h-full w-full" />
-      </div>
+      </a>
     </Slider>
   </div>
 );
