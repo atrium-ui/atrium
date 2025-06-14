@@ -33,10 +33,6 @@ section {
   hyphens: auto;
 }
 
-:not(:defined) > *:not([slot="toggle"]):not([slot="trigger"]) {
-  display: none;
-}
-
 main {
   position: relative;
   margin-inline: auto;
@@ -45,7 +41,12 @@ main {
 }
 
 /* trying to prevent layout shift with unstyled elements */
-main *:not(:defined):not(astro-slot) {
+
+main :not(:defined) > *:not([slot="toggle"]):not([slot="trigger"]):not(astro-slot) {
+  display: none;
+}
+
+a-overlay:not(:defined) {
   display: none;
 }
 

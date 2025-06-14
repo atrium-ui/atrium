@@ -1,9 +1,6 @@
 ---
-import "../layout.css";
-import { getCollection } from "astro:content";
 import Search from "astro-pagefind/components/Search";
-
-const allDocs = await getCollection("docs");
+import Menu from "./Menu.astro";
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -11,44 +8,65 @@ const base = import.meta.env.BASE_URL;
 <script>
   import "./Overlay.js";
   import "@sv/svg-sprites/svg-icon";
+
+  function updateLinks (toUrl: URL | Location) {
+    const current = document.querySelectorAll("[aria-current='page']");
+    current?.forEach(el => el.removeAttribute("aria-current"));
+
+    const newCurrentCandidates = document.querySelectorAll<HTMLAnchorElement>(`[href]`);
+
+    for (const candidate of newCurrentCandidates) {
+      const candidateUrl = new URL(candidate.href);
+      if (candidateUrl.pathname == toUrl.pathname) {
+        candidate.setAttribute("aria-current", "page");
+        break;
+      }
+    }
+  }
+
+  document.addEventListener("astro:after-swap", () => updateLinks(location))
+  updateLinks(location);
 </script>
 
-<header class="mb-6">
+<header class="mb-module-4xl">
   <div class="max-w-(--site-width) px-(--site-padding) mx-auto flex items-center justify-between gap-6 py-8">
     <div class="flex-none">
       <a href={base}>
-        <img src="../../../assets/atrium-light.png" class="h-12" />
+        <img src="../../../assets/atrium-light.png" class="w-12 aspect-square" />
       </a>
     </div>
 
-    <nav class="flex-1 px-6">
-      <ul class="flex gap-8 flex-wrap">
-        {allDocs.map(doc => {
-          const parts = doc.id.split("/");
+    <div class="flex-1">
+      <div class="hidden md:block px-12">
+        <Menu />
+      </div>
+    </div>
 
-          if(parts.length === 1) {
-            return (
-              <li>
-                <a class="text-link" href={`/${[...base.split("/"), ...doc.id.split("/")].filter(Boolean).join("/")}`}>
-                  <span>{doc.data.title}</span>
-                </a>
-              </li>
-            )
-          }
-        }).filter(Boolean)}
-      </ul>
-    </nav>
-
-    <a-overlay-trigger aria-controls="overlay-search">
-      <button class="button-primary">
+    <a-overlay-trigger>
+      <button class="button-primary" aria-controls="overlay-search">
         <svg-icon name="search" class="mx-[-1rem]" />
-        <span class="sr-only">Trigger Overlay</span>
+        <span class="sr-only">Open search</span>
+      </button>
+    </a-overlay-trigger>
+
+    <a-overlay-trigger class="block md:hidden">
+      <button class="button-primary" aria-controls="overlay-menu">
+        <svg-icon name="menu" class="mx-[-1rem]" />
+        <span class="sr-only">Open menu</span>
       </button>
     </a-overlay-trigger>
   </div>
 
+  <a-overlay id="overlay-menu">
+    <div class="pointer-events-none relative py-12 px-(--site-padding)">
+      <div class="max-w-[900px] px-(--site-padding) py-6 mx-auto bg-white rounded-xl pointer-events-auto">
+        <Menu />
+      </div>
+    </div>
+  </a-overlay>
+
   <a-overlay id="overlay-search">
-    <div class="pointer-events-none relative py-12">
+    <div class="pointer-events-none relative py-12 px-(--site-padding)">
       <div class="max-w-[900px] px-(--site-padding) py-6 mx-auto bg-white rounded-xl pointer-events-auto">
         <Search />
       </div>

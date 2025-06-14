@@ -16,31 +16,37 @@ import { AnimationCard } from "./showcase/cards/AnimationCard";
 import { LightboxCard } from "./showcase/cards/LightboxCard";
 import { FilterCard } from "./showcase/cards/FilterCard";
 
-<div>
+<div className="flex flex-col md:flex-row items-center gap-module-2xl mb-module-4xl move-in">
+  <div>
+    <img width="600" src="../../../assets/atrium-light.png" />
+  </div>
 
-<h1>The Atrium Library</h1>
-<p>
- A curated collection of libraries, custom-elements and components for different frameworks for building Websites.
-</p>
-
-<img src="../../../assets/atrium-light.png" />
-
+  <div className="pb-module-4xl">
+    <h1 className="typo-title-1 pb-module-l">The Atrium Library</h1>
+    <p>
+      A curated collection of libraries, custom-elements and components for different frameworks for building Websites.
+    </p>
+  </div>
 </div>
 
-<CardGrid>
-  <Card title="Not opinionated about styling" icon="star">
-    Components come pre-styled with TailwindCSS classes, but you can style them however you like.
-  </Card>
-  <Card title="Ship less JavaScript" icon="star">
-    Components use custom-elements that are written with a focus on small bundle sizes.
-  </Card>
-  <Card title="Protable and easy to use" icon="star">
-    Use with any framework, or event without one.
-  </Card>
-  <Card title="Performant and accessible" icon="star">
-    Minimal framework code, optimized for performance and accessibility.
-  </Card>
-</CardGrid>
+<div className="fade-in">
+
+  <CardGrid>
+    <Card title="Not opinionated about styling" icon="star">
+      Components come pre-styled with TailwindCSS classes, but you can style them however you like.
+    </Card>
+    <Card title="Ship less JavaScript" icon="star">
+      Components use custom-elements that are written with a focus on small bundle sizes.
+    </Card>
+    <Card title="Protable and easy to use" icon="star">
+      Use with any framework, or event without one.
+    </Card>
+    <Card title="Performant and accessible" icon="star">
+      Minimal framework code, optimized for performance and accessibility.
+    </Card>
+  </CardGrid>
+
+</div>
 
 <div class="pt-12"/>
 

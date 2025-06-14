@@ -550,3 +550,31 @@
 @utility input-disabled {
   @apply opacity-50 cursor-not-allowed;
 }
+
+/* Animations */
+
+@utility move-in {
+  animation: moveIn 1s .2s cubic-bezier(0, 0.34, 0, 0.96) both, fadeIn 1s .2s ease both;
+}
+
+@utility fade-in {
+  animation: fadeIn 1s ease both;
+}
+
+@keyframes moveIn {
+  from {
+    transform: translateY(-10vh);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

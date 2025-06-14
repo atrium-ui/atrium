@@ -114,7 +114,7 @@ export class OverlayTriggerElement extends LitElement {
   }
 
   private get target() {
-    const id = this.getAttribute("aria-controls");
+    const id = this.trigger?.getAttribute("aria-controls");
     return id ? overlayRegistry.get(id) : undefined;
   }
 

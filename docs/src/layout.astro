@@ -9,12 +9,12 @@ const iocnSheet = await svg();
 
 <html>
   <head>
-    <ClientRouter />
+    <!-- <ClientRouter /> -->
   </head>
-  <body>
-    <div class="hidden" set:html={iocnSheet} />
+  <body class="style-fill-white-background">
+    <div class="hidden" set:html={iocnSheet} transition:persist />
 
-    <Header />
+    <Header transition:persist />
 
     <main>
       <slot />
