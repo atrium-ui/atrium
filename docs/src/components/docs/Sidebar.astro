@@ -1,12 +1,9 @@
 ---
-import Default from "@astrojs/starlight/components/Sidebar.astro";
-
 const storiesImports = import.meta.glob("/src/**/*.stories.*", { eager: true });
 
 const stories: any[] = [];
 
-const routeData = Astro.locals.starlightRoute;
-const subpath = routeData.subpath as string;
+const subpath = "";
 const basePath = "atrium";
 
 for (const key in storiesImports) {
@@ -70,17 +67,6 @@ function currentPage(page?: string) {
     }
   }
 </script>
-
-<style>
-.sidebar-pane a[href]:not([aria-current="page"]):hover {
-	background-color: #d3dffc;
-}
-.docs-nav-link-variant[aria-current="page"] {
-	background-color: #d3dffc;
-}
-</style>
-
-<Default></Default>
 
 {stories.length > 0 ? (
   <div class="opacity-50 text-sm font-bold text-gray-500 px-2">

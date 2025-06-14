@@ -12,7 +12,6 @@
     "@astrojs/mdx": "^4.3.0",
     "@astrojs/react": "4.3.0",
     "@astrojs/solid-js": "5.1.0",
-    "@astrojs/starlight": "^0.34.4",
     "@astrojs/tailwind": "6.0.2",
     "@astrojs/vue": "5.1.0",
     "@atrium-ui/layout": "^2.0.0",

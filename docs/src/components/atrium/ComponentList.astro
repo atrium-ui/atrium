@@ -1,5 +1,4 @@
 ---
-import { LinkCard, CardGrid, Aside } from "@astrojs/starlight/components";
 import fs from "node:fs";
 import matter from "gray-matter";
 
@@ -21,7 +20,7 @@ for (const file of files) {
 }
 ---
 
-<CardGrid>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
   {
     components.map(comp => {
       return (
@@ -45,4 +44,4 @@ for (const file of files) {
       );
     })
   }
-</CardGrid>
+</div>
