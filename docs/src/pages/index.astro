@@ -6,14 +6,21 @@ import Layout from "../layout.astro";
   @reference "../layout.css";
 
   .home-card {
-    @apply p-12 bg-grey-50;
+    @apply p-12 min-h-[200px] bg-grey-50;
+  }
+  .home-card:nth-last-child(2) {
+    @apply opacity-60;
+  }
+  .home-card:nth-last-child(1) {
+    @apply opacity-30;
   }
 </style>
 
 <Layout>
   <section class="flex flex-col md:flex-row items-center gap-module-2xl mb-module-8xl move-in lg:px-module-3xl">
     <div>
-      <img width="600" src="/atrium-light.png" />
+      <img class="light-mode-only" width="600" src="/atrium-light.png" />
+      <img class="dark-mode-only" width="600" src="/atrium-dark.png" />
     </div>
 
     <div class="pb-module-4xl move-in">
@@ -33,6 +40,7 @@ import Layout from "../layout.astro";
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-element-xs pb-module-4xl">
+      <div class="home-card">Card</div>
       <div class="home-card">Card</div>
       <div class="home-card">Card</div>
       <div class="home-card">Card</div>

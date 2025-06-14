@@ -7,6 +7,20 @@ export interface Props {
 const props = Astro.props;
 ---
 
-<a href={props.href} class="pill">
+<a href={props.href} target="_blank" class="pill">
   <span class="align-bottom">{props.label}</span>
 </a>
+
+<style is:global>
+@reference "../../../layout.css";
+
+.pill {
+  @apply border border-zinc-200 flex gap-2 rounded-lg bg-zinc-500 px-3 py-2 leading-none no-underline items-center hover:bg-zinc-700 dark:hover:bg-zinc-700;
+
+  color: currentColor !important;
+}
+
+.pill span {
+  @apply text-xs font-bold;
+}
+</style>

@@ -1,5 +1,6 @@
 ---
 import { Icon } from "package:/components";
+import { Code } from "astro:components";
 
 export interface Props {
   title?: string;
@@ -29,7 +30,7 @@ const file = Astro.props.code?.trim();
     </button>
 
     <div>
-      <code lang="tsx">{file}</code>
+      <Code lang="tsx" code={file}></Code>
     </div>
   </a-expandable>
 </div>

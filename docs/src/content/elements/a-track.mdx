@@ -15,7 +15,7 @@ import "./a-track/track.css";
 
 
 <div class="not-content box overflow-hidden">
-  <a-track snap class="flex overflow-visible">
+  <a-track snap class="flex w-full overflow-visible">
     <a href="#" class="counted block flex-none p-4">
       <canvas width="500" height="280" class="bg-slate-500" />
     </a>
@@ -72,7 +72,7 @@ Different example confugrations of tracks.
 ### Free scroll
 
 <div class="not-content box">
-  <a-track class="flex overflow-visible">
+  <a-track class="flex w-full overflow-visible">
     <a href="#" class="block flex-none pr-4">
       <canvas width="260" height="280" class="bg-slate-500" />
     </a>
@@ -109,7 +109,7 @@ Different example confugrations of tracks.
 ### Snap scroll
 
 <div class="not-content box">
-  <a-track snap overflow="ignore" class="flex overflow-visible">
+  <a-track snap overflow="ignore" class="flex w-full overflow-visible">
     <a href="#" class="block flex-none pr-4">
       <canvas width="260" height="280" class="bg-slate-500" />
     </a>
@@ -158,7 +158,7 @@ Different example confugrations of tracks.
 ### Align center
 
 <div class="not-content box">
-  <a-track align="center" snap class="flex overflow-visible">
+  <a-track align="center" snap class="flex w-full overflow-visible">
     <a href="#" class="block flex-none pr-4">
       <canvas width="260" height="280" class="bg-slate-500" />
     </a>
@@ -207,7 +207,7 @@ Different example confugrations of tracks.
 ### Arrow key navigation
 
 <div class="not-content box">
-  <a-track tabindex="0" class="flex">
+  <a-track tabindex="0" class="flex w-full">
     <div class="block flex-none pr-4">
       <canvas width="260" height="280" class="bg-slate-500" />
     </div>
@@ -286,7 +286,7 @@ track.addEventListener("format", e => {
 ### Nested
 
 <div class="not-content box">
-  <a-track snap class="flex">
+  <a-track snap class="flex w-full">
     <div class="flex-none pr-4">
       <canvas width="260" height="280" class="bg-slate-500" />
     </div>
@@ -342,7 +342,7 @@ track.addEventListener("format", e => {
 ### Loop Snap
 
 <div class="not-content box">
-  <a-track debug snap loop class="flex">
+  <a-track debug snap loop class="flex w-full">
     <div class="flex-none w-full">
       <canvas width={720} height={480} class="w-full bg-red-500" />
     </div>

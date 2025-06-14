@@ -1,4 +1,5 @@
 ---
+import { Code } from "astro:components";
 import fs from "node:fs";
 
 export interface Props {
@@ -29,4 +30,4 @@ const ext = props.file.split(".").pop();
 const lang = (ext && langs[ext]) || "plaintext";
 ---
 
-<code lang={lang}>{file}</code>
+<Code lang={lang} code={file}></Code>

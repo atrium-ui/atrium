@@ -1,5 +1,6 @@
 ---
-import { Tabs, TabItem, Code } from "@astrojs/starlight/components";
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+import { Code } from "astro:components";
 
 const props = Astro.props;
 ---
@@ -7,13 +8,13 @@ const props = Astro.props;
 <div class="terminal-command">
   <Tabs syncKey="packageManagerCommand">
     <TabItem label="pnpm" icon="pnpm">
-      <code lang="sh">{props.pnpm}</code>
+      <Code lang="sh" code={props.pnpm}></Code>
     </TabItem>
     <TabItem label="npm" icon="seti:npm">
-      <code lang="sh">{props.npm}</code>
+      <Code lang="sh" code={props.npm}></Code>
     </TabItem>
     <TabItem label="bun" icon="bun">
-      <code lang="sh">{props.bun}</code>
+      <Code lang="sh" code={props.bun}></Code>
     </TabItem>
   </Tabs>
 </div>

@@ -106,17 +106,29 @@
   --color-black: #000000;
   --color-white: #ffffff;
 
-  --color-green-50: #f2fdf9;
-  --color-green-100: #e4fbf2;
-  --color-green-200: #c8f8e2;
-  --color-green-300: #aef4d0;
-  --color-green-400: #93f0bc;
-  --color-green-500: #7beda7;
-  --color-green-600: #3de586;
-  --color-green-700: #19c56e;
-  --color-green-800: #138b53;
-  --color-green-900: #004f32;
-  --color-green-950: #083625;
+  --color-primary-50: oklch(0.969 0.015 12.422);
+  --color-primary-100: oklch(0.941 0.03 12.58);
+  --color-primary-200: oklch(0.892 0.058 10.001);
+  --color-primary-300: oklch(0.81 0.117 11.638);
+  --color-primary-400: oklch(0.712 0.194 13.428);
+  --color-primary-500: oklch(0.645 0.246 16.439);
+  --color-primary-600: oklch(0.586 0.253 17.585);
+  --color-primary-700: oklch(0.514 0.222 16.935);
+  --color-primary-800: oklch(0.455 0.188 13.697);
+  --color-primary-900: oklch(0.41 0.159 10.272);
+  --color-primary-950: oklch(0.271 0.105 12.094);
+
+  --color-secondary-50: oklch(0.984 0.014 180.72);
+  --color-secondary-100: oklch(0.953 0.051 180.801);
+  --color-secondary-200: oklch(0.91 0.096 180.426);
+  --color-secondary-300: oklch(0.855 0.138 181.071);
+  --color-secondary-400: oklch(0.777 0.152 181.912);
+  --color-secondary-500: oklch(0.704 0.14 182.503);
+  --color-secondary-600: oklch(0.6 0.118 184.704);
+  --color-secondary-700: oklch(0.511 0.096 186.391);
+  --color-secondary-800: oklch(0.437 0.078 188.216);
+  --color-secondary-900: oklch(0.386 0.063 188.416);
+  --color-secondary-950: oklch(0.277 0.046 192.524);
 
   --color-grey-50: #f2f2f2;
   --color-grey-100: #e6e6e6;
@@ -142,45 +154,33 @@
   --color-red-900: #7a2100;
   --color-red-950: #5c1800;
 
-  --color-purple-50: #f5ebff;
-  --color-purple-100: #ecd6ff;
-  --color-purple-200: #d7a8ff;
-  --color-purple-300: #c380ff;
-  --color-purple-400: #b057ff;
-  --color-purple-500: #9c2bff;
-  --color-purple-600: #8000f0;
-  --color-purple-700: #5f00b3;
-  --color-purple-800: #3f0075;
-  --color-purple-900: #21003d;
-  --color-purple-950: #10001f;
-
   /* styles */
 
-  --style-fill-green-default: var(--color-green-900);
-  --style-fill-green-hover: var(--color-green-900);
-  --style-fill-green-active: var(--color-green-700);
-  --style-fill-green-subtle: var(--color-green-200);
-  --style-fill-green-disabled: var(--color-grey-300);
-  --style-fill-green-brighter: var(--color-green-800);
-  --style-contour-green-default: var(--color-green-900);
-  --style-contour-green-hover: var(--color-green-900);
-  --style-contour-green-onclick: var(--color-green-900);
-  --style-contour-green-active: var(--color-green-700);
-  --style-contour-green-focus: var(--color-purple-600);
-  --style-contour-green-disabled: var(--color-grey-300);
-  --style-contour-green-button: var(--color-green-900);
+  --style-fill-primary-default: var(--color-primary-900);
+  --style-fill-primary-hover: var(--color-primary-900);
+  --style-fill-primary-active: var(--color-primary-700);
+  --style-fill-primary-subtle: var(--color-primary-200);
+  --style-fill-primary-disabled: var(--color-grey-300);
+  --style-fill-primary-brighter: var(--color-primary-800);
+  --style-contour-primary-default: var(--color-primary-900);
+  --style-contour-primary-hover: var(--color-primary-900);
+  --style-contour-primary-onclick: var(--color-primary-900);
+  --style-contour-primary-active: var(--color-primary-700);
+  --style-contour-primary-focus: var(--color-secondary-600);
+  --style-contour-primary-disabled: var(--color-grey-300);
+  --style-contour-primary-button: var(--color-primary-900);
   --style-contour-grey-default: var(--color-grey-800);
   --style-contour-grey-hover: var(--color-grey-800);
   --style-contour-grey-onclick: var(--color-grey-800);
-  --style-contour-grey-focus: var(--color-purple-600);
-  --style-contour-grey-active: var(--color-green-700);
+  --style-contour-grey-focus: var(--color-secondary-600);
+  --style-contour-grey-active: var(--color-primary-700);
   --style-contour-grey-disabled: var(--color-grey-300);
   --style-typography-title: var(--color-grey-800);
   --style-icon-default: var(--color-grey-800);
   --style-icon-hover: var(--color-grey-800);
   --style-icon-onclick: var(--color-grey-800);
-  --style-icon-active: var(--color-green-700);
-  --style-icon-subtle: var(--color-green-200);
+  --style-icon-active: var(--color-primary-700);
+  --style-icon-subtle: var(--color-primary-200);
   --style-icon-disabled: var(--color-grey-300);
   --style-icon-negative: var(--color-grey-50);
   --style-icon-button-primary: var(--color-grey-50);
@@ -190,10 +190,10 @@
   --style-typography-subtitle: var(--color-grey-800);
   --style-typography-topline: var(--color-grey-800);
   --style-typography-disabled: var(--color-grey-300);
-  --style-typography-link: var(--color-green-900);
+  --style-typography-link: var(--color-primary-900);
   --style-typography-hover: var(--color-grey-800);
   --style-typography-onclick: var(--color-grey-800);
-  --style-typography-active: var(--color-green-700);
+  --style-typography-active: var(--color-primary-700);
   --style-typography-button-primary: var(--color-white);
   --style-typography-button-secondary: var(--color-grey-800);
   --style-black: var(--color-black);
@@ -367,46 +367,46 @@
 /* Color Styles */
 
 .mode-dark {
-  --style-fill-green-default: var(--color-green-400);
-  --style-fill-green-hover: var(--color-green-400);
-  --style-fill-green-active: var(--color-green-200);
-  --style-fill-green-subtle: var(--color-green-900);
-  --style-fill-green-disabled: var(--color-grey-700);
-  --style-fill-green-brighter: var(--color-green-300);
-  --style-contour-green-default: var(--color-green-400);
-  --style-contour-green-hover: var(--color-green-400);
-  --style-contour-green-onclick: var(--color-green-400);
-  --style-contour-green-active: var(--color-green-700);
-  --style-contour-green-focus: var(--color-purple-600);
-  --style-contour-green-disabled: var(--color-grey-700);
-  --style-contour-green-button: var(--color-green-400);
+  --style-fill-primary-default: var(--color-primary-400);
+  --style-fill-primary-hover: var(--color-primary-400);
+  --style-fill-primary-active: var(--color-primary-200);
+  --style-fill-primary-subtle: var(--color-primary-900);
+  --style-fill-primary-disabled: var(--color-grey-700);
+  --style-fill-primary-brighter: var(--color-primary-300);
+  --style-contour-primary-default: var(--color-primary-400);
+  --style-contour-primary-hover: var(--color-primary-400);
+  --style-contour-primary-onclick: var(--color-primary-400);
+  --style-contour-primary-active: var(--color-primary-700);
+  --style-contour-primary-focus: var(--color-secondary-600);
+  --style-contour-primary-disabled: var(--color-grey-700);
+  --style-contour-primary-button: var(--color-primary-400);
   --style-contour-grey-default: var(--color-grey-50);
   --style-contour-grey-hover: var(--color-grey-50);
   --style-contour-grey-onclick: var(--color-grey-50);
-  --style-contour-grey-focus: var(--color-purple-600);
-  --style-contour-grey-active: var(--color-green-700);
+  --style-contour-grey-focus: var(--color-secondary-600);
+  --style-contour-grey-active: var(--color-primary-700);
   --style-contour-grey-disabled: var(--color-grey-800);
   --style-typography-title: var(--color-white);
   --style-icon-default: var(--color-grey-50);
-  --style-icon-hover: var(--color-green-50);
-  --style-icon-onclick: var(--color-green-50);
+  --style-icon-hover: var(--color-primary-50);
+  --style-icon-onclick: var(--color-primary-50);
   --style-icon-active: #c8f8e2;
-  --style-icon-subtle: var(--color-green-900);
+  --style-icon-subtle: var(--color-primary-900);
   --style-icon-disabled: var(--color-grey-700);
   --style-icon-negative: var(--color-grey-800);
   --style-icon-button-primary: var(--color-grey-800);
-  --style-icon-button-secondary: var(--color-green-400);
+  --style-icon-button-secondary: var(--color-primary-400);
   --style-icon-error: var(--color-red-500);
   --style-typography-body: var(--color-white);
   --style-typography-subtitle: var(--color-white);
   --style-typography-topline: var(--color-white);
   --style-typography-disabled: var(--color-grey-700);
-  --style-typography-link: var(--color-green-400);
+  --style-typography-link: var(--color-primary-400);
   --style-typography-hover: var(--color-white);
   --style-typography-onclick: var(--color-white);
-  --style-typography-active: var(--color-green-400);
+  --style-typography-active: var(--color-primary-400);
   --style-typography-button-primary: var(--color-grey-900);
-  --style-typography-button-secondary: var(--color-green-400);
+  --style-typography-button-secondary: var(--color-primary-400);
   --style-black: var(--color-white);
   --style-white: var(--color-black);
   --style-fill-grey-default: var(--color-grey-800);
@@ -421,18 +421,89 @@
   --style-typography-error: var(--color-red-500);
 }
 
+/* Auto dark theme */
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --style-fill-primary-default: var(--color-primary-400);
+    --style-fill-primary-hover: var(--color-primary-400);
+    --style-fill-primary-active: var(--color-primary-200);
+    --style-fill-primary-subtle: var(--color-primary-900);
+    --style-fill-primary-disabled: var(--color-grey-700);
+    --style-fill-primary-brighter: var(--color-primary-300);
+    --style-contour-primary-default: var(--color-primary-400);
+    --style-contour-primary-hover: var(--color-primary-400);
+    --style-contour-primary-onclick: var(--color-primary-400);
+    --style-contour-primary-active: var(--color-primary-700);
+    --style-contour-primary-focus: var(--color-secondary-600);
+    --style-contour-primary-disabled: var(--color-grey-700);
+    --style-contour-primary-button: var(--color-primary-400);
+    --style-contour-grey-default: var(--color-grey-50);
+    --style-contour-grey-hover: var(--color-grey-50);
+    --style-contour-grey-onclick: var(--color-grey-50);
+    --style-contour-grey-focus: var(--color-secondary-600);
+    --style-contour-grey-active: var(--color-primary-700);
+    --style-contour-grey-disabled: var(--color-grey-800);
+    --style-typography-title: var(--color-white);
+    --style-icon-default: var(--color-grey-50);
+    --style-icon-hover: var(--color-primary-50);
+    --style-icon-onclick: var(--color-primary-50);
+    --style-icon-active: #c8f8e2;
+    --style-icon-subtle: var(--color-primary-900);
+    --style-icon-disabled: var(--color-grey-700);
+    --style-icon-negative: var(--color-grey-800);
+    --style-icon-button-primary: var(--color-grey-800);
+    --style-icon-button-secondary: var(--color-primary-400);
+    --style-icon-error: var(--color-red-500);
+    --style-typography-body: var(--color-white);
+    --style-typography-subtitle: var(--color-white);
+    --style-typography-topline: var(--color-white);
+    --style-typography-disabled: var(--color-grey-700);
+    --style-typography-link: var(--color-primary-400);
+    --style-typography-hover: var(--color-white);
+    --style-typography-onclick: var(--color-white);
+    --style-typography-active: var(--color-primary-400);
+    --style-typography-button-primary: var(--color-grey-900);
+    --style-typography-button-secondary: var(--color-primary-400);
+    --style-black: var(--color-white);
+    --style-white: var(--color-black);
+    --style-fill-grey-default: var(--color-grey-800);
+    --style-fill-white-background: var(--color-grey-900);
+    --style-fill-grey-hover: var(--color-grey-800);
+    --style-fill-grey-active: var(--color-grey-800);
+    --style-fill-grey-subtle: var(--color-grey-800);
+    --style-fill-grey-disabled: var(--color-grey-700);
+    --style-fill-grey-dark: var(--color-grey-50);
+    --style-fill-grey-background-overlay: var(--color-grey-50);
+    --style-contour-error: var(--color-red-500);
+    --style-typography-error: var(--color-red-500);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .light-mode-only {
+    display: none !important;
+  }
+  .dark-mode-only {
+    display: block;
+  }
+} */
+
+.dark-mode-only {
+  display: none;
+}
+
 /* Button Styles */
 
 /* Primary Button */
 
 @utility button-primary-shape {
-  @apply bg-(--style-fill-green-default) hover:bg-(--style-fill-green-hover) active:bg-(--style-fill-green-active);
+  @apply bg-(--style-fill-primary-default) hover:bg-(--style-fill-primary-hover) active:bg-(--style-fill-primary-active);
   @apply rounded-full transition-colors duration-150 active:duration-0;
   @apply not-enabled:button-primary-disabled;
 }
 
 @utility button-primary-disabled {
-  @apply text-(--style-typography-button-primary) bg-(--style-fill-green-disabled) cursor-default;
+  @apply text-(--style-typography-button-primary) bg-(--style-fill-primary-disabled) cursor-default;
 }
 
 @utility button-primary {
@@ -447,11 +518,11 @@
 
 @utility button-secondary-shape {
   @apply rounded-full transition-all duration-150 active:duration-0;
-  @apply border-1 border-(--style-contour-green-default);
+  @apply border-1 border-(--style-contour-primary-default);
 }
 
 @utility button-secondary-disabled {
-  @apply text-(--style-typography-disabled) cursor-default border-(--style-contour-green-disabled);
+  @apply text-(--style-typography-disabled) cursor-default border-(--style-contour-primary-disabled);
 }
 
 @utility button-secondary {
@@ -465,13 +536,13 @@
 /* Sublte Button */
 
 @utility button-subtle-shape {
-  @apply bg-(--style-fill-green-subtle) hover:bg-(--style-fill-green-subtle) active:bg-(--style-fill-green-subtle);
+  @apply bg-(--style-fill-primary-subtle) hover:bg-(--style-fill-primary-subtle) active:bg-(--style-fill-primary-subtle);
   @apply rounded-full transition-colors duration-150 active:duration-0;
   @apply not-enabled:button-subtle-disabled;
 }
 
 @utility button-subtle-disabled {
-  @apply text-(--style-typography-button-primary) bg-(--style-fill-green-disabled) cursor-default;
+  @apply text-(--style-typography-button-primary) bg-(--style-fill-primary-disabled) cursor-default;
 }
 
 @utility button-subtle {
@@ -540,9 +611,9 @@
 
 @utility input {
   @apply w-full typo-body font-medium style-typography-body style-fill-white-background;
-  @apply border-1 border-solid border-(--style-contour-green-default) rounded-md;
+  @apply border-1 border-solid border-(--style-contour-primary-default) rounded-md;
   @apply py-element-s px-element-m transition-colors duration-150;
-  @apply focus:border-(--style-contour-green-active);
+  @apply focus:border-(--style-contour-primary-active);
   @apply placeholder:style-typography-disabled;
 }
 

@@ -3,12 +3,13 @@
 @import "tailwindcss/theme";
 
 @import "./theme/theme.css";
+@import "./theme/markdown.css";
 
 @source '../../packages/components/src/vue/*.tsx';
 
 :root {
-  --site-width: 1400px;
-  --site-padding: 2rem;
+  --site-width: 1600px;
+  --site-padding: var(--module-2xl);
 
   @apply typo-body text-(--style-typography-body);
   min-width: 320px;
@@ -20,6 +21,7 @@
 
 section {
   overflow: hidden;
+  padding-inline: var(--site-padding);
 }
 
 * {
@@ -37,7 +39,6 @@ main {
   position: relative;
   margin-inline: auto;
   max-width: var(--site-width);
-  padding-inline: var(--site-padding);
 }
 
 h1,
@@ -74,16 +75,4 @@ a-overlay:not(:defined) {
   font-family: "NotoSans";
   src: url("./assets/fonts/NotoSans-Italic-VariableFont_wdth,wght.woff2") format("woff2");
   font-style: italic;
-}
-
-/* Pill */
-
-.pill {
-  @apply border border-zinc-700 flex gap-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 px-3 py-2 leading-none no-underline items-center hover:bg-zinc-300 dark:hover:bg-zinc-700;
-
-  color: currentColor !important;
-}
-
-.pill span {
-  @apply text-xs font-bold;
 }

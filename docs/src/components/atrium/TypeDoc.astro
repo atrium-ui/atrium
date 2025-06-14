@@ -11,6 +11,7 @@ import {
 import { remark } from "remark";
 import remarkHtml from "remark-html";
 import { codeToHtml } from "shiki";
+import { Code } from "astro:components";
 
 export interface Props {
   source: string;
@@ -236,7 +237,7 @@ const source = dec?.sources?.[0];
           <Fragment set:html={example} />
         </div> -->
         {example.map(exp => {
-          return <code lang="js">{exp}</code>;
+          return <Code lang="js" code={exp}></Code>;
         })}
       </div >
     ) : (

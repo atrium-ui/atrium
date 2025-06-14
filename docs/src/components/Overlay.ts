@@ -23,7 +23,7 @@ class OverlayBlurElement extends Blur {
       left: 0px;
       width: 100%;
       height: 100%;
-      z-index: 1;
+      z-index: 100;
     }
 
     :host([enabled]) {
@@ -231,6 +231,8 @@ export class OverlayElement extends Portal {
       if (this.portal instanceof OverlayBlurElement) {
         this.portal.enable();
 
+        document.querySelector(".root")?.classList.add("blurred");
+
         // @ts-ignore
         const elements = this.portal?.focusableElements();
         elements[0]?.focus();
@@ -244,6 +246,8 @@ export class OverlayElement extends Portal {
   public hide() {
     if (this.portal instanceof OverlayBlurElement) {
       this.portal.disable();
+
+      document.querySelector(".root")?.classList.remove("blurred");
     }
   }
 }

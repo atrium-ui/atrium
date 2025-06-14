@@ -26,7 +26,6 @@ export class IconElement extends HTMLElement {
   static get styles() {
     return /*css*/ `
       :host {
-        font-size: 1.5rem;
         color: inherit;
         display: inline-block;
         vertical-align: top;

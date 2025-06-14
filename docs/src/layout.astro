@@ -9,23 +9,28 @@ const iocnSheet = await svg();
 
 <html>
   <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <!-- <ClientRouter /> -->
   </head>
   <body class="style-fill-white-background">
-    <div class="hidden" set:html={iocnSheet} transition:persist />
+    <div class="root min-h-screen flex flex-col">
+      <div class="hidden" set:html={iocnSheet} transition:persist />
 
-    <Header transition:persist />
+      <Header transition:persist />
 
-    <main>
-      <slot />
-    </main>
+      <main class="flex-1 w-full px-(--site-padding)">
+        <slot />
+      </main>
 
-    <footer>
-      <div class="max-w-(--site-width) px-(--site-padding) mx-auto flex items-center justify-between gap-6 py-8">
-        <div class="lg:px-module-3xl">
-          <span class="typo-footnote">(c) Atrium Contributers</span>
+      <footer>
+        <div class="max-w-(--site-width) px-(--site-padding) mx-auto flex items-center justify-between gap-6 py-8">
+          <div>
+            <span class="typo-footnote">(c) Atrium Contributers</span>
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+    </div>
   </body>
 </html>
