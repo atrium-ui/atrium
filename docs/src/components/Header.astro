@@ -8,10 +8,13 @@ const allDocs = await getCollection("docs");
 const base = import.meta.env.BASE_URL;
 ---
 
-<header class="sticky top-0 z-10">
-  <div class="background absolute inset-0 -z-1"></div>
+<script>
+  import "./Overlay.js";
+  import "@sv/svg-sprites/svg-icon";
+</script>
 
-  <div class="max-w-[1200px] px-4 mx-auto flex items-center justify-between gap-6 py-5">
+<header class="mb-6">
+  <div class="max-w-(--site-width) px-(--site-padding) mx-auto flex items-center justify-between gap-6 py-8">
     <div class="flex-none">
       <a href={base}>
         <img src="../../../assets/atrium-light.png" class="h-12" />
@@ -19,29 +22,36 @@ const base = import.meta.env.BASE_URL;
     </div>
 
     <nav class="flex-1 px-6">
-      <ul class="flex gap-4 flex-wrap">
+      <ul class="flex gap-8 flex-wrap">
         {allDocs.map(doc => {
           const parts = doc.id.split("/");
 
           if(parts.length === 1) {
-            return <li><a href={`/${[...base.split("/"), ...doc.id.split("/")].filter(Boolean).join("/")}`}>{doc.data.title}</a></li>
+            return (
+              <li>
+                <a class="text-link" href={`/${[...base.split("/"), ...doc.id.split("/")].filter(Boolean).join("/")}`}>
+                  <span>{doc.data.title}</span>
+                </a>
+              </li>
+            )
           }
         }).filter(Boolean)}
       </ul>
     </nav>
 
-    <Search id="search" />
+    <a-overlay-trigger aria-controls="overlay-search">
+      <button class="button-primary">
+        <svg-icon name="search" class="mx-[-1rem]" />
+        <span class="sr-only">Trigger Overlay</span>
+      </button>
+    </a-overlay-trigger>
   </div>
+
+  <a-overlay id="overlay-search">
+    <div class="pointer-events-none relative py-12">
+      <div class="max-w-[900px] px-(--site-padding) py-6 mx-auto bg-white rounded-xl pointer-events-auto">
+        <Search />
+      </div>
+    </div>
+  </a-overlay>
 </header>
-
-<style>
-header {
-}
-
-.background {
-  background: linear-gradient(360deg,rgba(255,255,255,0.125) 0%,rgba(247,247,247,1) 100%);
-  /* mask-image: linear-gradient(to top, hsl(0deg 0% 0% / 0%) 0%, #000000 90%); */
-  backdrop-filter: blur(12px);
-  margin-bottom: -8px;
-}
-</style>

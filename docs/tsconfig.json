@@ -13,6 +13,8 @@
         "../packages/components/*"
       ]
     },
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
     "jsx": "preserve",
     "types": ["vite/client"]
   }

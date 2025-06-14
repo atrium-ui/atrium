@@ -7,6 +7,8 @@ import rehypeShiftHeading from "rehype-shift-heading";
 import mdx from "@astrojs/mdx";
 import { atriumDocsIntegration } from "./src/components/docs/integration";
 import pagefind from "astro-pagefind";
+import svgSprite from "@sv/svg-sprites/vite";
+import { resolve } from "node:path";
 
 export default defineConfig({
   publicDir: "assets",
@@ -26,7 +28,21 @@ export default defineConfig({
         allow: [".."],
       },
     },
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      svgSprite({
+        dir: [
+          //
+          "src/assets/icons/**/*.svg",
+          `${resolve("../node_modules/@sv/icons/assets")}/*.svg`,
+        ],
+        transform(code) {
+          return code
+            .replace(/#000091/g, "currentColor")
+            .replace(/#000000/g, "currentColor");
+        },
+      }),
+    ],
   },
   experimental: {
     contentIntellisense: true,

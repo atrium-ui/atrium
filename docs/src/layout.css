@@ -1,23 +1,52 @@
-@import "tailwindcss";
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
+@import "tailwindcss/theme";
+
+@import "./theme/theme.css";
 
 @source '../../packages/components/src/vue/*.tsx';
 
+:root {
+  --site-width: 1400px;
+  --site-padding: 2rem;
+
+  @apply typo-body text-(--style-typography-body);
+  min-width: 320px;
+
+  --scrollbar-color-track: transparent;
+  --scrollbar-color-thumb: #1c1c1c;
+  --outline-color: blue;
+}
+
+section {
+  overflow: hidden;
+}
+
+* {
+  scrollbar-color: var(--scrollbar-color-thumb) var(--scrollbar-color-track);
+  outline-color: var(--outline-color);
+  outline-offset: 3px;
+}
+
+* {
+  word-break: break-word;
+  hyphens: auto;
+}
+
+:not(:defined) > *:not([slot="toggle"]):not([slot="trigger"]) {
+  display: none;
+}
+
 main {
   position: relative;
-  min-height: calc(100vh - var(--sl-nav-height) - 3vh);
-  max-width: 1200px;
   margin-inline: auto;
-  padding-inline: 2rem;
-  box-sizing: content-box;
+  max-width: var(--site-width);
+  padding-inline: var(--site-padding);
 }
 
 /* trying to prevent layout shift with unstyled elements */
 main *:not(:defined):not(astro-slot) {
   display: none;
-}
-
-a[href] {
-  text-decoration: underline;
 }
 
 /* Fonts */
@@ -32,35 +61,6 @@ a[href] {
   font-family: "NotoSans";
   src: url("./assets/fonts/NotoSans-Italic-VariableFont_wdth,wght.woff2") format("woff2");
   font-style: italic;
-}
-
-:root {
-  -webkit-tap-highlight-color: transparent;
-  scrollbar-gutter: stable;
-  scrollbar-color: #888 transparent;
-}
-
-/* Slides count for Slider */
-
-.not-content {
-  counter-reset: content-counter;
-}
-
-.counted {
-  position: relative;
-}
-
-.counted::after {
-  counter-increment: content-counter;
-  content: counter(content-counter);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  font-size: 4rem;
-  transform: translate(-50%, -50%);
-  color: white;
-  opacity: 0.5;
-  font-family: monospace;
 }
 
 /* Pill */

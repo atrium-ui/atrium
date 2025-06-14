@@ -2,6 +2,9 @@
 import "./layout.css";
 import { ClientRouter } from "astro:transitions";
 import Header from "./components/Header.astro";
+import { svg } from "@sv/svg-sprites/sheet";
+
+const iocnSheet = await svg();
 ---
 
 <html>
@@ -9,6 +12,8 @@ import Header from "./components/Header.astro";
     <ClientRouter />
   </head>
   <body>
+    <div class="hidden" set:html={iocnSheet} />
+
     <Header />
 
     <main>
