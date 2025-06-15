@@ -50,6 +50,7 @@ export default defineConfig({
       {
         provider: fontProviders.google(),
         name: "Geist",
+        weights: [300, 400, 500, 600, 700],
         cssVariable: "--font-geist",
       },
     ],
@@ -69,7 +70,7 @@ export default defineConfig({
       jsx: true,
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.includes("-"),
+          isCustomElement: tag => tag.includes("-"),
         },
       },
     }),

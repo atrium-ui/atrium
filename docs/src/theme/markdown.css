@@ -12,11 +12,11 @@
   }
 
   h3 {
-    @apply typo-subtitle mb-module-m;
+    @apply typo-subtitle mb-module-m mt-module-2xl;
   }
 
   h4 {
-    @apply typo-headline mb-module-m;
+    @apply typo-headline mb-module-m mt-module-2xl;
   }
 
   p {
