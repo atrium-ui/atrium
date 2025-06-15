@@ -26,6 +26,7 @@ const { Content, headings, remarkPluginFrontmatter } = await render(entry);
 
 <Layout>
   <title slot="head">{entry.data.title} | Atrium {category}</title>
+  <meta name="description" slot="head" content={entry.data.description} />
 
   <div class="flex items-start">
     <div class="sticky top-module-4xl w-module-9xl hidden md:block">

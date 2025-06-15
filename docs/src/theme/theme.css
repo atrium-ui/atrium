@@ -11,6 +11,10 @@
   }
 }
 
+:root {
+  --ease-smooth: cubic-bezier(0, 0.34, 0, 0.96);
+}
+
 @theme atrium-docs {
   --breakpoint-md: 768px;
   --breakpoint-lg: 1200px;
@@ -624,7 +628,7 @@
 /* Animations */
 
 @utility move-in {
-  animation: moveIn 1s .2s cubic-bezier(0, 0.34, 0, 0.96) both, fadeIn 1s .2s ease both;
+  animation: moveIn 1s .2s var(--ease-smooth) both, fadeIn 1s .2s ease both;
 }
 
 @utility fade-in {

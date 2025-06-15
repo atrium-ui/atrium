@@ -13,6 +13,9 @@ const { Content, headings, remarkPluginFrontmatter } = await render(entry);
 ---
 
 <Layout>
+  <title slot="head">Introduction | Atrium UI</title>
+  <meta name="description" slot="head" content={entry.data.description} />
+
   <section class="markdown-content max-w-[900px] mx-auto">
     <Content />
   </section>

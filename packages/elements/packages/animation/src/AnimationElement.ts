@@ -313,7 +313,9 @@ export class AnimationElement extends LitElement {
     if (this.rive) {
       this.file = await this.rive.load(new Uint8Array(bytes));
       this.renderer = this.rive.makeRenderer(this.canvas);
-      this.artboardInstance = this.file.defaultArtboard();
+      this.artboardInstance = this.artboard
+        ? this.file.artboardByName(this.artboard)
+        : this.file.defaultArtboard();
       this.stateMachineInstance = new this.rive.StateMachineInstance(
         this.artboardInstance.stateMachineByName(
           this.stateMachine || this.artboardInstance.stateMachineByIndex(0).name,
