@@ -1,16 +1,12 @@
 ---
 title: Datepicker
 image: "/components/datepicker.png"
+description: A Datepicker
+tags: [["Button", "/atrium/components/button"], ["Input", "/atrium/components/input"]]
+command: "npx @sv/components datepicker"
 ---
 import DatepickerDemo from "./datepicker/datepicker";
-import { Example, Atrium, ComponentHeader } from "package:/components";
-
-<ComponentHeader name="Datepicker">
-  <Atrium slot="pills" label="Button" href="/atrium/components/button" />
-  <Atrium slot="pills" label="Input" href="/atrium/components/input" />
-
-  Datepicker
-</ComponentHeader>
+import { Example, Atrium } from "package:/components";
 
 <Example code={`
 // TODO

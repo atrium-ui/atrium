@@ -1,16 +1,12 @@
 ---
 title: Lightbox
+description: A Lightbox.
+tags: [["a-blur", "/atrium/elements/a-blur"], ["Button", "/atrium/components/button"]]
+command: "npx @sv/components lightbox"
 ---
 import { Lightbox } from "@components/src/vue/Lightbox";
 import { Button } from "@components/src/vue/Button";
-import { Example, Atrium, ComponentHeader } from "package:/components";
-
-<ComponentHeader name="Lightbox">
-  <Atrium slot="pills" label="a-blur" href="/atrium/elements/a-blur" />
-  <Atrium slot="pills" label="Button" href="/atrium/components/button" />
-
-  A Lightbox.
-</ComponentHeader>
+import { Example, Atrium } from "package:/components";
 
 <Example code={`
 <Lightbox>

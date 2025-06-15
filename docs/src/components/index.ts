@@ -12,7 +12,6 @@ export { default as Vue } from "./atrium/pills/Vue.astro";
 export { default as Git } from "./atrium/pills/Git.astro";
 export { default as Accessibility } from "./atrium/pills/Accessibility.astro";
 
-export { default as ComponentHeader } from "./atrium/ComponentHeader.astro";
 export { default as TypeDoc } from "./atrium/TypeDoc.astro";
 
 export { default as Icon } from "./atrium/Icon.astro";

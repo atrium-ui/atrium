@@ -26,6 +26,8 @@
 
   /* fonts */
 
+  --font-sans: var(--font-geist), sans-serif;
+
   --font-weight-thin: 200;
   --font-weight-light: 300;
   --font-weight-regular: 400;
@@ -204,7 +206,7 @@
   --style-white: var(--color-white);
   --style-fill-grey-default: var(--color-grey-50);
   --style-fill-white-background: var(--color-white);
-  --style-fill-grey-hover: var(--color-grey-50);
+  --style-fill-grey-hover: var(--color-grey-100);
   --style-fill-grey-active: var(--color-grey-50);
   --style-fill-grey-subtle: var(--color-grey-50);
   --style-fill-grey-disabled: var(--color-grey-300);
@@ -286,6 +288,10 @@
 
 @utility style-icon-* {
   color: --value(--style-icon-\*);
+}
+
+@utility style-contour-* {
+  border-color: --value(--style-contour-\*);
 }
 
 @utility icon {

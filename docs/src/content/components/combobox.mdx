@@ -1,17 +1,13 @@
 ---
 title: Combobox
 image: "/components/combobox.png"
+description: A combobox dropdown
+tags: [["a-select", "/atrium/elements/select"], ["Button", "/atrium/components/button"]]
+command: "npx @sv/components combobox"
 ---
 import ComboboxDemoRaw from "./combobox/combobox?raw";
 import ComboboxDemo from "./combobox/combobox";
-import { Example, Atrium, ComponentHeader } from "package:/components";
-
-<ComponentHeader name="Combobox">
-  <Atrium slot="pills" label="a-select" href="/atrium/elements/select" />
-  <Atrium slot="pills" label="Button" href="/atrium/components/button" />
-
-  A combobox dropdown
-</ComponentHeader>
+import { Example, Atrium } from "package:/components";
 
 <Example code={ComboboxDemoRaw}>
   <ComboboxDemo client:only="vue"/>

@@ -2,7 +2,7 @@ import react from "@astrojs/react";
 import solid from "@astrojs/solid-js";
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@astrojs/vue";
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import rehypeShiftHeading from "rehype-shift-heading";
 import mdx from "@astrojs/mdx";
 import { atriumDocsIntegration } from "./src/components/docs/integration";
@@ -46,6 +46,13 @@ export default defineConfig({
   },
   experimental: {
     contentIntellisense: true,
+    fonts: [
+      {
+        provider: fontProviders.google(),
+        name: "Geist",
+        cssVariable: "--font-geist",
+      },
+    ],
   },
   markdown: {
     rehypePlugins: [[rehypeShiftHeading, { shift: 1 }]],
@@ -62,7 +69,7 @@ export default defineConfig({
       jsx: true,
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.includes("-"),
+          isCustomElement: tag => tag.includes("-"),
         },
       },
     }),

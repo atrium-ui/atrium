@@ -8,11 +8,12 @@
 @source '../../packages/components/src/vue/*.tsx';
 
 :root {
-  --site-width: 1600px;
+  min-width: 320px;
+
+  --site-width: 1700px;
   --site-padding: var(--module-2xl);
 
-  @apply typo-body text-(--style-typography-body);
-  min-width: 320px;
+  @apply typo-body text-(--style-typography-body) font-sans;
 
   --scrollbar-color-track: transparent;
   --scrollbar-color-thumb: #1c1c1c;
@@ -51,6 +52,10 @@ ul,
 ol,
 p {
   @apply max-w-[880px];
+}
+
+.astro-code {
+  @apply typo-topline;
 }
 
 /* trying to prevent layout shift with unstyled elements */

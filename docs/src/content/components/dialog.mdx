@@ -1,17 +1,13 @@
 ---
 title: Dialog
 image: "/components/dialog.png"
+description: A Dialog.
+tags: [["a-blur", "/atrium/elements/a-blur"], ["Button", "/atrium/components/button"]]
+command: "npx @sv/components dialog"
 ---
-import { Example, Atrium, ComponentHeader } from "package:/components";
+import { Example, Atrium } from "package:/components";
 import { Dialog } from "@components/src/vue/Dialog";
 import { Button } from "@components/src/vue/Button";
-
-<ComponentHeader name="Dialog">
-  <Atrium slot="pills" label="a-blur" href="/atrium/elements/a-blur" />
-  <Atrium slot="pills" label="Button" href="/atrium/components/button" />
-
-  A Dialog.
-</ComponentHeader>
 
 <Example code={`
 ---

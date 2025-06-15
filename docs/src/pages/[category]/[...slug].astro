@@ -3,6 +3,17 @@ import { getEntry } from "astro:content";
 import { getCollection, render } from "astro:content";
 import Layout from "../../layout.astro";
 import SideMenu from "../../components/SideMenu.astro";
+import {
+  Example,
+  Pills,
+  Git,
+  Accessibility,
+  Atrium,
+  Rive,
+  Lit,
+  Vue,
+} from "package:/components";
+import { Code } from "astro:components";
 
 export async function getStaticPaths() {
   const allDocs = await getCollection("docs");
@@ -22,6 +33,8 @@ if (!entry) {
 }
 
 const { Content, headings, remarkPluginFrontmatter } = await render(entry);
+
+const name = entry.data.title || "";
 ---
 
 <Layout>
@@ -36,7 +49,36 @@ const { Content, headings, remarkPluginFrontmatter } = await render(entry);
     <section class="markdown-content md:px-0 w-full md:w-[calc(100%-var(--module-9xl))] overflow-x-hidden">
       <h1 class="typo-title-1 max-w-full lg:-mt-3 pb-module-xl border-b-1 border-gray-200">{entry.data.title}</h1>
 
-      <Content />
+      <div class="md:float-right md:w-[300px]">
+        <p>
+          {entry.data.description}
+        </p>
+
+        <Pills>
+          <Git href={`/packages/components/src/vue/${name}.tsx`} />
+          <Accessibility reportId={`-atrium-components-${name.toLowerCase()}-`} />
+
+          {entry.data.tags?.map(tag => {
+            if (tag[0] === "rive") {
+              return <Rive />
+            }
+            if (tag[0] === "lit") {
+              return <Lit />
+            }
+            if (tag[0] === "lit") {
+              return <Vue />
+            }
+            return <Atrium label={tag[0] || ""} href={`/atrium/components/${tag[1]?.toLowerCase()}`} />;
+          })}
+        </Pills>
+
+        {entry.data.command ? <Code lang="sh" code={entry.data.command}></Code> : ""}
+      </div>
+
+      <div class="md:float-left md:w-[calc(100%-300px)] md:pr-module-4xl">
+        <Content />
+      </div>
+
     </section>
   </div>
 </Layout>

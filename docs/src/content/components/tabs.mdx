@@ -1,17 +1,13 @@
 ---
 title: Tabs
+description: Tabs.
+tags: [["a-track", "/atrium/elements/a-track"], ["Button", "/atrium/components/button" ]]
+command: "npx @sv/components tabs"
 ---
 
 import { TabsDemo } from "./tabs/TabsDemo.jsx";
 import TabsDemoCode from "./tabs/TabsDemo.jsx?raw";
-import { Example, Atrium, ComponentHeader } from "package:/components";
-
-<ComponentHeader name="Tabs">
-  <Atrium slot="pills" label="a-track" href="/atrium/elements/a-track" />
-  <Atrium slot="pills" label="Button" href="/atrium/components/button" />
-
-  Tabs.
-</ComponentHeader>
+import { Example, Atrium } from "package:/components";
 
 <Example code={TabsDemoCode}>
   <TabsDemo client:only="vue" />

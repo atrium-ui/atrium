@@ -15,9 +15,8 @@ const props = Astro.props;
 @reference "../../../layout.css";
 
 .pill {
-  @apply border border-zinc-200 flex gap-2 rounded-lg bg-zinc-500 px-3 py-2 leading-none no-underline items-center hover:bg-zinc-700 dark:hover:bg-zinc-700;
-
-  color: currentColor !important;
+  @apply flex rounded-full px-2 py-1 leading-none items-center;
+  @apply border style-contour-grey-disabled style-fill-grey-default hover:style-fill-grey-hover style-typography-body gap-2;
 }
 
 .pill span {
