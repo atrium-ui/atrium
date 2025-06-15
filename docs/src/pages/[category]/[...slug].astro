@@ -25,6 +25,8 @@ export async function getStaticPaths() {
   });
 }
 
+const base = import.meta.env.BASE_URL;
+
 const { category, slug } = Astro.params;
 const entry = await getEntry("docs", [category, slug].join("/"));
 
@@ -68,7 +70,7 @@ const name = entry.data.title || "";
             if (tag[0] === "lit") {
               return <Vue />
             }
-            return <Atrium label={tag[0] || ""} href={`/atrium/components/${tag[1]?.toLowerCase()}`} />;
+            return <Atrium label={tag[0] || ""} href={`${base}${tag[1]?.toLowerCase()}`} />;
           })}
         </Pills>
 
