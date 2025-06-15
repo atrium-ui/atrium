@@ -3,7 +3,6 @@ export { default as Command } from "./atrium/Command.astro";
 export { default as Example } from "./atrium/Example.astro";
 export { default as File } from "./atrium/File.astro";
 
-export { default as Pills } from "./atrium/pills/Pills.astro";
 export { default as Pill } from "./atrium/pills/Pill.astro";
 export { default as Atrium } from "./atrium/pills/Atrium.astro";
 export { default as Lit } from "./atrium/pills/Lit.astro";

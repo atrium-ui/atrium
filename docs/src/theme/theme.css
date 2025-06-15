@@ -241,7 +241,7 @@
   @apply leading-24;
 }
 @utility typo-footnote {
-  @apply text-1xs leading-24;
+  @apply text-xs leading-[125%];
 }
 
 @utility typo-topline {
