@@ -17,12 +17,13 @@ export function randomImage() {
 }
 
 export function Image(props: {
+  src?: string;
   class?: string;
   width?: number;
   height?: number;
   lightbox?: boolean;
 }) {
-  const src = randomImage();
+  const src = props.src || randomImage();
 
   if (props.lightbox) {
     return (

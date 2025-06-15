@@ -15,7 +15,11 @@ export function LightboxCard() {
         </p>
       </div>
 
-      <Image class="mx-auto w-[75%] hover:ring-1" lightbox={true} />
+      <Image
+        src={`${import.meta.env.BASE_URL}placeholder.svg`}
+        class="mx-auto w-[75%] hover:ring-1"
+        lightbox={true}
+      />
     </Card>
   );
 }
