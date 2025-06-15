@@ -6,6 +6,8 @@ import { svg } from "@sv/svg-sprites/sheet";
 import { Font } from "astro:assets";
 
 const iocnSheet = await svg();
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <html>
@@ -13,13 +15,14 @@ const iocnSheet = await svg();
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="favicon" href="/favicon.png" />
-    <link rel="icon" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link rel="favicon" href={`${base}favicon.png`} />
+    <link rel="icon" href={`${base}favicon.png`} />
+    <link rel="apple-touch-icon" href={`${base}favicon.png`} />
 
     <Font cssVariable='--font-geist' preload />
 
     <slot name="head" />
+
     <!-- <ClientRouter /> -->
   </head>
   <body class="style-fill-white-background">
