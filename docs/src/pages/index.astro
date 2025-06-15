@@ -46,7 +46,7 @@ AnimationElement.riveWasm = riveWASMResource;
   </section>
 
   <section class="fade-in">
-    <div class="lg:px-module-3xl pb-module-4xl">
+    <div class="lg:px-module-6xl pb-module-4xl">
       <h2 class="typo-title-3 pb-element-xs">
         <span>19 Components ready for production</span>
       </h2>
@@ -80,7 +80,19 @@ AnimationElement.riveWasm = riveWASMResource;
         ></a-animation>
         <span class="sr-only">Dialog</span>
       </a>
-      <div class="home-card"></div>
+      <a class="home-card" href={`${base}components/popover`}>
+        <a-animation
+          src={`${base}animation/atrium_components.riv`}
+          autoplay
+          height={200}
+          width={320}
+          loop
+          class="w-full h-full"
+          layout="contain"
+          artboard="Popover"
+        ></a-animation>
+        <span class="sr-only">Popover</span>
+      </a>
       <div class="home-card"></div>
       <div class="home-card"></div>
       <div class="home-card"></div>
@@ -91,7 +103,7 @@ AnimationElement.riveWasm = riveWASMResource;
       <div class="home-card"></div>
     </div>
 
-    <div class="lg:px-module-3xl pb-module-4xl flex justify-end">
+    <div class="lg:px-module-6xl pb-module-4xl flex justify-end">
       <a href={`${base}components`} class="button-secondary typo-body flex items-center">
         <span>See all components</span>
         <svg-icon name="arrow-right" class="ml-4 typo-body" />
@@ -99,8 +111,8 @@ AnimationElement.riveWasm = riveWASMResource;
     </div>
   </section>
 
-  <section class="fade-in py-12 lg:px-module-7xl">
-    <div>
+  <section class="fade-in py-12">
+    <div class="lg:px-module-6xl">
       <div class="pb-module-4xl">
         <h3 class="typo-headline pb-element-xs">Not opinionated about styling</h3>
         <p>Components come pre-styled with TailwindCSS classes, but you can style them however you like.</p>
@@ -121,7 +133,7 @@ AnimationElement.riveWasm = riveWASMResource;
   </section>
 
   <section class="fade-in py-12">
-    <div class="lg:px-module-3xl pb-module-4xl">
+    <div class="lg:px-module-6xl pb-module-4xl">
       <h2 class="typo-title-3 pb-element-xs">
         <span>Using Elements built from scratch to the highest quality</span>
       </h2>
@@ -138,7 +150,7 @@ AnimationElement.riveWasm = riveWASMResource;
       <div class="home-card">Card</div>
     </div>
 
-    <div class="lg:px-module-3xl pb-module-4xl flex justify-end">
+    <div class="lg:px-module-6xl pb-module-4xl flex justify-end">
       <a href={`${base}elements`} class="button-secondary typo-body flex items-center">
         <span>See all elements</span>
         <svg-icon name="arrow-right" class="ml-4 typo-body" />
