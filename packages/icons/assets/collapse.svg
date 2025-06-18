@@ -1,10 +1,3 @@
-<svg viewBox="0 0 165 165" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <title>collapse</title>
-  <path
-    d="M150 116L82 48L14 116"
-    stroke="currentColor"
-    stroke-width="12"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  />
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M18.4958 15.4948C18.2224 15.7681 17.7792 15.7681 17.5058 15.4948L12.0008 9.98975L6.49576 15.4948C6.22239 15.7681 5.77917 15.7681 5.50581 15.4948C5.23244 15.2214 5.23244 14.7782 5.50581 14.5048L11.5058 8.50483C11.7792 8.23146 12.2224 8.23146 12.4958 8.50483L18.4958 14.5048C18.7691 14.7782 18.7691 15.2214 18.4958 15.4948Z" fill="#000000"/>
 </svg>

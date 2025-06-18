@@ -1,6 +1,8 @@
 export const icons = [
   "arrow-left",
   "arrow-right",
+  "arrow-up",
+  "arrow-down",
   "atrium",
   "check",
   "clipboard",
