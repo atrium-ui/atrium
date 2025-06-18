@@ -66,7 +66,8 @@ export default defineConfig({
         return (tree) => {
           visit(tree, (node) => {
             if (node.type === "containerDirective") {
-              const data = node.data || (node.data = {});
+              const data = node.data || {};
+              node.data = data;
               data.hName = "blockquote";
               data.hProperties = {
                 className: [`directive-${node.name}`],
