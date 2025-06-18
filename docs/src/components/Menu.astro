@@ -1,0 +1,169 @@
+---
+import { getCollection } from "astro:content";
+import { twMerge } from "tailwind-merge";
+
+const allDocs = await getCollection("docs");
+
+const props: {
+  class: string;
+} = Astro.props;
+
+const { category } = Astro.params;
+
+const base = import.meta.env.BASE_URL;
+
+const menuItemOrder = ["Introduction", "Components", "Elements", "Packages"];
+
+const menuItemsSorted = (a, b) => {
+  return (
+    menuItemOrder.indexOf(a.data.title || "") - menuItemOrder.indexOf(b.data.title || "")
+  );
+};
+---
+
+<script is:inline>
+async function animationFrame() {
+  await new Promise(resolve => setTimeout(resolve, 100));
+}
+
+function openMenu() {
+  document?.startViewTransition(async () => {
+    const menu = document.querySelector(".mobile-menu");
+    menu?.classList.add("open");
+    await animationFrame();
+  });
+}
+
+function closeMenu() {
+  document?.startViewTransition(async () => {
+    const menu = document.querySelector(".mobile-menu");
+    menu?.classList.remove("open");
+    await animationFrame();
+  });
+}
+</script>
+
+<div class="absolute top-module-3xl left-module-3xl w-auto right-module-3xl md:hidden flex justify-between">
+  <button
+    type="button"
+    class="typo-body"
+    onclick="closeMenu()"
+  >
+    <svg-icon class="text-[1.5em] mr-2 -ml-2" name="arrow-left" />
+    <span>back</span>
+  </button>
+
+  <button
+    type="button"
+    class="button-icon"
+    onclick="event?.target?.dispatchEvent(new CustomEvent('exit', { bubbles: true }))"
+  >
+    <svg-icon name="close" />
+    <span class="sr-only">Close</span>
+  </button>
+</div>
+
+<div class={twMerge("group flex overflow-auto h-[calc(100%-var(--module-6xl))] mt-module-6xl md:mt-0 relative", props.class)}>
+  <nav class="flex-none w-full group-[&.open]:hidden">
+    <ul class="block md:hidden gap-module-2xl">
+      {allDocs.sort(menuItemsSorted).map(doc => {
+        const parts = doc.id.split("/");
+
+        if(parts.length === 1) {
+          return (
+            <li class="mb-module-2xl">
+              <button
+                class="text-link [&[aria-current]]:text-link-active font-medium typo-title-2 w-full flex justify-between items-center"
+                onclick="openMenu()"
+              >
+                <span>{doc.data.title}</span>
+
+                <svg-icon name="arrow-right" />
+              </button>
+            </li>
+          )
+        }
+      }).filter(Boolean)}
+    </ul>
+
+    <ul class="hidden md:flex gap-module-2xl">
+      {allDocs.sort(menuItemsSorted).map(doc => {
+        const parts = doc.id.split("/");
+
+        if(parts.length === 1) {
+          return (
+            <li>
+              <a
+                class="text-link [&[aria-current]]:text-link-active font-medium"
+                href={`/${[...base.split("/"), ...doc.id.split("/")].filter(Boolean).join("/")}`}
+              >
+                <span>{doc.data.title}</span>
+              </a>
+            </li>
+          )
+        }
+      }).filter(Boolean)}
+    </ul>
+  </nav>
+
+  <nav class="hidden flex-none w-full group-[&.open]:block">
+    <ul class="gap-module-2xl">
+      {allDocs.map(doc => {
+        const parts = doc.id.split("/");
+
+        if(parts.length === 2) {
+          return (
+            <li class="mb-module-2xl">
+              <a
+                class="text-link [&[aria-current]]:text-link-active typo-title-3 font-medium w-full flex justify-between items-center"
+                href={`/${[...base.split("/"), ...doc.id.split("/")].filter(Boolean).join("/")}`}
+              >
+                <span>{doc.data.title}</span>
+              </a>
+            </li>
+          )
+        }
+      }).filter(Boolean)}
+    </ul>
+  </nav>
+</div>
+
+<style>
+:root {
+  --mobile-menu-direction: 1;
+}
+
+@keyframes slide-out {
+  0% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(-100% * var(--mobile-menu-direction)));
+    opacity: 0;
+  }
+}
+@keyframes slide-in {
+  0% {
+    transform: translateX(calc(100% * var(--mobile-menu-direction)));
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+/* Apply the custom animation to the old and new page states */
+
+::view-transition-old(mobile-menu) {
+  animation: 0.3s ease slide-out;
+}
+::view-transition-new(mobile-menu) {
+  animation: 0.3s ease slide-in;
+}
+
+.mobile-menu {
+  view-transition-name: mobile-menu;
+}
+</style>

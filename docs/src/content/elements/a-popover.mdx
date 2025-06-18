@@ -1,0 +1,34 @@
+---
+title: a-popover
+description: A reference page.
+command: import "@sv/elements/popover";
+---
+
+import { Elements, Lit, TypeDoc } from "package:/components"
+
+<div class="not-content box">
+  <a-popover-trigger class="group relative z-10">
+    <div slot="trigger">
+      <button variant="outline">
+        Label
+      </button>
+    </div>
+
+    <a-popover>
+      <div
+        class={[
+          "w-[max-content] rounded-md border p-2",
+          "border-zinc-700 bg-zinc-50 dark:bg-zinc-800",
+        ]}
+      >
+        Content
+      </div>
+    </a-popover>
+  </a-popover-trigger>
+</div>
+
+Implemented with [Popover](/atrium/components/popover).
+
+<TypeDoc source="../packages/elements/packages/popover" symbol="Popover" />
+
+<TypeDoc source="../packages/elements/packages/popover" symbol="PopoverTrigger" />

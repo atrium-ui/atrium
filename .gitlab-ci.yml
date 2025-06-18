@@ -1,8 +1,8 @@
 stages:
   - test
   - merge
-  - publish
   - docs
+  - publish
 
 image: luckydye/atrium:latest
 
@@ -83,15 +83,16 @@ publish:
 
 pages:
   stage: docs
-  dependencies:
-    - a11y
-    - publish
+  # dependencies:
+  #   - a11y
+  when: manual
   only:
     - main
+    - merge_requests
   environment:
     name: docs
     url: https://svp.pages.s-v.de/atrium
   artifacts:
     paths:
       - public
-  script: task docs:build
+  script: task docs:build -- --base /atrium/

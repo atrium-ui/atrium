@@ -9,4 +9,6 @@ export const icons = [
   "expand",
   "reload",
   "unknown",
+  "search",
+  "menu",
 ];

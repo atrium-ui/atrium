@@ -1,15 +1,15 @@
 import react from "@astrojs/react";
 import solid from "@astrojs/solid-js";
-import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@astrojs/vue";
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import rehypeShiftHeading from "rehype-shift-heading";
-import { atriumDocsIntegration } from "./src/components/docs/integration";
+import mdx from "@astrojs/mdx";
+import pagefind from "astro-pagefind";
+import svgSprite from "@sv/svg-sprites/vite";
+import { basename, resolve } from "node:path";
 
 export default defineConfig({
-  base: "/atrium/",
-  site: "https://sv.pages.s-v.de",
   publicDir: "assets",
   devToolbar: {
     enabled: false,
@@ -19,7 +19,7 @@ export default defineConfig({
       alias: {
         "package:": "/src",
         "@components": "@sv/components",
-        "@docs": "/src/components/docs",
+        "@docs": "/src/components/stories",
       },
     },
     server: {
@@ -27,15 +27,66 @@ export default defineConfig({
         allow: [".."],
       },
     },
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      svgSprite({
+        dir: [
+          //
+          "src/assets/icons/**/*.svg",
+          `${resolve("../node_modules/@sv/icons/assets")}/*.svg`,
+        ],
+        transform(code) {
+          return code
+            .replace(/#000091/g, "currentColor")
+            .replace(/#000000/g, "currentColor");
+        },
+      }),
+    ],
   },
   experimental: {
     contentIntellisense: true,
+    fonts: [
+      {
+        provider: fontProviders.google(),
+        name: "Geist",
+        weights: [300, 400, 500, 600, 700],
+        cssVariable: "--font-geist",
+      },
+    ],
   },
   markdown: {
     rehypePlugins: [[rehypeShiftHeading, { shift: 1 }]],
   },
   integrations: [
+    {
+      name: "astro-atrium-docs",
+      hooks: {
+        "astro:config:setup": ({ injectRoute, updateConfig }) => {
+          updateConfig({
+            vite: {
+              plugins: [
+                {
+                  name: "atrium-docs",
+                  transform(code, id) {
+                    if (id.match(".stories.")) {
+                      const storyId = basename(id, ".stories.ts").toLowerCase();
+                      return `export const _id = "${storyId}";\n${code}`;
+                    }
+                    return code;
+                  },
+                },
+              ],
+            },
+          });
+          injectRoute({
+            pattern: "/story",
+            entrypoint: "./src/components/stories/story.astro",
+          });
+        },
+      },
+    },
+    pagefind(),
+    mdx(),
     react({
       include: ["**/react/*.{tsx}"],
     }),
@@ -44,7 +95,9 @@ export default defineConfig({
       jsx: true,
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.includes("-"),
+          isCustomElement(tag) {
+            return tag.includes("-");
+          },
         },
       },
     }),
@@ -52,29 +105,11 @@ export default defineConfig({
       include: [
         //
         "**/solid/*.{tsx}",
-        "**/docs/Preview.tsx",
-        "**/docs/Stories.tsx",
-        "**/docs/Docs.tsx",
-        "**/docs/Playground.tsx",
+        "**/stories/Preview.tsx",
+        "**/stories/Stories.tsx",
+        "**/stories/Docs.tsx",
+        "**/playground/Playground.tsx",
       ],
-    }),
-    atriumDocsIntegration({
-      favicon: "favicon.png",
-      title: "Atrium",
-      routeMiddleware: "./src/routeData.ts",
-      customCss: ["./src/custom.css"],
-      logo: {
-        dark: "./assets/logo-dark.svg",
-        light: "./assets/logo-light.svg",
-        replacesTitle: true,
-        alt: "Atrium Logo",
-      },
-      social: {
-        gitlab: "https://gitlab.s-v.de/svp/atrium",
-      },
-      components: {
-        Header: "./src/components/starlight/Header.astro",
-      },
     }),
   ],
 });

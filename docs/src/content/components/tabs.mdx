@@ -1,0 +1,14 @@
+---
+title: Tabs
+description: Tabs.
+tags: [["a-track", "elements/a-track"], ["Button", "components/button" ]]
+command: "npx @sv/components tabs"
+---
+
+import { TabsDemo } from "./tabs/TabsDemo.jsx";
+import TabsDemoCode from "./tabs/TabsDemo.jsx?raw";
+import { Example, Atrium } from "package:/components";
+
+<Example code={TabsDemoCode}>
+  <TabsDemo client:only="vue" />
+</Example>

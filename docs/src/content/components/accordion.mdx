@@ -1,0 +1,19 @@
+---
+title: Accordion
+image: "/components/accordion.png"
+description: An array of expandable elements.
+tags: [["a-expandable", "elements/a-expandable"]]
+command: "npx @sv/components accordion"
+---
+
+import { AccordionDemo } from "./accordion/AccordionDemo.jsx";
+import AccordionDemoCode from "./accordion/AccordionDemo.jsx?raw";
+import { Example, Atrium } from "package:/components";
+
+## Behaviour
+
+When the accordion is opened or closed, the component makes sure it does not slip out of the viewport by srolling into the viewport.
+
+<Example code={AccordionDemoCode}>
+  <AccordionDemo client:only="vue" />
+</Example>

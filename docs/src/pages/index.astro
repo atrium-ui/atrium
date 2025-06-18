@@ -1,0 +1,166 @@
+---
+import Layout from "../layout.astro";
+
+const base = import.meta.env.BASE_URL;
+---
+
+<style>
+  @reference "../layout.css";
+
+  .home-card {
+    @apply min-h-[200px] bg-grey-50 transition-transform border-4 border-white;
+  }
+  .home-card:nth-last-child(2) {
+    @apply opacity-60;
+  }
+  .home-card:nth-last-child(1) {
+    @apply opacity-30;
+  }
+  .home-card:hover {
+    @apply scale-[1.02] duration-400 delay-100 ease-[var(--ease-smooth)];
+  }
+</style>
+
+<Layout>
+  <title slot="head">Atrium UI</title>
+  <meta name="description" slot="head" content="A curated collection of Libraries, Custom-Elements and Components for different Frameworks for building high quality websites." />
+
+  <section class="flex flex-col md:flex-row items-center gap-module-2xl mb-module-8xl move-in lg:px-module-3xl">
+    <div>
+      <img class="light-mode-only" width="600" src={`${base}atrium-light.png`} />
+      <img class="dark-mode-only" width="600" src={`${base}atrium-dark.png`} />
+    </div>
+
+    <div class="pb-module-4xl move-in">
+      <h1 class="typo-title-2 pb-module-l">Quality without thinking about it.</h1>
+      <p>
+        A curated collection of Libraries, Custom-Elements and Components for different Frameworks for building high quality websites.
+      </p>
+    </div>
+  </section>
+
+  <section class="fade-in">
+    <div class="lg:px-module-6xl pb-module-4xl">
+      <h2 class="typo-title-3 pb-element-xs">
+        <span>19 Components ready for production</span>
+      </h2>
+      <p class="typo-body">Fully styled components included, ready to use.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 pb-module-4xl">
+      <a class="home-card" href={`${base}components/accordion`}>
+        <a-animation
+          src={`${base}animation/atrium_components.riv`}
+          autoplay
+          height={200}
+          width={320}
+          loop
+          class="w-full h-full"
+          layout="contain"
+          artboard="Accordion"
+        ></a-animation>
+        <span class="sr-only">Accordion</span>
+      </a>
+      <a class="home-card" href={`${base}components/dialog`}>
+        <a-animation
+          src={`${base}animation/atrium_components.riv`}
+          autoplay
+          height={200}
+          width={320}
+          loop
+          class="w-full h-full"
+          layout="contain"
+          artboard="Dialog"
+        ></a-animation>
+        <span class="sr-only">Dialog</span>
+      </a>
+      <a class="home-card" href={`${base}components/popover`}>
+        <a-animation
+          src={`${base}animation/atrium_components.riv`}
+          autoplay
+          height={200}
+          width={320}
+          loop
+          class="w-full h-full"
+          layout="contain"
+          artboard="Popover"
+        ></a-animation>
+        <span class="sr-only">Popover</span>
+      </a>
+      <a class="home-card" href={`${base}components/slider`}>
+        <a-animation
+          src={`${base}animation/atrium_components.riv`}
+          autoplay
+          height={200}
+          width={320}
+          loop
+          class="w-full h-full"
+          layout="contain"
+          artboard="Slider"
+        ></a-animation>
+        <span class="sr-only">Slider</span>
+      </a>
+      <div class="home-card"></div>
+      <div class="home-card"></div>
+      <div class="home-card"></div>
+      <div class="home-card"></div>
+      <div class="home-card"></div>
+      <div class="home-card"></div>
+      <div class="home-card"></div>
+    </div>
+
+    <div class="lg:px-module-6xl pb-module-4xl flex justify-end">
+      <a href={`${base}components`} class="button-secondary typo-body flex items-center">
+        <span>See all components</span>
+        <svg-icon name="arrow-right" class="ml-4 typo-body" />
+      </a>
+    </div>
+  </section>
+
+  <section class="fade-in py-12">
+    <div class="lg:px-module-6xl">
+      <div class="pb-module-4xl">
+        <h3 class="typo-headline pb-element-xs">Not opinionated about styling</h3>
+        <p>Components come pre-styled with TailwindCSS classes, but you can style them however you like.</p>
+      </div>
+      <div class="pb-module-4xl">
+        <h3 class="typo-headline pb-element-xs">Ship less JavaScript</h3>
+        <p>Components use custom-elements that are written with a focus on small bundle sizes.</p>
+      </div>
+      <div class="pb-module-4xl">
+        <h3 class="typo-headline pb-element-xs">Protable and easy to use</h3>
+        <p>Use with any framework, or event without one.</p>
+      </div>
+      <div class="pb-module-4xl">
+        <h3 class="typo-headline pb-element-xs">Performant and accessible</h3>
+        <p>Minimal framework code, optimized for performance and accessibility.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="fade-in py-12">
+    <div class="lg:px-module-6xl pb-module-4xl">
+      <h2 class="typo-title-3 pb-element-xs">
+        <span>Using Elements built from scratch to the highest quality</span>
+      </h2>
+      <p class="typo-body">Lorem Upsum.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-element-xs pb-module-4xl">
+      <div class="home-card"></div>
+      <div class="home-card"></div>
+      <div class="home-card"></div>
+      <div class="home-card"></div>
+      <div class="home-card"></div>
+      <div class="home-card"></div>
+      <div class="home-card"></div>
+    </div>
+
+    <div class="lg:px-module-6xl pb-module-4xl flex justify-end">
+      <a href={`${base}elements`} class="button-secondary typo-body flex items-center">
+        <span>See all elements</span>
+        <svg-icon name="arrow-right" class="ml-4 typo-body" />
+      </a>
+    </div>
+  </section>
+</Layout>

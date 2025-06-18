@@ -1,0 +1,53 @@
+---
+import "./layout.css";
+import { ClientRouter } from "astro:transitions";
+import Header from "./components/Header.astro";
+import { svg } from "@sv/svg-sprites/sheet";
+import { Font } from "astro:assets";
+
+const iocnSheet = await svg();
+
+const base = import.meta.env.BASE_URL;
+---
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="favicon" href={`${base}favicon.png`} />
+    <link rel="icon" href={`${base}favicon.png`} />
+    <link rel="apple-touch-icon" href={`${base}favicon.png`} />
+
+    <Font cssVariable='--font-geist' preload />
+
+    <slot name="head" />
+
+    <script>
+      import { AnimationElement } from "@sv/elements/animation";
+      import riveWASMResource from "@rive-app/canvas-advanced-lite/rive.wasm?url";
+      AnimationElement.riveWasm = riveWASMResource;
+    </script>
+
+    <!-- <ClientRouter /> -->
+  </head>
+  <body class="style-fill-white-background">
+    <div class="root min-h-screen flex flex-col">
+      <div class="hidden" set:html={iocnSheet} transition:persist />
+
+      <Header transition:persist />
+
+      <main class="flex-1 w-full px-(--site-padding)">
+        <slot />
+      </main>
+
+      <footer>
+        <div class="max-w-(--site-width) px-(--site-padding) mx-auto flex items-center justify-between gap-6 py-8">
+          <div>
+            <span class="typo-footnote">(c) Atrium Contributers</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

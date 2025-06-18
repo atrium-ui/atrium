@@ -1,0 +1,20 @@
+---
+title: a-box
+description: A reference page.
+command: import "@sv/elements/box";
+---
+
+import { Elements } from "package:/components"
+import { TypeDoc, Example, Lit } from "package:/components";
+
+<TypeDoc source="../packages/elements/packages/box" symbol="BoxElement" />
+
+## Example
+
+```jsx
+<a-box onResize={() => {
+  console.log("update something based on the layout")
+}}>
+  ...
+</a-box>
+```

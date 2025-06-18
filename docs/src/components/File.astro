@@ -1,0 +1,33 @@
+---
+import { Code } from "astro:components";
+import fs from "node:fs";
+
+export interface Props {
+  file: string;
+}
+
+const props = Astro.props;
+
+const langs = {
+  ts: "typescript",
+  tsx: "typescript",
+  js: "javascript",
+  cjs: "javascript",
+  jsx: "javascript",
+  json: "json",
+  yaml: "yaml",
+  yml: "yaml",
+  md: "markdown",
+  html: "html",
+  css: "css",
+  scss: "scss",
+  sass: "sass",
+  editorconfig: "ini",
+};
+
+const file = fs.readFileSync(props.file, "utf-8");
+const ext = props.file.split(".").pop();
+const lang = (ext && langs[ext]) || "plaintext";
+---
+
+<Code lang={lang} code={file}></Code>

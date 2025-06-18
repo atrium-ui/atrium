@@ -1,0 +1,16 @@
+---
+import { Elements } from "package:/components";
+import Layout from "../layout.astro";
+import { PlaygroundView } from "../components/playground/Playground";
+---
+
+<Layout>
+  <title slot="head">Playground | Atrium UI</title>
+  <meta name="description" slot="head" content="Playground for Atrium UI components and features." />
+
+  <Elements />
+
+  <div class="-mt-module-4xl">
+    <PlaygroundView client:only="solid" />
+  </div>
+</Layout>

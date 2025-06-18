@@ -1,0 +1,80 @@
+---
+import Search from "astro-pagefind/components/Search";
+import Menu from "./Menu.astro";
+
+const base = import.meta.env.BASE_URL;
+---
+
+<script>
+  import "./Overlay.js";
+  import "@sv/svg-sprites/svg-icon";
+
+  function updateLinks (toUrl: URL | Location) {
+    const current = document.querySelectorAll("[aria-current='page']");
+    current?.forEach(el => el.removeAttribute("aria-current"));
+
+    const newCurrentCandidates = document.querySelectorAll<HTMLAnchorElement>(`[href]`);
+
+    for (const candidate of newCurrentCandidates) {
+      const candidateUrl = new URL(candidate.href);
+      if (toUrl.pathname.match(candidateUrl.pathname)) {
+        candidate.setAttribute("aria-current", "page");
+      }
+    }
+  }
+
+  document.addEventListener("astro:after-swap", () => updateLinks(location))
+  window.addEventListener("DOMContentLoaded", () => updateLinks(location));
+</script>
+
+<header class="mb-module-4xl">
+  <div class="max-w-(--site-width) px-(--site-padding) mx-auto flex items-center justify-between gap-6 py-8">
+    <div class="flex-none">
+      <a href={base}>
+        <img class="light-mode-only w-12 aspect-square" width="600" src={`${base}atrium-light.png`}  />
+        <img class="dark-mode-only w-12 aspect-square" width="600" src={`${base}atrium-dark.png`}  />
+      </a>
+    </div>
+
+    <div class="flex-1">
+      <div class="hidden md:block px-12">
+        <Menu />
+      </div>
+    </div>
+
+    <a class="button-icon text-xl self-center" href="https://gitlab.s-v.de/svp/atrium" target="_blank" rel="noopener noreferrer">
+      <svg-icon class="block" name="source" />
+      <span class="sr-only">To source</span>
+    </a>
+
+    <a-overlay-trigger>
+      <button class="button-primary text-xl" aria-controls="overlay-search">
+        <svg-icon name="search" class="mx-[-1rem]" />
+        <span class="sr-only">Open search</span>
+      </button>
+    </a-overlay-trigger>
+
+    <a-overlay-trigger class="block md:hidden">
+      <button class="button-primary text-xl" aria-controls="overlay-menu">
+        <svg-icon name="menu" class="mx-[-1rem]" />
+        <span class="sr-only">Open menu</span>
+      </button>
+    </a-overlay-trigger>
+  </div>
+
+  <a-overlay id="overlay-menu">
+    <div class="pointer-events-none relative py-12 px-(--site-padding) h-full">
+      <div class="max-w-[900px] px-(--site-padding) relative py-6 mx-auto bg-white rounded-xl pointer-events-auto h-full">
+        <Menu class="mobile-menu" />
+      </div>
+    </div>
+  </a-overlay>
+
+  <a-overlay id="overlay-search">
+    <div class="pointer-events-none relative py-12 px-(--site-padding) h-full">
+      <div class="max-w-[900px] px-(--site-padding) relative py-6 mx-auto bg-white rounded-xl pointer-events-auto max-h-full overflow-auto">
+        <Search />
+      </div>
+    </div>
+  </a-overlay>
+</header>

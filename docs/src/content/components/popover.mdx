@@ -1,0 +1,17 @@
+---
+title: Popover
+image: "/components/popover.png"
+description: A popover.
+tags: [["a-popover", "elements/a-popover"], ["Button", "components/button"]]
+command: "npx @sv/components popover"
+---
+import { Popover } from "@components/src/vue/Popover";
+import { Example, Atrium } from "package:/components";
+import PopoverDemo from "./popover/popover";
+import PopoverDemoCode from "./popover/popover?raw";
+
+<Example code={PopoverDemoCode}>
+  <div>
+    <PopoverDemo client:only="vue"/>
+  </div>
+</Example>

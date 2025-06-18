@@ -1,0 +1,17 @@
+---
+import { Code } from "astro:components";
+
+const props = Astro.props;
+---
+
+<div class="terminal-command">
+  <Code lang="sh" code={props.bun}></Code>
+</div>
+
+<style is:global>
+  .terminal-command .not-content {
+    padding: 0;
+    border: none;
+    min-height: 0;
+  }
+</style>

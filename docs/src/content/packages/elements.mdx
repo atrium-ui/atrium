@@ -1,0 +1,26 @@
+---
+title: "@sv/elements"
+description: A reference page.
+---
+
+import { Lit, Command } from "package:/components";
+import Changelog from "@sv/elements/CHANGELOG.md";
+
+This package includes all custom-elements used in components.
+
+## Installation
+
+Make sure your project is set up with access to the registry as described in [Setup](/atrium/setup).
+
+<Command
+  pnpm="pnpm add @sv/elements --save-exact"
+  npm="npm i @sv/elements --save-exact"
+  bun="bun add @sv/elements --exact"
+/>
+
+## Changelog
+
+<br/>
+<Changelog />
+<br/>
+<a target="_blank" href={`https://gitlab.s-v.de/svp/atrium/-/blob/main/packages/elements/CHANGELOG.md`}>Full changelog</a>

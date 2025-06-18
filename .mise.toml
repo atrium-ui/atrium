@@ -1,7 +1,7 @@
 [tools]
 task = "3.37"
-node = "20"    # needed to run starlight docs, https://github.com/oven-sh/bun/issues/7531
-bun = "1.2.0"
+node = "20"
+bun = "1.2.16"
 jq = "1.7"
 watchexec = "2.3.0"
 

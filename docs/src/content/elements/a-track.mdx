@@ -1,0 +1,359 @@
+---
+title: a-track
+description: A scroll-container with slider utility functions.
+command: import "@sv/elements/track";
+---
+
+import { Elements, Lit, TypeDoc } from "package:/components"
+import { VariableTrack } from "./a-track/Track";
+import "./a-track/track.css";
+
+<div class="not-content box overflow-hidden">
+  <a-track snap class="flex w-full overflow-visible">
+    <a href="#" class="counted block flex-none p-4">
+      <canvas width="500" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="counted block flex-none p-4">
+      <canvas width="200" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="counted block flex-none p-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="counted block flex-none p-4">
+      <canvas width="400" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="counted block flex-none p-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="counted block flex-none p-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="counted block flex-none p-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="counted block flex-none p-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="counted block flex-none p-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="counted block flex-none p-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="counted block flex-none p-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="counted block flex-none p-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="counted block flex-none p-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="counted block flex-none p-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+  </a-track>
+</div>
+
+Implemented with [Slider](/atrium/components/slider) and [Drawer](/atrium/components/drawer).
+
+<TypeDoc source="../packages/elements/packages/track" symbol="Track" />
+<TypeDoc source="../packages/elements/packages/track" symbol="Trait" />
+<TypeDoc source="../packages/elements/packages/track" symbol="SnapTrait" />
+
+Different example confugrations of tracks.
+
+### Free scroll
+
+<div class="not-content box">
+  <a-track class="flex w-full overflow-visible">
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+  </a-track>
+</div>
+
+### Snap scroll
+
+<div class="not-content box">
+  <a-track snap overflow="ignore" class="flex w-full overflow-visible">
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+  </a-track>
+</div>
+
+### Align center
+
+<div class="not-content box">
+  <a-track align="center" snap class="flex w-full overflow-visible">
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+    <a href="#" class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </a>
+  </a-track>
+</div>
+
+### Arrow key navigation
+
+<div class="not-content box">
+  <a-track tabindex="0" class="flex w-full">
+    <div class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </div>
+    <div class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </div>
+    <div class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </div>
+    <div class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </div>
+    <div class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </div>
+    <div class="block flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </div>
+  </a-track>
+</div>
+
+### Vertical snap scroll
+
+<div class="not-content box">
+  <a-track snap
+        debug
+        class="flex h-[800px] w-[250px] flex-col overflow-hidden"
+        vertical align="center">
+    <div class="flex-none py-2 font-bold">
+      <canvas width="200" height="200" class="bg-slate-500" />
+    </div>
+    <div class="flex-none py-2 font-bold">
+      <canvas width="200" height="200" class="bg-slate-500" />
+    </div>
+    <div class="flex-none py-2 font-bold">
+      <canvas width="200" height="200" class="bg-slate-500" />
+    </div>
+    <div class="flex-none py-2 font-bold">
+      <canvas width="200" height="200" class="bg-slate-500" />
+    </div>
+    <div class="flex-none py-2 font-bold">
+      <canvas width="200" height="200" class="bg-slate-500" />
+    </div>
+    <div class="flex-none py-2 font-bold">
+      <canvas width="200" height="200" class="bg-slate-500" />
+    </div>
+    <div class="flex-none py-2 font-bold">
+      <canvas width="200" height="200" class="bg-slate-500" />
+    </div>
+    <div class="flex-none py-2 font-bold">
+      <canvas width="200" height="200" class="bg-slate-500" />
+    </div>
+    <div class="flex-none py-2 font-bold">
+      <canvas width="200" height="200" class="bg-slate-500" />
+    </div>
+  </a-track>
+</div>
+
+### Dynamic children
+
+When children change, and the last selected item does not exist anymore, it will recover to the closest available child.
+
+<VariableTrack client:only="vue" />
+
+Configure format behaviour:
+
+```typescript
+track.addEventListener("format", e => {
+  // prevent default behaviour (move to the closest available child)
+  e.preventDefault();
+  // instead move to the first child
+  e.currentTarget?.moveTo(0);
+});
+```
+
+### Nested
+
+<div class="not-content box">
+  <a-track snap class="flex w-full">
+    <div class="flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </div>
+    <div class="flex-none pr-4">
+      <a-track id="nested" debug align="center" current="0" vertical snap class="flex h-[280px] flex-col overflow-hidden">
+        <div class="flex-none pb-2 font-bold">
+          <canvas width="200" height="180" class="bg-slate-500" />
+        </div>
+        <div class="flex-none pb-2 font-bold">
+          <canvas width="200" height="180" class="bg-slate-500" />
+        </div>
+        <div class="flex-none pb-2 font-bold">
+          <canvas width="200" height="180" class="bg-slate-500" />
+        </div>
+        <div class="flex-none pb-2 font-bold">
+          <canvas width="200" height="180" class="bg-slate-500" />
+        </div>
+        <div class="flex-none pb-2 font-bold">
+          <canvas width="200" height="180" class="bg-slate-500" />
+        </div>
+        <div class="flex-none pb-2 font-bold">
+          <canvas width="200" height="180" class="bg-slate-500" />
+        </div>
+        <div class="flex-none pb-2 font-bold">
+          <canvas width="200" height="180" class="bg-slate-500" />
+        </div>
+        <div class="flex-none pb-2 font-bold">
+          <canvas width="200" height="180" class="bg-slate-500" />
+        </div>
+        <div class="flex-none pb-2 font-bold">
+          <canvas width="200" height="180" class="bg-slate-500" />
+        </div>
+      </a-track>
+    </div>
+    <div class="flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </div>
+    <div class="flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </div>
+    <div class="flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </div>
+    <div class="flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </div>
+    <div class="flex-none pr-4">
+      <canvas width="260" height="280" class="bg-slate-500" />
+    </div>
+  </a-track>
+</div>
+
+### Loop Snap
+
+<div class="not-content box">
+  <a-track debug snap loop class="flex w-full">
+    <div class="flex-none w-full">
+      <canvas width={720} height={480} class="w-full bg-red-500" />
+    </div>
+    <div class="flex-none w-full">
+      <canvas width={720} height={480} class="w-full bg-slate-400" />
+    </div>
+    <div class="flex-none w-full">
+      <canvas width={720} height={480} class="w-full bg-slate-300" />
+    </div>
+    <div class="flex-none w-full">
+      <canvas width={720} height={480} class="w-full bg-slate-200" />
+    </div>
+    <div class="flex-none w-full">
+      <canvas width={720} height={480} class="w-full bg-slate-100" />
+    </div>
+    <div class="flex-none w-full">
+      <canvas width={720} height={480} class="w-full bg-slate-600" />
+    </div>
+  </a-track>
+</div>

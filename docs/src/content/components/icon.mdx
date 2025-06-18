@@ -1,0 +1,62 @@
+---
+title: Icon
+image: "/components/icon.png"
+description: Example Icon Component.
+command: "npx @sv/components icon"
+---
+
+import { Icon } from "@components/src/vue/Icon";
+import { Example, Atrium } from "package:/components";
+
+<Example code={`
+---
+import { Icon } from "./Icon.jsx";
+---
+
+<Icon name="unknown"/>
+`}>
+  <div class="text-base">
+    <Icon client:only="vue" name="unknown"/>
+  </div>
+  <br/>
+  <div class="text-lg">
+    <Icon client:only="vue" name="unknown"/>
+  </div>
+</Example>
+
+## Included icons
+
+<div class="box not-content">
+  <div class="text-lg flex flex-wrap gap-8 p-6">
+    <div>
+      <Icon client:only="vue" name="unknown"/>
+    </div>
+    <div>
+      <Icon client:only="vue" name="atrium"/>
+    </div>
+    <div>
+      <Icon client:only="vue" name="clipboard"/>
+    </div>
+    <div>
+      <Icon client:only="vue" name="collapse"/>
+    </div>
+    <div>
+      <Icon client:only="vue" name="expand"/>
+    </div>
+    <div>
+      <Icon client:only="vue" name="check"/>
+    </div>
+    <div>
+      <Icon client:only="vue" name="close"/>
+    </div>
+    <div>
+      <Icon client:only="vue" name="arrow-left"/>
+    </div>
+    <div>
+      <Icon client:only="vue" name="arrow-right"/>
+    </div>
+    <div>
+      <Icon client:only="vue" name="reload"/>
+    </div>
+  </div>
+</div>

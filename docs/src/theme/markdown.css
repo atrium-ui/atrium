@@ -1,0 +1,70 @@
+.markdown-content {
+  .astro-code {
+    @apply my-element-m py-element-2xs px-element-xs rounded-md;
+  }
+
+  h1 {
+    @apply typo-title-2 mb-module-m;
+  }
+
+  h2 {
+    @apply typo-title-3 mb-module-m;
+  }
+
+  h3 {
+    @apply typo-subtitle mb-module-m;
+  }
+
+  h4 {
+    @apply typo-headline mb-module-m;
+  }
+
+  h2:not(:first-child),
+  h3:not(:first-child),
+  h4:not(:first-child) {
+    @apply mt-module-2xl;
+  }
+
+  p {
+    @apply typo-body mb-module-m;
+  }
+
+  .box {
+    border: 1px solid var(--color-grey-200);
+    border-radius: var(--radius-xs);
+    display: flex;
+  }
+
+  .box > *:first-child {
+    min-height: 200px;
+  }
+
+  p a[href] {
+    color: blue;
+    text-decoration: underline;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  table th {
+    text-align: left;
+    padding-bottom: 1rem;
+    font-weight: bold;
+  }
+
+  table td {
+    border-bottom: 1px solid var(--color-grey-200);
+    padding-right: 2rem;
+  }
+
+  table td p {
+    margin: 0.5rem 0;
+  }
+
+  hr {
+    @apply my-element-m border-t-1;
+  }
+}

@@ -1,0 +1,67 @@
+---
+title: a-animation
+description: A wrapper element, which adapts its size to the size of its child.
+command: import "@sv/elements/animation";
+---
+
+import { TypeDoc, Elements, Lit, Rive } from "package:/components"
+
+<div class="not-content box grid gap-4 grid-cols-3">
+  <a-animation
+    class="border"
+    src="/atrium/animation/loading.riv"
+  />
+</div>
+
+
+<TypeDoc source="../packages/elements/packages/animation" symbol="AnimationElement" />
+
+## Examples
+
+Different example confugrations of rive animations.
+<br/>
+
+<a target="_blank" download="loading.riv" href="/atrium/animation/loading.riv">Doaload example riv</a>
+
+<br/>
+<br/>
+
+<div class="not-content flex flex-wrap gap-4">
+
+  <div>
+    ### Lauout Cover
+
+    <a-animation
+      class="border w-40 h-40"
+      layout="cover"
+      width="200"
+      height="200"
+      src="/atrium/animation/loading.riv"
+    />
+  </div>
+
+  <div>
+    ### Lauout Fill
+
+    <a-animation
+      class="border w-40 h-40"
+      layout="fill"
+      width="200"
+      height="200"
+      src="/atrium/animation/loading.riv"
+    />
+  </div>
+
+  <div>
+    ### Lauout Contain
+
+    <a-animation
+      class="border w-40 h-40"
+      layout="contain"
+      width="200"
+      height="200"
+      src="/atrium/animation/loading.riv"
+    />
+  </div>
+
+</div>
