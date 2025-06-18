@@ -5,7 +5,11 @@ const { headline } = Astro.props;
 
 const category = Astro.props.category || Astro.params.category;
 
-const slug = Astro.url.pathname.split("/").filter(str => str !== "/").filter(Boolean).join("/");
+const slug = Astro.url.pathname
+  .split("/")
+  .filter((str) => str !== "/")
+  .filter(Boolean)
+  .join("/");
 
 const allDocs = await getCollection("docs");
 

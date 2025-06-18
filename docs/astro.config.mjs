@@ -63,8 +63,8 @@ export default defineConfig({
     remarkPlugins: [
       [remarkDirective, {}],
       function remarkCustomInfobox() {
-        return tree => {
-          visit(tree, node => {
+        return (tree) => {
+          visit(tree, (node) => {
             if (node.type === "containerDirective") {
               const data = node.data || (node.data = {});
               data.hName = "blockquote";
