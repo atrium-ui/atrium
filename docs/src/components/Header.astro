@@ -9,22 +9,24 @@ const base = import.meta.env.BASE_URL;
   import "./Overlay.js";
   import "@sv/svg-sprites/svg-icon";
 
-  function updateLinks (toUrl: URL | Location) {
-    const current = document.querySelectorAll("[aria-current='page']");
-    current?.forEach(el => el.removeAttribute("aria-current"));
+  //// For Client-Side Navigation
+  //
+  // function updateLinks (toUrl: URL | Location) {
+  //   const current = document.querySelectorAll("[aria-current='page']");
+  //   current?.forEach(el => el.removeAttribute("aria-current"));
 
-    const newCurrentCandidates = document.querySelectorAll<HTMLAnchorElement>(`[href]`);
+  //   const newCurrentCandidates = document.querySelectorAll<HTMLAnchorElement>(`[href]`);
 
-    for (const candidate of newCurrentCandidates) {
-      const candidateUrl = new URL(candidate.href);
-      if (toUrl.pathname.match(candidateUrl.pathname)) {
-        candidate.setAttribute("aria-current", "page");
-      }
-    }
-  }
+  //   for (const candidate of newCurrentCandidates) {
+  //     const candidateUrl = new URL(candidate.href);
+  //     if (toUrl.pathname.match(candidateUrl.pathname)) {
+  //       candidate.setAttribute("aria-current", "page");
+  //     }
+  //   }
+  // }
 
-  document.addEventListener("astro:after-swap", () => updateLinks(location))
-  window.addEventListener("DOMContentLoaded", () => updateLinks(location));
+  // document.addEventListener("astro:after-swap", () => updateLinks(location))
+  // window.addEventListener("DOMContentLoaded", () => updateLinks(location));
 </script>
 
 <header class="mb-module-4xl">

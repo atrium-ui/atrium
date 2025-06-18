@@ -53,10 +53,12 @@ const name = entry.data.title || "";
       <SideMenu category="packages" headline="All packages" />
     </div>
 
-    <section class="markdown-content md:px-0 w-full md:w-[calc(100%-var(--module-9xl))] overflow-x-hidden">
-      <h1 class="typo-title-1 max-w-full lg:-mt-3 pb-module-xl border-b-1 border-gray-200">{entry.data.title}</h1>
+    <main class="markdown-content md:px-0 w-full md:w-[calc(100%-var(--module-9xl))] overflow-x-hidden">
+      <h1 class="typo-title-2 max-w-full lg:-mt-3">{entry.data.title}</h1>
 
-      <div class="lg:float-right lg:w-[300px]">
+      <div class="border-b-1 border-gray-200 pb-module-s mb-module-xl"></div>
+
+      <aside class="lg:float-right lg:w-[300px]">
         <p>
           {entry.data.description}
         </p>
@@ -83,12 +85,12 @@ const name = entry.data.title || "";
         {entry.data.command ? <Code lang="sh" code={entry.data.command}></Code> : ""}
 
         <!-- <div class="typo-footnote font-bold">Symbols</div> -->
-      </div>
+      </aside>
 
       <div class="lg:float-left lg:w-[calc(100%-300px)] lg:pr-module-4xl">
         <Content />
       </div>
 
-    </section>
+    </main>
   </div>
 </Layout>

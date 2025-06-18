@@ -39,12 +39,16 @@ if (!entry) {
   throw new Error("404");
 }
 
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 
 const name = entry.data.title || "";
 ---
 
 <Elements />
+
+<script>
+  import "@sv/elements/track";
+</script>
 
 <Layout>
   <title slot="head">{entry.data.title} | Atrium components</title>
@@ -55,11 +59,32 @@ const name = entry.data.title || "";
       <SideMenu category="components" headline="All components" />
     </div>
 
-    <section class="markdown-content md:px-0 w-full md:w-[calc(100%-var(--module-9xl))] overflow-x-hidden">
-      <h1 class="typo-title-1 max-w-full lg:-mt-3 pb-module-xl border-b-1 border-gray-200">{entry.data.title}</h1>
+    <main class="md:px-0 w-full md:w-[calc(100%-var(--module-9xl))] overflow-x-hidden">
+      <h1 class="typo-title-2 max-w-full lg:-mt-3">{entry.data.title}</h1>
 
-      <div class="lg:float-right lg:w-[300px]">
-        <p>
+      <div class="relative my-module-3xl">
+        <Preview client:load />
+      </div>
+
+      <a-track class="flex mt-module-2xl overflow-visible">
+        <ul class="flex-none flex gap-element-2xl">
+          {headings.map(heading => {
+            return (
+              <li class="flex-none">
+                <a href={`#${heading.slug}`} class="text-link text-grey-500 hover:text-black transition-colors">
+                  <svg-icon name="arrow-down" class="text-[1.75em]" />
+                  {heading.text}
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+      </a-track>
+
+      <div class="border-b-1 border-gray-200 pb-module-s mb-module-xl"></div>
+
+      <aside class="lg:float-right lg:w-[300px]">
+        <p class="mb-module-m">
           {entry.data.description}
         </p>
 
@@ -81,21 +106,17 @@ const name = entry.data.title || "";
           })}
         </div>
 
-        <div class="typo-footnote font-bold">Usage</div>
+        <div class="typo-footnote font-bold mb-module-m mt-module-2xl">Usage</div>
         {entry.data.command ? <Code lang="sh" code={entry.data.command}></Code> : ""}
 
         <div class="typo-footnote font-bold mb-module-m mt-module-2xl">Variants</div>
         <StoryNav />
-      </div>
+      </aside>
 
-      <div class="lg:float-left lg:w-[calc(100%-300px)] lg:pr-module-4xl">
-        <div class="relative">
-          <Preview client:load />
-        </div>
-
+      <div class="markdown-content lg:float-left lg:w-[calc(100%-300px)] lg:pr-module-4xl">
         <Content />
       </div>
 
-    </section>
+    </main>
   </div>
 </Layout>

@@ -11,6 +11,7 @@
     "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.3.0",
     "@astrojs/react": "4.3.0",
+    "@astrojs/sitemap": "^3.4.1",
     "@astrojs/solid-js": "5.1.0",
     "@astrojs/tailwind": "6.0.2",
     "@astrojs/vue": "5.1.0",

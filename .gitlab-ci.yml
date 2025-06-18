@@ -95,4 +95,4 @@ pages:
   artifacts:
     paths:
       - public
-  script: task docs:build -- --base /atrium/
+  script: SITE="https://svp.pages.s-v.de/atrium" task docs:build -- --base /atrium/

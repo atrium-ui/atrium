@@ -32,37 +32,37 @@ for (const key in storiesImports) {
 ---
 
 <script>
-  import "@sv/elements/expandable";
+  //// For Client-Side Navigation
+  //
+  // document.addEventListener('astro:before-preparation', (event) => {
+  //   updateCurrentPage(event.to);
 
-  document.addEventListener('astro:before-preparation', (event) => {
-    updateCurrentPage(event.to);
+  //   const originalLoader = event.loader;
+  //   event.loader = async function() {
+  //     const frame = document.querySelector(".main-frame");
+  //     frame?.classList.add("docs-story-loading");
 
-    const originalLoader = event.loader;
-    event.loader = async function() {
-      const frame = document.querySelector(".main-frame");
-      frame?.classList.add("docs-story-loading");
+  //     await originalLoader();
+  //   };
+  // });
 
-      await originalLoader();
-    };
-  });
+  // document.addEventListener('astro:page-load', () => {
+  //   updateCurrentPage(window.location);
+  // });
 
-  document.addEventListener('astro:page-load', () => {
-    updateCurrentPage(window.location);
-  });
+  // function updateCurrentPage(location: Location | URL) {
+  //   const loc = location.href.replace(location.origin, "");
+  //   const oldPages = document.querySelectorAll('[aria-current="page"]');
+  //   const newPages = document.querySelectorAll(`[href="${loc}"]`);
 
-  function updateCurrentPage(location: Location | URL) {
-    const loc = location.href.replace(location.origin, "");
-    const oldPages = document.querySelectorAll('[aria-current="page"]');
-    const newPages = document.querySelectorAll(`[href="${loc}"]`);
+  //   for (const oldPage of oldPages) {
+  //     oldPage.setAttribute("aria-current", "false");
+  //   }
 
-    for (const oldPage of oldPages) {
-      oldPage.setAttribute("aria-current", "false");
-    }
-
-    for (const newPage of newPages) {
-      newPage.setAttribute("aria-current", "page");
-    }
-  }
+  //   for (const newPage of newPages) {
+  //     newPage.setAttribute("aria-current", "page");
+  //   }
+  // }
 </script>
 
 {stories.length > 0 ? (

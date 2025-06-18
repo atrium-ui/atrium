@@ -1,8 +1,4 @@
 .markdown-content {
-  .astro-code {
-    @apply my-element-m py-element-2xs px-element-xs rounded-md;
-  }
-
   h1 {
     @apply typo-title-2 mb-module-m;
   }
@@ -22,23 +18,32 @@
   h2:not(:first-child),
   h3:not(:first-child),
   h4:not(:first-child) {
-    @apply mt-module-2xl;
+    @apply mt-module-4xl;
+  }
+
+  blockquote {
+    @apply rounded-md border-1 border-solid border-gray-200 bg-gray-100 p-4;
+    @apply not-last:mb-module-xl not-first:my-module-xl;
   }
 
   p {
-    @apply typo-body mb-module-m;
+    @apply typo-body not-last:mb-module-m;
   }
 
-  .box {
-    border: 1px solid var(--color-grey-200);
-    border-radius: var(--radius-xs);
-    display: flex;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  ul,
+  ol,
+  blockquote,
+  p {
+    @apply max-w-[880px];
   }
 
-  .box > *:first-child {
-    min-height: 200px;
-  }
-
+  ul a[href],
   p a[href] {
     color: blue;
     text-decoration: underline;
@@ -66,5 +71,19 @@
 
   hr {
     @apply my-element-m border-t-1;
+  }
+
+  ul:not(:where(.not-content *)) {
+    padding-left: 1rem;
+
+    li {
+      list-style-type: disc;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .directive-dev::before {
+    content: "For Developers";
+    @apply block text-sm text-gray-500 font-medium mb-module-s;
   }
 }

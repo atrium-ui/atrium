@@ -575,6 +575,7 @@
 @utility text-link {
   @apply typo-textlink-s not-enabled:text-(--style-typography-disabled) enabled:cursor-pointer;
   @apply [&>.icon:last-child]:ml-element-2xs [&>.icon:first-child]:mr-element-2xs;
+  @apply [&[aria-current="page"]]:text-link-active;
 }
 
 @utility text-link-active {

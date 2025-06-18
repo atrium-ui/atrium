@@ -1,25 +1,9 @@
 ---
-import fs from "node:fs";
-import matter from "gray-matter";
+import { getCollection } from "astro:content";
 
 const base = import.meta.env.BASE_URL;
 
-const basePath = "./src/content/components";
-const files = fs.readdirSync(basePath).filter((p) => {
-  return p.endsWith(".mdx") && !p.includes("---") && !p.includes("index");
-});
-
-const components: any[] = [];
-
-for (const file of files) {
-  const name = file.replace(".mdx", "");
-  const meta = matter(fs.readFileSync(`${basePath}/${file}`, "utf8"));
-
-  components.push({
-    id: name,
-    ...meta.data,
-  });
-}
+const components = await getCollection("docs").then(docs => docs.filter(doc => doc.id.startsWith("components")));
 ---
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-12">
@@ -27,7 +11,7 @@ for (const file of files) {
     components.map(comp => {
       return (
         <a
-          href={`${base}components/${comp.id}/`}
+          href={`${base}${comp.id}/`}
           class="block relative rounded-md border style-contour-grey-disabled"
         >
           <!-- <div>
@@ -39,8 +23,8 @@ for (const file of files) {
             />
           </div> -->
           <div class="p-5 m-0!">
-            <h3 class="text-2xl!">{comp.title}</h3>
-            <p class="mt-1!">{comp.description}</p>
+            <h3 class="text-2xl!">{comp.data.title}</h3>
+            <p class="mt-1!">{comp.data.description}</p>
           </div>
         </a>
       );

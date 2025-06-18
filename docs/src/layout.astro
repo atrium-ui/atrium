@@ -37,9 +37,9 @@ const base = import.meta.env.BASE_URL;
 
       <Header transition:persist />
 
-      <main class="flex-1 w-full px-(--site-padding)">
+      <div class="flex-1 w-full px-(--site-padding) relative mx-auto max-w-(--site-width)">
         <slot />
-      </main>
+      </div>
 
       <footer>
         <div class="max-w-(--site-width) px-(--site-padding) mx-auto flex items-center justify-between gap-6 py-8">
@@ -51,3 +51,71 @@ const base = import.meta.env.BASE_URL;
     </div>
   </body>
 </html>
+
+<style is:global>
+@reference "./layout.css";
+
+:root {
+  min-width: 320px;
+
+  --site-width: 1700px;
+  --site-padding: var(--module-2xl);
+
+  @apply typo-body text-(--style-typography-body) font-sans;
+
+  --scrollbar-color-track: transparent;
+  --scrollbar-color-thumb: #1c1c1c;
+  --outline-color: blue;
+}
+
+body {
+  scrollbar-gutter: stable;
+}
+
+section {
+  overflow: hidden;
+  padding-inline: var(--site-padding);
+}
+
+* {
+  scrollbar-color: var(--scrollbar-color-thumb) var(--scrollbar-color-track);
+  outline-color: var(--outline-color);
+  outline-offset: 3px;
+}
+
+* {
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.astro-code {
+  @apply typo-topline my-element-m py-element-2xs px-element-xs rounded-md;
+}
+
+.box {
+  border: 1px solid var(--color-grey-200);
+  border-radius: var(--radius-xs);
+  display: flex;
+}
+
+.box > *:first-child {
+  min-height: 200px;
+}
+
+/* trying to prevent layout shift with unstyled elements */
+
+svg-icon {
+  display: inline-block;
+  vertical-align: top;
+  width: 1em;
+  height: 1em;
+}
+
+a-overlay:not(:defined) {
+  display: none;
+}
+
+a-expandable:not(:defined) > * {
+  display: none;
+}
+</style>

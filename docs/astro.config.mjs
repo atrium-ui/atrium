@@ -8,12 +8,16 @@ import mdx from "@astrojs/mdx";
 import pagefind from "astro-pagefind";
 import svgSprite from "@sv/svg-sprites/vite";
 import { basename, resolve } from "node:path";
+import sitemap from "@astrojs/sitemap";
+import remarkDirective from "remark-directive";
+import { visit } from "unist-util-visit";
 
 export default defineConfig({
   publicDir: "assets",
   devToolbar: {
     enabled: false,
   },
+  site: process.env.SITE,
   vite: {
     resolve: {
       alias: {
@@ -55,6 +59,23 @@ export default defineConfig({
     ],
   },
   markdown: {
+    smartypants: false,
+    remarkPlugins: [
+      [remarkDirective, {}],
+      function remarkCustomInfobox() {
+        return tree => {
+          visit(tree, node => {
+            if (node.type === "containerDirective") {
+              const data = node.data || (node.data = {});
+              data.hName = "blockquote";
+              data.hProperties = {
+                className: [`directive-${node.name}`],
+              };
+            }
+          });
+        };
+      },
+    ],
     rehypePlugins: [[rehypeShiftHeading, { shift: 1 }]],
   },
   integrations: [
@@ -111,5 +132,6 @@ export default defineConfig({
         "**/playground/Playground.tsx",
       ],
     }),
+    sitemap(),
   ],
 });

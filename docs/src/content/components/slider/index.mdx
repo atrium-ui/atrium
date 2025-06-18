@@ -1,0 +1,40 @@
+---
+title: Slider
+image: "/components/slider.png"
+description: Just a slider.
+tags: [["a-track", "elements/a-track"], ["Button", "components/button"]]
+command: "npx @sv/components slider"
+---
+
+import { SomeSlider } from "./Slider.jsx";
+import SomeSliderCode from "./Slider.jsx?raw";
+import { Example, Atrium } from "package:/components";
+
+The Slider (or Carousel) component allows horizontal scrolling through elements
+like images or teasers. It supports features such as snapping,
+centered alignment, looping, and keyboard navigation,
+making it ideal for compact, scrollable content displays.
+
+<Example code={SomeSliderCode}>
+  <div class="w-full">
+    <SomeSlider client:only="vue" />
+  </div>
+</Example>
+
+## Guidelines
+
+Sliders should be used for content that is not easily consumed in a single view. They are ideal for displaying a large amount of content in a compact space.
+
+## Accessibility
+
+When building a Slider, accessibility should not be an afterthought. Ensure that:
+
+- Keyboard navigation is fully supported, allowing users to move between slides using arrow keys.
+- Each slide or item is focusable if it contains interactive content.
+- ARIA attributes are used to convey structure and behavior.
+- Avoid auto-advancing slides unless it’s essential—and always provide a way to pause or control playback.
+
+## References
+
+- [WAI-ARIA Carousel (Slide Show or Image Rotator) Pattern
+](https://www.w3.org/WAI/ARIA/apg/patterns/carousel/)

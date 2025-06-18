@@ -9,7 +9,9 @@ import ComponentList from "package:/components/ComponentList.astro";
 Components are copy-paste templates for a specific use case including styling and behavior.
 They are styled using [TailwindCSS](https://tailwindcss.com/) and written as JSX functional components. This allows us to build components that are highly customizable and compact without keeping a dependency on external CSS files.
 
+:::dev
 Components may have dependencies on other packages, though when "using" a component you do not import the component itself, but a copy of it. This copy can be freely changed and styled. That makes it possible to update or change the component templates without breaking the projects that used them.
+:::
 
 <div className="pt-12">
   <ComponentList />
