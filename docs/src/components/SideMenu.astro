@@ -5,15 +5,16 @@ const { headline } = Astro.props;
 
 const category = Astro.props.category || Astro.params.category;
 
+const base = import.meta.env.BASE_URL;
+
 const slug = Astro.url.pathname
+  .replace(base, "")
   .split("/")
   .filter((str) => str !== "/")
   .filter(Boolean)
   .join("/");
 
 const allDocs = await getCollection("docs");
-
-const base = import.meta.env.BASE_URL;
 ---
 
 <div class="capitalize pb-module-xl typo-topline text-grey-500">
