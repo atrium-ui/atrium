@@ -1,8 +1,10 @@
 {
   "name": "@sv/icons",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "./assets/index.js",
   "description": "Atrium default icon-set",
   "author": "atrium",
-  "files": ["assets"]
+  "files": [
+    "assets"
+  ]
 }
