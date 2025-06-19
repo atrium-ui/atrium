@@ -44,12 +44,6 @@ const { Content, headings } = await render(entry);
 const name = entry.data.title || "";
 ---
 
-<Elements />
-
-<script>
-  import "@sv/elements/track";
-</script>
-
 <Layout>
   <title slot="head">{entry.data.title} | Atrium components</title>
   <meta name="description" slot="head" content={entry.data.description} />

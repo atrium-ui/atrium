@@ -3,23 +3,13 @@ import { getEntry } from "astro:content";
 import { getCollection, render } from "astro:content";
 import Layout from "../../layout.astro";
 import SideMenu from "../../components/SideMenu.astro";
-import {
-  Git,
-  Accessibility,
-  Atrium,
-  Rive,
-  Lit,
-  Vue,
-  Elements,
-} from "package:/components";
-import { Code } from "astro:components";
 
 export async function getStaticPaths() {
   const allDocs = await getCollection("docs");
   return allDocs
     .map((doc) => {
       const [category, ...slug] = doc.id.split("/");
-      if (category !== "elements" && category !== "packages") return;
+      if (category !== "guides") return;
 
       return {
         params: { slug: slug.join("/") },
@@ -28,18 +18,14 @@ export async function getStaticPaths() {
     .filter(Boolean);
 }
 
-const base = import.meta.env.BASE_URL;
-
 const { slug } = Astro.params;
-const entry = await getEntry("docs", ["elements", slug].join("/"));
+const entry = await getEntry("docs", ["guides", slug].join("/"));
 
 if (!entry) {
   throw new Error("404");
 }
 
 const { Content } = await render(entry);
-
-const name = entry.data.title || "";
 ---
 
 <Layout>
@@ -48,9 +34,7 @@ const name = entry.data.title || "";
 
   <div class="flex items-start">
     <div class="sticky top-module-4xl w-module-9xl hidden md:block pr-module-4xl">
-      <SideMenu category="elements" headline="All elements" />
-      <div class="pb-module-2xl"></div>
-      <SideMenu category="packages" headline="Packages" />
+      <SideMenu category="guides" headline="On Design Systems" />
     </div>
 
     <main class="markdown-content md:px-0 w-full md:w-[calc(100%-var(--module-9xl))] overflow-x-hidden">
@@ -62,29 +46,6 @@ const name = entry.data.title || "";
         <p>
           {entry.data.description}
         </p>
-
-        <div class="flex gap-2 flex-wrap mb-module-2xl">
-          <Git href={`/packages/components/src/vue/${name}.tsx`} />
-          <Accessibility reportId={`-atrium-components-${name.toLowerCase()}-`} />
-
-          {entry.data.tags?.map(tag => {
-            if (tag[0] === "rive") {
-              return <Rive />
-            }
-            if (tag[0] === "lit") {
-              return <Lit />
-            }
-            if (tag[0] === "lit") {
-              return <Vue />
-            }
-            return <Atrium label={tag[0] || ""} href={`${base}${tag[1]?.toLowerCase()}`} />;
-          })}
-        </div>
-
-        <div class="typo-footnote font-bold">Usage</div>
-        {entry.data.command ? <Code lang="sh" code={entry.data.command}></Code> : ""}
-
-        <!-- <div class="typo-footnote font-bold">Symbols</div> -->
       </aside>
 
       <div class="lg:float-left lg:w-[calc(100%-300px)] lg:pr-module-4xl">

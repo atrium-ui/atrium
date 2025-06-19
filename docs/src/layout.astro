@@ -4,6 +4,7 @@ import { ClientRouter } from "astro:transitions";
 import Header from "./components/Header.astro";
 import { svg } from "@sv/svg-sprites/sheet";
 import { Font } from "astro:assets";
+import { Elements } from "./components";
 
 const iocnSheet = await svg();
 
@@ -22,6 +23,8 @@ const base = import.meta.env.BASE_URL;
     <Font cssVariable='--font-geist' preload />
 
     <slot name="head" />
+
+    <Elements />
 
     <script>
       import { AnimationElement } from "@sv/elements/animation";

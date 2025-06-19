@@ -11,11 +11,12 @@ const props: {
 const base = import.meta.env.BASE_URL;
 const category = Astro.url.pathname.replace(base, "").split("/")[0];
 
-const menuItemOrder = ["Introduction", "Components", "Elements", "Packages"];
+const menuItemOrder = ["introduction", "components", "elements"];
 
 const menuItemsSorted = (a, b) => {
   return (
-    menuItemOrder.indexOf(a.data.title || "") - menuItemOrder.indexOf(b.data.title || "")
+    menuItemOrder.indexOf(a.data.title.toLowerCase() || "") -
+    menuItemOrder.indexOf(b.data.title.toLowerCase() || "")
   );
 };
 ---
@@ -89,7 +90,7 @@ function closeMenu() {
       {allDocs.sort(menuItemsSorted).map(doc => {
         const parts = doc.id.split("/");
 
-        if(parts.length === 1) {
+        if(parts.length === 1 && menuItemOrder.includes(parts[0] || "")) {
           return (
             <li>
               <a
