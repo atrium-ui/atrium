@@ -19,7 +19,7 @@ export async function getStaticPaths() {
   return allDocs
     .map((doc) => {
       const [category, ...slug] = doc.id.split("/");
-      if (category !== "elements" && category !== "packages") return;
+      if (category !== "elements") return;
 
       return {
         params: { slug: slug.join("/") },
