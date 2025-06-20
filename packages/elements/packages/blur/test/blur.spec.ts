@@ -8,7 +8,7 @@ afterEach(() => {
 });
 
 test("import element", async () => {
-  const { Blur } = await import("../src/index.js");
+  const { Blur } = await import("@sv/elements/blur");
   expect(Blur).toBeDefined();
 
   // is defined in custom element registry
@@ -137,7 +137,7 @@ function click(ele: HTMLElement) {
 }
 
 async function createBlur() {
-  await import("../src/index.js");
+  await import("@sv/elements/blur");
   const ele = document.createElement("div");
   document.body.appendChild(ele);
 
