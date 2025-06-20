@@ -1,7 +1,11 @@
-import { test, expect, it, beforeAll } from "bun:test";
+import { test, expect, it, beforeAll, afterEach } from "bun:test";
 import type { Blur } from "../src/Blur.js";
 
 const NODE_NAME = "a-blur";
+
+afterEach(() => {
+  document.body.innerHTML = "";
+});
 
 test("import element", async () => {
   const { Blur } = await import("@sv/elements/blur");
