@@ -1,10 +1,14 @@
-import { test, expect, it, beforeAll } from "bun:test";
+import { test, expect, it, beforeAll, afterEach } from "bun:test";
 import type { Blur } from "../src/Blur.js";
 
 const NODE_NAME = "a-blur";
 
+afterEach(() => {
+  document.body.innerHTML = "";
+});
+
 test("import element", async () => {
-  const { Blur } = await import("@sv/elements/blur");
+  const { Blur } = await import("../src/index.js");
   expect(Blur).toBeDefined();
 
   // is defined in custom element registry
@@ -133,7 +137,7 @@ function click(ele: HTMLElement) {
 }
 
 async function createBlur() {
-  await import("@sv/elements/blur");
+  await import("../src/index.js");
   const ele = document.createElement("div");
   document.body.appendChild(ele);
 
