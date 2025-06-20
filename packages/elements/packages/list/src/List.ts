@@ -1,19 +1,19 @@
-import { LitElement, css, html } from "lit";
+import { css, html, LitElement } from "lit";
 import { property } from "lit/decorators.js";
 
 declare global {
   interface HTMLElementTagNameMap {
-    "a-list": List;
-    "a-list-item": ListItem;
+    "a-list": ListElement;
+    "a-list-item": ListItemElement;
   }
 }
 
-export class SelectEvent extends CustomEvent<{ selected: ListItem }> {
+export class SelectEvent extends CustomEvent<{ selected: ListItemElement }> {
   get option() {
     return this.detail.selected;
   }
 
-  constructor(selectedItem: ListItem) {
+  constructor(selectedItem: ListItemElement) {
     super("change", {
       bubbles: true,
       detail: {
@@ -26,9 +26,21 @@ export class SelectEvent extends CustomEvent<{ selected: ListItem }> {
 /**
  * Accessible and styleable list component.
  *
+ * @customEvent input - Emitted when the focused option changes through user interaction.
+ * @customEvent change - Emitted when the selected option changed.
+ *
+ * @example
+ * ```html
+ * <a-list>
+ * 	<a-list-item>Item 1</a-list-item>
+ * 	<a-list-item>Item 2</a-list-item>
+ * 	<a-list-item>Item 3</a-list-item>
+ * </a-list>
+ * ```
+ *
  * @see https://svp.pages.s-v.de/atrium/elements/a-list/
  */
-export class List extends LitElement {
+export class ListElement extends LitElement {
   static get styles() {
     return css`
       :host {
@@ -53,10 +65,8 @@ export class List extends LitElement {
       const optionValue = this.getValueOfOption(option);
       if (optionValue === this.selected) {
         option.ariaSelected = "true";
-        option.setAttribute("selected", "");
       } else {
         option.ariaSelected = "false";
-        option.removeAttribute("selected");
       }
     }
   }
@@ -67,7 +77,7 @@ export class List extends LitElement {
 
   private onSlotChange() {
     // update dom image
-    this.options = [...this.querySelectorAll("a-list-item")] as ListItem[];
+    this.options = [...this.querySelectorAll("a-list-item")] as ListItemElement[];
   }
 
   public selected?: string;
@@ -102,7 +112,7 @@ export class List extends LitElement {
   @property({ type: String, reflect: true })
   public direction: "up" | "down" = "up";
 
-  private options: ListItem[] = [];
+  private options: ListItemElement[] = [];
 
   constructor() {
     super();
@@ -121,6 +131,7 @@ export class List extends LitElement {
     super.connectedCallback();
 
     this.role = "listbox";
+    this.tabIndex = 0;
   }
 
   private onKeyDown(event: KeyboardEvent) {
@@ -143,14 +154,14 @@ export class List extends LitElement {
         this.scrollToSelected();
         event.preventDefault();
         break;
+      case "Enter":
+        this.submitSelected();
+        break;
     }
   }
 
   private onKeyUp(event: KeyboardEvent) {
     switch (event.key) {
-      case "Enter":
-        this.submitSelected();
-        break;
       default:
         this.keyPressed(event.key);
         break;
@@ -228,9 +239,7 @@ export class List extends LitElement {
       index++;
     }
 
-    if (event.type === "dblclick") {
-      this.submitSelected();
-    }
+    this.submitSelected();
   }
 
   private submitSelected() {
@@ -243,7 +252,7 @@ export class List extends LitElement {
     }
   }
 
-  private getValueOfOption(optionElement: ListItem) {
+  private getValueOfOption(optionElement: ListItemElement) {
     return (
       optionElement.getAttribute("value") ||
       this.options.indexOf(optionElement).toString()
@@ -262,7 +271,7 @@ export class List extends LitElement {
   }
 }
 
-export class ListItem extends LitElement {
+export class ListItemElement extends LitElement {
   static get styles() {
     return css`
       :host {
