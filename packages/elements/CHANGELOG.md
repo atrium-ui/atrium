@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.10.0-dev.0 (2025-06-20)
+
+### Features
+
+- Adds a-list element, fixes a-blur findin tabindex=-1 elements as focusable
+
 ## 2.9.0 (2025-06-05)
 
 ### Features
