@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.10.0 (2025-06-26)
+
+### Features
+
+- Adds a-list element, fixes a-blur finding tabindex=-1 elements as focusable (svp/atrium!47)
+
 ## 2.10.0-dev.0 (2025-06-20)
 
 ### Features
