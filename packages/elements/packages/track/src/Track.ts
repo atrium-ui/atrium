@@ -360,6 +360,7 @@ export class Track extends LitElement {
     if (!this._itemRects) {
       let topEdge: number | undefined = undefined;
 
+      // @ts-ignore
       this._itemRects = this.items
         .map((item) => {
           if (this.clones.includes(item)) return;
@@ -376,7 +377,7 @@ export class Track extends LitElement {
         })
         .filter(Boolean);
     }
-    return this._itemRects;
+    return this._itemRects || [];
   }
 
   private _itemWidths: number[] | undefined = undefined;
