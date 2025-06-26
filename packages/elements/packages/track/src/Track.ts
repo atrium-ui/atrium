@@ -1,5 +1,6 @@
-import { LitElement, type PropertyValues, css, html } from "lit";
+import { css, html, LitElement, type PropertyValues } from "lit";
 import { property } from "lit/decorators/property.js";
+
 // import { DebugTrait } from "./debug.js";
 
 const defaultTraits = [
@@ -218,6 +219,7 @@ export class Track extends LitElement {
         all: inherit;
         will-change: transform;
         min-width: 100%;
+        overflow: visible;
       }
       ::-webkit-scrollbar {
         width: 0px;
@@ -353,33 +355,46 @@ export class Track extends LitElement {
     return 0;
   }
 
-  private getItemRects() {
-    return new Array(this.itemCount)
-      .fill(0)
-      .map((_, i) => new Vec2(this.itemWidths[i], this.itemHeights[i]));
+  private _itemRects: Vec2[] | undefined = undefined;
+  private get itemRects() {
+    if (!this._itemRects) {
+      let topEdge: number | undefined = undefined;
+
+      this._itemRects = this.items
+        .map((item) => {
+          if (this.clones.includes(item)) return;
+
+          const { width, height, top } = item.getBoundingClientRect();
+
+          if (!topEdge) {
+            topEdge = top;
+          } else if (top !== topEdge) {
+            return;
+          }
+
+          return new Vec2(width, height);
+        })
+        .filter(Boolean);
+    }
+    return this._itemRects;
   }
 
-  private _widths: number[] | undefined = undefined;
+  private _itemWidths: number[] | undefined = undefined;
   private get itemWidths() {
-    if (!this._widths) {
+    if (!this._itemWidths) {
       // TODO: respect left children too
-      this._widths = new Array(this.itemCount).fill(1).map((_, i) => {
-        // TODO: offsetWidth doesn't take transforms in consideration, so we use. Maybe use getBoundingClientRect
-        return (this.items[i] as HTMLElement)?.offsetWidth || 0;
-      });
+      this._itemWidths = this.itemRects.map((rect) => rect[0]);
     }
-    return this._widths;
+    return this._itemWidths;
   }
 
-  private _heights: number[] | undefined = undefined;
+  private _itemHeights: number[] | undefined = undefined;
   private get itemHeights() {
-    if (!this._heights) {
+    if (!this._itemHeights) {
       // TODO: respect left children too
-      this._heights = new Array(this.itemCount).fill(1).map((_, i) => {
-        return (this.items[i] as HTMLElement)?.offsetHeight || 0;
-      });
+      this._itemHeights = this.itemRects.map((rect) => rect[1]);
     }
-    return this._heights;
+    return this._itemHeights;
   }
 
   public get trackWidth() {
@@ -1123,7 +1138,7 @@ export class Track extends LitElement {
   private getCurrentItem() {
     if (this.debug) {
       // this is only for debug information
-      this.itemAngles = this.getItemRects().reduce((acc, rect, i) => {
+      this.itemAngles = this.itemRects.reduce((acc, rect, i) => {
         acc[i] = (rect[this.currentAxis] / this.trackSize) * PI2;
         return acc;
       }, [] as number[]);
@@ -1163,7 +1178,7 @@ export class Track extends LitElement {
    */
   public getItemAtPosition(pos: Vec2) {
     // TODO: dupliacte of getCurrentItem ?
-    const rects = this.getItemRects();
+    const rects = this.itemRects;
     let px = 0;
 
     if (pos[0] > 0) {
@@ -1196,7 +1211,7 @@ export class Track extends LitElement {
     return null;
   }
 
-  private clones: HTMLElement[] = [];
+  private clones: Element[] = [];
 
   private drawUpdate() {
     this.scrollLeft = Math.min(this.position.x, this.scrollWidth);
@@ -1286,13 +1301,14 @@ export class Track extends LitElement {
   private updateLayout = () => {
     const lastWidth = this._width;
     const lastHeight = this._height;
-    const lastWidths = this._widths;
-    const lastHeights = this._heights;
+    const lastWidths = this._itemWidths;
+    const lastHeights = this._itemHeights;
 
+    this._itemRects = undefined;
     this._width = undefined;
     this._height = undefined;
-    this._widths = undefined;
-    this._heights = undefined;
+    this._itemWidths = undefined;
+    this._itemHeights = undefined;
 
     // apply align prop
     switch (this.align) {
@@ -1432,7 +1448,7 @@ export class Track extends LitElement {
   private onFocusIn = (e: FocusEvent) => {
     const item = this.elementItemIndex(e.target as HTMLElement);
     const dist = Vec2.dist2(this.getToItemPosition(item), this.position);
-    const rect = this.getItemRects()[item];
+    const rect = this.itemRects[item];
 
     if (!rect) return;
 
