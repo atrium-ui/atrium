@@ -10,7 +10,7 @@
 
 ### Features
 
-- Adds a-list element, fixes a-blur findin tabindex=-1 elements as focusable
+- Set track slot element to all: inherit
 
 ## 2.9.0 (2025-06-05)
 
