@@ -215,12 +215,7 @@ export class Track extends LitElement {
         touch-action: pan-x;
       }
       slot {
-        will-change: transform;
-        display: inherit;
-        flex-direction: inherit;
-        flex-flow: inherit;
-        justify-content: inherit;
-        align-items: inherit;
+        all: inherit;
         will-change: transform;
         min-width: 100%;
       }
