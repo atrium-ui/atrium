@@ -5,8 +5,7 @@ import { ScrollLock } from "@sv/scroll-lock";
 const SELECTOR_CUSTOM_ELEMENT =
   "*:not(br,span,script,slot,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)";
 
-const SELECTOR_FOCUSABLE =
-  'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+const SELECTOR_FOCUSABLE = "button, a[href], input, select, textarea, [tabindex]";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -67,10 +66,16 @@ function traverseShadowRealm(
 const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
   const children: HTMLElement[] = [];
 
-  if (!(el instanceof ShadowRoot) && el.matches?.(SELECTOR_FOCUSABLE)) {
+  if (
+    !(el instanceof ShadowRoot) &&
+    el.tabIndex >= 0 &&
+    el.matches?.(SELECTOR_FOCUSABLE)
+  ) {
     children.push(el);
   } else {
-    children.push(...el.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE));
+    for (const element of el.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE)) {
+      if (element.tabIndex >= 0) children.push(element);
+    }
   }
 
   const slots = el.querySelectorAll<HTMLSlotElement>("slot");
@@ -78,7 +83,11 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
   for (const slot of slots) {
     const assignedElements = slot.assignedElements({ flatten: true }) as HTMLElement[];
     for (const assignedElement of assignedElements) {
-      children.push(...assignedElement.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE));
+      for (const element of assignedElement.querySelectorAll<HTMLElement>(
+        SELECTOR_FOCUSABLE,
+      )) {
+        if (element.tabIndex >= 0) children.push(element);
+      }
     }
   }
 

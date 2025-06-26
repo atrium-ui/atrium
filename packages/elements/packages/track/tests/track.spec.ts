@@ -10,6 +10,7 @@ import {
   onFrame,
   press,
   setup,
+  pointer,
 } from "@sv/test";
 
 beforeEach(() => setup());
@@ -84,9 +85,10 @@ async function drag<
   },
 >(track: T, dist: [number, number]) {
   const start = [...track.position];
-  await _drag(track, dist);
+  const ev = await _drag(track, dist);
   // has moved at all?
   expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
+  return ev;
 }
 
 function logRun(track: Track) {
@@ -97,7 +99,7 @@ function logRun(track: Track) {
 
 describe("Track", () => {
   test(label("import track element"), async () => {
-    const { Track } = await import("@sv/elements/track");
+    const { Track } = await import("../src/index.js");
     expect(Track).toBeDefined();
 
     // is defined in custom element registry
@@ -105,7 +107,7 @@ describe("Track", () => {
   });
 
   test("construct track element", async () => {
-    const { Track } = await import("@sv/elements/track");
+    const { Track } = await import("../src/index.js");
 
     // is constructable
     expect(new Track()).toBeInstanceOf(Track);
@@ -340,7 +342,7 @@ describe("Track", () => {
     await sleep(track.transitionTime / 2);
 
     // grab it bevore transition ends
-    track.dispatchEvent(new FakePointerEvent("pointerdown", 0, 0));
+    track.dispatchEvent(pointer("pointerdown", 0, 0));
     console.info("Grabbed track");
 
     await sleep();
@@ -355,25 +357,25 @@ describe("Track", () => {
   test(label("click without move should not result in a cancled click"), async () => {
     const track = await trackWithChildren(10, { snap: true, align: "center" });
 
-    track.dispatchEvent(new FakePointerEvent("pointerdown", 100, 100));
+    track.dispatchEvent(pointer("pointerdown", 100, 100));
     console.info("down");
 
     await sleep();
 
-    const ev = new FakePointerEvent("pointerup", 100, 100);
+    const ev = pointer("pointerup", 100, 100);
     track.dispatchEvent(ev);
     console.info("up");
 
     expect(ev.defaultPrevented).toBe(false);
 
-    track.dispatchEvent(new FakePointerEvent("pointerdown", 100, 100));
+    track.dispatchEvent(pointer("pointerdown", 100, 100));
     console.info("down");
 
     await sleep(100);
-    window.dispatchEvent(new FakePointerEvent("pointermove", 150, 110));
+    window.dispatchEvent(pointer("pointermove", 150, 110));
     await sleep(100);
 
-    const ev2 = new FakePointerEvent("pointerup", 100, 100);
+    const ev2 = pointer("pointerup", 100, 100);
     track.dispatchEvent(ev2);
     console.info("up");
 
@@ -391,6 +393,7 @@ describe("Track", () => {
     const ev = new WheelEvent("wheel", {
       deltaX: -200,
       deltaY: 0,
+      cancelable: true,
     });
     console.info("fired");
     track.dispatchEvent(ev);

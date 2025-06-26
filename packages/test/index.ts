@@ -144,13 +144,8 @@ export async function sleep(ms = 16) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export async function drag<
-  T extends HTMLElement & {
-    position: [number, number];
-    target?: [number, number];
-  },
->(ele: T, dist: [number, number]) {
-  globalThis.FakePointerEvent = class FakePointerEvent extends PointerEvent {
+export function pointer(type: string, x: number, y: number) {
+  class FakePointerEvent extends PointerEvent {
     constructor(
       type: string,
       public x: number,
@@ -160,10 +155,36 @@ export async function drag<
       super(type, {
         button: 0,
         bubbles: true,
+        cancelable: true,
         ...init,
       });
     }
-  };
+  }
+
+  return new FakePointerEvent(type, x, y);
+}
+
+export async function drag<
+  T extends HTMLElement & {
+    position: [number, number];
+    target?: [number, number];
+  },
+>(ele: T, dist: [number, number]) {
+  class FakePointerEvent extends PointerEvent {
+    constructor(
+      type: string,
+      public x: number,
+      public y: number,
+      init?: PointerEventInit,
+    ) {
+      super(type, {
+        button: 0,
+        bubbles: true,
+        cancelable: true,
+        ...init,
+      });
+    }
+  }
 
   const multiplier = 1 + random();
   const pos = [10, 10] as [number, number];
@@ -187,8 +208,12 @@ export async function drag<
     pos[1] -= step[1];
   }
 
-  window.dispatchEvent(new FakePointerEvent("pointerup", ...pos));
+  const upEvent = new FakePointerEvent("pointerup", ...pos);
+
+  window.dispatchEvent(upEvent);
   console.info("drag end");
 
   await sleep();
+
+  return upEvent;
 }
