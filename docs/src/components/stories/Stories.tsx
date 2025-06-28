@@ -83,7 +83,7 @@ export function Stories() {
   return (
     <div
       class={[
-        `overflow-hidden story-root story-layout-${layout()}`,
+        `story-root overflow-hidden story-layout-${layout()}`,
         globals().theme ? `fra-context-background fra-context-${globals().theme}` : "",
       ]
         .filter(Boolean)
