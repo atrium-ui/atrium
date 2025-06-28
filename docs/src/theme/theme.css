@@ -553,7 +553,7 @@
 @utility input {
   @apply w-full typo-body font-medium style-typography-body style-fill-white-background;
   @apply border-1 border-solid border-(--style-contour-primary-default) rounded-md;
-  @apply py-element-s px-element-m transition-colors duration-150;
+  @apply py-element-2xs px-element-xs transition-colors duration-150;
   @apply focus:border-(--style-contour-primary-active);
   @apply placeholder:style-typography-disabled;
 }

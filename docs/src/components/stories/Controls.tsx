@@ -65,7 +65,7 @@ export function Controls(props: { storyData; storyUserArgs; variantId }) {
                 <code>{arg.name}</code>
                 <code>{arg.type}</code>
               </div>
-              <div>{renderControl(arg)}</div>
+              <div class="mb-element-xs">{renderControl(arg)}</div>
               <div class="typo-footnote">
                 {arg.description ? <span>{arg.description}</span> : ""}
               </div>
@@ -82,7 +82,9 @@ function renderControl(arg: Args) {
     return <input name={arg.name} type="checkbox" checked={!!arg.value || undefined} />;
   }
   if (arg.type === "number") {
-    return <input name={arg.name} type="number" value={arg.value as number} />;
+    return (
+      <input class="input" name={arg.name} type="number" value={arg.value as number} />
+    );
   }
   if (arg.type === "select") {
     return (
@@ -93,5 +95,12 @@ function renderControl(arg: Args) {
       </select>
     );
   }
-  return <input name={arg.name} type="text" value={(arg.value as string) || ""} />;
+  return (
+    <input
+      class="input"
+      name={arg.name}
+      type="text"
+      value={(arg.value as string) || ""}
+    />
+  );
 }

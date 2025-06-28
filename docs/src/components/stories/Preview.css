@@ -113,10 +113,7 @@
   justify-content: space-between;
   align-items: center;
   gap: var(--sl-nav-gap);
-  padding: 0.33rem var(--toolbar-padding-x);
-  border: 1px solid #eee;
-  border-radius: 0.33rem;
-  background-color: #f8f8f8;
+  padding: 1rem var(--toolbar-padding-x);
 }
 
 .docs-story-toolbar button {
@@ -170,5 +167,6 @@
   padding: 0.33rem var(--toolbar-padding-x);
   border: 1px solid #eee;
   border-radius: 0.33rem;
-  background-color: #f8f8f8;
+  background-color: #fff;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
 }

@@ -1,10 +1,16 @@
 import { html } from "lit";
 import "./FraportCarousel.js";
+import type { Story } from "../../../components/stories/stories.jsx";
 
-export default {
+export default (<Story>{
   tags: ["public"],
   args: {
     copy: "(Body) Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum ...",
+  },
+  argTypes: {
+    copy: {
+      description: "The text to be displayed in the carousel.",
+    },
   },
   render: (args) => {
     return html`
@@ -19,6 +25,6 @@ export default {
       </fra-carousel>
     `;
   },
-};
+});
 
 export const Fraport = {};

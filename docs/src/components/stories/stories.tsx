@@ -3,17 +3,17 @@ const storiesImports = import.meta.glob("/src/**/*.stories.*");
 type ArgType = any;
 type ParamType = any;
 
-export type Story<Template = unknown> = {
-  tags: string[];
-  parameters: Record<string, Record<string, ParamType>>;
-  args: Record<string, string | number>;
-  argTypes: Record<string, Record<string, ArgType>>;
-  render: () => Template;
+export type Story<Args extends Record<string, string | number> = any> = {
+  tags?: string[];
+  parameters?: Record<string, Record<string, ParamType>>;
+  args?: Args;
+  argTypes?: Record<string, Record<string, ArgType>>;
+  render?: (args: Args) => any;
 };
 
 export type StoryIndex = {
-  default: Story;
-  [key: string]: Story;
+  default: Story<any>;
+  [key: string]: Story<any>;
 } & {
   _id: string;
 };
