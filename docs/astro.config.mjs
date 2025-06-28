@@ -102,7 +102,7 @@ export default defineConfig({
           });
           injectRoute({
             pattern: "/story",
-            entrypoint: "./src/components/stories/story.astro",
+            entrypoint: "./src/components/stories/Frame.astro",
           });
         },
       },
@@ -128,8 +128,8 @@ export default defineConfig({
         //
         "**/solid/*.{tsx}",
         "**/stories/Preview.tsx",
-        "**/stories/Stories.tsx",
-        "**/stories/Docs.tsx",
+        "**/stories/Controls.tsx",
+        "**/stories/Frame.tsx",
         "**/playground/Playground.tsx",
       ],
     }),

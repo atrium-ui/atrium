@@ -1,26 +1,13 @@
-/* @jsxImportSource solid-js */
-
 import { render } from "lit";
 import { createEffect, createSignal } from "solid-js";
-
-const storiesImports = import.meta.glob("/src/**/*.stories.*");
-
-type Story = unknown;
-const stories = new Map<string, () => Promise<Story>>();
-
-for (const key in storiesImports) {
-  const storyId = key.split("/").pop()?.replace(".stories.ts", "").toLowerCase();
-  if (storyId) {
-    stories.set(storyId, storiesImports[key]);
-  }
-}
+import { stories, type Story } from "./stories.jsx";
 
 const [story, setStory] = createSignal();
 const [variant, setVariant] = createSignal();
 const [layout, setLayout] = createSignal("default");
 const [globals, setGlobals] = createSignal({});
 
-export function Stories() {
+export function Frame() {
   const searchParams = new URLSearchParams(location.search);
   const currentStoryId = searchParams.get("id");
   if (currentStoryId) {
@@ -29,8 +16,7 @@ export function Stories() {
 
     stories
       .get(id)?.()
-      .then((storyModule) => {
-        const module = storyModule as Record<string, Promise<Story>>;
+      .then((module) => {
         setStory(module.default);
 
         for (const key in module) {
@@ -81,15 +67,17 @@ export function Stories() {
   });
 
   return (
-    <div
-      class={[
-        `story-root overflow-hidden story-layout-${layout()}`,
-        globals().theme ? `fra-context-background fra-context-${globals().theme}` : "",
-      ]
-        .filter(Boolean)
-        .join(" ")}
-    >
-      {root}
+    <div>
+      <div
+        class={[
+          `story-root overflow-hidden story-layout-${layout()}`,
+          globals().theme ? `fra-context-background fra-context-${globals().theme}` : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {root}
+      </div>
     </div>
   );
 }
