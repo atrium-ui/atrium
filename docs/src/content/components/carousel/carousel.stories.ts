@@ -1,5 +1,5 @@
 import { html } from "lit";
-import "./FraportSlider.js";
+import "./FraportCarousel.js";
 
 export default {
   tags: ["public"],

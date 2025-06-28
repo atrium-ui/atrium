@@ -1,18 +1,18 @@
 .markdown-content {
   h1 {
-    @apply typo-title-2 mb-module-m;
+    @apply typo-title-2 mb-module-2xl;
   }
 
   h2 {
-    @apply typo-title-3 mb-module-m;
+    @apply typo-title-3 mb-module-2xl;
   }
 
   h3 {
-    @apply typo-subtitle mb-module-m;
+    @apply typo-subtitle mb-module-2xl;
   }
 
   h4 {
-    @apply typo-headline mb-module-m;
+    @apply typo-headline mb-module-xl;
   }
 
   h2:not(:first-child),

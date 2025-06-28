@@ -30,6 +30,7 @@ const base = import.meta.env.BASE_URL;
 </script>
 
 <header class="mb-module-4xl">
+  <div class="wip w-full text-center pt-2 pb-4 absolute top-0 left-0 -z-1"></div>
   <div class="max-w-(--site-width) px-(--site-padding) mx-auto flex items-center justify-between gap-6 py-8">
     <div class="flex-none">
       <a href={base}>
@@ -80,3 +81,28 @@ const base = import.meta.env.BASE_URL;
     </div>
   </a-overlay>
 </header>
+
+<style>
+.wip {
+  --wip-color: #caa908;
+  pointer-events: none;
+}
+.wip::before {
+  content: "";
+  background-color: #ffffff;
+  background: repeating-linear-gradient( 45deg, var(--wip-color), var(--wip-color) 13.5px, #ffffff 13.5px, #ffffff 32.5px );
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 1) 250%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.wip::after {
+  font-weight: bold;
+  color: #caa908;
+  content: "Work in progress";
+  position: relative;
+  z-index: 10;
+}
+</style>

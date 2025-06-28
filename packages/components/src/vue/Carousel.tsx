@@ -6,8 +6,8 @@ import { computed, defineComponent, onMounted, ref } from "vue";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
 
-export const Slider = defineComponent(
-  (props: { class?: string }, { slots }) => {
+export const Carousel = defineComponent(
+  (props, { slots }) => {
     const track = ref<Track>();
     const current = ref(0);
     const position = ref(0);
@@ -114,9 +114,5 @@ export const Slider = defineComponent(
         </div>
       </div>
     );
-  },
-  {
-    name: "Slider",
-    props: ["class"],
   },
 );

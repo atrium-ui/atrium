@@ -1,11 +1,11 @@
 /* @jsxImportSource vue */
 
 import { Image } from "package:/components/Image";
-import { Slider } from "@components/src/vue/Slider";
+import { Carousel } from "@components/src/vue/Carousel";
 
 export const SomeSlider = () => (
   <div>
-    <Slider>
+    <Carousel>
       <div class="h-[500px] w-full flex-none p-2">
         <Image src={`${import.meta.env.BASE_URL}placeholder.svg`} class="h-full w-full" />
       </div>
@@ -24,9 +24,9 @@ export const SomeSlider = () => (
       <div class="h-[500px] w-full flex-none p-2">
         <Image src={`${import.meta.env.BASE_URL}placeholder.svg`} class="h-full w-full" />
       </div>
-    </Slider>
+    </Carousel>
 
-    <Slider>
+    <Carousel>
       <a href="/" class="block h-[300px] flex-none p-2 active:ring-2">
         <Image src={`${import.meta.env.BASE_URL}placeholder.svg`} class="h-full w-full" />
       </a>
@@ -45,6 +45,6 @@ export const SomeSlider = () => (
       <a href="/" class="block h-[300px] flex-none p-2 active:ring-2">
         <Image src={`${import.meta.env.BASE_URL}placeholder.svg`} class="h-full w-full" />
       </a>
-    </Slider>
+    </Carousel>
   </div>
 );

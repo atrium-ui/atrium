@@ -23,7 +23,7 @@ export async function getStaticPaths() {
   return allDocs
     .map((doc) => {
       const [category, ...slug] = doc.id.split("/");
-      if (category !== "components") return;
+      if (category !== "modules") return;
 
       return {
         params: { slug: slug.join("/") },
@@ -35,7 +35,7 @@ export async function getStaticPaths() {
 const base = import.meta.env.BASE_URL;
 
 const { slug } = Astro.params;
-const entry = await getEntry("docs", ["components", slug].join("/"));
+const entry = await getEntry("docs", ["modules", slug].join("/"));
 
 if (!entry) {
   throw new Error("404");

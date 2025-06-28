@@ -1,7 +1,5 @@
 /* @jsxImportSource solid-js */
 
-import "./Stories.css";
-
 import { render } from "lit";
 import { createEffect, createSignal } from "solid-js";
 
@@ -85,7 +83,7 @@ export function Stories() {
   return (
     <div
       class={[
-        `story-root story-layout-${layout()}`,
+        `overflow-hidden story-root story-layout-${layout()}`,
         globals().theme ? `fra-context-background fra-context-${globals().theme}` : "",
       ]
         .filter(Boolean)
