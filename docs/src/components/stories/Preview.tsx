@@ -9,6 +9,7 @@ import {
 import { Controls } from "./Controls";
 import "./Preview.css";
 import { stories, type StoryIndex } from "./stories";
+import { twMerge } from "tailwind-merge";
 
 const base = import.meta.env.BASE_URL;
 
@@ -96,31 +97,42 @@ export function Preview(props: ParentProps) {
   });
 
   return (
-    <div>
-      {variantId() ? (
-        <div class="docs-story-preview">
-          <div class="docs-story-toolbar-container">
-            <div class="docs-story-toolbar">
-              <div>{id()}</div>
-              <div>
-                <OpenStoryButton query={`id=${id()}`} />
+    <a-blur
+      scrolllock
+      onExit={() => setVariantId("")}
+      bool:enabled={variantId()}
+      class={ twMerge(
+        "fixed top-0 left-0 right-0 bottom-0 w-full h-full bg-black/10 backdrop-blur-sm z-10",
+        "hidden [&[enabled]]:flex justify-center items-center"
+      )}
+    >
+      <div class="pointer-events-auto min-w-[90vw] min-h-[90vh] bg-white rounded-lg shadow-2xl relative">
+        {variantId() ? (
+          <div class="docs-story-preview h-full w-full absolute! inset-0">
+            <div class="docs-story-toolbar-container">
+              <div class="docs-story-toolbar">
+                <div>{id()}</div>
+                <div class="flex gap-module-m">
+                  <OpenStoryButton query={`id=${id()}`} />
+                  <button onClick={() => setVariantId("")}>X</button>
+                </div>
               </div>
             </div>
-          </div>
 
-          <StoryFrame canvasId={id()} params={searchParams()} />
+            <StoryFrame canvasId={id()} params={searchParams()} />
 
-          <div class="docs-story-controls-container">
-            <Controls
-              storyData={storyData()}
-              storyUserArgs={storyUserArgs}
-              variantId={variantId()}
-            />
+            <div class="docs-story-controls-container">
+              <Controls
+                storyData={storyData()}
+                storyUserArgs={storyUserArgs}
+                variantId={variantId()}
+              />
+            </div>
           </div>
-        </div>
-      ) : (
-        props.children
-      )}
-    </div>
+        ) : (
+          props.children
+        )}
+      </div>
+    </a-blur>
   );
 }
