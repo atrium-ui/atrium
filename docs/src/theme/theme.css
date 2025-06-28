@@ -1,20 +1,3 @@
-@custom-variant enabled (&:not([disabled]):not([aria-disabled="true"]));
-
-@custom-variant hover-active {
-  @media (any-hover: hover) {
-    &:hover {
-      @slot;
-    }
-  }
-  :active {
-    @slot;
-  }
-}
-
-:root {
-  --ease-smooth: cubic-bezier(0, 0.34, 0, 0.96);
-}
-
 @theme atrium-docs {
   --breakpoint-md: 768px;
   --breakpoint-lg: 1200px;
@@ -214,12 +197,10 @@
   --style-fill-grey-background-overlay: var(--color-grey-50);
   --style-contour-error: var(--color-red-500);
   --style-typography-error: var(--color-red-500);
-}
 
-/* Utilities */
+  /* animation */
 
-@utility backdrop {
-  @apply -z-1 absolute left-0 top-0 content-[''] w-full h-full transition-all pointer-events-none;
+  --ease-smooth: cubic-bezier(0, 0.34, 0, 0.96);
 }
 
 /* Grids */
@@ -276,22 +257,6 @@
 }
 @utility typo-textlink-m {
   @apply text-base leading-24;
-}
-
-@utility style-fill-* {
-  background-color: --value(--style-fill-\*);
-}
-
-@utility style-typography-* {
-  color: --value(--style-typography-\*);
-}
-
-@utility style-icon-* {
-  color: --value(--style-icon-\*);
-}
-
-@utility style-contour-* {
-  border-color: --value(--style-contour-\*);
 }
 
 @utility icon {
@@ -431,78 +396,42 @@
   --style-typography-error: var(--color-red-500);
 }
 
-/* Auto dark theme */
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --style-fill-primary-default: var(--color-primary-400);
-    --style-fill-primary-hover: var(--color-primary-400);
-    --style-fill-primary-active: var(--color-primary-200);
-    --style-fill-primary-subtle: var(--color-primary-900);
-    --style-fill-primary-disabled: var(--color-grey-700);
-    --style-fill-primary-brighter: var(--color-primary-300);
-    --style-contour-primary-default: var(--color-primary-400);
-    --style-contour-primary-hover: var(--color-primary-400);
-    --style-contour-primary-onclick: var(--color-primary-400);
-    --style-contour-primary-active: var(--color-primary-700);
-    --style-contour-primary-focus: var(--color-secondary-600);
-    --style-contour-primary-disabled: var(--color-grey-700);
-    --style-contour-primary-button: var(--color-primary-400);
-    --style-contour-grey-default: var(--color-grey-50);
-    --style-contour-grey-hover: var(--color-grey-50);
-    --style-contour-grey-onclick: var(--color-grey-50);
-    --style-contour-grey-focus: var(--color-secondary-600);
-    --style-contour-grey-active: var(--color-primary-700);
-    --style-contour-grey-disabled: var(--color-grey-800);
-    --style-typography-title: var(--color-white);
-    --style-icon-default: var(--color-grey-50);
-    --style-icon-hover: var(--color-primary-50);
-    --style-icon-onclick: var(--color-primary-50);
-    --style-icon-active: #c8f8e2;
-    --style-icon-subtle: var(--color-primary-900);
-    --style-icon-disabled: var(--color-grey-700);
-    --style-icon-negative: var(--color-grey-800);
-    --style-icon-button-primary: var(--color-grey-800);
-    --style-icon-button-secondary: var(--color-primary-400);
-    --style-icon-error: var(--color-red-500);
-    --style-typography-body: var(--color-white);
-    --style-typography-subtitle: var(--color-white);
-    --style-typography-topline: var(--color-white);
-    --style-typography-disabled: var(--color-grey-700);
-    --style-typography-link: var(--color-primary-400);
-    --style-typography-hover: var(--color-white);
-    --style-typography-onclick: var(--color-white);
-    --style-typography-active: var(--color-primary-400);
-    --style-typography-button-primary: var(--color-grey-900);
-    --style-typography-button-secondary: var(--color-primary-400);
-    --style-black: var(--color-white);
-    --style-white: var(--color-black);
-    --style-fill-grey-default: var(--color-grey-800);
-    --style-fill-white-background: var(--color-grey-900);
-    --style-fill-grey-hover: var(--color-grey-800);
-    --style-fill-grey-active: var(--color-grey-800);
-    --style-fill-grey-subtle: var(--color-grey-800);
-    --style-fill-grey-disabled: var(--color-grey-700);
-    --style-fill-grey-dark: var(--color-grey-50);
-    --style-fill-grey-background-overlay: var(--color-grey-50);
-    --style-contour-error: var(--color-red-500);
-    --style-typography-error: var(--color-red-500);
+/* Utilities */
+
+@custom-variant enabled (&:not([disabled]):not([aria-disabled="true"]));
+
+@custom-variant hover-active {
+  @media (any-hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+  :active {
+    @slot;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .light-mode-only {
-    display: none !important;
-  }
-  .dark-mode-only {
-    display: block;
-  }
-} */
-
-.dark-mode-only {
-  display: none;
+@utility style-fill-* {
+  background-color: --value(--style-fill-\*);
 }
 
-/* Button Styles */
+@utility style-typography-* {
+  color: --value(--style-typography-\*);
+}
+
+@utility style-icon-* {
+  color: --value(--style-icon-\*);
+}
+
+@utility style-contour-* {
+  border-color: --value(--style-contour-\*);
+}
+
+/* Buttons */
+
+@utility backdrop {
+  @apply -z-1 absolute left-0 top-0 content-[''] w-full h-full transition-all pointer-events-none;
+}
 
 /* Primary Button */
 

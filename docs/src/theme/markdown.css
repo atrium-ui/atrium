@@ -1,79 +1,83 @@
 .markdown-content {
-  h1 {
+  & > h1 {
     @apply typo-title-2 mb-module-2xl;
   }
 
-  h2 {
+  & > h2 {
     @apply typo-title-3 mb-module-2xl;
   }
 
-  h3 {
+  & > h3 {
     @apply typo-subtitle mb-module-2xl;
   }
 
-  h4 {
+  & > h4 {
     @apply typo-headline mb-module-xl;
   }
 
-  h2:not(:first-child),
-  h3:not(:first-child),
-  h4:not(:first-child) {
+  & > h2:not(:first-child),
+  & > h3:not(:first-child),
+  & > h4:not(:first-child) {
     @apply mt-module-4xl;
   }
 
-  blockquote {
+  & > blockquote {
     @apply rounded-md border-1 border-solid border-gray-200 bg-gray-100 p-4;
     @apply not-last:mb-module-xl not-first:my-module-xl;
   }
 
-  p {
+  & > p {
     @apply typo-body not-last:mb-module-m;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  ul,
-  ol,
-  blockquote,
-  p {
+  & > h1,
+  & > h2,
+  & > h3,
+  & > h4,
+  & > h5,
+  & > h6,
+  & > ul,
+  & > ol,
+  & > blockquote,
+  & > p {
     @apply max-w-[880px];
   }
 
-  ul a[href],
-  p a[href] {
+  & > ul a[href],
+  & > p a[href] {
     color: blue;
     text-decoration: underline;
   }
 
-  table {
+  & > a[href]:hover {
+    text-decoration: underline;
+  }
+
+  & > table {
     border-collapse: collapse;
     width: 100%;
   }
 
-  table th {
+  & > table th {
     text-align: left;
     padding-bottom: 1rem;
     font-weight: bold;
   }
 
-  table td {
+  & > table td {
     border-bottom: 1px solid var(--color-grey-200);
     padding-right: 2rem;
   }
 
-  table td p {
+  & > table td p {
     margin: 0.5rem 0;
   }
 
-  hr {
+  & > hr {
     @apply my-element-m border-t-1;
   }
 
-  ul:not(:where(.not-content *)) {
+  & > ul:not(:where(.not-content *)) {
     padding-left: 1rem;
 
     li {
@@ -82,7 +86,7 @@
     }
   }
 
-  .directive-dev::before {
+  & > .directive-dev::before {
     content: "For Developers";
     @apply block text-sm text-gray-500 font-medium mb-module-s;
   }
