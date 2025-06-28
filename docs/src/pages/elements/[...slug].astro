@@ -12,6 +12,7 @@ import {
   Vue,
   Elements,
   Tags,
+  Headings,
 } from "package:/components";
 import { Code } from "astro:components";
 
@@ -38,7 +39,7 @@ if (!entry) {
   throw new Error("404");
 }
 
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 
 const name = entry.data.title || "";
 ---
@@ -73,7 +74,9 @@ const name = entry.data.title || "";
         <div class="typo-footnote font-bold">Usage</div>
         {entry.data.command ? <Code lang="sh" code={entry.data.command}></Code> : ""}
 
-        <!-- <div class="typo-footnote font-bold">Symbols</div> -->
+        <div class="typo-footnote font-bold mt-module-2xl">Outline</div>
+
+        <Headings headings={headings} class="flex-col gap-element-m" />
       </aside>
 
       <div class="markdown-content lg:float-left lg:w-[calc(100%-300px)] lg:pr-module-4xl">
