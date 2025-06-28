@@ -114,7 +114,9 @@ export function Preview(props: ParentProps) {
                 <div>{id()}</div>
                 <div class="flex gap-module-m">
                   <OpenStoryButton query={`id=${id()}`} />
-                  <button onClick={() => setVariantId("")}>X</button>
+                  <button type="button" onClick={() => setVariantId("")}>
+                    X
+                  </button>
                 </div>
               </div>
             </div>
