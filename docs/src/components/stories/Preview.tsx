@@ -101,14 +101,14 @@ export function Preview(props: ParentProps) {
       scrolllock
       onExit={() => setVariantId("")}
       bool:enabled={variantId()}
-      class={ twMerge(
-        "fixed top-0 left-0 right-0 bottom-0 w-full h-full bg-black/10 backdrop-blur-sm z-10",
-        "hidden [&[enabled]]:flex justify-center items-center"
+      class={twMerge(
+        "fixed top-0 right-0 bottom-0 left-0 z-10 h-full w-full bg-black/10 backdrop-blur-sm",
+        "hidden items-center justify-center [&[enabled]]:flex",
       )}
     >
-      <div class="pointer-events-auto min-w-[90vw] min-h-[90vh] bg-white rounded-lg shadow-2xl relative">
+      <div class="pointer-events-auto relative min-h-[90vh] min-w-[90vw] rounded-lg bg-white shadow-2xl">
         {variantId() ? (
-          <div class="docs-story-preview h-full w-full absolute! inset-0">
+          <div class="docs-story-preview absolute! inset-0 h-full w-full">
             <div class="docs-story-toolbar-container">
               <div class="docs-story-toolbar">
                 <div>{id()}</div>
