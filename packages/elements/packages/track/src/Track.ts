@@ -218,6 +218,7 @@ export class Track extends LitElement {
       slot {
         all: inherit;
         will-change: transform;
+        height: auto;
         min-width: 100%;
         overflow: visible;
       }
@@ -306,7 +307,7 @@ export class Track extends LitElement {
 
   render() {
     return html`
-      <slot @slotchange=${this.onSlotChange}></slot>
+      <slot part="track" @slotchange=${this.onSlotChange}></slot>
       ${this.debug ? html`<div class="debug">${this.debugCanvas}</div>` : null}
     `;
   }
