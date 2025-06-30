@@ -1578,8 +1578,8 @@ function timer(start: number, time: number) {
 
 function diffArray(arr: number[]) {
   return (w: number, i: number) => {
-    if (arr[i] === undefined) throw new Error("Array index out of bounds");
-    return arr[i] - w;
+    const b = arr[i] || 0;
+    return b - w;
   };
 }
 
