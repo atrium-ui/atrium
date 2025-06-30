@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 2.11.0-dev.2 (2025-06-30)
+
+### Features
+
+- Set track slot element to all: inherit
+- refactor how items are counted, respecting the layout, when items are wrapped
+
 ## 2.11.0-dev.1 (2025-06-30)
 
 ### Features
