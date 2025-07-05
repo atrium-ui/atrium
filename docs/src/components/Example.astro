@@ -1,6 +1,7 @@
 ---
 import { Icon } from "package:/components";
 import { Code } from "astro:components";
+import { ExamplePreview } from "./Example.jsx";
 
 export interface Props {
   title?: string;
@@ -10,7 +11,6 @@ export interface Props {
 const file = Astro.props.code?.trim();
 ---
 
-{Astro.props.title && <h3>{Astro.props.title}</h3>}
 
 <script>
   import { elementToSVG, inlineResources } from 'dom-to-svg'
@@ -64,34 +64,34 @@ drag-example {
 }
 </style>
 
-<div class="not-content w-full flex flex-col items-left justify-center">
+<div class="relative">
+  <div class="absolute top-[2px] opacity-65 left-[-1.75rem] flex items-center pointer-events-none w-0 h-0 -rotate-90 justify-end">
+    {Astro.props.title && <h3 class="uppercase whitespace-nowrap">{Astro.props.title}</h3>}
+  </div>
 
-  <drag-example>
-    <div class="box p-3">
-      <div class="w-full h-full">
-        <slot />
+
+
+  <div class="not-content w-full flex flex-col items-left justify-center relative">
+    <drag-example>
+      <div class="box p-3 overflow-clip">
+        <div class="w-full h-full">
+          <slot />
+        </div>
       </div>
-    </div>
-  </drag-example>
+    </drag-example>
+  </div>
 
-  <a-expandable class="group">
-    <button
-      slot="toggle"
-      type="button"
-      class="items-center p-2 px-4 cursor-pointer w-full text-left typo-body flex justify-between"
-    >
-      <span>Show Code</span>
-
-      <Icon class="block! group-[[opened]]:hidden!" name="expand" />
-      <Icon class="hidden! group-[[opened]]:block!" name="collapse" />
-    </button>
-
-    <div>
-      <Code lang="tsx" code={file}></Code>
-    </div>
-  </a-expandable>
+  <ExamplePreview client:only="vue">
+    <Code lang="tsx" code={file}></Code>
+  </ExamplePreview>
 </div>
 
 <script>
   document.body.classList.add("hydrated");
 </script>
+
+<style scoped>
+  pre {
+    margin: 0;
+  }
+</style>

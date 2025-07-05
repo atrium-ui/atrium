@@ -10,6 +10,7 @@ export const Carousel = defineComponent(
   (
     props: {
       class?: string;
+      overflow?: string;
       align?: "start" | "center";
     },
     { slots },
@@ -49,22 +50,16 @@ export const Carousel = defineComponent(
     };
 
     return () => (
-      <div
-        class={twMerge(
-          "@container group/slider relative w-full overflow-hidden",
-          props.class,
-        )}
-      >
+      <div class={twMerge("@container group/slider relative w-full", props.class)}>
         <div class="relative w-full">
           <a-track
             ref={track}
             snap
             // loop
             debug
-            // align="center"
-            overflow="ignore"
             class="flex w-full overflow-visible"
             align={props.align}
+            overflow={props.overflow}
             onScroll={() => {
               position.value = track.value?.position.x || 0;
             }}
@@ -125,6 +120,6 @@ export const Carousel = defineComponent(
     );
   },
   {
-    props: ["class", "align"],
+    props: ["class", "align", "overflow"],
   },
 );
