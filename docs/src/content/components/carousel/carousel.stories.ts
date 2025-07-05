@@ -6,7 +6,6 @@ export default (<Story>{
   tags: ["public"],
   args: {
     count: 5,
-    itemsPerPage: 3,
   },
   argTypes: {
     count: {
@@ -20,7 +19,7 @@ export default (<Story>{
       <fra-carousel style="padding: 1.5rem;">
         ${items.map((_, i) => {
           return html`
-            <div style="display: block; flex: none; width: ${100 / args.itemsPerPage}%; height: 320px;">
+            <div style="display: block; flex: none; height: 320px;" class="w-full md:w-1/2 lg:w-1/3">
               <placeholder style="display: block; width: 100%; height: 100%; background: #EDEDF7;"></placeholder>
             </div>
           `;

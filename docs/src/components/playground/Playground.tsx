@@ -265,17 +265,6 @@ export function PlaygroundView() {
     }
   }
 
-  function showToast(str: string) {
-    const toast = new CustomToast({
-      message: str,
-      onClick: () => {
-        toast.kill();
-      },
-    });
-    toastfeed.append(toast);
-    return toast;
-  }
-
   async function share() {
     try {
       const value = files["index.tsx"]?.model.getValue();
@@ -285,15 +274,10 @@ export function PlaygroundView() {
       }).then((response) => response.text());
 
       const url = `${location.origin}${location.pathname}?${uid}`;
-      toastfeed.append(
-        new CustomToast({
-          message: url,
-          onClick: () => {
-            navigator.clipboard.writeText(url);
-            showToast("Copied!");
-          },
-        }),
-      );
+      showToast(url, () => {
+        navigator.clipboard.writeText(url);
+        showToast("Copied!");
+      });
     } catch (error) {
       console.error(error);
       showToast(error.message);
@@ -416,8 +400,6 @@ export function PlaygroundView() {
       </div>
 
       <command-menu />
-
-      <a-toast-feed id="toastfeed" class="-translate-x-1/2 fixed top-16 left-1/2 z-100" />
     </div>
   );
 }

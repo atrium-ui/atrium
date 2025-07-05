@@ -27,8 +27,9 @@
     @apply not-last:mb-module-xl not-first:my-module-xl;
   }
 
+  & > div > p,
   & > p {
-    @apply typo-body not-last:mb-module-m;
+    @apply typo-body not-last:mb-module-m max-w-[880px];
   }
 
   & > h1,

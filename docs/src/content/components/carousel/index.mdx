@@ -6,7 +6,7 @@ tags: [["a-track", "elements/a-track"], ["Button", "components/button"]]
 command: "npx @sv/components carousel"
 ---
 
-import { SomeSlider } from "./carousel.jsx";
+import { SomeSlider, SomeSliderB, SomeSliderC } from "./carousel.jsx";
 import SomeSliderCode from "./carousel.jsx?raw";
 import { Example, Atrium } from "package:/components";
 
@@ -15,10 +15,20 @@ like images or teasers. It supports features such as snapping,
 centered alignment, looping, and keyboard navigation,
 making it ideal for compact, scrollable content displays.
 
+<Example title="Gallary" code={SomeSliderCode}>
+  <SomeSlider client:only="vue" />
+</Example>
+
+<Example title="Film Strip" code={SomeSliderCode}>
+  <SomeSliderB client:only="vue" />
+</Example>
+
+### Teaser
+
+The Items in this example are responsive. The visible items per slide are determined by the width of the screen.
+
 <Example code={SomeSliderCode}>
-  <div class="w-full">
-    <SomeSlider client:only="vue" />
-  </div>
+  <SomeSliderC client:only="vue" />
 </Example>
 
 ## Guidelines

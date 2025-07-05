@@ -10,12 +10,69 @@ export interface Props {
 const file = Astro.props.code?.trim();
 ---
 
-<h2>{Astro.props.title || "Example"}</h2>
+{Astro.props.title && <h3>{Astro.props.title}</h3>}
 
-<div class="not-content box w-full flex flex-col items-left justify-center">
-  <div class="p-4">
-    <slot />
-  </div>
+<script>
+  import { elementToSVG, inlineResources } from 'dom-to-svg'
+
+  function copySVG(target: HTMLElement) {
+    const svgDocument = elementToSVG(target)
+    return new XMLSerializer().serializeToString(svgDocument);
+  }
+
+  class DragExample extends HTMLElement {
+    constructor() {
+      super();
+
+      const shadow = this.attachShadow({ mode: "open" });
+      shadow.innerHTML = `<slot></slot>`;
+
+      this.draggable = true;
+
+      this.addEventListener("dragstart",
+        (event: DragEvent) => event.dataTransfer?.setData("text/svg+xml", copySVG(this.children[0] as HTMLElement) || "")
+      )
+
+      this.addEventListener("dragover", ev => {
+        ev.preventDefault();
+      })
+
+      this.addEventListener("drop",
+        async (ev: DragEvent) => {
+          ev.preventDefault();
+          const data = ev.dataTransfer?.getData("text/svg+xml");
+
+          console.log(data)
+
+          navigator.clipboard.write([new ClipboardItem({ "text/plain": data || '' })]).then(() => {
+            showToast("Copied to clipboard")
+          })
+        }
+      )
+    }
+  }
+
+  customElements.define("drag-example", DragExample);
+
+</script>
+
+<style>
+drag-example {
+  display: block;
+  border-radius: 4px;
+  -webkit-user-drag: element;
+}
+</style>
+
+<div class="not-content w-full flex flex-col items-left justify-center">
+
+  <drag-example>
+    <div class="box p-3">
+      <div class="w-full h-full">
+        <slot />
+      </div>
+    </div>
+  </drag-example>
 
   <a-expandable class="group">
     <button
