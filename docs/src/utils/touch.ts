@@ -437,10 +437,10 @@ export default {
       const centerY = rect.top + rect.height / 2;
       const distance = 100;
 
-      let startX = centerX,
-        startY = centerY;
-      let endX = centerX,
-        endY = centerY;
+      let startX = centerX;
+      let startY = centerY;
+      let endX = centerX;
+      let endY = centerY;
 
       switch (direction) {
         case "left":
