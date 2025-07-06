@@ -17,7 +17,25 @@ let portalIdIncrement = 10000;
  * @see https://svp.pages.s-v.de/atrium/elements/a-portal/
  */
 export class Portal extends (globalThis.HTMLElement || class {}) {
-  private proxiedEvents = ["blur", "focus", "change", "exit", "keyup", "keydown"];
+  private proxiedEvents = [
+    "blur",
+    "focus",
+    "change",
+    "exit",
+    "keyup",
+    "keydown",
+    "transitionstart",
+    "animationstart",
+    "transitionend",
+    "animationend",
+  ];
+
+  // Real children, .children is override to return children of portal
+  private _children = this.children;
+
+  get children() {
+    return this.portal?.children || this._children;
+  }
 
   constructor() {
     super();
@@ -38,7 +56,7 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
   };
 
   public portalId = (++portalIdIncrement).toString();
-  public portal!: HTMLElement;
+  public portal?: HTMLElement;
 
   // TODO: try to find existing portal with this.dataset.portal
   protected portalGun() {
@@ -53,7 +71,7 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
 
   protected onEventProxy(ev: Event) {}
 
-  proxyEvent(name: string) {
+  private proxyEvent(name: string) {
     return (e: Event) => {
       this.onEventProxy(e);
 
@@ -75,29 +93,39 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
     };
   }
 
-  get children() {
-    return this.portal.children;
-  }
-
   private onMutation() {
-    if (this.childNodes.length) {
+    if (this.childNodes.length && this.portal) {
       this.portal.innerHTML = "";
       this.portal.append(...this.childNodes);
     }
   }
 
-  observer = new MutationObserver(() => {
+  private observer = new MutationObserver(() => {
     requestAnimationFrame(() => {
       this.onMutation();
     });
   });
 
   disconnectedCallback(): void {
-    this.portal.remove();
+    this.removePortal();
+  }
+
+  public autoplace = true;
+
+  connectedCallback(): void {
+    this.portal = this.createPortal();
+
+    if (this.autoplace) {
+      this.placePortal();
+    }
+  }
+
+  removePortal() {
+    this.portal?.remove();
     this.observer.disconnect();
   }
 
-  connectedCallback(): void {
+  placePortal() {
     this.observer.observe(this, {
       subtree: true,
       childList: true,
@@ -105,9 +133,11 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
       characterData: true,
     });
 
-    this.portal = this.createPortal();
-
-    document.body.append(this.portal);
+    if (this.portal) {
+      document.body.append(this.portal);
+    } else {
+      console.error("Cant place portal, no portal element found");
+    }
 
     this.dataset.portal = this.portalId;
 
