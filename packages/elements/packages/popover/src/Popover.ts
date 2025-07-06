@@ -125,7 +125,11 @@ export class Popover extends Portal {
   }
 
   get arrowElement() {
-    return this.children[0]?.querySelector<HTMLElement>("a-popover-arrow");
+    return (
+      (this.children[0] as HTMLElement | undefined)?.querySelector<HTMLElement>(
+        "a-popover-arrow",
+      ) || undefined
+    );
   }
 
   public get alignment(): Alignment | undefined {
