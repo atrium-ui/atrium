@@ -1,5 +1,16 @@
 # @sv/elements
 
+## 2.11.0-dev.3 (2025-07-06)
+
+### Features
+
+- Set track slot element to all: inherit
+- refactor how items are counted, respecting the layout, when items are wrapped
+
+### Fixes
+
+- Popover is not hidden when "exit" of blur is called
+
 ## 2.11.0-dev.2 (2025-06-30)
 
 ### Features
