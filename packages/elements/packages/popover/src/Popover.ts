@@ -113,12 +113,14 @@ export class Popover extends Portal {
     return ele as PopoverPortal;
   }
 
+  protected triggerElementSelector = "a-popover-trigger";
+
   protected override onEventProxy(ev: Event) {
     if (ev.type !== "exit") {
       return;
     }
 
-    const trigger = this.closest("a-popover-trigger");
+    const trigger = this.closest<PopoverTrigger>(this.triggerElementSelector);
     if (ev instanceof CustomEvent) {
       trigger?.hide();
     }
@@ -154,7 +156,7 @@ export class Popover extends Portal {
   public show() {
     this.placePortal();
 
-    const trigger = this.closest("a-popover-trigger");
+    const trigger = this.closest<PopoverTrigger>(this.triggerElementSelector);
     const content = this.children[0] as HTMLElement | undefined;
 
     if (!trigger || !content) return;
