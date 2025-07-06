@@ -1,5 +1,49 @@
 # @sv/elements
 
+## 2.11.0-dev.4 (2025-07-06)
+
+### Features
+
+- refactor how items are counted, respecting the layout, when items are wrapped
+- Popover respects temporary portals
+
+### Fixes
+
+- Popover is not hidden when "exit" of blur is called
+- a-popover: emit events
+
+## 2.11.0-dev.3 (2025-07-06)
+
+### Features
+
+- Set track slot element to all: inherit
+- refactor how items are counted, respecting the layout, when items are wrapped
+
+### Fixes
+
+- Popover is not hidden when "exit" of blur is called
+
+## 2.11.0-dev.2 (2025-06-30)
+
+### Features
+
+- Set track slot element to all: inherit
+- refactor how items are counted, respecting the layout, when items are wrapped
+
+## 2.11.0-dev.1 (2025-06-30)
+
+### Features
+
+- Set track slot element to all: inherit
+- refactor how items are counted, respecting the layout, when items are wrapped
+
+## 2.11.0-dev.0 (2025-06-26)
+
+### Features
+
+- Set track slot element to all: inherit
+- refactor how items are counted, respecting the layout, when items are wrapped
+
 ## 2.10.0 (2025-06-26)
 
 ### Features
@@ -10,7 +54,7 @@
 
 ### Features
 
-- Adds a-list element, fixes a-blur findin tabindex=-1 elements as focusable
+- Set track slot element to all: inherit
 
 ## 2.9.0 (2025-06-05)
 
