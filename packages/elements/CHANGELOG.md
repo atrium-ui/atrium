@@ -1,5 +1,17 @@
 # @sv/elements
 
+## 2.11.0-dev.4 (2025-07-06)
+
+### Features
+
+- refactor how items are counted, respecting the layout, when items are wrapped
+- Popover respects temporary portals
+
+### Fixes
+
+- Popover is not hidden when "exit" of blur is called
+- a-popover: emit events
+
 ## 2.11.0-dev.3 (2025-07-06)
 
 ### Features
