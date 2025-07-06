@@ -110,9 +110,6 @@ export class Popover extends Portal {
     const ele = new PopoverPortal();
     ele.className = this.className;
     ele.dataset.portal = this.portalId;
-    ele.addEventListener("exit", () => {
-      this.hide();
-    });
     return ele as PopoverPortal;
   }
 
@@ -217,6 +214,9 @@ export class Popover extends Portal {
 /**
  * A wrapper element that shows content when the user clicks with the slotted input element.
  *
+ * @customEvent show - Fired when the popover is shown.
+ * @customEvent hide - Fired when the popover is hidden.
+ *
  * @example
  * ```html
  * <a-popover-trigger>
@@ -310,6 +310,8 @@ export class PopoverTrigger extends LitElement {
 
     this.trigger?.setAttribute("aria-haspopup", "dialog");
     this.trigger?.setAttribute("aria-expanded", "true");
+
+    this.dispatchEvent(new CustomEvent("show"));
   }
 
   /**
@@ -324,6 +326,8 @@ export class PopoverTrigger extends LitElement {
 
     this.trigger?.setAttribute("aria-haspopup", "dialog");
     this.trigger?.setAttribute("aria-expanded", "false");
+
+    this.dispatchEvent(new CustomEvent("hide"));
   }
 
   /**
