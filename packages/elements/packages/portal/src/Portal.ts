@@ -53,7 +53,7 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
 
   protected onEventProxy(ev: Event) {}
 
-  proxyEvent(name: string) {
+  private proxyEvent(name: string) {
     return (e: Event) => {
       this.onEventProxy(e);
 
@@ -86,18 +86,26 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
     }
   }
 
-  observer = new MutationObserver(() => {
+  private observer = new MutationObserver(() => {
     requestAnimationFrame(() => {
       this.onMutation();
     });
   });
 
   disconnectedCallback(): void {
+    this.removePortal();
+  }
+
+  connectedCallback(): void {
+    this.placePortal();
+  }
+
+  removePortal() {
     this.portal.remove();
     this.observer.disconnect();
   }
 
-  connectedCallback(): void {
+  placePortal() {
     this.observer.observe(this, {
       subtree: true,
       childList: true,
@@ -106,9 +114,7 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
     });
 
     this.portal = this.createPortal();
-
     document.body.append(this.portal);
-
     this.dataset.portal = this.portalId;
 
     this.onMutation();

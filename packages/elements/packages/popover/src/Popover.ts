@@ -107,9 +107,12 @@ export class Popover extends Portal {
   }
 
   protected portalGun() {
-    const ele = document.createElement("a-popover-portal");
+    const ele = new PopoverPortal();
     ele.className = this.className;
     ele.dataset.portal = this.portalId;
+    ele.addEventListener("exit", () => {
+      this.hide();
+    });
     return ele as PopoverPortal;
   }
 
