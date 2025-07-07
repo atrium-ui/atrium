@@ -205,37 +205,53 @@ export class Popover extends Portal {
     });
   }
 
+  private transitionInProgress = false;
+
+  private onTransitionStart = () => {
+    this.transitionInProgress = true;
+
+    // wait for transitions to end before removing portal
+    this.addEventListener("transitionend", this.onRemovePortal, {
+      once: true,
+    });
+  };
+
+  private onRemovePortal = () => {
+    this.removePortal();
+    this.cleanup?.();
+
+    this.removeEventListener("transitionstart", this.onTransitionStart);
+    this.removeEventListener("transitionend", this.onRemovePortal);
+
+    this.transitionInProgress = false;
+  };
+
   /**
    * Hide the popover.
    */
   public hide() {
-    this.cleanup?.();
-
-    const removePortal = () => {
-      this.removePortal();
-
-      this.removeEventListener("transitionend", removePortal);
-      clearTimeout(timeout);
-    };
-
-    // wait for transitions to end before removing portal
-    this.addEventListener("transitionend", removePortal, {
+    this.addEventListener("transitionstart", this.onTransitionStart, {
       once: true,
     });
-
-    // as a fallback, remove portal after 2 seconds
-    const timeout = setTimeout(removePortal, 2000);
 
     // disable the portal (blur), to start the transition
     if (this.portal instanceof PopoverPortal) {
       this.portal.disable();
     }
+
+    // wait for transitions to start before removing portal
+    setTimeout(() => {
+      if (!this.transitionInProgress) {
+        this.onRemovePortal();
+      }
+      // if it started, it will end at some point, right? :)
+    }, 150);
   }
 
+  // disabled imidate placemnt of portal
   public override autoplace = false;
 
   connectedCallback(): void {
-    // disabled imidate placemnt of portal
     super.connectedCallback();
 
     const shadow = this.attachShadow({ mode: "open" });
@@ -250,9 +266,8 @@ export class Popover extends Portal {
   }
 
   disconnectedCallback(): void {
+    // overwrite default removePortal, to respect transitions to play
     this.hide();
-    this.removePortal();
-    super.disconnectedCallback();
   }
 }
 
