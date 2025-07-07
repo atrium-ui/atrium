@@ -1,5 +1,18 @@
 # @sv/elements
 
+## 2.11.0-dev.6 (2025-07-07)
+
+### Features
+
+- Popover respects temporary portals
+
+### Fixes
+
+- Popover is not hidden when "exit" of blur is called
+- a-popover: emit events
+- Overrideable popover trigger selector
+- Transition behaviour
+
 ## 2.11.0-dev.5 (2025-07-06)
 
 ### Features
