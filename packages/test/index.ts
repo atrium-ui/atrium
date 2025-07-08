@@ -133,11 +133,25 @@ export async function fixElementSizes(ele: Element, width: number, height: numbe
   Object.defineProperty(ele, "offsetHeight", {
     writable: true,
   });
+  Object.defineProperty(ele, "getBoundingClientRect", {
+    writable: true,
+  });
 
   // @ts-ignore
   ele.offsetWidth = width;
   // @ts-ignore
   ele.offsetHeight = height;
+  // @ts-ignore
+  ele.getBoundingClientRect = () => {
+    return {
+      width,
+      height,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+    };
+  };
 }
 
 export async function sleep(ms = 16) {

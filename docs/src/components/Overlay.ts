@@ -139,7 +139,7 @@ export class OverlayTriggerElement extends LitElement {
       this.target.addEventListener(
         "exit",
         () => {
-          this.close();
+          this.hide();
         },
         {
           once: true,
@@ -154,7 +154,7 @@ export class OverlayTriggerElement extends LitElement {
   /**
    * Closes the inner popover.
    */
-  public close() {
+  public hide() {
     this.opened = false;
 
     if (this.target instanceof OverlayElement) {
@@ -169,7 +169,7 @@ export class OverlayTriggerElement extends LitElement {
    * Toggles the inner popover.
    */
   public toggle() {
-    this.opened ? this.close() : this.show();
+    this.opened ? this.hide() : this.show();
   }
 
   protected override updated(): void {
@@ -209,7 +209,7 @@ export class OverlayElement extends Portal {
     this.addEventListener("exit", (e) => {
       const trigger = this.closest("a-overlay-trigger");
       if (e instanceof CustomEvent) {
-        trigger?.close();
+        trigger?.hide();
       }
     });
   }

@@ -10,6 +10,6 @@
   "scripts": {
     "build": "bun ./build.ts",
     "check": "tsc",
-    "dev": "watchexec -e ts bun ./build.ts"
+    "dev": "bun --watch ./build.ts"
   }
 }
