@@ -332,7 +332,7 @@ export class PopoverTrigger extends LitElement {
     super();
 
     new ElementEventListener(this, window, "click", (e) => {
-      if (this.content instanceof Popover) return;
+      if (this.isContent(this.content)) return;
 
       if (this.opened && !this.contains(e.target as Node)) {
         this.hide();
@@ -362,13 +362,17 @@ export class PopoverTrigger extends LitElement {
     return undefined;
   }
 
+  protected isContent(element?: Element) {
+    return element instanceof Popover;
+  }
+
   /**
    * Show the inner popover.
    */
   public show() {
     this.opened = true;
 
-    if (this.content instanceof Popover) {
+    if (this.isContent(this.content)) {
       this.content.show();
     }
 
@@ -384,7 +388,7 @@ export class PopoverTrigger extends LitElement {
   public hide() {
     this.opened = false;
 
-    if (this.content instanceof Popover) {
+    if (this.isContent(this.content)) {
       this.content.hide();
     }
 
