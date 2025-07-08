@@ -362,8 +362,19 @@ export class PopoverTrigger extends LitElement {
     return undefined;
   }
 
-  protected isContent(element?: Element) {
-    return element instanceof Popover;
+  protected isContent(
+    element?: Element & {
+      show?: () => void;
+      hide?: () => void;
+    },
+  ) {
+    if (element?.show instanceof Function && element?.hide instanceof Function) {
+      return element as {
+        show: () => void;
+        hide: () => void;
+      };
+    }
+    return undefined;
   }
 
   /**
@@ -372,9 +383,7 @@ export class PopoverTrigger extends LitElement {
   public show() {
     this.opened = true;
 
-    if (this.isContent(this.content)) {
-      this.content.show();
-    }
+    this.isContent(this.content)?.show();
 
     this.trigger?.setAttribute("aria-haspopup", "dialog");
     this.trigger?.setAttribute("aria-expanded", "true");
@@ -388,9 +397,7 @@ export class PopoverTrigger extends LitElement {
   public hide() {
     this.opened = false;
 
-    if (this.isContent(this.content)) {
-      this.content.hide();
-    }
+    this.isContent(this.content)?.hide();
 
     this.trigger?.setAttribute("aria-haspopup", "dialog");
     this.trigger?.setAttribute("aria-expanded", "false");
