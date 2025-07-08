@@ -106,28 +106,32 @@ export class Popover extends Portal {
     return ["alignment", "placements"];
   }
 
-  protected portalGun() {
-    const ele = document.createElement("a-popover-portal");
+  protected override portalGun() {
+    const ele = new PopoverPortal();
     ele.className = this.className;
     ele.dataset.portal = this.portalId;
     return ele as PopoverPortal;
   }
 
-  private cleanup?: () => void;
+  protected triggerElementSelector = "a-popover-trigger";
 
-  protected onEventProxy(ev: Event) {
+  protected override onEventProxy(ev: Event) {
     if (ev.type !== "exit") {
       return;
     }
 
-    const trigger = this.closest("a-popover-trigger");
+    const trigger = this.closest<PopoverTrigger>(this.triggerElementSelector);
     if (ev instanceof CustomEvent) {
-      trigger?.close();
+      trigger?.hide();
     }
   }
 
   get arrowElement() {
-    return this.children[0]?.querySelector<HTMLElement>("a-popover-arrow");
+    return (
+      (this.children[0] as HTMLElement | undefined)?.querySelector<HTMLElement>(
+        "a-popover-arrow",
+      ) || undefined
+    );
   }
 
   public get alignment(): Alignment | undefined {
@@ -144,11 +148,15 @@ export class Popover extends Portal {
     return ["top", "bottom"];
   }
 
+  private cleanup?: () => void;
+
   /**
    * Show the popover.
    */
   public show() {
-    const trigger = this.closest("a-popover-trigger");
+    this.placePortal();
+
+    const trigger = this.closest<PopoverTrigger>(this.triggerElementSelector);
     const content = this.children[0] as HTMLElement | undefined;
 
     if (!trigger || !content) return;
@@ -189,30 +197,89 @@ export class Popover extends Portal {
       this.children[0].role = "dialog";
     }
 
-    if (this.portal instanceof PopoverPortal) {
-      this.portal.enable();
-    }
+    // waits for DOM mutations to finish, to start transitions no enable
+    requestAnimationFrame(() => {
+      if (this.portal instanceof PopoverPortal) {
+        this.portal.enable();
+      }
+    });
   }
+
+  private transitionInProgress = false;
+
+  private onTransitionStart = () => {
+    this.transitionInProgress = true;
+
+    // wait for transitions to end before removing portal
+    this.addEventListener("transitionend", this.onRemovePortal, {
+      once: true,
+    });
+  };
+
+  private onRemovePortal = () => {
+    this.removePortal();
+    this.cleanup?.();
+
+    this.removeEventListener("transitionstart", this.onTransitionStart);
+    this.removeEventListener("transitionend", this.onRemovePortal);
+
+    this.transitionInProgress = false;
+  };
 
   /**
    * Hide the popover.
    */
   public hide() {
-    this.cleanup?.();
+    this.addEventListener("transitionstart", this.onTransitionStart, {
+      once: true,
+    });
 
+    // disable the portal (blur), to start the transition
     if (this.portal instanceof PopoverPortal) {
       this.portal.disable();
     }
+
+    // wait for transitions to start before removing portal
+    setTimeout(() => {
+      if (!this.transitionInProgress) {
+        this.onRemovePortal();
+      }
+      // if it started, it will end at some point, right? :)
+    }, 150);
+  }
+
+  // disabled imidate placemnt of portal
+  public override autoplace = false;
+
+  connectedCallback(): void {
+    super.connectedCallback();
+
+    const shadow = this.attachShadow({ mode: "open" });
+    shadow.innerHTML = `
+      <style>
+        ::slotted(*) {
+          display: none !important;
+        }
+      </style>
+      <slot></slot>
+    `;
   }
 
   disconnectedCallback(): void {
-    this.cleanup?.();
-    super.disconnectedCallback();
+    // overwrite default removePortal, to respect transitions to play
+    this.hide();
   }
 }
 
 /**
  * A wrapper element that shows content when the user clicks with the slotted input element.
+ * Calls `.show()` on the target when the trigger is clicked.
+ * Calls `.hide()` on the target when the trigger is clicked outside of the popover.
+ *
+ * TODO: Generalized a-trigger. So it can be used for lightbox and other overlays.
+ *
+ * @customEvent show - Fired when the popover is shown.
+ * @customEvent hide - Fired when the popover is hidden.
  *
  * @example
  * ```html
@@ -224,7 +291,7 @@ export class Popover extends Portal {
  *   <a-popover>
  *     <div>Content</div>
  *   </a-popover>
- * </a-popover>
+ * </a-popover-trigger>
  * ```
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-popover/
@@ -265,10 +332,10 @@ export class PopoverTrigger extends LitElement {
     super();
 
     new ElementEventListener(this, window, "click", (e) => {
-      if (this.content instanceof Popover) return;
+      if (this.isContent(this.content)) return;
 
       if (this.opened && !this.contains(e.target as Node)) {
-        this.close();
+        this.hide();
       }
     });
 
@@ -295,40 +362,49 @@ export class PopoverTrigger extends LitElement {
     return undefined;
   }
 
+  protected isContent(element?: Element) {
+    return element instanceof Popover;
+  }
+
   /**
    * Show the inner popover.
    */
   public show() {
     this.opened = true;
 
-    if (this.content instanceof Popover) {
+    if (this.isContent(this.content)) {
       this.content.show();
     }
 
     this.trigger?.setAttribute("aria-haspopup", "dialog");
     this.trigger?.setAttribute("aria-expanded", "true");
+
+    this.dispatchEvent(new CustomEvent("show"));
   }
 
   /**
    * Closes the inner popover.
    */
-  public close() {
+  public hide() {
     this.opened = false;
 
-    if (this.content instanceof Popover) {
+    if (this.isContent(this.content)) {
       this.content.hide();
     }
 
     this.trigger?.setAttribute("aria-haspopup", "dialog");
     this.trigger?.setAttribute("aria-expanded", "false");
+
+    this.dispatchEvent(new CustomEvent("hide"));
   }
 
   /**
    * Toggles the inner popover.
    */
   public toggle() {
-    this.opened ? this.close() : this.show();
+    this.opened ? this.hide() : this.show();
   }
+
   protected updated(): void {
     if (this.trigger) {
       this.trigger.ariaHasPopup = "dialog";
