@@ -21,7 +21,7 @@ interface SerializedMyCustomNode extends SerializedLexicalNode {
 }
 
 class HTMLNode extends ElementNode {
-  __foo: string;
+  __html: string;
 
   static getType(): string {
     return "html-node";
@@ -30,7 +30,7 @@ class HTMLNode extends ElementNode {
   static clone(node: HTMLNode): HTMLNode {
     // If any state needs to be set after construction, it should be
     // done by overriding the `afterCloneFrom` instance method.
-    return new HTMLNode(node.__foo, node.__key);
+    return new HTMLNode(node.__html, node.__key);
   }
 
   static importJSON(serializedNode: LexicalUpdateJSON<SerializedMyCustomNode>): HTMLNode {
@@ -57,7 +57,7 @@ class HTMLNode extends ElementNode {
 
   constructor(foo: string = "", key?: NodeKey) {
     super(key);
-    this.__foo = foo;
+    this.__html = foo;
   }
 
   updateFromJSON(serializedNode: LexicalUpdateJSON<SerializedMyCustomNode>): this {
@@ -92,7 +92,7 @@ class HTMLNode extends ElementNode {
     // if needed, to ensure we don't try and mutate
     // a stale version of this node.
     const self = this.getWritable();
-    self.__foo = foo;
+    self.__html = foo;
     return self;
   }
 
@@ -100,17 +100,23 @@ class HTMLNode extends ElementNode {
     // getLatest() ensures we are getting the most
     // up-to-date value from the EditorState.
     const self = this.getLatest();
-    return self.__foo;
+    return self.__html;
   }
 }
 
 class DocsEditorElement extends (globalThis.HTMLElement || class {}) {
   connectedCallback() {
+    location.search.includes("editor") && this.initEditor();
+  }
+
+  initEditor() {
     const contentString = this.innerHTML;
     this.contentEditable = "true";
     this.classList.add("hydrated");
 
-    console.log(contentString);
+    const filePath = this.getAttribute("filepath");
+
+    console.log(filePath, contentString);
 
     const editor = createEditor({
       nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, HTMLNode],
@@ -159,6 +165,7 @@ class DocsEditorElement extends (globalThis.HTMLElement || class {}) {
         ]);
 
         console.log(markdown);
+        fetch(`/content?filepath=${filePath}`, { method: "POST", body: markdown });
       });
     });
   }

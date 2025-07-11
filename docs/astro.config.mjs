@@ -11,6 +11,7 @@ import { basename, resolve } from "node:path";
 import sitemap from "@astrojs/sitemap";
 import remarkDirective from "remark-directive";
 import { visit } from "unist-util-visit";
+import { readFileSync, writeFileSync } from "node:fs";
 
 export default defineConfig({
   publicDir: "assets",
@@ -100,6 +101,60 @@ export default defineConfig({
                 svgSprite({
                   dir: ["src/assets/icons/**/*.svg", "../packages/icons/assets/*.svg"],
                 }),
+                {
+                  name: "atrium-docs-editor",
+                  configureServer(server) {
+                    console.log(server);
+
+                    server.middlewares.use("/content", async (req, res) => {
+                      const origin = server.resolvedUrls?.local[0];
+                      const baseHeaders = {
+                        "Access-Control-Allow-Origin": "*",
+                      };
+
+                      if (!origin) {
+                        res.writeHead(500, baseHeaders);
+                        res.end();
+                        return;
+                      }
+
+                      if (req.method !== "POST") {
+                        res.writeHead(405, baseHeaders);
+                        res.end();
+                        return;
+                      }
+
+                      const reqUrlParams = new URL(req.url, origin).searchParams;
+                      const filePath = reqUrlParams.get("filepath");
+
+                      const buffer = [];
+
+                      req.on("data", chunk => {
+                        buffer.push(chunk);
+                      });
+
+                      req.on("end", () => {
+                        const decder = new TextDecoder();
+                        const text = buffer.map(curr => decder.decode(curr)).join("");
+
+                        console.log(filePath, text);
+
+                        if (filePath) {
+                          const rawFile = readFileSync(filePath, "utf-8");
+
+                          console.log(rawFile);
+
+                          // writeFileSync(filePath, text);
+                        }
+
+                        res.writeHead(200, {
+                          ...baseHeaders,
+                        });
+                        res.end();
+                      });
+                    });
+                  },
+                },
               ],
             },
           });

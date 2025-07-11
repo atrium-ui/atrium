@@ -65,11 +65,11 @@ const file = Astro.props.code?.trim();
   </style>
 
   <div class="absolute top-[2px] opacity-50 left-[-1.75rem] flex items-center pointer-events-none w-0 h-0 -rotate-90 justify-end">
-    <spam class="uppercase whitespace-nowrap text-xs">Preview</spam>
+    <spam class="uppercase whitespace-nowrap text-xs before:content-['Preview']"></spam>
   </div>
 
   <div class="not-content w-full flex flex-col items-left justify-center relative">
-    <drag-example>
+    <drag-example class="overflow-hidden resize-x">
       <div class="box p-3 overflow-clip">
         <div class="w-full h-full">
           <slot />
@@ -78,7 +78,7 @@ const file = Astro.props.code?.trim();
     </drag-example>
   </div>
 
-  <ExamplePreview client:only="vue">
+  <ExamplePreview client:only="react">
     <Code lang="tsx" code={file}></Code>
   </ExamplePreview>
 
