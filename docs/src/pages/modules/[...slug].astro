@@ -61,7 +61,7 @@ const name = entry.data.title || "";
       <h1 class="typo-title-2 max-w-full lg:-mt-3">{entry.data.title}</h1>
 
       <div class="relative my-module-3xl">
-        <Preview client:load />
+        <Preview client:only="react" />
       </div>
 
       <Headings headings={headings} />

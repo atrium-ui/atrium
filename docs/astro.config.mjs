@@ -97,6 +97,9 @@ export default defineConfig({
                     return code;
                   },
                 },
+                svgSprite({
+                  dir: ["src/assets/icons/**/*.svg", "../packages/icons/assets/*.svg"],
+                }),
               ],
             },
           });

@@ -110,8 +110,9 @@ const base = import.meta.env.BASE_URL;
     <!-- <ClientRouter /> -->
   </head>
   <body class="style-fill-white-background">
+    <div class="hidden" set:html={iocnSheet} />
+
     <div class="root min-h-screen flex flex-col">
-      <div class="hidden" set:html={iocnSheet} transition:persist />
 
       <Header transition:persist />
 

@@ -91,17 +91,16 @@ const name = entry.data.title || "";
         import './docs-editor.jsx';
       </script>
       <style>
-        docs-editor {
+        docs-editor.hydrated {
           @apply block focus-within:outline-2;
         }
       </style>
 
-      <div class="lg:float-left lg:w-[calc(100%-300px)] lg:pr-module-4xl">
-        <!-- <DocsEditor client:only="react" /> -->
+      <div class="markdown-content lg:float-left lg:w-[calc(100%-300px)] lg:pr-module-4xl">
 
-        <docs-editor class="markdown-content">
+        <!-- <docs-editor class="markdown-content"> -->
           <Content />
-        </docs-editor>
+        <!-- </docs-editor> -->
       </div>
 
     </main>

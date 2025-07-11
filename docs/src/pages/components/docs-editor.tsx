@@ -45,6 +45,8 @@ class DocsEditorElement extends (globalThis.HTMLElement || class {}) {
       $getRoot().select();
       // Insert them at a selection.
       $insertNodes(nodes);
+
+      this.classList.add("hydrated");
     });
 
     editor.registerUpdateListener(({ editorState }) => {
@@ -58,37 +60,4 @@ class DocsEditorElement extends (globalThis.HTMLElement || class {}) {
   }
 }
 
-import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
-import { ContentEditable } from "@lexical/react/LexicalContentEditable";
-import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-
-const initialConfig = {
-  nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode],
-  onError: (error: Error) => {
-    throw error;
-  },
-  theme: {
-    quote: "PlaygroundEditorTheme__quote",
-  },
-};
-
-export function DocsEditor() {
-  return (
-    <LexicalComposer initialConfig={initialConfig}>
-      <PlainTextPlugin
-        contentEditable={<ContentEditable />}
-        placeholder={<div>Enter some text...</div>}
-      />
-      <HistoryPlugin />
-      <OnChangePlugin
-        onChange={() => {
-          console.log("onChange");
-        }}
-      />
-    </LexicalComposer>
-  );
-}
-
-// customElements.define("docs-editor", DocsEditorElement);
+customElements.define("docs-editor", DocsEditorElement);
