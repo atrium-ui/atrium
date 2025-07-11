@@ -17,7 +17,6 @@ import {
 import { Code } from "astro:components";
 import StoryNav from "../../components/stories/Nav.astro";
 import { Preview } from "../../components/stories/Preview";
-import { DocsEditor } from "./docs-editor";
 
 export async function getStaticPaths() {
   const allDocs = await getCollection("docs");
@@ -32,8 +31,6 @@ export async function getStaticPaths() {
     })
     .filter(Boolean);
 }
-
-const base = import.meta.env.BASE_URL;
 
 const { slug } = Astro.params;
 const entry = await getEntry("docs", ["components", slug].join("/"));
@@ -98,7 +95,7 @@ const name = entry.data.title || "";
 
       <div class="markdown-content lg:float-left lg:w-[calc(100%-300px)] lg:pr-module-4xl">
 
-        <!-- <docs-editor class="markdown-content"> -->
+        <!-- <docs-editor data-file-path={entry.filePath} class="markdown-content"> -->
           <Content />
         <!-- </docs-editor> -->
       </div>

@@ -13,6 +13,8 @@ function copySVG(target: HTMLElement) {
 export const ExamplePreview = defineComponent((props, { slots }) => {
   const open = ref(false);
 
+  document.body.classList.add("hydrated");
+
   return () => (
     <div>
       <div class="absolute bottom-0 left-full">
@@ -56,7 +58,7 @@ export const ExamplePreview = defineComponent((props, { slots }) => {
           "after:fixed after:top-0 after:left-0 after:h-full after:w-full",
         )}
       >
-        <div class="relative z-10 overflow-clip rounded-xl bg-[#24292F] text-white">
+        <div class="relative z-10 overflow-clip rounded-lg bg-[#24292F] text-white">
           <div class="sticky top-0 bg-[#3A3A43] p-2">Code view</div>
           {/* contenteditable scopes ctrl+a to this box */}
           <div contenteditable>{slots.default?.()}</div>
