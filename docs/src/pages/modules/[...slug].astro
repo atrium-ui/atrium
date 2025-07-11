@@ -16,7 +16,7 @@ import {
 } from "package:/components";
 import { Code } from "astro:components";
 import StoryNav from "../../components/stories/Nav.astro";
-import { Preview } from "../../components/stories/Preview";
+import { Preview } from "../../components/stories/Preview.js";
 
 export async function getStaticPaths() {
   const allDocs = await getCollection("docs");

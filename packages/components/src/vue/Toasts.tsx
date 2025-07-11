@@ -1,8 +1,8 @@
 /* @jsxImportSource vue */
 import { Toast, ToastFeed } from "@sv/elements/toast";
 import { defineCustomElement } from "vue";
-import { Button } from "./Button";
-import { Icon, type IconName } from "./Icon";
+import { Button } from "./Button.js";
+import { Icon, type IconName } from "./Icon.js";
 
 const TOAST_TYPE = {
   default: "default",

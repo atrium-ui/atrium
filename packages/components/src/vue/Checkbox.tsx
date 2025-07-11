@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 import { defineComponent, ref, effect } from "vue";
-import { Icon } from "./Icon";
+import { Icon } from "./Icon.js";
 
 export const Checkbox = defineComponent(
   (

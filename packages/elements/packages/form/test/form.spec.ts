@@ -1,5 +1,5 @@
 import { test, expect } from "bun:test";
-import type { FormFieldElement } from "../src/Form";
+import type { FormFieldElement } from "../src/Form.js";
 
 const NODE_NAME = "a-form-field";
 

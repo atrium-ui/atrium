@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Controls } from "./Controls";
+import { Controls } from "./Controls.js";
 import "./Preview.css";
-import { stories, type StoryIndex } from "./stories";
+import { stories, type StoryIndex } from "./stories.js";
 import { twMerge } from "tailwind-merge";
 
 const base = import.meta.env.BASE_URL;

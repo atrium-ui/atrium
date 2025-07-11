@@ -64,8 +64,8 @@ export default defineConfig({
     remarkPlugins: [
       [remarkDirective, {}],
       function remarkCustomInfobox() {
-        return tree => {
-          visit(tree, node => {
+        return (tree) => {
+          visit(tree, (node) => {
             if (node.type === "containerDirective") {
               const data = node.data || {};
               node.data = data;
@@ -129,13 +129,13 @@ export default defineConfig({
 
                       const buffer = [];
 
-                      req.on("data", chunk => {
+                      req.on("data", (chunk) => {
                         buffer.push(chunk);
                       });
 
                       req.on("end", () => {
                         const decder = new TextDecoder();
-                        const text = buffer.map(curr => decder.decode(curr)).join("");
+                        const text = buffer.map((curr) => decder.decode(curr)).join("");
 
                         console.log(filePath, text);
 

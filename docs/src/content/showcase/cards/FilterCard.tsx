@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
 import { Combobox } from "@components/src/vue/Combobox";
-import { Card } from "../Card";
+import { Card } from "../Card.js";
 
 export function FilterCard() {
   return (

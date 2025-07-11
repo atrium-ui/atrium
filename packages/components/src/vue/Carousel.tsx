@@ -3,8 +3,8 @@ import "@sv/elements/track";
 import type { Track } from "@sv/elements/track";
 import { twMerge } from "tailwind-merge";
 import { computed, defineComponent, onMounted, ref } from "vue";
-import { Button } from "./Button";
-import { Icon } from "./Icon";
+import { Button } from "./Button.js";
+import { Icon } from "./Icon.js";
 
 export const Carousel = defineComponent(
   (
