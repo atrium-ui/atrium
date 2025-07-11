@@ -116,7 +116,7 @@ class DocsEditorElement extends (globalThis.HTMLElement || class {}) {
 
     const filePath = this.getAttribute("filepath");
 
-    console.log(filePath, contentString);
+    console.info(filePath, contentString);
 
     const editor = createEditor({
       nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, HTMLNode],
@@ -140,7 +140,7 @@ class DocsEditorElement extends (globalThis.HTMLElement || class {}) {
 
       // Once you have the DOM instance it's easy to generate LexicalNodes.
       const nodes = $generateNodesFromDOM(editor, dom);
-      console.log(nodes);
+      console.info(nodes);
 
       // Select the root
       $getRoot().select();
@@ -164,7 +164,7 @@ class DocsEditorElement extends (globalThis.HTMLElement || class {}) {
           },
         ]);
 
-        console.log(markdown);
+        console.info(markdown);
         fetch(`/content?filepath=${filePath}`, { method: "POST", body: markdown });
       });
     });

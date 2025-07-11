@@ -42,7 +42,7 @@ const file = Astro.props.code?.trim();
             ev.preventDefault();
             const data = ev.dataTransfer?.getData("text/svg+xml");
 
-            console.log(data)
+            console.info(data)
 
             navigator.clipboard.write([new ClipboardItem({ "text/plain": data || '' })]).then(() => {
               showToast("Copied to clipboard")

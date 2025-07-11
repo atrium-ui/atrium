@@ -21,7 +21,8 @@
           "options": {
             "forceJsExtensions": true
           }
-        }
+        },
+        "useExhaustiveDependencies": "warn"
       },
       "style": {
         "noDefaultExport": "warn",
@@ -42,6 +43,7 @@
           "level": "error",
           "options": {
             "allow": [
+              "debug",
               "warn",
               "error",
               "info"

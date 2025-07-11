@@ -281,7 +281,7 @@ export function PlaygroundView() {
     const root = iframe.contentWindow?.document.querySelector("#root");
     if (root) {
       root.innerHTML = files["index.html"]?.model?.getValue();
-      console.log(script);
+      console.info(script);
       iframe.contentWindow?.document.body.appendChild(script);
     }
 

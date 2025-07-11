@@ -104,8 +104,6 @@ export default defineConfig({
                 {
                   name: "atrium-docs-editor",
                   configureServer(server) {
-                    console.log(server);
-
                     server.middlewares.use("/content", async (req, res) => {
                       const origin = server.resolvedUrls?.local[0];
                       const baseHeaders = {
@@ -137,12 +135,12 @@ export default defineConfig({
                         const decder = new TextDecoder();
                         const text = buffer.map((curr) => decder.decode(curr)).join("");
 
-                        console.log(filePath, text);
+                        console.info(filePath, text);
 
                         if (filePath) {
                           const rawFile = readFileSync(filePath, "utf-8");
 
-                          console.log(rawFile);
+                          console.info(rawFile);
 
                           // writeFileSync(filePath, text);
                         }
