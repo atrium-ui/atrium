@@ -1,6 +1,6 @@
 import { html } from "lit";
 import "./FraportCarousel.js";
-import type { Story } from "../../../components/stories/stories.jsx";
+import type { Story } from "../../../components/stories/stories.js";
 
 export default (<Story>{
   tags: ["public"],

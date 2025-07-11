@@ -63,8 +63,8 @@ export default defineConfig({
     remarkPlugins: [
       [remarkDirective, {}],
       function remarkCustomInfobox() {
-        return (tree) => {
-          visit(tree, (node) => {
+        return tree => {
+          visit(tree, node => {
             if (node.type === "containerDirective") {
               const data = node.data || {};
               node.data = data;
@@ -109,12 +109,10 @@ export default defineConfig({
     },
     pagefind(),
     mdx(),
-    react({
-      include: ["**/react/*.{tsx}"],
-    }),
     vue({
-      include: ["**/vue/*.{tsx}"],
-      jsx: true,
+      exclude: ["**/*"],
+      include: ["**/vue/*.{tsx|vue}"],
+      // jsx: true,
       template: {
         compilerOptions: {
           isCustomElement(tag) {
@@ -123,16 +121,24 @@ export default defineConfig({
         },
       },
     }),
-    solid({
+    react({
       include: [
         //
-        "**/solid/*.{tsx}",
+        "**/react/*.{tsx}",
+        "**/playground/Playground.tsx",
+        "./src/pages/components/docs-editor.tsx",
         "**/stories/Preview.tsx",
         "**/stories/Controls.tsx",
         "**/stories/Frame.tsx",
-        "**/playground/Playground.tsx",
       ],
     }),
+    // solid({
+    //   exclude: ["**/*"],
+    //   include: [
+    //     //
+    //     "**/solid/*.{tsx}",
+    //   ],
+    // }),
     sitemap(),
   ],
 });

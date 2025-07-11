@@ -521,8 +521,10 @@
   background: currentColor;
   pointer-events: none;
   opacity: 0;
-  transition: width 0.175s ease-in-out, transform 0.05s ease-out, opacity 0.15s
-    ease-in-out;
+  transition:
+    width 0.175s ease-in-out,
+    transform 0.05s ease-out,
+    opacity 0.15s ease-in-out;
 }
 
 .text-link span {
@@ -565,11 +567,13 @@
 /* Animations */
 
 @utility move-in {
-  animation: moveIn 1s .2s var(--ease-smooth) both, fadeIn 1s .2s ease both;
+  animation:
+    moveIn 1s 0.2s var(--ease-smooth) both,
+    fadeIn 1s 0.2s ease both;
 }
 
 @utility fade-in {
-  animation: fadeIn 1.5s .25s ease both;
+  animation: fadeIn 1.5s 0.25s ease both;
 }
 
 @keyframes moveIn {

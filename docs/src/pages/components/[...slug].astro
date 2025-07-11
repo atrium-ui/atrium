@@ -17,6 +17,7 @@ import {
 import { Code } from "astro:components";
 import StoryNav from "../../components/stories/Nav.astro";
 import { Preview } from "../../components/stories/Preview";
+import { DocsEditor } from "./docs-editor";
 
 export async function getStaticPaths() {
   const allDocs = await getCollection("docs");
@@ -61,7 +62,7 @@ const name = entry.data.title || "";
       <h1 class="typo-title-2 max-w-full lg:-mt-3">{entry.data.title}</h1>
 
       <div class="relative my-module-3xl">
-        <Preview client:load />
+        <Preview client:only="react" />
       </div>
 
       <Headings headings={headings} />
@@ -86,8 +87,21 @@ const name = entry.data.title || "";
         <StoryNav />
       </aside>
 
-      <div class="markdown-content lg:float-left lg:w-[calc(100%-300px)] lg:pr-module-4xl">
-        <Content />
+      <script>
+        import './docs-editor.jsx';
+      </script>
+      <style>
+        docs-editor {
+          @apply block focus-within:outline-2;
+        }
+      </style>
+
+      <div class="lg:float-left lg:w-[calc(100%-300px)] lg:pr-module-4xl">
+        <!-- <DocsEditor client:only="react" /> -->
+
+        <docs-editor class="markdown-content">
+          <Content />
+        </docs-editor>
       </div>
 
     </main>

@@ -92,12 +92,21 @@
   --line-color2: hsla(0, 0%, 50%, 0.2);
   --line-color: hsla(0, 0%, 50%, 0.2);
 
-  background-image: linear-gradient(var(--line-color) 1px, transparent 1px),
+  background-image:
+    linear-gradient(var(--line-color) 1px, transparent 1px),
     linear-gradient(90deg, var(--line-color) 1px, transparent 1px),
     linear-gradient(var(--line-color2) 0.5px, transparent 0.5px),
     linear-gradient(90deg, var(--line-color2) 0.5px, transparent 0.5px);
-  background-size: 32px 32px, 32px 32px, 8px 8px, 8px 8px;
-  background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
+  background-size:
+    32px 32px,
+    32px 32px,
+    8px 8px,
+    8px 8px;
+  background-position:
+    -1px -1px,
+    -1px -1px,
+    -1px -1px,
+    -1px -1px;
 }
 
 .docs-story-toolbar-container {

@@ -1,5 +1,3 @@
-/* @jsxImportSource solid-js */
-
 import "./Playground.css";
 
 import "@sv/elements/blur";
@@ -15,9 +13,9 @@ import tsEditorWorker from "monaco-editor/esm/vs/language/typescript/ts.worker.j
 import exampleCodeHtml from "./Examplecode.html.txt?raw";
 import exampleCodeTsx from "./Examplecode.tsx.txt?raw";
 import { Toast } from "@sv/elements/toast";
-import { createSignal, onMount } from "solid-js";
 import { Blur } from "@sv/elements/blur";
 import { css, html } from "lit";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const componentsImports = import.meta.glob(
   "./../../../../packages/components/src/vue/*.tsx",
@@ -48,7 +46,16 @@ globalThis.MonacoEnvironment = {
   },
 };
 
+let initialized: Promise<void>;
+
 async function transformCode(code: string) {
+  if (!code) return;
+
+  if (!initialized) {
+    initialized = esbuild.initialize({ wasmURL: esbuildUrl });
+  }
+  await initialized;
+
   return await esbuild.transform(code, {
     sourcemap: false,
     minify: false,
@@ -87,7 +94,11 @@ customElements.define("custom-toast", CustomToast);
 
 async function init() {
   await import("@atrium-ui/layout");
-  await esbuild.initialize({ wasmURL: esbuildUrl });
+
+  if (!initialized) {
+    initialized = esbuild.initialize({ wasmURL: esbuildUrl });
+  }
+  await initialized;
 
   customElements.define(
     "command-menu",
@@ -104,9 +115,9 @@ async function init() {
         super.connectedCallback();
 
         this.innerHTML = `
-          <a-list class="commandmenu">
+          <a-list className="commandmenu">
             <input type="text" placeholder="Search..." />
-            <div class="commandmenu-list" />
+            <div className="commandmenu-list" />
           </a-list>
         `;
 
@@ -203,14 +214,14 @@ async function init() {
         this._monacoEditor.setModel(model);
 
         model.onDidChangeContent((event) => {
-          this.dispatchEvent(new CustomEvent("change"));
+          this.dispatchEvent(new Event("change", { bubbles: true }));
         });
 
         this._model = model;
 
         this.load();
 
-        this.dispatchEvent(new CustomEvent("change"));
+        this.dispatchEvent(new Event("change", { bubbles: true }));
       }
 
       async load() {
@@ -226,11 +237,19 @@ if (typeof window !== "undefined") {
   init();
 }
 
-export function PlaygroundView() {
-  const [loading, setLoading] = createSignal(false);
+const preloadMap = {
+  vue: `import { h } from "vue";`,
+};
+const framework = "vue";
 
-  const iframe = document.createElement("iframe");
-  iframe.src = `${import.meta.env.BASE_URL}story`;
+export function PlaygroundView() {
+  const [loading, setLoading] = useState(false);
+
+  const iframe = useMemo(() => {
+    const iframe = document.createElement("iframe");
+    iframe.src = `${import.meta.env.BASE_URL}story`;
+    return iframe;
+  }, []);
 
   async function loadFiles() {
     const query = location.search.slice(1);
@@ -244,26 +263,34 @@ export function PlaygroundView() {
 
   async function pushCode() {
     setLoading(true);
-    iframe.contentWindow.location.reload();
+    iframe.contentWindow?.location.reload();
 
     await new Promise((resolve) => {
       iframe.onload = () => {
-        setLoading(false);
-        resolve();
+        resolve(0);
       };
     });
 
     const script = document.createElement("script");
     script.type = "module";
-    script.textContent = `import { h } from "vue";\n${(await transformCode(files["index.tsx"]?.model.getValue())).code}`;
+    const code = (await transformCode(files["index.tsx"]?.model?.getValue()))?.code;
+
+    script.textContent = `${preloadMap[framework]}\n${code || ""}`;
     console.debug(script.textContent);
 
-    const root = iframe.contentWindow.document.querySelector("#root");
+    const root = iframe.contentWindow?.document.querySelector("#root");
     if (root) {
-      root.innerHTML = files["index.html"]?.model.getValue();
-      iframe.contentWindow.document.body.appendChild(script);
+      root.innerHTML = files["index.html"]?.model?.getValue();
+      console.log(script);
+      iframe.contentWindow?.document.body.appendChild(script);
     }
+
+    setLoading(false);
   }
+
+  useEffect(() => {
+    loadFiles().then(pushCode());
+  }, []);
 
   async function share() {
     try {
@@ -326,24 +353,26 @@ export function PlaygroundView() {
     showToast("No image to paste");
   }
 
-  onMount(async () => {
-    await loadFiles();
-  });
+  const iframeContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    iframeContainerRef.current?.appendChild(iframe);
+  }, [iframe]);
 
   return (
-    <div class={["relative", "not-content"].join(" ")}>
-      <div class="flex">
-        <div class="flex flex-col gap-2 p-2">
+    <div className={["relative", "not-content"].join(" ")}>
+      <div className="flex">
+        <div className="flex hidden flex-col gap-2 p-2">
           <button
             type="button"
-            class="cursor-pointer rounded bg-blue-500 p-3 font-bold text-white hover:bg-blue-700"
+            className="cursor-pointer rounded bg-blue-500 p-3 font-bold text-white hover:bg-blue-700"
             onClick={() => share()}
             title="share"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 256 256"
-              class="h-[1em] w-[1em]"
+              className="h-[1em] w-[1em]"
             >
               <title>Share</title>
               <path
@@ -356,14 +385,14 @@ export function PlaygroundView() {
           {GEMINI_SERVICE_URL ? (
             <button
               type="button"
-              class="cursor-pointer rounded bg-blue-500 p-3 font-bold text-white hover:bg-blue-700"
+              className="cursor-pointer rounded bg-blue-500 p-3 font-bold text-white hover:bg-blue-700"
               onClick={() => gemini()}
               title="gemini"
             >
               <svg
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-[1em] w-[1em]"
+                className="h-[1em] w-[1em]"
               >
                 <title>Gemini</title>
                 <path
@@ -377,22 +406,18 @@ export function PlaygroundView() {
           )}
         </div>
 
-        <a-layout class="z-0">
+        <a-layout className="z-0">
           <a-layout-column>
-            <a-layout-group tabs>
-              <monaco-editor
-                data-file="index.html"
-                tab="index.html"
-                onChange={pushCode}
-              />
-              <monaco-editor data-file="index.tsx" tab="index.tsx" onChange={pushCode} />
+            <a-layout-group tabs onChange={pushCode}>
+              <monaco-editor data-file="index.html" tab="index.html" />
+              <monaco-editor data-file="index.tsx" tab="index.tsx" />
             </a-layout-group>
           </a-layout-column>
           <a-layout-column>
             <a-layout-group tabs>
-              <div tab="Preview" class="flex h-full flex-col">
-                {loading() ? <div>Loading...</div> : null}
-                <div class="flex-1">{iframe}</div>
+              <div tab="Preview" className="flex h-full flex-col">
+                {loading ? <div>Loading...</div> : null}
+                <div className="flex-1" ref={iframeContainerRef} />
               </div>
             </a-layout-group>
           </a-layout-column>

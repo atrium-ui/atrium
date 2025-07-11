@@ -1,4 +1,4 @@
-import { type Signal, createMemo } from "solid-js";
+import { useMemo } from "react";
 
 type Args = {
   name: string;
@@ -9,7 +9,7 @@ type Args = {
 };
 
 export function Controls(props: { storyData; storyUserArgs; variantId }) {
-  const args = createMemo(() => {
+  const args = useMemo(() => {
     const values = props.storyData?.default?.args;
     const types = props.storyData?.default?.argTypes;
 
@@ -34,7 +34,7 @@ export function Controls(props: { storyData; storyUserArgs; variantId }) {
     }
 
     return allArgs;
-  });
+  }, [props]);
 
   function applyArgs(controls: FormData, variantId: string) {
     const argsSignal = props.storyUserArgs.get(variantId);
@@ -44,7 +44,7 @@ export function Controls(props: { storyData; storyUserArgs; variantId }) {
 
     // values not in the form data are retained, even if changed to "false"
     const args = {
-      ...userArgs(),
+      ...userArgs,
     };
     for (const [key, value] of controls.entries()) {
       args[key] = value;
@@ -54,19 +54,19 @@ export function Controls(props: { storyData; storyUserArgs; variantId }) {
 
   return (
     <form
-      class="docs-story-controls"
+      className="docs-story-controls"
       onChange={(e) => applyArgs(new FormData(e.currentTarget), props.variantId)}
     >
       <div>
-        {args().map((arg, i) => {
+        {args.map((arg, i) => {
           return (
-            <div key={`row-${i}`} class="mb-module-m">
-              <div class="typo-topline mb-2 flex justify-between">
+            <div key={`row-${i}`} className="mb-module-m">
+              <div className="typo-topline mb-2 flex justify-between">
                 <code>{arg.name}</code>
                 <code>{arg.type}</code>
               </div>
-              <div class="mb-element-xs">{renderControl(arg)}</div>
-              <div class="typo-footnote">
+              <div className="mb-element-xs">{renderControl(arg)}</div>
+              <div className="typo-footnote">
                 {arg.description ? <span>{arg.description}</span> : ""}
               </div>
             </div>
@@ -83,12 +83,21 @@ function renderControl(arg: Args) {
   }
   if (arg.type === "number") {
     return (
-      <input class="input" name={arg.name} type="number" value={arg.value as number} />
+      <input
+        className="input"
+        name={arg.name}
+        type="number"
+        defaultValue={arg.value as number}
+      />
     );
   }
   if (arg.type === "select") {
     return (
-      <select class="w-full" name={arg.name} value={(arg.value as string) || undefined}>
+      <select
+        className="w-full"
+        name={arg.name}
+        value={(arg.value as string) || undefined}
+      >
         {arg.options?.map((option, i) => (
           <option key={`option-${i}`}>{option}</option>
         ))}
@@ -97,7 +106,7 @@ function renderControl(arg: Args) {
   }
   return (
     <input
-      class="input"
+      className="input"
       name={arg.name}
       type="text"
       value={(arg.value as string) || ""}

@@ -94,12 +94,12 @@ tasks:
   check:fix:
     desc: Apply all (unsafe) autofixes
     cmds:
-      - bun x biome check --apply .
+      - bun x biome check --write .
 
   check:fix:unsafe:
     desc: Apply all (unsafe) autofixes
     cmds:
-      - bun x biome check --apply-unsafe .
+      - bun x biome check --write --unsafe .
 
   clean:
     desc: Clean untracked files

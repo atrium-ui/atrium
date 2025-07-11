@@ -1,11 +1,4 @@
-import {
-  type ParentProps,
-  type Signal,
-  createEffect,
-  createMemo,
-  createSignal,
-  onMount,
-} from "solid-js";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Controls } from "./Controls";
 import "./Preview.css";
 import { stories, type StoryIndex } from "./stories";
@@ -18,13 +11,13 @@ function OpenStoryButton(props: { query: string }) {
     <a
       title="Open in new tab"
       href={`${base}story?${props.query}`}
-      class="block rounded-md p-2 opacity-50 hover:bg-gray-100 hover:opacity-100"
+      className="block rounded-md p-2 opacity-50 hover:bg-gray-100 hover:opacity-100"
       target="_blank"
       rel="noreferrer"
     >
-      <span class="sr-only">Open in new tab</span>
+      <span className="sr-only">Open in new tab</span>
       <svg
-        class="block"
+        className="block"
         aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         width="18"
@@ -38,102 +31,107 @@ function OpenStoryButton(props: { query: string }) {
   );
 }
 
-function StoryFrame(props: { canvasId: string; params?: string }) {
-  const iframe = document.createElement("iframe");
+export function Preview(props) {
+  const [storyId, setStoryId] = useState<string>();
+  const [storyData, setStoryData] = useState<StoryIndex>();
+  const storyUserArgs = new Map<string, Record<string, any>>();
 
-  createEffect(() => {
-    iframe.title = `Story of ${props.canvasId}`;
-    iframe.src = `${base}story?id=${props.canvasId}&${props.params || ""}`;
-  });
-
-  window?.addEventListener("message", (msg) => {
-    if (props.canvasId === msg.data.id) {
-      iframe.style.height = `${msg.data.height}px`;
-      window.dispatchEvent(new Event("story.loaded"));
-    }
-  });
-
-  return iframe;
-}
-
-export function Preview(props: ParentProps) {
-  const [storyId, setStoryId] = createSignal<string>();
-  const [storyData, setStoryData] = createSignal<StoryIndex>();
-  const storyUserArgs = new Map<string, Signal<Record<string, any>>>();
-
-  const [id, setId] = createSignal<string>("");
-  const [variantId, setVariantId] = createSignal<string>();
+  const [id, setId] = useState<string>("");
+  const [variantId, setVariantId] = useState<string>();
 
   const location = globalThis.location || {};
 
   const of = "fraport";
 
-  const [userArgs, setUserArgs] = createSignal<Record<string, any>>({});
+  const [userArgs, setUserArgs] = useState<Record<string, any>>({});
 
   storyUserArgs.set(of, [userArgs, setUserArgs]);
 
-  const searchParams = createMemo(() => {
+  const searchParams = useMemo(() => {
     const searchParams = new URLSearchParams(location.search);
     const argsData = {
-      ...storyData()?.[of]?.args,
-      ...userArgs(),
+      ...storyData?.[of]?.args,
+      ...userArgs,
     };
     for (const key in argsData) {
       const value = argsData[key];
       searchParams.set(key, value.toString());
     }
     return searchParams.toString();
-  });
+  }, [storyData, userArgs, location.search]);
 
-  onMount(async () => {
+  useEffect(() => {
     const previewId = new URLSearchParams(location.search).get("id");
     setId(previewId || "");
 
     setVariantId(previewId?.split("--")[1]);
     setStoryId(previewId?.split("--")[0] || "");
 
-    const storyModule = await stories.get(storyId())?.();
-    setStoryData(storyModule);
+    stories
+      .get(storyId)?.()
+      ?.then((storyModule) => {
+        setStoryData(storyModule);
+      });
+  }, [storyId, location.search]);
+
+  const iframe = useMemo(() => document.createElement("iframe"), []);
+
+  useEffect(() => {
+    iframe.title = `Story of ${id}`;
+    iframe.src = `${base}story?id=${id}&${searchParams || ""}`;
+  }, [id, searchParams, iframe]);
+
+  useEffect(() => {
+    window?.addEventListener("message", (msg) => {
+      if (props.canvasId === msg.data.id) {
+        iframe.style.height = `${msg.data.height}px`;
+        window.dispatchEvent(new Event("story.loaded"));
+      }
+    });
   });
+
+  const frameRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!iframe || !frameRef.current) return;
+    frameRef.current.appendChild(iframe);
+    iframe.style.height = "100%";
+  }, [iframe]);
 
   return (
     <a-blur
       scrolllock
       onExit={() => setVariantId("")}
-      bool:enabled={variantId()}
-      class={twMerge(
+      enabled={variantId}
+      className={twMerge(
         "fixed top-0 right-0 bottom-0 left-0 z-10 h-full w-full bg-black/10 backdrop-blur-sm",
         "hidden items-center justify-center [&[enabled]]:flex",
       )}
     >
-      <div class="pointer-events-auto relative min-h-[90vh] min-w-[90vw] rounded-lg bg-white shadow-2xl">
-        {variantId() ? (
-          <div class="docs-story-preview absolute! inset-0 h-full w-full">
-            <div class="docs-story-toolbar-container">
-              <div class="docs-story-toolbar">
-                <div>{id()}</div>
-                <div class="flex gap-module-m">
-                  <OpenStoryButton query={`id=${id()}`} />
-                  <button type="button" onClick={() => setVariantId("")}>
-                    X
-                  </button>
-                </div>
+      <div className="pointer-events-auto relative min-h-[90vh] min-w-[90vw] rounded-lg bg-white shadow-2xl">
+        <div className="docs-story-preview absolute! inset-0 h-full w-full">
+          <div className="docs-story-toolbar-container">
+            <div className="docs-story-toolbar">
+              <div>{id}</div>
+              <div className="flex gap-module-m">
+                <OpenStoryButton query={`id=${id}`} />
+                <button type="button" onClick={() => setVariantId("")}>
+                  X
+                </button>
               </div>
             </div>
-
-            <StoryFrame canvasId={id()} params={searchParams()} />
-
-            <div class="docs-story-controls-container">
-              <Controls
-                storyData={storyData()}
-                storyUserArgs={storyUserArgs}
-                variantId={variantId()}
-              />
-            </div>
           </div>
-        ) : (
-          props.children
-        )}
+
+          <div ref={frameRef} className="contents" />
+
+          <div className="docs-story-controls-container">
+            <Controls
+              storyData={storyData}
+              storyUserArgs={storyUserArgs}
+              variantId={variantId}
+            />
+          </div>
+        </div>
       </div>
     </a-blur>
   );

@@ -1,13 +1,14 @@
 import { render } from "lit";
-import { createEffect, createSignal } from "solid-js";
-import { stories, type Story } from "./stories.jsx";
-
-const [story, setStory] = createSignal();
-const [variant, setVariant] = createSignal();
-const [layout, setLayout] = createSignal("default");
-const [globals, setGlobals] = createSignal({});
+import { stories } from "./stories.js";
+import { useState, useEffect, useRef } from "react";
+import { twMerge } from "tailwind-merge";
 
 export function Frame() {
+  const [story, setStory] = useState();
+  const [variant, setVariant] = useState();
+  const [layout, setLayout] = useState("default");
+  const [globals, setGlobals] = useState({});
+
   const searchParams = new URLSearchParams(location.search);
   const currentStoryId = searchParams.get("id");
   if (currentStoryId) {
@@ -31,8 +32,8 @@ export function Frame() {
 
   const root = document.createElement("div");
 
-  createEffect(() => {
-    const storyDefinition = story();
+  useEffect(() => {
+    const storyDefinition = story;
     if (!storyDefinition) {
       return;
     }
@@ -41,7 +42,7 @@ export function Frame() {
     const parameters = storyDefinition.parameters || {};
     const globals = storyDefinition.globals || {};
 
-    const vars = variant();
+    const vars = variant;
 
     if (vars) {
       Object.assign(args, vars.args);
@@ -64,20 +65,23 @@ export function Frame() {
     render(renderStory(args), root);
 
     window.dispatchEvent(new Event("story.loaded"));
-  });
+  }, [story, variant]);
+
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    rootRef.current?.appendChild(root);
+  }, [root]);
 
   return (
     <div>
       <div
-        class={[
-          `story-root overflow-hidden story-layout-${layout()}`,
-          globals().theme ? `fra-context-background fra-context-${globals().theme}` : "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-      >
-        {root}
-      </div>
+        className={twMerge(
+          `story-root overflow-hidden story-layout-${layout}`,
+          globals.theme ? `fra-context-background fra-context-${globals.theme}` : "",
+        )}
+        ref={rootRef}
+      />
     </div>
   );
 }

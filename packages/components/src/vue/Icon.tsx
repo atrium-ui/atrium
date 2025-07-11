@@ -1,8 +1,5 @@
 /* @jsxImportSource vue */
-export function Icon(props: {
-  name: keyof typeof ICONS;
-  class?: string | string[];
-}) {
+export function Icon(props: { name: keyof typeof ICONS; class?: string | string[] }) {
   return (
     <span
       aria-hidden="true"
