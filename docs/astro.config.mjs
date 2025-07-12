@@ -64,8 +64,8 @@ export default defineConfig({
     remarkPlugins: [
       [remarkDirective, {}],
       function remarkCustomInfobox() {
-        return (tree) => {
-          visit(tree, (node) => {
+        return tree => {
+          visit(tree, node => {
             if (node.type === "containerDirective") {
               const data = node.data || {};
               node.data = data;
@@ -104,6 +104,8 @@ export default defineConfig({
                 {
                   name: "atrium-docs-editor",
                   configureServer(server) {
+                    let timeout;
+                    
                     server.middlewares.use("/content", async (req, res) => {
                       const origin = server.resolvedUrls?.local[0];
                       const baseHeaders = {
@@ -127,22 +129,92 @@ export default defineConfig({
 
                       const buffer = [];
 
-                      req.on("data", (chunk) => {
+                      req.on("data", chunk => {
                         buffer.push(chunk);
                       });
 
                       req.on("end", () => {
                         const decder = new TextDecoder();
-                        const text = buffer.map((curr) => decder.decode(curr)).join("");
+                        const text = buffer.map(curr => decder.decode(curr)).join("");
 
                         console.info(filePath, text);
 
                         if (filePath) {
                           const rawFile = readFileSync(filePath, "utf-8");
+                          const rawLines = rawFile.split("\n");
+                          const updateLines = text.split("\n");
+                          updateLines.unshift(" ");
 
-                          console.info(rawFile);
+                          let meta = false;
+                          let html = false;
+                          let imprt = false;
+                          let index = 0;
 
-                          // writeFileSync(filePath, text);
+                          const ignore = ["import"];
+
+                          const newLines = [];
+
+                          // TODO: AST merge
+
+                          for (const line of rawLines) {
+                            let take = false;
+
+                            if (line.startsWith("---")) {
+                              meta = !meta;
+                              take = true;
+                            }
+                            if (line.startsWith("<")) {
+                              html = true;
+                              take = true;
+                            }
+                            if (line.startsWith("</")) {
+                              html = false;
+                              take = true;
+                            }
+                            if (line.startsWith("import")) {
+                              imprt = true;
+                              take = true;
+                            } else {
+                              if (imprt === true) {
+                                imprt = false;
+                                newLines.push("");
+                              }
+                            }
+
+                            if (meta === true) {
+                              take = true;
+                            }
+                            if (html === true) {
+                              take = true;
+                            }
+
+                            if (ignore.find(curr => line.startsWith(curr))) {
+                              take = true;
+                            }
+
+                            if (take) {
+                              newLines.push(line);
+                              continue;
+                            }
+
+                            const updateLine = updateLines[index];
+                            if (!updateLine?.startsWith("[")) {
+                              newLines.push(updateLines[index]);
+                            }
+
+                            index++;
+                          }
+
+                          // console.info(newLines.join("\n"));
+
+                          const newContent = newLines.join("\n");
+
+                          if (newContent !== rawFile) {
+                            clearTimeout(timeout);
+                            timeout = setTimeout(() => {
+                              writeFileSync(filePath, newLines.join("\n"));
+                            }, 1000)
+                          }
                         }
 
                         res.writeHead(200, {
