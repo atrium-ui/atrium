@@ -9,7 +9,8 @@
 
   /* fonts */
 
-  --font-sans: var(--font-geist), sans-serif;
+  --font-sans: Roboto, sans-serif;
+  --font-sans-condensed: Roboto Condensed, sans-serif;
 
   --font-weight-thin: 200;
   --font-weight-light: 300;
@@ -214,39 +215,54 @@
 
 /* Typography Styles */
 
-@utility typo-body {
-  @apply text-base leading-24;
-}
-@utility typo-caption {
-  @apply text-md md:text-lg lg:text-lg xl:text-lg;
-  @apply leading-24;
-}
-@utility typo-footnote {
-  @apply text-xs leading-[125%];
-}
-
-@utility typo-topline {
-  @apply text-sm md:text-base leading-[125%];
-}
 @utility typo-title-1 {
-  @apply text-[2.4375rem] md:text-[3.75rem] lg:text-[6.0625rem];
+  @apply font-sans-condensed font-bold uppercase;
+  @apply text-[4.5rem];
   @apply leading-[125%];
 }
 @utility typo-title-2 {
-  @apply text-[1.8125rem] md:text-[2.4375rem] lg:text-[3.3125rem] xl:text-[3.9375rem];
+  @apply font-sans-condensed font-bold;
+  @apply text-[3.75rem];
   @apply leading-[125%];
 }
 @utility typo-title-3 {
-  @apply text-[1.375rem] md:text-[1.8125rem] lg:text-[2.4375rem] xl:text-[2.875rem];
+  @apply font-sans-condensed font-bold;
+  @apply text-[3.625rem];
+  @apply leading-[125%];
+}
+@utility typo-title-4 {
+  @apply font-sans-condensed font-bold;
+  @apply text-[2.5rem];
   @apply leading-[125%];
 }
 @utility typo-subtitle {
-  @apply text-[1.375rem] md:text-[1.375rem] lg:text-[1.8125rem] xl:text-[2.125rem];
+  @apply font-semibold;
+  @apply text-[1.5rem];
   @apply leading-[125%];
 }
 @utility typo-headline {
-  @apply text-[1.125rem] md:text-[1.375rem] lg:text-[1.375rem] xl:text-[1.625rem];
+  /* subtitle 2 */
+  @apply font-light;
+  @apply text-[1.5rem];
   @apply leading-[125%];
+}
+@utility typo-intro {
+  @apply font-light uppercase tracking-[0.04em];
+  @apply text-[1.25rem];
+  @apply leading-[125%];
+}
+
+@utility typo-body {
+  @apply text-base leading-24 font-light;
+}
+@utility typo-footnote {
+  @apply text-[0.8125rem] leading-[125%];
+}
+@utility typo-info {
+  @apply text-[0.75rem] leading-[125%] font-bold uppercase;
+}
+@utility typo-caption {
+  @apply text-[0.75rem] leading-[125%] font-light;
 }
 
 @utility typo-button-s {

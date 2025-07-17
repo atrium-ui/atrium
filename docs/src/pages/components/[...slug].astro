@@ -56,7 +56,7 @@ const name = entry.data.title || "";
     </div>
 
     <main class="md:px-0 w-full md:w-[calc(100%-var(--module-9xl))]">
-      <h1 class="typo-title-2 max-w-full lg:-mt-3">{entry.data.title}</h1>
+      <h1 class="typo-title-1 max-w-full lg:-mt-3">{entry.data.title}</h1>
 
       <div class="relative my-module-3xl">
         <Preview client:only="react" />
@@ -77,10 +77,10 @@ const name = entry.data.title || "";
           <Tags />
         </div>
 
-        <div class="typo-footnote font-bold mb-module-m mt-module-2xl">Usage</div>
+        <div class="typo-info font-bold mb-module-m mt-module-2xl">Usage</div>
         {entry.data.command ? <Code lang="sh" code={entry.data.command}></Code> : ""}
 
-        <div class="typo-footnote font-bold mb-module-m mt-module-2xl">Variants</div>
+        <div class="typo-info font-bold mb-module-m mt-module-2xl">Variants</div>
         <StoryNav />
       </aside>
 

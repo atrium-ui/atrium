@@ -50,14 +50,6 @@ export default defineConfig({
   },
   experimental: {
     contentIntellisense: true,
-    fonts: [
-      {
-        provider: fontProviders.google(),
-        name: "Geist",
-        weights: [300, 400, 500, 600, 700],
-        cssVariable: "--font-geist",
-      },
-    ],
   },
   markdown: {
     smartypants: false,
@@ -105,7 +97,7 @@ export default defineConfig({
                   name: "atrium-docs-editor",
                   configureServer(server) {
                     let timeout;
-                    
+
                     server.middlewares.use("/content", async (req, res) => {
                       const origin = server.resolvedUrls?.local[0];
                       const baseHeaders = {
@@ -213,7 +205,7 @@ export default defineConfig({
                             clearTimeout(timeout);
                             timeout = setTimeout(() => {
                               writeFileSync(filePath, newLines.join("\n"));
-                            }, 1000)
+                            }, 1000);
                           }
                         }
 

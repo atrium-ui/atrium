@@ -5,7 +5,7 @@
 
   & > a > h2,
   & > h2 {
-    @apply typo-title-3 mb-module-2xl;
+    @apply typo-title-4 mb-module-2xl;
   }
 
   & > h3 {

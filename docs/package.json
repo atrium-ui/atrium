@@ -16,6 +16,8 @@
     "@astrojs/tailwind": "6.0.2",
     "@astrojs/vue": "5.1.0",
     "@atrium-ui/layout": "^2.0.0",
+    "@fontsource/roboto": "^5.2.6",
+    "@fontsource/roboto-condensed": "^5.2.6",
     "@lexical/history": "^0.33.1",
     "@lexical/html": "^0.33.1",
     "@lexical/list": "^0.33.1",

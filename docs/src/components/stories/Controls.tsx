@@ -61,7 +61,7 @@ export function Controls(props: { storyData; storyUserArgs; variantId }) {
         {args.map((arg, i) => {
           return (
             <div key={`row-${i}`} className="mb-module-m">
-              <div className="typo-topline mb-2 flex justify-between">
+              <div className="typo-info mb-2 flex justify-between">
                 <code>{arg.name}</code>
                 <code>{arg.type}</code>
               </div>
