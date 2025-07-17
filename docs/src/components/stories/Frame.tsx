@@ -1,13 +1,19 @@
-import { render } from "lit";
-import { stories } from "./stories.js";
-import { useState, useEffect, useRef } from "react";
+import { render as renderLit } from "lit";
+import { render as renderVue } from "vue";
+import { createRoot, type Root as ReactRoot } from "react-dom/client";
+import { stories, type Story } from "./stories.js";
+import { useState, useEffect, useRef, useMemo, useLayoutEffect } from "react";
 import { twMerge } from "tailwind-merge";
 
 export function Frame() {
-  const [story, setStory] = useState();
+  const [story, setStory] = useState<Story | null | undefined>();
   const [variant, setVariant] = useState();
   const [layout, setLayout] = useState("default");
   const [globals, setGlobals] = useState({});
+
+  const [reactRoot, setReactRoot] = useState<ReactRoot>();
+
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const searchParams = new URLSearchParams(location.search);
   const currentStoryId = searchParams.get("id");
@@ -15,9 +21,12 @@ export function Frame() {
     const id = currentStoryId.split("--")[0];
     const variant = currentStoryId.split("--")[1];
 
-    stories
-      .get(id)?.()
-      .then((module) => {
+    const storyModule = stories.get(id);
+
+    if (!storyModule) {
+      setStory(null);
+    } else {
+      storyModule()?.then((module) => {
         setStory(module.default);
 
         for (const key in module) {
@@ -28,9 +37,8 @@ export function Frame() {
           }
         }
       });
+    }
   }
-
-  const root = document.createElement("div");
 
   useEffect(() => {
     const storyDefinition = story;
@@ -61,17 +69,31 @@ export function Frame() {
     setGlobals(globals || {});
     setLayout(parameters?.layout || "default");
 
-    // framework specific
-    render(renderStory(args), root);
+    if (!rootRef.current) return;
+
+    if (renderStory instanceof Function) {
+      const template = renderStory(args);
+
+      // framework specific
+      if (template.$$typeof) {
+        // react
+        if (!reactRoot) {
+          setReactRoot(createRoot(rootRef.current));
+        }
+        reactRoot?.render(template);
+      } else if (template.__v_isVNode) {
+        // vue
+        renderVue(template, rootRef.current);
+      } else {
+        // lit (default)
+        renderLit(template, rootRef.current);
+      }
+    } else {
+      console.warn("No render function found on story", currentStoryId);
+    }
 
     window.dispatchEvent(new Event("story.loaded"));
-  }, [story, variant]);
-
-  const rootRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    rootRef.current?.appendChild(root);
-  }, [root]);
+  }, [story, variant, currentStoryId, reactRoot]);
 
   return (
     <div>
@@ -81,7 +103,13 @@ export function Frame() {
           globals.theme ? `fra-context-background fra-context-${globals.theme}` : "",
         )}
         ref={rootRef}
-      />
+      >
+        {!story ? (
+          <div className="flex h-fill w-full flex-col items-center justify-center text-red-500 opacity-50">
+            Story not found "{currentStoryId}"
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }

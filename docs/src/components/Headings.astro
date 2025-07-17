@@ -6,7 +6,7 @@ const props = Astro.props;
 
 <a-track class="flex mt-module-2xl overflow-visible">
   <ul class={twMerge("flex-none flex gap-element-2xl", props.class)}>
-    {props.headings.map(heading => {
+    {props.headings.filter(heading => heading.depth < 3).map(heading => {
       return (
         <li class="flex-none">
           <a href={`#${heading.slug}`} class="text-link text-grey-500 hover:text-black transition-colors">

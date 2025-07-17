@@ -17,6 +17,9 @@
     "useDefineForClassFields": false,
     "jsx": "preserve",
     "jsxImportSource": "react",
-    "types": ["vite/client"]
+    "types": [
+      "vite/client",
+      "@sv/elements"
+    ]
   }
 }

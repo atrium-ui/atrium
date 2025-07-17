@@ -5,81 +5,29 @@ import { ExamplePreview } from "./Example.jsx";
 
 export interface Props {
   title?: string;
-  code: string;
+  code?: string;
 }
 
 const file = Astro.props.code?.trim();
 ---
 
 <div data-html-node class="relative">
-  <script>
-    import { elementToSVG, inlineResources } from 'dom-to-svg'
-
-    function copySVG(target: HTMLElement) {
-      const svgDocument = elementToSVG(target)
-      return new XMLSerializer().serializeToString(svgDocument);
-    }
-
-    class DragExample extends HTMLElement {
-      constructor() {
-        super();
-
-        const shadow = this.attachShadow({ mode: "open" });
-        shadow.innerHTML = `<slot></slot>`;
-
-        this.draggable = true;
-
-        this.addEventListener("dragstart",
-          (event: DragEvent) => event.dataTransfer?.setData("text/svg+xml", copySVG(this.children[0] as HTMLElement) || "")
-        )
-
-        this.addEventListener("dragover", ev => {
-          ev.preventDefault();
-        })
-
-        this.addEventListener("drop",
-          async (ev: DragEvent) => {
-            ev.preventDefault();
-            const data = ev.dataTransfer?.getData("text/svg+xml");
-
-            console.info(data)
-
-            navigator.clipboard.write([new ClipboardItem({ "text/plain": data || '' })]).then(() => {
-              showToast("Copied to clipboard")
-            })
-          }
-        )
-      }
-    }
-
-    customElements.define("drag-example", DragExample);
-
-  </script>
-
-  <style>
-    drag-example {
-      display: block;
-      border-radius: 4px;
-      -webkit-user-drag: element;
-    }
-  </style>
-
   <div class="absolute top-[2px] opacity-50 left-[-1.75rem] flex items-center pointer-events-none w-0 h-0 -rotate-90 justify-end">
     <spam class="uppercase whitespace-nowrap text-xs before:content-['Preview']"></spam>
   </div>
 
   <div class="not-content w-full flex flex-col items-left justify-center relative">
-    <drag-example class="overflow-hidden resize-x">
+    <div class="overflow-hidden resize-x">
       <div class="box p-3 overflow-clip">
         <div class="w-full h-full">
           <slot />
         </div>
       </div>
-    </drag-example>
+    </div>
   </div>
 
   <ExamplePreview client:only="react">
-    <Code lang="tsx" code={file}></Code>
+    <Code lang="tsx" code={file || ''}></Code>
   </ExamplePreview>
 
   <script>

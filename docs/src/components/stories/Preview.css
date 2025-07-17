@@ -77,7 +77,7 @@
 }
 
 .docs-story-preview iframe {
-  width: 80%;
+  max-width: 80%;
 }
 
 .docs-story-preview::before {

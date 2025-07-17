@@ -31,7 +31,36 @@ function OpenStoryButton(props: { query: string }) {
   );
 }
 
-export function Preview(props) {
+export function StoryCanvas(props: { id: string; params: string }) {
+  const iframe = useMemo(() => document.createElement("iframe"), []);
+
+  useEffect(() => {
+    iframe.title = `Story of ${props.id}`;
+    iframe.src = `${base}story?id=${props.id}&${props.params || ""}`;
+  }, [props.id, props.params, iframe]);
+
+  useEffect(() => {
+    window?.addEventListener("message", (msg) => {
+      if (props.id === msg.data.id) {
+        iframe.style.height = `${msg.data.height}px`;
+        window.dispatchEvent(new Event("story.loaded"));
+      }
+    });
+  });
+
+  const frameRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!iframe || !frameRef.current) return;
+    frameRef.current.appendChild(iframe);
+    iframe.style.height = "100%";
+    iframe.style.width = "100%";
+  }, [iframe]);
+
+  return <div ref={frameRef} className="contents" />;
+}
+
+export function Preview() {
   const [storyId, setStoryId] = useState<string>();
   const [storyData, setStoryData] = useState<StoryIndex>();
   const storyUserArgs = new Map<string, Record<string, any>>();
@@ -74,30 +103,6 @@ export function Preview(props) {
       });
   }, [storyId, location.search]);
 
-  const iframe = useMemo(() => document.createElement("iframe"), []);
-
-  useEffect(() => {
-    iframe.title = `Story of ${id}`;
-    iframe.src = `${base}story?id=${id}&${searchParams || ""}`;
-  }, [id, searchParams, iframe]);
-
-  useEffect(() => {
-    window?.addEventListener("message", (msg) => {
-      if (props.canvasId === msg.data.id) {
-        iframe.style.height = `${msg.data.height}px`;
-        window.dispatchEvent(new Event("story.loaded"));
-      }
-    });
-  });
-
-  const frameRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!iframe || !frameRef.current) return;
-    frameRef.current.appendChild(iframe);
-    iframe.style.height = "100%";
-  }, [iframe]);
-
   return (
     <a-blur
       scrolllock
@@ -122,7 +127,7 @@ export function Preview(props) {
             </div>
           </div>
 
-          <div ref={frameRef} className="contents" />
+          <StoryCanvas id={id} params={searchParams} />
 
           <div className="docs-story-controls-container">
             <Controls
