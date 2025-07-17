@@ -56,15 +56,15 @@ const name = entry.data.title || "";
     </div>
 
     <main class="md:px-0 w-full md:w-[calc(100%-var(--module-9xl))]">
-      <h1 class="typo-title-1 max-w-full lg:-mt-3">{entry.data.title}</h1>
+      <hgroup>
+        {entry.data.headline ? <p class="typo-info max-w-full mb-element-m">{entry.data.headline}</p> : ""}
+        <h1 class="typo-title-1 max-w-full mb-element-m">{entry.data.title}</h1>
+        {entry.data.description ? <p class="typo-body font-normal max-w-full mt-4">{entry.data.description}</p> : ""}
+      </hgroup>
 
       <div class="border-b-1 border-gray-200 pb-module-s mb-module-xl"></div>
 
       <aside class="lg:float-right lg:w-[300px]">
-        <p>
-          {entry.data.description}
-        </p>
-
         <div class="flex gap-2 flex-wrap mb-module-2xl mt-module-xl">
           <Git href={`/packages/components/src/vue/${name}.tsx`} />
           <Accessibility reportId={`-atrium-components-${name.toLowerCase()}-`} />
