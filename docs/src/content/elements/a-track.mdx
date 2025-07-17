@@ -8,7 +8,7 @@ import { Elements, Lit, TypeDoc } from "package:/components"
 import { VariableTrack } from "./a-track/Track";
 import "./a-track/track.css";
 
-<div class="not-content box overflow-hidden">
+<div class="not-content box overflow-clip">
   <a-track snap class="flex w-full overflow-visible">
     <a href="#" class="counted block flex-none p-4">
       <canvas width="500" height="280" class="bg-slate-500" />
@@ -65,7 +65,7 @@ Different example confugrations of tracks.
 
 ### Free scroll
 
-<div class="not-content box">
+<div class="not-content box overflow-clip">
   <a-track class="flex w-full overflow-visible">
     <a href="#" class="block flex-none pr-4">
       <canvas width="260" height="280" class="bg-slate-500" />
@@ -102,7 +102,7 @@ Different example confugrations of tracks.
 
 ### Snap scroll
 
-<div class="not-content box">
+<div class="not-content box overflow-clip">
   <a-track snap overflow="ignore" class="flex w-full overflow-visible">
     <a href="#" class="block flex-none pr-4">
       <canvas width="260" height="280" class="bg-slate-500" />
@@ -151,7 +151,7 @@ Different example confugrations of tracks.
 
 ### Align center
 
-<div class="not-content box">
+<div class="not-content box overflow-clip">
   <a-track align="center" snap class="flex w-full overflow-visible">
     <a href="#" class="block flex-none pr-4">
       <canvas width="260" height="280" class="bg-slate-500" />
@@ -200,7 +200,7 @@ Different example confugrations of tracks.
 
 ### Arrow key navigation
 
-<div class="not-content box">
+<div class="not-content box overflow-clip">
   <a-track tabindex="0" class="flex w-full">
     <div class="block flex-none pr-4">
       <canvas width="260" height="280" class="bg-slate-500" />
@@ -225,10 +225,10 @@ Different example confugrations of tracks.
 
 ### Vertical snap scroll
 
-<div class="not-content box">
+<div class="not-content box overflow-clip">
   <a-track snap
         debug
-        class="flex h-[800px] w-[250px] flex-col overflow-hidden"
+        class="flex h-[800px] w-[250px] flex-col overflow-clip"
         vertical align="center">
     <div class="flex-none py-2 font-bold">
       <canvas width="200" height="200" class="bg-slate-500" />
@@ -279,13 +279,13 @@ track.addEventListener("format", e => {
 
 ### Nested
 
-<div class="not-content box">
+<div class="not-content box overflow-clip">
   <a-track snap class="flex w-full">
     <div class="flex-none pr-4">
       <canvas width="260" height="280" class="bg-slate-500" />
     </div>
     <div class="flex-none pr-4">
-      <a-track id="nested" debug align="center" current="0" vertical snap class="flex h-[280px] flex-col overflow-hidden">
+      <a-track id="nested" debug align="center" current="0" vertical snap class="flex h-[280px] flex-col overflow-clip">
         <div class="flex-none pb-2 font-bold">
           <canvas width="200" height="180" class="bg-slate-500" />
         </div>
@@ -335,7 +335,7 @@ track.addEventListener("format", e => {
 
 ### Loop Snap
 
-<div class="not-content box">
+<div class="not-content box overflow-clip">
   <a-track debug snap loop class="flex w-full">
     <div class="flex-none w-full">
       <canvas width={720} height={480} class="w-full bg-red-500" />
