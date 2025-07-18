@@ -22,4 +22,4 @@ try {
   console.warn("a-popover already defined");
 }
 
-export { PopoverTrigger, Popover, PopoverPortal };
+export { PopoverTrigger, Popover, PopoverPortal, Tooltip };

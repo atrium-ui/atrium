@@ -279,10 +279,12 @@ export class Tooltip extends Popover {
     ele.style.top = "0px";
     ele.style.left = "0px";
     ele.style.zIndex = "10000000";
-    ele.setAttribute("enabled", "");
     ele.className = this.className;
     ele.dataset.portal = this.portalId;
     ele.setAttribute("tooltip", "");
+    requestAnimationFrame(() => {
+      ele.setAttribute("enabled", "");
+    });
     return ele;
   }
 }
@@ -391,7 +393,28 @@ export class PopoverTrigger extends LitElement {
 
     let hoverTimeout: ReturnType<typeof setTimeout>;
 
-    new ElementEventListener(this, window, "pointerover", (e) => {
+    this.addEventListener("pointerover", (e) => {
+      lastPointerType = e.pointerType;
+
+      if (lastPointerType !== "mouse") return;
+
+      if (!(this.content instanceof Tooltip)) return;
+
+      const content = this.content?.children[0];
+
+      if (
+        this.trigger?.contains(e.target as Node) ||
+        content?.contains(e.target as Node)
+      ) {
+        clearTimeout(hoverTimeout);
+        hoverTimeout = setTimeout(() => this.show(), this.showdelay);
+      } else {
+        clearTimeout(hoverTimeout);
+        hoverTimeout = setTimeout(() => this.hide(), this.hidedelay);
+      }
+    });
+
+    this.addEventListener("pointerleave", (e) => {
       lastPointerType = e.pointerType;
 
       if (lastPointerType !== "mouse") return;
