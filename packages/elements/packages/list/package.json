@@ -9,6 +9,6 @@
   "types": "src/index.ts",
   "scripts": {
     "build": "bun ./build.ts",
-    "dev": "watchexec -e ts bun ./build.ts"
+    "dev": "bun --watch ./build.ts"
   }
 }
