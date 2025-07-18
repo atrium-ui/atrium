@@ -1,6 +1,6 @@
 /* @jsxImportSource solis-js */
 import type { ParentProps } from "solid-js";
-import { Button } from "./Button";
+import { Button } from "./Button.js";
 import "@sv/elements/popover";
 
 export function Popover(props: { label?: string } & ParentProps) {

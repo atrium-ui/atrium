@@ -7,7 +7,7 @@
   "types": "src/index.ts",
   "scripts": {
     "test": "bun test",
-    "dev": "watchexec -e ts bun ./build.ts",
+    "dev": "bun --watch ./build.ts",
     "build": "bun ./build.ts",
     "publish-package": "task publish"
   },

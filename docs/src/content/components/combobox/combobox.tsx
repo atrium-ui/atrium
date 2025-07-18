@@ -1,10 +1,10 @@
 /* @jsxImportSource vue */
-import { Combobox, ComboboxItem } from "@components/src/vue/Combobox";
+import { Combobox } from "@components/src/vue/Combobox";
 import { defineComponent } from "vue";
 
 export default defineComponent(() => {
   return () => (
-    <div class="max-w-[700px]">
+    <div class="min-h-[200px] max-w-[700px]">
       <Combobox
         name="combobox"
         placeholder="Select"

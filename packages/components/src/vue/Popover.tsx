@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 import "@sv/elements/popover";
-import { Button } from "./Button";
+import { Button } from "./Button.js";
 
 export function Popover(props: { label?: string }, { slots }) {
   return (

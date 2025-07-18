@@ -1,6 +1,6 @@
 import { beforeEach, test, expect, describe } from "bun:test";
-import type { MoveEvent, Track } from "../src/Track";
-import type { Track as TrackElement } from "../src/Track";
+import type { MoveEvent, Track } from "../src/Track.js";
+import type { Track as TrackElement } from "../src/Track.js";
 import {
   fixElementSizes,
   label,
