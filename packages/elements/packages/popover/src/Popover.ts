@@ -65,7 +65,8 @@ export class PopoverPortal extends Blur {
       z-index: 1000;
     }
 
-    :host([enabled]) {
+    :host([enabled]:not([tooltip])) {
+      /* non-modal (tooltip) or modal */
       pointer-events: all !important;
     }
 
@@ -106,11 +107,11 @@ export class Popover extends Portal {
     return ["alignment", "placements"];
   }
 
-  protected override portalGun() {
+  protected override portalGun(): HTMLElement {
     const ele = new PopoverPortal();
     ele.className = this.className;
     ele.dataset.portal = this.portalId;
-    return ele as PopoverPortal;
+    return ele;
   }
 
   protected triggerElementSelector = "a-popover-trigger";
@@ -271,6 +272,21 @@ export class Popover extends Portal {
   }
 }
 
+export class Tooltip extends Popover {
+  protected override portalGun() {
+    const ele = document.createElement("div");
+    ele.style.position = "fixed";
+    ele.style.top = "0px";
+    ele.style.left = "0px";
+    ele.style.zIndex = "10000000";
+    ele.setAttribute("enabled", "");
+    ele.className = this.className;
+    ele.dataset.portal = this.portalId;
+    ele.setAttribute("tooltip", "");
+    return ele;
+  }
+}
+
 /**
  * A wrapper element that shows content when the user clicks with the slotted input element.
  * Calls `.show()` on the target when the trigger is clicked.
@@ -303,10 +319,26 @@ export class PopoverTrigger extends LitElement {
   @property({ type: Boolean, reflect: true })
   public opened = false;
 
+  /**
+   * The time in milliseconds to wait before showing the popover.
+   */
+  @property({ type: Number })
+  public showdelay = 750;
+
+  /**
+   * The time in milliseconds to wait before hiding the popover.
+   */
+  @property({ type: Number })
+  public hidedelay = 250;
+
   public static styles = css`
     :host {
       display: inline-block;
       transition-property: all;
+    }
+
+    ::slotted([slot="trigger"]) {
+      touch-action: none;
     }
   `;
 
@@ -331,19 +363,92 @@ export class PopoverTrigger extends LitElement {
   constructor() {
     super();
 
+    let lastPointerType: string | undefined;
+
     new ElementEventListener(this, window, "click", (e) => {
       if (this.isContent(this.content)) return;
 
-      if (this.opened && !this.contains(e.target as Node)) {
+      const content = this.content?.children[0];
+
+      if (
+        this.opened &&
+        !this.contains(e.target as Node) &&
+        !content?.contains(e.target as Node)
+      ) {
         this.hide();
       }
     });
 
     this.addEventListener("click", (e) => {
+      if (this.content instanceof Tooltip) return; // not tooltip
+
       if (this.trigger?.contains(e.target as Node)) {
         this.toggle();
       }
     });
+
+    // Tooltip integration
+
+    let hoverTimeout: ReturnType<typeof setTimeout>;
+
+    new ElementEventListener(this, window, "pointerover", (e) => {
+      lastPointerType = e.pointerType;
+
+      if (lastPointerType !== "mouse") return;
+
+      if (!(this.content instanceof Tooltip)) return;
+
+      const content = this.content?.children[0];
+
+      if (
+        this.trigger?.contains(e.target as Node) ||
+        content?.contains(e.target as Node)
+      ) {
+        clearTimeout(hoverTimeout);
+        hoverTimeout = setTimeout(() => this.show(), this.showdelay);
+      } else {
+        clearTimeout(hoverTimeout);
+        hoverTimeout = setTimeout(() => this.hide(), this.hidedelay);
+      }
+    });
+
+    this.addEventListener("contextmenu", (e) => {
+      // longpress to show tooltip
+      if (lastPointerType !== "touch") return;
+
+      e.preventDefault();
+
+      clearTimeout(hoverTimeout);
+      hoverTimeout = setTimeout(() => this.show(), this.showdelay);
+    });
+
+    this.addEventListener(
+      "focus",
+      (e) => {
+        if (!(this.content instanceof Tooltip)) return;
+        if (!this.trigger?.contains(e.target as Node)) return;
+
+        clearTimeout(hoverTimeout);
+        hoverTimeout = setTimeout(() => this.show(), this.showdelay);
+      },
+      {
+        capture: true,
+      },
+    );
+
+    this.addEventListener(
+      "blur",
+      (e) => {
+        if (!(this.content instanceof Tooltip)) return;
+        if (this.trigger?.contains(document.activeElement)) return;
+
+        clearTimeout(hoverTimeout);
+        this.hide();
+      },
+      {
+        capture: true,
+      },
+    );
   }
 
   private get content() {
@@ -420,7 +525,7 @@ export class PopoverTrigger extends LitElement {
   }
 }
 
-class PopoverArrow extends LitElement {
+export class PopoverArrow extends LitElement {
   static styles = css`
     :host {
       position: absolute;
@@ -431,8 +536,4 @@ class PopoverArrow extends LitElement {
   render() {
     return html`<slot></slot>`;
   }
-}
-
-if (!customElements.get("a-popover-arrow")) {
-  customElements.define("a-popover-arrow", PopoverArrow);
 }

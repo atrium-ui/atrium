@@ -9,11 +9,11 @@
   }
 
   & > h3 {
-    @apply typo-subtitle mb-module-2xl;
+    @apply typo-subtitle mb-module-m;
   }
 
   & > h4 {
-    @apply typo-headline mb-module-xl;
+    @apply typo-headline mb-module-m;
   }
 
   & > h2:not(:first-child),

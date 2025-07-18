@@ -128,7 +128,7 @@ const base = import.meta.env.BASE_URL;
 
       <Header transition:persist />
 
-      <div class="flex-1 w-full px-(--site-padding) relative mx-auto max-w-(--site-width)">
+      <div class="flex-1 w-full px-(--site-padding) relative mx-auto max-w-(--site-width) overflow-clip">
         <slot />
       </div>
 
@@ -189,10 +189,6 @@ section {
   border: 1px solid var(--color-grey-200);
   border-radius: var(--radius-xs);
   display: flex;
-}
-
-.box > *:first-child {
-  min-height: 200px;
 }
 
 /* trying to prevent layout shift with unstyled elements */

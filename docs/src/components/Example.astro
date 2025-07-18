@@ -18,8 +18,8 @@ const file = Astro.props.code?.trim();
 
   <div class="not-content w-full flex flex-col items-left justify-center relative">
     <div class="overflow-hidden resize-x">
-      <div class="box p-3 overflow-clip">
-        <div class="w-full h-full">
+      <div class="box overflow-clip">
+        <div class="w-full h-full min-h-14 p-3">
           <slot />
         </div>
       </div>

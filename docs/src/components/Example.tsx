@@ -65,7 +65,7 @@ export function ExamplePreview(props: PropsWithChildren) {
         enabled={open || undefined}
         ref={blurRef}
         className={twMerge(
-          "-right-[10px] absolute top-0 z-10 my-4 flex max-h-full w-full max-w-[70%] overflow-auto rounded-lg bg-white opacity-0 shadow-xl [&[enabled]]:opacity-100",
+          "-right-[10px] absolute top-0 z-10 my-4 flex max-h-full min-h-[200px] w-full max-w-[70%] overflow-auto rounded-lg bg-white opacity-0 shadow-xl [&[enabled]]:opacity-100",
           "after:fixed after:top-0 after:left-0 after:h-full after:w-full",
         )}
       >

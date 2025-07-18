@@ -43,7 +43,8 @@ export default defineConfig({
         transform(code) {
           return code
             .replace(/#000091/g, "currentColor")
-            .replace(/#000000/g, "currentColor");
+            .replace(/#000000/g, "currentColor")
+            .replace(/#000/g, "currentColor");
         },
       }),
     ],
