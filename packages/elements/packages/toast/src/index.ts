@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { ToastFeed, Toast } from "./Toast";
+import { ToastFeed, Toast } from "./Toast.js";
 
 try {
   if (typeof window !== "undefined") {

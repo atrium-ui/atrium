@@ -1,5 +1,5 @@
 /* @jsxImportSource solid-js */
-import { Icon } from "./Icon";
+import { Icon } from "./Icon.js";
 import { type ParentProps, createEffect, createSignal } from "solid-js";
 import { twMerge } from "tailwind-merge";
 
@@ -29,8 +29,8 @@ export function Checkbox(props: ParentProps<CheckboxProps>) {
 
   return (
     <div class="flex items-start gap-3">
+      {/** biome-ignore lint/a11y/useSemanticElements: no */}
       <button
-        // biome-ignore lint/a11y/useSemanticElements: <explanation>
         role="checkbox"
         aria-checked={checked()}
         type="button"

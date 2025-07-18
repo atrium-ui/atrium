@@ -1,12 +1,12 @@
 /* @jsxImportSource vue */
 import "@sv/elements/popover";
-import { Button } from "./Button";
+import { Button } from "./Button.js";
 import { defineComponent, ref } from "vue";
 import AirDatepicker from "air-datepicker";
 import "air-datepicker/air-datepicker.css";
 import localeEn from "air-datepicker/locale/en";
 import localeDe from "air-datepicker/locale/de";
-import { Input } from "./Input";
+import { Input } from "./Input.js";
 
 const locales = {
   en: localeEn,

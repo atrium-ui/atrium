@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 
-import { Card } from "../Card";
+import { Card } from "../Card.js";
 import { Input } from "@components/src/vue/Input";
 import { Form, FormField } from "@components/src/vue/Form";
 

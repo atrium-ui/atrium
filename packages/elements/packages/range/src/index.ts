@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: MIT
  */
 
-export { Range } from "./components/Range";
+export { Range } from "./components/Range.js";

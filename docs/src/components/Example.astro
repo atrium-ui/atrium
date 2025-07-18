@@ -1,40 +1,36 @@
 ---
 import { Icon } from "package:/components";
 import { Code } from "astro:components";
+import { ExamplePreview } from "./Example.jsx";
 
 export interface Props {
   title?: string;
-  code: string;
+  code?: string;
 }
 
 const file = Astro.props.code?.trim();
 ---
 
-<h2>{Astro.props.title || "Example"}</h2>
-
-<div class="not-content box w-full flex flex-col items-left justify-center">
-  <div class="p-4">
-    <slot />
+<div data-html-node class="relative">
+  <div class="absolute top-[2px] opacity-50 left-[-1.75rem] flex items-center pointer-events-none w-0 h-0 -rotate-90 justify-end">
+    <spam class="uppercase whitespace-nowrap text-xs before:content-['Preview']"></spam>
   </div>
 
-  <a-expandable class="group">
-    <button
-      slot="toggle"
-      type="button"
-      class="items-center p-2 px-4 cursor-pointer w-full text-left typo-body flex justify-between"
-    >
-      <span>Show Code</span>
-
-      <Icon class="block! group-[[opened]]:hidden!" name="expand" />
-      <Icon class="hidden! group-[[opened]]:block!" name="collapse" />
-    </button>
-
-    <div>
-      <Code lang="tsx" code={file}></Code>
+  <div class="not-content w-full flex flex-col items-left justify-center relative">
+    <div class="overflow-hidden resize-x">
+      <div class="box overflow-clip">
+        <div class="w-full h-full min-h-14 p-3">
+          <slot />
+        </div>
+      </div>
     </div>
-  </a-expandable>
-</div>
+  </div>
 
-<script>
-  document.body.classList.add("hydrated");
-</script>
+  <ExamplePreview client:only="react">
+    <Code lang="tsx" code={file || ''}></Code>
+  </ExamplePreview>
+
+  <script>
+    document.body.classList.add("hydrated");
+  </script>
+</div>

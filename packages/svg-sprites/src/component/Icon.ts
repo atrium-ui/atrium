@@ -50,16 +50,18 @@ export class IconElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["name", "src"];
+    return ["use", "name", "src"];
   }
 
   _name: string | undefined = undefined;
+  _use: string | undefined = undefined;
   _src: string | undefined = undefined;
 
   attributeChangedCallback() {
     this.updateIcon();
 
-    this._name = this.getAttribute("name") || "unknown";
+    this._name = this.getAttribute("name") || undefined;
+    this._use = this.getAttribute("use") || undefined;
     this._src = this.getAttribute("src") || undefined;
   }
 
@@ -67,8 +69,8 @@ export class IconElement extends HTMLElement {
     return this._src;
   }
 
-  get name() {
-    return this._name;
+  get iconName() {
+    return this._name || this._use || "unknown";
   }
 
   async updateIcon() {
@@ -81,15 +83,15 @@ export class IconElement extends HTMLElement {
       return;
     }
 
-    if (!this.name) return;
+    if (!this.iconName) return;
 
-    symbol = document.getElementById(this.name);
-    this.dataset.icon = this.name;
+    symbol = document.getElementById(this.iconName);
+    this.dataset.icon = this.iconName;
 
     if (symbol) {
       this.useSymbol(symbol);
     } else {
-      console.warn(`Could not find icon "${this.name}"`);
+      console.warn(`Could not find icon "${this.iconName}"`);
       symbol = document.getElementById("unknown");
     }
   }

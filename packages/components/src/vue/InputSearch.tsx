@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 import { defineComponent } from "vue";
-import { Input } from "./Input";
+import { Input } from "./Input.js";
 
 export const InputSearch = defineComponent(
   (

@@ -1,79 +1,99 @@
 .markdown-content {
-  h1 {
-    @apply typo-title-2 mb-module-m;
+  & > h1 {
+    @apply typo-title-2 mb-module-2xl;
   }
 
-  h2 {
-    @apply typo-title-3 mb-module-m;
+  & > a > h2,
+  & > h2 {
+    @apply typo-title-4 mb-module-2xl;
   }
 
-  h3 {
+  & > h3 {
     @apply typo-subtitle mb-module-m;
   }
 
-  h4 {
+  & > h4 {
     @apply typo-headline mb-module-m;
   }
 
-  h2:not(:first-child),
-  h3:not(:first-child),
-  h4:not(:first-child) {
+  & > h2:not(:first-child),
+  & > h3:not(:first-child),
+  & > h4:not(:first-child) {
     @apply mt-module-4xl;
   }
 
-  blockquote {
+  & > blockquote {
     @apply rounded-md border-1 border-solid border-gray-200 bg-gray-100 p-4;
     @apply not-last:mb-module-xl not-first:my-module-xl;
   }
 
-  p {
-    @apply typo-body not-last:mb-module-m;
+  & > div > p,
+  & > p {
+    @apply typo-body not-last:mb-module-m max-w-[880px];
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  ul,
-  ol,
-  blockquote,
-  p {
+  & > h1,
+  & > h2,
+  & > h3,
+  & > h4,
+  & > h5,
+  & > h6,
+  & > ul,
+  & > ol,
+  & > blockquote,
+  & > p {
     @apply max-w-[880px];
   }
 
-  ul a[href],
-  p a[href] {
+  & > ul a[href],
+  & > p a[href] {
     color: blue;
     text-decoration: underline;
   }
 
-  table {
-    border-collapse: collapse;
-    width: 100%;
+  & > a[href]:hover {
+    text-decoration: underline;
   }
 
-  table th {
+  & > table {
+    border-spacing: 0;
+    border-collapse: separate;
+    border-radius: 8px;
+    border: 1px solid #bdbdbd;
+    width: 100%;
+    background: white;
+  }
+
+  & > table th {
     text-align: left;
     padding-bottom: 1rem;
     font-weight: bold;
   }
 
-  table td {
-    border-bottom: 1px solid var(--color-grey-200);
-    padding-right: 2rem;
+  & > table th,
+  & > table td {
+    padding: 0.5rem;
   }
 
-  table td p {
+  & > table tr:not(:last-child) th,
+  & > table tr:not(:last-child) td {
+    border-bottom: 1px solid #eaeaea;
+  }
+
+  & > table tr th:not(:last-child),
+  & > table tr td:not(:last-child) {
+    border-right: 1px solid #eaeaea;
+  }
+
+  & > table td p {
     margin: 0.5rem 0;
   }
 
-  hr {
+  & > hr {
     @apply my-element-m border-t-1;
   }
 
-  ul:not(:where(.not-content *)) {
+  & > ul:not(:where(.not-content *)) {
     padding-left: 1rem;
 
     li {
@@ -82,7 +102,7 @@
     }
   }
 
-  .directive-dev::before {
+  & > .directive-dev::before {
     content: "For Developers";
     @apply block text-sm text-gray-500 font-medium mb-module-s;
   }

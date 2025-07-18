@@ -1,6 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { property, query } from "lit/decorators.js";
-import type { OptionElement } from "./Option";
+import type { OptionElement } from "./Option.js";
 
 declare global {
   interface HTMLElementTagNameMap {

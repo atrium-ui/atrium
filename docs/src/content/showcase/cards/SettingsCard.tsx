@@ -4,7 +4,7 @@ import { Checkbox } from "@components/src/vue/Checkbox";
 import { Button } from "@components/src/vue/Button";
 import { Icon } from "@components/src/vue/Icon";
 import { Popover } from "@components/src/vue/Popover";
-import { Card } from "../Card";
+import { Card } from "../Card.js";
 import { Switch } from "@components/src/vue/Switch";
 import { Dialog } from "@components/src/vue/Dialog";
 import "@sv/elements/toggle";

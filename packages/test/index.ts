@@ -5,6 +5,7 @@ const frameHooks = new Set<(ms: number) => void>();
 
 setup();
 
+// biome-ignore lint/suspicious/noConsole: testing
 const log = console.log;
 globalThis.console.log = (...args: any[]) => {
   log(
@@ -13,6 +14,7 @@ globalThis.console.log = (...args: any[]) => {
     ...args,
   );
 };
+// biome-ignore lint/suspicious/noConsole: testing
 globalThis.console.info = globalThis.console.log;
 
 /**
@@ -133,11 +135,25 @@ export async function fixElementSizes(ele: Element, width: number, height: numbe
   Object.defineProperty(ele, "offsetHeight", {
     writable: true,
   });
+  Object.defineProperty(ele, "getBoundingClientRect", {
+    writable: true,
+  });
 
   // @ts-ignore
   ele.offsetWidth = width;
   // @ts-ignore
   ele.offsetHeight = height;
+  // @ts-ignore
+  ele.getBoundingClientRect = () => {
+    return {
+      width,
+      height,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+    };
+  };
 }
 
 export async function sleep(ms = 16) {

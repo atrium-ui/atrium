@@ -1,4 +1,4 @@
-import type { Track, Trait } from "./Track";
+import type { Track, Trait } from "./Track.js";
 
 const PI2 = Math.PI * 2;
 

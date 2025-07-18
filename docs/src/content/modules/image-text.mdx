@@ -1,5 +1,5 @@
 ---
-title: ImageText
+title: Image-Text
 image: "/components/imagetext.png"
 description: A simple image-text layout component.
 command: "npx @sv/components imagetext"
@@ -9,5 +9,5 @@ import ImageTextCode from "@components/src/vue/ImageText?raw";
 import { Example, Atrium } from "package:/components";
 
 <Example code={ImageTextCode}>
-  <ImageText image="https://picsum.photos/400/400" client:only="vue" />
+  <ImageText image={`${import.meta.env.BASE_URL}placeholder.svg`} client:only="vue" />
 </Example>

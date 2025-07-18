@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: MIT
  */
 
-export { Time } from "./Time";
+export { Time } from "./Time.js";
