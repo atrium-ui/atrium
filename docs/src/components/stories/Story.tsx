@@ -2,43 +2,47 @@ import { render as renderLit } from "lit";
 import { render as renderVue } from "vue";
 import { createRoot, type Root as ReactRoot } from "react-dom/client";
 import { stories, type Story } from "./stories.js";
-import { useState, useEffect, useRef, useMemo, useLayoutEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
 
-export function Frame() {
+export function StoryFrame() {
+  const searchParams = useMemo(() => new URLSearchParams(location.search), []);
+  const currentStoryId = searchParams?.get("id");
+
   const [story, setStory] = useState<Story | null | undefined>();
   const [variant, setVariant] = useState();
+  const [renderer, setRenderer] = useState<string>();
   const [layout, setLayout] = useState("default");
-  const [globals, setGlobals] = useState({});
+  const [globals, setGlobals] = useState<Story["globals"]>({});
 
   const [reactRoot, setReactRoot] = useState<ReactRoot>();
 
   const rootRef = useRef<HTMLDivElement>(null);
 
-  const searchParams = new URLSearchParams(location.search);
-  const currentStoryId = searchParams.get("id");
-  if (currentStoryId) {
-    const id = currentStoryId.split("--")[0];
-    const variant = currentStoryId.split("--")[1];
+  useEffect(() => {
+    if (currentStoryId) {
+      const id = currentStoryId.split("--")[0];
+      const variant = currentStoryId.split("--")[1];
 
-    const storyModule = stories.get(id);
+      const storyModule = stories.get(id);
 
-    if (!storyModule) {
-      setStory(null);
-    } else {
-      storyModule()?.then((module) => {
-        setStory(module.default);
+      if (!storyModule) {
+        setStory(null);
+      } else {
+        storyModule()?.then((module) => {
+          setStory(module.default);
 
-        for (const key in module) {
-          if (key.toLowerCase() === variant) {
-            const variantStory = module[key];
-            setVariant(variantStory);
-            break;
+          for (const key in module) {
+            if (key.toLowerCase() === variant) {
+              const variantStory = module[key];
+              setVariant(variantStory);
+              break;
+            }
           }
-        }
-      });
+        });
+      }
     }
-  }
+  }, [currentStoryId]);
 
   useEffect(() => {
     const storyDefinition = story;
@@ -66,7 +70,7 @@ export function Frame() {
       args[param[0]] = param[1];
     }
 
-    setGlobals(globals || {});
+    setGlobals(globals);
     setLayout(parameters?.layout || "default");
 
     if (!rootRef.current) return;
@@ -81,22 +85,25 @@ export function Frame() {
           setReactRoot(createRoot(rootRef.current));
         }
         reactRoot?.render(template);
+        setRenderer("react");
       } else if (template.__v_isVNode) {
         // vue
         renderVue(template, rootRef.current);
+        setRenderer("vue");
       } else {
         // lit (default)
         renderLit(template, rootRef.current);
+        setRenderer("lit");
       }
     } else {
       console.warn("No render function found on story", currentStoryId);
     }
 
     window.dispatchEvent(new Event("story.loaded"));
-  }, [story, variant, currentStoryId, reactRoot]);
+  }, [story, variant, currentStoryId, reactRoot, searchParams]);
 
   return (
-    <div>
+    <div data-story-renderer={renderer}>
       <div
         className={twMerge(
           `story-root overflow-hidden story-layout-${layout}`,
@@ -105,9 +112,9 @@ export function Frame() {
         ref={rootRef}
       >
         {!story ? (
-          <div className="flex h-fill w-full flex-col items-center justify-center text-red-500 opacity-50">
+          <pre className="flex h-fill w-full flex-col items-center justify-center text-red-500 opacity-50">
             Story not found "{currentStoryId}"
-          </div>
+          </pre>
         ) : null}
       </div>
     </div>

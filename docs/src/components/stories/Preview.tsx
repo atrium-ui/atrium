@@ -46,7 +46,7 @@ export function StoryCanvas(props: { id: string; params: string }) {
         window.dispatchEvent(new Event("story.loaded"));
       }
     });
-  });
+  }, []);
 
   const frameRef = useRef<HTMLDivElement>(null);
 

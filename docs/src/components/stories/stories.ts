@@ -5,6 +5,7 @@ type ParamType = any;
 
 export type Story<Args extends Record<string, string | number> = any> = {
   tags?: string[];
+  globals?: Record<string, Record<string, ParamType>>;
   parameters?: Record<string, Record<string, ParamType>>;
   args?: Args;
   argTypes?: Record<string, Record<string, ArgType>>;
