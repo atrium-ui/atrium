@@ -4,7 +4,9 @@ import { twMerge } from "tailwind-merge";
 const props = Astro.props;
 ---
 
-<a-track class="flex mt-module-2xl overflow-visible">
+<div class="mt-module-2xl"></div>
+
+<a-track class="flex overflow-visible">
   <ul class={twMerge("flex-none flex gap-element-2xl", props.class)}>
     {props.headings.filter(heading => heading.depth < 3).map(heading => {
       return (
