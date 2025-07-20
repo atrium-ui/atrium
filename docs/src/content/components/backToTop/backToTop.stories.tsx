@@ -1,7 +1,6 @@
 /* @jsxImportSource vue */
 
 import type { Story } from "../../../components/stories/stories.js";
-import { Breadcrumbs } from "@components/src/vue/Breadcrumbs";
 
 export default {
   tags: ["public"],
@@ -16,11 +15,7 @@ export default {
   render: (args) => {
     return (
       <div>
-        <Breadcrumbs>
-          <a href="/">Home</a>
-          <a href="/about">About</a>
-          <span>Contact</span>
-        </Breadcrumbs>
+        <span>tba</span>
       </div>
     );
   },
