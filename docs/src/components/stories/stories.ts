@@ -28,6 +28,4 @@ for (const key in storiesImports) {
   }
 }
 
-console.log(stories);
-
 export { stories };
