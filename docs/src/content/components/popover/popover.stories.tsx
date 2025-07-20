@@ -21,4 +21,4 @@ export default {
   },
 } satisfies Story;
 
-export const Tooltip = {};
+export const Default = {};
