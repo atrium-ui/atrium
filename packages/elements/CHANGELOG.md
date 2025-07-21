@@ -1,5 +1,19 @@
 # @sv/elements
 
+## 2.11.0-dev.10 (2025-07-21)
+
+### Features
+
+- Popover variant for tooltips
+
+### Fixes
+
+- Overrideable popover trigger selector
+- Transition behaviour
+- Overwriteable popover instance check for triggers
+- Dunamically check for show and hide functions in trigger
+- a-tooltip: Layout not working
+
 ## 2.11.0-dev.9 (2025-07-18)
 
 ### Features
