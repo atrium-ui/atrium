@@ -10,7 +10,7 @@ import { Popover } from "@components/src/vue/Popover";
 import { Example, Atrium } from "package:/components";
 import PopoverDemo from "./popover";
 import PopoverDemoCode from "./popover.tsx?raw";
-import { StoryCanvas } from "../../../components/stories/Preview";
+import { Story } from "package:/components/docs";
 
 "A tooltip is a popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it. It typically appears after a small delay and disappears when Escape is pressed or on mouse out."
 
@@ -28,9 +28,7 @@ Click the button to open the popover.
 
 In this example, the popover opens when the pointer hovers over the button.
 
-<Example>
-  <StoryCanvas client:only="react" id="tooltipx--tooltip" />
-</Example>
+<Story id="popoverx--default" />
 
 ## Guidelines
 

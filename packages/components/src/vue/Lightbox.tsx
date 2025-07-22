@@ -10,6 +10,7 @@ export const Lightbox = defineComponent((_, { slots }) => {
 
   return () => (
     <>
+      {/* TODO: click on figure with image */}
       <button
         type="button"
         class="m-0 cursor-pointer bg-transparent p-0"
