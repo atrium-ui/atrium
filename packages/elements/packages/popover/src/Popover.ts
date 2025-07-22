@@ -155,6 +155,8 @@ export class Popover extends Portal {
    * Show the popover.
    */
   public show() {
+    console.error("show");
+
     this.placePortal();
 
     const trigger = this.closest<PopoverTrigger>(this.triggerElementSelector);
@@ -235,6 +237,8 @@ export class Popover extends Portal {
    * Hide the popover.
    */
   public hide() {
+    console.error("hide");
+
     this.addEventListener("transitionstart", this.onTransitionStart, {
       once: true,
     });
@@ -392,12 +396,6 @@ export class PopoverTrigger extends LitElement {
 
     let lastPointerType: string | undefined;
 
-    new ElementEventListener(this, window, "click", (e) => {
-      if (!this.elementContains(e.target)) {
-        this.hide();
-      }
-    });
-
     this.addEventListener("click", (e) => {
       if (this.content instanceof Tooltip) return; // not tooltip
 
@@ -524,8 +522,8 @@ export class PopoverTrigger extends LitElement {
     if (!(this.content instanceof Tooltip)) return;
 
     if (e.type === "pointerover") {
+      clearTimeout(this.hoverTimeout);
       if (this.elementContains(e.target)) {
-        clearTimeout(this.hoverTimeout);
         this.hoverTimeout = setTimeout(() => this.show(), this.showdelay);
       }
     } else {
@@ -538,6 +536,9 @@ export class PopoverTrigger extends LitElement {
    * Show the inner popover.
    */
   public show() {
+    // dont do anything if already open
+    if (this.opened) return;
+
     this.opened = true;
 
     this.isContent(this.content)?.show();
