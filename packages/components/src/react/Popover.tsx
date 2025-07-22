@@ -1,6 +1,6 @@
 /* @jsx React */
 import type { PropsWithChildren } from "react";
-import { Button } from "./Button";
+import { Button } from "./Button.js";
 import "@sv/elements/popover";
 
 export function Popover(props: { label?: string } & PropsWithChildren) {

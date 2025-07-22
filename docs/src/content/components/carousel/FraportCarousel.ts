@@ -24,9 +24,6 @@ class FraCarouselElement extends LitElement {
       .justify-center {
         justify-content: center;
       }
-      .mt-pager {
-        margin-top: var(--pager-margin);
-      }
       .gap-2px {
         gap: 2px;
       }
@@ -74,6 +71,9 @@ class FraCarouselElement extends LitElement {
       }
       .item-spacer.hidden {
         display: none;
+      }
+      .mt-pager {
+        margin-top: var(--pager-margin);
       }
       input[type="range"] {
         -webkit-appearance: none;

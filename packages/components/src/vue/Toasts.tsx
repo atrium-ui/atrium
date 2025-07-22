@@ -1,8 +1,8 @@
 /* @jsxImportSource vue */
 import { Toast, ToastFeed } from "@sv/elements/toast";
 import { defineCustomElement } from "vue";
-import { Button } from "./Button";
-import { Icon, type IconName } from "./Icon";
+import { Button } from "./Button.js";
+import { Icon, type IconName } from "./Icon.js";
 
 const TOAST_TYPE = {
   default: "default",
@@ -53,11 +53,7 @@ export function toast(options: ToastOptions) {
 }
 
 export const ToastContent = defineCustomElement(
-  (props: {
-    message: string;
-    icon?: IconName;
-    button?: ToastButton;
-  }) => {
+  (props: { message: string; icon?: IconName; button?: ToastButton }) => {
     return () => (
       <div class="flex gap-4 rounded-lg bg-white px-6 py-4 text-black shadow-md">
         {props.icon && <Icon class="flex-none text-xl" name={props.icon} />}

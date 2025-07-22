@@ -10,6 +10,7 @@ export function Sheet(props: Props, { slots }) {
   return (
     <a-portal>
       <a-blur
+        id="sheet"
         scrolllock
         enabled={props?.enabled}
         class="group/blur fixed top-0 left-0 block h-full w-full transition-all [&[enabled]]:bg-[#33333333]"

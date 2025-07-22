@@ -6,12 +6,12 @@ export default function () {
   return (
     <div>
       <Sheet>
-        <div onclick="document.querySelector('a-blur').enabled = false">
+        <div onclick="document.querySelector('#sheet').enabled = false">
           <Button>Close</Button>
         </div>
       </Sheet>
 
-      <div onclick="document.querySelector('a-blur').enabled = true">
+      <div onclick="document.querySelector('#sheet').enabled = true">
         <Button>Open</Button>
       </div>
     </div>

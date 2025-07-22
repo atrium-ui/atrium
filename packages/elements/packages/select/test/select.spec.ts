@@ -1,5 +1,5 @@
 import { test, expect, describe } from "bun:test";
-import { SelectEvent } from "../src/Select";
+import { SelectEvent } from "../src/Select.js";
 
 const NODE_NAME = "a-select";
 

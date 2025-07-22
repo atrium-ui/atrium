@@ -3,11 +3,18 @@ import "@sv/elements/track";
 import type { Track } from "@sv/elements/track";
 import { twMerge } from "tailwind-merge";
 import { computed, defineComponent, onMounted, ref } from "vue";
-import { Button } from "./Button";
-import { Icon } from "./Icon";
+import { Button } from "./Button.js";
+import { Icon } from "./Icon.js";
 
-export const Slider = defineComponent(
-  (props: { class?: string }, { slots }) => {
+export const Carousel = defineComponent(
+  (
+    props: {
+      class?: string;
+      overflow?: string;
+      align?: "start" | "center";
+    },
+    { slots },
+  ) => {
     const track = ref<Track>();
     const current = ref(0);
     const position = ref(0);
@@ -43,38 +50,16 @@ export const Slider = defineComponent(
     };
 
     return () => (
-      <div
-        class={twMerge(
-          "@container group/slider relative w-full overflow-hidden",
-          props.class,
-        )}
-      >
+      <div class={twMerge("@container group/slider relative w-full", props.class)}>
         <div class="relative w-full">
-          <Button
-            disabled={!showPrev.value}
-            class="-translate-y-1/2 absolute top-1/2 left-[12px] z-10 hidden transform text-black opacity-0 transition-opacity group-hover/slider:opacity-100 lg:block"
-            onClick={prev}
-            label="Previous page"
-          >
-            <Icon class="block drop-shadow-[2px_2px_6px_black]" name="arrow-left" />
-          </Button>
-          <Button
-            disabled={!showNext.value}
-            class="-translate-y-1/2 absolute top-1/2 right-[12px] z-10 hidden transform text-black opacity-0 transition-opacity group-hover/slider:opacity-100 lg:block"
-            onClick={next}
-            label="Next page"
-          >
-            <Icon class="block drop-shadow-[2px_2px_6px_black]" name="arrow-right" />
-          </Button>
-
           <a-track
             ref={track}
             snap
             // loop
             debug
-            // align="center"
-            overflow="ignore"
             class="flex w-full overflow-visible"
+            align={props.align}
+            overflow={props.overflow}
             onScroll={() => {
               position.value = track.value?.position.x || 0;
             }}
@@ -92,6 +77,25 @@ export const Slider = defineComponent(
           >
             {slots.default?.()}
           </a-track>
+
+          <div>
+            <Button
+              disabled={!showPrev.value}
+              class="-translate-y-1/2 absolute top-1/2 left-[12px] z-10 hidden transform text-black opacity-0 transition-opacity group-hover/slider:opacity-100 lg:block"
+              onClick={prev}
+              label="Previous page"
+            >
+              <Icon class="block drop-shadow-[2px_2px_6px_black]" name="arrow-left" />
+            </Button>
+            <Button
+              disabled={!showNext.value}
+              class="-translate-y-1/2 absolute top-1/2 right-[12px] z-10 hidden transform text-black opacity-0 transition-opacity group-hover/slider:opacity-100 lg:block"
+              onClick={next}
+              label="Next page"
+            >
+              <Icon class="block drop-shadow-[2px_2px_6px_black]" name="arrow-right" />
+            </Button>
+          </div>
         </div>
 
         <div class="flex justify-center @lg:py-8 pt-5 pb-2">
@@ -116,7 +120,6 @@ export const Slider = defineComponent(
     );
   },
   {
-    name: "Slider",
-    props: ["class"],
+    props: ["class", "align", "overflow"],
   },
 );

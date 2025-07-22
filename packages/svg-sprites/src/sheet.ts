@@ -9,7 +9,7 @@ function writeFile(location: string, contents: string) {
 }
 
 export function replacePlaceholder(code: string, svg: string) {
-  return code.replace(/\"_svgSheetString_\"/g, `\`${svg}\``);
+  return code.replace(/"_svgSheetString_"/g, `\`${svg}\``);
 }
 
 export function createSheetCode(svg: string) {

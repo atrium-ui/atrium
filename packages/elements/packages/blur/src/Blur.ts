@@ -151,7 +151,8 @@ export class Blur extends LitElement {
   public allowscroll = "";
 
   /**
-   * Whether the blur is enabled or not.
+   * The "enabled" will enable or disabled all functionality.
+   * All other properties only apply, when the element is enabled.
    */
   @property({ type: Boolean, reflect: true })
   public enabled = false;

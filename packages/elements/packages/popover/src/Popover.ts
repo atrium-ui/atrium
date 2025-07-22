@@ -65,7 +65,8 @@ export class PopoverPortal extends Blur {
       z-index: 1000;
     }
 
-    :host([enabled]) {
+    :host([enabled]:not([tooltip])) {
+      /* non-modal (tooltip) or modal */
       pointer-events: all !important;
     }
 
@@ -106,11 +107,11 @@ export class Popover extends Portal {
     return ["alignment", "placements"];
   }
 
-  protected override portalGun() {
+  protected override portalGun(): HTMLElement {
     const ele = new PopoverPortal();
     ele.className = this.className;
     ele.dataset.portal = this.portalId;
-    return ele as PopoverPortal;
+    return ele;
   }
 
   protected triggerElementSelector = "a-popover-trigger";
@@ -199,7 +200,11 @@ export class Popover extends Portal {
 
     // waits for DOM mutations to finish, to start transitions no enable
     requestAnimationFrame(() => {
-      if (this.portal instanceof PopoverPortal) {
+      if (
+        this.portal &&
+        "enable" in this.portal &&
+        this.portal.enable instanceof Function
+      ) {
         this.portal.enable();
       }
     });
@@ -235,7 +240,11 @@ export class Popover extends Portal {
     });
 
     // disable the portal (blur), to start the transition
-    if (this.portal instanceof PopoverPortal) {
+    if (
+      this.portal &&
+      "disable" in this.portal &&
+      this.portal.disable instanceof Function
+    ) {
       this.portal.disable();
     }
 
@@ -271,8 +280,30 @@ export class Popover extends Portal {
   }
 }
 
+export class Tooltip extends Popover {
+  protected override portalGun() {
+    const ele = document.createElement("div");
+    ele.style.position = "fixed";
+    ele.style.top = "0px";
+    ele.style.left = "0px";
+    ele.style.zIndex = "10000000";
+    ele.className = this.className;
+    ele.dataset.portal = this.portalId;
+    ele.setAttribute("tooltip", "");
+    // @ts-ignore
+    ele.enable = () => {
+      ele.setAttribute("enabled", "");
+    };
+    // @ts-ignore
+    ele.disable = () => {
+      ele.removeAttribute("enabled");
+    };
+    return ele;
+  }
+}
+
 /**
- * A wrapper element that shows content when the user clicks with the slotted input element.
+ * A wrapper element that controls the visibility of a popover. Either using hover/contextmenu or click on a trigger.
  * Calls `.show()` on the target when the trigger is clicked.
  * Calls `.hide()` on the target when the trigger is clicked outside of the popover.
  *
@@ -303,10 +334,26 @@ export class PopoverTrigger extends LitElement {
   @property({ type: Boolean, reflect: true })
   public opened = false;
 
+  /**
+   * The time in milliseconds to wait before showing the popover.
+   */
+  @property({ type: Number })
+  public showdelay = 750;
+
+  /**
+   * The time in milliseconds to wait before hiding the popover.
+   */
+  @property({ type: Number })
+  public hidedelay = 250;
+
   public static styles = css`
     :host {
       display: inline-block;
       transition-property: all;
+    }
+
+    ::slotted([slot="trigger"]) {
+      touch-action: none;
     }
   `;
 
@@ -328,29 +375,114 @@ export class PopoverTrigger extends LitElement {
     this.trigger?.setAttribute("aria-expanded", "false");
   }
 
+  private elementContains(element: EventTarget | HTMLElement | null) {
+    if (!element || !(element instanceof HTMLElement)) return false;
+
+    return this.trigger?.contains(element) || this.contentElement?.contains(element);
+  }
+
+  private get contentElement() {
+    return this.content?.children[0] as HTMLElement | undefined;
+  }
+
+  private hoverTimeout?: ReturnType<typeof setTimeout>;
+
   constructor() {
     super();
 
-    new ElementEventListener(this, window, "click", (e) => {
-      if (this.isContent(this.content)) return;
+    let lastPointerType: string | undefined;
 
-      if (this.opened && !this.contains(e.target as Node)) {
+    new ElementEventListener(this, window, "click", (e) => {
+      if (!this.elementContains(e.target)) {
         this.hide();
       }
     });
 
     this.addEventListener("click", (e) => {
+      if (this.content instanceof Tooltip) return; // not tooltip
+
       if (this.trigger?.contains(e.target as Node)) {
         this.toggle();
       }
     });
+
+    // Tooltip integration
+
+    this.addEventListener("pointerover", (e) => {
+      lastPointerType = e.pointerType;
+
+      if (lastPointerType !== "mouse") return;
+
+      if (!(this.content instanceof Tooltip)) return;
+
+      this.onPointerEvent(e);
+    });
+
+    this.addEventListener("pointerleave", (e) => {
+      lastPointerType = e.pointerType;
+
+      if (lastPointerType !== "mouse") return;
+
+      if (!(this.content instanceof Tooltip)) return;
+
+      this.onPointerEvent(e);
+    });
+
+    this.addEventListener("contextmenu", (e) => {
+      // longpress to show tooltip
+      if (lastPointerType !== "touch") return;
+
+      e.preventDefault();
+
+      this.show();
+    });
+
+    this.addEventListener(
+      "focus",
+      (e) => {
+        // ignore this on a touch device
+        if (lastPointerType === "touch") return;
+
+        // this is only for the tooltip
+        if (!(this.content instanceof Tooltip)) return;
+
+        // skip if the trigger is not the focus
+        if (!this.trigger?.contains(e.target as Node)) return;
+
+        clearTimeout(this.hoverTimeout);
+        this.hoverTimeout = setTimeout(() => this.show(), this.showdelay);
+      },
+      {
+        capture: true,
+      },
+    );
+
+    this.addEventListener(
+      "blur",
+      (e) => {
+        // ignore this on a touch device
+        if (lastPointerType === "touch") return;
+
+        // this is only for the tooltip
+        if (!(this.content instanceof Tooltip)) return;
+
+        // skip if the trigger is in focus
+        if (this.trigger?.contains(document.activeElement)) return;
+
+        clearTimeout(this.hoverTimeout);
+        this.hide();
+      },
+      {
+        capture: true,
+      },
+    );
   }
 
   private get content() {
     // Note: slot.assignedNodes() would be better, but it's not supported within our test runner
     for (const ele of this.children) {
       // default slot
-      if (!ele.slot) return ele;
+      if (!ele.slot) return ele as HTMLElement;
     }
     return undefined;
   }
@@ -377,6 +509,31 @@ export class PopoverTrigger extends LitElement {
     return undefined;
   }
 
+  private onPointerEvent = (e: PointerEvent) => {
+    if (this.elementContains(e.target)) {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = setTimeout(() => this.show(), this.showdelay);
+    } else {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = setTimeout(() => this.hide(), this.hidedelay);
+    }
+  };
+
+  private onPointerEventContent = (e: PointerEvent) => {
+    // only tooltip
+    if (!(this.content instanceof Tooltip)) return;
+
+    if (e.type === "pointerover") {
+      if (this.elementContains(e.target)) {
+        clearTimeout(this.hoverTimeout);
+        this.hoverTimeout = setTimeout(() => this.show(), this.showdelay);
+      }
+    } else {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = setTimeout(() => this.hide(), this.hidedelay);
+    }
+  };
+
   /**
    * Show the inner popover.
    */
@@ -384,6 +541,9 @@ export class PopoverTrigger extends LitElement {
     this.opened = true;
 
     this.isContent(this.content)?.show();
+
+    this.contentElement?.addEventListener("pointerover", this.onPointerEventContent);
+    this.contentElement?.addEventListener("pointerleave", this.onPointerEventContent);
 
     this.trigger?.setAttribute("aria-haspopup", "dialog");
     this.trigger?.setAttribute("aria-expanded", "true");
@@ -398,6 +558,9 @@ export class PopoverTrigger extends LitElement {
     this.opened = false;
 
     this.isContent(this.content)?.hide();
+
+    this.contentElement?.removeEventListener("pointerover", this.onPointerEventContent);
+    this.contentElement?.removeEventListener("pointerleave", this.onPointerEventContent);
 
     this.trigger?.setAttribute("aria-haspopup", "dialog");
     this.trigger?.setAttribute("aria-expanded", "false");
@@ -420,7 +583,7 @@ export class PopoverTrigger extends LitElement {
   }
 }
 
-class PopoverArrow extends LitElement {
+export class PopoverArrow extends LitElement {
   static styles = css`
     :host {
       position: absolute;
@@ -431,8 +594,4 @@ class PopoverArrow extends LitElement {
   render() {
     return html`<slot></slot>`;
   }
-}
-
-if (!customElements.get("a-popover-arrow")) {
-  customElements.define("a-popover-arrow", PopoverArrow);
 }

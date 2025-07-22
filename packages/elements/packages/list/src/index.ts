@@ -5,7 +5,7 @@
  */
 
 import "@sv/elements/expandable";
-import { ListItemElement, ListElement } from "./List";
+import { ListItemElement, ListElement } from "./List.js";
 
 if (!customElements.get("a-list")) {
   customElements.define("a-list-item", ListItemElement);

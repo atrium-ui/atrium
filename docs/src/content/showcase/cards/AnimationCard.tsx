@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
 import { Animation } from "@components/src/vue/Animation";
-import { Card } from "../Card";
+import { Card } from "../Card.js";
 
 export function AnimationCard() {
   return (
