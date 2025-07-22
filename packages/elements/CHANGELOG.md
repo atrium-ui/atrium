@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.11.0 (2025-07-22)
+
+### Features
+
+- a-track: Sets slot to `all: inherit`, a-popover-trigger: Renames `.close` of a-popover-trigger to `.hide` (svp/atrium!48)
+
 ## 2.11.0-dev.8 (2025-07-08)
 
 ### Features
