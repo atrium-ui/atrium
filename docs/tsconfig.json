@@ -9,6 +9,9 @@
       "package:/components": [
         "./src/components"
       ],
+      "package:/components/docs": [
+        "./src/components/docs.js"
+      ],
       "@components/*": [
         "../packages/components/*"
       ]
@@ -16,6 +19,10 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "jsx": "preserve",
-    "types": ["vite/client"]
+    "jsxImportSource": "react",
+    "types": [
+      "vite/client",
+      "@sv/elements"
+    ]
   }
 }

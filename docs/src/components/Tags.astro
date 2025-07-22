@@ -1,0 +1,18 @@
+---
+import { Git, Accessibility, Atrium, Rive, Lit, Vue } from "package:/components";
+
+const { tags } = Astro.props;
+---
+
+{tags?.map(tag => {
+  if (tag[0] === "rive") {
+    return <Rive />
+  }
+  if (tag[0] === "lit") {
+    return <Lit />
+  }
+  if (tag[0] === "lit") {
+    return <Vue />
+  }
+  return <Atrium label={tag[0] || ""} href={`${base}${tag[1]?.toLowerCase()}`} />;
+})}

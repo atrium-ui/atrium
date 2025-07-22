@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 
-import { Card } from "../Card";
+import { Card } from "../Card.js";
 import "@sv/elements/chart";
 
 export function ChartCard() {

@@ -10,5 +10,8 @@
   "scripts": {
     "build": "bun ./build.ts",
     "dev": "bun --watch ./build.ts"
+  },
+  "dependencies": {
+    "@sv/scroll-lock": "workspace:*"
   }
 }

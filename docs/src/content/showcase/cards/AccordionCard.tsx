@@ -2,7 +2,7 @@
 
 import { Accordion, AccordionItem } from "@components/src/vue/Accordion";
 import { lorem, sentence } from "txtgen";
-import { Card } from "../Card";
+import { Card } from "../Card.js";
 
 const data2 = [
   {

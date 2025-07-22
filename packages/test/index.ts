@@ -5,6 +5,7 @@ const frameHooks = new Set<(ms: number) => void>();
 
 setup();
 
+// biome-ignore lint/suspicious/noConsole: testing
 const log = console.log;
 globalThis.console.log = (...args: any[]) => {
   log(
@@ -13,6 +14,7 @@ globalThis.console.log = (...args: any[]) => {
     ...args,
   );
 };
+// biome-ignore lint/suspicious/noConsole: testing
 globalThis.console.info = globalThis.console.log;
 
 /**

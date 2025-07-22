@@ -1,3 +1,3 @@
-import { preload } from "./index";
+import { preload } from "./index.js";
 
 preload();

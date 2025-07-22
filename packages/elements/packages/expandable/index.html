@@ -1,50 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <title>Document</title>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-
-  <script type="module">
+    <script type="module">
     import "./src/index.ts";
 
     const state = ({
       current: 3,
     });
   </script>
-</head>
+  </head>
 
-<body>
-  <main style="display: grid; grid-template-columns: 1fr 600px 1fr;">
-    <div style="grid-column: 2;">
-      <p>
-        Some Text
-      </p>
-      <a-expandable>
-        <button slot="toggle" style="width: 100%;">
-          <span>Click me</span>
-        </button>
+  <body>
+    <main style="display: grid; grid-template-columns: 1fr 600px 1fr;">
+      <div style="grid-column: 2;">
+        <p>Some Text</p>
+        <a-expandable>
+          <button slot="toggle" style="width: 100%;">
+            <span>Click me</span>
+          </button>
 
-        <div style="width: 100%; overflow: auto;">
-          <div style="width: 800px;">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nulla architecto minus, reprehenderit at eum atque
-            esse, optio rerum quibusdam vel quidem odit. Odio voluptatibus cupiditate exercitationem, error reiciendis
-            soluta dicta.
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nulla architecto minus, reprehenderit at eum atque
-            esse, optio rerum quibusdam vel quidem odit. Odio voluptatibus cupiditate exercitationem, error reiciendis
-            soluta dicta.
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nulla architecto minus, reprehenderit at eum atque
-            esse, optio rerum quibusdam vel quidem odit. Odio voluptatibus cupiditate exercitationem, error reiciendis
-            soluta dicta.
+          <div style="width: 100%; overflow: auto;">
+            <div style="width: 800px;">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nulla architecto
+              minus, reprehenderit at eum atque esse, optio rerum quibusdam vel quidem
+              odit. Odio voluptatibus cupiditate exercitationem, error reiciendis soluta
+              dicta. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nulla
+              architecto minus, reprehenderit at eum atque esse, optio rerum quibusdam vel
+              quidem odit. Odio voluptatibus cupiditate exercitationem, error reiciendis
+              soluta dicta. Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+              Nulla architecto minus, reprehenderit at eum atque esse, optio rerum
+              quibusdam vel quidem odit. Odio voluptatibus cupiditate exercitationem,
+              error reiciendis soluta dicta.
+            </div>
           </div>
-        </div>
-      </a-expandable>
-      <p>
-        Some Text
-      </p>
-    </div>
-  </main>
-</body>
-
+        </a-expandable>
+        <p>Some Text</p>
+      </div>
+    </main>
+  </body>
 </html>

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { BoxElement } from "./Box";
+import { BoxElement } from "./Box.js";
 
 try {
   customElements.define("a-box", BoxElement);

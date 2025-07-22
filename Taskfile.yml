@@ -2,6 +2,8 @@
 
 version: "3"
 
+interval: "50ms"
+
 vars:
   PACKAGES:
     [
@@ -54,10 +56,13 @@ tasks:
     cmd: bun build --target=browser {{.ENTRY}} --outdir dist --sourcemap=external --format {{.FORMAT}} {{.EXTERNAL}} {{.CLI_ARGS}}
 
   dev:
-    desc: Start docs and watch for changes
+    desc: Start packages in dev mode
     deps: [setup]
+    watch: true
+    sources:
+      - "packages/elements/**/*.{ts,tsx}"
     cmds:
-      - task --parallel docs build:watch
+      - bun x turbo build
 
   build:watch:
     desc: Watch-build packages for development
@@ -94,12 +99,12 @@ tasks:
   check:fix:
     desc: Apply all (unsafe) autofixes
     cmds:
-      - bun x biome check --apply .
+      - bun x biome check --write .
 
   check:fix:unsafe:
     desc: Apply all (unsafe) autofixes
     cmds:
-      - bun x biome check --apply-unsafe .
+      - bun x biome check --write --unsafe .
 
   clean:
     desc: Clean untracked files

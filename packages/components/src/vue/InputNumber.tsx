@@ -1,12 +1,9 @@
 /* @jsxImportSource vue */
 import { defineComponent } from "vue";
-import { Input } from "./Input";
+import { Input } from "./Input.js";
 
 export const InputNumber = defineComponent(
-  (props: {
-    class?: string | string[];
-    value?: string;
-  }) => {
+  (props: { class?: string | string[]; value?: string }) => {
     return () => <Input class={props.class} type="number" value={props.value} />;
   },
   {

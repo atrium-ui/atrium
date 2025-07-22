@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
 import { Slider } from "@components/src/vue/Slider";
-import { Card } from "../Card";
+import { Card } from "../Card.js";
 import { Image } from "package:/components/Image";
 import "@sv/elements/range";
 
