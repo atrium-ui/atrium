@@ -54,7 +54,7 @@ tasks:
     cmd: bun build --target=browser {{.ENTRY}} --outdir dist --sourcemap=external --format {{.FORMAT}} {{.EXTERNAL}} {{.CLI_ARGS}}
 
   dev:
-    desc: Start docs and packages in dev mode
+    desc: Start packages in dev mode
     deps: [setup]
     cmds:
       - bun x turbo dev
