@@ -49,15 +49,17 @@ export function ExamplePreview(props: PropsWithChildren) {
             <svg-icon className="block" use="svg" />
           </button>
 
-          <button
-            type="button"
-            className="button-icon"
-            onClick={() => {
-              setOpen(!open);
-            }}
-          >
-            <svg-icon className="block" use="code" />
-          </button>
+          {props.children ? (
+            <button
+              type="button"
+              className="button-icon"
+              onClick={() => {
+                setOpen(!open);
+              }}
+            >
+              <svg-icon className="block" use="code" />
+            </button>
+          ) : null}
         </div>
       </div>
 

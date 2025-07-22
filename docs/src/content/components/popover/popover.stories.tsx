@@ -1,6 +1,8 @@
 /* @jsxImportSource vue */
 import type { Story } from "../../../components/stories/stories.js";
 import { Tooltip as ToolTip } from "@components/src/vue/Tooltip";
+import { Button } from "@components/src/vue/Button";
+import { Popover } from "@components/src/vue/Popover";
 
 export default {
   tags: ["public"],
@@ -12,9 +14,27 @@ export default {
       description: "Number of slides",
     },
   },
+} satisfies Story;
+
+export const Default = {
   render: (args) => {
     return (
-      <div class="flex min-h-[200px] max-w-full items-center justify-center">
+      <div class="flex min-h-[300px] max-w-full items-center justify-center">
+        <Popover label="Click">
+          <div class="p-3">
+            <p>Some Content</p>
+            <Button>Button</Button>
+          </div>
+        </Popover>
+      </div>
+    );
+  },
+};
+
+export const Tooltip = {
+  render: (args) => {
+    return (
+      <div class="flex min-h-[300px] max-w-full items-center justify-center">
         <ToolTip label="Hover">
           <div class="p-3">
             <p>Some Content</p>
@@ -23,6 +43,4 @@ export default {
       </div>
     );
   },
-} satisfies Story;
-
-export const Default = {};
+};

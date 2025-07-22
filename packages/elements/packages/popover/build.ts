@@ -16,7 +16,7 @@ await Bun.build({
 });
 
 // reference for watch build
-import("./src/index.js");
+// import("./src/index.js");
 
 console.info("🚀 Build complete");
 

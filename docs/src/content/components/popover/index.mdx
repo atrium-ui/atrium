@@ -8,27 +8,21 @@ command: "npx @sv/components popover"
 ---
 import { Popover } from "@components/src/vue/Popover";
 import { Example, Atrium } from "package:/components";
-import PopoverDemo from "./popover";
-import PopoverDemoCode from "./popover.tsx?raw";
 import { Story } from "package:/components/docs";
 
 "A tooltip is a popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it. It typically appears after a small delay and disappears when Escape is pressed or on mouse out."
 
 ## Example
 
-Click the button to open the popover.
+Click the button to open the popover. This type of popover is a modal popover, so the rest of the page is blocked.
 
-<Example code={PopoverDemoCode}>
-  <div>
-    <PopoverDemo client:only="vue"/>
-  </div>
-</Example>
+<Story id="popoverx--default" />
 
 ### Tooltip
 
-In this example, the popover opens when the pointer hovers over the button.
+In this example, the popover opens when the pointer hovers over the button. This type of popover is a non-modal popover, so the rest of the page is **not** blocked.
 
-<Story id="popoverx--default" />
+<Story id="popoverx--tooltip" />
 
 ## Guidelines
 

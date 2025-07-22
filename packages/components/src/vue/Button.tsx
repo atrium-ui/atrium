@@ -15,7 +15,7 @@ export const buttonVariants = {
   ],
   outline: [
     "bg-transparent hover:bg-[rgba(150,150,150,0.1)]",
-    "filter active:bg-[rgba(150,150,150,0.1)]",
+    "filter active:bg-[rgba(150,150,150,0.2)]",
     "border border-zinc-700",
   ],
   ghost: [

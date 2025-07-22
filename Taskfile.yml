@@ -2,6 +2,8 @@
 
 version: "3"
 
+interval: "50ms"
+
 vars:
   PACKAGES:
     [
@@ -56,8 +58,11 @@ tasks:
   dev:
     desc: Start packages in dev mode
     deps: [setup]
+    watch: true
+    sources:
+      - "packages/elements/**/*.{ts,tsx}"
     cmds:
-      - bun x turbo dev
+      - bun x turbo build
 
   build:watch:
     desc: Watch-build packages for development

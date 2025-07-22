@@ -200,7 +200,11 @@ export class Popover extends Portal {
 
     // waits for DOM mutations to finish, to start transitions no enable
     requestAnimationFrame(() => {
-      if (this.portal instanceof PopoverPortal) {
+      if (
+        this.portal &&
+        "enable" in this.portal &&
+        this.portal.enable instanceof Function
+      ) {
         this.portal.enable();
       }
     });
@@ -236,7 +240,11 @@ export class Popover extends Portal {
     });
 
     // disable the portal (blur), to start the transition
-    if (this.portal instanceof PopoverPortal) {
+    if (
+      this.portal &&
+      "disable" in this.portal &&
+      this.portal.disable instanceof Function
+    ) {
       this.portal.disable();
     }
 
@@ -282,15 +290,20 @@ export class Tooltip extends Popover {
     ele.className = this.className;
     ele.dataset.portal = this.portalId;
     ele.setAttribute("tooltip", "");
-    requestAnimationFrame(() => {
+    // @ts-ignore
+    ele.enable = () => {
       ele.setAttribute("enabled", "");
-    });
+    };
+    // @ts-ignore
+    ele.disable = () => {
+      ele.removeAttribute("enabled");
+    };
     return ele;
   }
 }
 
 /**
- * A wrapper element that shows content when the user clicks with the slotted input element.
+ * A wrapper element that controls the visibility of a popover. Either using hover/contextmenu or click on a trigger.
  * Calls `.show()` on the target when the trigger is clicked.
  * Calls `.hide()` on the target when the trigger is clicked outside of the popover.
  *
@@ -362,21 +375,25 @@ export class PopoverTrigger extends LitElement {
     this.trigger?.setAttribute("aria-expanded", "false");
   }
 
+  private elementContains(element: EventTarget | HTMLElement | null) {
+    if (!element || !(element instanceof HTMLElement)) return false;
+
+    return this.trigger?.contains(element) || this.contentElement?.contains(element);
+  }
+
+  private get contentElement() {
+    return this.content?.children[0] as HTMLElement | undefined;
+  }
+
+  private hoverTimeout?: ReturnType<typeof setTimeout>;
+
   constructor() {
     super();
 
     let lastPointerType: string | undefined;
 
     new ElementEventListener(this, window, "click", (e) => {
-      if (this.isContent(this.content)) return;
-
-      const content = this.content?.children[0];
-
-      if (
-        this.opened &&
-        !this.contains(e.target as Node) &&
-        !content?.contains(e.target as Node)
-      ) {
+      if (!this.elementContains(e.target)) {
         this.hide();
       }
     });
@@ -391,8 +408,6 @@ export class PopoverTrigger extends LitElement {
 
     // Tooltip integration
 
-    let hoverTimeout: ReturnType<typeof setTimeout>;
-
     this.addEventListener("pointerover", (e) => {
       lastPointerType = e.pointerType;
 
@@ -400,18 +415,7 @@ export class PopoverTrigger extends LitElement {
 
       if (!(this.content instanceof Tooltip)) return;
 
-      const content = this.content?.children[0];
-
-      if (
-        this.trigger?.contains(e.target as Node) ||
-        content?.contains(e.target as Node)
-      ) {
-        clearTimeout(hoverTimeout);
-        hoverTimeout = setTimeout(() => this.show(), this.showdelay);
-      } else {
-        clearTimeout(hoverTimeout);
-        hoverTimeout = setTimeout(() => this.hide(), this.hidedelay);
-      }
+      this.onPointerEvent(e);
     });
 
     this.addEventListener("pointerleave", (e) => {
@@ -421,18 +425,7 @@ export class PopoverTrigger extends LitElement {
 
       if (!(this.content instanceof Tooltip)) return;
 
-      const content = this.content?.children[0];
-
-      if (
-        this.trigger?.contains(e.target as Node) ||
-        content?.contains(e.target as Node)
-      ) {
-        clearTimeout(hoverTimeout);
-        hoverTimeout = setTimeout(() => this.show(), this.showdelay);
-      } else {
-        clearTimeout(hoverTimeout);
-        hoverTimeout = setTimeout(() => this.hide(), this.hidedelay);
-      }
+      this.onPointerEvent(e);
     });
 
     this.addEventListener("contextmenu", (e) => {
@@ -441,18 +434,23 @@ export class PopoverTrigger extends LitElement {
 
       e.preventDefault();
 
-      clearTimeout(hoverTimeout);
-      hoverTimeout = setTimeout(() => this.show(), this.showdelay);
+      this.show();
     });
 
     this.addEventListener(
       "focus",
       (e) => {
+        // ignore this on a touch device
+        if (lastPointerType === "touch") return;
+
+        // this is only for the tooltip
         if (!(this.content instanceof Tooltip)) return;
+
+        // skip if the trigger is not the focus
         if (!this.trigger?.contains(e.target as Node)) return;
 
-        clearTimeout(hoverTimeout);
-        hoverTimeout = setTimeout(() => this.show(), this.showdelay);
+        clearTimeout(this.hoverTimeout);
+        this.hoverTimeout = setTimeout(() => this.show(), this.showdelay);
       },
       {
         capture: true,
@@ -462,10 +460,16 @@ export class PopoverTrigger extends LitElement {
     this.addEventListener(
       "blur",
       (e) => {
+        // ignore this on a touch device
+        if (lastPointerType === "touch") return;
+
+        // this is only for the tooltip
         if (!(this.content instanceof Tooltip)) return;
+
+        // skip if the trigger is in focus
         if (this.trigger?.contains(document.activeElement)) return;
 
-        clearTimeout(hoverTimeout);
+        clearTimeout(this.hoverTimeout);
         this.hide();
       },
       {
@@ -478,7 +482,7 @@ export class PopoverTrigger extends LitElement {
     // Note: slot.assignedNodes() would be better, but it's not supported within our test runner
     for (const ele of this.children) {
       // default slot
-      if (!ele.slot) return ele;
+      if (!ele.slot) return ele as HTMLElement;
     }
     return undefined;
   }
@@ -505,6 +509,31 @@ export class PopoverTrigger extends LitElement {
     return undefined;
   }
 
+  private onPointerEvent = (e: PointerEvent) => {
+    if (this.elementContains(e.target)) {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = setTimeout(() => this.show(), this.showdelay);
+    } else {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = setTimeout(() => this.hide(), this.hidedelay);
+    }
+  };
+
+  private onPointerEventContent = (e: PointerEvent) => {
+    // only tooltip
+    if (!(this.content instanceof Tooltip)) return;
+
+    if (e.type === "pointerover") {
+      if (this.elementContains(e.target)) {
+        clearTimeout(this.hoverTimeout);
+        this.hoverTimeout = setTimeout(() => this.show(), this.showdelay);
+      }
+    } else {
+      clearTimeout(this.hoverTimeout);
+      this.hoverTimeout = setTimeout(() => this.hide(), this.hidedelay);
+    }
+  };
+
   /**
    * Show the inner popover.
    */
@@ -512,6 +541,9 @@ export class PopoverTrigger extends LitElement {
     this.opened = true;
 
     this.isContent(this.content)?.show();
+
+    this.contentElement?.addEventListener("pointerover", this.onPointerEventContent);
+    this.contentElement?.addEventListener("pointerleave", this.onPointerEventContent);
 
     this.trigger?.setAttribute("aria-haspopup", "dialog");
     this.trigger?.setAttribute("aria-expanded", "true");
@@ -526,6 +558,9 @@ export class PopoverTrigger extends LitElement {
     this.opened = false;
 
     this.isContent(this.content)?.hide();
+
+    this.contentElement?.removeEventListener("pointerover", this.onPointerEventContent);
+    this.contentElement?.removeEventListener("pointerleave", this.onPointerEventContent);
 
     this.trigger?.setAttribute("aria-haspopup", "dialog");
     this.trigger?.setAttribute("aria-expanded", "false");

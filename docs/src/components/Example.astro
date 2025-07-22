@@ -1,5 +1,4 @@
 ---
-import { Icon } from "package:/components";
 import { Code } from "astro:components";
 import { ExamplePreview } from "./Example.jsx";
 
@@ -19,7 +18,7 @@ const file = Astro.props.code?.trim();
   <div class="not-content w-full flex flex-col items-left justify-center relative">
     <div class="overflow-hidden resize-x">
       <div class="box overflow-clip">
-        <div class="w-full h-full min-h-14 p-3">
+        <div class="w-full h-full min-h-14">
           <slot />
         </div>
       </div>
@@ -27,7 +26,7 @@ const file = Astro.props.code?.trim();
   </div>
 
   <ExamplePreview client:only="react">
-    <Code lang="tsx" code={file || ''}></Code>
+    {file ? <Code lang="tsx" code={file || ''}></Code> : null}
   </ExamplePreview>
 
   <script>
