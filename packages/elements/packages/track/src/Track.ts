@@ -221,6 +221,8 @@ export class Track extends LitElement {
         height: auto;
         min-width: 100%;
         overflow: visible;
+        padding: 0;
+        margin: 0;
       }
       ::-webkit-scrollbar {
         width: 0px;
@@ -359,7 +361,7 @@ export class Track extends LitElement {
   private _itemRects: Vec2[] | undefined = undefined;
   private get itemRects() {
     if (!this._itemRects) {
-      let topEdge: number | undefined = undefined;
+      let topEdge: number | undefined;
 
       // @ts-ignore
       this._itemRects = this.items

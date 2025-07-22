@@ -1,32 +1,10 @@
 # @sv/elements
 
-## 2.11.0-dev.10 (2025-07-21)
+## 2.11.0 (2025-07-22)
 
 ### Features
 
-- Popover variant for tooltips
-
-### Fixes
-
-- Overrideable popover trigger selector
-- Transition behaviour
-- Overwriteable popover instance check for triggers
-- Dunamically check for show and hide functions in trigger
-- a-tooltip: Layout not working
-
-## 2.11.0-dev.9 (2025-07-18)
-
-### Features
-
-- Popover respects temporary portals
-- Popover variant for tooltips
-
-### Fixes
-
-- Overrideable popover trigger selector
-- Transition behaviour
-- Overwriteable popover instance check for triggers
-- Dunamically check for show and hide functions in trigger
+- a-track: Sets slot to `all: inherit`, a-popover-trigger: Renames `.close` of a-popover-trigger to `.hide` (svp/atrium!48)
 
 ## 2.11.0-dev.8 (2025-07-08)
 

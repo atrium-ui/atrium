@@ -107,7 +107,7 @@ export class Popover extends Portal {
     return ["alignment", "placements"];
   }
 
-  protected override portalGun(): HTMLElement {
+  protected override portalGun() {
     const ele = new PopoverPortal();
     ele.className = this.className;
     ele.dataset.portal = this.portalId;
