@@ -6,31 +6,6 @@ import { twMerge } from "tailwind-merge";
 
 const base = import.meta.env.BASE_URL;
 
-function OpenStoryButton(props: { query: string }) {
-  return (
-    <a
-      title="Open in new tab"
-      href={`${base}story?${props.query}`}
-      className="block rounded-md p-2 opacity-50 hover:bg-gray-100 hover:opacity-100"
-      target="_blank"
-      rel="noreferrer"
-    >
-      <span className="sr-only">Open in new tab</span>
-      <svg
-        className="block"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        width="18"
-        height="18"
-        fill="#000000"
-        viewBox="0 0 256 256"
-      >
-        <path d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z" />
-      </svg>
-    </a>
-  );
-}
-
 export function StoryCanvas(props: { id: string; params: string }) {
   const iframe = useMemo(() => document.createElement("iframe"), []);
 
@@ -119,7 +94,17 @@ export function Preview() {
             <div className="docs-story-toolbar">
               <div>{id}</div>
               <div className="flex gap-module-m">
-                <OpenStoryButton query={`id=${id}`} />
+                <a
+                  title="Open in new tab"
+                  href={`${base}story?${`id=${id}`}`}
+                  className="block rounded-md p-2 opacity-50 hover:bg-gray-100 hover:opacity-100"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <span className="sr-only">Open in new tab</span>
+                  <svg-icon use="external" class="block" />
+                </a>
+
                 <button type="button" onClick={() => setVariantId("")}>
                   X
                 </button>

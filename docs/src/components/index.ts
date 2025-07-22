@@ -1,4 +1,3 @@
-export { default as Elements } from "./Elements.astro";
 export { default as Command } from "./Command.astro";
 export { default as Example } from "./Example.astro";
 export { default as File } from "./File.astro";

@@ -54,10 +54,10 @@ tasks:
     cmd: bun build --target=browser {{.ENTRY}} --outdir dist --sourcemap=external --format {{.FORMAT}} {{.EXTERNAL}} {{.CLI_ARGS}}
 
   dev:
-    desc: Start docs and watch for changes
+    desc: Start docs and packages in dev mode
     deps: [setup]
     cmds:
-      - task --parallel docs build:watch
+      - bun x turbo dev
 
   build:watch:
     desc: Watch-build packages for development

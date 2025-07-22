@@ -31,7 +31,9 @@ const base = import.meta.env.BASE_URL;
 
     <slot name="head" />
 
-    <Elements />
+    <script>
+      import "@sv/elements";
+    </script>
 
     <script>
       import { AnimationElement } from "@sv/elements/animation";
