@@ -4,7 +4,7 @@
   "contributors": [
     "luckydye"
   ],
-  "version": "2.11.0",
+  "version": "2.12.0-dev.1",
   "description": "Atrium Elements",
   "type": "module",
   "scripts": {

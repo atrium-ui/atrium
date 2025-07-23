@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
 import { Checkbox } from "@components/src/vue/Checkbox";
-import { Card } from "../Card";
+import { Card } from "../Card.js";
 import { Select, SelectItem } from "@components/src/vue/Select";
 import { Dialog } from "@components/src/vue/Dialog";
 

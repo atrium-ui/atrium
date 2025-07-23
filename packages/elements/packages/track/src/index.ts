@@ -12,4 +12,4 @@ try {
   console.warn("a-track already defined");
 }
 
-export * from "./Track";
+export * from "./Track.js";

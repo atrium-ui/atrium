@@ -5,14 +5,14 @@ const LICENSE = `/**
 * SPDX-License-Identifier: MIT
 */`;
 
-function options(format: "esm" | "cjs" | undefined) {
+function options() {
   return {
     entrypoints: ["./src/index.ts"],
     footer: LICENSE,
     outdir: "./dist",
-    format: format,
+    format: "esm",
     sourcemap: "linked" as const,
-    naming: format === "esm" ? "[dir]/[name].js" : "[dir]/[name].cjs",
+    naming: "[dir]/[name].js",
   };
 }
 

@@ -1,5 +1,5 @@
 ---
-import { Stories } from "./Stories.jsx";
+import { StoryFrame } from "./Story.jsx";
 ---
 
 <!DOCTYPE html>
@@ -31,7 +31,7 @@ import { Stories } from "./Stories.jsx";
 
     <script>
       import "@tailwindcss/browser";
-      import "@sv/elements";
+      import("@sv/elements");
     </script>
 
     <script type="module" is:inline>
@@ -50,6 +50,6 @@ import { Stories } from "./Stories.jsx";
   </head>
   <body>
     <div id="root"></div>
-    <Stories client:only="solid" />
+    <StoryFrame client:only="react" />
   </body>
 </html>

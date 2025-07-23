@@ -2,14 +2,15 @@
 import { defineComponent, ref } from "vue";
 import "@sv/elements/blur";
 import "@sv/elements/portal";
-import { Button } from "./Button";
-import { Icon } from "./Icon";
+import { Button } from "./Button.js";
+import { Icon } from "./Icon.js";
 
 export const Lightbox = defineComponent((_, { slots }) => {
   const open = ref(false);
 
   return () => (
     <>
+      {/* TODO: click on figure with image */}
       <button
         type="button"
         class="m-0 cursor-pointer bg-transparent p-0"

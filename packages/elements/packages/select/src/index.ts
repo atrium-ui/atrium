@@ -5,8 +5,8 @@
  */
 
 import "@sv/elements/expandable";
-import { OptionElement } from "./Option";
-import { Select } from "./Select";
+import { OptionElement } from "./Option.js";
+import { Select } from "./Select.js";
 
 if (!customElements.get("a-select")) {
   customElements.define("a-option", OptionElement);

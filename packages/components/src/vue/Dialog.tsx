@@ -2,7 +2,7 @@
 import { defineComponent, ref } from "vue";
 import "@sv/elements/blur";
 import "@sv/elements/portal";
-import { Button } from "./Button";
+import { Button } from "./Button.js";
 
 export const Dialog = defineComponent(
   (props: { label?: string; class?: string }, { slots }) => {

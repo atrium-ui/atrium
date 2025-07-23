@@ -5,18 +5,8 @@
 @import "./theme/theme.css";
 @import "./theme/markdown.css";
 
-@source '../../packages/components/src/vue/*.tsx';
-
 /* Fonts */
+@import "@fontsource/roboto/latin.css";
+@import "@fontsource/roboto-condensed/latin.css";
 
-@font-face {
-  font-family: "NotoSans";
-  src: url("./assets/fonts/NotoSans-VariableFont_wdth,wght.woff2") format("woff2");
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "NotoSans";
-  src: url("./assets/fonts/NotoSans-Italic-VariableFont_wdth,wght.woff2") format("woff2");
-  font-style: italic;
-}
+@source '../../packages/components/src/vue/*.tsx';

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { Expandable } from "./Expandable";
+import { Expandable } from "./Expandable.js";
 
 try {
   customElements.define("a-expandable", Expandable);
