@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 2.11.1-dev.0 (2025-07-23)
+
+### Fixes
+
+- a-tooltip: Layout not working
+- a-track: Fix track not moving with darkreader
+
 ## 2.12.0-dev.1 (2025-07-22)
 
 ### Features
