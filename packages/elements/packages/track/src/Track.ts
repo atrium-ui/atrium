@@ -315,7 +315,10 @@ export class Track extends LitElement {
   }
 
   public get slotElement() {
-    return this.shadowRoot?.children?.[0] as HTMLSlotElement | undefined;
+    for (const child of this.shadowRoot?.children || []) {
+      if (child instanceof HTMLSlotElement) return child;
+    }
+    return undefined;
   }
 
   protected updated(_changedProperties: PropertyValues): void {
