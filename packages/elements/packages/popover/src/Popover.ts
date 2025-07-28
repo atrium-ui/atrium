@@ -155,8 +155,6 @@ export class Popover extends Portal {
    * Show the popover.
    */
   public show() {
-    console.error("show");
-
     this.placePortal();
 
     const trigger = this.closest<PopoverTrigger>(this.triggerElementSelector);
@@ -237,8 +235,6 @@ export class Popover extends Portal {
    * Hide the popover.
    */
   public hide() {
-    console.error("hide");
-
     this.addEventListener("transitionstart", this.onTransitionStart, {
       once: true,
     });
