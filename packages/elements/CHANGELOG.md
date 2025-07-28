@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.12.0 (2025-07-28)
+
+### Features
+
+- Adds a-loader element for loading and error states (svp/atrium!51)
+
 ## 2.11.1 (2025-07-28)
 
 ### Fixes
