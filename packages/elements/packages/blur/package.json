@@ -12,6 +12,6 @@
     "dev": "bun --watch ./build.ts"
   },
   "dependencies": {
-    "@sv/scroll-lock": "workspace:*"
+    "@sv/scroll-lock": "^1.0.1"
   }
 }
