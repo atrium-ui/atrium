@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="./src/index.ts"></script>
+
+    <style>
+      button {
+        background-color: transparent;
+        border-radius: 4px;
+        padding: 0.25em 0.5em;
+        font-size: 1rem;
+      }
+      a-shortcut {
+        color: #333;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button>
+      <span>Submit</span>
+      <a-shortcut value="ctrl-shift-a"></a-shortcut>
+    </button>
+    <br>
+    <br>
+    <button>
+      Yo
+      <a-shortcut value="shift-enter"></a-shortcut>
+    </button>
+    <br>
+    <br>
+    <button>
+      Cancel
+      <a-shortcut value="cmd-enter"></a-shortcut>
+    </button>
+    <br>
+    <br>
+    <button>
+      Cancel
+      <a-shortcut value="alt-space"></a-shortcut>
+    </button>
+  </body>
+</html>

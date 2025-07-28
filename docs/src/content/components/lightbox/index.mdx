@@ -1,0 +1,22 @@
+---
+title: Lightbox
+description: A Lightbox.
+tags: [["a-blur", "elements/a-blur"], ["Button", "components/button"]]
+command: "npx @sv/components lightbox"
+---
+import { Lightbox } from "@components/src/vue/Lightbox";
+import { Button } from "@components/src/vue/Button";
+import { Example, Atrium } from "package:/components";
+
+<Example>
+  <Lightbox client:only="vue">
+    <a-loader loading className="min-w-[200px] max-h-[600px] w-full flex-none p-2">
+      <img
+        src="https://picsum.photos/id/12/1280/720"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    </a-loader>
+  </Lightbox>
+</Example>

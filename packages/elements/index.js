@@ -16,3 +16,4 @@ import "@sv/elements/scroll";
 import "@sv/elements/chart";
 import "@sv/elements/box";
 import "@sv/elements/list";
+import "@sv/elements/loader";

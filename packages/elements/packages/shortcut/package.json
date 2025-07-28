@@ -1,0 +1,13 @@
+{
+  "name": "@sv/elements-shortcut",
+  "author": "atrium",
+  "contributors": [],
+  "private": true,
+  "description": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "bun ./build.ts"
+  }
+}

@@ -13,12 +13,16 @@ export const Lightbox = defineComponent((_, { slots }) => {
       {/* TODO: click on figure with image */}
       <button
         type="button"
-        class="m-0 cursor-pointer bg-transparent p-0"
+        class="m-0 block cursor-pointer bg-transparent p-0"
         onClick={() => {
           open.value = true;
         }}
       >
-        {slots.trigger?.() || <Button>Show</Button>}
+        <img
+          class="max-w-[200px] bg-zinc-400 object-cover"
+          src="https://picsum.photos/id/12/320/180"
+          alt=""
+        />
       </button>
 
       {/* TODO: it may be better to implement portals with a framwork specific library */}
@@ -35,8 +39,8 @@ export const Lightbox = defineComponent((_, { slots }) => {
         >
           <div
             class={[
-              "-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 min-w-[400px] transition-all",
-              "scale-95 group-[&[enabled]]/dialog:block group-[&[enabled]]/dialog:scale-100",
+              "-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 transition-all",
+              "scale-105 group-[&[enabled]]/dialog:block group-[&[enabled]]/dialog:scale-100",
             ]}
           >
             {slots.default?.()}
