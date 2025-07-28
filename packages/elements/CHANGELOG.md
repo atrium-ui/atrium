@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 2.11.1 (2025-07-28)
+
+### Fixes
+
+- a-track: Fix track not moving with darkreader
+- Exception when reattatching a popover
+
 ## 2.11.1-dev.0 (2025-07-23)
 
 ### Fixes
