@@ -58,12 +58,24 @@ test("popover no scrolllock", async () => {
   expect(content.lock.enabled).toBe(false);
 });
 
-test("slotting names", async () => {
+test("reattach", async () => {
   const ele = await createPopover();
   const popover = ele.querySelector("a-popover");
   const trigger = ele.querySelector("a-popover-trigger");
 
   // TOOD: find a way to test assigned slots
+});
+
+test("slotting names", async () => {
+  const ele = await createPopover();
+  const popover = ele.querySelector("a-popover");
+  const trigger = ele.querySelector("a-popover-trigger");
+
+  expect(popover).toBeDefined();
+  expect(trigger).toBeDefined();
+
+  // should not error, when reappending the popover
+  trigger.append(popover);
 });
 
 async function createPopover() {

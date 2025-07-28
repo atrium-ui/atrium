@@ -267,15 +267,16 @@ export class Popover extends Portal {
   connectedCallback(): void {
     super.connectedCallback();
 
-    const shadow = this.attachShadow({ mode: "open" });
-    shadow.innerHTML = `
-      <style>
-        ::slotted(*) {
-          display: none !important;
-        }
-      </style>
-      <slot></slot>
-    `;
+    if (!this.shadowRoot) {
+      this.attachShadow({ mode: "open" });
+    }
+
+    if (this.shadowRoot) {
+      this.shadowRoot.innerHTML = `
+        <style>::slotted(*) { display: none !important; }</style>
+        <slot></slot>
+      `;
+    }
   }
 
   disconnectedCallback(): void {
