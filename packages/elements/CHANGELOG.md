@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.12.1 (2025-07-28)
+
+### Fixes
+
+- a-popover: Remove debug logs
+
 ## 2.12.0 (2025-07-28)
 
 ### Features
