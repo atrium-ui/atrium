@@ -267,7 +267,8 @@ export class Track extends LitElement {
     this.updateItems();
 
     this.ariaRoleDescription = "carousel";
-    this.role = "region";
+
+    this.role = this.role || "region"; // fallback to region if no role is set
 
     this.listener(window, "pointermove", this.onPointerMove);
     this.listener(window, "touchmove", this.onPointerMove);
