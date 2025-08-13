@@ -117,6 +117,7 @@ class Transition extends LitElement {
 
     this.observer.observe(this, {
       childList: true,
+      attributes: true,
       subtree: true,
       characterData: true,
     });
