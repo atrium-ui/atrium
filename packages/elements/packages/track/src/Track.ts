@@ -133,13 +133,6 @@ export class SnapTrait implements Trait {
       Math.max(Math.round(track.velocity.abs() / powerThreshold), 1) *
       Math.sign(velocity);
 
-    // if projected position is past maxIndex
-    // if (track.maxIndex && power > 0 && track.currentIndex + power > track.maxIndex) {
-    //   // instead, snap to the end
-    //   track.setTarget(track.getToItemPosition(track.itemCount - 1), "linear");
-    //   return;
-    // }
-
     const velocityThreshold = 8;
 
     if (Math.abs(velocity) > velocityThreshold) {
@@ -147,10 +140,18 @@ export class SnapTrait implements Trait {
       track.acceleration.mul(0.25);
       track.inputForce.mul(0.125);
 
-      track.setTarget(
-        track.getToItemPosition(Math.min(track.currentItem + power, track.itemCount - 1)),
-        "linear",
+      const toIndex = Math.max(
+        Math.min(track.currentItem + power, track.maxIndex),
+        track.minIndex,
       );
+
+      // if projected position is past maxIndex
+      if (toIndex >= track.maxIndex) {
+        // go to end of bounds
+        track.setTarget(track.trackOverflow, "linear");
+      } else {
+        track.setTarget(track.getToItemPosition(toIndex), "linear");
+      }
     } else {
       track.setTarget(track.getToItemPosition(track.currentItem), "linear");
     }
@@ -368,7 +369,7 @@ export class Track extends LitElement {
 
   private _itemRects: Vec2[] | undefined = undefined;
   private get itemRects() {
-    if (!this._itemRects) {
+    if (this._itemRects === undefined) {
       let topEdge: number | undefined;
       let leftEdge: number | undefined;
 
@@ -402,7 +403,7 @@ export class Track extends LitElement {
 
   private _itemWidths: number[] | undefined = undefined;
   private get itemWidths() {
-    if (!this._itemWidths) {
+    if (this._itemWidths === undefined) {
       // TODO: respect left children too
       this._itemWidths = this.itemRects.map((rect) => rect[0]);
     }
@@ -411,7 +412,7 @@ export class Track extends LitElement {
 
   private _itemHeights: number[] | undefined = undefined;
   private get itemHeights() {
-    if (!this._itemHeights) {
+    if (this._itemHeights === undefined) {
       // TODO: respect left children too
       this._itemHeights = this.itemRects.map((rect) => rect[1]);
     }
@@ -420,7 +421,7 @@ export class Track extends LitElement {
 
   private _itemsInView: number | undefined = undefined;
   public get itemsInView() {
-    if (!this._itemsInView) {
+    if (this._itemsInView === undefined) {
       let itemsInView = 0;
 
       if (this.itemCount === 0) {
@@ -430,7 +431,6 @@ export class Track extends LitElement {
 
       const viewportSize = this.vertical ? this.height : this.width;
       const itemSizes = this.vertical ? this.itemHeights : this.itemWidths;
-      const currentIndex = this.currentIndex;
 
       if (viewportSize <= 0 || itemSizes.length === 0) {
         this._itemsInView = 1;
@@ -439,7 +439,7 @@ export class Track extends LitElement {
 
       // Start from current item and calculate how many items fit in viewport
       let accumulatedSize = 0;
-      let itemIndex = currentIndex;
+      let itemIndex = this.currentIndex;
 
       // Count items forward from current item
       while (accumulatedSize < viewportSize) {
@@ -448,9 +448,9 @@ export class Track extends LitElement {
         if (size === undefined) break;
 
         accumulatedSize += size;
-        itemsInView++;
-
-        // Move to next item
+        if (accumulatedSize < viewportSize) {
+          itemsInView++;
+        }
         itemIndex++;
 
         // If not looping and we've reached the end, break
@@ -459,7 +459,7 @@ export class Track extends LitElement {
         }
 
         // If looping and we've come full circle, break to avoid infinite loop
-        if (this.loop && itemIndex >= currentIndex + this.itemCount) {
+        if (this.loop && itemIndex >= this.currentIndex + this.itemCount) {
           break;
         }
       }
@@ -482,7 +482,7 @@ export class Track extends LitElement {
       //   }
       // }
 
-      this._itemsInView = Math.max(1, itemsInView);
+      this._itemsInView = itemsInView;
     }
 
     return this._itemsInView;
