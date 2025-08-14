@@ -551,7 +551,7 @@ export class Track extends LitElement {
       return Number.POSITIVE_INFINITY;
     }
 
-    if (this.overflow === "ignore") {
+    if (this.overflow === "ignore" || this.overflow === "snap") {
       // when ignored, max-index is just the last item
       return this.itemCount - 1;
     }
@@ -631,7 +631,7 @@ export class Track extends LitElement {
     stopBottom = this.overflowHeight;
     stopRight = this.overflowWidth;
 
-    if (this.overflow === "ignore" || this.overflow === "snap") {
+    if (this.overflow === "ignore") {
       stopBottom += this.height - lastItemHeight;
       stopRight += this.width - lastItemWidth;
     }
