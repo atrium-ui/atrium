@@ -7,7 +7,7 @@ const LICENSE = `/**
 
 await Bun.build({
   entrypoints: ["./src/index.ts"],
-  external: ["lit", "@sv/elements", "@rive-app/canvas-advanced"],
+  external: ["lit", "chart.js", "@sv/elements", "@rive-app/canvas-advanced"],
   footer: LICENSE,
   outdir: "./dist",
   format: "esm",

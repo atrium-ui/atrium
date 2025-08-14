@@ -76,6 +76,10 @@ export function wait(time = 0) {
   });
 }
 
+export async function sleep(ms = 16) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 /**
  * Register a callback to be called on each frame.
  */
@@ -120,14 +124,6 @@ export function label(str: string) {
   return `[TEST_SEED=${globalThis.seed} bun test track -t "${str}"]`;
 }
 
-export function press(ele: Element, key: string) {
-  ele.dispatchEvent(
-    new KeyboardEvent("keydown", {
-      key: key,
-    }),
-  );
-}
-
 export async function fixElementSizes(ele: Element, width: number, height: number) {
   Object.defineProperty(ele, "offsetWidth", {
     writable: true,
@@ -156,8 +152,12 @@ export async function fixElementSizes(ele: Element, width: number, height: numbe
   };
 }
 
-export async function sleep(ms = 16) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+export function press(ele: Element, key: string) {
+  ele.dispatchEvent(
+    new KeyboardEvent("keydown", {
+      key: key,
+    }),
+  );
 }
 
 export function pointer(type: string, x: number, y: number) {
@@ -172,6 +172,8 @@ export function pointer(type: string, x: number, y: number) {
         button: 0,
         bubbles: true,
         cancelable: true,
+        clientX: x,
+        clientY: y,
         ...init,
       });
     }
@@ -197,6 +199,8 @@ export async function drag<
         button: 0,
         bubbles: true,
         cancelable: true,
+        clientX: x,
+        clientY: y,
         ...init,
       });
     }
@@ -213,12 +217,13 @@ export async function drag<
   console.info("drag start", multiplier, "dist", dist, "step", step);
   ele.dispatchEvent(new FakePointerEvent("pointerdown", ...pos));
 
-  await sleep();
+  await wait(6);
 
   for (let i = 0; i < 10; i++) {
-    window.dispatchEvent(new FakePointerEvent("pointermove", ...pos));
+    const ev = new FakePointerEvent("pointermove", ...pos);
+    window.dispatchEvent(ev);
 
-    await sleep();
+    await wait(6);
 
     pos[0] -= step[0];
     pos[1] -= step[1];
@@ -229,7 +234,7 @@ export async function drag<
   window.dispatchEvent(upEvent);
   console.info("drag end");
 
-  await sleep();
+  await wait(6);
 
   return upEvent;
 }

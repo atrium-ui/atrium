@@ -1,3 +1,4 @@
+import { userEvent } from "@testing-library/user-event";
 import { beforeEach, test, expect, describe } from "bun:test";
 import type { MoveEvent, Track } from "../src/Track.js";
 import type { Track as TrackElement } from "../src/Track.js";
@@ -5,15 +6,36 @@ import {
   fixElementSizes,
   label,
   random,
-  sleep,
+  wait,
   drag as _drag,
   onFrame,
   press,
   setup,
   pointer,
 } from "@sv/test";
+import { afterEach } from "node:test";
 
 beforeEach(() => setup());
+
+afterEach(() => {
+  if (globalThis.frameHook) {
+    globalThis.frameHook();
+  }
+});
+
+function logRun(track: Track) {
+  globalThis.frameHook = onFrame(() => {
+    if (process.env.DEBUG) {
+      console.info(
+        "FRAME >",
+        track.position,
+        track.currentItem,
+        track.velocity,
+        track.target,
+      );
+    }
+  });
+}
 
 async function trackWithChildren(
   itemCount = 10,
@@ -89,12 +111,6 @@ async function drag<
   // has moved at all?
   expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
   return ev;
-}
-
-function logRun(track: Track) {
-  onFrame(() => {
-    console.info(">", track.position, track.currentItem, track.velocity, track.target);
-  });
 }
 
 describe("Track", () => {
@@ -173,7 +189,7 @@ describe("Track", () => {
     track.onFormat();
     track.startAnimate();
 
-    await sleep(100);
+    await wait(100);
 
     expect(start).toBeTrue();
     expect(input).toBeTrue();
@@ -200,7 +216,7 @@ describe("Track", () => {
 
     press(track, "ArrowRight");
 
-    await sleep(track.transitionTime + 100);
+    await wait(track.transitionTime + 100);
 
     expect(document.activeElement).toBe(track);
     expect(track.currentItem).toBe(1);
@@ -225,11 +241,11 @@ describe("Track", () => {
     logRun(track);
 
     track.moveTo(2);
-    await sleep(track.transitionTime + 100);
+    await wait(track.transitionTime + 100);
     expect(track.currentItem).toBe(2);
 
     track.moveBy(2);
-    await sleep(track.transitionTime + 100);
+    await wait(track.transitionTime + 100);
 
     expect(track.currentItem).toBe(4);
   });
@@ -243,7 +259,7 @@ describe("Track", () => {
     expect(track.align).toBe("center");
 
     track.moveTo(1);
-    await sleep(track.transitionTime + 100);
+    await wait(track.transitionTime + 100);
 
     expect(track.currentItem).toBe(1);
     expect(Math.abs(track.currentPosition)).toBeGreaterThan(0);
@@ -266,7 +282,7 @@ describe("Track", () => {
     expect(track.align).toBe("center");
 
     track.moveTo(0);
-    await sleep(track.transitionTime + 300);
+    await wait(track.transitionTime + 300);
 
     expect(track.currentItem).toBe(0);
 
@@ -282,7 +298,7 @@ describe("Track", () => {
     expect(track.snap).toBe(true);
     track.setTarget(undefined);
     track.inputForce.x += 100;
-    await sleep(track.transitionTime + 100);
+    await wait(track.transitionTime + 100);
     expect(track.target).toBeDefined();
   });
 
@@ -291,12 +307,12 @@ describe("Track", () => {
     logRun(track);
 
     track.moveTo(4, "none");
-    await sleep(200);
+    await wait(200);
 
     console.info(track.position, track.overflowWidth, track.target);
 
     await drag(track, [200, 0]);
-    await sleep(300);
+    await wait(300);
 
     // target should be set by snap
     if (track.target) {
@@ -311,8 +327,18 @@ describe("Track", () => {
     const track = await trackWithChildren(10, { snap: true });
     logRun(track);
 
-    await drag(track, [-20, 0]);
-    await sleep(300);
+    const start = [...track.position];
+
+    const { pointer } = userEvent.setup();
+    pointer([
+      { keys: "[TouchA>]", target: track, coords: { x: 10, y: 650 } },
+      { pointerName: "TouchA", target: track, coords: { x: 10, y: 10 } },
+      { keys: "[/TouchA]", target: track },
+    ]);
+
+    await wait(200);
+
+    expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
 
     // target should be set by snap
     if (track.position.x > 0) {
@@ -321,12 +347,22 @@ describe("Track", () => {
     }
   });
 
-  test(label("drag vertical with snap"), async () => {
+  test(label("drag with snap vertical"), async () => {
     const track = await trackWithChildren(10, { snap: true, current: 3, vertical: true });
     logRun(track);
 
-    await drag(track, [0, 100]);
-    await sleep(200);
+    const start = [...track.position];
+
+    const { pointer } = userEvent.setup();
+    pointer([
+      { keys: "[TouchA>]", target: track, coords: { x: 10, y: 650 } },
+      { pointerName: "TouchA", target: track, coords: { x: 10, y: 10 } },
+      { keys: "[/TouchA]", target: track },
+    ]);
+
+    await wait(200);
+
+    expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
 
     // target should be set by snap
     expect(track.target).toBeDefined();
@@ -339,17 +375,17 @@ describe("Track", () => {
 
     track.transitionTime = 1000;
     track.moveTo(8, "ease");
-    await sleep(track.transitionTime / 2);
+    await wait(track.transitionTime / 2);
 
     // grab it bevore transition ends
     track.dispatchEvent(pointer("pointerdown", 0, 0));
     console.info("Grabbed track");
 
-    await sleep();
+    await wait();
     const pos = track.position[0];
 
     // wait
-    await sleep(200);
+    await wait(200);
     // pos should not have changed
     expect(track.position[0]).toBe(pos);
   });
@@ -360,7 +396,7 @@ describe("Track", () => {
     track.dispatchEvent(pointer("pointerdown", 100, 100));
     console.info("down");
 
-    await sleep();
+    await wait(6);
 
     const ev = pointer("pointerup", 100, 100);
     track.dispatchEvent(ev);
@@ -371,9 +407,9 @@ describe("Track", () => {
     track.dispatchEvent(pointer("pointerdown", 100, 100));
     console.info("down");
 
-    await sleep(100);
+    await wait(100);
     window.dispatchEvent(pointer("pointermove", 150, 110));
-    await sleep(100);
+    await wait(100);
 
     const ev2 = pointer("pointerup", 100, 100);
     track.dispatchEvent(ev2);
@@ -386,7 +422,7 @@ describe("Track", () => {
     const track = await trackWithChildren(10, {});
     logRun(track);
     track.moveTo(8, "none");
-    await sleep(200);
+    await wait(200);
 
     const start = [...track.position];
 
@@ -398,10 +434,21 @@ describe("Track", () => {
     console.info("fired");
     track.dispatchEvent(ev);
 
-    await sleep(100);
+    await wait(100);
 
     expect(ev.defaultPrevented).toBe(true);
     expect(track.position[0]).not.toBe(start[0]);
+  });
+
+  test(label("itemsInView works"), async () => {
+    const track = await trackWithChildren(10, {});
+    logRun(track);
+    await wait(200);
+
+    console.info("itemsInView", track.itemsInView);
+    await wait(100);
+
+    expect(track.itemsInView).toBeGreaterThan(0);
   });
 
   // TODO: loop
