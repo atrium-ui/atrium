@@ -133,11 +133,12 @@ export class SnapTrait implements Trait {
       Math.max(Math.round(track.velocity.abs() / powerThreshold), 1) *
       Math.sign(velocity);
 
-    if (track.maxIndex && power > 0 && track.currentIndex + power > track.maxIndex) {
-      // instead, snap to the end
-      track.setTarget(track.getToItemPosition(track.itemCount - 1), "linear");
-      return;
-    }
+    // if projected position is past maxIndex
+    // if (track.maxIndex && power > 0 && track.currentIndex + power > track.maxIndex) {
+    //   // instead, snap to the end
+    //   track.setTarget(track.getToItemPosition(track.itemCount - 1), "linear");
+    //   return;
+    // }
 
     const velocityThreshold = 8;
 
@@ -146,7 +147,10 @@ export class SnapTrait implements Trait {
       track.acceleration.mul(0.25);
       track.inputForce.mul(0.125);
 
-      track.setTarget(track.getToItemPosition(track.currentItem + power), "linear");
+      track.setTarget(
+        track.getToItemPosition(Math.min(track.currentItem + power, track.itemCount - 1)),
+        "linear",
+      );
     } else {
       track.setTarget(track.getToItemPosition(track.currentItem), "linear");
     }
@@ -366,18 +370,27 @@ export class Track extends LitElement {
   private get itemRects() {
     if (!this._itemRects) {
       let topEdge: number | undefined;
+      let leftEdge: number | undefined;
 
       // @ts-ignore
       this._itemRects = this.items
         .map((item) => {
           if (this.clones.includes(item)) return;
 
-          const { width, height, top } = item.getBoundingClientRect();
+          const { width, height, top, left } = item.getBoundingClientRect();
 
-          if (!topEdge) {
-            topEdge = top;
-          } else if (top !== topEdge) {
-            return;
+          if (this.vertical) {
+            if (!leftEdge) {
+              leftEdge = left;
+            } else if (left !== leftEdge) {
+              return;
+            }
+          } else {
+            if (!topEdge) {
+              topEdge = top;
+            } else if (top !== topEdge) {
+              return;
+            }
           }
 
           return new Vec2(width, height);
@@ -405,6 +418,76 @@ export class Track extends LitElement {
     return this._itemHeights;
   }
 
+  private _itemsInView: number | undefined = undefined;
+  public get itemsInView() {
+    if (!this._itemsInView) {
+      let itemsInView = 0;
+
+      if (this.itemCount === 0) {
+        this._itemsInView = 0;
+        return this._itemsInView;
+      }
+
+      const viewportSize = this.vertical ? this.height : this.width;
+      const itemSizes = this.vertical ? this.itemHeights : this.itemWidths;
+      const currentIndex = this.currentIndex;
+
+      if (viewportSize <= 0 || itemSizes.length === 0) {
+        this._itemsInView = 1;
+        return this._itemsInView;
+      }
+
+      // Start from current item and calculate how many items fit in viewport
+      let accumulatedSize = 0;
+      let itemIndex = currentIndex;
+
+      // Count items forward from current item
+      while (accumulatedSize < viewportSize) {
+        const sizeIndex = itemIndex % this.itemCount;
+        const size = itemSizes[sizeIndex];
+        if (size === undefined) break;
+
+        accumulatedSize += size;
+        itemsInView++;
+
+        // Move to next item
+        itemIndex++;
+
+        // If not looping and we've reached the end, break
+        if (!this.loop && itemIndex >= this.itemCount) {
+          break;
+        }
+
+        // If looping and we've come full circle, break to avoid infinite loop
+        if (this.loop && itemIndex >= currentIndex + this.itemCount) {
+          break;
+        }
+      }
+
+      // TODO: looping
+      // If we have space left and looping is enabled, check backwards too
+      // if (this.loop && accumulatedSize < viewportSize) {
+      //   itemIndex = currentIdx - 1;
+      //   while (accumulatedSize < viewportSize && itemIndex >= currentIdx - this.itemCount) {
+      //     if (itemIndex < 0) {
+      //       itemIndex = this.itemCount - 1;
+      //     }
+      //     const sizeIndex = itemIndex % this.itemCount;
+      //     const size = itemSizes[sizeIndex];
+      //     if (size === undefined) break;
+
+      //     accumulatedSize += size;
+      //     itemsInView++;
+      //     itemIndex--;
+      //   }
+      // }
+
+      this._itemsInView = Math.max(1, itemsInView);
+    }
+
+    return this._itemsInView;
+  }
+
   public get trackWidth() {
     if (!this.vertical) {
       return this.itemWidths.reduce((last, curr) => last + curr, 0);
@@ -417,6 +500,10 @@ export class Track extends LitElement {
       return this.itemHeights.reduce((last, curr) => last + curr, 0);
     }
     return this.height;
+  }
+
+  public get trackOverflow() {
+    return new Vec2(this.overflowWidth, this.overflowHeight);
   }
 
   private _width;
@@ -448,7 +535,10 @@ export class Track extends LitElement {
   }
 
   public get hasOverflow() {
-    return this.overflowWidth > 0 || this.overflowHeight > 0;
+    if (this.vertical) {
+      return this.overflowHeight > 0;
+    }
+    return this.overflowWidth > 0;
   }
 
   public get currentIndex() {
@@ -465,6 +555,7 @@ export class Track extends LitElement {
     }
 
     if (this.overflow === "ignore") {
+      // when ignored, max-index is just the last item
       return this.itemCount - 1;
     }
 
@@ -485,6 +576,7 @@ export class Track extends LitElement {
       }
     }
 
+    // falls back to last item as max-index
     return this.itemCount - 1;
   }
 
@@ -856,11 +948,17 @@ export class Track extends LitElement {
    * Move by given count of items.
    */
   public moveBy(byItems: number, easing?: Easing) {
-    let i = this.currentItem + byItems;
-    if (!this.loop) {
-      i = Math.min(Math.max(0, i), this.itemCount - 1);
+    const toIndex = Math.min(
+      Math.max(this.minIndex, this.currentItem + byItems),
+      this.maxIndex,
+    );
+
+    if (this.overflow !== "ignore" && toIndex >= this.maxIndex) {
+      this.setTarget(this.trackOverflow, easing);
+      return;
     }
-    const pos = this.getToItemPosition(i);
+
+    const pos = this.getToItemPosition(toIndex);
     this.setTarget(pos, easing);
   }
 
@@ -920,6 +1018,9 @@ export class Track extends LitElement {
       this.computeCurrentItem();
       this.drawUpdate();
     }
+
+    // reset lazily computed itemsInView value
+    this._itemsInView = undefined;
 
     this.trait((t) => t.draw?.(this));
 
@@ -1317,6 +1418,7 @@ export class Track extends LitElement {
     this._height = undefined;
     this._itemWidths = undefined;
     this._itemHeights = undefined;
+    this._itemsInView = undefined;
 
     // apply align prop
     switch (this.align) {
@@ -1379,11 +1481,6 @@ export class Track extends LitElement {
     this.dispatchEvent(formatEvent);
 
     if (formatEvent.defaultPrevented) return;
-
-    // TODO: why?
-    // if (this.position.x > this.overflowWidth || this.position.y > this.overflowHeight) {
-    //   this.setTarget(undefined);
-    // }
 
     this.trait((t) => t.format?.(this));
   };
@@ -1482,8 +1579,8 @@ export class Track extends LitElement {
     this.mouseDown = true;
 
     if (pointerEvent instanceof PointerEvent) {
-      this.mousePos.x = pointerEvent.x;
-      this.mousePos.y = pointerEvent.y;
+      this.mousePos.x = pointerEvent.clientX;
+      this.mousePos.y = pointerEvent.clientY;
 
       pointerEvent.preventDefault();
       pointerEvent.stopPropagation();
@@ -1515,8 +1612,8 @@ export class Track extends LitElement {
     let y = 0;
 
     if (pointerEvent instanceof PointerEvent) {
-      x = pointerEvent.x;
-      y = pointerEvent.y;
+      x = pointerEvent.clientX;
+      y = pointerEvent.clientY;
     } else if (pointerEvent instanceof TouchEvent) {
       x = pointerEvent.touches[0]?.clientX || 0;
       y = pointerEvent.touches[0]?.clientY || 0;
