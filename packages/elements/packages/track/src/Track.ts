@@ -503,6 +503,10 @@ export class Track extends LitElement {
     return this.height;
   }
 
+  public get trackOverflow() {
+    return new Vec2(this.overflowWidth, this.overflowHeight);
+  }
+
   private _width;
   public get width() {
     if (this._width === undefined) {
@@ -551,7 +555,7 @@ export class Track extends LitElement {
       return Number.POSITIVE_INFINITY;
     }
 
-    if (this.overflow === "ignore" || this.overflow === "snap") {
+    if (this.overflow === "ignore") {
       // when ignored, max-index is just the last item
       return this.itemCount - 1;
     }
@@ -947,11 +951,17 @@ export class Track extends LitElement {
    * Move by given count of items.
    */
   public moveBy(byItems: number, easing?: Easing) {
-    let i = this.currentItem + byItems;
-    if (!this.loop) {
-      i = Math.min(Math.max(0, i), this.itemCount - 1);
+    const toIndex = Math.min(
+      Math.max(this.minIndex, this.currentItem + byItems),
+      this.maxIndex,
+    );
+
+    if (toIndex >= this.maxIndex) {
+      this.setTarget(this.trackOverflow, easing);
+      return;
     }
-    const pos = this.getToItemPosition(i);
+
+    const pos = this.getToItemPosition(toIndex);
     this.setTarget(pos, easing);
   }
 
