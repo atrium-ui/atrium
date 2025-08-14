@@ -894,7 +894,7 @@ export class Track extends LitElement {
       throw new Error("Invalid index");
     }
 
-    const targetIndex = Math.max(this.minIndex, Math.min(index, this.maxIndex));
+    const targetIndex = index;
     const sizes = this.vertical ? this.itemHeights : this.itemWidths;
     const pos = new Vec2();
 
