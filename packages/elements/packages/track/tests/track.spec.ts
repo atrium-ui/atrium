@@ -19,14 +19,20 @@ beforeEach(() => setup());
 
 afterEach(() => {
   if (globalThis.frameHook) {
-    globalThis.frameHook()
+    globalThis.frameHook();
   }
-})
+});
 
 function logRun(track: Track) {
   globalThis.frameHook = onFrame(() => {
     if (process.env.DEBUG) {
-      console.info("FRAME >", track.position, track.currentItem, track.velocity, track.target);
+      console.info(
+        "FRAME >",
+        track.position,
+        track.currentItem,
+        track.velocity,
+        track.target,
+      );
     }
   });
 }
@@ -106,7 +112,6 @@ async function drag<
   expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
   return ev;
 }
-
 
 describe("Track", () => {
   test(label("import track element"), async () => {
@@ -326,10 +331,10 @@ describe("Track", () => {
 
     const { pointer } = userEvent.setup();
     pointer([
-      { keys: '[TouchA>]', target: track, coords: { x: 10, y: 650 } },
-      { pointerName: 'TouchA', target: track, coords: { x: 10, y: 10 } },
-      { keys: '[/TouchA]', target: track },
-    ])
+      { keys: "[TouchA>]", target: track, coords: { x: 10, y: 650 } },
+      { pointerName: "TouchA", target: track, coords: { x: 10, y: 10 } },
+      { keys: "[/TouchA]", target: track },
+    ]);
 
     await wait(200);
 
@@ -350,10 +355,10 @@ describe("Track", () => {
 
     const { pointer } = userEvent.setup();
     pointer([
-      { keys: '[TouchA>]', target: track, coords: { x: 10, y: 650 } },
-      { pointerName: 'TouchA', target: track, coords: { x: 10, y: 10 } },
-      { keys: '[/TouchA]', target: track },
-    ])
+      { keys: "[TouchA>]", target: track, coords: { x: 10, y: 650 } },
+      { pointerName: "TouchA", target: track, coords: { x: 10, y: 10 } },
+      { keys: "[/TouchA]", target: track },
+    ]);
 
     await wait(200);
 

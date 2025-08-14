@@ -8,7 +8,7 @@ const PI2 = Math.PI * 2;
 export class DebugTrait implements Trait {
   id = "debug";
 
-  input(track, state) {
+  input(_track, state) {
     console.debug(state);
   }
 

@@ -1604,7 +1604,6 @@ export class Track extends LitElement {
     let x = 0;
     let y = 0;
 
-
     if (pointerEvent instanceof PointerEvent) {
       x = pointerEvent.clientX;
       y = pointerEvent.clientY;
@@ -1612,7 +1611,6 @@ export class Track extends LitElement {
       x = pointerEvent.touches[0]?.clientX || 0;
       y = pointerEvent.touches[0]?.clientY || 0;
     }
-
 
     const pos = new Vec2(x, y);
     const delta = Vec2.sub(pos, this.mousePos);
