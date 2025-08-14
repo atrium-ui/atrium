@@ -422,7 +422,7 @@ export class Track extends LitElement {
   private _itemsInView: number | undefined = undefined;
   public get itemsInView() {
     if (this._itemsInView === undefined) {
-      let itemsInView = 1;
+      let itemsInView = 0;
 
       if (this.itemCount === 0) {
         this._itemsInView = 0;
@@ -482,7 +482,7 @@ export class Track extends LitElement {
       //   }
       // }
 
-      this._itemsInView = itemsInView;
+      this._itemsInView = Math.max(1, itemsInView);
     }
 
     return this._itemsInView;
