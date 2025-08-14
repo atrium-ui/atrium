@@ -124,7 +124,6 @@ export class SnapTrait implements Trait {
     if (track.vertical && track.position.y - track.scrollBounds.bottom > 0) return;
     if (!track.vertical && track.position.x <= track.scrollBounds.left) return;
     if (track.vertical && track.position.y <= track.scrollBounds.top) return;
-    // TODO: snap to bound border
 
     // Project the current velocity to determine the target item.
     const velocity = Math.round(track.velocity[track.currentAxis] * 10) / 10;
@@ -792,11 +791,9 @@ export class Track extends LitElement {
   /** Change the overflow behavior.
    * - "auto" - Only scrollable when necessary.
    * - "scroll" - Always scrollable.
-   * - "snap" - Ignore overflow for snapping only. Items stay in bounds.
    * - "ignore" - Ignore any overflow.
    */
-  @property({ type: String }) public overflow: "auto" | "scroll" | "ignore" | "snap" =
-    "auto";
+  @property({ type: String }) public overflow: "auto" | "scroll" | "ignore" = "auto";
 
   @property({ type: Boolean }) public debug = false;
 
@@ -956,7 +953,7 @@ export class Track extends LitElement {
       this.maxIndex,
     );
 
-    if (toIndex >= this.maxIndex) {
+    if (this.overflow !== "ignore" && toIndex >= this.maxIndex) {
       this.setTarget(this.trackOverflow, easing);
       return;
     }
