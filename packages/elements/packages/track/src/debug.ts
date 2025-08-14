@@ -8,6 +8,10 @@ const PI2 = Math.PI * 2;
 export class DebugTrait implements Trait {
   id = "debug";
 
+  input(track, state) {
+    console.debug(state);
+  }
+
   update(track: Track): void {
     if (!track.debug) return;
 
@@ -25,6 +29,8 @@ export class DebugTrait implements Trait {
       target: track.target,
       scrollDebounce: track.scrollDebounce,
     };
+
+    console.debug(meta);
 
     const trackSize = track.trackSize;
     const currentAngle = track.currentAngle;
