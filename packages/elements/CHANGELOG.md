@@ -1,5 +1,23 @@
 # @sv/elements
 
+## 2.13.0-dev.6 (2025-08-15)
+
+### Features
+
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Move track to the end within bounds, if the last item is the target
+- a-track: Ignore snapping bounds if overflow=ignore
+- a-track: Dont clamp toTargetPositon index
+- a-track: Clamp to max-index or bounds on snapping
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: itemsInView off by one
+
+### Fixes
+
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+
 ## 2.13.0-dev.5 (2025-08-14)
 
 ### Features
