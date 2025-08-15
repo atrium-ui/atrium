@@ -1,5 +1,94 @@
 # @sv/elements
 
+## 2.13.0-dev.5 (2025-08-14)
+
+### Features
+
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Move track to the end within bounds, if the last item is the target
+- a-track: Ignore snapping bounds if overflow=ignore
+- a-track: Dont clamp toTargetPositon index
+- a-track: Clamp to max-index or bounds on snapping
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: Fix itemsInView when track is smaller than one item
+
+### Fixes
+
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+
+## 2.13.0-dev.4 (2025-08-14)
+
+### Features
+
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Move track to the end within bounds, if the last item is the target
+- a-track: Ignore snapping bounds if overflow=ignore
+- a-track: Dont clamp toTargetPositon index
+
+### Fixes
+
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+
+## 2.13.0-dev.3 (2025-08-14)
+
+### Features
+
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Move track to the end within bounds, if the last item is the target
+- a-track: Ignore snapping bounds if overflow=ignore
+
+### Fixes
+
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+
+## 2.13.0-dev.2 (2025-08-14)
+
+### Features
+
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Move track to the end within bounds, if the last item is the target
+
+### Fixes
+
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+
+## 2.13.0-dev.1 (2025-08-14)
+
+### Features
+
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+
+### Fixes
+
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+
+## 2.13.0-dev.0 (2025-08-14)
+
+### Features
+
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+
+### Fixes
+
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+
 ## 2.12.1 (2025-07-28)
 
 ### Fixes
