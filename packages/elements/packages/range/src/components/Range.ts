@@ -20,7 +20,6 @@ declare global {
  *
  * @see https://svp.pages.s-v.de/atrium/elements/a-select/
  */
-@customElement("a-range")
 export class Range extends LitElement {
   static get styles() {
     return css`
