@@ -160,7 +160,7 @@ export function press(ele: Element, key: string) {
   );
 }
 
-export function pointer(type: string, x: number, y: number) {
+export function fakePointer(type: string, x: number, y: number) {
   class FakePointerEvent extends PointerEvent {
     constructor(
       type: string,
