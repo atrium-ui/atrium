@@ -10,7 +10,7 @@ export function StoryFrame() {
   const currentStoryId = searchParams?.get("id");
 
   const [story, setStory] = useState<Story | null | undefined>();
-  const [variant, setVariant] = useState();
+  const [variant, setVariant] = useState<Story>();
   const [renderer, setRenderer] = useState<string>();
   const [layout, setLayout] = useState("default");
   const [globals, setGlobals] = useState<Story["globals"]>({});
@@ -33,9 +33,8 @@ export function StoryFrame() {
           setStory(module.default);
 
           for (const key in module) {
-            if (key.toLowerCase() === variant) {
-              const variantStory = module[key];
-              setVariant(variantStory);
+            if (key.toLowerCase() === variant?.toLowerCase()) {
+              setVariant(module[key]);
               break;
             }
           }

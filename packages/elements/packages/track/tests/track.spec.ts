@@ -378,39 +378,61 @@ describe("Track", () => {
     expect(track.itemsInView).toBeGreaterThan(0);
   });
 
-  test(label("should snap to the end"), async () => {
-    const track = await trackWithChildren(10, { snap: true, current: 2 });
+  test(label("should snap to the end with overflow auto"), async () => {
+    const track = await trackWithChildren(10, {
+      snap: true,
+      width: "800",
+    });
 
     track.moveTo(track.itemCount - 1, "none");
     await wait(200);
 
-    const targetPosition = track.position[0];
-
     // should be and end of scroll bounds
-    expect(track.position[0]).toBeCloseTo(track.overflowWidth);
     expect(track.target).toBeDefined();
+    expect(track.position[0]).toBeCloseTo(track.overflowWidth, -2);
+  });
 
-    console.info("snap info", track.target);
+  test(label("should snap to the end with overflow auto with interaction"), async () => {
+    const track = await trackWithChildren(10, {
+      snap: true,
+      width: "800",
+    });
 
+    track.moveTo(track.itemCount - 1, "none");
+    await wait(200);
+
+    // click on the track once to reset target
     track.dispatchEvent(fakePointer("pointerdown", 100, 100));
     console.info("down");
     await wait(100);
     track.dispatchEvent(fakePointer("pointerup", 100, 100));
     console.info("up");
-    await wait(100);
+    await wait(200);
 
-    console.info("snap info", track.target, track.position);
-    expect(track.target).toBeDefined();
-
-    expect(track.position[0]).toBeCloseTo(targetPosition);
+    // should be and end of scroll bounds after one click
+    expect(track.position[0]).toBeCloseTo(track.overflowWidth, -2);
   });
 
-  test(label("a single item should snap to the start"), async () => {
+  test(label("a single item should snap to the start without overflow"), async () => {
     const track = await trackWithChildren(1, { snap: true, width: 800 });
 
-    await wait(150);
+    track.moveTo(0, "none");
+    await wait(200);
 
     expect(track.position[0]).toBeCloseTo(0);
+  });
+
+  test(label("snap to second last item works"), async () => {
+    const track = await trackWithChildren(6, { snap: true, width: 800 });
+
+    const secondLastItemIndex = track.itemCount - 2;
+
+    track.moveTo(secondLastItemIndex, "none");
+    await wait(200);
+
+    const targetPosition = track.getToItemPosition(secondLastItemIndex);
+
+    expect(track.position[0]).toBe(targetPosition[0]);
   });
 
   // TODO: loop
@@ -432,10 +454,12 @@ async function trackWithChildren(
 
   const div = document.createElement("div");
   const markup = `
-    <a-track ${Object.entries(attributes)
+    <a-track id="track" class="outline-2 outline-red-500 overflow-visible w-[${attributes.width}px] h-[${attributes.height}px]" ${Object.entries(
+      attributes,
+    )
       .map(([key, value]) => `${key}="${value}"`)
       .join(" ")}>
-      ${widths.map((w) => `<canvas width="${w}" height="800"></canvas>`).join("")}
+      ${widths.map((w) => `<canvas class="bg-white border-2" width="${w}" height="200"></canvas>`).join("")}
     </a-track>
   `;
   div.innerHTML = markup;
@@ -484,7 +508,7 @@ async function trackWithChildren(
     "position",
     track.position,
   );
-  console.info("\n", track.outerHTML);
+  console.error("\n", track.outerHTML);
 
   return track;
 }

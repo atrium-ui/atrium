@@ -120,8 +120,9 @@ export class SnapTrait implements Trait {
     if (movement !== 0 && movement < 0.1) return;
 
     // Ignore if target is out of bounds
-    if (!track.vertical && track.position.x - track.scrollBounds.right > 0) return;
-    if (track.vertical && track.position.y - track.scrollBounds.bottom > 0) return;
+    // (-1 becuase the transition might leave it at 99.999 instead of 100 for example)
+    if (!track.vertical && track.position.x - track.scrollBounds.right > -1) return;
+    if (track.vertical && track.position.y - track.scrollBounds.bottom > -1) return;
     if (!track.vertical && track.position.x <= track.scrollBounds.left) return;
     if (track.vertical && track.position.y <= track.scrollBounds.top) return;
 
@@ -135,25 +136,22 @@ export class SnapTrait implements Trait {
 
     const velocityThreshold = 8;
 
+    let toIndex = track.currentItem;
+
     if (Math.abs(velocity) > velocityThreshold) {
       // apply inertia to snap target
       track.acceleration.mul(0.25);
       track.inputForce.mul(0.125);
 
-      const toIndex = Math.max(
-        Math.min(track.currentItem + power, track.maxIndex),
-        track.minIndex,
-      );
+      toIndex = track.currentItem + power;
+    }
 
-      // if projected position is past maxIndex
-      if (toIndex >= track.maxIndex) {
-        // go to end of bounds
-        track.setTarget(track.trackOverflow, "linear");
-      } else {
-        track.setTarget(track.getToItemPosition(toIndex), "linear");
-      }
+    // if projected position is past maxIndex
+    if (toIndex > track.maxIndex) {
+      // go to end of bounds
+      track.setTarget(track.trackOverflow, "linear");
     } else {
-      track.setTarget(track.getToItemPosition(track.currentItem), "linear");
+      track.setTarget(track.getToItemPosition(toIndex), "linear");
     }
 
     if (!track.target) {
@@ -228,6 +226,8 @@ export class Track extends LitElement {
         overflow: visible;
         padding: 0;
         margin: 0;
+        border: none;
+        outline: none;
       }
       ::-webkit-scrollbar {
         width: 0px;
@@ -948,18 +948,14 @@ export class Track extends LitElement {
    * Move by given count of items.
    */
   public moveBy(byItems: number, easing?: Easing) {
-    const toIndex = Math.min(
-      Math.max(this.minIndex, this.currentItem + byItems),
-      this.maxIndex,
-    );
+    const toIndex = this.currentItem + byItems;
 
-    if (this.overflow !== "ignore" && toIndex >= this.maxIndex) {
+    if (this.overflow !== "ignore" && this.overflowWidth > 0 && toIndex > this.maxIndex) {
       this.setTarget(this.trackOverflow, easing);
-      return;
+    } else {
+      const pos = this.getToItemPosition(toIndex);
+      this.setTarget(pos, easing);
     }
-
-    const pos = this.getToItemPosition(toIndex);
-    this.setTarget(pos, easing);
   }
 
   /**
