@@ -120,8 +120,9 @@ export class SnapTrait implements Trait {
     if (movement !== 0 && movement < 0.1) return;
 
     // Ignore if target is out of bounds
-    if (!track.vertical && track.position.x - track.scrollBounds.right > 0) return;
-    if (track.vertical && track.position.y - track.scrollBounds.bottom > 0) return;
+    // (-1 becuase the transition might leave it at 99.999 instead of 100 for example)
+    if (!track.vertical && track.position.x - track.scrollBounds.right > -1) return;
+    if (track.vertical && track.position.y - track.scrollBounds.bottom > -1) return;
     if (!track.vertical && track.position.x <= track.scrollBounds.left) return;
     if (track.vertical && track.position.y <= track.scrollBounds.top) return;
 
@@ -133,22 +134,24 @@ export class SnapTrait implements Trait {
       Math.max(Math.round(track.velocity.abs() / powerThreshold), 1) *
       Math.sign(velocity);
 
-    if (track.maxIndex && power > 0 && track.currentIndex + power > track.maxIndex) {
-      // instead, snap to the end
-      track.setTarget(track.getToItemPosition(track.itemCount - 1), "linear");
-      return;
-    }
-
     const velocityThreshold = 8;
+
+    let toIndex = track.currentItem;
 
     if (Math.abs(velocity) > velocityThreshold) {
       // apply inertia to snap target
       track.acceleration.mul(0.25);
       track.inputForce.mul(0.125);
 
-      track.setTarget(track.getToItemPosition(track.currentItem + power), "linear");
+      toIndex = track.currentItem + power;
+    }
+
+    // if projected position is past maxIndex
+    if (toIndex > track.maxIndex) {
+      // go to end of bounds
+      track.setTarget(track.trackOverflow, "linear");
     } else {
-      track.setTarget(track.getToItemPosition(track.currentItem), "linear");
+      track.setTarget(track.getToItemPosition(toIndex), "linear");
     }
 
     if (!track.target) {
@@ -223,6 +226,8 @@ export class Track extends LitElement {
         overflow: visible;
         padding: 0;
         margin: 0;
+        border: none;
+        outline: none;
       }
       ::-webkit-scrollbar {
         width: 0px;
@@ -364,20 +369,29 @@ export class Track extends LitElement {
 
   private _itemRects: Vec2[] | undefined = undefined;
   private get itemRects() {
-    if (!this._itemRects) {
+    if (this._itemRects === undefined) {
       let topEdge: number | undefined;
+      let leftEdge: number | undefined;
 
       // @ts-ignore
       this._itemRects = this.items
         .map((item) => {
           if (this.clones.includes(item)) return;
 
-          const { width, height, top } = item.getBoundingClientRect();
+          const { width, height, top, left } = item.getBoundingClientRect();
 
-          if (!topEdge) {
-            topEdge = top;
-          } else if (top !== topEdge) {
-            return;
+          if (this.vertical) {
+            if (!leftEdge) {
+              leftEdge = left;
+            } else if (left !== leftEdge) {
+              return;
+            }
+          } else {
+            if (!topEdge) {
+              topEdge = top;
+            } else if (top !== topEdge) {
+              return;
+            }
           }
 
           return new Vec2(width, height);
@@ -389,7 +403,7 @@ export class Track extends LitElement {
 
   private _itemWidths: number[] | undefined = undefined;
   private get itemWidths() {
-    if (!this._itemWidths) {
+    if (this._itemWidths === undefined) {
       // TODO: respect left children too
       this._itemWidths = this.itemRects.map((rect) => rect[0]);
     }
@@ -398,11 +412,80 @@ export class Track extends LitElement {
 
   private _itemHeights: number[] | undefined = undefined;
   private get itemHeights() {
-    if (!this._itemHeights) {
+    if (this._itemHeights === undefined) {
       // TODO: respect left children too
       this._itemHeights = this.itemRects.map((rect) => rect[1]);
     }
     return this._itemHeights;
+  }
+
+  private _itemsInView: number | undefined = undefined;
+  public get itemsInView() {
+    if (this._itemsInView === undefined) {
+      let itemsInView = 0;
+
+      if (this.itemCount === 0) {
+        this._itemsInView = 0;
+        return this._itemsInView;
+      }
+
+      const viewportSize = this.vertical ? this.height : this.width;
+      const itemSizes = this.vertical ? this.itemHeights : this.itemWidths;
+
+      if (viewportSize <= 0 || itemSizes.length === 0) {
+        this._itemsInView = 1;
+        return this._itemsInView;
+      }
+
+      // Start from current item and calculate how many items fit in viewport
+      let accumulatedSize = 0;
+      let itemIndex = this.currentIndex;
+
+      // Count items forward from current item
+      while (accumulatedSize < viewportSize) {
+        const sizeIndex = itemIndex % this.itemCount;
+        const size = itemSizes[sizeIndex];
+        if (size === undefined) break;
+
+        accumulatedSize += size;
+        if (accumulatedSize <= viewportSize) {
+          itemsInView++;
+        }
+        itemIndex++;
+
+        // If not looping and we've reached the end, break
+        if (!this.loop && itemIndex >= this.itemCount) {
+          break;
+        }
+
+        // If looping and we've come full circle, break to avoid infinite loop
+        if (this.loop && itemIndex >= this.currentIndex + this.itemCount) {
+          break;
+        }
+      }
+
+      // TODO: looping
+      // If we have space left and looping is enabled, check backwards too
+      // if (this.loop && accumulatedSize < viewportSize) {
+      //   itemIndex = currentIdx - 1;
+      //   while (accumulatedSize < viewportSize && itemIndex >= currentIdx - this.itemCount) {
+      //     if (itemIndex < 0) {
+      //       itemIndex = this.itemCount - 1;
+      //     }
+      //     const sizeIndex = itemIndex % this.itemCount;
+      //     const size = itemSizes[sizeIndex];
+      //     if (size === undefined) break;
+
+      //     accumulatedSize += size;
+      //     itemsInView++;
+      //     itemIndex--;
+      //   }
+      // }
+
+      this._itemsInView = Math.max(1, itemsInView);
+    }
+
+    return this._itemsInView;
   }
 
   public get trackWidth() {
@@ -417,6 +500,10 @@ export class Track extends LitElement {
       return this.itemHeights.reduce((last, curr) => last + curr, 0);
     }
     return this.height;
+  }
+
+  public get trackOverflow() {
+    return new Vec2(this.overflowWidth, this.overflowHeight);
   }
 
   private _width;
@@ -448,7 +535,10 @@ export class Track extends LitElement {
   }
 
   public get hasOverflow() {
-    return this.overflowWidth > 0 || this.overflowHeight > 0;
+    if (this.vertical) {
+      return this.overflowHeight > 0;
+    }
+    return this.overflowWidth > 0;
   }
 
   public get currentIndex() {
@@ -465,6 +555,7 @@ export class Track extends LitElement {
     }
 
     if (this.overflow === "ignore") {
+      // when ignored, max-index is just the last item
       return this.itemCount - 1;
     }
 
@@ -485,6 +576,7 @@ export class Track extends LitElement {
       }
     }
 
+    // falls back to last item as max-index
     return this.itemCount - 1;
   }
 
@@ -802,7 +894,7 @@ export class Track extends LitElement {
       throw new Error("Invalid index");
     }
 
-    const targetIndex = Math.max(this.minIndex, Math.min(index, this.maxIndex));
+    const targetIndex = index;
     const sizes = this.vertical ? this.itemHeights : this.itemWidths;
     const pos = new Vec2();
 
@@ -856,12 +948,14 @@ export class Track extends LitElement {
    * Move by given count of items.
    */
   public moveBy(byItems: number, easing?: Easing) {
-    let i = this.currentItem + byItems;
-    if (!this.loop) {
-      i = Math.min(Math.max(0, i), this.itemCount - 1);
+    const toIndex = this.currentItem + byItems;
+
+    if (this.overflow !== "ignore" && this.overflowWidth > 0 && toIndex > this.maxIndex) {
+      this.setTarget(this.trackOverflow, easing);
+    } else {
+      const pos = this.getToItemPosition(toIndex);
+      this.setTarget(pos, easing);
     }
-    const pos = this.getToItemPosition(i);
-    this.setTarget(pos, easing);
   }
 
   /**
@@ -920,6 +1014,9 @@ export class Track extends LitElement {
       this.computeCurrentItem();
       this.drawUpdate();
     }
+
+    // reset lazily computed itemsInView value
+    this._itemsInView = undefined;
 
     this.trait((t) => t.draw?.(this));
 
@@ -1317,6 +1414,7 @@ export class Track extends LitElement {
     this._height = undefined;
     this._itemWidths = undefined;
     this._itemHeights = undefined;
+    this._itemsInView = undefined;
 
     // apply align prop
     switch (this.align) {
@@ -1379,11 +1477,6 @@ export class Track extends LitElement {
     this.dispatchEvent(formatEvent);
 
     if (formatEvent.defaultPrevented) return;
-
-    // TODO: why?
-    // if (this.position.x > this.overflowWidth || this.position.y > this.overflowHeight) {
-    //   this.setTarget(undefined);
-    // }
 
     this.trait((t) => t.format?.(this));
   };
@@ -1482,8 +1575,8 @@ export class Track extends LitElement {
     this.mouseDown = true;
 
     if (pointerEvent instanceof PointerEvent) {
-      this.mousePos.x = pointerEvent.x;
-      this.mousePos.y = pointerEvent.y;
+      this.mousePos.x = pointerEvent.clientX;
+      this.mousePos.y = pointerEvent.clientY;
 
       pointerEvent.preventDefault();
       pointerEvent.stopPropagation();
@@ -1515,8 +1608,8 @@ export class Track extends LitElement {
     let y = 0;
 
     if (pointerEvent instanceof PointerEvent) {
-      x = pointerEvent.x;
-      y = pointerEvent.y;
+      x = pointerEvent.clientX;
+      y = pointerEvent.clientY;
     } else if (pointerEvent instanceof TouchEvent) {
       x = pointerEvent.touches[0]?.clientX || 0;
       y = pointerEvent.touches[0]?.clientY || 0;
