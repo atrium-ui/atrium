@@ -435,7 +435,32 @@ describe("Track", () => {
     expect(track.position[0]).toBe(targetPosition[0]);
   });
 
-  // TODO: loop
+  test(label("dont loop to aroung without loop enabled"), async () => {
+    const track = await trackWithChildren(10, { snap: true, width: 800 });
+
+    expect(track.loop).toBe(false);
+
+    track.moveTo(4, "none");
+
+    track.moveBy(-5, "none");
+    await wait(200);
+
+    expect(track.currentIndex).toBe(0);
+  });
+
+  test(label("loop with snap"), async () => {
+    const track = await trackWithChildren(10, { snap: true, width: 800, loop: true });
+
+    // move to first cloned item
+    track.moveTo(11);
+    await wait(200);
+
+    console.error(track.position);
+
+    expect(track.currentIndex).toBe(1);
+
+    expect(track.loop).toBe(true);
+  });
 });
 
 async function trackWithChildren(
