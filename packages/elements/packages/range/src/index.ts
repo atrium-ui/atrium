@@ -4,4 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-export { Range } from "./components/Range.js";
+import { Range } from "./components/Range.js";
+
+try {
+  customElements.define("a-range", Range);
+} catch (err) {
+  console.warn("a-range already defined");
+}
+
+export { Range };

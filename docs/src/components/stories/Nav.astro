@@ -18,11 +18,13 @@ for (const key in storiesImports) {
 
   const exports = Object.keys(module).filter((key) => !["default", "_id"].includes(key));
   for (const key of exports) {
-    story.entries.push({
-      name: key,
-      slug: key.toLowerCase(),
-      path: key,
-    });
+    if (import.meta.env.DEV || !key.startsWith("_")) {
+      story.entries.push({
+        name: key,
+        slug: key.toLowerCase(),
+        path: key,
+      });
+    }
   }
 
   if (story.name === Astro.params.slug) {
