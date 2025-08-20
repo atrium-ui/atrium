@@ -53,7 +53,7 @@ export const _StripSnappingAtTheEnd: Story = {
     return html`
       <div class="bg-zinc-300">
         <div class="pl-5 py-4">
-          <a-track id="track" class="outline-2 outline-red-500 overflow-visible w-[800px] h-[undefinedpx]" snap="true" width="800" role="region">
+          <a-track id="track" class="outline-2 outline-red-500 overflow-visible w-[800px] h-[undefinedpx] gap-8" snap="true" width="800" role="region">
             <canvas class="bg-white border-2" width="624" height="200" active=""></canvas><canvas class="bg-white border-2" width="223" height="200"></canvas><canvas class="bg-white border-2" width="291" height="200"></canvas><canvas class="bg-white border-2" width="573" height="200"></canvas><canvas class="bg-white border-2" width="344" height="200"></canvas><canvas class="bg-white border-2" width="483" height="200"></canvas><canvas class="bg-white border-2" width="642" height="200"></canvas><canvas class="bg-white border-2" width="482" height="200"></canvas><canvas class="bg-white border-2" width="548" height="200"></canvas><canvas class="bg-white border-2" width="402" height="200"></canvas>
           </a-track>
         </div>

@@ -373,12 +373,15 @@ export class Track extends LitElement {
       let topEdge: number | undefined;
       let leftEdge: number | undefined;
 
-      // @ts-ignore
+      let lastRight: number | undefined;
+      let lastBottom: number | undefined;
+
       this._itemRects = this.items
-        .map((item) => {
+        .flatMap((item) => {
           if (this.clones.includes(item)) return;
 
-          const { width, height, top, left } = item.getBoundingClientRect();
+          const { width, height, top, left, right, bottom } =
+            item.getBoundingClientRect();
 
           if (this.vertical) {
             if (!leftEdge) {
@@ -394,18 +397,39 @@ export class Track extends LitElement {
             }
           }
 
-          return new Vec2(width, height);
+          const xGap = !this.vertical && lastRight ? left - lastRight : 0;
+          const yGap = this.vertical && lastBottom ? top - lastBottom : 0;
+
+          lastRight = right;
+          lastBottom = bottom;
+
+          return [new Vec2(xGap, yGap), new Vec2(width, height)];
         })
         .filter(Boolean);
     }
     return this._itemRects || [];
   }
 
+  private getItemRectIndex(index: number) {
+    const filteredRects = this.itemRects
+      .map((rect, i) => {
+        if (rect[0] !== 0 && rect[1] !== 0) return i;
+        return undefined;
+      })
+      .filter(Boolean);
+
+    return filteredRects[index] || -1;
+  }
+
   private _itemWidths: number[] | undefined = undefined;
   private get itemWidths() {
     if (this._itemWidths === undefined) {
       // TODO: respect left children too
-      this._itemWidths = this.itemRects.map((rect) => rect[0]);
+      this._itemWidths = this.itemRects
+        .map((rect) => {
+          if (rect[0] !== 0 && rect[1] !== 0) return rect[0];
+        })
+        .filter(Boolean);
     }
     return this._itemWidths;
   }
@@ -414,7 +438,11 @@ export class Track extends LitElement {
   private get itemHeights() {
     if (this._itemHeights === undefined) {
       // TODO: respect left children too
-      this._itemHeights = this.itemRects.map((rect) => rect[1]);
+      this._itemHeights = this.itemRects
+        .map((rect) => {
+          if (rect[0] !== 0 && rect[1] !== 0) return rect[1];
+        })
+        .filter(Boolean);
     }
     return this._itemHeights;
   }
@@ -490,14 +518,14 @@ export class Track extends LitElement {
 
   public get trackWidth() {
     if (!this.vertical) {
-      return this.itemWidths.reduce((last, curr) => last + curr, 0);
+      return this.itemRects.reduce((last, curr) => last + curr[0], 0);
     }
     return this.width;
   }
 
   public get trackHeight() {
     if (this.vertical) {
-      return this.itemHeights.reduce((last, curr) => last + curr, 0);
+      return this.itemRects.reduce((last, curr) => last + curr[1], 0);
     }
     return this.height;
   }
@@ -898,13 +926,65 @@ export class Track extends LitElement {
       ? index
       : Math.min(Math.max(index, 0), this.itemCount - 1);
 
-    const sizes = this.vertical ? this.itemHeights : this.itemWidths;
+    const rects = this.itemRects.map((rec) => {
+      return [rec.y, rec.x] as const;
+    });
+
     const pos = new Vec2();
+
+    const findMinDistance = (
+      originPoint: number,
+      targetIndex: number,
+      itemRects: (readonly [number, number])[],
+      totalWidth: number,
+      wrap: boolean,
+    ) => {
+      // Normalize negative indices
+      const normalizedIndex =
+        ((targetIndex % itemRects.length) + itemRects.length) % itemRects.length;
+
+      // Calculate the base position of the target index
+      let basePosition = 0;
+      for (let i = 0; i < normalizedIndex; i++) {
+        const rect = itemRects[i];
+        if (rect === undefined) {
+          throw new Error("Item width is undefined");
+        }
+        basePosition += rect[this.currentAxis];
+      }
+
+      // Consider three possible positions:
+      // 1. The base position
+      // 2. One wrap backwards (base - totalWidth)
+      // 3. One wrap forwards (base + totalWidth)
+      const positions = wrap
+        ? [basePosition, basePosition - totalWidth, basePosition + totalWidth]
+        : [basePosition];
+
+      const pos = positions[0];
+      if (pos === undefined) {
+        throw new Error("Position is undefined");
+      }
+
+      // Find the position with the shortest distance to the target point
+      let closestPosition = positions[0];
+      let minDistance = Math.abs(originPoint - pos);
+
+      for (const position of positions) {
+        const distance = Math.abs(originPoint - position);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestPosition = position;
+        }
+      }
+
+      return closestPosition;
+    };
 
     pos[this.currentAxis] = findMinDistance(
       this.position[this.currentAxis] - this.origin[this.currentAxis],
-      targetIndex,
-      sizes,
+      this.getItemRectIndex(targetIndex),
+      rects,
       this.trackSize,
       this.loop,
     );
@@ -913,7 +993,7 @@ export class Track extends LitElement {
 
     if (this.align === "center") {
       // adds half of the current item to the position to center it
-      pos[this.currentAxis] += (sizes[targetIndex] || 0) / 2;
+      pos[this.currentAxis] += (rects[targetIndex]?.[this.currentAxis] || 0) / 2;
     }
 
     return pos;
@@ -1290,30 +1370,40 @@ export class Track extends LitElement {
     let px = 0;
 
     if (pos[0] > 0) {
+      let index = 0;
       for (const item of rects) {
         if (px + item.x > pos[0] % this.trackWidth) {
           const offset = Math.floor(pos[0] / this.trackWidth) * this.itemCount;
           return {
             width: item.x,
             height: item.y,
-            domIndex: offset + rects.indexOf(item),
-            index: rects.indexOf(item),
+            domIndex: offset + index,
+            index: index,
           };
         }
         px += item.x;
+
+        if (item.x === 0 || item.y === 0) continue;
+
+        index += 1;
       }
     } else {
+      let index = 0;
       for (const item of [...rects].reverse()) {
         if (px - item.x < pos[0] % -this.trackWidth) {
           const offset = Math.floor(pos[0] / this.trackWidth) * this.itemCount;
           return {
             width: item.x,
             height: item.y,
-            domIndex: offset + rects.indexOf(item),
-            index: rects.indexOf(item),
+            domIndex: offset + index,
+            index: index,
           };
         }
         px -= item.x;
+
+        if (item.x === 0 || item.y === 0) continue;
+
+        index += 1;
       }
     }
     return null;
@@ -1552,14 +1642,16 @@ export class Track extends LitElement {
   private onFocusIn = (e: FocusEvent) => {
     const item = this.elementItemIndex(e.target as HTMLElement);
     const dist = Vec2.dist2(this.getToItemPosition(item), this.position);
-    const rect = this.itemRects[item];
 
-    if (!rect) return;
+    const width = this.itemWidths[item];
+    const height = this.itemHeights[item];
+
+    if (!width || !height) return;
 
     if (
-      dist.x + rect.x > this.width ||
+      dist.x + width > this.width ||
       dist.x < 0 ||
-      dist.y + rect.y > this.height ||
+      dist.y + height > this.height ||
       dist.y < 0
     ) {
       this.moveTo(item);
@@ -1684,55 +1776,6 @@ function diffArray(arr: number[]) {
     const b = arr[i] || 0;
     return b - w;
   };
-}
-
-function findMinDistance(
-  targetPoint: number,
-  targetIndex: number,
-  itemWidths: number[],
-  totalWidth: number,
-  wrap: boolean,
-) {
-  // Normalize negative indices
-  const normalizedIndex =
-    ((targetIndex % itemWidths.length) + itemWidths.length) % itemWidths.length;
-
-  // Calculate the base position of the target index
-  let basePosition = 0;
-  for (let i = 0; i < normalizedIndex; i++) {
-    const width = itemWidths[i];
-    if (width === undefined) {
-      throw new Error("Item width is undefined");
-    }
-    basePosition += width;
-  }
-
-  // Consider three possible positions:
-  // 1. The base position
-  // 2. One wrap backwards (base - totalWidth)
-  // 3. One wrap forwards (base + totalWidth)
-  const positions = wrap
-    ? [basePosition, basePosition - totalWidth, basePosition + totalWidth]
-    : [basePosition];
-
-  const pos = positions[0];
-  if (pos === undefined) {
-    throw new Error("Position is undefined");
-  }
-
-  // Find the position with the shortest distance to the target point
-  let closestPosition = positions[0];
-  let minDistance = Math.abs(targetPoint - pos);
-
-  for (const position of positions) {
-    const distance = Math.abs(targetPoint - position);
-    if (distance < minDistance) {
-      minDistance = distance;
-      closestPosition = position;
-    }
-  }
-
-  return closestPosition;
 }
 
 function findClosestItemIndex(
