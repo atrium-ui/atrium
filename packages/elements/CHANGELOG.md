@@ -1,5 +1,22 @@
 # @sv/elements
 
+## 2.13.0 (2025-09-03)
+
+### Features
+
+- a-track: Clamp to max-index or bounds on snapping
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: itemsInView off by one
+
+### Fixes
+
+- Solve for new tests
+- Solve for new tests
+- a-track: role attribute is overwritten
+- Moveing out of bounds wraps without loop enabled
+- a-transition: Observe attribute changes too
+
 ## 2.13.0-dev.8 (2025-08-19)
 
 ### Features
