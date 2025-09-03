@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.13.1 (2025-09-03)
+
+### Fixes
+
+- Ensure TouchEvent class is defined.
+
 ## 2.13.0 (2025-09-03)
 
 ### Features
