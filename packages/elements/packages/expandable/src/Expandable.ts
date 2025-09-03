@@ -49,7 +49,7 @@ export class Expandable extends LitElement {
         .container {
           display: grid;
           grid-template-rows: 0fr;
-					grid-template-columns: 100%;
+          grid-template-columns: 100%;
           overflow: hidden;
           transition: grid-template-rows var(--transition-speed) var(--animation-easing);
         }
@@ -162,9 +162,13 @@ export class Expandable extends LitElement {
       return undefined;
     }
 
-    const ele = this.querySelector<HTMLElement>(location.hash);
-    if (ele) {
-      return ele;
+    try {
+      const ele = this.querySelector<HTMLElement>(location.hash);
+      if (ele) {
+        return ele;
+      }
+    } catch (_err: unknown) {
+      // invalid selector or ele not found
     }
 
     const slots = this.querySelectorAll("slot");
@@ -211,7 +215,11 @@ export class Expandable extends LitElement {
   }
 
   private renderToggle() {
-    return html`<slot name="toggle" @slotchange=${this.onSlotChange} @click=${this.onClick}></slot>`;
+    return html`<slot
+      name="toggle"
+      @slotchange=${this.onSlotChange}
+      @click=${this.onClick}
+    ></slot>`;
   }
 
   protected render(): HTMLTemplateResult {

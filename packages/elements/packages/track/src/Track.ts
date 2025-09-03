@@ -1,6 +1,9 @@
 import { css, html, LitElement, type PropertyValues } from "lit";
 import { property } from "lit/decorators/property.js";
 
+// ensure TouchEvent is defined
+const TouchEvent = globalThis.TouchEvent || class {};
+
 // import { DebugTrait } from "./debug.js";
 
 const defaultTraits = [
