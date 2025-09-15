@@ -278,9 +278,12 @@ export class Track extends LitElement {
 
     this.role = this.role || "region"; // fallback to region if no role is set
 
-    this.listener(window, "pointermove", this.onPointerMove);
-    this.listener(window, "touchmove", this.onPointerMove);
-    this.listener(window, ["pointerup", "pointercancel"], this.onPointerUpOrCancel);
+    this.listener(window, ["pointermove", "touchmove"], this.onPointerMove);
+    this.listener(
+      window,
+      ["pointerup", "pointercancel", "touchend", "touchcancel"],
+      this.onPointerUpOrCancel,
+    );
 
     const intersectionObserver = new IntersectionObserver((intersections) => {
       for (const entry of intersections) {
@@ -1123,7 +1126,7 @@ export class Track extends LitElement {
   }
 
   private updateTick(_ms = 0) {
-    const lastPosition = this.position.clone();
+    const _lastPosition = this.position.clone();
     const lastVelocity = this.velocity.clone();
 
     this.trait((t) => t.update?.(this));
@@ -1359,8 +1362,8 @@ export class Track extends LitElement {
             }
           } else {
             // TODO: generate ghots on the left side; need to be position with transforms
-            const child = this.items[item.domIndex];
-            const realChild = this.items[item.index];
+            const _child = this.items[item.domIndex];
+            const _realChild = this.items[item.index];
             // console.log(item.index);
 
             // if (!child && realChild) {
@@ -1624,7 +1627,9 @@ export class Track extends LitElement {
     const pos = new Vec2(x, y);
     const delta = Vec2.sub(pos, this.mousePos);
 
-    if (!this.canMove(delta)) return;
+    if (!this.canMove(delta)) {
+      return;
+    }
 
     if (!this.grabbing && delta.abs() > 3) {
       if (this.vertical && this.mousePos.y && Math.abs(delta.x) < Math.abs(delta.y)) {
@@ -1674,7 +1679,7 @@ function mod(a: number, n: number) {
   return a - Math.floor(a / n) * n;
 }
 
-function angleDist(a: number, b: number) {
+function _angleDist(a: number, b: number) {
   return mod(b - a + 180, 360) - 180;
 }
 
