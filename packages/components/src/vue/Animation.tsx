@@ -9,7 +9,6 @@ export function Animation(props: { src: string; width?: number; height?: number 
       height={props.height || 400}
       width={props.width || 400}
       src={props.src}
-      stateMachine="State Machine 1"
     />
   );
 }

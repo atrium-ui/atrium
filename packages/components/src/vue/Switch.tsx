@@ -28,7 +28,7 @@ export const Switch = defineComponent(
         <a-toggle
           class={[
             "group inline-flex",
-            "mt-[2px] w-12 cursor-pointer overflow-hidden rounded-full border border-zinc-700 bg-transparent",
+            "mt-[2px] w-12 cursor-pointer overflow-hidden rounded-full border border-zinc-200 bg-transparent",
             "outline-hidden focus:ring-2 focus:ring-[currentColor]",
           ]}
           name={props.name}

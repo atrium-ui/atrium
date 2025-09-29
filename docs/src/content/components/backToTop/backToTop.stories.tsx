@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-
+import { BackToTop } from "@components/src/vue/BackToTop.jsx";
 import type { Story } from "../../../components/stories/stories.js";
 
 export default {
@@ -15,7 +15,9 @@ export default {
   render: (args) => {
     return (
       <div>
-        <span>tba</span>
+        <div class="h-[400px]"></div>
+
+        <BackToTop visible />
       </div>
     );
   },

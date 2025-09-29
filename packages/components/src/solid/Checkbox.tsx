@@ -36,7 +36,7 @@ export function Checkbox(props: ParentProps<CheckboxProps>) {
         type="button"
         aria-labelledby={`label_${props.id}`}
         onClick={() => handleChange(!checked())}
-        class="mt-[2px] h-6 w-6 cursor-pointer rounded-md border border-zinc-700 bg-transparent p-0 align-bottom hover:border-zinc-600"
+        class="mt-[2px] h-6 w-6 cursor-pointer rounded-md border border-zinc-200 bg-transparent p-0 align-bottom hover:border-zinc-600"
       >
         <div
           aria-hidden="true"

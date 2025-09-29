@@ -35,3 +35,6 @@ stats.html
 
 # docs built
 public
+
+# for audits
+yarn.lock

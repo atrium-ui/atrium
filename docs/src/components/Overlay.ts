@@ -38,8 +38,8 @@ class OverlayBlurElement extends Blur {
     .container {
       transition: opacity 0.2s ease;
       opacity: 1;
-      background: rgba(0, 0, 28, 0.6);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 28, 0.4);
+      backdrop-filter: blur(4px);
       position: relative;
       width: 100%;
       height: 100%;

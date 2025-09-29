@@ -3,6 +3,14 @@ import { Controls } from "./Controls.js";
 import "./Preview.css";
 import { stories, type StoryIndex } from "./stories.js";
 import { twMerge } from "tailwind-merge";
+import { elementToSVG } from "dom-to-svg";
+import * as prettier from "prettier";
+import * as prettierHTML from "prettier/parser-html";
+
+function copySVG(target: HTMLElement) {
+  const svgDocument = elementToSVG(target);
+  return new XMLSerializer().serializeToString(svgDocument);
+}
 
 const base = import.meta.env.BASE_URL;
 
@@ -32,7 +40,68 @@ export function StoryCanvas(props: { id: string; params: string }) {
     iframe.style.width = "100%";
   }, [iframe]);
 
-  return <div ref={frameRef} className="contents" />;
+  return (
+    <div className="relative h-full min-h-40">
+      <div className="absolute bottom-0 left-full">
+        <div className="flex flex-col gap-module-xl px-6 py-2">
+          <a
+            className="button-icon"
+            href={`${base}story?${`id=${props.id}`}`}
+            title="Open example in new tab"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <svg-icon className="block" use="external" />
+          </a>
+
+          <button
+            type="button"
+            className="button-icon"
+            title="Copy component as SVG"
+            onClick={(e) => {
+              const ele = iframe.contentDocument?.querySelector(".story-root");
+              if (!ele) return;
+
+              const str = copySVG(ele);
+
+              navigator.clipboard
+                .write([new ClipboardItem({ "text/plain": str || "" })])
+                .then(() => {
+                  showToast("Copied to clipboard");
+                });
+            }}
+          >
+            <svg-icon className="block" use="svg" />
+          </button>
+
+          <button
+            type="button"
+            className="button-icon"
+            title="Copy component as HTML"
+            onClick={async (e) => {
+              const ele = iframe.contentDocument?.querySelector(".story-root");
+              if (!ele) return;
+
+              const text = await prettier.format(ele.innerHTML, {
+                parser: "html",
+                plugins: [prettierHTML],
+              });
+
+              navigator.clipboard
+                .write([new ClipboardItem({ "text/plain": text || "" })])
+                .then(() => {
+                  showToast("Copied to clipboard");
+                });
+            }}
+          >
+            <svg-icon className="block" use="code" />
+          </button>
+        </div>
+      </div>
+
+      <div ref={frameRef} className="contents" />
+    </div>
+  );
 }
 
 export function Preview() {

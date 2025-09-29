@@ -23,10 +23,13 @@ const allDocs = await getCollection("docs");
 
 <nav>
   <ul class="gap-module-2xl">
-    {allDocs.map(doc => {
-      const parts = doc.id.split("/");
-
-      if(parts.length === 2 && parts[0] === category) {
+    {allDocs
+      .filter(doc => {
+        const parts = doc.id.split("/");
+        return parts.length === 2 && parts[0] === category;
+      })
+      .sort((a, b) => a.data.title?.localeCompare(b.data.title || "") || 1)
+      .map(doc => {
         return (
           <li class="mb-module-xs">
             <a
@@ -38,7 +41,6 @@ const allDocs = await getCollection("docs");
             </a>
           </li>
         )
-      }
-    }).filter(Boolean)}
+      })}
   </ul>
 </nav>

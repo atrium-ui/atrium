@@ -1,14 +1,8 @@
 import { twMerge } from "tailwind-merge";
 import "@sv/svg-sprites/svg-icon";
-import { elementToSVG } from "dom-to-svg";
 import { useEffect, useRef, useState, type PropsWithChildren } from "react";
 
-function copySVG(target: HTMLElement) {
-  const svgDocument = elementToSVG(target);
-  return new XMLSerializer().serializeToString(svgDocument);
-}
-
-export function ExamplePreview(props: PropsWithChildren) {
+export function ExampleCodeView(props: PropsWithChildren & { external?: stirng }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -30,39 +24,6 @@ export function ExamplePreview(props: PropsWithChildren) {
 
   return (
     <div>
-      <div className="absolute bottom-0 left-full">
-        <div className="flex flex-col gap-module-xl px-[1.75rem] py-2">
-          <button
-            type="button"
-            className="button-icon"
-            onClick={(e) => {
-              const ele = e.target?.closest(".relative")?.querySelector(".not-content");
-              const str = copySVG(ele);
-
-              navigator.clipboard
-                .write([new ClipboardItem({ "text/plain": str || "" })])
-                .then(() => {
-                  showToast("Copied to clipboard");
-                });
-            }}
-          >
-            <svg-icon className="block" use="svg" />
-          </button>
-
-          {props.children ? (
-            <button
-              type="button"
-              className="button-icon"
-              onClick={() => {
-                setOpen(!open);
-              }}
-            >
-              <svg-icon className="block" use="code" />
-            </button>
-          ) : null}
-        </div>
-      </div>
-
       <a-blur
         enabled={open || undefined}
         ref={blurRef}

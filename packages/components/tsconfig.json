@@ -15,6 +15,7 @@
     "node_modules",
     "src/solid/*",
     "src/react/*",
+    "src/vue/*",
     "**/dist"
   ]
 }

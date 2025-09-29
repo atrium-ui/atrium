@@ -39,7 +39,7 @@ export class SelectEvent extends CustomEvent<{ selected: OptionElement }> {
  *     <div class="w-[150px] text-left">Select</div>
  *   </button>
  *
- *   <div class="mt-1 border border-zinc-700 bg-zinc-800 p-1">
+ *   <div class="mt-1 border border-zinc-200 bg-zinc-800 p-1">
  *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-1">Option 1</a-option>
  *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-2">Option 2</a-option>
  *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-3">Option 3</a-option>

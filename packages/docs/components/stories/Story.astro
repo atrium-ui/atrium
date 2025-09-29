@@ -1,0 +1,68 @@
+---
+import { StoryFrame } from "./Story.jsx";
+---
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+      html, body {
+        background: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      svg-icon {
+        color: inherit;
+        display: inline-block;
+        vertical-align: top;
+        width: 1em;
+        height: 1em;
+      }
+      svg-icon img, svg-icon svg {
+        display: block;
+        width: inherit;
+        height: inherit;
+      }
+    </style>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "lit": "https://esm.sh/lit",
+          "vue": "https://esm.sh/vue",
+          "solid-js/web": "https://esm.sh/solid-js/web",
+          "solid-js": "https://esm.sh/solid-js",
+          "solid-js/jsx-runtime": "https://esm.sh/solid-js/jsx-runtime",
+          "tailwind-merge": "https://esm.sh/tailwind-merge"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <StoryFrame client:only="react" />
+
+    <script type="module" is:inline>
+      const searchParams = new URLSearchParams(location.search);
+
+      new ResizeObserver((entries) => {
+        const height = document.body.scrollHeight;
+        if(height) {
+          parent.postMessage({
+            id: searchParams.get("id"),
+            height: height
+          }, "*");
+        }
+      }).observe(document.body);
+    </script>
+
+    <script>
+      import("@sv/elements");
+      import("@tailwindcss/browser");
+    </script>
+  </body>
+</html>

@@ -40,7 +40,7 @@ export const Select = defineComponent(
             <div class="min-w-[150px] text-left">{value.value || props.placeholder}</div>
           </Button>
 
-          <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-50 p-1">
+          <div class="mt-1 rounded-md border border-zinc-200 bg-zinc-50 p-1">
             {slots.default?.()}
           </div>
         </a-select>
