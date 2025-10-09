@@ -5,6 +5,7 @@ export const collections = {
   docs: defineCollection({
     loader: glob({ pattern: "**/*.mdx", base: "./src/content" }),
     schema: z.object({
+      order: z.number().optional(),
       title: z.string().optional(),
       headline: z.string().optional(),
       description: z.string().optional(),

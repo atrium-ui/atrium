@@ -28,7 +28,8 @@ const allDocs = await getCollection("docs");
         const parts = doc.id.split("/");
         return parts.length === 2 && parts[0] === category;
       })
-      .sort((a, b) => a.data.title?.localeCompare(b.data.title || "") || 1)
+      .sort((a, b) => a.data.title?.localeCompare(b.data.title || "") || 0)
+      .sort((a, b) => (a.data.order || 1) > (b.data.order || 1) ? 1 : -1)
       .map(doc => {
         return (
           <li class="mb-module-xs">
