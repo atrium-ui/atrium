@@ -4,7 +4,7 @@ import { render } from "astro:content";
 import Layout from "../layout.astro";
 import SideMenu from "../components/SideMenu.astro";
 
-const entry = await getEntry("docs", "setup");
+const entry = await getEntry("docs", "guides/setup");
 
 if (!entry) {
   throw new Error("404");
