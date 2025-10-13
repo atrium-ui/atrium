@@ -33,7 +33,7 @@ export const Dialog = defineComponent(
             <div
               class={[
                 "rounded-lg border px-8 py-8 opacity-0 transition-all",
-                "border-zinc-700 bg-zinc-50",
+                "border-zinc-200 bg-zinc-50",
                 "-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 min-w-[400px]",
                 "scale-95 group-[&[enabled]]/dialog:block group-[&[enabled]]/dialog:scale-100 group-[&[enabled]]/dialog:opacity-100",
               ]}

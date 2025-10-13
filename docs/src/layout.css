@@ -9,4 +9,4 @@
 @import "@fontsource/roboto/latin.css";
 @import "@fontsource/roboto-condensed/latin.css";
 
-@source '../../packages/components/src/vue/*.tsx';
+@source '../../packages/components/**/*.tsx';

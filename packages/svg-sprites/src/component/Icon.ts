@@ -2,6 +2,8 @@ let svgSheet: HTMLDivElement;
 let supportsAdoptingStyleSheets = true;
 let loaded: Promise<void>;
 
+const HTMLElement = globalThis.HTMLElement || class {};
+
 async function loadSvgSheet() {
   const { svg } = await import("@sv/svg-sprites/sheet");
   svgSheet = document.createElement("div");

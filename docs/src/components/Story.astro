@@ -1,0 +1,23 @@
+---
+import { StoryCanvas } from "./stories/Preview.jsx";
+import Example from "./Example.astro";
+import { ExampleCodeView } from "./Example.js";
+import { Code } from "astro:components";
+
+const { id } = Astro.props;
+
+export interface Props {
+  title?: string;
+  code?: string;
+}
+
+const file = Astro.props.code?.trim();
+---
+
+<Example>
+  <StoryCanvas client:only="react" id={id} />
+
+  <!-- <ExampleCodeView client:only="react">
+    {file ? <Code lang="tsx" code={file || ''}></Code> : null}
+  </ExampleCodeView> -->
+</Example>

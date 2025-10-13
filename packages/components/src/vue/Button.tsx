@@ -1,28 +1,31 @@
 /* @jsxImportSource vue */
-import { twMerge } from "tailwind-merge";
+import { twJoin } from "tailwind-merge";
 
 export const buttonVariants = {
   base: [
-    "text-base leading-none",
-    "flex cursor-pointer items-center gap-2",
-    "rounded-lg px-3 py-2 transition-all active:transition-none",
-    "outline-hidden focus-visible:ring-3 focus-visible:ring-[currentColor]",
+    "inline-flex items-center gap-1 rounded-md font-sans",
+    "aria-disabled:pointer-events-none cursor-pointer",
   ],
   default: [
-    "bg-[var(--theme-color,#bfa188)] text-black",
-    "filter active:brightness-90 hover:brightness-110 active:contrast-125",
-    "border border-zinc-700",
+    "border-0 bg-blue-400 px-4 py-2 text-white transition-colors",
+    "hover:bg-blue-200 hover:text-white",
+    "active:bg-blue-300 active:transition-none",
+    "aria-disabled:bg-gray-100 aria-disabled:text-gray-300",
   ],
   outline: [
-    "bg-transparent hover:bg-[rgba(150,150,150,0.1)]",
-    "filter active:bg-[rgba(150,150,150,0.2)]",
-    "border border-zinc-700",
+    "bg-transparent transition-colors",
+    "hover:bg-blue-200 hover:text-white",
+    "active:bg-blue-300 active:transition-none",
+    "border-1 border-blue-300 hover:border-blue-100 active:border-blue-300",
+    "aria-disabled:text-gray-300 aria-disabled:before:border-gray-200",
+    "py-[calc(0.5rem-1px)] px-[calc(1rem-1px)]",
   ],
   ghost: [
-    "bg-transparent active:bg-[rgba(150,150,150,0.1)]",
-    "filter hover:brightness-110",
+    "border-0 bg-gray-50 px-4 py-2 transition-colors",
+    "hover:bg-blue-200 hover:text-white",
+    "active:bg-blue-300 active:transition-none",
+    "aria-disabled:bg-gray-100 aria-disabled:text-gray-300",
   ],
-  disabled: ["cursor-not-allowed filter filter-[opacity(50%)]"],
 };
 
 export function Button(
@@ -43,16 +46,15 @@ export function Button(
     <button
       type={props.type || "button"}
       inert={props.inert || undefined}
-      // @ts-ignore
+      // @ts-expect-error
       slot={props.slot || undefined}
       autofocus={props.autofocus || undefined}
+      // the disabled attribute is not used for accessibility reasons
       aria-disabled={props.disabled || undefined}
-      class={twMerge(
+      class={twJoin(
         buttonVariants.base,
         buttonVariants[props.variant ?? "default"],
         props.class,
-        // the disabled attribute is not used for accessibility reasons
-        props.disabled && buttonVariants.disabled,
       )}
       onClick={(e) => {
         if (props.disabled || props.onClick) {
@@ -68,29 +70,5 @@ export function Button(
     >
       {context?.slots.default?.()}
     </button>
-  );
-}
-
-export function Link(
-  props: {
-    variant?: keyof Omit<typeof buttonVariants, "base">;
-    href: string;
-    target?: string;
-  },
-  context,
-) {
-  return (
-    <a
-      class={twMerge(
-        "inline text-base leading-4 no-underline",
-        "transition-all active:transition-none",
-        props.variant && buttonVariants.base,
-        buttonVariants[props.variant ?? "default"],
-      )}
-      href={props.href}
-      target={props.target}
-    >
-      {context?.slots.default?.()}
-    </a>
   );
 }

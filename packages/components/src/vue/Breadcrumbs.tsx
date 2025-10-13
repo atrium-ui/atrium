@@ -1,6 +1,7 @@
+/* @jsxImportSource vue */
 import { twMerge } from "tailwind-merge";
 
-export function Breadcrumbs(props, context) {
+export function Breadcrumbs(_props, context) {
   return (
     <div class={twMerge("relative block min-h-[1.5rem]")}>
       <a-track class="overflow-hidden">

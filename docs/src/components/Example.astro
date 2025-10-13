@@ -1,33 +1,15 @@
----
-import { Code } from "astro:components";
-import { ExamplePreview } from "./Example.jsx";
-
-export interface Props {
-  title?: string;
-  code?: string;
-}
-
-const file = Astro.props.code?.trim();
----
-
-<div data-html-node class="relative">
+<div data-html-node class="relative mr-12">
   <div class="absolute top-[2px] opacity-50 left-[-1.75rem] flex items-center pointer-events-none w-0 h-0 -rotate-90 justify-end">
     <spam class="uppercase whitespace-nowrap text-xs before:content-['Preview']"></spam>
   </div>
 
   <div class="not-content w-full flex flex-col items-left justify-center relative">
-    <div class="overflow-hidden resize-x">
-      <div class="box overflow-clip">
-        <div class="w-full h-full min-h-14">
-          <slot />
-        </div>
+    <div class="box">
+      <div class="w-full h-full min-h-40">
+        <slot />
       </div>
     </div>
   </div>
-
-  <ExamplePreview client:only="react">
-    {file ? <Code lang="tsx" code={file || ''}></Code> : null}
-  </ExamplePreview>
 
   <script>
     document.body.classList.add("hydrated");

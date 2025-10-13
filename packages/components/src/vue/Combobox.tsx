@@ -113,7 +113,7 @@ export const Combobox = defineComponent(
             </InputSearch>
           </div>
 
-          <div class="mt-1 rounded-md border border-zinc-700 bg-zinc-50 p-1">
+          <div class="mt-1 rounded-md border border-zinc-200 bg-zinc-50 p-1">
             {props.options
               .filter((opt) => !filter.value || opt.label.match(filter.value))
               .map((option) => (

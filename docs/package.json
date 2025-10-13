@@ -24,7 +24,7 @@
     "@lexical/markdown": "^0.33.1",
     "@lexical/react": "^0.33.1",
     "@lexical/utils": "^0.33.1",
-    "@rive-app/canvas-advanced": "2.25.3",
+    "@rive-app/canvas-advanced-lite": "2.23.3",
     "@sv/a11y": "workspace:",
     "@sv/components": "workspace:",
     "@sv/elements": "workspace:",

@@ -10,12 +10,12 @@ export const buttonVariants = {
   default: [
     "bg-[var(--theme-color,#bfa188)]",
     "filter active:brightness-90 hover:brightness-110 active:contrast-125",
-    "border border-zinc-700",
+    "border border-zinc-200",
   ],
   outline: [
     "bg-transparent hover:bg-[rgba(150,150,150,0.1)]",
     "filter active:brightness-90 hover:brightness-110 active:contrast-125",
-    "border border-zinc-700",
+    "border border-zinc-200",
   ],
   ghost: [
     "bg-transparent active:bg-[rgba(150,150,150,0.1)]",

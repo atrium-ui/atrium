@@ -30,8 +30,8 @@ const base = import.meta.env.BASE_URL;
 </script>
 
 <header class="mb-module-4xl">
-  <div class="wip w-full text-center pt-2 pb-4 absolute top-0 left-0 -z-1"></div>
-  <div class="max-w-(--site-width) px-(--site-padding) mx-auto flex items-center justify-between gap-6 py-8">
+  <div class="w-full text-center pt-2 pb-4 absolute top-0 left-0 -z-1"></div>
+  <div class="max-w-(--site-width) px-(--site-padding) mx-auto flex items-center justify-between gap-6 py-6">
     <div class="flex-none">
       <a href={base}>
         <img class="light-mode-only w-12 aspect-square" width="600" src={`${base}atrium-light.png`}  />
@@ -75,7 +75,7 @@ const base = import.meta.env.BASE_URL;
 
   <a-overlay id="overlay-search">
     <div class="pointer-events-none relative py-12 px-(--site-padding) h-full">
-      <div class="max-w-[900px] px-(--site-padding) relative py-6 mx-auto bg-white rounded-xl pointer-events-auto max-h-full overflow-auto">
+      <div class="max-w-[900px] relative mx-auto bg-white rounded-xl pointer-events-auto max-h-full overflow-auto">
         <Search />
       </div>
     </div>

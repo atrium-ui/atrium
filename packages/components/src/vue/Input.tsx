@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 
 const variants = {
   default: [
-    "group w-full resize-y rounded-md border border-zinc-700 bg-transparent leading-normal px-3 py-1 hover:border-zinc-400",
+    "group w-full resize-y rounded-md border border-zinc-200 bg-transparent leading-normal px-3 py-1 hover:border-zinc-400",
     "outline-hidden focus-within:ring-2 focus-within:ring-[currentColor]",
   ],
   error: ["border-red-600"],

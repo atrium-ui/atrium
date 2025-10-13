@@ -1,0 +1,181 @@
+@reference "../../layout.css";
+
+.docs-story-canvas {
+  position: relative;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  margin-top: 1rem;
+  height: 100%;
+}
+
+.docs-story-canvas iframe {
+  display: block;
+  user-select: none;
+  width: 100%;
+  height: 0px;
+  min-height: 0px;
+  min-width: 320px;
+}
+
+.docs-story-controls {
+  width: 100%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem;
+}
+
+.docs-nav-link-variant,
+.docs-nav-link {
+  --sl-sidebar-item-padding-inline: 0.5rem;
+
+  display: block;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  color: var(--sl-color-gray-2);
+  padding: 0.3em var(--sl-sidebar-item-padding-inline);
+  line-height: 1.4;
+  font-weight: 500;
+  font-size: 1rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-transform: capitalize;
+}
+
+.docs-nav-link-variant:hover,
+.docs-nav-link:hover {
+  background-color: #d3dffc;
+}
+
+.docs-nav-link[aria-current="page"] {
+  color: var(--sl-color-text-invert);
+  background-color: var(--sl-color-text-accent);
+  font-weight: 600;
+}
+
+[data-layout-fullscreen="true"] {
+  position: relative;
+
+  --sl-content-width: 100%;
+}
+
+[data-layout-fullscreen="true"] main {
+  padding-bottom: 0;
+}
+
+[data-layout-fullscreen="true"] footer {
+  display: none;
+}
+
+/* Preview */
+
+.docs-story-preview {
+  position: relative;
+  overflow: hidden;
+  min-height: calc(100vh - var(--sl-nav-height));
+}
+
+.docs-story-preview iframe {
+  max-width: 80%;
+}
+
+.docs-story-preview::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+
+  --line-color2: hsla(0, 0%, 50%, 0.2);
+  --line-color: hsla(0, 0%, 50%, 0.2);
+
+  background-image:
+    linear-gradient(var(--line-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-color) 1px, transparent 1px),
+    linear-gradient(var(--line-color2) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, var(--line-color2) 0.5px, transparent 0.5px);
+  background-size:
+    32px 32px,
+    32px 32px,
+    8px 8px,
+    8px 8px;
+  background-position:
+    -1px -1px,
+    -1px -1px,
+    -1px -1px,
+    -1px -1px;
+}
+
+.docs-story-toolbar-container {
+  margin: 0.75rem calc(var(--sl-nav-gap) - var(--toolbar-padding-x));
+  height: 3rem;
+
+  --toolbar-padding-x: 1rem;
+}
+
+.docs-story-toolbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sl-nav-gap);
+  padding: 1rem var(--toolbar-padding-x);
+}
+
+.docs-story-toolbar button {
+  min-width: 2.125rem;
+  padding: 0.5rem 0.65rem;
+  line-height: 1.125rem;
+  cursor: pointer;
+
+  @apply block p-2 rounded-md;
+  @apply hover:bg-[#d3dffc] bg-gray-100 active:text-[var(--sl-color-text-invert)] active:bg-[var(--sl-color-text-accent)];
+}
+
+.docs-story-loading {
+  position: relative;
+}
+
+.docs-story-loading::after {
+  content: "";
+  position: absolute;
+  top: 33vh;
+  left: calc(50% - 16px);
+  width: 32px;
+  height: 32px;
+  background-color: currentColor;
+  mask: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgiIGhlaWdodD0iMjgiIHZpZXdCb3g9IjAgMCAyOCAyOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNCAyLjczMzMzQzcuNzc3NTkgMi43MzMzMyAyLjczMzMzIDcuNzc3NTkgMi43MzMzMyAxNEMyLjczMzMzIDIwLjIyMjQgNy43Nzc1OSAyNS4yNjY3IDE0IDI1LjI2NjdDMTQuNDc4NiAyNS4yNjY3IDE0Ljg2NjcgMjUuNjU0NyAxNC44NjY3IDI2LjEzMzNDMTQuODY2NyAyNi42MTIgMTQuNDc4NiAyNyAxNCAyN0M2LjgyMDMgMjcgMSAyMS4xNzk3IDEgMTRDMSA2LjgyMDMgNi44MjAzIDEgMTQgMUMyMS4xNzk3IDEgMjcgNi44MjAzIDI3IDE0QzI3IDE0LjQ3ODYgMjYuNjEyIDE0Ljg2NjcgMjYuMTMzMyAxNC44NjY3QzI1LjY1NDcgMTQuODY2NyAyNS4yNjY3IDE0LjQ3ODYgMjUuMjY2NyAxNEMyNS4yNjY3IDcuNzc3NTkgMjAuMjIyNCAyLjczMzMzIDE0IDIuNzMzMzNaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K");
+  mask-size: 100%;
+  animation: story-loading 1s linear infinite;
+}
+
+@keyframes story-loading {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.docs-story-loading * {
+  opacity: 0;
+}
+
+.docs-story-preview .docs-story-controls-container {
+  position: absolute;
+  bottom: 0;
+  top: 45px;
+  right: 0;
+  width: 20%;
+  height: auto;
+  margin: 0.75rem 1rem;
+  padding: 0.33rem var(--toolbar-padding-x);
+  border: 1px solid #eee;
+  border-radius: 0.33rem;
+  background-color: #fff;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+}
