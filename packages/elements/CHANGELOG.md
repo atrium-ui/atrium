@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 2.13.2-dev.0 (2025-09-15)
+
+### Fixes
+
+- Track does not listen on touchend events
+
 ## 2.13.1 (2025-09-03)
 
 ### Fixes
