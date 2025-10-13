@@ -1587,7 +1587,6 @@ export class Track extends LitElement {
       this.mousePos.x = pointerEvent.clientX;
       this.mousePos.y = pointerEvent.clientY;
 
-      pointerEvent.preventDefault();
       pointerEvent.stopPropagation();
     } else if (pointerEvent instanceof TouchEvent) {
       this.mousePos.x = pointerEvent.touches[0]?.clientX || 0;
