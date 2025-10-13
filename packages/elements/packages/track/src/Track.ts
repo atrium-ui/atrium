@@ -1587,7 +1587,7 @@ export class Track extends LitElement {
       this.mousePos.x = pointerEvent.clientX;
       this.mousePos.y = pointerEvent.clientY;
 
-      if (this.overflow === "auto" && !this.hasOverflow) {
+      if (this.overflow === "auto" && this.hasOverflow) {
         pointerEvent.preventDefault();
         pointerEvent.stopPropagation();
       }
