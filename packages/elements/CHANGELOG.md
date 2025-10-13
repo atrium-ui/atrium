@@ -1,5 +1,19 @@
 # @sv/elements
 
+## 2.13.2-dev.1 (2025-10-13)
+
+### Fixes
+
+- Track does not listen on touchend events
+- a-track: Dont prevent pointerdown events for focus on inputs etc
+- Only prevent default, if overflow
+
+## 2.13.2-dev.0 (2025-09-15)
+
+### Fixes
+
+- Track does not listen on touchend events
+
 ## 2.13.1 (2025-09-03)
 
 ### Fixes
