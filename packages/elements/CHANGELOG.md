@@ -1,5 +1,15 @@
 # @sv/elements
 
+## 2.13.2-dev.3 (2025-10-14)
+
+### Fixes
+
+- Track does not listen on touchend events
+- a-track: Dont prevent pointerdown events for focus on inputs etc
+- Only prevent default, if overflow
+- Only prevent default, if overflow
+- Catch error when finding deeplink in expandable
+
 ## 2.13.2-dev.2 (2025-10-13)
 
 ### Fixes
