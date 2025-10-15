@@ -5,11 +5,7 @@
     "useDefineForClassFields": false,
     "experimentalDecorators": true,
     "jsx": "preserve",
-    "types": [
-      "@types/bun",
-      "vite/client",
-      "@sv/elements"
-    ]
+    "types": ["@types/bun"]
   },
   "exclude": [
     "node_modules",
