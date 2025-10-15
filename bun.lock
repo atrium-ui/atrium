@@ -115,66 +115,6 @@
         "chart.js": "^4.4.3",
       },
     },
-    "packages/elements/packages/animation": {
-      "name": "@sv/animation",
-    },
-    "packages/elements/packages/blur": {
-      "name": "@sv/blur",
-      "dependencies": {
-        "@sv/scroll-lock": "^1.0.1",
-      },
-    },
-    "packages/elements/packages/box": {
-      "name": "@sv/box",
-    },
-    "packages/elements/packages/chart": {
-      "name": "@sv/chart",
-    },
-    "packages/elements/packages/expandable": {
-      "name": "@sv/expandable",
-    },
-    "packages/elements/packages/form": {
-      "name": "@sv/form",
-    },
-    "packages/elements/packages/list": {
-      "name": "@sv/list",
-    },
-    "packages/elements/packages/loader": {
-      "name": "@sv/loader",
-    },
-    "packages/elements/packages/popover": {
-      "name": "@sv/popover",
-    },
-    "packages/elements/packages/portal": {
-      "name": "@sv/portal",
-    },
-    "packages/elements/packages/range": {
-      "name": "@sv/range",
-    },
-    "packages/elements/packages/scroll": {
-      "name": "@sv/scroll",
-    },
-    "packages/elements/packages/select": {
-      "name": "@sv/select",
-    },
-    "packages/elements/packages/shortcut": {
-      "name": "@sv/elements-shortcut",
-    },
-    "packages/elements/packages/time": {
-      "name": "@sv/time",
-    },
-    "packages/elements/packages/toast": {
-      "name": "@sv/toast",
-    },
-    "packages/elements/packages/toggle": {
-      "name": "@sv/toggle",
-    },
-    "packages/elements/packages/track": {
-      "name": "@sv/track",
-    },
-    "packages/elements/packages/transition": {
-      "name": "@sv/transition",
-    },
     "packages/icons": {
       "name": "@sv/icons",
       "version": "1.1.1",
@@ -655,15 +595,7 @@
 
     "@sv/a11y": ["@sv/a11y@workspace:packages/a11y"],
 
-    "@sv/animation": ["@sv/animation@workspace:packages/elements/packages/animation"],
-
     "@sv/atrium-docs": ["@sv/atrium-docs@workspace:packages/docs"],
-
-    "@sv/blur": ["@sv/blur@workspace:packages/elements/packages/blur"],
-
-    "@sv/box": ["@sv/box@workspace:packages/elements/packages/box"],
-
-    "@sv/chart": ["@sv/chart@workspace:packages/elements/packages/chart"],
 
     "@sv/components": ["@sv/components@workspace:packages/components"],
 
@@ -671,43 +603,13 @@
 
     "@sv/elements": ["@sv/elements@workspace:packages/elements"],
 
-    "@sv/elements-shortcut": ["@sv/elements-shortcut@workspace:packages/elements/packages/shortcut"],
-
-    "@sv/expandable": ["@sv/expandable@workspace:packages/elements/packages/expandable"],
-
-    "@sv/form": ["@sv/form@workspace:packages/elements/packages/form"],
-
     "@sv/icons": ["@sv/icons@workspace:packages/icons"],
 
-    "@sv/list": ["@sv/list@workspace:packages/elements/packages/list"],
-
-    "@sv/loader": ["@sv/loader@workspace:packages/elements/packages/loader"],
-
-    "@sv/popover": ["@sv/popover@workspace:packages/elements/packages/popover"],
-
-    "@sv/portal": ["@sv/portal@workspace:packages/elements/packages/portal"],
-
-    "@sv/range": ["@sv/range@workspace:packages/elements/packages/range"],
-
-    "@sv/scroll": ["@sv/scroll@workspace:packages/elements/packages/scroll"],
-
     "@sv/scroll-lock": ["@sv/scroll-lock@workspace:packages/scroll-lock"],
-
-    "@sv/select": ["@sv/select@workspace:packages/elements/packages/select"],
 
     "@sv/svg-sprites": ["@sv/svg-sprites@workspace:packages/svg-sprites"],
 
     "@sv/test": ["@sv/test@workspace:packages/test"],
-
-    "@sv/time": ["@sv/time@workspace:packages/elements/packages/time"],
-
-    "@sv/toast": ["@sv/toast@workspace:packages/elements/packages/toast"],
-
-    "@sv/toggle": ["@sv/toggle@workspace:packages/elements/packages/toggle"],
-
-    "@sv/track": ["@sv/track@workspace:packages/elements/packages/track"],
-
-    "@sv/transition": ["@sv/transition@workspace:packages/elements/packages/transition"],
 
     "@swc/helpers": ["@swc/helpers@0.5.17", "", { "dependencies": { "tslib": "^2.8.0" } }, "sha512-5IKx/Y13RsYd+sauPb2x+U/xZikHjolzfuDgTAl/Tdf3Q8rslRvC19NKDLgAJQ6wsqADk10ntlv08nPFw/gO/A=="],
 

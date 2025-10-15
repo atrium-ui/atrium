@@ -8,8 +8,10 @@
   "description": "Atrium Elements",
   "type": "module",
   "scripts": {
-    "check": "tsc",
+    "build": "bun ./build.ts",
+    "dev": "bun --watch ./build.ts",
     "test": "bun test --rerun-each 3 --coverage",
+    "check": "tsc",
     "publish-package": "task publish"
   },
   "files": [
