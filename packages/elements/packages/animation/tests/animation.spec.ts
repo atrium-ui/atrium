@@ -2,7 +2,7 @@ import { beforeAll, test, expect } from "bun:test";
 import type { AnimationElement } from "@sv/elements/animation";
 
 beforeAll(async () => {
-  const { AnimationElement } = await import("@sv/elements/animation");
+  const { AnimationElement } = await import("../dist/index.js");
   expect(AnimationElement).toBeDefined();
 
   const ele = new AnimationElement();

@@ -42,7 +42,7 @@ function createForm(
 }
 
 test("import element", async () => {
-  const { FormFieldElement } = await import("@sv/elements/form");
+  const { FormFieldElement } = await import("../dist/index.js");
   expect(FormFieldElement).toBeDefined();
 
   // is defined in custom element registry

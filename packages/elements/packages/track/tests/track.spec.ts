@@ -45,7 +45,7 @@ describe("Track", () => {
   });
 
   test(label("import track element"), async () => {
-    const { Track } = await import("../src/index.js");
+    const { Track } = await import("../dist/index.js");
     expect(Track).toBeDefined();
 
     // is defined in custom element registry
