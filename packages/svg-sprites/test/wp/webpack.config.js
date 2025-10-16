@@ -11,7 +11,7 @@ export default {
       {
         use: [
           {
-            loader: "@sv/svg-sprites/loader",
+            loader: "../../dist/webpack-loader.js",
             options: {
               dir: [dir1, dir2],
             },
