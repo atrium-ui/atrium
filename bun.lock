@@ -81,12 +81,14 @@
       "name": "@sv/animation",
       "dependencies": {
         "@rive-app/canvas-advanced-lite": "2.23.3",
+        "lit": "^3.1.3",
       },
     },
     "packages/chart": {
       "name": "@sv/charts",
       "dependencies": {
         "chart.js": "^4.4.3",
+        "lit": "^3.1.3",
       },
     },
     "packages/components": {
