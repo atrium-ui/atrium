@@ -6,6 +6,13 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "src/index.ts",
+  "scripts": {
+    "build": "bun ./build.ts",
+    "dev": "bun --watch ./build.ts",
+    "test": "bun test --rerun-each 3 --coverage",
+    "check": "tsc",
+    "publish-package": "task publish"
+  },
   "dependencies": {
     "chart.js": "^4.4.3"
   }
