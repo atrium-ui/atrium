@@ -7,12 +7,7 @@
       {
         "name": "ts-lit-plugin"
       }
-    ],
-    "paths": {
-      "@sv/elements/*": [
-        "./packages/*/dist/index.js"
-      ]
-    }
+    ]
   },
   "exclude": [
     "node_modules",

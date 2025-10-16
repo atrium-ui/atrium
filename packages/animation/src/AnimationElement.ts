@@ -8,7 +8,7 @@ import {
 } from "lit";
 import pkg from "../../../package.json";
 
-const RIVE_VERSION = pkg.peerDependencies["@rive-app/canvas-advanced-lite"];
+const RIVE_VERSION = pkg.dependencies["@rive-app/canvas-advanced-lite"];
 
 declare global {
   interface HTMLElementTagNameMap {

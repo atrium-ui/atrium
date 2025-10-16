@@ -41,9 +41,9 @@
     "icons"
   ],
   "scripts": {
-    "test": "vite build test/vite && webpack -c test/wp/webpack.config.js",
-    "test:vite": "vite test/vite",
-    "test:webpack": "webpack watch -c test/wp/webpack.config.js",
+    "test": "bun run test:vite && bun run test:webpack",
+    "test:vite": "cd test/vite && bun i && vite build",
+    "test:webpack": "cd test/wp && webpack build -c ./webpack.config.js",
     "build": "npm run build:main && npm run build:component && npm run build:vite && npm run build:webpack",
     "build:main": "tsup src/sprite-sheet.ts -d dist --format esm,cjs --dts",
     "build:component": "tsup src/component/Icon.ts -d dist --format esm,cjs --dts --external @sv/svg-sprites/sheet",

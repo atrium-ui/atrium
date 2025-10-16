@@ -44,14 +44,6 @@ describe("Track", () => {
     }
   });
 
-  test(label("import track element"), async () => {
-    const { Track } = await import("../src/index.js");
-    expect(Track).toBeDefined();
-
-    // is defined in custom element registry
-    expect(customElements.get("a-track")).toBeDefined();
-  });
-
   test("construct track element", async () => {
     const { Track } = await import("../src/index.js");
 
@@ -63,6 +55,13 @@ describe("Track", () => {
     ele.innerHTML = html;
 
     expect(ele.children[0]).toBeInstanceOf(Track);
+  });
+
+  test(label("import track element"), async () => {
+    await import("../dist/index.js");
+
+    // is defined in custom element registry
+    expect(customElements.get("a-track")).toBeDefined();
   });
 
   test(label("deconstruct track element"), async () => {
