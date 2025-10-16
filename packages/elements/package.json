@@ -67,11 +67,6 @@
       "import": "./packages/popover/dist/index.js",
       "require": "./packages/popover/dist/index.cjs"
     },
-    "./animation": {
-      "types": "./packages/animation/src/index.ts",
-      "import": "./packages/animation/dist/index.js",
-      "require": "./packages/animation/dist/index.cjs"
-    },
     "./time": {
       "types": "./packages/time/src/index.ts",
       "import": "./packages/time/dist/index.js",
@@ -111,11 +106,6 @@
       "types": "./packages/scroll/src/index.ts",
       "import": "./packages/scroll/dist/index.js",
       "require": "./packages/scroll/dist/index.cjs"
-    },
-    "./chart": {
-      "types": "./packages/chart/src/index.ts",
-      "import": "./packages/chart/dist/index.js",
-      "require": "./packages/chart/dist/index.cjs"
     },
     "./box": {
       "types": "./packages/box/src/index.ts",
