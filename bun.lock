@@ -77,6 +77,18 @@
         "pa11y": "^8.0.0",
       },
     },
+    "packages/animation": {
+      "name": "@sv/animation",
+      "dependencies": {
+        "@rive-app/canvas-advanced-lite": "2.23.3",
+      },
+    },
+    "packages/chart": {
+      "name": "@sv/charts",
+      "dependencies": {
+        "chart.js": "^4.4.3",
+      },
+    },
     "packages/components": {
       "name": "@sv/components",
       "version": "1.8.2-dev.3",
@@ -93,10 +105,6 @@
         "vue": "^3.4.27",
       },
     },
-    "packages/docs": {
-      "name": "@sv/atrium-docs",
-      "version": "0.1.0",
-    },
     "packages/elements": {
       "name": "@sv/elements",
       "version": "2.13.2-dev.3",
@@ -111,9 +119,7 @@
       },
       "peerDependencies": {
         "@floating-ui/dom": "^1.6.7",
-        "@rive-app/canvas-advanced-lite": "2.23.3",
         "@sv/scroll-lock": "^1.1.1",
-        "chart.js": "^4.4.3",
       },
     },
     "packages/icons": {
@@ -134,7 +140,6 @@
       },
       "devDependencies": {
         "@biomejs/biome": "^1.8.3",
-        "@sv/icons": "^1.0.0",
         "@types/node": "^18.19.49",
         "@types/svg-sprite": "^0.0.34",
         "happy-dom": "^15.7.4",
@@ -597,7 +602,9 @@
 
     "@sv/a11y": ["@sv/a11y@workspace:packages/a11y"],
 
-    "@sv/atrium-docs": ["@sv/atrium-docs@workspace:packages/docs"],
+    "@sv/animation": ["@sv/animation@workspace:packages/animation"],
+
+    "@sv/charts": ["@sv/charts@workspace:packages/chart"],
 
     "@sv/components": ["@sv/components@workspace:packages/components"],
 

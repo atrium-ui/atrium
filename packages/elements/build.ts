@@ -26,10 +26,10 @@ async function buildLib(root: string) {
 
 await Promise.all([
   //
-  buildLib("./packages/animation"),
+  // buildLib("./packages/animation"),
   buildLib("./packages/blur"),
   buildLib("./packages/box"),
-  buildLib("./packages/chart"),
+  // buildLib("./packages/chart"),
   buildLib("./packages/expandable"),
   buildLib("./packages/form"),
   buildLib("./packages/list"),
