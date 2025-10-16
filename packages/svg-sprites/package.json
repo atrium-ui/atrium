@@ -57,7 +57,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
-    "@sv/icons": "^1.0.0",
     "@types/node": "^18.19.49",
     "@types/svg-sprite": "^0.0.34",
     "happy-dom": "^15.7.4",
