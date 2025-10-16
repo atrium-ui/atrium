@@ -13,6 +13,8 @@ async function buildLib(root: string) {
       "@rive-app/canvas-advanced-lite",
       "@sv/elements",
       "@sv/scroll-lock",
+      "@floating-ui/dom",
+      "chart.js",
     ],
     footer: LICENSE,
     outdir: `${root}/dist`,
