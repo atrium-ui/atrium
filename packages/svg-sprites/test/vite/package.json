@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "vite": "^4.5.3",
+    "@sv/svg-sprites": "file://../../",
+    "@sv/icons": "^1.0.0"
+  }
+}

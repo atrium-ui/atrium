@@ -3,7 +3,7 @@
   "tasks": {
     "build": {
       "cache": true,
-      "outputs": ["dist"]
+      "outputs": ["./dist"]
     },
     "dev": {
       "cache": false
