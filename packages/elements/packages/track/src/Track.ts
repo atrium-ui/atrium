@@ -260,7 +260,9 @@ export class Track extends LitElement {
     this.addEventListener("dragstart", this.onDragStart);
 
     this.addEventListener("pointerdown", this.onPointerDown);
-    this.addEventListener("touchstart", this.onPointerDown);
+    this.addEventListener("touchstart", this.onPointerDown, {
+      passive: true,
+    });
 
     this.addEventListener("pointerleave", () => {
       this.inputState.leave.value = true;
@@ -1574,10 +1576,10 @@ export class Track extends LitElement {
     }
   };
 
-  private onDragStart = (pointerEvent: DragEvent) => {
-    if (this.overflow === "auto" && this.hasOverflow) {
-      pointerEvent.preventDefault();
-      pointerEvent.stopPropagation();
+  private onDragStart = (event: DragEvent) => {
+    if (this.hasOverflow) {
+      event.preventDefault();
+      event.stopPropagation();
     }
   };
 
