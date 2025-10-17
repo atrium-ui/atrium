@@ -30,7 +30,7 @@ tasks:
   setup:
     desc: Install dependencies
     cmds:
-      - bun install
+      - bun install --linker=hoisted
 
   build:
     desc: Build all packages
