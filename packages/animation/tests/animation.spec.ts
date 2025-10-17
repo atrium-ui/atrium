@@ -1,8 +1,7 @@
 import { beforeAll, test, expect } from "bun:test";
-import type { AnimationElement } from "@sv/elements/animation";
 
 beforeAll(async () => {
-  const { AnimationElement } = await import("@sv/elements/animation");
+  const { AnimationElement } = await import("../dist/index.js");
   expect(AnimationElement).toBeDefined();
 
   const ele = new AnimationElement();
@@ -10,7 +9,7 @@ beforeAll(async () => {
 });
 
 test("a-animation: defaults", async () => {
-  const ele = globalThis.ele as AnimationElement;
+  const ele = globalThis.ele;
   expect(ele.src).toBeUndefined();
   // @ts-ignore
   expect(ele.paused).toBeTrue();

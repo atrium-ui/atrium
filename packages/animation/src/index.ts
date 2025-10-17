@@ -8,7 +8,7 @@ import { AnimationElement } from "./AnimationElement.js";
 
 try {
   customElements.define("a-animation", AnimationElement);
-} catch (err) {
+} catch (_err) {
   console.warn("a-animation already defined");
 }
 
