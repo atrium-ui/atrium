@@ -3,7 +3,7 @@ import { test, expect } from "bun:test";
 const NODE_NAME = "a-expandable";
 
 test("import element", async () => {
-  const { Expandable } = await import("@sv/elements/expandable");
+  const { Expandable } = await import("../dist/index.js");
   expect(Expandable).toBeDefined();
 
   // is defined in custom element registry
@@ -104,7 +104,7 @@ test("no change event when attribute is changed", async () => {
 });
 
 async function newExpandable() {
-  await import("@sv/elements/expandable");
+  await import("../dist/index.js");
   const ele = document.createElement("div");
 
   ele.innerHTML = `
@@ -125,7 +125,7 @@ async function newExpandable() {
 }
 
 async function newExpandableOpened() {
-  await import("@sv/elements/expandable");
+  await import("../dist/index.js");
   const ele = document.createElement("div");
 
   ele.innerHTML = `

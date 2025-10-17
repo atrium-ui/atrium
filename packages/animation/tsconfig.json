@@ -1,18 +1,16 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "target": "ES2019",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
     "useDefineForClassFields": false,
     "experimentalDecorators": true,
     "plugins": [
       {
         "name": "ts-lit-plugin"
       }
-    ],
-    "paths": {
-      "@sv/elements/*": [
-        "./packages/*/dist/index.js"
-      ]
-    }
+    ]
   },
   "exclude": [
     "node_modules",
