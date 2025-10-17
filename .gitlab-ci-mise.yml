@@ -1,0 +1,22 @@
+image:
+  name: jdxcode/mise:2025.9.6
+  entrypoint: [""]
+
+variables:
+  MISE_DATA_DIR: ~/.local/share/mise
+
+cache:
+  policy: pull-push
+  key:
+    files:
+      - mise.toml
+  paths:
+    - node_modules
+    - .task
+    - .turbo
+    - ~/.local/share/mise
+
+before_script:
+  # - mise install
+  - mise bin-paths
+  - eval $(mise env)

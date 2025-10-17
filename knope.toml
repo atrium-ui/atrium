@@ -8,6 +8,16 @@ versioned_files = ["packages/a11y/package.json"]
 changelog = "packages/a11y/CHANGELOG.md"
 scopes = ["a11y"]
 
+[packages.animation]
+versioned_files = ["packages/animation/package.json"]
+changelog = "packages/animation/CHANGELOG.md"
+scopes = ["animation"]
+
+[packages.charts]
+versioned_files = ["packages/charts/package.json"]
+changelog = "packages/charts/CHANGELOG.md"
+scopes = ["charts"]
+
 [packages.elements]
 versioned_files = ["packages/elements/package.json"]
 changelog = "packages/elements/CHANGELOG.md"

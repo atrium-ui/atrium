@@ -6,9 +6,5 @@
   "main": "dist/example.js",
   "types": "src/index.ts",
   "author": "",
-  "license": "MIT",
-  "scripts": {
-    "build": "bun ./build.ts",
-    "dev": "bun --watch ./build.ts"
-  }
+  "license": "MIT"
 }

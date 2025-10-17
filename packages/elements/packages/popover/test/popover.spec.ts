@@ -3,7 +3,7 @@ import { test, expect } from "bun:test";
 const NODE_NAME = "a-popover";
 
 test("import element", async () => {
-  const { Popover } = await import("@sv/elements/popover");
+  const { Popover } = await import("../dist/index.js");
   expect(Popover).toBeDefined();
 
   // is defined in custom element registry
@@ -20,7 +20,7 @@ test("import element", async () => {
 });
 
 test("initial state", async () => {
-  const { PopoverTrigger } = await import("@sv/elements/popover");
+  const { PopoverTrigger } = await import("../dist/index.js");
   const ele = new PopoverTrigger();
 
   expect(ele.opened).toBe(false);
@@ -79,7 +79,7 @@ test("slotting names", async () => {
 });
 
 async function createPopover() {
-  await import("@sv/elements/popover");
+  await import("../dist/index.js");
   const ele = document.createElement("div");
   ele.innerHTML = `
     <a-popover-trigger>

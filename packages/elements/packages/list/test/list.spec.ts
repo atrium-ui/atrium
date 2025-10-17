@@ -3,7 +3,7 @@ import { test, expect, describe } from "bun:test";
 const NODE_NAME = "a-list";
 
 test("import a-list element", async () => {
-  const { List } = await import("@sv/elements/list");
+  const { List } = await import("../dist/index.js");
   expect(List).toBeDefined();
 
   // is defined in custom element registry

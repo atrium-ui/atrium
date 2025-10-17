@@ -21,7 +21,7 @@ This project contains a collection of functional web primitives that can be used
 
 **Example:**
 ```ts
-import "@sv/elements/animation";
+import "@sv/animation";
 ```
 ```html
 <a-animation
@@ -88,7 +88,7 @@ import "@sv/elements/blur";
 
 **Example:**
 ```ts
-import "@sv/elements/chart";
+import "@sv/charts";
 ```
 ```html
 <a-chart

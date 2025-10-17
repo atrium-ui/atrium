@@ -1,5 +1,80 @@
 # @sv/elements
 
+## 2.13.3-dev.0 (2025-10-17)
+
+### Fixes
+
+- Catch error when finding deeplink in expandable
+- Fix track listeners
+
+## 2.13.2-dev.0 (2025-10-17)
+
+### Fixes
+
+- Only prevent default, if overflow
+- Catch error when finding deeplink in expandable
+
+## 3.0.0-dev.1 (2025-10-17)
+
+### Breaking Changes
+
+- Move chart and animation elemnts into own package
+
+### Fixes
+
+- Track does not listen on touchend events
+- a-track: Dont prevent pointerdown events for focus on inputs etc
+- Only prevent default, if overflow
+- Only prevent default, if overflow
+- Catch error when finding deeplink in expandable
+
+## 3.0.0-dev.0 (2025-10-16)
+
+### Breaking Changes
+
+- Move chart and animation elemnts into own package
+
+### Fixes
+
+- Track does not listen on touchend events
+- a-track: Dont prevent pointerdown events for focus on inputs etc
+- Only prevent default, if overflow
+- Only prevent default, if overflow
+- Catch error when finding deeplink in expandable
+
+## 2.13.2-dev.3 (2025-10-14)
+
+### Fixes
+
+- Track does not listen on touchend events
+- a-track: Dont prevent pointerdown events for focus on inputs etc
+- Only prevent default, if overflow
+- Only prevent default, if overflow
+- Catch error when finding deeplink in expandable
+
+## 2.13.2-dev.2 (2025-10-13)
+
+### Fixes
+
+- Track does not listen on touchend events
+- a-track: Dont prevent pointerdown events for focus on inputs etc
+- Only prevent default, if overflow
+- Only prevent default, if overflow
+
+## 2.13.2-dev.1 (2025-10-13)
+
+### Fixes
+
+- Track does not listen on touchend events
+- a-track: Dont prevent pointerdown events for focus on inputs etc
+- Only prevent default, if overflow
+
+## 2.13.2-dev.0 (2025-09-15)
+
+### Fixes
+
+- Track does not listen on touchend events
+
 ## 2.13.1 (2025-09-03)
 
 ### Fixes

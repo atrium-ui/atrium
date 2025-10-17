@@ -15,7 +15,7 @@ async function newElement(options: { value?: string } = {}) {
 }
 
 test("import a-toggle element", async () => {
-  const { ToggleElement } = await import("@sv/elements/toggle");
+  const { ToggleElement } = await import("../dist/index.js");
   expect(ToggleElement).toBeDefined();
 
   // is defined in custom element registry
@@ -23,7 +23,7 @@ test("import a-toggle element", async () => {
 });
 
 test("construct a-toggle element", async () => {
-  const { ToggleElement } = await import("@sv/elements/toggle");
+  const { ToggleElement } = await import("../dist/index.js");
 
   // is constructable
   expect(new ToggleElement()).toBeInstanceOf(ToggleElement);

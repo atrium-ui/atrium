@@ -1,5 +1,5 @@
 import path from "node:path";
-import svgSprite from "@sv/svg-sprites/vite";
+import svgSprite from "../../dist/vite-plugin.js";
 import { defineConfig } from "vite";
 
 export default defineConfig({

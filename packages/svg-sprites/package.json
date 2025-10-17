@@ -15,22 +15,22 @@
       "import": "./CHANGELOG.md"
     },
     "./sheet": {
-      "types": "./dist/sprite-sheet.d.ts",
+      "types": "./src/sprite-sheet.ts",
       "import": "./dist/sprite-sheet.js",
       "require": "./dist/sprite-sheet.cjs"
     },
     "./svg-icon": {
-      "types": "./dist/Icon.d.ts",
+      "types": "./src/component/Icon.ts",
       "import": "./dist/Icon.js",
       "require": "./dist/Icon.cjs"
     },
     "./loader": {
-      "types": "./dist/webpack-loader.d.ts",
+      "types": "./src/loader/webpack-loader.ts",
       "import": "./dist/webpack-loader.js",
       "require": "./dist/webpack-loader.cjs"
     },
     "./vite": {
-      "types": "./dist/vite-plugin.d.ts",
+      "types": "./src/plugin/vite-plugin.ts",
       "import": "./dist/vite-plugin.js",
       "require": "./dist/vite-plugin.cjs"
     }
@@ -41,26 +41,19 @@
     "icons"
   ],
   "scripts": {
-    "test": "vite build test/vite && webpack -c test/wp/webpack.config.js",
-    "test:vite": "vite test/vite",
-    "test:webpack": "webpack watch -c test/wp/webpack.config.js",
-    "build": "npm run build:main && npm run build:component && npm run build:vite && npm run build:webpack",
-    "build:main": "tsup src/sprite-sheet.ts -d dist --format esm,cjs --dts",
-    "build:component": "tsup src/component/Icon.ts -d dist --format esm,cjs --dts --external @sv/svg-sprites/sheet",
-    "build:vite": "tsup src/plugin/vite-plugin.ts -d dist --format esm,cjs --dts --external chokidar",
-    "build:webpack": "tsup src/loader/webpack-loader.ts -d dist --format esm,cjs --dts"
+    "test": "bun run test:vite && bun run test:webpack",
+    "test:vite": "cd test/vite && bun i && vite build",
+    "test:webpack": "cd test/wp && webpack build -c ./webpack.config.js",
+    "build": "bun ./build.ts"
   },
   "dependencies": {
+    "chokidar": "^4.0.3",
     "fast-glob": "^3.3.2",
     "svg-sprite": "^2.0.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.8.3",
     "@types/node": "^18.19.49",
     "@types/svg-sprite": "^0.0.34",
-    "happy-dom": "^15.7.4",
-    "tsup": "^6.7.0",
-    "typescript": "^4.9.5",
     "vite": "^4.5.3",
     "vitest": "^2.1.1",
     "webpack": "^5.94.0",

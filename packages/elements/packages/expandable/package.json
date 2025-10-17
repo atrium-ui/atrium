@@ -6,9 +6,5 @@
   "description": "",
   "main": "dist/index.js",
   "types": "src/index.ts",
-  "type": "module",
-  "scripts": {
-    "build": "bun ./build.ts",
-    "dev": "bun --watch ./build.ts"
-  }
+  "type": "module"
 }

@@ -1,13 +1,6 @@
 {
-  "name": "vite",
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "@sv/icons": "../../../icons",
-    "svg-sprites": "file:../../",
-    "vite": "^5.4.3"
+    "vite": "^4.5.3",
+    "@sv/icons": "file://../../../icons"
   }
 }

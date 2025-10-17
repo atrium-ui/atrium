@@ -28,14 +28,9 @@ tasks:
       - task -l --sort none
 
   setup:
-    desc: Install tools and dependencies
-    run: when_changed
-    sources:
-      - .mise.toml
-      - "package.json"
-      - "**/package.json"
+    desc: Install dependencies
     cmds:
-      - bun install
+      - bun install --linker=hoisted
 
   build:
     desc: Build all packages

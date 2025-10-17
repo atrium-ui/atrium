@@ -44,14 +44,6 @@ describe("Track", () => {
     }
   });
 
-  test(label("import track element"), async () => {
-    const { Track } = await import("../src/index.js");
-    expect(Track).toBeDefined();
-
-    // is defined in custom element registry
-    expect(customElements.get("a-track")).toBeDefined();
-  });
-
   test("construct track element", async () => {
     const { Track } = await import("../src/index.js");
 
@@ -63,6 +55,13 @@ describe("Track", () => {
     ele.innerHTML = html;
 
     expect(ele.children[0]).toBeInstanceOf(Track);
+  });
+
+  test(label("import track element"), async () => {
+    await import("../dist/index.js");
+
+    // is defined in custom element registry
+    expect(customElements.get("a-track")).toBeDefined();
   });
 
   test(label("deconstruct track element"), async () => {
@@ -423,7 +422,7 @@ describe("Track", () => {
   });
 
   test(label("snap to second last item works"), async () => {
-    const track = await trackWithChildren(6, { snap: true, width: 800 });
+    const track = await trackWithChildren(6, { snap: true, width: 600 });
 
     const secondLastItemIndex = track.itemCount - 2;
 
@@ -475,11 +474,15 @@ async function trackWithChildren(
     .fill(0)
     .map(() => Math.floor(random() * 500 + 150));
 
+  const totalSize = widths.reduce((acc, w) => acc + w, 0);
+  const width = +(attributes.width || 0) || random() * (totalSize / 4);
+  const height = +(attributes.height || 0) || random() * 800;
+
   console.info("items", widths);
 
   const div = document.createElement("div");
   const markup = `
-    <a-track id="track" class="outline-2 outline-red-500 overflow-visible w-[${attributes.width}px] h-[${attributes.height}px]" ${Object.entries(
+    <a-track id="track" class="outline-2 outline-red-500 overflow-visible w-[${width}px] h-[${height}px]" ${Object.entries(
       attributes,
     )
       .map(([key, value]) => `${key}="${value}"`)
@@ -489,13 +492,8 @@ async function trackWithChildren(
   `;
   div.innerHTML = markup;
 
-  const totalSize = widths.reduce((acc, w) => acc + w, 0);
   const track = div.children[0] as TrackElement;
-  fixElementSizes(
-    track,
-    +(attributes.width || 0) || random() * (totalSize / 4),
-    +(attributes.height || 0) || random() * 800,
-  );
+  fixElementSizes(track, width, height);
 
   // increase animation speed for testing
   track.transitionTime = 100;

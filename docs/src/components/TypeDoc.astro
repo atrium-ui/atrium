@@ -29,7 +29,7 @@ async function parse(options: { pkg: string; entry: string; config?: string }) {
   const app = await Application.bootstrap({
     basePath: base,
     exclude: ["**/node_modules/**"],
-    includes: `${base}/src/*`,
+    // includes: `${base}/src/*`,
     entryPoints: [`${base}${options.entry}`],
     tsconfig: options.config ? `${base}${options.config}` : `${base}/tsconfig.json`,
     validation: false,
