@@ -1,3 +1,5 @@
+# include: .gitlab-ci-mise.yml
+
 stages:
   - test
   - merge
@@ -8,15 +10,6 @@ image: luckydye/atrium:latest
 
 variables:
   GIT_PUSH_TOKEN: $GIT_PUSH_TOKEN # A Gitlab access token to push to the repo
-
-cache: &global_cache
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - node_modules
-    - .task
-    - .turbo
-    - .mise
-  policy: pull-push
 
 check:
   stage: test
@@ -36,18 +29,18 @@ test:
     - main
   script: task test
 
-a11y:
-  allow_failure: true
-  stage: test
-  artifacts:
-    when: always
-    paths:
-      - docs/.reports
-  except:
-    - tags
-  only:
-    - main
-  script: task a11y
+# a11y:
+#   allow_failure: true
+#   stage: test
+#   artifacts:
+#     when: always
+#     paths:
+#       - docs/.reports
+#   except:
+#     - tags
+#   only:
+#     - main
+#   script: task a11y
 
 publish-dev:
   stage: publish
@@ -83,8 +76,6 @@ publish:
 
 pages:
   stage: docs
-  # dependencies:
-  #   - a11y
   when: manual
   only:
     - main

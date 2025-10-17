@@ -7,11 +7,7 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "src/index.ts",
-  "scripts": {
-    "build": "bun ./build.ts",
-    "dev": "bun --watch ./build.ts"
-  },
   "dependencies": {
-    "@sv/scroll-lock": "^1.0.1"
+    "@sv/scroll-lock": "workspace:*"
   }
 }

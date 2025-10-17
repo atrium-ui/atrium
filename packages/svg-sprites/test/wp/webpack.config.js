@@ -1,17 +1,17 @@
 import path from "node:path";
 
-const dir1 = path.resolve("./test/assets/icons/**/*.svg");
-const dir2 = path.resolve("./test/assets/icons2/*.svg");
+const dir1 = path.resolve("../assets/icons/**/*.svg");
+const dir2 = path.resolve("../assets/icons2/*.svg");
 
 export default {
   mode: "development",
-  entry: path.resolve("./test/wp/main.js"),
+  entry: path.resolve("./main.js"),
   module: {
     rules: [
       {
         use: [
           {
-            loader: "@sv/svg-sprites/loader",
+            loader: "../../dist/webpack-loader.js",
             options: {
               dir: [dir1, dir2],
             },
@@ -22,6 +22,6 @@ export default {
   },
   output: {
     filename: "main.bundle.js",
-    path: path.resolve("./test/wp/dist"),
+    path: path.resolve("./dist"),
   },
 };

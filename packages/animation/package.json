@@ -1,0 +1,21 @@
+{
+  "name": "@sv/animation",
+  "version": "0.2.0",
+  "author": "atrium",
+  "contributors": [],
+  "description": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "bun ./build.ts",
+    "dev": "bun --watch ./build.ts",
+    "test": "bun test --rerun-each 3 --coverage",
+    "check": "tsc",
+    "publish-package": "task publish"
+  },
+  "dependencies": {
+    "lit": "^3.1.3",
+    "@rive-app/canvas-advanced-lite": "2.23.3"
+  }
+}
