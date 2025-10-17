@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 2.13.2-dev.0 (2025-10-17)
+
+### Fixes
+
+- Only prevent default, if overflow
+- Catch error when finding deeplink in expandable
+
 ## 3.0.0-dev.1 (2025-10-17)
 
 ### Breaking Changes
