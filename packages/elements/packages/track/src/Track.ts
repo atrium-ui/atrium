@@ -257,6 +257,8 @@ export class Track extends LitElement {
 
     this.addEventListener("keydown", this.onKeyDown);
 
+    this.addEventListener("dragstart", this.onDragStart);
+
     this.addEventListener("pointerdown", this.onPointerDown);
     this.addEventListener("touchstart", this.onPointerDown);
 
@@ -1569,6 +1571,13 @@ export class Track extends LitElement {
       dist.y < 0
     ) {
       this.moveTo(item);
+    }
+  };
+
+  private onDragStart = (pointerEvent: PointerEvent | TouchEvent) => {
+    if (this.overflow === "auto" && this.hasOverflow) {
+      pointerEvent.preventDefault();
+      pointerEvent.stopPropagation();
     }
   };
 
