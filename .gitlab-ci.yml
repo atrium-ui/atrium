@@ -1,4 +1,4 @@
-include: .gitlab-ci-mise.yml
+# include: .gitlab-ci-mise.yml
 
 stages:
   - test
