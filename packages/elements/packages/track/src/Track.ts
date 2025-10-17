@@ -1574,7 +1574,7 @@ export class Track extends LitElement {
     }
   };
 
-  private onDragStart = (pointerEvent: PointerEvent | TouchEvent) => {
+  private onDragStart = (pointerEvent: DragEvent) => {
     if (this.overflow === "auto" && this.hasOverflow) {
       pointerEvent.preventDefault();
       pointerEvent.stopPropagation();
