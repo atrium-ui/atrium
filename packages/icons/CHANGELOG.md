@@ -1,3 +1,15 @@
+## 0.1.0-dev.0 (2025-10-17)
+
+### Breaking Changes
+
+- Move chart and animation elemnts into own package
+
+## 2.0.0-dev.0 (2025-10-16)
+
+### Breaking Changes
+
+- Move chart and animation elemnts into own package
+
 ## 1.1.1 (2025-07-28)
 
 ### Fixes
