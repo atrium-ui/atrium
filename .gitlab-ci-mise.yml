@@ -17,6 +17,6 @@ cache:
     - ~/.local/share/mise
 
 before_script:
-  - mise install
+  # - mise install
   - mise bin-paths
   - eval $(mise env)
