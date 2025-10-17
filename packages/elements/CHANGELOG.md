@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 2.13.3-dev.0 (2025-10-17)
+
+### Fixes
+
+- Catch error when finding deeplink in expandable
+- Fix track listeners
+
 ## 2.13.2-dev.0 (2025-10-17)
 
 ### Fixes
