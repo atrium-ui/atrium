@@ -1,5 +1,19 @@
 # @sv/elements
 
+## 3.0.0-dev.1 (2025-10-17)
+
+### Breaking Changes
+
+- Move chart and animation elemnts into own package
+
+### Fixes
+
+- Track does not listen on touchend events
+- a-track: Dont prevent pointerdown events for focus on inputs etc
+- Only prevent default, if overflow
+- Only prevent default, if overflow
+- Catch error when finding deeplink in expandable
+
 ## 3.0.0-dev.0 (2025-10-16)
 
 ### Breaking Changes
