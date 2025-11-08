@@ -1,5 +1,15 @@
 # @sv/elements
 
+## 4.0.0 (2025-11-08)
+
+### Breaking Changes
+
+- Track does not listen on touchend events (svp/atrium!54)
+
+### Fixes
+
+- Add shortcut element to package exports
+
 ## 2.13.3-dev.0 (2025-10-17)
 
 ### Fixes
