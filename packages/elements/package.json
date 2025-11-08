@@ -121,6 +121,11 @@
       "types": "./packages/loader/src/index.ts",
       "import": "./packages/loader/dist/index.js",
       "require": "./packages/loader/dist/index.cjs"
+    },
+    "./shortcut": {
+      "types": "./packages/shortcut/src/index.ts",
+      "import": "./packages/shortcut/dist/index.js",
+      "require": "./packages/shortcut/dist/index.cjs"
     }
   }
 }
