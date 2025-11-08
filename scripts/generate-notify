@@ -3,7 +3,7 @@
 import fs from "fs";
 import fg from "fast-glob";
 
-const publishOutputLog = ".task/publish.txt";
+const publishOutputLog = ".publish";
 
 function getPackageTree() {
   const rootPackage = JSON.parse(fs.readFileSync("package.json", "utf8"));

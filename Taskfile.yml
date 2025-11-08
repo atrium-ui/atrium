@@ -122,7 +122,7 @@ tasks:
       - git config user.email "gitlab@s-v.de"
       - git config user.name "CI"
       - git fetch --prune --prune-tags -f
-      - knope -v release | tee .task/publish.txt
+      - knope -v release | tee .publish
       - task notify || true
 
   release:preview:
@@ -158,10 +158,10 @@ tasks:
     silent: true
     dir: "./"
     cmds:
-      - bun ./scripts/generate-notify > .task/notify.txt
-      - defer: rm .task/notify.txt
-      - 'echo "$(cat .task/notify.txt)"'
-      - 'curl -X POST -d "$(cat .task/notify.txt)" $SLACK_WEBHOOK_URL'
+      - bun ./scripts/generate-notify > .notify
+      - defer: rm .notify
+      - 'echo "$(cat .notify)"'
+      - 'curl -X POST -d "$(cat .notify)" $SLACK_WEBHOOK_URL'
 
   docker:build:
     desc: Build docker image, pass --push to push to registry
