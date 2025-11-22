@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.0.3 (2025-11-22)
+
+### Fixes
+
+- a-popover: Prevent exit event loop in popover
+
 ## 4.0.2 (2025-11-22)
 
 ### Fixes
