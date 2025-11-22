@@ -124,6 +124,9 @@ export class Popover extends Portal {
     const trigger = this.closest<PopoverTrigger>(this.triggerElementSelector);
     if (ev instanceof CustomEvent) {
       trigger?.hide();
+
+      // prevent event from propagating further
+      ev.preventDefault();
     }
   }
 
