@@ -288,6 +288,10 @@ export class Blur extends LitElement {
     this.addEventListener(
       "exit",
       (e) => {
+        if(e.target === this) {
+          return; // ignore own exit events
+        }
+
         // bubble up a new exit event and cancel the captured one
         this.tryBlur();
         e.stopPropagation();
