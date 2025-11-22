@@ -288,7 +288,7 @@ export class Blur extends LitElement {
     this.addEventListener(
       "exit",
       (e) => {
-        if(e.target === this) {
+        if (e.target === this) {
           return; // ignore own exit events
         }
 
