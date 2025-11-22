@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.0.1 (2025-11-22)
+
+### Fixes
+
+- a-blur: Captured exit event cant be prevented
+
 ## 4.0.0 (2025-11-08)
 
 ### Breaking Changes
