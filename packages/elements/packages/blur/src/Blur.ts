@@ -288,9 +288,8 @@ export class Blur extends LitElement {
     this.addEventListener(
       "exit",
       (e) => {
-        // bubble up a new exit event
+        // bubble up a new exit event and cancel the captured one
         this.tryBlur();
-        // and cancel the captured one
         e.stopPropagation();
       },
       { capture: true },
