@@ -1,4 +1,5 @@
-# include: .gitlab-ci-mise.yml
+include:
+  - component: $CI_SERVER_FQDN/sv/taskfiles/mise@2.1.0
 
 stages:
   - test
@@ -28,19 +29,6 @@ test:
     - merge_requests
     - main
   script: task test
-
-# a11y:
-#   allow_failure: true
-#   stage: test
-#   artifacts:
-#     when: always
-#     paths:
-#       - docs/.reports
-#   except:
-#     - tags
-#   only:
-#     - main
-#   script: task a11y
 
 publish-dev:
   stage: publish

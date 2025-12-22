@@ -7,8 +7,8 @@ import { Command } from "../components";
 
 <section className="flex flex-col md:flex-row items-center gap-module-4xl mb-module-8xl move-in lg:px-module-3xl">
   <div>
-    <img className="light-mode-only" width="400" src={`/atrium-light.png`} />
-    <img className="dark-mode-only" width="400" src={`/atrium-dark.png`} />
+    <img className="light-mode-only" width="400" src={`${import.meta.env.BASE_URL}atrium-light.png`} />
+    <img className="dark-mode-only" width="400" src={`${import.meta.env.BASE_URL}atrium-dark.png`} />
   </div>
 
   <div className="pb-module-4xl move-in">
@@ -37,9 +37,9 @@ import { Command } from "../components";
   </div>
 
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 pb-module-4xl">
-    <a className="home-card" href={`/components/accordion`}>
+    <a className="home-card" href={`${import.meta.env.BASE_URL}components/accordion`}>
       <a-animation
-        src={`/animation/atrium_components.riv`}
+        src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
         autoplay
         height={200}
         width={320}
@@ -50,9 +50,9 @@ import { Command } from "../components";
       ></a-animation>
       <span className="sr-only">Accordion</span>
     </a>
-    <a className="home-card" href={`/components/dialog`}>
+    <a className="home-card" href={`${import.meta.env.BASE_URL}components/dialog`}>
       <a-animation
-        src={`/animation/atrium_components.riv`}
+        src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
         autoplay
         height={200}
         width={320}
@@ -63,9 +63,9 @@ import { Command } from "../components";
       ></a-animation>
       <span className="sr-only">Dialog</span>
     </a>
-    <a className="home-card" href={`/components/popover`}>
+    <a className="home-card" href={`${import.meta.env.BASE_URL}components/popover`}>
       <a-animation
-        src={`/animation/atrium_components.riv`}
+        src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
         autoplay
         height={200}
         width={320}
@@ -76,9 +76,9 @@ import { Command } from "../components";
       ></a-animation>
       <span className="sr-only">Popover</span>
     </a>
-    <a className="home-card" href={`/components/carousel`}>
+    <a className="home-card" href={`${import.meta.env.BASE_URL}components/carousel`}>
       <a-animation
-        src={`/animation/atrium_components.riv`}
+        src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
         autoplay
         height={200}
         width={320}
