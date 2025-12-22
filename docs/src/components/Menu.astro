@@ -73,33 +73,13 @@ function closeMenu() {
           return (
             <li class="mb-module-2xl">
               <button
-                class="text-link font-medium typo-title-2 w-full flex justify-between items-center"
+                class="text-link w-full flex justify-between items-center"
                 onclick="openMenu()"
               >
                 <span>{doc.data.title}</span>
 
                 <svg-icon name="arrow-right" />
               </button>
-            </li>
-          )
-        }
-      }).filter(Boolean)}
-    </ul>
-
-    <ul class="hidden md:flex gap-module-2xl">
-      {allDocs.sort(menuItemsSorted).map(doc => {
-        const parts = doc.id.split("/");
-
-        if(parts.length === 1 && menuItemOrder.includes(parts[0] || "")) {
-          return (
-            <li>
-              <a
-                class="text-link font-medium"
-                href={`/${[...base.split("/"), ...doc.id.split("/")].filter(Boolean).join("/")}`}
-                aria-current={doc.id === category ? "page" : undefined}
-              >
-                <span>{doc.data.title}</span>
-              </a>
             </li>
           )
         }
@@ -116,7 +96,7 @@ function closeMenu() {
           return (
             <li class="mb-module-2xl">
               <a
-                class="text-link typo-title-3 font-medium w-full flex justify-between items-center"
+                class="text-link w-full flex justify-between items-center"
                 href={`/${[...base.split("/"), ...doc.id.split("/")].filter(Boolean).join("/")}`}
                 aria-current={doc.id === category ? "page" : undefined}
               >

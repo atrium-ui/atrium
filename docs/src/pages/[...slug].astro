@@ -23,8 +23,7 @@ export async function getStaticPaths() {
   const allDocs = await getCollection("docs");
   return allDocs
     .map((doc) => {
-      const [category, ...slug] = doc.id.split("/");
-      if (category !== "components") return;
+      const [...slug] = doc.id.split("/");
 
       return {
         params: { slug: slug.join("/") },

@@ -29,20 +29,7 @@
 
   & > div > p,
   & > p {
-    @apply typo-body not-last:mb-module-m max-w-[880px];
-  }
-
-  & > h1,
-  & > h2,
-  & > h3,
-  & > h4,
-  & > h5,
-  & > h6,
-  & > ul,
-  & > ol,
-  & > blockquote,
-  & > p {
-    @apply max-w-[880px];
+    @apply typo-body not-last:mb-module-m;
   }
 
   & > ul a[href],
