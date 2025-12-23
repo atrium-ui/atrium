@@ -1,4 +1,3 @@
-
 import { type HTMLTemplateResult, LitElement, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
 import { ifDefined } from "lit/directives/if-defined.js";
@@ -240,7 +239,7 @@ export class Expandable extends LitElement {
         class="container"
         part="container"
         ?inert=${this.opened}
-        hidden=${ifDefined(!this.opened ? 'until-found' : undefined)}
+        hidden=${ifDefined(!this.opened ? "until-found" : undefined)}
         @beforematch=${this.onBeforeMatch}
       >
         <slot @slotchange=${this.onSlotChange} class="content"></slot>

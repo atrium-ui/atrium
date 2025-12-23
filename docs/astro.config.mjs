@@ -33,7 +33,7 @@ export default defineConfig({
       },
     },
     optimizeDeps: {
-       exclude: ['@sv/elements'],
+      exclude: ["@sv/elements"],
     },
     plugins: [
       tailwindcss(),
