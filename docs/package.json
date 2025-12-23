@@ -26,7 +26,7 @@
     "@lexical/utils": "^0.33.1",
     "@rive-app/canvas-advanced-lite": "2.23.3",
     "@sv/components": "workspace:*",
-    "@sv/elements": "workspace:*",
+    "@sv/elements": "file:../packages/elements",
     "@sv/icons": "workspace:*",
     "@sv/scroll-lock": "workspace:*",
     "@sv/svg-sprites": "workspace:*",

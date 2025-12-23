@@ -1,5 +1,7 @@
+
 import { type HTMLTemplateResult, LitElement, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -52,6 +54,7 @@ export class Expandable extends LitElement {
           grid-template-columns: 100%;
           overflow: hidden;
           transition: grid-template-rows var(--transition-speed) var(--animation-easing);
+          content-visibility: visible;
         }
 
         :host([opened]) .container {
@@ -97,7 +100,7 @@ export class Expandable extends LitElement {
     this.opened ? this.close() : this.open();
   }
 
-  private onChange() {
+  onChange() {
     const trigger = this.trigger;
     if (trigger) {
       this.trigger.setAttribute("aria-expanded", this.opened.toString());
@@ -120,7 +123,7 @@ export class Expandable extends LitElement {
     }
   }
 
-  private get content() {
+  get content() {
     for (const ele of this.children) {
       // default slot
       if (!ele.slot) return ele;
@@ -128,17 +131,17 @@ export class Expandable extends LitElement {
     return undefined;
   }
 
-  private get trigger() {
+  get trigger() {
     for (const ele of this.children) {
       if (ele.slot === "toggle") return ele;
     }
     return undefined;
   }
 
-  private _id_toggle = `expandable_toggle_${++accordionIncrement}`;
-  private _id_content = `expandable_content_${accordionIncrement}`;
+  _id_toggle = `expandable_toggle_${++accordionIncrement}`;
+  _id_content = `expandable_content_${accordionIncrement}`;
 
-  private onSlotChange() {
+  onSlotChange() {
     const trigger = this.trigger;
     if (trigger) {
       trigger.setAttribute("aria-controls", this._id_content);
@@ -153,11 +156,15 @@ export class Expandable extends LitElement {
     }
   }
 
-  private onClick(e: Event) {
+  onBeforeMatch() {
+    if (!this.opened) this.open();
+  }
+
+  onClick(e: Event) {
     if (this.trigger?.contains(e.target as HTMLElement)) this.toggle();
   }
 
-  private findDeeplink() {
+  findDeeplink() {
     if (!location.hash) {
       return undefined;
     }
@@ -198,7 +205,7 @@ export class Expandable extends LitElement {
     return undefined;
   }
 
-  private onDeeplink = () => {
+  onDeeplink = () => {
     if (!this.opened && this.findDeeplink()) {
       this.open();
     }
@@ -218,7 +225,7 @@ export class Expandable extends LitElement {
     window.removeEventListener("hashchange", this.onDeeplink);
   }
 
-  private renderToggle() {
+  renderToggle() {
     return html`<slot
       name="toggle"
       @slotchange=${this.onSlotChange}
@@ -229,7 +236,13 @@ export class Expandable extends LitElement {
   protected render(): HTMLTemplateResult {
     return html`
       ${this.direction === "down" ? this.renderToggle() : undefined}
-      <div class="container" part="container" ?inert=${!this.opened}>
+      <div
+        class="container"
+        part="container"
+        ?inert=${this.opened}
+        hidden=${ifDefined(!this.opened ? 'until-found' : undefined)}
+        @beforematch=${this.onBeforeMatch}
+      >
         <slot @slotchange=${this.onSlotChange} class="content"></slot>
       </div>
       ${this.direction === "up" ? this.renderToggle() : undefined}

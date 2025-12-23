@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@testing-library/user-event": "^14.6.1",
-    "@types/bun": "^1.1.0",
+    "@types/bun": "^1.3.5",
     "@sv/test": "^0.1.0",
     "ts-lit-plugin": "^2.0.2"
   },

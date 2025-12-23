@@ -32,6 +32,9 @@ export default defineConfig({
         allow: ["../../"],
       },
     },
+    optimizeDeps: {
+       exclude: ['@sv/elements'],
+    },
     plugins: [
       tailwindcss(),
       svgSprite({
