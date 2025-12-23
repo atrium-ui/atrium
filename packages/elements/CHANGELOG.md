@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.1.0 (2025-12-23)
+
+### Features
+
+- a-expandable: support opening for native cmd+f search matches
+
 ## 4.0.3 (2025-11-22)
 
 ### Fixes
