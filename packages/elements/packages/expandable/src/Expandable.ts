@@ -238,7 +238,7 @@ export class Expandable extends LitElement {
       <div
         class="container"
         part="container"
-        ?inert=${this.opened}
+        ?inert=${!this.opened}
         hidden=${ifDefined(!this.opened ? "until-found" : undefined)}
         @beforematch=${this.onBeforeMatch}
       >
