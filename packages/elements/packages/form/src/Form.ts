@@ -19,7 +19,7 @@ declare global {
  *   </a-form-field>
  * </form>
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-form-field/
+ * @see https://atrium-ui.dev/elements/a-form-field/
  */
 export class FormFieldElement extends LitElement {
   valid = true;
@@ -126,7 +126,7 @@ export class FormFieldElement extends LitElement {
  *   </a-form-field>
  * </form>
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-form-field/
+ * @see https://atrium-ui.dev/elements/a-form-field/
  */
 export class FormFieldErrorElement extends LitElement {
   static styles = [

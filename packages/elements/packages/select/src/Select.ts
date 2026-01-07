@@ -49,7 +49,7 @@ export class SelectEvent extends CustomEvent<{ selected: OptionElement }> {
  * </form>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-select/
+ * @see https://atrium-ui.dev/elements/a-select/
  */
 export class Select extends LitElement {
   static get styles() {

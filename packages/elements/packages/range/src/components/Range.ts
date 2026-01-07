@@ -18,7 +18,7 @@ declare global {
  * <a-range value="0.5"></a-range>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-select/
+ * @see https://atrium-ui.dev/elements/a-select/
  */
 export class Range extends LitElement {
   static get styles() {

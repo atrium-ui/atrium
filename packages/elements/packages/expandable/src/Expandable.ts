@@ -34,7 +34,7 @@ let accordionIncrement = 0;
  *  </a-expandable>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-expandable/
+ * @see https://atrium-ui.dev/elements/a-expandable/
  */
 export class Expandable extends LitElement {
   public static get styles() {

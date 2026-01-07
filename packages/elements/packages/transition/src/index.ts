@@ -32,7 +32,7 @@ function msFromCSS(string: string) {
  * </a-transition>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-transition/
+ * @see https://atrium-ui.dev/elements/a-transition/
  */
 class Transition extends LitElement {
   // TODO: these should also work with page navigations

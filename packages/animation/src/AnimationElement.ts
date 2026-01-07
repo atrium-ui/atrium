@@ -32,7 +32,7 @@ declare global {
  * />
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-animation/
+ * @see https://atrium-ui.dev/elements/a-animation/
  */
 export class AnimationElement extends LitElement {
   public static styles = css`

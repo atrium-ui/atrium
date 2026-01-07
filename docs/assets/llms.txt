@@ -94,7 +94,7 @@ import "@sv/charts";
 <a-chart
   type="bar"
   class="h-[300px] aspect-[2/1] text-black stroke-black/5 dark:stroke-white/5 dark:text-white"
-  src="/atrium/chart-data.json"
+  src="/chart-data.json"
 />
 ```
 
