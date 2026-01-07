@@ -1,5 +1,5 @@
 import { userEvent } from "@testing-library/user-event";
-import { beforeEach, test, expect, describe } from "bun:test";
+import { beforeEach, afterEach, test, expect, describe } from "bun:test";
 import type { MoveEvent, Track } from "../src/Track.js";
 import type { Track as TrackElement } from "../src/Track.js";
 import {
@@ -12,7 +12,6 @@ import {
   setup,
   fakePointer,
 } from "@sv/test";
-import { afterEach } from "node:test";
 
 describe("Track", () => {
   const { pointer } = userEvent.setup();

@@ -10,11 +10,9 @@ async function buildLib(root: string) {
     entrypoints: [`${root}/src/index.ts`],
     external: [
       "lit",
-      "@rive-app/canvas-advanced-lite",
       "@sv/elements",
       "@sv/scroll-lock",
-      "@floating-ui/dom",
-      "chart.js",
+      "@floating-ui/dom"
     ],
     footer: LICENSE,
     outdir: `${root}/dist`,
@@ -45,6 +43,7 @@ await Promise.all([
   buildLib("./packages/toggle"),
   buildLib("./packages/track"),
   buildLib("./packages/transition"),
+  buildLib("./packages/calendar"),
 ]);
 
 export {};
