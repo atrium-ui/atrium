@@ -4,18 +4,18 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { DatepickerElement } from "./Datepicker.js";
+import { CalendarElement } from "./Calendar.js";
 
 declare global {
   interface HTMLElementTagNameMap {
-    "a-datepicker": DatepickerElement;
+    "a-calendar": CalendarElement;
   }
 }
 
 try {
-  customElements.define("a-datepicker", DatepickerElement);
+  customElements.define("a-calendar", CalendarElement);
 } catch (err) {
-  console.warn("a-datepicker already defined");
+  console.warn("a-calendar already defined");
 }
 
-export { DatepickerElement };
+export { CalendarElement };
