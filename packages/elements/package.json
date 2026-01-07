@@ -4,7 +4,7 @@
   "contributors": [
     "luckydye"
   ],
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Atrium Elements",
   "type": "module",
   "scripts": {
@@ -126,6 +126,11 @@
       "types": "./packages/shortcut/src/index.ts",
       "import": "./packages/shortcut/dist/index.js",
       "require": "./packages/shortcut/dist/index.cjs"
+    },
+    "./calendar": {
+      "types": "./packages/calendar/src/index.ts",
+      "import": "./packages/calendar/dist/index.js",
+      "require": "./packages/calendar/dist/index.cjs"
     }
   }
 }

@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.1.1 (2025-12-23)
+
+### Fixes
+
+- a-expandable: content still inert when open
+
 ## 4.1.0 (2025-12-23)
 
 ### Features
