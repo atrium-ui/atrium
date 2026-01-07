@@ -30,11 +30,11 @@ export class CalendarElement extends LitElement {
       font-family: inherit;
       user-select: none;
 
-      --_hover-bg: var(--calendar-hover-bg, rgba(0, 0, 0, 0.1));
-      --_selected-bg: var(--calendar-selected-bg, #0066cc);
+      --_hover-bg: var(--calendar-hover-bg, rgba(0, 0, 0, 0.08));
+      --_selected-bg: var(--calendar-selected-bg, #1d4ed8);
       --_selected-color: var(--calendar-selected-color, white);
-      --_range-bg: var(--calendar-range-bg, rgba(0, 102, 204, 0.2));
-      --_highlight-bg: var(--calendar-highlight-bg, rgba(255, 200, 0, 0.3));
+      --_range-bg: var(--calendar-range-bg, rgba(29, 78, 216, 0.2));
+      --_highlight-bg: var(--calendar-highlight-bg, rgba(234, 179, 8, 0.4));
       --_focus-outline: var(--calendar-focus-outline, currentColor);
     }
 
@@ -116,6 +116,7 @@ export class CalendarElement extends LitElement {
 
     .day:hover:not([disabled]) {
       background: var(--_hover-bg);
+      color: inherit;
     }
 
     .day[data-other-month] {
@@ -127,14 +128,14 @@ export class CalendarElement extends LitElement {
       text-decoration: underline;
     }
 
-    .day[data-selected] {
-      background: var(--_selected-bg);
-      color: var(--_selected-color);
-    }
-
     .day[data-in-range] {
       background: var(--_range-bg);
       border-radius: 0;
+    }
+
+    .day[data-selected]:not([disabled]) {
+      background: var(--_selected-bg);
+      color: var(--_selected-color);
     }
 
     .day[data-range-start] {
