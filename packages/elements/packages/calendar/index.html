@@ -46,9 +46,9 @@
         padding: 1rem;
         background: #2a2a2a;
         border-radius: 0.5rem;
-        --calendar-selected-bg: #3b82f6;
+        /*--calendar-selected-bg: #3b82f6;
         --calendar-range-bg: rgba(59, 130, 246, 0.3);
-        --calendar-hover-bg: rgba(255, 255, 255, 0.1);
+        --calendar-hover-bg: rgba(255, 255, 255, 0.1);*/
       }
 
       form {
@@ -119,6 +119,42 @@
       <div class="demo-item">
         <label>Week starts Saturday (week-start="6")</label>
         <a-calendar week-start="6"></a-calendar>
+      </div>
+    </div>
+
+    <h2>Highlighted Dates</h2>
+    <div class="demo-grid">
+      <div class="demo-item">
+        <label>Single highlighted date</label>
+        <a-calendar highlight="2024-03-15"></a-calendar>
+      </div>
+
+      <div class="demo-item">
+        <label>Highlighted range</label>
+        <a-calendar highlight="2024-03-10/2024-03-16"></a-calendar>
+      </div>
+
+      <div class="demo-item">
+        <label>Multiple highlights (dates + ranges)</label>
+        <a-calendar highlight="2024-03-05,2024-03-15/2024-03-18,2024-03-25"></a-calendar>
+      </div>
+    </div>
+
+    <h2>Unavailable Dates</h2>
+    <div class="demo-grid">
+      <div class="demo-item">
+        <label>Single unavailable date</label>
+        <a-calendar unavailable="2024-03-15"></a-calendar>
+      </div>
+
+      <div class="demo-item">
+        <label>Unavailable range</label>
+        <a-calendar unavailable="2024-03-10/2024-03-16"></a-calendar>
+      </div>
+
+      <div class="demo-item">
+        <label>Multiple unavailable (dates + ranges)</label>
+        <a-calendar unavailable="2024-03-05,2024-03-15/2024-03-18,2024-03-25"></a-calendar>
       </div>
     </div>
 

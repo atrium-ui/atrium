@@ -29,6 +29,24 @@ export class CalendarElement extends LitElement {
       display: inline-block;
       font-family: inherit;
       user-select: none;
+
+      --_hover-bg: var(--calendar-hover-bg, rgba(0, 0, 0, 0.1));
+      --_selected-bg: var(--calendar-selected-bg, #0066cc);
+      --_selected-color: var(--calendar-selected-color, white);
+      --_range-bg: var(--calendar-range-bg, rgba(0, 102, 204, 0.2));
+      --_highlight-bg: var(--calendar-highlight-bg, rgba(255, 200, 0, 0.3));
+      --_focus-outline: var(--calendar-focus-outline, currentColor);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :host {
+        --_hover-bg: var(--calendar-hover-bg, rgba(255, 255, 255, 0.1));
+        --_selected-bg: var(--calendar-selected-bg, #3b82f6);
+        --_selected-color: var(--calendar-selected-color, white);
+        --_range-bg: var(--calendar-range-bg, rgba(59, 130, 246, 0.3));
+        --_highlight-bg: var(--calendar-highlight-bg, rgba(255, 200, 0, 0.4));
+        --_focus-outline: var(--calendar-focus-outline, currentColor);
+      }
     }
 
     .header {
@@ -97,7 +115,7 @@ export class CalendarElement extends LitElement {
     }
 
     .day:hover:not([disabled]) {
-      background: var(--calendar-hover-bg, rgba(128, 128, 128, 0.2));
+      background: var(--_hover-bg);
     }
 
     .day[data-other-month] {
@@ -110,12 +128,12 @@ export class CalendarElement extends LitElement {
     }
 
     .day[data-selected] {
-      background: var(--calendar-selected-bg, #0066cc);
-      color: var(--calendar-selected-color, white);
+      background: var(--_selected-bg);
+      color: var(--_selected-color);
     }
 
     .day[data-in-range] {
-      background: var(--calendar-range-bg, rgba(0, 102, 204, 0.2));
+      background: var(--_range-bg);
       border-radius: 0;
     }
 
@@ -134,6 +152,27 @@ export class CalendarElement extends LitElement {
     .day[disabled] {
       opacity: 0.3;
       cursor: not-allowed;
+    }
+
+    :host(:focus-visible) .day[data-focused] {
+      outline: 2px solid var(--_focus-outline);
+      outline-offset: -2px;
+    }
+
+    .day[data-highlighted] {
+      background: var(--_highlight-bg);
+    }
+
+    .day[data-highlight-start] {
+      border-radius: 0.25rem 0 0 0.25rem;
+    }
+
+    .day[data-highlight-end] {
+      border-radius: 0 0.25rem 0.25rem 0;
+    }
+
+    .day[data-highlight-start][data-highlight-end] {
+      border-radius: 0.25rem;
     }
   `;
 
@@ -183,6 +222,26 @@ export class CalendarElement extends LitElement {
   max?: string;
 
   /**
+   * Dates or ranges to highlight visually.
+   * Comma-separated list of dates (YYYY-MM-DD) or ranges (YYYY-MM-DD/YYYY-MM-DD).
+   * @example "2024-03-15" - single date
+   * @example "2024-03-15/2024-03-20" - date range
+   * @example "2024-03-15,2024-03-20/2024-03-25,2024-04-01" - multiple
+   */
+  @property({ type: String })
+  highlight?: string;
+
+  /**
+   * Dates or ranges to mark as unavailable.
+   * Comma-separated list of dates (YYYY-MM-DD) or ranges (YYYY-MM-DD/YYYY-MM-DD).
+   * @example "2024-03-15" - single date
+   * @example "2024-03-15/2024-03-20" - date range
+   * @example "2024-03-15,2024-03-20/2024-03-25,2024-04-01" - multiple
+   */
+  @property({ type: String })
+  unavailable?: string;
+
+  /**
    * Whether the calendar is disabled.
    */
   @property({ type: Boolean, reflect: true })
@@ -206,6 +265,12 @@ export class CalendarElement extends LitElement {
   @state()
   hoverDate?: string;
 
+  /**
+   * Currently focused date for keyboard navigation.
+   */
+  @state()
+  focusedDate?: string;
+
   input = document.createElement("input");
 
   connectedCallback() {
@@ -216,7 +281,19 @@ export class CalendarElement extends LitElement {
       const parsed = this.parseValue(this.value);
       if (parsed.start) {
         this.viewDate = this.parseDate(parsed.start);
+        this.focusedDate = parsed.start;
       }
+    } else if (this.highlight) {
+      const highlights = this.parseHighlight();
+      if (highlights.length > 0) {
+        const earliest = highlights.map((h) => h.start).sort()[0]!;
+        this.viewDate = this.parseDate(earliest);
+        this.focusedDate = earliest;
+      }
+    }
+
+    if (!this.focusedDate) {
+      this.focusedDate = this.formatDate(new Date());
     }
 
     if (this.name) {
@@ -437,13 +514,78 @@ export class CalendarElement extends LitElement {
   }
 
   /**
-   * Check if a date is disabled (outside min/max bounds).
+   * Check if a date is disabled (outside min/max bounds or in disable list).
    */
   isDateDisabled(dateStr: string): boolean {
     if (this.disabled) return true;
     if (this.min && dateStr < this.min) return true;
     if (this.max && dateStr > this.max) return true;
+    if (this.isUnavailable(dateStr)) return true;
     return false;
+  }
+
+  /**
+   * Parse highlight string into array of {start, end} objects.
+   */
+  parseHighlight(): Array<{ start: string; end: string }> {
+    if (!this.highlight) return [];
+
+    return this.highlight.split(",").map((part) => {
+      const trimmed = part.trim();
+      if (trimmed.includes("/")) {
+        const [start, end] = trimmed.split("/");
+        return { start: start!, end: end! };
+      }
+      return { start: trimmed, end: trimmed };
+    });
+  }
+
+  /**
+   * Check if a date is highlighted.
+   */
+  isHighlighted(dateStr: string): boolean {
+    const highlights = this.parseHighlight();
+    return highlights.some(({ start, end }) => dateStr >= start && dateStr <= end);
+  }
+
+  /**
+   * Check if a date is the start of a highlight range.
+   */
+  isHighlightStart(dateStr: string): boolean {
+    const highlights = this.parseHighlight();
+    return highlights.some(({ start, end }) => dateStr === start && start !== end);
+  }
+
+  /**
+   * Check if a date is the end of a highlight range.
+   */
+  isHighlightEnd(dateStr: string): boolean {
+    const highlights = this.parseHighlight();
+    return highlights.some(({ start, end }) => dateStr === end && start !== end);
+  }
+
+  /**
+   * Parse unavailable string into array of {start, end} objects.
+   */
+  parseUnavailable(): Array<{ start: string; end: string }> {
+    if (!this.unavailable) return [];
+
+    return this.unavailable.split(",").map((part) => {
+      const trimmed = part.trim();
+      if (trimmed.includes("/")) {
+        const [start, end] = trimmed.split("/");
+        return { start: start!, end: end! };
+      }
+      return { start: trimmed, end: trimmed };
+    });
+  }
+
+  /**
+   * Check if a date is unavailable.
+   */
+  isUnavailable(dateStr: string): boolean {
+    const unavailables = this.parseUnavailable();
+    return unavailables.some(({ start, end }) => dateStr >= start && dateStr <= end);
   }
 
   /**
@@ -455,6 +597,7 @@ export class CalendarElement extends LitElement {
       this.viewDate.getMonth() - 1,
       1,
     );
+    this.focusedDate = this.formatDate(this.viewDate);
   }
 
   /**
@@ -466,6 +609,7 @@ export class CalendarElement extends LitElement {
       this.viewDate.getMonth() + 1,
       1,
     );
+    this.focusedDate = this.formatDate(this.viewDate);
   }
 
   /**
@@ -522,15 +666,67 @@ export class CalendarElement extends LitElement {
   }
 
   /**
+   * Move focused date by a number of days.
+   */
+  moveFocusedDate(days: number) {
+    if (!this.focusedDate) {
+      this.focusedDate = this.formatDate(new Date());
+      return;
+    }
+
+    const current = this.parseDate(this.focusedDate);
+    current.setDate(current.getDate() + days);
+    const newDateStr = this.formatDate(current);
+
+    // Update view if we've moved outside current month
+    if (
+      current.getMonth() !== this.viewDate.getMonth() ||
+      current.getFullYear() !== this.viewDate.getFullYear()
+    ) {
+      this.viewDate = new Date(current.getFullYear(), current.getMonth(), 1);
+    }
+
+    this.focusedDate = newDateStr;
+
+    // Update hover preview during range selection
+    if (this.mode === "range" && this.rangeStart) {
+      this.hoverDate = newDateStr;
+    }
+  }
+
+  /**
    * Handle keyboard navigation.
    */
   onKeyDown = (e: KeyboardEvent) => {
     switch (e.key) {
       case "ArrowLeft":
-        this.prevMonth();
+        this.moveFocusedDate(-1);
         e.preventDefault();
         break;
       case "ArrowRight":
+        this.moveFocusedDate(1);
+        e.preventDefault();
+        break;
+      case "ArrowUp":
+        this.moveFocusedDate(-7);
+        e.preventDefault();
+        break;
+      case "ArrowDown":
+        this.moveFocusedDate(7);
+        e.preventDefault();
+        break;
+      case "Enter":
+      case " ":
+        if (this.focusedDate) {
+          this.selectDate(this.focusedDate);
+          e.preventDefault();
+        }
+        break;
+      case "PageUp":
+        this.prevMonth();
+        e.preventDefault();
+        break;
+      case "PageDown":
         this.nextMonth();
         e.preventDefault();
         break;
@@ -553,6 +749,7 @@ export class CalendarElement extends LitElement {
           type="button"
           class="nav-btn"
           part="nav-btn prev"
+          tabindex="-1"
           @click=${this.prevMonth}
           ?disabled=${this.disabled}
           aria-label="Previous month"
@@ -564,6 +761,7 @@ export class CalendarElement extends LitElement {
           type="button"
           class="nav-btn"
           part="nav-btn next"
+          tabindex="-1"
           @click=${this.nextMonth}
           ?disabled=${this.disabled}
           aria-label="Next month"
@@ -584,6 +782,10 @@ export class CalendarElement extends LitElement {
           const rangeStart = this.isRangeStart(dateStr);
           const rangeEnd = this.isRangeEnd(dateStr);
           const today = this.isToday(dateStr);
+          const focused = this.focusedDate === dateStr;
+          const highlighted = this.isHighlighted(dateStr);
+          const highlightStart = this.isHighlightStart(dateStr);
+          const highlightEnd = this.isHighlightEnd(dateStr);
           const dayNum = parseInt(dateStr.split("-")[2]!, 10);
 
           return html`
@@ -592,6 +794,7 @@ export class CalendarElement extends LitElement {
               class="day"
               part="day"
               role="gridcell"
+              tabindex="-1"
               ?disabled=${disabled}
               ?data-other-month=${isOtherMonth}
               ?data-today=${today}
@@ -599,6 +802,10 @@ export class CalendarElement extends LitElement {
               ?data-in-range=${inRange}
               ?data-range-start=${rangeStart}
               ?data-range-end=${rangeEnd}
+              ?data-focused=${focused}
+              ?data-highlighted=${highlighted}
+              ?data-highlight-start=${highlightStart}
+              ?data-highlight-end=${highlightEnd}
               aria-selected=${selected ? "true" : "false"}
               aria-label=${dateStr}
               @click=${() => this.selectDate(dateStr)}
