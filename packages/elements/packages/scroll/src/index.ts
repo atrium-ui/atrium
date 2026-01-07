@@ -26,7 +26,7 @@ const historyStorage = {
  * </a-scroll>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-scroll/
+ * @see https://atrium-ui.dev/elements/a-scroll/
  */
 class ScrollElement extends HTMLElement {
   /** The unique name of the scroll container. Fallback is className + className of the parent element. */

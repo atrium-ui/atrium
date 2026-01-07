@@ -100,7 +100,7 @@ type Placements =
  * </a-popover>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-popover/
+ * @see https://atrium-ui.dev/elements/a-popover/
  */
 export class Popover extends Portal {
   static get observedAttributes() {
@@ -329,7 +329,7 @@ export class Tooltip extends Popover {
  * </a-popover-trigger>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-popover/
+ * @see https://atrium-ui.dev/elements/a-popover/
  */
 export class PopoverTrigger extends LitElement {
   /**

@@ -38,7 +38,7 @@ export class SelectEvent extends CustomEvent<{ selected: ListItemElement }> {
  * </a-list>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-list/
+ * @see https://atrium-ui.dev/elements/a-list/
  */
 export class ListElement extends LitElement {
   static get styles() {

@@ -110,7 +110,7 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
  * </a-blur>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-blur/
+ * @see https://atrium-ui.dev/elements/a-blur/
  */
 export class Blur extends LitElement {
   static styles = css`

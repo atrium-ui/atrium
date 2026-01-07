@@ -6,7 +6,7 @@ import { property } from "lit/decorators.js";
  * Its help with displaying a loading state of dynamic elements.
  * For example, a error state can be displayed to the user, using just css and this element.
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-loader/
+ * @see https://atrium-ui.dev/elements/a-loader/
  */
 export class LoaderElement extends LitElement {
   static styles = [

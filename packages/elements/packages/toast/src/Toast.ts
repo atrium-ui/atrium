@@ -12,7 +12,7 @@ import { LitElement, css, html } from "lit";
  * </a-portal>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-toast/
+ * @see https://atrium-ui.dev/elements/a-toast/
  */
 export class ToastFeed extends LitElement {
   static instance: ToastFeed | null = null;
@@ -89,7 +89,7 @@ export interface ToastOptions {
  * `;
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-toast/
+ * @see https://atrium-ui.dev/elements/a-toast/
  */
 export class Toast extends LitElement {
   static get styles() {

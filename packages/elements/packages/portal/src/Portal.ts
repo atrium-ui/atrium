@@ -14,7 +14,7 @@ let portalIdIncrement = 10000;
  * </a-portal>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-portal/
+ * @see https://atrium-ui.dev/elements/a-portal/
  */
 export class Portal extends (globalThis.HTMLElement || class {}) {
   private proxiedEvents = [

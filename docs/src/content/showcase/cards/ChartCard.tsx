@@ -18,7 +18,7 @@ export function ChartCard() {
       <a-chart
         type="line"
         class="h-[250px] w-full stroke-black/5 text-zinc-800 dark:stroke-white/5 dark:text-zinc-500"
-        src="/atrium/chart/chart-data-stock.json"
+        src="/chart/chart-data-stock.json"
       />
     </Card>
   );

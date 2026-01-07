@@ -45,11 +45,11 @@ Chart.register(
  * <a-chart
  *   type="bar"
  *   class="h-[300px] aspect-[2/1] text-black stroke-black/5 dark:stroke-white/5 dark:text-white"
- *   src="/atrium/chart-data.json"
+ *   src="/chart-data.json"
  * />
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-chart/
+ * @see https://atrium-ui.dev/elements/a-chart/
  * @see https://www.chartjs.org/docs/latest/general/data-structures.html
  */
 export class ChartElement extends LitElement {

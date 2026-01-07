@@ -18,14 +18,14 @@ export function AnimationCard() {
           class="h-[200px] w-[200px]"
           width={400}
           height={400}
-          src="/atrium/animation/pie.riv"
+          src="/animation/pie.riv"
         />
 
         <Animation
           class="h-[200px] w-[200px]"
           width={400}
           height={400}
-          src="/atrium/animation/pie.riv"
+          src="/animation/pie.riv"
         />
       </div>
     </Card>
