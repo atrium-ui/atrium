@@ -1,0 +1,71 @@
+---
+title: a-calendar
+description: Calendar element for date or date-range selection.
+command: import "@sv/elements/calendar";
+---
+
+import { TypeDoc, Lit } from "package:/components"
+
+<div class="not-content box">
+  <a-calendar value="2024-03-15" style="width: 280px; padding: 1rem; background: var(--color-surface); border-radius: 0.5rem;"></a-calendar>
+</div>
+
+## Usage
+
+Single date selection:
+
+```html
+<a-calendar name="date" value="2024-03-15"></a-calendar>
+```
+
+Date range selection:
+
+```html
+<a-calendar mode="range" name="dates" value="2024-03-15/2024-03-20"></a-calendar>
+```
+
+Custom locale and week start:
+
+```html
+<a-calendar locale="de-DE" week-start="1"></a-calendar>
+```
+
+## Highlighted Dates
+
+Highlight specific dates or ranges:
+
+```html
+<a-calendar highlight="2024-03-15"></a-calendar>
+<a-calendar highlight="2024-03-10/2024-03-16"></a-calendar>
+<a-calendar highlight="2024-03-05,2024-03-15/2024-03-18,2024-03-25"></a-calendar>
+```
+
+## Unavailable Dates
+
+Mark dates as unavailable:
+
+```html
+<a-calendar unavailable="2024-03-15"></a-calendar>
+<a-calendar unavailable="2024-03-10/2024-03-16"></a-calendar>
+```
+
+## Min/Max Constraints
+
+Restrict selectable dates:
+
+```html
+<a-calendar min="2024-03-01" max="2024-03-31"></a-calendar>
+```
+
+## CSS Custom Properties
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--calendar-hover-bg` | `rgba(0,0,0,0.08)` | Hover background color |
+| `--calendar-selected-bg` | `#1d4ed8` | Selected date background |
+| `--calendar-selected-color` | `white` | Selected date text color |
+| `--calendar-range-bg` | `rgba(29,78,216,0.2)` | Range selection background |
+| `--calendar-highlight-bg` | `rgba(234,179,8,0.4)` | Highlighted date background |
+| `--calendar-focus-outline` | `currentColor` | Focus outline color |
+
+<TypeDoc source="../packages/elements/packages/calendar" symbol="CalendarElement" />

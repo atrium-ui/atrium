@@ -30,7 +30,7 @@ export class CalendarElement extends LitElement {
       font-family: inherit;
       user-select: none;
 
-      --_hover-bg: var(--calendar-hover-bg, rgba(0, 0, 0, 0.08));
+      --_hover-bg: var(--calendar-hover-bg, rgba(0, 0, 0, 0.1));
       --_selected-bg: var(--calendar-selected-bg, #1d4ed8);
       --_selected-color: var(--calendar-selected-color, white);
       --_range-bg: var(--calendar-range-bg, rgba(29, 78, 216, 0.2));
