@@ -6,6 +6,19 @@ command: import "@sv/elements/calendar";
 
 import { TypeDoc, Lit } from "package:/components"
 
+<style>
+{`
+a-calendar {
+  --calendar-hover-bg: rgba(0, 0, 0, 0.1);
+  --calendar-selected-bg: #1d4ed8;
+  --calendar-selected-color: white;
+  --calendar-range-bg: rgba(29, 78, 216, 0.2);
+  --calendar-highlight-bg: rgba(234, 179, 8, 0.4);
+  --calendar-focus-outline: currentColor;
+}
+`}
+</style>
+
 <div class="not-content box">
   <a-calendar value="2024-03-15" style="width: 280px; padding: 1rem; background: var(--color-surface); border-radius: 0.5rem;"></a-calendar>
 </div>
@@ -18,17 +31,29 @@ Single date selection:
 <a-calendar name="date" value="2024-03-15"></a-calendar>
 ```
 
+<div class="not-content box">
+  <a-calendar name="date" value="2024-03-15"></a-calendar>
+</div>
+
 Date range selection:
 
 ```html
 <a-calendar mode="range" name="dates" value="2024-03-15/2024-03-20"></a-calendar>
 ```
 
+<div class="not-content box">
+  <a-calendar mode="range" name="dates" value="2024-03-15/2024-03-20"></a-calendar>
+</div>
+
 Custom locale and week start:
 
 ```html
 <a-calendar locale="de-DE" week-start="1"></a-calendar>
 ```
+
+<div class="not-content box">
+  <a-calendar locale="de-DE" week-start="1"></a-calendar>
+</div>
 
 ## Highlighted Dates
 
@@ -40,6 +65,10 @@ Highlight specific dates or ranges:
 <a-calendar highlight="2024-03-05,2024-03-15/2024-03-18,2024-03-25"></a-calendar>
 ```
 
+<div class="not-content box">
+  <a-calendar highlight="2024-03-05,2024-03-15/2024-03-18,2024-03-25"></a-calendar>
+</div>
+
 ## Unavailable Dates
 
 Mark dates as unavailable:
@@ -49,6 +78,10 @@ Mark dates as unavailable:
 <a-calendar unavailable="2024-03-10/2024-03-16"></a-calendar>
 ```
 
+<div class="not-content box">
+  <a-calendar unavailable="2026-01-10/2026-03-16"></a-calendar>
+</div>
+
 ## Min/Max Constraints
 
 Restrict selectable dates:
@@ -56,6 +89,10 @@ Restrict selectable dates:
 ```html
 <a-calendar min="2024-03-01" max="2024-03-31"></a-calendar>
 ```
+
+<div class="not-content box">
+  <a-calendar min="2024-03-01" max="2024-03-31"></a-calendar>
+</div>
 
 ## CSS Custom Properties
 
