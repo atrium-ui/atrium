@@ -67,16 +67,18 @@ export const FormDialog = {
           }}
         >
           <div>
-            <label class="block font-medium text-sm">Email</label>
+            <label for="email" class="block font-medium text-sm">Email</label>
             <input
+              id="email"
               type="email"
               required
               class="mt-1 w-full rounded border border-zinc-300 px-3 py-2"
             />
           </div>
           <div>
-            <label class="block font-medium text-sm">Password</label>
+            <label for="password" class="block font-medium text-sm">Password</label>
             <input
+              id="password"
               type="password"
               required
               class="mt-1 w-full rounded border border-zinc-300 px-3 py-2"

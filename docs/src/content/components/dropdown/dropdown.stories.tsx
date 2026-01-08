@@ -1,5 +1,4 @@
 /* @jsxImportSource vue */
-import { Icon } from "@components/src/vue/Icon.jsx";
 import type { Story } from "../../../components/stories/stories.js";
 
 export default {
@@ -20,7 +19,7 @@ export const Default = {
       <div class="flex max-w-full items-center justify-center pt-[50px] pb-[200px]">
         <a-popover-trigger class="w-full sm:w-auto">
           <button
-            slot="trigger"
+            type="button"
             class="group w-full cursor-pointer rounded-md border border-gray-300 bg-white p-2 px-4 text-left text-gray-900 hover:bg-gray-200 sm:w-auto"
           >
             <a-box class="relative w-auto min-w-[180px] md:max-w-[300px]">
@@ -39,9 +38,9 @@ export const Default = {
                   link?.click();
                 }}
               >
-                {args.data?.map((item) => {
+                {args.data?.map((item, index) => {
                   return (
-                    <a-list-item class="mb-1 last:mb-0 focus-within:bg-blue-100 group-focus-within:aria-selected:bg-blue-100">
+                    <a-list-item key={index} class="mb-1 last:mb-0 focus-within:bg-blue-100 group-focus-within:aria-selected:bg-blue-100">
                       <a
                         tabindex="-1"
                         href={item.url}
