@@ -3,16 +3,18 @@ import { beforeEach, afterEach, test, expect, describe } from "bun:test";
 const NODE_NAME = "a-calendar";
 
 // Helper to create a calendar element
-async function newCalendar(options: {
-  value?: string;
-  mode?: "single" | "range";
-  locale?: string;
-  weekStart?: number;
-  min?: string;
-  max?: string;
-  disabled?: boolean;
-  name?: string;
-} = {}) {
+async function newCalendar(
+  options: {
+    value?: string;
+    mode?: "single" | "range";
+    locale?: string;
+    weekStart?: number;
+    min?: string;
+    max?: string;
+    disabled?: boolean;
+    name?: string;
+  } = {},
+) {
   const attrs: string[] = [];
   if (options.value) attrs.push(`value="${options.value}"`);
   if (options.mode) attrs.push(`mode="${options.mode}"`);
@@ -388,7 +390,9 @@ describe("form integration", () => {
       value: "2024-03-15",
     });
 
-    const hiddenInput = calendar.querySelector('input[type="hidden"]') as HTMLInputElement;
+    const hiddenInput = calendar.querySelector(
+      'input[type="hidden"]',
+    ) as HTMLInputElement;
     expect(hiddenInput).toBeDefined();
     expect(hiddenInput.name).toBe("test-date");
     expect(hiddenInput.value).toBe("2024-03-15");
@@ -438,7 +442,7 @@ describe("leap year handling", () => {
 
     const days = calendar.getDaysInView();
     const febDays = days.filter(
-      (d) => !d.isOtherMonth && d.dateStr.startsWith("2024-02")
+      (d) => !d.isOtherMonth && d.dateStr.startsWith("2024-02"),
     );
 
     expect(febDays.length).toBe(29);
@@ -452,7 +456,7 @@ describe("leap year handling", () => {
 
     const days = calendar.getDaysInView();
     const febDays = days.filter(
-      (d) => !d.isOtherMonth && d.dateStr.startsWith("2023-02")
+      (d) => !d.isOtherMonth && d.dateStr.startsWith("2023-02"),
     );
 
     expect(febDays.length).toBe(28);
