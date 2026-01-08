@@ -43,13 +43,60 @@ export class CalendarElement extends LitElement {
       align-items: center;
       justify-content: space-between;
       gap: 0.5rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
     }
 
     .header-title {
-      flex: 1;
-      text-align: center;
       font-weight: 600;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      border: none;
+      background: none;
+      color: inherit;
+      font-size: inherit;
+    }
+
+    .header-title:hover {
+      background: var(--_hover-bg);
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .year-picker {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.25rem;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .year-option {
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 0.25rem;
+      border: none;
+      background: none;
+      color: inherit;
+      font-size: 1rem;
+    }
+
+    .year-option:hover {
+      background: var(--_hover-bg);
+    }
+
+    .year-option[data-selected] {
+      background: var(--_selected-bg);
+      color: var(--_selected-color);
+    }
+
+    .year-option[data-focused] {
+      outline: 2px solid var(--_focus-outline);
+      outline-offset: -2px;
     }
 
     .nav-btn {
@@ -128,6 +175,7 @@ export class CalendarElement extends LitElement {
     }
 
     .day[data-range-start] {
+      outline: 1px solid var(--_selected-bg);
       border-radius: 0.25rem 0 0 0.25rem;
     }
 
@@ -242,6 +290,18 @@ export class CalendarElement extends LitElement {
    */
   @state()
   viewDate: Date = new Date();
+
+  /**
+   * Whether the year picker menu is open.
+   */
+  @state()
+  yearPickerOpen = false;
+
+  /**
+   * Currently focused year for keyboard navigation in year picker.
+   */
+  @state()
+  focusedYear?: number;
 
   /**
    * Temporary range start during range selection.
@@ -609,6 +669,52 @@ export class CalendarElement extends LitElement {
     this.viewDate = new Date();
   }
 
+  toggleYearPicker(ev: Event) {
+    this.yearPickerOpen = !this.yearPickerOpen;
+    this.focusedYear = this.yearPickerOpen ? this.viewDate.getFullYear() : undefined;
+    ev.stopPropagation();
+    if (this.yearPickerOpen) {
+      this.updateComplete.then(() => {
+        const selected = this.shadowRoot?.querySelector(".year-option[data-selected]");
+        selected?.scrollIntoView({ block: "center" });
+      });
+    }
+  }
+
+  selectYear(year: number) {
+    const newDate = new Date(this.viewDate);
+    newDate.setFullYear(year);
+    this.viewDate = newDate;
+    this.focusedDate = this.formatDate(new Date(year, newDate.getMonth(), 1));
+    this.yearPickerOpen = false;
+    this.focusedYear = undefined;
+  }
+
+  getYearOptions(): number[] {
+    const minYear = this.min ? parseInt(this.min.split("-")[0]!, 10) : 1900;
+    const maxYear = this.max ? parseInt(this.max.split("-")[0]!, 10) : 2100;
+    const years: number[] = [];
+    for (let y = minYear; y <= maxYear; y++) {
+      years.push(y);
+    }
+    return years;
+  }
+
+  moveFocusedYear(delta: number) {
+    if (this.focusedYear === undefined) {
+      this.focusedYear = this.viewDate.getFullYear();
+      return;
+    }
+    const years = this.getYearOptions();
+    const currentIndex = years.indexOf(this.focusedYear);
+    const newIndex = Math.max(0, Math.min(years.length - 1, currentIndex + delta));
+    this.focusedYear = years[newIndex]!;
+    this.updateComplete.then(() => {
+      const focused = this.shadowRoot?.querySelector(".year-option[data-focused]");
+      focused?.scrollIntoView({ block: "nearest" });
+    });
+  }
+
   /**
    * Navigate to a specific date's month.
    * @param date - Date object or YYYY-MM-DD string
@@ -688,6 +794,48 @@ export class CalendarElement extends LitElement {
    * Handle keyboard navigation.
    */
   onKeyDown = (e: KeyboardEvent) => {
+    if (this.yearPickerOpen) {
+      switch (e.key) {
+        case "ArrowLeft":
+          this.moveFocusedYear(-1);
+          e.preventDefault();
+          break;
+        case "ArrowRight":
+          this.moveFocusedYear(1);
+          e.preventDefault();
+          break;
+        case "ArrowUp":
+          this.moveFocusedYear(-3);
+          e.preventDefault();
+          break;
+        case "ArrowDown":
+          this.moveFocusedYear(3);
+          e.preventDefault();
+          break;
+        case "Enter":
+        case " ":
+          if (this.focusedYear !== undefined) {
+            this.selectYear(this.focusedYear);
+            e.preventDefault();
+          }
+          break;
+        case "Escape":
+          this.yearPickerOpen = false;
+          this.focusedYear = undefined;
+          e.preventDefault();
+          e.stopPropagation();
+          break;
+      }
+      return;
+    } else {
+      const target = e.composedPath()[0] as HTMLElement;
+      if (target.classList.contains("header-title") && (e.key === "Enter" || e.key === " ")) {
+        // open year-picker
+        requestAnimationFrame(() => this.focus());
+        return;
+      }
+    }
+
     switch (e.key) {
       case "ArrowLeft":
         this.moveFocusedDate(-1);
@@ -730,6 +878,7 @@ export class CalendarElement extends LitElement {
   };
 
   render() {
+    const currentYear = this.viewDate.getFullYear();
     const weekdays = this.getWeekdayNames();
     const days = this.getDaysInView();
 
@@ -737,83 +886,126 @@ export class CalendarElement extends LitElement {
       <div class="header" part="header">
         <button
           type="button"
-          class="nav-btn"
-          part="nav-btn prev"
-          tabindex="-1"
-          @click=${this.prevMonth}
+          class="header-title"
+          part="title"
+          @click=${this.toggleYearPicker}
           ?disabled=${this.disabled}
-          aria-label="Previous month"
+          aria-label=${this.yearPickerOpen ? "Back to calendar" : "Select year"}
         >
-          ‹
+          ${this.yearPickerOpen ? currentYear : this.getMonthYearString()}
         </button>
-        <span class="header-title" part="title">${this.getMonthYearString()}</span>
-        <button
-          type="button"
-          class="nav-btn"
-          part="nav-btn next"
-          tabindex="-1"
-          @click=${this.nextMonth}
-          ?disabled=${this.disabled}
-          aria-label="Next month"
-        >
-          ›
-        </button>
+        ${this.yearPickerOpen
+          ? nothing
+          : html`
+              <div class="nav-buttons">
+                <button
+                  type="button"
+                  class="nav-btn"
+                  part="nav-btn prev"
+                  tabindex="-1"
+                  @click=${this.prevMonth}
+                  ?disabled=${this.disabled}
+                  aria-label="Previous month"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  class="nav-btn"
+                  part="nav-btn next"
+                  tabindex="-1"
+                  @click=${this.nextMonth}
+                  ?disabled=${this.disabled}
+                  aria-label="Next month"
+                >
+                  ›
+                </button>
+              </div>
+            `}
       </div>
 
-      <div class="weekdays" part="weekdays">
-        ${weekdays.map((name) => html`<span class="weekday">${name}</span>`)}
-      </div>
-
-      <div class="days" part="days" role="grid">
-        ${days.map(({ dateStr, isOtherMonth }) => {
-          const disabled = this.isDateDisabled(dateStr);
-          const selected = this.isSelected(dateStr);
-          const inRange = this.isInRange(dateStr);
-          const rangeStart = this.isRangeStart(dateStr);
-          const rangeEnd = this.isRangeEnd(dateStr);
-          const today = this.isToday(dateStr);
-          const focused = this.focusedDate === dateStr;
-          const highlighted = this.isHighlighted(dateStr);
-          const highlightStart = this.isHighlightStart(dateStr);
-          const highlightEnd = this.isHighlightEnd(dateStr);
-          const dayNum = parseInt(dateStr.split("-")[2]!, 10);
-
-          return html`
-            <button
-              type="button"
-              class="day"
-              part="day"
-              role="gridcell"
-              tabindex="-1"
-              ?disabled=${disabled}
-              ?data-other-month=${isOtherMonth}
-              ?data-today=${today}
-              ?data-selected=${selected}
-              ?data-in-range=${inRange}
-              ?data-range-start=${rangeStart}
-              ?data-range-end=${rangeEnd}
-              ?data-focused=${focused}
-              ?data-highlighted=${highlighted}
-              ?data-highlight-start=${highlightStart}
-              ?data-highlight-end=${highlightEnd}
-              aria-selected=${selected ? "true" : "false"}
-              aria-label=${dateStr}
-              @click=${() => this.selectDate(dateStr)}
-              @mouseenter=${() => this.onDayHover(dateStr)}
+      ${this.yearPickerOpen
+        ? html`
+            <div
+              class="year-picker"
+              part="year-picker"
+              role="listbox"
+              aria-label="Select year"
+              aria-activedescendant=${this.focusedYear ? `year-${this.focusedYear}` : nothing}
             >
-              ${dayNum}
-            </button>
-          `;
-        })}
-      </div>
+              ${this.getYearOptions().map(
+                (year) => html`
+                  <button
+                    type="button"
+                    id="year-${year}"
+                    class="year-option"
+                    role="option"
+                    tabindex="-1"
+                    aria-selected=${year === currentYear ? "true" : "false"}
+                    ?data-selected=${year === currentYear}
+                    ?data-focused=${year === this.focusedYear}
+                    @click=${() => this.selectYear(year)}
+                  >
+                    ${year}
+                  </button>
+                `
+              )}
+            </div>
+          `
+        : html`
+            <div class="weekdays" part="weekdays">
+              ${weekdays.map((name) => html`<span class="weekday">${name}</span>`)}
+            </div>
 
-      ${
-        this.rangeStart
-          ? html`<div part="hint" style="font-size: 0.75rem; opacity: 0.6; margin-top: 0.5rem; text-align: center;">
-            Select end date
-          </div>`
-          : nothing
-      }
+            <div class="days" part="days" role="grid">
+              ${days.map(({ dateStr, isOtherMonth }) => {
+                const disabled = this.isDateDisabled(dateStr);
+                const selected = this.isSelected(dateStr);
+                const inRange = this.isInRange(dateStr);
+                const rangeStart = this.isRangeStart(dateStr);
+                const rangeEnd = this.isRangeEnd(dateStr);
+                const today = this.isToday(dateStr);
+                const focused = this.focusedDate === dateStr;
+                const highlighted = this.isHighlighted(dateStr);
+                const highlightStart = this.isHighlightStart(dateStr);
+                const highlightEnd = this.isHighlightEnd(dateStr);
+                const dayNum = parseInt(dateStr.split("-")[2]!, 10);
+
+                return html`
+                  <button
+                    type="button"
+                    class="day"
+                    part="day"
+                    role="gridcell"
+                    tabindex="-1"
+                    ?disabled=${disabled}
+                    ?data-other-month=${isOtherMonth}
+                    ?data-today=${today}
+                    ?data-selected=${selected}
+                    ?data-in-range=${inRange}
+                    ?data-range-start=${rangeStart}
+                    ?data-range-end=${rangeEnd}
+                    ?data-focused=${focused}
+                    ?data-highlighted=${highlighted}
+                    ?data-highlight-start=${highlightStart}
+                    ?data-highlight-end=${highlightEnd}
+                    aria-selected=${selected ? "true" : "false"}
+                    aria-label=${dateStr}
+                    @click=${() => this.selectDate(dateStr)}
+                    @mouseenter=${() => this.onDayHover(dateStr)}
+                  >
+                    ${dayNum}
+                  </button>
+                `;
+              })}
+            </div>
+
+            ${this.rangeStart
+              ? html`<div part="hint" style="font-size: 0.75rem; opacity: 0.6; margin-top: 0.5rem; text-align: center;">
+                  Select end date
+                </div>`
+              : nothing}
+          `}
     `;
   }
 }
