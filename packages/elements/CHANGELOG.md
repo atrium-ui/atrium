@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.2.0 (2026-01-08)
+
+### Features
+
+- Adds a-calendar to elements with docs (#7)
+
 ## 4.1.1 (2025-12-23)
 
 ### Fixes

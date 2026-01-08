@@ -1,5 +1,12 @@
 # @sv/components
 
+## 1.9.0 (2026-01-08)
+
+### Features
+
+- Adds a-calendar to elements with docs (#7)
+- Remove air-datepicker dependency
+
 ## 0.1.0-dev.1 (2025-10-17)
 
 ### Breaking Changes

@@ -1,3 +1,9 @@
+## 0.5.4 (2026-01-08)
+
+### Features
+
+- Adds a-calendar to elements with docs (#7)
+
 ## 0.1.0-dev.0 (2025-10-17)
 
 ### Breaking Changes
