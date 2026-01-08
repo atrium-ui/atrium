@@ -28,3 +28,32 @@ To keep the amount of logic in Components small, Elements are built as unstyled 
 
 We use gotask for a common interface to run scripts. 
 All available tasks can be found in the /Taskfile.yml in the root of the project.
+
+## Documentation Guidelines
+
+### Components
+
+Doc pages for components should consist of a couple sections in given order:
+
+- Description of component
+- Examples
+  - Elements in stories should be centerd in the frame
+  - Examples shold reflect some common usecase
+  - They need to look good
+  - 
+- "Guidelines" for usage
+- "Accessibility" things to consider and features
+- "References" links
+
+### Elements
+
+Documentation of elements are more technical, describing the interface of an element.
+
+Doc pages for components should consist of a couple sections in given order:
+
+- Description of element
+- Featured example
+- Accessibility features
+- How to use it with examples
+- Customization options
+- Type Documentation

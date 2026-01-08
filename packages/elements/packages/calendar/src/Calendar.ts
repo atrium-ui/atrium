@@ -18,6 +18,11 @@ import { property, state } from "lit/decorators.js";
  * <a-calendar mode="range" name="dates" value="2024-03-15/2024-03-20"></a-calendar>
  * ```
  *
+ * @example Date range with initial view on end date
+ * ```html
+ * <a-calendar mode="range" value="2024-03-15/2024-05-20" range-focus="end"></a-calendar>
+ * ```
+ *
  * @example Custom locale and week start
  * ```html
  * <a-calendar locale="de-DE" week-start="1"></a-calendar>
@@ -286,6 +291,14 @@ export class CalendarElement extends LitElement {
   disabled = false;
 
   /**
+   * Which date of a range to focus for initial view month.
+   * Only applies when mode="range" and a value is provided.
+   * @default "start"
+   */
+  @property({ type: String, attribute: "range-focus" })
+  rangeFocus: "start" | "end" = "start";
+
+  /**
    * Currently displayed month/year for navigation.
    */
   @state()
@@ -329,9 +342,11 @@ export class CalendarElement extends LitElement {
 
     if (this.value) {
       const parsed = this.parseValue(this.value);
-      if (parsed.start) {
-        this.viewDate = this.parseDate(parsed.start);
-        this.focusedDate = parsed.start;
+      const focusDate =
+        this.rangeFocus === "end" && parsed.end ? parsed.end : parsed.start;
+      if (focusDate) {
+        this.viewDate = this.parseDate(focusDate);
+        this.focusedDate = focusDate;
       }
     } else if (this.highlight) {
       const highlights = this.parseHighlight();
