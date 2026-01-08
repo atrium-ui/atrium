@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.3.0 (2026-01-08)
+
+### Features
+
+- Add year-picker to a-calendar
+
 ## 4.2.0 (2026-01-08)
 
 ### Features
