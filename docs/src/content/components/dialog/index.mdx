@@ -1,0 +1,43 @@
+---
+title: Dialog
+image: "/components/dialog.png"
+description: A modal dialog component for displaying content in an overlay with focus management.
+tags: [["a-blur", "elements/a-blur"], ["a-portal", "elements/a-portal"], ["Button", "components/button"]]
+command: "npx @sv/components dialog"
+---
+
+import { Story } from "package:/components/docs";
+
+The Dialog component displays content in a modal overlay, centered on the screen.
+
+### Default Dialog
+
+<Story id="dialog--default" />
+
+### Confirmation
+
+<Story id="dialog--Confirmation" />
+
+### Form Dialog
+
+<Story id="dialog--FormDialog" />
+
+## Guidelines
+
+Dialogs should be used for:
+
+- Confirming critical actions that require user attention
+- Displaying important alerts or notifications
+
+Always provide a clear way to close the dialog and ensure the primary action is obvious.
+
+## Accessibility
+
+- The dialog has proper focus management, focus moves to the dialog when opened and returns to the trigger element when closed
+- The dialog is marked with appropriate ARIA attributes (`role="dialog"` or `role="alertdialog"`)
+- Color should never used to communicate important information
+
+## References
+
+- [WAI-ARIA Dialog (Modal) Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialogmodal/)
+- [MDN: Dialog Pattern](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role)

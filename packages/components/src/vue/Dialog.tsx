@@ -22,10 +22,7 @@ export const Dialog = defineComponent(
         <a-portal>
           <a-blur
             enabled={open.value || undefined}
-            class={[
-              "group/dialog fixed top-0 left-0 z-50 block h-full w-full transition-all",
-              "[&[enabled]]:bg-[#00000033]",
-            ]}
+            class="group/dialog fixed top-0 left-0 z-50 block h-full w-full [&[enabled]]:bg-[#00000010] transition-colors"
             onExit={() => {
               open.value = false;
             }}
@@ -39,16 +36,6 @@ export const Dialog = defineComponent(
               ]}
             >
               {slots.default?.()}
-
-              <div class="mt-4">
-                <Button
-                  onClick={() => {
-                    open.value = false;
-                  }}
-                >
-                  Close
-                </Button>
-              </div>
             </div>
           </a-blur>
         </a-portal>
