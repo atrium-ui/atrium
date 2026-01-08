@@ -12,13 +12,18 @@ export default {
 
 export const Default = {
   render: () => (
-    <div class="flex max-w-full items-center justify-center min-h-[300px]">
+    <div class="flex min-h-[300px] max-w-full items-center justify-center">
       <Dialog label="Open Dialog">
-        <h2 class="text-2xl mb-2">Welcome</h2>
+        <h2 class="mb-2 text-2xl">Welcome</h2>
         <p>This is a simple dialog with basic content.</p>
 
         <div class="mt-4 flex justify-end">
-          <Button variant="outline" onClick={(ev) => { ev.target?.dispatchEvent(new CustomEvent('exit', { bubbles: true })); }}>
+          <Button
+            variant="outline"
+            onClick={(ev) => {
+              ev.target?.dispatchEvent(new CustomEvent("exit", { bubbles: true }));
+            }}
+          >
             Close
           </Button>
         </div>
@@ -29,18 +34,21 @@ export const Default = {
 
 export const Confirmation = {
   render: () => (
-    <div class="flex max-w-full items-center justify-center min-h-[300px]">
+    <div class="flex min-h-[300px] max-w-full items-center justify-center">
       <Dialog label="Delete Item">
-        <h2 class="text-2xl mb-2">Are you sure?</h2>
+        <h2 class="mb-2 text-2xl">Are you sure?</h2>
         <p>This action cannot be undone. Do you want to proceed?</p>
 
         <div class="mt-4 flex justify-end">
-          <Button variant="outline" onClick={(ev) => { ev.target?.dispatchEvent(new CustomEvent('exit', { bubbles: true })); }}>
+          <Button
+            variant="outline"
+            onClick={(ev) => {
+              ev.target?.dispatchEvent(new CustomEvent("exit", { bubbles: true }));
+            }}
+          >
             Cancel
           </Button>
-          <Button class="ml-2 bg-red-600 text-white hover:bg-red-700">
-            Delete
-          </Button>
+          <Button class="ml-2 bg-red-600 text-white hover:bg-red-700">Delete</Button>
         </div>
       </Dialog>
     </div>
@@ -49,21 +57,39 @@ export const Confirmation = {
 
 export const FormDialog = {
   render: () => (
-    <div class="flex max-w-full items-center justify-center min-h-[300px]">
+    <div class="flex min-h-[300px] max-w-full items-center justify-center">
       <Dialog label="Sign Up">
-        <h2 class="text-2xl mb-2">Create Account</h2>
-        <form class="space-y-4" onSubmit={(ev) => { ev.preventDefault(); }}>
+        <h2 class="mb-2 text-2xl">Create Account</h2>
+        <form
+          class="space-y-4"
+          onSubmit={(ev) => {
+            ev.preventDefault();
+          }}
+        >
           <div>
-            <label class="block text-sm font-medium">Email</label>
-            <input type="email" required class="w-full mt-1 px-3 py-2 border border-zinc-300 rounded" />
+            <label class="block font-medium text-sm">Email</label>
+            <input
+              type="email"
+              required
+              class="mt-1 w-full rounded border border-zinc-300 px-3 py-2"
+            />
           </div>
           <div>
-            <label class="block text-sm font-medium">Password</label>
-            <input type="password" required class="w-full mt-1 px-3 py-2 border border-zinc-300 rounded" />
+            <label class="block font-medium text-sm">Password</label>
+            <input
+              type="password"
+              required
+              class="mt-1 w-full rounded border border-zinc-300 px-3 py-2"
+            />
           </div>
 
           <div class="mt-4 flex justify-end">
-            <Button variant="outline" onClick={(ev) => { ev.target?.dispatchEvent(new CustomEvent('exit', { bubbles: true })); }}>
+            <Button
+              variant="outline"
+              onClick={(ev) => {
+                ev.target?.dispatchEvent(new CustomEvent("exit", { bubbles: true }));
+              }}
+            >
               Cancel
             </Button>
             <Button class="ml-2" type="submit">

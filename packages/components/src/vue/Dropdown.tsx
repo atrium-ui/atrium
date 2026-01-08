@@ -1,14 +1,5 @@
 /* @jsxImportSource vue */
 
-export function Button(
-  props: {
-
-  },
-  context,
-) {
-  return (
-    <div>
-
-    </div>
-  );
+export function Button(props: {}, context) {
+  return <div></div>;
 }

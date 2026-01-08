@@ -9,7 +9,7 @@ export default {
     data: [
       { title: "Test 1", url: "" },
       { title: "Test 2", url: "" },
-    ]
+    ],
   },
   argTypes: {},
 } satisfies Story;
@@ -21,24 +21,18 @@ export const Default = {
         <a-popover-trigger class="w-full sm:w-auto">
           <button
             slot="trigger"
-            class="w-full sm:w-auto cursor-pointer group text-left text-gray-900 rounded-md bg-white p-2 px-4 border border-gray-300 hover:bg-gray-200"
+            class="group w-full cursor-pointer rounded-md border border-gray-300 bg-white p-2 px-4 text-left text-gray-900 hover:bg-gray-200 sm:w-auto"
           >
-            <a-box
-              class="relative w-auto min-w-[180px] md:max-w-[300px]"
-            >
-              <span class="block flex-1">
-                {args.label}
-              </span>
+            <a-box class="relative w-auto min-w-[180px] md:max-w-[300px]">
+              <span class="block flex-1">{args.label}</span>
             </a-box>
           </button>
 
           <a-popover class="group">
-            <div
-              class="group inline-block opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100 border border-gray-300 shadow-lg rounded-md bg-white my-1"
-            >
+            <div class="group my-1 inline-block rounded-md border border-gray-300 bg-white opacity-0 shadow-lg transition-opacity duration-100 group-[&[enabled]]:opacity-100">
               <a-list
                 style={`width: ${210}px`}
-                class="group scrollbar-thin scrollbar-transparent max-h-[300px] overflow-auto w-auto bg-white group-data-[placement=top]:rounded-t-md group-data-[placement=bottom]:rounded-b-md -translate-y-1 transition-all duration-150 group-[&[enabled]]:translate-y-0"
+                class="group scrollbar-thin scrollbar-transparent -translate-y-1 max-h-[300px] w-auto overflow-auto bg-white transition-all duration-150 group-[&[enabled]]:translate-y-0 group-data-[placement=top]:rounded-t-md group-data-[placement=bottom]:rounded-b-md"
                 onChange={(e: CustomEvent) => {
                   const option = e.detail.selected;
                   const link = option.querySelector("a[href]");
@@ -47,13 +41,11 @@ export const Default = {
               >
                 {args.data?.map((item) => {
                   return (
-                    <a-list-item
-                      class="group-focus-within:aria-selected:bg-blue-100 focus-within:bg-blue-100 mb-1 last:mb-0"
-                    >
+                    <a-list-item class="mb-1 last:mb-0 focus-within:bg-blue-100 group-focus-within:aria-selected:bg-blue-100">
                       <a
                         tabindex="-1"
                         href={item.url}
-                        class="block text-gray-900 hover:bg-blue-100 active:bg-blue-200 px-4 py-2 whitespace-nowrap text-ellipsis overflow-hidden"
+                        class="block overflow-hidden text-ellipsis whitespace-nowrap px-4 py-2 text-gray-900 hover:bg-blue-100 active:bg-blue-200"
                       >
                         {item.title}
                       </a>

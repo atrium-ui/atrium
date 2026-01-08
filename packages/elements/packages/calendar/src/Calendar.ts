@@ -829,7 +829,10 @@ export class CalendarElement extends LitElement {
       return;
     } else {
       const target = e.composedPath()[0] as HTMLElement;
-      if (target.classList.contains("header-title") && (e.key === "Enter" || e.key === " ")) {
+      if (
+        target.classList.contains("header-title") &&
+        (e.key === "Enter" || e.key === " ")
+      ) {
         // open year-picker
         requestAnimationFrame(() => this.focus());
         return;
@@ -894,9 +897,10 @@ export class CalendarElement extends LitElement {
         >
           ${this.yearPickerOpen ? currentYear : this.getMonthYearString()}
         </button>
-        ${this.yearPickerOpen
-          ? nothing
-          : html`
+        ${
+          this.yearPickerOpen
+            ? nothing
+            : html`
               <div class="nav-buttons">
                 <button
                   type="button"
@@ -921,11 +925,13 @@ export class CalendarElement extends LitElement {
                   ›
                 </button>
               </div>
-            `}
+            `
+        }
       </div>
 
-      ${this.yearPickerOpen
-        ? html`
+      ${
+        this.yearPickerOpen
+          ? html`
             <div
               class="year-picker"
               part="year-picker"
@@ -948,11 +954,11 @@ export class CalendarElement extends LitElement {
                   >
                     ${year}
                   </button>
-                `
+                `,
               )}
             </div>
           `
-        : html`
+          : html`
             <div class="weekdays" part="weekdays">
               ${weekdays.map((name) => html`<span class="weekday">${name}</span>`)}
             </div>
@@ -1000,12 +1006,15 @@ export class CalendarElement extends LitElement {
               })}
             </div>
 
-            ${this.rangeStart
-              ? html`<div part="hint" style="font-size: 0.75rem; opacity: 0.6; margin-top: 0.5rem; text-align: center;">
+            ${
+              this.rangeStart
+                ? html`<div part="hint" style="font-size: 0.75rem; opacity: 0.6; margin-top: 0.5rem; text-align: center;">
                   Select end date
                 </div>`
-              : nothing}
-          `}
+                : nothing
+            }
+          `
+      }
     `;
   }
 }

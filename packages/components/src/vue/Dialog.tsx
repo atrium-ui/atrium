@@ -22,7 +22,7 @@ export const Dialog = defineComponent(
         <a-portal>
           <a-blur
             enabled={open.value || undefined}
-            class="group/dialog fixed top-0 left-0 z-50 block h-full w-full [&[enabled]]:bg-[#00000010] transition-colors"
+            class="group/dialog fixed top-0 left-0 z-50 block h-full w-full transition-colors [&[enabled]]:bg-[#00000010]"
             onExit={() => {
               open.value = false;
             }}
