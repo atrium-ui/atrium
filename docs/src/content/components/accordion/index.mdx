@@ -16,3 +16,19 @@ When the accordion is opened or closed, the component makes sure it does not sli
 ### Initially opened
 
 <Story id="accordion--opened" />
+
+## Accessibility
+
+- Each accordion header is a button element that controls the visibility of its associated content region.
+- The content region is marked with `aria-labelledby` pointing to the corresponding header button.
+- Keyboard interactions:
+  - Users can navigate between accordion headers using the Tab key.
+  - Users can toggle the visibility of the content region using the Enter or Space key when the
+    header button is focused.
+- Focusable elements within the content region are only accessible when the accordion item is expanded.
+- The accordion will expand, when navigating to an anchor within the content.
+- When an accordion item is expanded or collapsed, the component ensures that the focused header remains visible within the viewport.
+
+## References
+
+- [WAI-ARIA Accordion Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/)

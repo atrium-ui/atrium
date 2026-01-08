@@ -6,20 +6,14 @@ import { Button } from "@components/src/vue/Button";
 
 export default {
   tags: ["public"],
-  args: {
-    count: 5,
-  },
-  argTypes: {
-    count: {
-      description: "Number of slides",
-    },
-  },
+  args: {},
+  argTypes: {},
 } satisfies Story;
 
 export const Default = {
   render: () => {
     return (
-      <div class="flex gap-10">
+      <div class="flex justify-center py-10 gap-10">
         <Button>Button</Button>
         <Button disabled>Disabled</Button>
         <Button>
@@ -34,7 +28,7 @@ export const Default = {
 export const Ghost = {
   render: () => {
     return (
-      <div class="flex gap-10">
+      <div class="flex justify-center py-10 gap-10">
         <Button variant="ghost">Button</Button>
         <Button variant="ghost" disabled>
           Disabled
@@ -51,7 +45,7 @@ export const Ghost = {
 export const Outline = {
   render: () => {
     return (
-      <div class="flex gap-10">
+      <div class="flex justify-center py-10 gap-10">
         <Button variant="outline">Button</Button>
         <Button variant="outline" disabled>
           Disabled
