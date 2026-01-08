@@ -40,7 +40,10 @@ export const Default = {
               >
                 {args.data?.map((item, index) => {
                   return (
-                    <a-list-item key={index} class="mb-1 last:mb-0 focus-within:bg-blue-100 group-focus-within:aria-selected:bg-blue-100">
+                    <a-list-item
+                      key={index}
+                      class="mb-1 last:mb-0 focus-within:bg-blue-100 group-focus-within:aria-selected:bg-blue-100"
+                    >
                       <a
                         tabindex="-1"
                         href={item.url}

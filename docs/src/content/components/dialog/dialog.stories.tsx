@@ -67,7 +67,9 @@ export const FormDialog = {
           }}
         >
           <div>
-            <label for="email" class="block font-medium text-sm">Email</label>
+            <label for="email" class="block font-medium text-sm">
+              Email
+            </label>
             <input
               id="email"
               type="email"
@@ -76,7 +78,9 @@ export const FormDialog = {
             />
           </div>
           <div>
-            <label for="password" class="block font-medium text-sm">Password</label>
+            <label for="password" class="block font-medium text-sm">
+              Password
+            </label>
             <input
               id="password"
               type="password"
