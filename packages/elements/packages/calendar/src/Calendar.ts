@@ -38,17 +38,6 @@ export class CalendarElement extends LitElement {
       --_focus-outline: var(--calendar-focus-outline, currentColor);
     }
 
-    @media (prefers-color-scheme: dark) {
-      :host {
-        --_hover-bg: var(--calendar-hover-bg, rgba(255, 255, 255, 0.1));
-        --_selected-bg: var(--calendar-selected-bg, #3b82f6);
-        --_selected-color: var(--calendar-selected-color, white);
-        --_range-bg: var(--calendar-range-bg, rgba(59, 130, 246, 0.3));
-        --_highlight-bg: var(--calendar-highlight-bg, rgba(255, 200, 0, 0.4));
-        --_focus-outline: var(--calendar-focus-outline, currentColor);
-      }
-    }
-
     .header {
       display: flex;
       align-items: center;

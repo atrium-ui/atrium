@@ -33,7 +33,6 @@
     "@sv/animation": "workspace:*",
     "@tailwindcss/browser": "^4.0.15",
     "@tailwindcss/vite": "^4.1.10",
-    "air-datepicker": "^3.5.3",
     "astro": "5.9.3",
     "astro-pagefind": "^1.8.3",
     "dom-to-svg": "^0.12.2",
