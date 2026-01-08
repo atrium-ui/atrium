@@ -19,6 +19,7 @@ export const Default = {
       <div class="flex max-w-full items-center justify-center pt-[50px] pb-[200px]">
         <a-popover-trigger class="w-full sm:w-auto">
           <button
+            slot="trigger"
             type="button"
             class="group w-full cursor-pointer rounded-md border border-gray-300 bg-white p-2 px-4 text-left text-gray-900 hover:bg-gray-200 sm:w-auto"
           >
@@ -31,7 +32,7 @@ export const Default = {
             <div class="group my-1 inline-block rounded-md border border-gray-300 bg-white opacity-0 shadow-lg transition-opacity duration-100 group-[&[enabled]]:opacity-100">
               <a-list
                 style={`width: ${210}px`}
-                class="group scrollbar-thin scrollbar-transparent -translate-y-1 max-h-[300px] w-auto overflow-auto bg-white transition-all duration-150 group-[&[enabled]]:translate-y-0 group-data-[placement=top]:rounded-t-md group-data-[placement=bottom]:rounded-b-md"
+                class="group scrollbar-thin scrollbar-transparent max-h-[300px] w-auto -translate-y-1 overflow-auto overflow-hidden rounded-md bg-white transition-all duration-150 group-[&[enabled]]:translate-y-0"
                 onChange={(e: CustomEvent) => {
                   const option = e.detail.selected;
                   const link = option.querySelector("a[href]");
