@@ -17,7 +17,7 @@ export default {
 export const Default = {
   render: (args) => {
     return (
-      <div class="flex pt-[50px] pb-[300px] max-w-full items-center justify-center">
+      <div class="flex max-w-full items-center justify-center pt-[50px] pb-[300px]">
         <Datepicker
           onChange={(ev) => {
             console.info(ev.detail.date);

@@ -15,14 +15,14 @@ export const Datepicker = defineComponent(
         </div>
 
         <a-popover class="group" placements="bottom">
-          <div class="w-[max-content] opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100 p-3">
-            <div class="min-w-[100px] scale-95 rounded-md p-1 transition-all duration-150 group-[&[enabled]]:scale-100 bg-white shadow-lg">
+          <div class="w-[max-content] p-3 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100">
+            <div class="min-w-[100px] scale-95 rounded-md bg-white p-1 shadow-lg transition-all duration-150 group-[&[enabled]]:scale-100">
               <a-calendar
                 onChange={(ev) => {
                   value.value = ev.target.value;
                   requestAnimationFrame(() => {
                     ev.target.dispatchEvent(new CustomEvent("exit"));
-                  })
+                  });
                 }}
               />
             </div>
