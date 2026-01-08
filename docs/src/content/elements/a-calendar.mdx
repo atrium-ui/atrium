@@ -6,6 +6,14 @@ command: import "@sv/elements/calendar";
 
 import { TypeDoc, Lit } from "package:/components"
 
+The `a-calendar` element provides a fully accessible calendar for selecting single dates or date ranges. It supports localisation, highlighted dates, unavailable dates, and min/max constraints.
+
+## Installation
+
+```ts
+import "@sv/elements/calendar";
+```
+
 <style>
 {`
 a-calendar {
@@ -105,4 +113,23 @@ Restrict selectable dates:
 | `--calendar-highlight-bg` | `rgba(234,179,8,0.4)` | Highlighted date background |
 | `--calendar-focus-outline` | `currentColor` | Focus outline color |
 
+## Accessibility
+
+- **Keyboard Navigation**: Full keyboard support for navigating dates with Arrow keys, Page Up/Down for months, and Enter to select.
+- **ARIA Labels**: Days are labelled with full date information for screen readers.
+- **Focus Management**: Focus is visible and moves logically through the calendar grid.
+
+| Key | Action |
+|-----|--------|
+| `ArrowLeft` / `ArrowRight` | Move to previous/next day |
+| `ArrowUp` / `ArrowDown` | Move to same day in previous/next week |
+| `PageUp` / `PageDown` | Move to previous/next month |
+| `Home` / `End` | Move to first/last day of month |
+| `Enter` / `Space` | Select the focused date |
+
 <TypeDoc source="../packages/elements/packages/calendar" symbol="CalendarElement" />
+
+## References
+
+- [WAI-ARIA Date Picker Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/)
+- [Date Formats (ISO 8601)](https://en.wikipedia.org/wiki/ISO_8601)

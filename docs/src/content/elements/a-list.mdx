@@ -1,15 +1,12 @@
 ---
 title: a-list
-description: a-list
+description: An accessible, keyboard-navigable list element for building selection interfaces.
 command: import "@sv/elements/list";
 ---
 
 import { TypeDoc, Lit, Example } from "package:/components"
 
-
-A list can represent a list of items. The list can be scrolled and items can be selected.
-It supports keyboard navigation and selection.
-
+The `a-list` element provides an accessible list with keyboard navigation and selection support. It's useful for building custom select dropdowns, menu lists, and any interface where users need to choose from a list of options.
 
 <Example title="Basic usage" code={`
 <style>
@@ -83,8 +80,119 @@ It supports keyboard navigation and selection.
   </a-list>
 </Example>
 
+
+## Usage
+
+### Basic List
+
+```html
+<a-list>
+  <a-list-item value="apple">Apple</a-list-item>
+  <a-list-item value="banana">Banana</a-list-item>
+  <a-list-item value="orange">Orange</a-list-item>
+</a-list>
+```
+
+### With Initial Selection
+
+```html
+<a-list value="banana">
+  <a-list-item value="apple">Apple</a-list-item>
+  <a-list-item value="banana">Banana</a-list-item>
+  <a-list-item value="orange">Orange</a-list-item>
+</a-list>
+```
+
+### Listening for Selection
+
+```ts
+const list = document.querySelector('a-list');
+
+list.addEventListener('change', (event) => {
+  console.log('Selected:', event.target.value);
+  console.log('Selected item:', event.detail.selected);
+});
+
+list.addEventListener('input', (event) => {
+  // Fired when focus moves between items
+  console.log('Focused:', event.detail);
+});
+```
+
+### Programmatic Selection
+
+```ts
+const list = document.querySelector('a-list');
+
+// Set selection by value
+list.value = 'orange';
+
+// Navigate programmatically
+list.selectNext();
+list.selectPrev();
+```
+
+## Keyboard Navigation
+
+| Key | Action |
+|-----|--------|
+| `ArrowDown` | Move to next item |
+| `ArrowUp` | Move to previous item |
+| `Enter` | Confirm selection |
+| `Home` | Move to first item |
+| `End` | Move to last item |
+| Type character | Jump to item starting with that letter |
+
+## Accessibility
+
+- **Role**: The list has `role="listbox"` and items have `role="option"`.
+- **ARIA Selection**: Items have `aria-selected` to indicate selection state.
+- **Focus Management**: The list is focusable and manages focus between items.
+- **Keyboard Support**: Full keyboard navigation as described above.
+  - Keyboard navigation (Arrow keys, Home, End)
+  - Type-ahead character search
+  - Single selection with visual feedback
+  - Scroll-into-view for selected items
+
+```html
+<label id="fruit-label">Choose a fruit</label>
+<a-list aria-labelledby="fruit-label">
+  <a-list-item value="apple">Apple</a-list-item>
+  <a-list-item value="banana">Banana</a-list-item>
+</a-list>
+```
+
+## Styling
+
+```css
+a-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+a-list-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+}
+
+a-list-item:hover {
+  background-color: #f3f4f6;
+}
+
+a-list-item[aria-selected="true"] {
+  background-color: #e5e7eb;
+}
+```
+
 ## API Reference
 
 <TypeDoc source="../packages/elements/packages/list" symbol="ListElement" />
 
 <TypeDoc source="../packages/elements/packages/list" symbol="ListItemElement" />
+
+## References
+
+- [WAI-ARIA Listbox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/)
+- [MDN: ARIA listbox role](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/listbox_role)

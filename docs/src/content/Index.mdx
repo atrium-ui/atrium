@@ -1,42 +1,20 @@
 ---
-title: Atrium components
-description: A curated collection of Libraries, custom-elements and Components for different Frameworks for building high quality websites.
+title: Atrium UI
+description: Copy-paste components you own. Framework-agnostic custom elements under the hood. No dependencies, no lock-in.
 ---
 
 import { Command } from "../components";
 
-<section className="flex flex-col md:flex-row items-center gap-module-4xl mb-module-8xl move-in lg:px-module-3xl">
-  <div>
-    <img className="light-mode-only" width="400" src={`${import.meta.env.BASE_URL}atrium-light.png`} />
-    <img className="dark-mode-only" width="400" src={`${import.meta.env.BASE_URL}atrium-dark.png`} />
+<section className="flex flex-col items-center text-center gap-module-xl mb-module-8xl">
+  <div className="pb-module-l">
+    <img className="light-mode-only" width="120" src={`${import.meta.env.BASE_URL}atrium-light.png`} />
+    <img className="dark-mode-only" width="120" src={`${import.meta.env.BASE_URL}atrium-dark.png`} />
   </div>
 
-  <div className="pb-module-4xl move-in">
-    <h1 className="typo-title-1 pb-module-l">Atrium UI</h1>
-    <p>
-      A curated collection of Libraries, Custom-Elements and
-    </p>
-    <p>
-      Components for different Frameworks for building high quality websites.
-    </p>
-  </div>
-</section>
+  <h1 className="typo-title-1 pb-module-s">Build Better, Ship Faster</h1>
 
-<section className="fade-in">
-  <div className="markdown-content lg:px-module-6xl pb-module-4xl">
-    <h2 className="typo-title-3 pb-element-xs">
-      <span>Fully styled components included, ready to use.</span>
-    </h2>
-    <p>
-      Components may have dependencies on other packages, though when "using" a component you do not import the component itself, but a copy of it. This copy can be freely changed and styled. That makes it possible to update or change the component templates without breaking the projects that used them.
-    </p>
-    <p>
-      Components are copy-paste templates for a specific use case including styling and behavior.
-      They are styled using [TailwindCSS](https://tailwindcss.com/) and written as JSX functional components. This allows us to build components that are highly customizable and compact without keeping a dependency on external CSS files.
-    </p>
-  </div>
 
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 pb-module-4xl">
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1">
     <a className="home-card" href={`${import.meta.env.BASE_URL}components/accordion`}>
       <a-animation
         src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
@@ -90,91 +68,86 @@ import { Command } from "../components";
       <span className="sr-only">Carousel</span>
     </a>
   </div>
+
+  <p className="typo-body max-w-[600px] text-balance opacity-80">
+    Copy-paste components that you own. Framework-agnostic custom elements under the hood.
+    No dependencies, no lock-in, just clean code.
+  </p>
+
+  <div className="flex flex-wrap gap-module-m pt-module-xl justify-center">
+    <a href={`${import.meta.env.BASE_URL}guides/setup`} className="inline-flex items-center gap-2 rounded-lg bg-(--style-typography-body) text-white px-6 py-3 font-medium hover:opacity-90 transition-opacity">
+      Get Started
+    </a>
+    <a href={`${import.meta.env.BASE_URL}components/accordion`} className="inline-flex items-center gap-2 rounded-lg border border-current px-6 py-3 font-medium hover:bg-(--style-typography-body) hover:text-white transition-colors">
+      Browse Components
+    </a>
+  </div>
 </section>
 
-<section className="fade-in py-12">
-  <div className="lg:px-module-6xl">
-  <div className="pb-module-4xl">
-    <h3 className="typo-headline pb-element-xs">Not opinionated about styling</h3>
-      <p>Components come pre-styled with TailwindCSS classes, but you can style them however you like.</p>
+<section className="pb-module-8xl">
+  <h2 className="typo-title-2 text-center pb-module-3xl">Why Atrium?</h2>
+
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-module-2xl lg:px-module-4xl">
+    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10">
+      <h3 className="typo-headline pb-element-xs">🎨 You Own the Code</h3>
+      <p className="opacity-80">Components are copied into your project, not imported. Modify anything without waiting for upstream changes or fighting abstraction layers.</p>
     </div>
-    <div className="pb-module-4xl">
-      <h3 className="typo-headline pb-element-xs">Ship less JavaScript</h3>
-      <p>Components use custom-elements that are written with a focus on small bundle sizes.</p>
+    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10">
+      <h3 className="typo-headline pb-element-xs">⚡ Tiny Bundle Size</h3>
+      <p className="opacity-80">Minimal Dependencies. The entire elements package has minimal dependencies.</p>
     </div>
-    <div className="pb-module-4xl">
-      <h3 className="typo-headline pb-element-xs">Protable and easy to use</h3>
-      <p>Use with any framework, or event without one.</p>
+    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10">
+      <h3 className="typo-headline pb-element-xs">🔧 Framework Agnostic</h3>
+      <p className="opacity-80">Works with Vue, React, Astro, or vanilla JS. Custom elements play nice with everything.</p>
     </div>
-    <div className="pb-module-4xl">
-      <h3 className="typo-headline pb-element-xs">Performant and accessible</h3>
-      <p>Minimal framework code, optimized for performance and accessibility.</p>
+    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10">
+      <h3 className="typo-headline pb-element-xs">♿ Accessible by Default</h3>
+      <p className="opacity-80">Keyboard navigation, ARIA attributes, and focus management baked into every element. A11y isn't an afterthought.</p>
     </div>
   </div>
 </section>
 
-<section className="fade-in py-12">
-  <div className="markdown-content lg:px-module-6xl pb-module-4xl">
-    ## Using Elements built from scratch to the highest quality
+<section className="pb-module-8xl lg:px-module-4xl">
+  <h2 className="typo-title-2 text-center pb-module-xl">Get Started in Seconds</h2>
 
-    To keep the amount of logic in Components small, Elements are built as unstyled [custom-elements](https://web.dev/articles/custom-elements-v1#prestyle) using [Lit](https://lit.dev/docs/) which makes them framework agnostic, so they can be reused within many requirements and with any framework.
+  <div className="markdown-content max-w-[700px] mx-auto">
+    <p className="text-center pb-module-xl opacity-80">Install the elements package and copy your first component:</p>
 
-    Since they are defined by just an html tag, it forces you to think in a simple way: Props (Attributes) are just strings, which makes it possible to use them in any way html is used.
-
-    The lower-level API of custom-elements, compared to frameworks, also gives you the oppertunity to offer better performance.
-
-    The components in this library are composed of two layers:
-
-    - The first layer are **[Components](./components)**. they ready to use, framework specific and pre-styled Components that give you a solid starting point. You do not import Components as dependencies, they are copied into your projects codebase like templates.
-
-    - The second layer is the **[Elements](./elements)** layer. Elements are "Headless" custom-elements that only implement behavior with accessibility in mind, with as little styling as possible.
-
-    ![diagram](./images/concept-diagram.png)
+    <Command bun="bun add @sv/elements" />
 
     <br/>
 
-    This approach gives the given project ownership over the components design. We start with sensible defaults, then change the design for the projects needs.
+    ```sh
+    npx @sv/components button
+    ```
 
+    <p className="text-center pt-module-xl">
+      <a href={`${import.meta.env.BASE_URL}guides/setup`} className="underline underline-offset-4 hover:opacity-80">
+        Read the full setup guide →
+      </a>
+    </p>
+  </div>
+</section>
 
-    ## Limitations of custom-elements
+<section className="pb-module-6xl">
+  <h2 className="typo-title-2 text-center pb-module-4xl">Two Layers, Maximum Flexibility</h2>
 
-    [Use custom-elements for what they are good at.](https://nolanlawson.com/2023/08/23/use-web-components-for-what-theyre-good-at/)
-    [Web Components Are Not the Future](https://dev.to/ryansolid/web-components-are-not-the-future-48bh)
-    [Web Components are not Framework Components — and That’s Okay](https://lea.verou.me/blog/2024/wcs-vs-frameworks/)
-
-    - Custom-elements work best when they are completely self-contained.
-    - They should not effect elements around itself.
-    - Do not create DOM elements in custom-elements to avoid layout-shifts.
-    - When fully client-side rendered, most of these limitations are not relevant.
-
-    ## Server side rendering
-
-    Unless specific plugins for Lit SSR are used, **Elements** are not fully server side rendered. The custom-element tags will exist in the markup (like *\<a-track\/\>*), but only on the client the markup of the [shadow-root](https://lit.dev/docs/components/shadow-dom/) is generated.
-
-    This does not apply for the children of the Element, those are still rendered by the framework. Only the presentation of those children may vary from server to final hydrated client.
-
-    ## Shallow dependency tree
-
-    Ship less code with less dependencies.
-
-    ![Dependency tree](./images/elements-dependencies.png)
-
-    ## Common Issues
-
-    <br/>
-
-    - **Layout shifts with hydration of custom-elements.** -- When elements or their children, that should be hidden, are visivle before hydration, a simple css selector with `:not(:defined) { opacity: 0; }` or `:not(:defined) * { display: none; }` may be used to hide them before hydration..
-
-    - **Failed to execute 'define' on 'CustomElementRegistry': the name "..." has already been used with this registry** -- There may be two versions of the same element imported.
-
-
-    ## Browser Support
-
-    [Can I use](https://caniuse.com/mdn-api_window_customelements) Support for WebComponents exists in major browsers since around 2018.
-
-    ![Support table](./images/support.jpg)
-
-    [More information here](https://www.webcomponents.org/)
-
-</div>
+  <div className="markdown-content lg:px-module-4xl">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-module-2xl pb-module-2xl">
+      <div>
+        <h3 className="typo-headline pb-element-xs">Components</h3>
+        <p className="opacity-80">Pre-styled, ready-to-use templates built with TailwindCSS. Copy them into your project and make them yours.</p>
+        <p className="pt-module-s">
+          <a href={`${import.meta.env.BASE_URL}components/accordion`} className="underline underline-offset-4 hover:opacity-80">Browse Components →</a>
+        </p>
+      </div>
+      <div>
+        <h3 className="typo-headline pb-element-xs">Elements</h3>
+        <p className="opacity-80">Headless custom elements that handle behaviour and accessibility.</p>
+        <p className="pt-module-s">
+          <a href={`${import.meta.env.BASE_URL}elements/a-expandable`} className="underline underline-offset-4 hover:opacity-80">Browse Elements →</a>
+        </p>
+      </div>
+    </div>
+  </div>
 </section>

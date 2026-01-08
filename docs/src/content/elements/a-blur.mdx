@@ -1,11 +1,94 @@
 ---
 title: a-blur
-description: A Blur is a wrapper element which can show and hide its children.
+description: A low-level dialog element that manages focus trapping, scroll locking, and click-outside detection.
 command: import "@sv/elements/blur";
 ---
 
 import { TypeDoc, Lit } from "package:/components"
 
-Implemented with [Sheet](/components/sheet) and [Dialog](/components/dialog).
+The `a-blur` element functions like a low-level dialog primitive. It manages focus trapping, scroll locking, and provides events for when the user clicks outside of its children or presses Escape.
+
+Used internally by [Sheet](/components/sheet) and [Dialog](/components/dialog).
+
+## Installation
+
+```ts
+import "@sv/elements/blur";
+```
+
+## Usage
+
+### Basic Usage
+
+```html
+<a-blur enabled>
+  <div class="modal-content">
+    <h2>Modal Title</h2>
+    <p>Click outside or press Escape to close.</p>
+  </div>
+</a-blur>
+```
+
+### With Scroll Lock
+
+Prevent background scrolling when the blur is enabled:
+
+```html
+<a-blur enabled scrolllock>
+  <div class="modal-content">
+    <p>Background scrolling is disabled while this is open.</p>
+  </div>
+</a-blur>
+```
+
+### Programmatic Control
+
+```ts
+const blur = document.querySelector('a-blur');
+
+// Enable the blur (shows overlay, traps focus)
+blur.enable();
+
+// Disable the blur (hides overlay, returns focus)
+blur.disable();
+```
+
+### Listening for Exit Events
+
+```ts
+const blur = document.querySelector('a-blur');
+
+blur.addEventListener('exit', (event) => {
+  // Optionally prevent closing
+  // event.preventDefault();
+
+  console.log('User requested to close the blur');
+});
+```
+
+### Allow Scrolling on Specific Elements
+
+When using scroll lock, you can allow scrolling on specific elements:
+
+```html
+<a-blur enabled scrolllock allowscroll=".scrollable-area, .another-scrollable">
+  <div class="scrollable-area" style="overflow: auto; max-height: 300px;">
+    <!-- This area remains scrollable -->
+  </div>
+</a-blur>
+```
+
+## Accessibility
+
+- **Focus Trapping**: When enabled, focus is trapped within the blur element. Tab and Shift+Tab cycle through focusable elements inside.
+- **Focus Restoration**: When disabled, focus returns to the previously focused element.
+- **Escape Key**: Pressing Escape triggers the `exit` event.
+- **ARIA Attributes**: The element has `role="dialog"` and manages `aria-hidden` and `inert` states automatically.
+- **Initial Focus**: When enabled via keyboard navigation, focus automatically moves to the first focusable element inside.
 
 <TypeDoc source="../packages/elements/packages/blur" symbol="Blur" />
+
+## References
+
+- [WAI-ARIA Dialog (Modal) Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialogmodal/)
+- [Inert Attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inert)

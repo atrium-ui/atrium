@@ -1,12 +1,14 @@
 ---
 title: a-track
-description: A scroll-container with slider utility functions.
+description: A scroll-container with snap scrolling, drag gestures, and slider utility functions.
 command: import "@sv/elements/track";
 ---
 
 import { Lit, TypeDoc } from "package:/components"
 import { VariableTrack } from "./a-track/Track";
 import "./a-track/track.css";
+
+The `a-track` element is a horizontal or vertical scroll container with built-in support for snap scrolling, drag gestures, keyboard navigation, and looping. It's the foundation for carousels, image galleries, and any scrollable content that benefits from snap points.
 
 <div class="not-content box overflow-clip">
   <a-track snap class="flex w-full overflow-visible">
@@ -55,13 +57,65 @@ import "./a-track/track.css";
   </a-track>
 </div>
 
-Implemented with [Slider](/components/slider) and [Drawer](/components/drawer).
+Used by [Carousel](/components/carousel) and other sliding components.
+
+## Usage
+
+### Basic Track
+
+```html
+<a-track class="flex overflow-hidden">
+  <div class="flex-none w-64">Slide 1</div>
+  <div class="flex-none w-64">Slide 2</div>
+  <div class="flex-none w-64">Slide 3</div>
+</a-track>
+```
+
+### With Snap Scrolling
+
+Add the `snap` attribute to enable snap-to-item behaviour:
+
+```html
+<a-track snap class="flex overflow-hidden">
+  <div class="flex-none w-full">Slide 1</div>
+  <div class="flex-none w-full">Slide 2</div>
+  <div class="flex-none w-full">Slide 3</div>
+</a-track>
+```
+
+### Programmatic Navigation
+
+```ts
+const track = document.querySelector('a-track');
+
+// Move to a specific slide (0-indexed)
+track.moveTo(2);
+
+// Move to next/previous
+track.next();
+track.prev();
+
+// Get current slide index
+console.log(track.current);
+```
+
+### Listening for Slide Changes
+
+```ts
+const track = document.querySelector('a-track');
+
+track.addEventListener('change', (event) => {
+  console.log('Current slide:', track.current);
+});
+```
 
 <TypeDoc source="../packages/elements/packages/track" symbol="Track" />
 <TypeDoc source="../packages/elements/packages/track" symbol="Trait" />
 <TypeDoc source="../packages/elements/packages/track" symbol="SnapTrait" />
 
-Different example confugrations of tracks.
+## Examples
+
+Different example configurations of tracks.
 
 ### Free scroll
 

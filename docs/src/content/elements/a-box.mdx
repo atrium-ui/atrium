@@ -1,20 +1,88 @@
 ---
 title: a-box
-description: A reference page.
+description: A container element that observes its own size changes and emits resize events.
 command: import "@sv/elements/box";
 ---
 
 import { Elements } from "package:/components"
 import { TypeDoc, Example, Lit } from "package:/components";
 
-<TypeDoc source="../packages/elements/packages/box" symbol="BoxElement" />
+The `a-box` element wraps content and uses [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) to detect size changes. It dispatches events when its dimensions change, making it useful for responsive layouts and size-dependent logic.
 
-## Example
+## Usage
 
-```jsx
-<a-box onResize={() => {
-  console.log("update something based on the layout")
-}}>
-  ...
+### Basic Usage
+
+```html
+<a-box>
+  <div>Content that may change size</div>
 </a-box>
 ```
+
+### Listening to Resize Events
+
+```ts
+const box = document.querySelector('a-box');
+
+box.addEventListener('resize', (event) => {
+  const { offsetWidth, offsetHeight } = event.target;
+  console.log(`Box resized to ${offsetWidth}x${offsetHeight}`);
+});
+```
+
+### Responding to Layout Changes
+
+A common use case is updating dependent UI when a container's size changes:
+
+```jsx
+<a-box onResize={(e) => {
+  const { width } = e.detail;
+
+  // Switch to compact layout on small widths
+  if (width < 400) {
+    setLayout('compact');
+  } else {
+    setLayout('full');
+  }
+}}>
+  <div class="responsive-content">
+    ...
+  </div>
+</a-box>
+```
+
+### Container Queries Alternative
+
+While CSS Container Queries handle many responsive scenarios, `a-box` is useful when you need JavaScript logic based on size:
+
+```html
+<a-box id="chart-container">
+  <canvas id="chart"></canvas>
+</a-box>
+
+<script>
+  const container = document.querySelector('#chart-container');
+  const chart = document.querySelector('#chart');
+
+  container.addEventListener('resize', (e) => {
+    // Re-render chart at new dimensions
+    chart.width = e.detail.width;
+    chart.height = e.detail.height;
+    renderChart();
+  });
+</script>
+```
+
+## When to Use
+
+- **Responsive components** that can't rely on CSS alone
+- **Virtual scrolling** implementations that need container dimensions
+- **Canvas elements** that require explicit width/height values
+- **Layout calculations** that depend on rendered sizes
+
+<TypeDoc source="../packages/elements/packages/box" symbol="BoxElement" />
+
+## References
+
+- [ResizeObserver API (MDN)](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver)
+- [CSS Container Queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries)

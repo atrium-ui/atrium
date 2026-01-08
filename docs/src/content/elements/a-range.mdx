@@ -1,14 +1,165 @@
 ---
 title: a-range
-description: A reference page.
+description: A customisable range slider element for selecting numeric values.
 command: import "@sv/elements/range";
 ---
 
 import { Elements } from "package:/components"
 import { TypeDoc, Example, Lit } from "package:/components";
 
+The `a-range` element is a fully styleable range slider for selecting numeric values within a defined range. It supports keyboard navigation, custom styling via CSS custom properties, and works as a form-associated element.
+
 <div class="not-content box">
-  <a-range class="w-[400px]" value="0.2"></a-range>
+  <a-range class="w-[400px]" value="0.5"></a-range>
 </div>
 
+## Usage
+
+### Basic Usage
+
+```html
+<a-range value="0.5"></a-range>
+```
+
+### With Min, Max and Step
+
+```html
+<!-- Range from 0 to 100, stepping by 10 -->
+<a-range min="0" max="100" step="10" value="50"></a-range>
+```
+
+<div class="not-content box">
+  <a-range class="w-[400px]" min="0" max="100" step="10" value="50"></a-range>
+</div>
+
+### Percentage Values (Default)
+
+By default, the range operates from 0 to 1:
+
+```html
+<a-range value="0.25"></a-range> <!-- 25% -->
+<a-range value="0.5"></a-range>  <!-- 50% -->
+<a-range value="0.75"></a-range> <!-- 75% -->
+```
+
+### Listening to Value Changes
+
+```ts
+const range = document.querySelector('a-range');
+
+range.addEventListener('input', (event) => {
+  const { value } = event.detail;
+  console.log('Current value:', value);
+});
+```
+
+### Reading the Value
+
+```ts
+const range = document.querySelector('a-range');
+
+// As a number
+console.log(range.valueAsNumber); // 0.5
+
+// As the property
+console.log(range.value); // 0.5
+```
+
+### Disabled State
+
+```html
+<a-range disabled value="0.5"></a-range>
+```
+
+<div class="not-content box">
+  <a-range class="w-[400px] opacity-50" disabled value="0.5"></a-range>
+</div>
+
+## Styling
+
+The range slider is fully customisable via CSS custom properties:
+
+```css
+a-range {
+  /* Handle (the draggable circle) */
+  --range-handle-background: #1d4ed8;
+  --range-handle-size: 0.75rem;
+
+  /* Progress bar (filled portion) */
+  --range-progress-background: #1d4ed8;
+
+  /* Track (unfilled portion) */
+  --range-track-background: #e5e7eb;
+  --range-track-height: 0.25rem;
+  --range-track-padding: 0.5rem 0;
+
+  /* Focus state */
+  --range-outline-color: #3b82f6;
+}
+```
+
+### Themed Example
+
+```html
+<style>
+  .custom-range {
+    --range-handle-background: #10b981;
+    --range-progress-background: #10b981;
+    --range-track-background: #d1fae5;
+    --range-handle-size: 1rem;
+    --range-track-height: 0.5rem;
+  }
+</style>
+
+<a-range class="custom-range" value="0.6"></a-range>
+```
+
+<div class="not-content box">
+  <style>
+    { `.custom-range {
+      width: 300px;
+      --range-handle-background: #10b981;
+      --range-progress-background: #10b981;
+      --range-track-background: #d1fae5;
+      --range-handle-size: 1rem;
+      --range-track-height: 0.5rem;
+    }`}
+  </style>
+
+  <a-range class="custom-range" value="0.6"></a-range>
+</div>
+
+## CSS Parts
+
+Style internal parts directly using `::part()`:
+
+```css
+a-range::part(track) {
+  border-radius: 0;
+}
+
+a-range::part(handle) {
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+```
+
+| Part | Description |
+|------|-------------|
+| `track` | The background track element |
+| `handle` | The draggable handle/thumb |
+
+## Accessibility
+
+- **Role**: The element has `role="slider"` for screen reader compatibility.
+- **ARIA Attributes**: Automatically sets `aria-valuemin`, `aria-valuemax`, `aria-valuenow`, and `aria-orientation`.
+- **Keyboard Navigation**:
+  - Focus is indicated with a visible outline
+- **Disabled State**: When disabled, `aria-disabled="true"` is set and interactions are blocked.
+
 <TypeDoc source="../packages/elements/packages/range" symbol="Range" />
+
+## References
+
+- [WAI-ARIA Slider Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/slider/)
+- [MDN: input type="range"](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range)

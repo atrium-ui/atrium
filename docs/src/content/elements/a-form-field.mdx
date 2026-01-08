@@ -1,13 +1,131 @@
 ---
 title: a-form-field
-description: A reference page.
+description: A wrapper element for form inputs that handles validation states and error messages.
 command: import "@sv/elements/forms";
 ---
 
 import { Lit, TypeDoc } from "package:/components"
 
-Implemented with [Form](/components/form).
+The `a-form-field` element wraps form inputs to provide consistent validation handlinga and error display.
+
+<div class="not-content box">
+  <a-form-field>
+    <label slot="label">Email Address</label>
+    <input type="email" name="email" placeholder="you@example.com" />
+    <a-form-field-error>Please enter a valid email address</a-form-field-error>
+  </a-form-field>
+</div>
+
+Used by [Form](/components/form) and various input components.
+
+## Usage
+
+### Basic Form Field
+
+```html
+<a-form-field>
+  <label slot="label">Username</label>
+  <input type="text" name="username" required />
+  <a-form-field-error></a-form-field-error>
+</a-form-field>
+```
+
+## Form Integration
+
+### Complete Form Example
+
+```html
+<form id="signup-form">
+  <a-form-field>
+    <label slot="label">Name</label>
+    <input type="text" name="name" required />
+    <a-form-field-error>Please enter your name</a-form-field-error>
+  </a-form-field>
+
+  <a-form-field>
+    <label slot="label">Email</label>
+    <input type="email" name="email" required />
+    <a-form-field-error>Please enter a valid email</a-form-field-error>
+  </a-form-field>
+
+  <a-form-field>
+    <label slot="label">Password</label>
+    <input type="password" name="password" required minlength="8" />
+    <span slot="helper">Minimum 8 characters</span>
+    <a-form-field-error>Password must be at least 8 characters</a-form-field-error>
+  </a-form-field>
+
+  <button type="submit">Sign Up</button>
+</form>
+```
+
+<div class="box not-content">
+  <style>
+    {`
+    a-form-field {
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    a-form-field [slot="label"] {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    a-form-field input,
+    a-form-field select,
+    a-form-field textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+    }
+
+    a-form-field input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+
+    a-form-field [slot="helper"] {
+      display: block;
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-top: 0.25rem;
+    }
+    `}
+  </style>
+
+  <form id="signup-form">
+    <a-form-field class="block">
+      <label slot="label">Name</label>
+      <input type="text" name="name" placeholder="name" required />
+      <a-form-field-error>Please enter your name</a-form-field-error>
+    </a-form-field>
+
+    <a-form-field class="block">
+      <label slot="label">Email</label>
+      <input type="email" name="email" placeholder="email" required />
+      <a-form-field-error>Please enter a valid email</a-form-field-error>
+    </a-form-field>
+
+    <a-form-field class="block">
+      <label slot="label">Password</label>
+      <input type="password" name="password" placeholder="password" required minlength="8" />
+      <span slot="helper">Minimum 8 characters</span>
+      <a-form-field-error>Password must be at least 8 characters</a-form-field-error>
+    </a-form-field>
+
+    <button type="submit">Sign Up</button>
+  </form>
+</div>
 
 <TypeDoc source="../packages/elements/packages/form" symbol="FormFieldElement" />
 
 <TypeDoc source="../packages/elements/packages/form" symbol="FormFieldErrorElement" />
+
+## References
+
+- [WAI Form Validation Tutorials](https://www.w3.org/WAI/tutorials/forms/validation/)
+- [MDN: Client-side form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation)
