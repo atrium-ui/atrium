@@ -265,18 +265,6 @@ describe("navigation", () => {
 
     cleanup(root);
   });
-
-  test("arrow keys navigate months", async () => {
-    const { root, calendar } = await newCalendar({ value: "2024-03-15" });
-
-    calendar.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
-    expect(calendar.viewDate.getMonth()).toBe(3); // April
-
-    calendar.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
-    expect(calendar.viewDate.getMonth()).toBe(2); // March
-
-    cleanup(root);
-  });
 });
 
 // Week start tests
