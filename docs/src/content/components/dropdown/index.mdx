@@ -1,14 +1,38 @@
 ---
 title: Dropdown
-description: Dropdown
+description: A menu component that displays a list of navigable options in a popover.
 headline: Atrium // Components
-tags: []
+tags: [["a-popover", "elements/a-popover"], ["a-list", "elements/a-list"]]
 ---
 
-import { Story } from "package:/components/docs";
+import { Story, ContentTabs } from "package:/components/docs";
+import { Code } from "astro:components";
+import dropdownCode from "./dropdown.stories.tsx?raw";
 
-[description]
+The Dropdown provides a button-triggered menu for presenting a list of actions or navigation links. It combines [a-popover](/elements/a-popover) for positioning and [a-list](/elements/a-list) for keyboard-navigable options.
 
 ## Example
 
-<Story id="dropdown--default" />
+Click the button to reveal the dropdown menu with selectable options.
+
+<ContentTabs labels={["Preview", "Code"]}>
+  <Story id="dropdown--default" />
+  <Code lang="tsx" code={dropdownCode} class="max-h-[600px] overflow-auto" />
+</ContentTabs>
+
+## Examples with context
+
+### Settings Panel
+
+<Story id="dropdown--SettingsPanel" />
+
+## Accessibility
+
+- The menu can be navigated using arrow keys
+- Pressing Enter or Space activates the focused option
+- Escape dismisses the dropdown and returns focus to the trigger
+- The trigger button indicates the expanded/collapsed state via ARIA attributes
+
+## References
+
+- [WAI-ARIA Menu Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/)
