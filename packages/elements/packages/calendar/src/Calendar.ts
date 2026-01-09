@@ -185,6 +185,7 @@ export class CalendarElement extends LitElement {
     }
 
     .day[data-range-end] {
+      outline: 1px solid var(--_selected-bg);
       border-radius: 0 0.25rem 0.25rem 0;
     }
 
@@ -512,6 +513,11 @@ export class CalendarElement extends LitElement {
    * Check if a date is selected.
    */
   isSelected(dateStr: string): boolean {
+    // When actively selecting a new range, don't show old selection
+    if (this.mode === "range" && this.rangeStart) {
+      return dateStr === this.rangeStart;
+    }
+
     const { start, end } = this.parseValue(this.value || "");
     return dateStr === start || dateStr === end;
   }
@@ -525,8 +531,9 @@ export class CalendarElement extends LitElement {
     let start: string | undefined;
     let end: string | undefined;
 
-    if (this.rangeStart && this.hoverDate) {
-      // Preview mode during selection
+    if (this.rangeStart) {
+      // Actively selecting - only show preview range if hovering
+      if (!this.hoverDate) return false;
       [start, end] = [this.rangeStart, this.hoverDate].sort();
     } else {
       const parsed = this.parseValue(this.value || "");
@@ -535,6 +542,7 @@ export class CalendarElement extends LitElement {
     }
 
     if (!start || !end) return false;
+
     return dateStr >= start && dateStr <= end;
   }
 
