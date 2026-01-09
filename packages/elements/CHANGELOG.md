@@ -1,5 +1,15 @@
 # @sv/elements
 
+## 4.4.0 (2026-01-09)
+
+### Features
+
+- Give option to define if start or end date is focused initially
+
+### Fixes
+
+- a-calendar: improve range seelction preview
+
 ## 4.3.0 (2026-01-08)
 
 ### Features
