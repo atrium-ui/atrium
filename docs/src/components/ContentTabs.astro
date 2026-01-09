@@ -1,0 +1,62 @@
+---
+interface Props {
+  labels: string[];
+}
+
+const { labels } = Astro.props;
+---
+
+<div class="content-tabs w-full">
+  <div class="mb-4 flex gap-1 border-b border-gray-200 pb-1">
+    {labels.map((label, i) => (
+      <button
+        type="button"
+        class:list={[
+          "content-tab-btn rounded-lg bg-transparent px-4 py-2 text-sm font-medium transition-opacity",
+          i === 0 ? "opacity-100" : "opacity-50",
+        ]}
+        data-tab-index={i}
+      >
+        {label}
+      </button>
+    ))}
+  </div>
+  <div class="content-tab-panels">
+    <slot />
+  </div>
+</div>
+
+<script>
+  function initContentTabs() {
+    document.querySelectorAll(".content-tabs").forEach((container) => {
+      const buttons = container.querySelectorAll<HTMLButtonElement>(".content-tab-btn");
+      const panels = container.querySelectorAll<HTMLElement>(".content-tab-panels > *");
+
+      panels.forEach((panel, i) => {
+        if (i === 0) {
+          panel.style.display = "block";
+        } else {
+          panel.style.display = "none";
+        }
+      });
+
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const index = Number(btn.dataset.tabIndex);
+
+          buttons.forEach((b, i) => {
+            b.classList.toggle("opacity-100", i === index);
+            b.classList.toggle("opacity-50", i !== index);
+          });
+
+          panels.forEach((panel, i) => {
+            panel.style.display = i === index ? "block" : "none";
+          });
+        });
+      });
+    });
+  }
+
+  initContentTabs();
+  document.addEventListener("astro:page-load", initContentTabs);
+</script>

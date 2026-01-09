@@ -105,7 +105,7 @@ export function StoryFrame() {
     <div data-story-renderer={renderer}>
       <div
         className={twMerge(
-          `story-root overflow-hidden p-4 story-layout-${layout}`,
+          `story-root overflow-hidden p-0 story-layout-${layout}`,
           globals.theme ? `fra-context-background fra-context-${globals.theme}` : "",
         )}
         ref={rootRef}

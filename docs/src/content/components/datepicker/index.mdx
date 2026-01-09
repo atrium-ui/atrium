@@ -1,13 +1,38 @@
 ---
 title: Datepicker
 image: "/components/datepicker.png"
-description: A Datepicker
+description: A date selection component combining an input field with a calendar popover.
 tags: [["Button", "components/button"], ["Input", "components/input"]]
 command: "npx @sv/components datepicker"
 ---
 import { Example, Atrium } from "package:/components";
-import { Story } from "package:/components/docs";
+import { Story, ContentTabs } from "package:/components/docs";
+import datepickerCode from "@components/src/vue/Datepicker?raw";
+import { Code } from "astro:components";
 
-Uses [a-calendar](/elements/a-calendar).
+The Datepicker provides an intuitive way for users to select dates through a text input paired with a calendar popover. It combines the [Input](/components/input) component with the [a-calendar](/elements/a-calendar) element to create a seamless date selection experience.
 
-<Story id="datepicker--default" />
+<ContentTabs labels={["Preview", "Code"]}>
+  <Story id="datepicker--default" />
+  <Code lang="tsx" code={datepickerCode} />
+</ContentTabs>
+
+## Examples with context
+
+### List Filter
+
+Use a datepicker to filter lists by date ranges, making it easy for users to narrow down results to a specific time period.
+
+<Story id="datepicker--FilterableSidebar" />
+
+### Forms
+
+Integrate the datepicker into forms where date input is required, such as booking systems or event scheduling.
+
+<Story id="datepicker--BookingForm" />
+
+## Accessibility
+
+- The calendar popover can be navigated using keyboard arrow keys
+- Pressing Enter or Space selects the focused date
+- The calendar supports custom locales via the `locale` attribute
