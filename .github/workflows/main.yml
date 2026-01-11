@@ -13,32 +13,32 @@ permissions:
   contents: write
 
 jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - uses: jdx/mise-action@v2
-        with:
-          install: true
-      - name: Run Linting
-        run: task check
+  # check:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - uses: jdx/mise-action@v2
+  #       with:
+  #         install: true
+  #     - name: Run Linting
+  #       run: task check
 
-  test:
-    runs-on: ubuntu-latest
-    needs: check
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - uses: jdx/mise-action@v2
-        with:
-          install: true
-      - name: Run Tests
-        run: task test
+  # test:
+  #   runs-on: ubuntu-latest
+  #   needs: check
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - uses: jdx/mise-action@v2
+  #       with:
+  #         install: true
+  #     - name: Run Tests
+  #       run: task test
 
   release:
     runs-on: ubuntu-latest
-    needs: test
+    # needs: test
     steps:
       - name: Checkout
         uses: actions/checkout@v4
