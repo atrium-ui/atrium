@@ -8,7 +8,12 @@ const LICENSE = `/**
 async function buildLib(root: string) {
   await Bun.build({
     entrypoints: [`${root}/src/index.ts`],
-    external: ["lit", "@atrium-ui/elements", "@atrium-ui/scroll-lock", "@floating-ui/dom"],
+    external: [
+      "lit",
+      "@atrium-ui/elements",
+      "@atrium-ui/scroll-lock",
+      "@floating-ui/dom",
+    ],
     footer: LICENSE,
     outdir: `${root}/dist`,
     format: "esm",
