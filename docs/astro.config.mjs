@@ -6,7 +6,7 @@ import { defineConfig, fontProviders } from "astro/config";
 import rehypeShiftHeading from "rehype-shift-heading";
 import mdx from "@astrojs/mdx";
 import pagefind from "astro-pagefind";
-import svgSprite from "@sv/svg-sprites/vite";
+import svgSprite from "@atrium-ui/svg-sprites/vite";
 import { basename, resolve } from "node:path";
 import sitemap from "@astrojs/sitemap";
 import remarkDirective from "remark-directive";
@@ -23,7 +23,7 @@ export default defineConfig({
     resolve: {
       alias: {
         "package:": "/src",
-        "@components": "@sv/components",
+        "@components": "@atrium-ui/components",
         "@docs": "/src/components/stories",
       },
     },
@@ -33,7 +33,7 @@ export default defineConfig({
       },
     },
     optimizeDeps: {
-      exclude: ["@sv/elements"],
+      exclude: ["@atrium-ui/elements"],
     },
     plugins: [
       tailwindcss(),
@@ -41,7 +41,7 @@ export default defineConfig({
         dir: [
           //
           "src/assets/icons/**/*.svg",
-          `${resolve("../node_modules/@sv/icons/assets")}/*.svg`,
+          `${resolve("../node_modules/@atrium-ui/icons/assets")}/*.svg`,
         ],
         transform(code) {
           return code

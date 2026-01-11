@@ -11,7 +11,7 @@ import {
   press,
   setup,
   fakePointer,
-} from "@sv/test";
+} from "@atrium-ui/test";
 
 describe("Track", () => {
   const { pointer } = userEvent.setup();

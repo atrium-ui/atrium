@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
-import "@sv/elements/popover";
-// import "@sv/elements/calendar";
+import "@atrium-ui/elements/popover";
+// import "@atrium-ui/elements/calendar";
 import { defineComponent, ref } from "vue";
 import { Input } from "./Input.js";
 

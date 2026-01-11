@@ -1,11 +1,11 @@
 ---
-title: "@sv/svg-sprites"
+title: "@atrium-ui/svg-sprites"
 description: A reference page.
-command: bun add @sv/svg-sprites
+command: bun add @atrium-ui/svg-sprites
 ---
 
 import { Command } from "package:/components";
-import Changelog from "@sv/svg-sprites/CHANGELOG.md";
+import Changelog from "@atrium-ui/svg-sprites/CHANGELOG.md";
 
 Compiles svgs in a directory to a spritesheet and make it available as text or blob.
 
@@ -19,7 +19,7 @@ Or SSR the SVG symbols into the page, for use with `<use href="..."/>` tags.
 
 ```astro
 ---
-import { svg } from '@sv/svg-sprites/sheet';
+import { svg } from '@atrium-ui/svg-sprites/sheet';
 ---
 <div class="hidden" set:html={await svg()}></div>
 ```
@@ -29,9 +29,9 @@ import { svg } from '@sv/svg-sprites/sheet';
 Make sure your project is set up with access to the registry as described in [Setup](/guides/setup).
 
 <Command
-  pnpm="pnpm add @sv/svg-sprites"
-  npm="npm i @sv/svg-sprites"
-  bun="bun add @sv/svg-sprites"
+  pnpm="pnpm add @atrium-ui/svg-sprites"
+  npm="npm i @atrium-ui/svg-sprites"
+  bun="bun add @atrium-ui/svg-sprites"
 />
 
 ## Usage
@@ -39,7 +39,7 @@ Make sure your project is set up with access to the registry as described in [Se
 ### Vite configuration
 
 ```ts
-import svgSprite from "@sv/svg-sprites/vite";
+import svgSprite from "@atrium-ui/svg-sprites/vite";
 
 export default {
   plugins: [
@@ -57,7 +57,7 @@ module.exports = {
     config.module.rules.push({
       use: [
         {
-          loader: "@sv/svg-sprites/loader",
+          loader: "@atrium-ui/svg-sprites/loader",
           options: {
             dir: "./assets/icons/*.svg",
           },
@@ -73,7 +73,7 @@ module.exports = {
 ### Component Usage
 
 ```ts
-import "@sv/svg-sprites/svg-icon";
+import "@atrium-ui/svg-sprites/svg-icon";
 ```
 
 ```html

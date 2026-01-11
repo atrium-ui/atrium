@@ -3,7 +3,7 @@ import { LitElement, type TemplateResult, html } from "lit";
 import { twMerge } from "tailwind-merge";
 import { state } from "lit/decorators/state.js";
 import { property } from "lit/decorators.js";
-import "@sv/svg-sprites/svg-icon";
+import "@atrium-ui/svg-sprites/svg-icon";
 
 const SHOW_THRESHOLD_SCREEN_HEIGHTS = 3;
 

@@ -2,7 +2,7 @@
 import type { Story } from "../../../components/stories/stories.js";
 import { Datepicker } from "@components/src/vue/Datepicker";
 import { ref } from "vue";
-import "@sv/elements/calendar";
+import "@atrium-ui/elements/calendar";
 
 export default {
   tags: ["public"],

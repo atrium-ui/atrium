@@ -1,4 +1,4 @@
-# @sv/scroll-lock
+# @atrium-ui/scroll-lock
 
 ## 1.2.0 (2026-01-08)
 

@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge";
-import "@sv/svg-sprites/svg-icon";
+import "@atrium-ui/svg-sprites/svg-icon";
 import { useEffect, useRef, useState, type PropsWithChildren } from "react";
 
 export function ExampleCodeView(props: PropsWithChildren & { external?: stirng }) {

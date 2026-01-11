@@ -9,7 +9,7 @@
       }
     ],
     "paths": {
-      "@sv/elements/*": [
+      "@atrium-ui/elements/*": [
         "./packages/*/dist/index.js"
       ]
     }

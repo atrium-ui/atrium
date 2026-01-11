@@ -1,11 +1,11 @@
 ---
-title: "@sv/elements"
+title: "@atrium-ui/elements"
 description: A collection of headless custom-elements for building accessible, framework-agnostic UI components.
-command: bun add @sv/elements
+command: bun add @atrium-ui/elements
 ---
 
 import { Lit, Command } from "package:/components";
-import Changelog from "@sv/elements/CHANGELOG.md";
+import Changelog from "@atrium-ui/elements/CHANGELOG.md";
 
 This package includes all custom-elements used in Atrium components. Elements are headless (unstyled) and focus purely on behaviour and accessibility, making them framework-agnostic and highly customisable.
 
@@ -14,9 +14,9 @@ This package includes all custom-elements used in Atrium components. Elements ar
 Make sure your project is set up with access to the registry as described in [Setup](/guides/setup).
 
 <Command
-  pnpm="pnpm add @sv/elements --save-exact"
-  npm="npm i @sv/elements --save-exact"
-  bun="bun add @sv/elements --exact"
+  pnpm="pnpm add @atrium-ui/elements --save-exact"
+  npm="npm i @atrium-ui/elements --save-exact"
+  bun="bun add @atrium-ui/elements --exact"
 />
 
 **Note:** We recommend using `--save-exact` to pin the version, as elements may receive breaking changes between minor versions.
@@ -29,9 +29,9 @@ Import elements individually to keep your bundle size small:
 
 ```ts
 // Import specific elements
-import "@sv/elements/expandable";
-import "@sv/elements/popover";
-import "@sv/elements/toggle";
+import "@atrium-ui/elements/expandable";
+import "@atrium-ui/elements/popover";
+import "@atrium-ui/elements/toggle";
 ```
 
 ### Using in HTML
@@ -51,7 +51,7 @@ Elements work with any framework that supports custom elements:
 
 ```tsx
 // React/Preact
-import "@sv/elements/toggle";
+import "@atrium-ui/elements/toggle";
 
 function App() {
   return (
@@ -66,7 +66,7 @@ function App() {
 ```vue
 <!-- Vue -->
 <script setup>
-import "@sv/elements/expandable";
+import "@atrium-ui/elements/expandable";
 </script>
 
 <template>
@@ -80,7 +80,7 @@ import "@sv/elements/expandable";
 ```astro
 ---
 // Astro
-import "@sv/elements/popover";
+import "@atrium-ui/elements/popover";
 ---
 
 <a-popover-trigger>

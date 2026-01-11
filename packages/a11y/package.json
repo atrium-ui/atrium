@@ -1,5 +1,5 @@
 {
-  "name": "@sv/a11y",
+  "name": "@atrium-ui/a11y",
   "author": "atrium",
   "version": "1.2.0",
   "description": "Accessibility testing",

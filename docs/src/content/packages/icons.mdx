@@ -1,11 +1,11 @@
 ---
-title: "@sv/icons"
+title: "@atrium-ui/icons"
 description: A small collection of commonly used icons.
-command: bun add @sv/icons
+command: bun add @atrium-ui/icons
 ---
 
 import { Command } from "package:/components";
-import Changelog from "@sv/icons/CHANGELOG.md";
+import Changelog from "@atrium-ui/icons/CHANGELOG.md";
 
 A curated collection of commonly used icons, optimised for use with Atrium components. Icons are provided as SVG and can be used directly or through the included utilities.
 
@@ -14,9 +14,9 @@ A curated collection of commonly used icons, optimised for use with Atrium compo
 Make sure your project is set up with access to the registry as described in [Setup](/guides/setup).
 
 <Command
-  pnpm="pnpm add @sv/icons"
-  npm="npm i @sv/icons"
-  bun="bun add @sv/icons"
+  pnpm="pnpm add @atrium-ui/icons"
+  npm="npm i @atrium-ui/icons"
+  bun="bun add @atrium-ui/icons"
 />
 
 ## Usage
@@ -26,7 +26,7 @@ Make sure your project is set up with access to the registry as described in [Se
 Import icons directly as SVG strings or components:
 
 ```ts
-import { arrowLeft, arrowRight, close, check } from '@sv/icons';
+import { arrowLeft, arrowRight, close, check } from '@atrium-ui/icons';
 
 // Use in your framework
 document.querySelector('.icon').innerHTML = arrowLeft;
@@ -66,7 +66,7 @@ For applications with many icons, consider lazy loading:
 
 ```ts
 async function loadIcon(name: string): Promise<string> {
-  const icons = await import('@sv/icons');
+  const icons = await import('@atrium-ui/icons');
   return icons[name];
 }
 

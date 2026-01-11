@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import { AnimationElement } from "@sv/animation";
+import { AnimationElement } from "@atrium-ui/animation";
 import riveWASMResource from "@rive-app/canvas-advanced-lite/rive.wasm?url";
 AnimationElement.riveWasm = riveWASMResource;
 

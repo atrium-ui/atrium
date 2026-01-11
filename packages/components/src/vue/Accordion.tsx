@@ -1,5 +1,5 @@
-import "@sv/elements/expandable";
-import "@sv/svg-sprites/svg-icon";
+import "@atrium-ui/elements/expandable";
+import "@atrium-ui/svg-sprites/svg-icon";
 import { defineComponent } from "vue";
 
 export const Accordion = defineComponent((_, { slots }) => {

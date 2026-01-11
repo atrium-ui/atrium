@@ -1,7 +1,7 @@
 import "./Playground.css";
 
-import "@sv/elements/blur";
-import "@sv/elements/list";
+import "@atrium-ui/elements/blur";
+import "@atrium-ui/elements/list";
 
 // esbuild
 import * as esbuild from "esbuild-wasm";
@@ -12,8 +12,8 @@ import tsEditorWorker from "monaco-editor/esm/vs/language/typescript/ts.worker.j
 
 import exampleCodeHtml from "./Examplecode.html.txt?raw";
 import exampleCodeTsx from "./Examplecode.tsx.txt?raw";
-import { Toast } from "@sv/elements/toast";
-import { Blur } from "@sv/elements/blur";
+import { Toast } from "@atrium-ui/elements/toast";
+import { Blur } from "@atrium-ui/elements/blur";
 import { css, html } from "lit";
 import { useEffect, useMemo, useRef, useState } from "react";
 

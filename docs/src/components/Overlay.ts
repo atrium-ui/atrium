@@ -1,8 +1,8 @@
-import { Blur } from "@sv/elements/blur";
-import { Portal } from "@sv/elements/portal";
+import { Blur } from "@atrium-ui/elements/blur";
+import { Portal } from "@atrium-ui/elements/portal";
 import { css, html, LitElement } from "lit";
 import { property, query } from "lit/decorators.js";
-import { ScrollLock } from "@sv/scroll-lock";
+import { ScrollLock } from "@atrium-ui/scroll-lock";
 
 const overlayRegistry = new Map<string, OverlayElement>();
 
