@@ -574,7 +574,6 @@ export class CalendarViewElement extends LitElement {
     const gridWidth = width - LEFT_GUTTER_WIDTH;
     const dayWidth = gridWidth / 7;
     const today = new Date();
-    const showTimeScale = this.dayHeight >= 200;
 
     // Find visible weeks
     const visibleWeeks = this.weeks.filter(
@@ -621,33 +620,31 @@ export class CalendarViewElement extends LitElement {
       ctx.lineTo(width, y);
       ctx.stroke();
 
-      // Left gutter: week number or time scale
-      if (showTimeScale) {
-        const hourLabelOpacity = Math.max(0, Math.min(1, (this.dayHeight - 300) / 300));
+      // Left gutter: week number and time scale
+      const hourLabelOpacity = Math.max(0, Math.min(1, (this.dayHeight - 300) / 300));
 
-        ctx.textAlign = "right";
+      ctx.textAlign = "right";
 
-        // Draw hourly lines and labels
-        ctx.strokeStyle = `rgba(255, 255, 255, ${0.05 * hourLabelOpacity})`;
+      // Draw hourly lines and labels
+      ctx.strokeStyle = `rgba(255, 255, 255, ${0.05 * hourLabelOpacity})`;
 
-        // Calculate opacity for hour labels based on zoom level
-        // Fade in as we zoom in from 200px to 400px
-        ctx.fillStyle = `rgba(255, 255, 255, ${0.4 * hourLabelOpacity})`;
+      // Calculate opacity for hour labels based on zoom level
+      // Fade in as we zoom in from 200px to 400px
+      ctx.fillStyle = `rgba(255, 255, 255, ${0.4 * hourLabelOpacity})`;
 
-        for (let hour = 0; hour < 24; hour++) {
-          const hourY = y + (hour / 24) * week.height;
-          if (hourY >= 0 && hourY <= height) {
-            // Hour line
-            ctx.beginPath();
-            ctx.moveTo(LEFT_GUTTER_WIDTH, hourY);
-            ctx.lineTo(width, hourY);
-            ctx.stroke();
+      for (let hour = 0; hour < 24; hour++) {
+        const hourY = y + (hour / 24) * week.height;
+        if (hourY >= 0 && hourY <= height) {
+          // Hour line
+          ctx.beginPath();
+          ctx.moveTo(LEFT_GUTTER_WIDTH, hourY);
+          ctx.lineTo(width, hourY);
+          ctx.stroke();
 
-            // Hour label (only draw if opacity is significant)
-            if (hourLabelOpacity > 0.1) {
-              const label = `${hour.toString().padStart(2, "0")}:00`;
-              ctx.fillText(label, 48, hourY + 4);
-            }
+          // Hour label (only draw if opacity is significant)
+          if (hourLabelOpacity > 0.1) {
+            const label = `${hour.toString().padStart(2, "0")}:00`;
+            ctx.fillText(label, 48, hourY + 4);
           }
         }
       }
@@ -694,7 +691,7 @@ export class CalendarViewElement extends LitElement {
     // Determine zoom direction: deltaY < 0 = zoom in (scroll up), deltaY > 0 = zoom out (scroll down)
     const newHeight = Math.max(
       MIN_DAY_HEIGHT,
-      Math.min(MAX_DAY_HEIGHT, this.dayHeight + e.deltaY)
+      Math.min(MAX_DAY_HEIGHT, this.dayHeight - e.deltaY)
     );
 
     const oldHeight = this.dayHeight;
