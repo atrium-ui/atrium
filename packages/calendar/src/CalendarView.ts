@@ -356,13 +356,13 @@ export class CalendarViewElement extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
     this.generateWeeks();
-    
+
     // Restore zoom level from localStorage
     const savedDayHeight = this.loadDayHeight();
     if (savedDayHeight !== 80) {
       this.dayHeight = savedDayHeight;
     }
-    
+
     window.addEventListener("mousemove", this.onMouseMove);
     window.addEventListener("mouseup", this.onMouseUp);
   }
@@ -433,10 +433,10 @@ export class CalendarViewElement extends LitElement {
     if (changedProps.has("filter")) {
       const previousFilter = changedProps.get("filter") as string | undefined;
       const currentFilter = this.filter;
-      
+
       const wasFiltered = previousFilter && previousFilter.trim().length > 0;
       const isFiltered = currentFilter && currentFilter.trim().length > 0;
-      
+
       // If filter was just cleared/reset (was filtered, now empty)
       if (wasFiltered && !isFiltered) {
         this.updateWeekOffsets();
@@ -690,8 +690,9 @@ export class CalendarViewElement extends LitElement {
 
     // Store the Y position in content coordinates as zoom origin
     const rect = this.scrollContainer.getBoundingClientRect();
-    this.zoomViewportY = e.clientY - rect.top;
-    this.zoomOriginY = this.scrollTop + this.zoomViewportY;
+    const viewportY = e.clientY - rect.top;
+    this.zoomViewportY = viewportY;
+    this.zoomOriginY = viewportY + this.scrollTop;
   };
 
   onMouseMove = (e: MouseEvent): void => {
@@ -785,6 +786,7 @@ export class CalendarViewElement extends LitElement {
 
     const rect = this.scrollContainer.getBoundingClientRect();
     const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top + this.scrollTop;
 
     // Check if clicking on zoom handle area (left gutter)
     if (x < LEFT_GUTTER_WIDTH) {
@@ -792,11 +794,11 @@ export class CalendarViewElement extends LitElement {
       return;
     }
 
-    // Start selection
+    // Start selection (coordinates are absolute, accounting for scrollTop)
     e.preventDefault();
     this.isSelecting = true;
     this.selectionStartX = x;
-    this.selectionStartY = e.clientY - rect.top + this.scrollTop;
+    this.selectionStartY = y;
     this.selection = {
       startX: this.selectionStartX,
       startY: this.selectionStartY,
@@ -1014,7 +1016,7 @@ export class CalendarViewElement extends LitElement {
             const x = dayIndex * dayWidth;
             const yStart = week.yOffset + 2 + visibleCount * (MIN_EVENT_HEIGHT + 2);
             const yEnd = yStart + MIN_EVENT_HEIGHT;
-            
+
             // Only show ellipsis if it fits within the week height
             if (yEnd <= week.yOffset + week.height) {
               eventElements.push(html`
@@ -1102,8 +1104,8 @@ export class CalendarViewElement extends LitElement {
 
     const minX = Math.min(this.selection.startX, this.selection.endX);
     const maxX = Math.max(this.selection.startX, this.selection.endX);
-    const minY = Math.min(this.selection.startY, this.selection.endY) - this.scrollTop;
-    const maxY = Math.max(this.selection.startY, this.selection.endY) - this.scrollTop;
+    const minY = Math.min(this.selection.startY, this.selection.endY);
+    const maxY = Math.max(this.selection.startY, this.selection.endY);
 
     return html`
       <div
