@@ -21,11 +21,12 @@ interface VisibleMonth {
   name: string;
   year: number;
   yStart: number;
+  yOffset: number;
 }
 
 const WEEKDAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MIN_DAY_HEIGHT = 100;
-const MAX_DAY_HEIGHT = 1440; // 1px per minute
+const MAX_DAY_HEIGHT = 2000; // 1px per minute
 const LEFT_GUTTER_WIDTH = 60;
 const MIN_EVENT_HEIGHT = 16;
 
@@ -238,16 +239,14 @@ export class CalendarViewElement extends LitElement {
     }
 
     .month-label {
-      position: sticky;
-      top: 0;
-      left: 0;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 4px 8px;
-      font-size: 14px;
+      position: absolute;
+      font-size: 24px;
       font-weight: 500;
       color: var(--text-color);
       z-index: 5;
       pointer-events: none;
+      white-space: nowrap;
+      padding: 12px 0 0 12px;
     }
 
     .selection {
@@ -259,7 +258,7 @@ export class CalendarViewElement extends LitElement {
 
     .date-label {
       position: absolute;
-      font-size: 11px;
+      font-size: 16px;
       color: var(--text-muted);
       padding: 2px 4px;
     }
@@ -919,6 +918,7 @@ export class CalendarViewElement extends LitElement {
             name: monthName,
             year,
             yStart: week.yOffset - scrollTop,
+            yOffset: week.yOffset,
           });
         }
       }
@@ -938,11 +938,69 @@ export class CalendarViewElement extends LitElement {
     const showTimeScale = this.dayHeight >= 200;
 
     const eventElements: ReturnType<typeof html>[] = [];
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
 
     // Track event count per day for stacking when zoomed out
     const dayEventCount = new Map<string, number>();
     // Track total events per day for overflow detection
     const dayTotalCount = new Map<string, number>();
+
+    // First pass: collect all month boundaries with their Y positions
+    const monthBoundaries: { monthKey: string; monthName: string; year: number; yOffset: number }[] = [];
+    for (const week of this.weeks) {
+      if (week.height === 0) continue;
+      const firstDay = week.days[0];
+      if (!firstDay) continue;
+
+      const monthIndex = firstDay.getMonth();
+      const year = firstDay.getFullYear();
+      const monthKey = `${monthIndex}-${year}`;
+
+      if (firstDay.getDate() <= 7) {
+        const existing = monthBoundaries.find((m) => m.monthKey === monthKey);
+        if (!existing) {
+          const monthName = monthNames[monthIndex];
+          if (monthName) {
+            monthBoundaries.push({ monthKey, monthName, year, yOffset: week.yOffset });
+          }
+        }
+      }
+    }
+
+    // Second pass: render month labels with sticky behavior until next month
+    for (let i = 0; i < monthBoundaries.length; i++) {
+      const month = monthBoundaries[i];
+      if (!month) continue;
+      const nextMonth = monthBoundaries[i + 1];
+      const labelY = month.yOffset;
+      const nextMonthY = nextMonth ? nextMonth.yOffset : this.totalHeight;
+
+      // Skip if this month is entirely above viewport
+      if (nextMonthY < scrollTop) continue;
+      // Skip if this month starts below viewport
+      if (labelY > viewportBottom) break;
+
+      // Calculate sticky position
+      const stickyTop = Math.max(0, scrollTop - labelY);
+      const maxStickyTop = nextMonthY - labelY - 24; // Stop before next month label
+      const clampedStickyTop = Math.min(stickyTop, maxStickyTop);
+      const finalTop = labelY + clampedStickyTop;
+
+      eventElements.push(html`
+        <div
+          class="month-label"
+          style="
+            top: ${finalTop}px;
+            left: 2px;
+          "
+        >
+          ${month.monthName} ${month.year}
+        </div>
+      `);
+    }
 
     for (const event of events) {
       const eventStart = new Date(event.start);
@@ -1105,7 +1163,7 @@ export class CalendarViewElement extends LitElement {
         const dayBottom = dayTop + week.height;
 
         // Make date sticky at bottom of screen if day extends below
-        const labelY = Math.min(dayBottom - 20, rect.height - 20);
+        const labelY = Math.min(dayBottom - 32, rect.height - 32);
 
         // Only show if the day cell is visible
         if (dayTop < rect.height && dayBottom > 0 && labelY > dayTop) {
@@ -1225,9 +1283,7 @@ export class CalendarViewElement extends LitElement {
         </div>
 
         <div class="header">
-          <div class="header-gutter">
-            ${firstMonth ? html`<span class="month-label">${firstMonth.name}</span>` : ""}
-          </div>
+          <div class="header-gutter"></div>
           <div class="weekdays">
             ${WEEKDAY_NAMES.map((name) => html`<div class="weekday">${name}</div>`)}
           </div>
@@ -1253,4 +1309,6 @@ export class CalendarViewElement extends LitElement {
       </div>
     `;
   }
+
+
 }
