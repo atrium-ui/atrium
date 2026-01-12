@@ -130,7 +130,6 @@ export class CalendarViewElement extends LitElement {
       font-size: 12px;
       color: var(--text-muted);
       text-transform: uppercase;
-      transition: opacity 0.3s ease;
     }
 
     .body {
@@ -303,14 +302,67 @@ export class CalendarViewElement extends LitElement {
   selectionStartY = 0;
   animationFrame: number | null = null;
   isDraggingMinimap = false;
+  preFilterScrollTop = 0; // Stores scroll position before filtering
 
   // Generate weeks for a year range centered on current date
   startDate = getStartOfWeek(addDays(new Date(), -365));
   endDate = addDays(new Date(), 365);
 
+  loadDayHeight(): number {
+    try {
+      const saved = localStorage.getItem("calendar-dayHeight");
+      if (saved) {
+        return Math.max(MIN_DAY_HEIGHT, Math.min(MAX_DAY_HEIGHT, parseFloat(saved)));
+      }
+    } catch (e) {
+      // localStorage not available
+    }
+    return 80;
+  }
+
+  saveDayHeight(): void {
+    try {
+      localStorage.setItem("calendar-dayHeight", this.dayHeight.toString());
+    } catch (e) {
+      // localStorage not available
+    }
+  }
+
+  saveScrollPosition(): void {
+    try {
+      localStorage.setItem("calendar-scrollTop", this.scrollTop.toString());
+    } catch (e) {
+      // localStorage not available
+    }
+  }
+
+  saveFilterScrollState(): void {
+    // Save the current scroll position before applying filter
+    this.preFilterScrollTop = this.scrollTop;
+  }
+
+  restoreFilterScrollState(): void {
+    // Restore scroll position after clearing filter
+    // Use requestAnimationFrame to ensure layout has updated
+    requestAnimationFrame(() => {
+      if (this.scrollContainer) {
+        const clampedScroll = Math.max(0, Math.min(this.preFilterScrollTop, this.totalHeight - this.viewportHeight));
+        this.scrollContainer.scrollTop = clampedScroll;
+        this.scrollTop = clampedScroll;
+      }
+    });
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
     this.generateWeeks();
+    
+    // Restore zoom level from localStorage
+    const savedDayHeight = this.loadDayHeight();
+    if (savedDayHeight !== 80) {
+      this.dayHeight = savedDayHeight;
+    }
+    
     window.addEventListener("mousemove", this.onMouseMove);
     window.addEventListener("mouseup", this.onMouseUp);
   }
@@ -334,16 +386,31 @@ export class CalendarViewElement extends LitElement {
       this.scrollContainer.addEventListener("scroll", this.onScroll);
       this.viewportHeight = this.scrollContainer.clientHeight;
 
-      // Scroll to today
-      const today = new Date();
-      const weekIndex = this.weeks.findIndex((w) =>
-        w.days.some((d) => isSameDay(d, today))
-      );
-      if (weekIndex >= 0) {
-        const targetWeek = this.weeks[weekIndex];
-        if (targetWeek) {
-          const targetScroll = targetWeek.yOffset - this.viewportHeight / 2;
-          this.scrollContainer.scrollTop = Math.max(0, targetScroll);
+      // Try to restore saved scroll position, otherwise scroll to today
+      let shouldRestoreScroll = false;
+      try {
+        const savedScroll = localStorage.getItem("calendar-scrollTop");
+        if (savedScroll) {
+          const scrollPos = parseFloat(savedScroll);
+          this.scrollContainer.scrollTop = Math.max(0, Math.min(scrollPos, this.totalHeight - this.viewportHeight));
+          shouldRestoreScroll = true;
+        }
+      } catch (e) {
+        // localStorage not available
+      }
+
+      if (!shouldRestoreScroll) {
+        // Scroll to today if no saved position
+        const today = new Date();
+        const weekIndex = this.weeks.findIndex((w) =>
+          w.days.some((d) => isSameDay(d, today))
+        );
+        if (weekIndex >= 0) {
+          const targetWeek = this.weeks[weekIndex];
+          if (targetWeek) {
+            const targetScroll = targetWeek.yOffset - this.viewportHeight / 2;
+            this.scrollContainer.scrollTop = Math.max(0, targetScroll);
+          }
         }
       }
     }
@@ -358,11 +425,39 @@ export class CalendarViewElement extends LitElement {
   }
 
   protected updated(changedProps: PropertyValueMap<this>): void {
-    if (changedProps.has("dayHeight") || changedProps.has("filter")) {
+    if (changedProps.has("dayHeight")) {
+      this.saveDayHeight();
       this.updateWeekOffsets();
       this.scheduleRender();
     }
+    if (changedProps.has("filter")) {
+      const previousFilter = changedProps.get("filter") as string | undefined;
+      const currentFilter = this.filter;
+      
+      const wasFiltered = previousFilter && previousFilter.trim().length > 0;
+      const isFiltered = currentFilter && currentFilter.trim().length > 0;
+      
+      // If filter was just cleared/reset (was filtered, now empty)
+      if (wasFiltered && !isFiltered) {
+        this.updateWeekOffsets();
+        this.scheduleRender();
+        // Restore after render completes
+        requestAnimationFrame(() => {
+          this.restoreFilterScrollState();
+        });
+      }
+      // If filter was just applied (was empty, now filtered)
+      else if (!wasFiltered && isFiltered) {
+        this.saveFilterScrollState();
+        this.updateWeekOffsets();
+        this.scheduleRender();
+      } else {
+        this.updateWeekOffsets();
+        this.scheduleRender();
+      }
+    }
     if (changedProps.has("scrollTop")) {
+      this.saveScrollPosition();
       this.scheduleRender();
     }
   }
@@ -886,7 +981,7 @@ export class CalendarViewElement extends LitElement {
                 style="
                   left: ${x + 2}px;
                   top: ${yStart}px;
-                  width: ${dayWidth - 4}px;
+                  width: ${dayWidth - 32}px;
                   height: ${height}px;
                   background: ${event.color || "var(--event-default)"};
                 "
@@ -895,6 +990,52 @@ export class CalendarViewElement extends LitElement {
                 ${event.title}
               </div>
             `);
+          }
+        }
+      }
+    }
+
+    // Add ellipsis indicators for overflow events when zoomed out
+    if (!showTimeScale) {
+      for (const week of this.weeks) {
+        if (week.height === 0) continue;
+        if (week.yOffset + week.height < scrollTop) continue;
+        if (week.yOffset > viewportBottom) continue;
+
+        const maxEventsInDay = Math.floor(week.height / (MIN_EVENT_HEIGHT + 2));
+
+        for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
+          const dayKey = `${week.weekNumber}-${dayIndex}`;
+          const visibleCount = dayEventCount.get(dayKey) || 0;
+          const totalCount = dayTotalCount.get(dayKey) || 0;
+
+          // Show ellipsis if there are more events than fit
+          if (totalCount > visibleCount && visibleCount === maxEventsInDay) {
+            const x = dayIndex * dayWidth;
+            const yStart = week.yOffset + 2 + visibleCount * (MIN_EVENT_HEIGHT + 2);
+            const yEnd = yStart + MIN_EVENT_HEIGHT;
+            
+            // Only show ellipsis if it fits within the week height
+            if (yEnd <= week.yOffset + week.height) {
+              eventElements.push(html`
+                <div
+                  class="event"
+                  style="
+                    left: ${x + 2}px;
+                    top: ${yStart}px;
+                    width: ${dayWidth - 32}px;
+                    height: ${MIN_EVENT_HEIGHT}px;
+                    background: rgba(100, 100, 100, 0.5);
+                    pointer-events: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  …
+                </div>
+              `);
+            }
           }
         }
       }
@@ -1061,19 +1202,7 @@ export class CalendarViewElement extends LitElement {
             ${firstMonth ? html`<span class="month-label">${firstMonth.name}</span>` : ""}
           </div>
           <div class="weekdays">
-            ${WEEKDAY_NAMES.map((name) => {
-              // Crossfade weekday names: fade out when zooming in (dayHeight >= 150)
-              const showTimeScale = this.dayHeight >= 200;
-              const fadeThreshold = 150;
-              let opacity = 1;
-              if (this.dayHeight >= fadeThreshold && this.dayHeight < 200) {
-                // Fade out as we zoom in from 150 to 200
-                opacity = 1 - (this.dayHeight - fadeThreshold) / (200 - fadeThreshold);
-              } else if (this.dayHeight >= 200) {
-                opacity = 0;
-              }
-              return html`<div class="weekday" style="opacity: ${opacity};">${name}</div>`;
-            })}
+            ${WEEKDAY_NAMES.map((name) => html`<div class="weekday">${name}</div>`)}
           </div>
         </div>
 
