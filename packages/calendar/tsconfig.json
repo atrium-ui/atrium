@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "useDefineForClassFields": false,
+    "experimentalDecorators": true,
+    "plugins": [
+      {
+        "name": "ts-lit-plugin"
+      }
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "**/dist",
+    "**/*.spec.ts"
+  ]
+}
