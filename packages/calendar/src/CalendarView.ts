@@ -301,6 +301,7 @@ export class CalendarViewElement extends LitElement {
   animationFrame: number | null = null;
   isDraggingMinimap = false;
   preFilterScrollTop = 0; // Stores scroll position before filtering
+  timeUpdateInterval: ReturnType<typeof setInterval> | null = null;
 
   // Generate weeks for a year range centered on current date
   startDate = getStartOfWeek(addDays(new Date(), -365));
@@ -364,6 +365,11 @@ export class CalendarViewElement extends LitElement {
     window.addEventListener("mousemove", this.onMouseMove);
     window.addEventListener("mouseup", this.onMouseUp);
     window.addEventListener("wheel", this.onWheel, { passive: false });
+
+    // Update current time indicator every 10 seconds
+    this.timeUpdateInterval = setInterval(() => {
+      this.scheduleRender();
+    }, 10000);
   }
 
   disconnectedCallback(): void {
@@ -374,6 +380,9 @@ export class CalendarViewElement extends LitElement {
     this.resizeObserver?.disconnect();
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame);
+    }
+    if (this.timeUpdateInterval) {
+      clearInterval(this.timeUpdateInterval);
     }
   }
 
@@ -583,7 +592,7 @@ export class CalendarViewElement extends LitElement {
         w.yOffset < scrollTop + height
     );
 
-    // Draw today highlight
+    // Draw today highlight and current time indicator
     for (const week of visibleWeeks) {
       const todayIndex = week.days.findIndex((d) => isSameDay(d, today));
       if (todayIndex >= 0) {
@@ -591,6 +600,20 @@ export class CalendarViewElement extends LitElement {
         const y = week.yOffset - scrollTop;
         ctx.fillStyle = "rgba(255, 255, 255, 0.03)";
         ctx.fillRect(x, y, dayWidth, week.height);
+
+        // Draw current time indicator line
+        const now = new Date();
+        const currentMinutes = now.getHours() * 60 + now.getMinutes();
+        const timeY = y + (currentMinutes / 1440) * week.height;
+        if (timeY >= 0 && timeY <= height) {
+          ctx.strokeStyle = "rgba(255, 0, 0, 0.8)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(x, timeY);
+          ctx.lineTo(x + dayWidth, timeY);
+          ctx.stroke();
+          ctx.lineWidth = 1;
+        }
       }
     }
 
