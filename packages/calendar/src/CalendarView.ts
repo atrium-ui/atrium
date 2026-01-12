@@ -865,13 +865,13 @@ export class CalendarViewElement extends LitElement {
             } else {
               // Stack events vertically within the day cell
               const stackIndex = dayEventCount.get(dayKey) || 0;
-              
+
               // Check if adding this event would exceed the day's capacity
               const maxEventsInDay = Math.floor(week.height / (MIN_EVENT_HEIGHT + 2));
               if (stackIndex >= maxEventsInDay) {
                 continue;
               }
-              
+
               dayEventCount.set(dayKey, stackIndex + 1);
 
               yStart = week.yOffset + 2 + stackIndex * (MIN_EVENT_HEIGHT + 2);
@@ -895,52 +895,6 @@ export class CalendarViewElement extends LitElement {
                 ${event.title}
               </div>
             `);
-          }
-        }
-      }
-    }
-
-    // Add ellipsis indicators for overflow events when zoomed out
-    if (!showTimeScale) {
-      for (const week of this.weeks) {
-        if (week.height === 0) continue;
-        if (week.yOffset + week.height < scrollTop) continue;
-        if (week.yOffset > viewportBottom) continue;
-
-        const maxEventsInDay = Math.floor(week.height / (MIN_EVENT_HEIGHT + 2));
-
-        for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
-          const dayKey = `${week.weekNumber}-${dayIndex}`;
-          const visibleCount = dayEventCount.get(dayKey) || 0;
-          const totalCount = dayTotalCount.get(dayKey) || 0;
-
-          // Show ellipsis if there are more events than fit
-          if (totalCount > visibleCount && visibleCount === maxEventsInDay) {
-            const x = dayIndex * dayWidth;
-            const yStart = week.yOffset + 2 + visibleCount * (MIN_EVENT_HEIGHT + 2);
-            const yEnd = yStart + MIN_EVENT_HEIGHT;
-            
-            // Only show ellipsis if it fits within the week height
-            if (yEnd <= week.yOffset + week.height) {
-              eventElements.push(html`
-                <div
-                  class="event"
-                  style="
-                    left: ${x + 2}px;
-                    top: ${yStart}px;
-                    width: ${dayWidth - 4}px;
-                    height: ${MIN_EVENT_HEIGHT}px;
-                    background: rgba(100, 100, 100, 0.5);
-                    pointer-events: none;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                  "
-                >
-                  …
-                </div>
-              `);
-            }
           }
         }
       }
