@@ -231,7 +231,7 @@ export class CalendarViewElement extends LitElement {
       pointer-events: auto;
       cursor: pointer;
       box-sizing: border-box;
-      border-left: 3px solid rgba(0, 0, 0, 0.3);
+      border-bottom: 3px solid rgba(0, 0, 0, 0.3);
     }
 
     .event:hover {
