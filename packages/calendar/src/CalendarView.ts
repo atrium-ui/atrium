@@ -260,7 +260,9 @@ export class CalendarViewElement extends LitElement {
       position: absolute;
       font-size: 16px;
       color: var(--text-muted);
-      padding: 2px 4px;
+      padding: 2px 18px;
+      text-align: right;
+      box-sizing: border-box;
     }
   `;
 
@@ -1170,7 +1172,7 @@ export class CalendarViewElement extends LitElement {
           labels.push(html`
             <div
               class="date-label"
-              style="left: ${x + dayWidth - 28}px; top: ${labelY}px;"
+              style="left: ${x}px; top: ${labelY}px; width: ${dayWidth}px"
             >
               ${day.getDate()}
             </div>
