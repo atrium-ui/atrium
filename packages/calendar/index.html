@@ -33,7 +33,7 @@
   </head>
   <body>
     <div id="app">
-      <calendar-view></calendar-view>
+      <calendar-view locale="de-DE"></calendar-view>
     </div>
 
     <script type="module">
@@ -73,6 +73,11 @@
         const events = [];
         let currentEvent = null;
 
+        const color = (() => {
+          const colors = ["#9b59b6", "#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#1abc9c", "#e91e63"];
+          return colors[Math.floor(Math.random() * colors.length)];
+        })();
+
         for (const line of lines) {
           const trimmed = line.trim();
           if (trimmed === "BEGIN:VEVENT") {
@@ -84,7 +89,7 @@
                 title: currentEvent.summary || "Untitled Event",
                 start: currentEvent.start,
                 end: currentEvent.end || currentEvent.start,
-                color: "#3498db",
+                color,
               });
             }
             currentEvent = null;
@@ -188,9 +193,13 @@
       calendar.events = events;
 
       // Fetch additional events from iCal URL
-      const ICAL_URL = "/basic.ics";
-
-      fetchICalEvents(ICAL_URL).then((icalEvents) => {
+      fetchICalEvents("/work.ics").then((icalEvents) => {
+        console.log(`Loaded ${icalEvents.length} events from iCal`);
+        calendar.events = [...calendar.events, ...icalEvents];
+      }).catch((err) => {
+        console.error("Failed to load iCal events:", err);
+      });
+      fetchICalEvents("/planning.ics").then((icalEvents) => {
         console.log(`Loaded ${icalEvents.length} events from iCal`);
         calendar.events = [...calendar.events, ...icalEvents];
       }).catch((err) => {
