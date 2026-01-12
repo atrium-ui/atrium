@@ -1226,7 +1226,7 @@ export class CalendarViewElement extends LitElement {
   }
 
   renderMinimap(): ReturnType<typeof html> {
-    if (this.totalHeight === 0) return html``;
+    if (this.totalHeight === 0 || this.weeks.length === 0) return html``;
 
     const events = this.getFilteredEvents();
     const viewportRatio = this.viewportHeight / this.totalHeight;
@@ -1234,46 +1234,53 @@ export class CalendarViewElement extends LitElement {
     const viewportHeight = Math.max(viewportRatio * 100, 2);
 
     const eventMarkers: ReturnType<typeof html>[] = [];
+    const startDateTimestamp = this.startDate.getTime();
+    const msPerWeek = 7 * 24 * 60 * 60 * 1000;
 
     for (const event of events) {
       const eventStart = new Date(event.start);
       const eventEnd = new Date(event.end);
 
-      // Find the weeks this event spans
-      for (const week of this.weeks) {
-        if (week.height === 0) continue;
+      // Calculate week indices directly from dates - O(1) instead of O(weeks × days)
+      const startWeekIndex = Math.floor((eventStart.getTime() - startDateTimestamp) / msPerWeek);
+      const endWeekIndex = Math.floor((eventEnd.getTime() - startDateTimestamp) / msPerWeek);
 
-        for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
-          const day = week.days[dayIndex];
-          if (!day) continue;
-          const dayStart = this.startOfDay(day);
-          const dayEnd = this.endOfDay(day);
+      const firstWeekIndex = Math.max(0, startWeekIndex);
+      const lastWeekIndex = Math.min(this.weeks.length - 1, endWeekIndex);
 
-          if (eventStart <= dayEnd && eventEnd >= dayStart) {
-            const effectiveStart = eventStart < dayStart ? dayStart : eventStart;
-            const effectiveEnd = eventEnd > dayEnd ? dayEnd : eventEnd;
+      for (let weekIndex = firstWeekIndex; weekIndex <= lastWeekIndex; weekIndex++) {
+        const week = this.weeks[weekIndex];
+        if (!week || week.height === 0) continue;
 
-            const startMinutes = effectiveStart.getHours() * 60 + effectiveStart.getMinutes();
-            const endMinutes = effectiveEnd.getHours() * 60 + effectiveEnd.getMinutes();
+        const weekStart = week.days[0];
+        const weekEnd = week.days[6];
+        if (!weekStart || !weekEnd) continue;
 
-            const yStart = week.yOffset + (startMinutes / 1440) * week.height;
-            const yEnd = week.yOffset + (endMinutes / 1440) * week.height;
+        const weekStartTime = this.startOfDay(weekStart);
+        const weekEndTime = this.endOfDay(weekEnd);
 
-            const topPercent = (yStart / this.totalHeight) * 100;
-            const heightPercent = Math.max(((yEnd - yStart) / this.totalHeight) * 100, 0.3);
+        const effectiveStart = eventStart < weekStartTime ? weekStartTime : eventStart;
+        const effectiveEnd = eventEnd > weekEndTime ? weekEndTime : eventEnd;
 
-            eventMarkers.push(html`
-              <div
-                class="minimap-event"
-                style="
-                  top: ${topPercent}%;
-                  height: ${heightPercent}%;
-                  background: ${event.color || "var(--event-default)"};
-                "
-              ></div>
-            `);
-          }
-        }
+        const startMinutes = effectiveStart.getHours() * 60 + effectiveStart.getMinutes();
+        const endMinutes = effectiveEnd.getHours() * 60 + effectiveEnd.getMinutes();
+
+        const yStart = week.yOffset + (startMinutes / 1440) * week.height;
+        const yEnd = week.yOffset + (endMinutes / 1440) * week.height;
+
+        const topPercent = (yStart / this.totalHeight) * 100;
+        const heightPercent = Math.max(((yEnd - yStart) / this.totalHeight) * 100, 0.3);
+
+        eventMarkers.push(html`
+          <div
+            class="minimap-event"
+            style="
+              top: ${topPercent}%;
+              height: ${heightPercent}%;
+              background: ${event.color || "var(--event-default)"};
+            "
+          ></div>
+        `);
       }
     }
 
