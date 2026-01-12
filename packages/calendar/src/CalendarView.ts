@@ -24,7 +24,7 @@ interface VisibleMonth {
 }
 
 const WEEKDAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const MIN_DAY_HEIGHT = 30;
+const MIN_DAY_HEIGHT = 100;
 const MAX_DAY_HEIGHT = 1440; // 1px per minute
 const LEFT_GUTTER_WIDTH = 60;
 const MIN_EVENT_HEIGHT = 16;
@@ -608,7 +608,7 @@ export class CalendarViewElement extends LitElement {
     }
 
     // Horizontal lines (week separators) and left gutter content
-    ctx.font = "11px system-ui, sans-serif";
+    ctx.font = "12px monospace, system-ui, sans-serif";
 
     for (const week of visibleWeeks) {
       const y = week.yOffset - scrollTop;
@@ -622,12 +622,15 @@ export class CalendarViewElement extends LitElement {
 
       // Left gutter: week number or time scale
       if (showTimeScale) {
+        const hourLabelOpacity = Math.max(0, Math.min(1, (this.dayHeight - 300) / 300));
+
+        ctx.textAlign = "right";
+
         // Draw hourly lines and labels
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+        ctx.strokeStyle = `rgba(255, 255, 255, ${0.05 * hourLabelOpacity})`;
 
         // Calculate opacity for hour labels based on zoom level
         // Fade in as we zoom in from 200px to 400px
-        const hourLabelOpacity = Math.max(0, Math.min(1, (this.dayHeight - 200) / 200));
         ctx.fillStyle = `rgba(255, 255, 255, ${0.4 * hourLabelOpacity})`;
 
         for (let hour = 0; hour < 24; hour++) {
@@ -642,25 +645,26 @@ export class CalendarViewElement extends LitElement {
             // Hour label (only draw if opacity is significant)
             if (hourLabelOpacity > 0.1) {
               const label = `${hour.toString().padStart(2, "0")}:00`;
-              ctx.fillText(label, 8, hourY + 12);
+              ctx.fillText(label, 48, hourY + 4);
             }
           }
         }
-      } else {
-        // Draw week number - sticky within visible portion of week
-        // Fade out week numbers as we zoom in from 150px to 200px
-        const weekNumberOpacity = Math.max(0, Math.min(1, 1 - (this.dayHeight - 150) / 50));
-        ctx.fillStyle = `rgba(255, 255, 255, ${0.4 * weekNumberOpacity})`;
-        const label = `W${week.weekNumber}`;
-        const weekTop = y;
-        const weekBottom = y + week.height;
-        // Clamp label to be visible: at least 14px from top of viewport,
-        // but within the week's bounds
-        const labelY = Math.max(14, Math.min(weekTop + week.height / 2 + 4, weekBottom - 4));
-        // Only draw if the label position is within the week's visible area and viewport and opacity is significant
-        if (labelY >= Math.max(0, weekTop + 4) && labelY <= Math.min(height, weekBottom) && weekNumberOpacity > 0.1) {
-          ctx.fillText(label, 8, labelY);
-        }
+      }
+
+      // Draw week number - sticky within visible portion of week
+      // Fade out week numbers as we zoom in from 150px to 200px
+      const weekNumberOpacity = Math.max(0, Math.min(1, 1 - (this.dayHeight - 300) / 50));
+      ctx.fillStyle = `rgba(255, 255, 255, ${0.4 * weekNumberOpacity})`;
+      ctx.textAlign = "center";
+      const label = `W${week.weekNumber}`;
+      const weekTop = y;
+      const weekBottom = y + week.height;
+      // Clamp label to be visible: at least 14px from top of viewport,
+      // but within the week's bounds
+      const labelY = Math.max(14, Math.min(weekTop + week.height / 2 + 4, weekBottom - 4));
+      // Only draw if the label position is within the week's visible area and viewport and opacity is significant
+      if (labelY >= Math.max(0, weekTop + 4) && labelY <= Math.min(height, weekBottom) && weekNumberOpacity > 0.1) {
+        ctx.fillText(label, 30, labelY);
       }
     }
 
