@@ -616,7 +616,7 @@ export class CalendarViewElement extends LitElement {
       // Week separator line
       ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
       ctx.beginPath();
-      ctx.moveTo(0, y);
+      ctx.moveTo(LEFT_GUTTER_WIDTH, y);
       ctx.lineTo(width, y);
       ctx.stroke();
 
@@ -667,13 +667,6 @@ export class CalendarViewElement extends LitElement {
         ctx.fillText(label, 30, labelY);
       }
     }
-
-    // Left gutter separator
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
-    ctx.beginPath();
-    ctx.moveTo(LEFT_GUTTER_WIDTH, 0);
-    ctx.lineTo(LEFT_GUTTER_WIDTH, height);
-    ctx.stroke();
 
     this.requestUpdate();
   }
