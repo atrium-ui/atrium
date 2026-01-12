@@ -500,41 +500,54 @@ export class CalendarViewElement extends LitElement {
 
   updateWeekOffsets(): void {
     let y = 0;
-    const filteredEvents = this.getFilteredEvents();
 
-    for (const week of this.weeks) {
-      week.yOffset = y;
+    if (this.filter) {
+      const filteredEvents = this.getFilteredEvents();
 
-      if (this.filter) {
-        // In filtered mode, collapse empty weeks
-        const hasEvents = week.days.some((day) =>
-          filteredEvents.some(
-            (e) => day >= this.startOfDay(e.start) && day <= this.endOfDay(e.end)
-          )
+      // Pre-compute event date ranges once (avoiding repeated startOfDayTime/endOfDayTime calls)
+      const eventRanges = filteredEvents.map((e) => ({
+        start: this.startOfDayTime(e.start),
+        end: this.endOfDayTime(e.end),
+      }));
+
+      for (const week of this.weeks) {
+        week.yOffset = y;
+
+        // Check if any day in this week overlaps any event range
+        const weekStartTime = week.days[0]?.getTime() ?? 0;
+        const weekEndTime = week.days[6]?.getTime() ?? 0;
+
+        // Quick check: skip if week is entirely outside all event ranges
+        const hasEvents = eventRanges.some(
+          (range) => range.end >= weekStartTime && range.start <= weekEndTime
         );
-        week.height = hasEvents ? this.dayHeight : 0;
-      } else {
-        week.height = this.dayHeight;
-      }
 
-      y += week.height;
+        week.height = hasEvents ? this.dayHeight : 0;
+        y += week.height;
+      }
+    } else {
+      for (const week of this.weeks) {
+        week.yOffset = y;
+        week.height = this.dayHeight;
+        y += week.height;
+      }
     }
 
     this.totalHeight = y;
   }
 
-  startOfDay(date: Date | undefined): Date {
-    if (!date) return new Date(0);
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    return d;
+  // Returns timestamp for start of day using pure math (no Date object creation)
+  startOfDayTime(date: Date | undefined): number {
+    if (!date) return 0;
+    const time = date.getTime();
+    const timezoneOffset = date.getTimezoneOffset() * 60000;
+    return time - ((time - timezoneOffset) % 86400000);
   }
 
-  endOfDay(date: Date | undefined): Date {
-    if (!date) return new Date(0);
-    const d = new Date(date);
-    d.setHours(23, 59, 59, 999);
-    return d;
+  // Returns timestamp for end of day using pure math (no Date object creation)
+  endOfDayTime(date: Date | undefined): number {
+    if (!date) return 0;
+    return this.startOfDayTime(date) + 86400000 - 1;
   }
 
   getFilteredEvents(): CalendarEvent[] {
@@ -965,15 +978,57 @@ export class CalendarViewElement extends LitElement {
       "July", "August", "September", "October", "November", "December"
     ];
 
-    // Track event count per day for stacking when zoomed out
-    const dayEventCount = new Map<string, number>();
-    // Track total events per day for overflow detection
-    const dayTotalCount = new Map<string, number>();
+    // Filter to visible weeks only
+    const visibleWeeks = this.weeks.filter(
+      (w) => w.height > 0 && w.yOffset + w.height >= scrollTop && w.yOffset <= viewportBottom
+    );
 
-    // First pass: collect all month boundaries with their Y positions
+    if (visibleWeeks.length === 0) return html``;
+
+    // Compute visible date range (timestamps for fast comparison)
+    const firstVisibleWeek = visibleWeeks[0]!;
+    const lastVisibleWeek = visibleWeeks[visibleWeeks.length - 1]!;
+    const firstVisibleDay = firstVisibleWeek.days[0]!;
+    const lastVisibleDay = lastVisibleWeek.days[6]!;
+    const visibleStartTime = firstVisibleDay.getTime();
+    const visibleEndTime = lastVisibleDay.getTime() + 86400000 - 1; // end of last day
+
+    // Build event index by day timestamp for O(1) lookup
+    // Key: day timestamp (start of day), Value: events overlapping that day
+    const eventsByDay = new Map<number, CalendarEvent[]>();
+
+    for (const event of events) {
+      const eventStartTime = event.start.getTime();
+      const eventEndTime = event.end.getTime();
+
+      // Skip events entirely outside visible range
+      if (eventEndTime < visibleStartTime || eventStartTime > visibleEndTime) continue;
+
+      // Compute the day range this event spans (clamped to visible range)
+      const startDay = new Date(Math.max(eventStartTime, visibleStartTime));
+      startDay.setHours(0, 0, 0, 0);
+      const endDay = new Date(Math.min(eventEndTime, visibleEndTime));
+      endDay.setHours(0, 0, 0, 0);
+
+      // Index event for each day it spans
+      const currentDay = new Date(startDay);
+      while (currentDay <= endDay) {
+        const dayKey = currentDay.getTime();
+        let dayEvents = eventsByDay.get(dayKey);
+        if (!dayEvents) {
+          dayEvents = [];
+          eventsByDay.set(dayKey, dayEvents);
+        }
+        dayEvents.push(event);
+        currentDay.setDate(currentDay.getDate() + 1);
+      }
+    }
+
+    // Collect month boundaries from visible weeks only
     const monthBoundaries: { monthKey: string; monthName: string; year: number; yOffset: number }[] = [];
-    for (const week of this.weeks) {
-      if (week.height === 0) continue;
+    const seenMonths = new Set<string>();
+
+    for (const week of visibleWeeks) {
       const firstDay = week.days[0];
       if (!firstDay) continue;
 
@@ -981,33 +1036,27 @@ export class CalendarViewElement extends LitElement {
       const year = firstDay.getFullYear();
       const monthKey = `${monthIndex}-${year}`;
 
-      if (firstDay.getDate() <= 7) {
-        const existing = monthBoundaries.find((m) => m.monthKey === monthKey);
-        if (!existing) {
-          const monthName = monthNames[monthIndex];
-          if (monthName) {
-            monthBoundaries.push({ monthKey, monthName, year, yOffset: week.yOffset });
-          }
+      if (firstDay.getDate() <= 7 && !seenMonths.has(monthKey)) {
+        seenMonths.add(monthKey);
+        const monthName = monthNames[monthIndex];
+        if (monthName) {
+          monthBoundaries.push({ monthKey, monthName, year, yOffset: week.yOffset });
         }
       }
     }
 
-    // Second pass: render month labels with sticky behavior until next month
+    // Render month labels with sticky behavior
     for (let i = 0; i < monthBoundaries.length; i++) {
-      const month = monthBoundaries[i];
-      if (!month) continue;
+      const month = monthBoundaries[i]!;
       const nextMonth = monthBoundaries[i + 1];
       const labelY = month.yOffset;
       const nextMonthY = nextMonth ? nextMonth.yOffset : this.totalHeight;
 
-      // Skip if this month is entirely above viewport
       if (nextMonthY < scrollTop) continue;
-      // Skip if this month starts below viewport
       if (labelY > viewportBottom) break;
 
-      // Calculate sticky position
       const stickyTop = Math.max(0, scrollTop - labelY);
-      const maxStickyTop = nextMonthY - labelY - 24; // Stop before next month label
+      const maxStickyTop = nextMonthY - labelY - 24;
       const clampedStickyTop = Math.min(stickyTop, maxStickyTop);
       const finalTop = labelY + clampedStickyTop;
 
@@ -1024,126 +1073,81 @@ export class CalendarViewElement extends LitElement {
       `);
     }
 
-    for (const event of events) {
-      const eventStart = new Date(event.start);
-      const eventEnd = new Date(event.end);
+    // Track event count per day for stacking when zoomed out
+    const dayEventCount = new Map<string, number>();
+    const dayTotalCount = new Map<string, number>();
 
-      // Find all days this event spans
-      for (const week of this.weeks) {
-        if (week.height === 0) continue;
-        // Skip weeks not in viewport
-        if (week.yOffset + week.height < scrollTop) continue;
-        if (week.yOffset > viewportBottom) continue;
+    // Render events by iterating visible weeks and looking up indexed events
+    for (const week of visibleWeeks) {
+      const weekHeight = week.height;
+      const weekYOffset = week.yOffset;
+      const maxEventsInDay = Math.floor(weekHeight / (MIN_EVENT_HEIGHT + 2));
 
-        for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
-          const day = week.days[dayIndex];
-          if (!day) continue;
-          const dayStart = this.startOfDay(day);
-          const dayEnd = this.endOfDay(day);
+      for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
+        const day = week.days[dayIndex];
+        if (!day) continue;
 
-          // Check if event overlaps this day
-          if (eventStart <= dayEnd && eventEnd >= dayStart) {
-            const dayKey = `${week.weekNumber}-${dayIndex}`;
-            const totalCount = (dayTotalCount.get(dayKey) || 0) + 1;
-            dayTotalCount.set(dayKey, totalCount);
+        // Get cached day boundaries
+        const dayStartTime = new Date(day).setHours(0, 0, 0, 0);
+        const dayEvents = eventsByDay.get(dayStartTime);
+        if (!dayEvents || dayEvents.length === 0) continue;
 
-            const x = dayIndex * dayWidth;
-            let yStart: number;
-            let yEnd: number;
+        const dayKey = `${week.weekNumber}-${dayIndex}`;
+        const x = dayIndex * dayWidth;
 
-            if (showTimeScale) {
-              // Position by time
-              const effectiveStart = eventStart < dayStart ? dayStart : eventStart;
-              const effectiveEnd = eventEnd > dayEnd ? dayEnd : eventEnd;
+        // Set total count for overflow detection
+        dayTotalCount.set(dayKey, dayEvents.length);
 
-              const startMinutes =
-                effectiveStart.getHours() * 60 + effectiveStart.getMinutes();
-              const endMinutes =
-                effectiveEnd.getHours() * 60 + effectiveEnd.getMinutes();
+        for (const event of dayEvents) {
+          let yStart: number;
+          let yEnd: number;
 
-              // Use absolute positions (scroll container handles offset)
-              yStart = week.yOffset + (startMinutes / 1440) * week.height;
-              yEnd = week.yOffset + (endMinutes / 1440) * week.height;
-            } else {
-              // Stack events vertically within the day cell
-              const stackIndex = dayEventCount.get(dayKey) || 0;
+          if (showTimeScale) {
+            // Position by time - use timestamps for comparison
+            const eventStartTime = event.start.getTime();
+            const eventEndTime = event.end.getTime();
+            const dayEndTime = dayStartTime + 86400000 - 1;
 
-              // Check if adding this event would exceed the day's capacity
-              const maxEventsInDay = Math.floor(week.height / (MIN_EVENT_HEIGHT + 2));
-              if (stackIndex >= maxEventsInDay) {
-                continue;
-              }
+            const effectiveStartTime = Math.max(eventStartTime, dayStartTime);
+            const effectiveEndTime = Math.min(eventEndTime, dayEndTime);
 
-              dayEventCount.set(dayKey, stackIndex + 1);
+            const effectiveStart = new Date(effectiveStartTime);
+            const effectiveEnd = new Date(effectiveEndTime);
 
-              yStart = week.yOffset + 2 + stackIndex * (MIN_EVENT_HEIGHT + 2);
-              yEnd = yStart + MIN_EVENT_HEIGHT;
-            }
+            const startMinutes = effectiveStart.getHours() * 60 + effectiveStart.getMinutes();
+            const endMinutes = effectiveEnd.getHours() * 60 + effectiveEnd.getMinutes();
 
-            const height = Math.max(MIN_EVENT_HEIGHT, yEnd - yStart);
+            yStart = weekYOffset + (startMinutes / 1440) * weekHeight;
+            yEnd = weekYOffset + (endMinutes / 1440) * weekHeight;
+          } else {
+            // Stack events vertically within the day cell
+            const stackIndex = dayEventCount.get(dayKey) || 0;
 
-            eventElements.push(html`
-              <div
-                class="event"
-                style="
-                  left: ${x + 2}px;
-                  top: ${yStart}px;
-                  width: ${dayWidth - 32}px;
-                  height: ${height}px;
-                  background: ${event.color || "var(--event-default)"};
-                "
-                @click=${() => this.onEventClick(event)}
-              >
-                ${event.title}
-              </div>
-            `);
+            if (stackIndex >= maxEventsInDay) continue;
+
+            dayEventCount.set(dayKey, stackIndex + 1);
+
+            yStart = weekYOffset + 2 + stackIndex * (MIN_EVENT_HEIGHT + 2);
+            yEnd = yStart + MIN_EVENT_HEIGHT;
           }
-        }
-      }
-    }
 
-    // Add ellipsis indicators for overflow events when zoomed out
-    if (!showTimeScale) {
-      for (const week of this.weeks) {
-        if (week.height === 0) continue;
-        if (week.yOffset + week.height < scrollTop) continue;
-        if (week.yOffset > viewportBottom) continue;
+          const height = Math.max(MIN_EVENT_HEIGHT, yEnd - yStart);
 
-        const maxEventsInDay = Math.floor(week.height / (MIN_EVENT_HEIGHT + 2));
-
-        for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
-          const dayKey = `${week.weekNumber}-${dayIndex}`;
-          const visibleCount = dayEventCount.get(dayKey) || 0;
-          const totalCount = dayTotalCount.get(dayKey) || 0;
-
-          // Show ellipsis if there are more events than fit
-          if (totalCount > visibleCount && visibleCount === maxEventsInDay) {
-            const x = dayIndex * dayWidth;
-            const yStart = week.yOffset + 2 + visibleCount * (MIN_EVENT_HEIGHT + 2);
-            const yEnd = yStart + MIN_EVENT_HEIGHT;
-
-            // Only show ellipsis if it fits within the week height
-            if (yEnd <= week.yOffset + week.height) {
-              eventElements.push(html`
-                <div
-                  class="event"
-                  style="
-                    left: ${x + 2}px;
-                    top: ${yStart}px;
-                    width: ${dayWidth - 32}px;
-                    height: ${MIN_EVENT_HEIGHT}px;
-                    background: rgba(100, 100, 100, 0.5);
-                    pointer-events: none;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                  "
-                >
-                  …
-                </div>
-              `);
-            }
-          }
+          eventElements.push(html`
+            <div
+              class="event"
+              style="
+                left: ${x + 2}px;
+                top: ${yStart}px;
+                width: ${dayWidth - 32}px;
+                height: ${height}px;
+                background: ${event.color || "var(--event-default)"};
+              "
+              @click=${() => this.onEventClick(event)}
+            >
+              ${event.title}
+            </div>
+          `);
         }
       }
     }
@@ -1236,14 +1240,16 @@ export class CalendarViewElement extends LitElement {
     const eventMarkers: ReturnType<typeof html>[] = [];
     const startDateTimestamp = this.startDate.getTime();
     const msPerWeek = 7 * 24 * 60 * 60 * 1000;
+    const msPerDay = 24 * 60 * 60 * 1000;
+    const msPerMinute = 60 * 1000;
 
     for (const event of events) {
-      const eventStart = new Date(event.start);
-      const eventEnd = new Date(event.end);
+      const eventStartTime = event.start.getTime();
+      const eventEndTime = event.end.getTime();
 
       // Calculate week indices directly from dates - O(1) instead of O(weeks × days)
-      const startWeekIndex = Math.floor((eventStart.getTime() - startDateTimestamp) / msPerWeek);
-      const endWeekIndex = Math.floor((eventEnd.getTime() - startDateTimestamp) / msPerWeek);
+      const startWeekIndex = Math.floor((eventStartTime - startDateTimestamp) / msPerWeek);
+      const endWeekIndex = Math.floor((eventEndTime - startDateTimestamp) / msPerWeek);
 
       const firstWeekIndex = Math.max(0, startWeekIndex);
       const lastWeekIndex = Math.min(this.weeks.length - 1, endWeekIndex);
@@ -1256,14 +1262,15 @@ export class CalendarViewElement extends LitElement {
         const weekEnd = week.days[6];
         if (!weekStart || !weekEnd) continue;
 
-        const weekStartTime = this.startOfDay(weekStart);
-        const weekEndTime = this.endOfDay(weekEnd);
+        const weekStartTime = weekStart.getTime();
+        const weekEndTime = weekEnd.getTime() + msPerDay - 1;
 
-        const effectiveStart = eventStart < weekStartTime ? weekStartTime : eventStart;
-        const effectiveEnd = eventEnd > weekEndTime ? weekEndTime : eventEnd;
+        const effectiveStartTime = Math.max(eventStartTime, weekStartTime);
+        const effectiveEndTime = Math.min(eventEndTime, weekEndTime);
 
-        const startMinutes = effectiveStart.getHours() * 60 + effectiveStart.getMinutes();
-        const endMinutes = effectiveEnd.getHours() * 60 + effectiveEnd.getMinutes();
+        // Compute minutes from midnight using timestamp math (no Date object creation)
+        const startMinutes = Math.floor((effectiveStartTime % msPerDay) / msPerMinute);
+        const endMinutes = Math.floor((effectiveEndTime % msPerDay) / msPerMinute);
 
         const yStart = week.yOffset + (startMinutes / 1440) * week.height;
         const yEnd = week.yOffset + (endMinutes / 1440) * week.height;
