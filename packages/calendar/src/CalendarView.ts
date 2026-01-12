@@ -253,12 +253,9 @@ export class CalendarViewElement extends LitElement {
     .selection {
       position: absolute;
       background: var(--selection-bg);
-      border: 1px solid rgba(100, 100, 255, 0.5);
-      border-radius: 2px;
+      border: 0.5px solid rgba(100, 100, 255, 0.5);
       pointer-events: none;
     }
-
-
 
     .date-label {
       position: absolute;
@@ -365,12 +362,14 @@ export class CalendarViewElement extends LitElement {
 
     window.addEventListener("mousemove", this.onMouseMove);
     window.addEventListener("mouseup", this.onMouseUp);
+    window.addEventListener("wheel", this.onWheel, { passive: false });
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback();
     window.removeEventListener("mousemove", this.onMouseMove);
     window.removeEventListener("mouseup", this.onMouseUp);
+    window.removeEventListener("wheel", this.onWheel);
     this.resizeObserver?.disconnect();
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame);
@@ -679,6 +678,35 @@ export class CalendarViewElement extends LitElement {
     if (this.scrollContainer) {
       this.scrollTop = this.scrollContainer.scrollTop;
     }
+  };
+
+  onWheel = (e: WheelEvent): void => {
+    const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+    const isZoomKey = isMac ? e.metaKey : e.ctrlKey;
+
+    if (!isZoomKey || !this.scrollContainer) return;
+
+    e.preventDefault();
+
+    // Get the position where the wheel event occurred
+    const rect = this.scrollContainer.getBoundingClientRect();
+    const viewportY = e.clientY - rect.top;
+    const contentY = viewportY + this.scrollTop;
+
+    // Determine zoom direction: deltaY < 0 = zoom in (scroll up), deltaY > 0 = zoom out (scroll down)
+    const newHeight = Math.max(
+      MIN_DAY_HEIGHT,
+      Math.min(MAX_DAY_HEIGHT, this.dayHeight + e.deltaY)
+    );
+
+    const oldHeight = this.dayHeight;
+    this.dayHeight = newHeight;
+
+    // Maintain the zoom center point under the cursor
+    const scaleRatio = newHeight / oldHeight;
+    const newContentY = contentY * scaleRatio;
+    const adjustedScroll = newContentY - viewportY;
+    this.scrollContainer.scrollTop = adjustedScroll;
   };
 
   onZoomHandleMouseDown = (e: MouseEvent): void => {
