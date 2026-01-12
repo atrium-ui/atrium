@@ -1,5 +1,6 @@
 import { LitElement, css, html, type PropertyValueMap } from "lit";
 import { property, state } from "lit/decorators.js";
+import { CalendarUtils } from "./CalendarUtils.js";
 
 export interface CalendarEvent {
   id: string;
@@ -24,41 +25,10 @@ interface VisibleMonth {
   yOffset: number;
 }
 
-const WEEKDAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MIN_DAY_HEIGHT = 100;
 const MAX_DAY_HEIGHT = 2000; // 1px per minute
 const LEFT_GUTTER_WIDTH = 60;
 const MIN_EVENT_HEIGHT = 16;
-
-function getWeekNumber(date: Date): number {
-  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  const dayNum = d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
-}
-
-function isSameDay(a: Date, b: Date): boolean {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
-
-function getStartOfWeek(date: Date): Date {
-  const d = new Date(date);
-  const day = d.getDay();
-  d.setDate(d.getDate() - day);
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
-
-function addDays(date: Date, days: number): Date {
-  const d = new Date(date);
-  d.setDate(d.getDate() + days);
-  return d;
-}
 
 export class CalendarViewElement extends LitElement {
   static styles = css`
@@ -272,6 +242,16 @@ export class CalendarViewElement extends LitElement {
   @property({ type: String })
   filter = "";
 
+  @property({ type: String })
+  locale: string = navigator.language;
+
+  /**
+   * First day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday).
+   * Defaults to locale-appropriate value.
+   */
+  @property({ type: Number, attribute: "week-start" })
+  weekStart?: number;
+
   @state()
   dayHeight = 80;
 
@@ -304,8 +284,9 @@ export class CalendarViewElement extends LitElement {
   timeUpdateInterval: ReturnType<typeof setInterval> | null = null;
 
   // Generate weeks for a year range centered on current date
-  startDate = getStartOfWeek(addDays(new Date(), -365));
-  endDate = addDays(new Date(), 365);
+  startDate = new Date();
+  endDate = CalendarUtils.addDays(new Date(), 365);
+  utils = new CalendarUtils({ locale: this.locale, weekStart: this.weekStart });
 
   loadDayHeight(): number {
     try {
@@ -354,6 +335,7 @@ export class CalendarViewElement extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
+    this.startDate = this.utils.getStartOfWeek(CalendarUtils.addDays(new Date(), -365));
     this.generateWeeks();
 
     // Restore zoom level from localStorage
@@ -412,7 +394,7 @@ export class CalendarViewElement extends LitElement {
         // Scroll to today if no saved position
         const today = new Date();
         const weekIndex = this.weeks.findIndex((w) =>
-          w.days.some((d) => isSameDay(d, today))
+          w.days.some((d) => CalendarUtils.isSameDay(d, today))
         );
         if (weekIndex >= 0) {
           const targetWeek = this.weeks[weekIndex];
@@ -434,6 +416,12 @@ export class CalendarViewElement extends LitElement {
   }
 
   protected updated(changedProps: PropertyValueMap<this>): void {
+    if (changedProps.has("locale") || changedProps.has("weekStart")) {
+      this.utils = new CalendarUtils({ locale: this.locale, weekStart: this.weekStart });
+      this.startDate = this.utils.getStartOfWeek(CalendarUtils.addDays(new Date(), -365));
+      this.generateWeeks();
+      this.scheduleRender();
+    }
     if (changedProps.has("dayHeight")) {
       this.saveDayHeight();
       this.updateWeekOffsets();
@@ -479,14 +467,14 @@ export class CalendarViewElement extends LitElement {
       const days: Date[] = [];
       for (let i = 0; i < 7; i++) {
         days.push(new Date(current));
-        current = addDays(current, 1);
+        current = CalendarUtils.addDays(current, 1);
       }
 
       const firstDay = days[0];
       const thursday = days[3];
       if (firstDay && thursday) {
         this.weeks.push({
-          weekNumber: getWeekNumber(firstDay),
+          weekNumber: CalendarUtils.getWeekNumber(firstDay),
           year: thursday.getFullYear(), // Use Thursday for year
           days,
           yOffset: 0,
@@ -607,7 +595,7 @@ export class CalendarViewElement extends LitElement {
 
     // Draw today highlight and current time indicator
     for (const week of visibleWeeks) {
-      const todayIndex = week.days.findIndex((d) => isSameDay(d, today));
+      const todayIndex = week.days.findIndex((d) => CalendarUtils.isSameDay(d, today));
       if (todayIndex >= 0) {
         const x = LEFT_GUTTER_WIDTH + todayIndex * dayWidth;
         const y = week.yOffset - scrollTop;
@@ -1321,7 +1309,7 @@ export class CalendarViewElement extends LitElement {
         <div class="header">
           <div class="header-gutter"></div>
           <div class="weekdays">
-            ${WEEKDAY_NAMES.map((name) => html`<div class="weekday">${name}</div>`)}
+            ${this.utils.getWeekdayNames().map((name) => html`<div class="weekday">${name}</div>`)}
           </div>
         </div>
 
