@@ -15,8 +15,30 @@ export class CalendarInternal {
 
   // TODO: also do layouting to compute selection etc.
 
-  generateWeeks(): void {
-    // TODO
+  generateWeeks(startDate, endDate): void {
+    const weeks = [];
+    let current = new Date(startDate);
+
+    while (current < endDate) {
+      const days: Date[] = [];
+      for (let i = 0; i < 7; i++) {
+        days.push(new Date(current));
+        current = CalendarInternal.addDays(current, 1);
+      }
+
+      const firstDay = days[0];
+      const thursday = days[3];
+      if (firstDay && thursday) {
+        weeks.push({
+          weekNumber: CalendarInternal.getWeekNumber(firstDay),
+          year: thursday.getFullYear(), // Use Thursday for year
+          days,
+          yOffset: 0,
+        });
+      }
+    }
+
+    return weeks;
   }
 
   getFilteredEvents(): CalendarEvent[] {

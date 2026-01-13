@@ -501,29 +501,7 @@ export class CalendarViewElement extends LitElement {
   }
 
   generateWeeks(): void {
-    this.weeks = [];
-    let current = new Date(this.startDate);
-
-    while (current < this.endDate) {
-      const days: Date[] = [];
-      for (let i = 0; i < 7; i++) {
-        days.push(new Date(current));
-        current = CalendarInternal.addDays(current, 1);
-      }
-
-      const firstDay = days[0];
-      const thursday = days[3];
-      if (firstDay && thursday) {
-        this.weeks.push({
-          weekNumber: CalendarInternal.getWeekNumber(firstDay),
-          year: thursday.getFullYear(), // Use Thursday for year
-          days,
-          yOffset: 0,
-          height: this.dayHeight,
-        });
-      }
-    }
-
+    this.weeks = this.utils.generateWeeks(this.startDate, this.endDate);
     this.updateWeekOffsets();
   }
 
