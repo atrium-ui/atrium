@@ -258,16 +258,33 @@ export class CalendarViewElement extends LitElement {
   @property({ type: Number, attribute: "week-start" })
   weekStart?: number;
 
-  @state()
-  dayHeight = MIN_DAY_HEIGHT;
+  _dayHeight = MIN_DAY_HEIGHT;
 
-  @state()
-  scrollTop = 0;
+  set dayHeight(value) {
+    this._dayHeight = value;
 
-  @state()
+    this.saveDayHeight();
+    this.updateWeekOffsets();
+    this.renderCanvas();
+  }
+  get dayHeight() {
+    return this._dayHeight;
+  }
+
+  _scrollTop = 0;
+
+  set scrollTop(value) {
+    this._scrollTop = value;
+
+    this.saveScrollPosition();
+    this.renderCanvas();
+  }
+  get scrollTop() {
+    return this._scrollTop;
+  }
+
   viewportHeight = 0;
 
-  @state()
   selection: { startX: number; startY: number; endX: number; endY: number } | null = null;
 
   canvas: HTMLCanvasElement | null = null;
@@ -447,11 +464,6 @@ export class CalendarViewElement extends LitElement {
       this.generateWeeks();
       this.renderCanvas();
     }
-    if (changedProps.has("dayHeight")) {
-      this.saveDayHeight();
-      this.updateWeekOffsets();
-      this.renderCanvas();
-    }
     if (changedProps.has("filter")) {
       const previousFilter = changedProps.get("filter") as string | undefined;
       const currentFilter = this.filter;
@@ -477,10 +489,6 @@ export class CalendarViewElement extends LitElement {
         this.updateWeekOffsets();
         this.renderCanvas();
       }
-    }
-    if (changedProps.has("scrollTop")) {
-      this.saveScrollPosition();
-      this.renderCanvas();
     }
   }
 
@@ -848,6 +856,7 @@ export class CalendarViewElement extends LitElement {
         endX: e.clientX - rect.left,
         endY: e.clientY - rect.top + this.scrollTop,
       };
+      this.requestUpdate();
     }
 
     this.lastPointerY = e.clientY;
@@ -874,6 +883,7 @@ export class CalendarViewElement extends LitElement {
       this.handleSelectionComplete();
       this.isSelecting = false;
       this.selection = null;
+      this.requestUpdate();
     }
   };
 
