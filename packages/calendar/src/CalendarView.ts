@@ -49,6 +49,10 @@ export class CalendarViewElement extends LitElement {
       --event-default: #9b59b6;
     }
 
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
     .container {
       position: relative;
       width: 100%;
@@ -127,7 +131,7 @@ export class CalendarViewElement extends LitElement {
     .scroll-container {
       position: absolute;
       inset: 0;
-      overflow-y: auto;
+      overflow-y: overlay;
       overflow-x: hidden;
       z-index: 1;
       cursor: default;
@@ -324,6 +328,7 @@ export class CalendarViewElement extends LitElement {
   canvas: HTMLCanvasElement | null = null;
   ctx: CanvasRenderingContext2D | null = null;
   scrollContainer: HTMLElement | null = null;
+  scrollContent: HTMLElement | null = null;
   resizeObserver: ResizeObserver | null = null;
   weeks: WeekInfo[] = [];
   totalHeight = 0;
@@ -452,6 +457,7 @@ export class CalendarViewElement extends LitElement {
   protected firstUpdated(): void {
     this.canvas = this.renderRoot.querySelector("canvas");
     this.scrollContainer = this.renderRoot.querySelector(".scroll-container");
+    this.scrollContent = this.renderRoot.querySelector(".scroll-content");
     this.ctx = this.canvas?.getContext("2d") ?? null;
 
     if (this.scrollContainer) {
@@ -1074,7 +1080,7 @@ export class CalendarViewElement extends LitElement {
   renderEvents(): ReturnType<typeof html> {
     if (!this.scrollContainer) return html``;
 
-    const gridWidth = this.scrollContainer.clientWidth - LEFT_GUTTER_WIDTH;
+    const gridWidth = this.scrollContent.clientWidth - LEFT_GUTTER_WIDTH;
     const dayWidth = gridWidth / 7;
     const events = this.getFilteredEvents();
     const scrollTop = this.scrollTop;
@@ -1265,15 +1271,6 @@ export class CalendarViewElement extends LitElement {
       }
     }
 
-    // Sort segments by week, then by start day, then by event duration (longer first)
-    segments.sort((a, b) => {
-      if (a.weekIndex !== b.weekIndex) return a.weekIndex - b.weekIndex;
-      if (a.startDayIndex !== b.startDayIndex) return a.startDayIndex - b.startDayIndex;
-      const aDuration = a.event.end.getTime() - a.event.start.getTime();
-      const bDuration = b.event.end.getTime() - b.event.start.getTime();
-      return bDuration - aDuration; // Longer events first
-    });
-
     // Assign stack positions and render segments
     for (const segment of segments) {
       const {
@@ -1376,7 +1373,7 @@ export class CalendarViewElement extends LitElement {
           class="event ${spanClass}"
           data-event-id="${event.id}"
           style="
-            left: ${x + 2}px;
+            left: ${x}px;
             top: ${yStart}px;
             width: ${spanWidth - 4}px;
             height: ${height}px;
