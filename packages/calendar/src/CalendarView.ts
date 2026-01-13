@@ -622,8 +622,56 @@ export class CalendarViewElement extends LitElement {
     // Horizontal lines (week separators) and left gutter content
     ctx.font = "12px monospace, system-ui, sans-serif";
 
-    for (const week of visibleWeeks) {
+    for (let i = 0; i < visibleWeeks.length; i++) {
+      const week = visibleWeeks[i];
+      if (!week) continue;
       const y = week.yOffset - scrollTop;
+
+      // Draw gap indicator if there are hidden weeks before this one
+      if (this.filter && i > 0) {
+        const prevWeek = visibleWeeks[i - 1];
+        if (!prevWeek) continue;
+        const prevWeekIndex = this.weeks.indexOf(prevWeek);
+        const currentWeekIndex = this.weeks.indexOf(week);
+        const hiddenWeeks = currentWeekIndex - prevWeekIndex - 1;
+        
+        if (hiddenWeeks > 0) {
+          // Draw gap indicator at the top of the current week
+          const gapY = y;
+          
+          // Draw dashed line
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+          ctx.lineWidth = 1;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.moveTo(LEFT_GUTTER_WIDTH, gapY);
+          ctx.lineTo(width, gapY);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          
+          // Draw ellipsis in the center
+          ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+          ctx.font = "12px monospace, system-ui, sans-serif";
+          ctx.textAlign = "center";
+          const ellipsisText = `⋯ ${hiddenWeeks} week${hiddenWeeks > 1 ? "s" : ""} ⋯`;
+          
+          // Draw background pill for the ellipsis
+          const textWidth = ctx.measureText(ellipsisText).width;
+          const pillPadding = 8;
+          const pillX = (LEFT_GUTTER_WIDTH + width) / 2 - textWidth / 2 - pillPadding;
+          const pillY = gapY - 8;
+          const pillWidth = textWidth + pillPadding * 2;
+          const pillHeight = 16;
+          
+          ctx.fillStyle = "rgba(30, 30, 30, 0.9)";
+          ctx.beginPath();
+          ctx.roundRect(pillX, pillY, pillWidth, pillHeight, 8);
+          ctx.fill();
+          
+          ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+          ctx.fillText(ellipsisText, (LEFT_GUTTER_WIDTH + width) / 2, gapY + 4);
+        }
+      }
 
       // Week separator line
       ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
