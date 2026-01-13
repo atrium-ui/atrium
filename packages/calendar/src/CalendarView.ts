@@ -40,7 +40,7 @@ export class CalendarViewElement extends LitElement {
       overflow: hidden;
       font-family: system-ui, -apple-system, sans-serif;
       --grid-color: rgba(255, 255, 255, 0.1);
-      --text-color: rgba(255, 255, 255, 0.7);
+      --text-color: rgba(255, 255, 255, 0.9);
       --text-muted: rgba(255, 255, 255, 0.4);
       --today-bg: rgba(255, 255, 255, 0.05);
       --selection-bg: rgba(100, 100, 255, 0.3);
@@ -272,8 +272,8 @@ export class CalendarViewElement extends LitElement {
   weekStart?: number;
 
   @state()
-  dayHeight = 80;
-
+  dayHeight = MIN_DAY_HEIGHT;
+a
   @state()
   scrollTop = 0;
 
@@ -421,6 +421,8 @@ export class CalendarViewElement extends LitElement {
       const shouldRestoreScroll = false;
 
       if (!shouldRestoreScroll) {
+        this.updateWeekOffsets();
+
         // Scroll to today if no saved position
         const today = new Date();
         const weekIndex = this.weeks.findIndex((w) =>
