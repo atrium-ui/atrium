@@ -38,7 +38,10 @@ export class CalendarViewElement extends LitElement {
       width: 100%;
       height: 100%;
       overflow: hidden;
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family:
+        system-ui,
+        -apple-system,
+        sans-serif;
       --grid-color: rgba(255, 255, 255, 0.1);
       --text-color: rgba(255, 255, 255, 0.9);
       --text-muted: rgba(255, 255, 255, 0.4);
@@ -165,27 +168,11 @@ export class CalendarViewElement extends LitElement {
       right: 0;
       bottom: 0;
       width: 12px;
+      height: 100%;
       background: rgba(0, 0, 0, 0.3);
       z-index: 10;
       cursor: pointer;
-    }
-
-    .minimap-viewport {
-      position: absolute;
-      left: 0;
-      right: 0;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 2px;
-      pointer-events: none;
-    }
-
-    .minimap-event {
-      position: absolute;
-      left: 2px;
-      right: 2px;
-      min-height: 2px;
-      border-radius: 1px;
-      pointer-events: none;
+      display: block;
     }
 
     .event {
@@ -342,7 +329,10 @@ export class CalendarViewElement extends LitElement {
       if (savedScroll) {
         const scrollPos = parseFloat(savedScroll);
         if (this.scrollContainer) {
-          this.scrollContainer.scrollTop = Math.max(0, Math.min(scrollPos, this.totalHeight - this.viewportHeight));
+          this.scrollContainer.scrollTop = Math.max(
+            0,
+            Math.min(scrollPos, this.totalHeight - this.viewportHeight),
+          );
           shouldRestoreScroll = true;
         }
       }
@@ -363,7 +353,10 @@ export class CalendarViewElement extends LitElement {
     // Use requestAnimationFrame to ensure layout has updated
     requestAnimationFrame(() => {
       if (this.scrollContainer) {
-        const clampedScroll = Math.max(0, Math.min(this.preFilterScrollTop, this.totalHeight - this.viewportHeight));
+        const clampedScroll = Math.max(
+          0,
+          Math.min(this.preFilterScrollTop, this.totalHeight - this.viewportHeight),
+        );
         this.scrollContainer.scrollTop = clampedScroll;
         this.scrollTop = clampedScroll;
       }
@@ -425,8 +418,8 @@ export class CalendarViewElement extends LitElement {
 
         // Scroll to today if no saved position
         const today = new Date();
-        const weekIndex = this.weeks.findIndex((w) =>
-          w.days.some((d) => CalendarUtils.isSameDay(d, today))
+        const weekIndex = this.weeks.findIndex(w =>
+          w.days.some(d => CalendarUtils.isSameDay(d, today)),
         );
         if (weekIndex >= 0) {
           const targetWeek = this.weeks[weekIndex];
@@ -525,7 +518,7 @@ export class CalendarViewElement extends LitElement {
       const filteredEvents = this.getFilteredEvents();
 
       // Pre-compute event date ranges once (avoiding repeated startOfDayTime/endOfDayTime calls)
-      const eventRanges = filteredEvents.map((e) => ({
+      const eventRanges = filteredEvents.map(e => ({
         start: CalendarUtils.startOfDayTime(e.start),
         end: CalendarUtils.endOfDayTime(e.end),
       }));
@@ -539,7 +532,7 @@ export class CalendarViewElement extends LitElement {
 
         // Quick check: skip if week is entirely outside all event ranges
         const hasEvents = eventRanges.some(
-          (range) => range.end >= weekStartTime && range.start <= weekEndTime
+          range => range.end >= weekStartTime && range.start <= weekEndTime,
         );
 
         week.height = hasEvents ? this.dayHeight : 0;
@@ -559,7 +552,7 @@ export class CalendarViewElement extends LitElement {
   getFilteredEvents(): CalendarEvent[] {
     if (!this.filter) return this.events;
     const f = this.filter.toLowerCase();
-    return this.events.filter((e) => e.title.toLowerCase().includes(f));
+    return this.events.filter(e => e.title.toLowerCase().includes(f));
   }
 
   handleResize(): void {
@@ -597,15 +590,15 @@ export class CalendarViewElement extends LitElement {
 
     // Find visible weeks
     const visibleWeeks = this.weeks.filter(
-      (w) =>
+      w =>
         w.height > 0 &&
         w.yOffset + w.height > scrollTop &&
-        w.yOffset < scrollTop + height
+        w.yOffset < scrollTop + height,
     );
 
     // Draw today highlight and current time indicator
     for (const week of visibleWeeks) {
-      const todayIndex = week.days.findIndex((d) => CalendarUtils.isSameDay(d, today));
+      const todayIndex = week.days.findIndex(d => CalendarUtils.isSameDay(d, today));
       if (todayIndex >= 0) {
         const x = LEFT_GUTTER_WIDTH + todayIndex * dayWidth;
         const y = week.yOffset - scrollTop;
@@ -741,9 +734,16 @@ export class CalendarViewElement extends LitElement {
       const weekBottom = y + week.height;
       // Clamp label to be visible: at least 14px from top of viewport,
       // but within the week's bounds
-      const labelY = Math.max(14, Math.min(weekTop + week.height / 2 + 4, weekBottom - 4));
+      const labelY = Math.max(
+        14,
+        Math.min(weekTop + week.height / 2 + 4, weekBottom - 4),
+      );
       // Only draw if the label position is within the week's visible area and viewport and opacity is significant
-      if (labelY >= Math.max(0, weekTop + 4) && labelY <= Math.min(height, weekBottom) && weekNumberOpacity > 0.1) {
+      if (
+        labelY >= Math.max(0, weekTop + 4) &&
+        labelY <= Math.min(height, weekBottom) &&
+        weekNumberOpacity > 0.1
+      ) {
         ctx.fillText(label, 30, labelY);
       }
     }
@@ -770,7 +770,7 @@ export class CalendarViewElement extends LitElement {
     const delta = e.deltaY * (this.dayHeight / 100);
     const newHeight = Math.max(
       MIN_DAY_HEIGHT,
-      Math.min(MAX_DAY_HEIGHT, this.dayHeight - delta)
+      Math.min(MAX_DAY_HEIGHT, this.dayHeight - delta),
     );
 
     const oldHeight = this.dayHeight;
@@ -820,7 +820,7 @@ export class CalendarViewElement extends LitElement {
 
       const newHeight = Math.max(
         MIN_DAY_HEIGHT,
-        Math.min(MAX_DAY_HEIGHT, this.dayHeight - delta)
+        Math.min(MAX_DAY_HEIGHT, this.dayHeight - delta),
       );
 
       const oldHeight = this.dayHeight;
@@ -905,7 +905,10 @@ export class CalendarViewElement extends LitElement {
     const y = e.clientY - rect.top;
     const ratio = y / rect.height;
     const targetScroll = ratio * this.totalHeight - this.viewportHeight / 2;
-    this.scrollContainer.scrollTop = Math.max(0, Math.min(targetScroll, this.totalHeight - this.viewportHeight));
+    this.scrollContainer.scrollTop = Math.max(
+      0,
+      Math.min(targetScroll, this.totalHeight - this.viewportHeight),
+    );
   }
 
   onCanvasMouseDown = (e: MouseEvent): void => {
@@ -952,10 +955,10 @@ export class CalendarViewElement extends LitElement {
 
     // Find the weeks covered
     const startWeek = this.weeks.find(
-      (w) => w.yOffset <= minY && w.yOffset + w.height > minY
+      w => w.yOffset <= minY && w.yOffset + w.height > minY,
     );
     const endWeek = this.weeks.find(
-      (w) => w.yOffset <= maxY && w.yOffset + w.height > maxY
+      w => w.yOffset <= maxY && w.yOffset + w.height > maxY,
     );
 
     if (startWeek && endWeek) {
@@ -982,7 +985,7 @@ export class CalendarViewElement extends LitElement {
         new CustomEvent("selection", {
           detail: { start, end },
           bubbles: true,
-        })
+        }),
       );
     }
   }
@@ -997,8 +1000,18 @@ export class CalendarViewElement extends LitElement {
     const height = this.viewportHeight;
     const months: VisibleMonth[] = [];
     const monthNames = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
 
     for (const week of this.weeks) {
@@ -1015,7 +1028,7 @@ export class CalendarViewElement extends LitElement {
         if (!monthName) continue;
         const year = firstDay.getFullYear();
         const key = `${monthName}-${year}`;
-        const existingMonth = months.find((m) => `${m.name}-${m.year}` === key);
+        const existingMonth = months.find(m => `${m.name}-${m.year}` === key);
         if (!existingMonth) {
           months.push({
             name: monthName,
@@ -1042,13 +1055,24 @@ export class CalendarViewElement extends LitElement {
 
     const eventElements: ReturnType<typeof html>[] = [];
     const monthNames = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
 
     // Filter to visible weeks only
     const visibleWeeks = this.weeks.filter(
-      (w) => w.height > 0 && w.yOffset + w.height >= scrollTop && w.yOffset <= viewportBottom
+      w =>
+        w.height > 0 && w.yOffset + w.height >= scrollTop && w.yOffset <= viewportBottom,
     );
 
     if (visibleWeeks.length === 0) return html``;
@@ -1062,7 +1086,12 @@ export class CalendarViewElement extends LitElement {
     const visibleEndTime = lastVisibleDay.getTime() + 86400000 - 1;
 
     // Collect month boundaries from visible weeks only
-    const monthBoundaries: { monthKey: string; monthName: string; year: number; yOffset: number }[] = [];
+    const monthBoundaries: {
+      monthKey: string;
+      monthName: string;
+      year: number;
+      yOffset: number;
+    }[] = [];
     const seenMonths = new Set<string>();
 
     for (const week of visibleWeeks) {
@@ -1178,7 +1207,8 @@ export class CalendarViewElement extends LitElement {
         const { weekIndex, week } = eventWeeks[i]!;
 
         // Check if this week is visible
-        if (week.yOffset + week.height < scrollTop || week.yOffset > viewportBottom) continue;
+        if (week.yOffset + week.height < scrollTop || week.yOffset > viewportBottom)
+          continue;
 
         const isStart = i === 0;
         const isEnd = i === eventWeeks.length - 1;
@@ -1218,7 +1248,16 @@ export class CalendarViewElement extends LitElement {
 
     // Assign stack positions and render segments
     for (const segment of segments) {
-      const { event, week, weekIndex, startDayIndex, endDayIndex, isStart, isEnd, totalWeeks } = segment;
+      const {
+        event,
+        week,
+        weekIndex,
+        startDayIndex,
+        endDayIndex,
+        isStart,
+        isEnd,
+        totalWeeks,
+      } = segment;
       const weekHeight = week.height;
       const weekYOffset = week.yOffset;
 
@@ -1358,7 +1397,7 @@ export class CalendarViewElement extends LitElement {
       new CustomEvent("event-click", {
         detail: event,
         bubbles: true,
-      })
+      }),
     );
   }
 
@@ -1427,26 +1466,45 @@ export class CalendarViewElement extends LitElement {
     `;
   }
 
-  renderMinimap(): ReturnType<typeof html> {
+  renderMinimap() {
     if (this.totalHeight === 0 || this.weeks.length === 0) return html``;
 
-    const events = this.getFilteredEvents();
-    const viewportRatio = this.viewportHeight / this.totalHeight;
-    const viewportTop = (this.scrollTop / this.totalHeight) * 100;
-    const viewportHeight = Math.max(viewportRatio * 100, 2);
+    // Canvas dimensions
+    const width = 32;
+    const height = 1200; // Adjust as needed or make dynamic
 
-    const eventMarkers: ReturnType<typeof html>[] = [];
+    // Calculate viewport rectangle
+    const viewportRatio = this.viewportHeight / this.totalHeight;
+    const viewportTop = (this.scrollTop / this.totalHeight) * height;
+    const viewportHeightPx = Math.max(viewportRatio * height, 4);
+
+    // Prepare event rectangles
+    const events = this.getFilteredEvents();
     const startDateTimestamp = this.startDate.getTime();
     const msPerWeek = 7 * 24 * 60 * 60 * 1000;
     const msPerDay = 24 * 60 * 60 * 1000;
     const msPerMinute = 60 * 1000;
 
+    // We'll draw after the canvas is rendered
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = width;
+    canvas.height = height;
+
+    if (!ctx) throw new Error("Failed to get 2d context");
+
+    // Clear
+    ctx.clearRect(0, 0, width, height);
+
+    // Draw event rectangles
     for (const event of events) {
       const eventStartTime = event.start.getTime();
       const eventEndTime = event.end.getTime();
 
-      // Calculate week indices directly from dates - O(1) instead of O(weeks × days)
-      const startWeekIndex = Math.floor((eventStartTime - startDateTimestamp) / msPerWeek);
+      const startWeekIndex = Math.floor(
+        (eventStartTime - startDateTimestamp) / msPerWeek,
+      );
       const endWeekIndex = Math.floor((eventEndTime - startDateTimestamp) / msPerWeek);
 
       const firstWeekIndex = Math.max(0, startWeekIndex);
@@ -1466,38 +1524,33 @@ export class CalendarViewElement extends LitElement {
         const effectiveStartTime = Math.max(eventStartTime, weekStartTime);
         const effectiveEndTime = Math.min(eventEndTime, weekEndTime);
 
-        // Compute minutes from midnight using timestamp math (no Date object creation)
         const startMinutes = Math.floor((effectiveStartTime % msPerDay) / msPerMinute);
         const endMinutes = Math.floor((effectiveEndTime % msPerDay) / msPerMinute);
 
-        const yStart = week.yOffset + (startMinutes / 1440) * week.height;
-        const yEnd = week.yOffset + (endMinutes / 1440) * week.height;
+        const yStart =
+          (week.yOffset / this.totalHeight) * height +
+          (startMinutes / 1440) * ((week.height / this.totalHeight) * height);
+        const yEnd =
+          (week.yOffset / this.totalHeight) * height +
+          (endMinutes / 1440) * ((week.height / this.totalHeight) * height);
 
-        const topPercent = (yStart / this.totalHeight) * 100;
-        const heightPercent = Math.max(((yEnd - yStart) / this.totalHeight) * 100, 0.3);
-
-        eventMarkers.push(html`
-          <div
-            class="minimap-event"
-            style="
-              top: ${topPercent}%;
-              height: ${heightPercent}%;
-              background: ${event.color || "var(--event-default)"};
-            "
-          ></div>
-        `);
+        ctx.fillStyle = event.color || "#888";
+        ctx.fillRect(2, yStart, width - 4, Math.max(yEnd - yStart, 2));
       }
     }
 
-    return html`
-      <div class="minimap" @mousedown=${this.onMinimapMouseDown}>
-        <div
-          class="minimap-viewport"
-          style="top: ${viewportTop}%; height: ${viewportHeight}%;"
-        ></div>
-        ${eventMarkers}
-      </div>
-    `;
+    // Draw viewport rectangle
+    ctx.strokeStyle = "#1976d2";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(1, viewportTop, width - 2, viewportHeightPx);
+    ctx.fillStyle = "rgba(25, 118, 210, 0.08)";
+    ctx.fillRect(2, viewportTop, width - 4, viewportHeightPx);
+
+    canvas.onmousedown = this.onMinimapMouseDown;
+    canvas.className = "minimap";
+
+    // Render the canvas
+    return canvas;
   }
 
   render() {
@@ -1516,7 +1569,9 @@ export class CalendarViewElement extends LitElement {
         <div class="header">
           <div class="header-gutter"></div>
           <div class="weekdays">
-            ${this.utils.getWeekdayNames().map((name) => html`<div class="weekday">${name}</div>`)}
+            ${this.utils
+              .getWeekdayNames()
+              .map(name => html`<div class="weekday">${name}</div>`)}
           </div>
         </div>
 
@@ -1524,22 +1579,20 @@ export class CalendarViewElement extends LitElement {
           <div class="canvas-layer">
             <canvas></canvas>
           </div>
-          <div class="scroll-container" @mousedown=${this.onCanvasMouseDown} @mousemove=${this.onScrollContainerMouseMove}>
+          <div
+            class="scroll-container"
+            @mousedown=${this.onCanvasMouseDown}
+            @mousemove=${this.onScrollContainerMouseMove}
+          >
             <div class="scroll-content" style="height: ${this.totalHeight}px;">
-              <div class="events-layer">
-                ${this.renderEvents()}
-              </div>
+              <div class="events-layer">${this.renderEvents()}</div>
             </div>
             ${this.renderSelection()}
           </div>
-          <div class="overlay-layer">
-            ${this.renderDateLabels()}
-          </div>
+          <div class="overlay-layer">${this.renderDateLabels()}</div>
           ${this.renderMinimap()}
         </div>
       </div>
     `;
   }
-
-
 }
