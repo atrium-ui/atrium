@@ -753,7 +753,10 @@ export class CalendarViewElement extends LitElement {
     }
 
     if (this.isDraggingZoom && this.scrollContainer) {
-      const deltaY = e.clientY - this.lastPointerY;
+      let deltaY = 0;
+      if (this.lastPointerY) {
+        deltaY = e.clientY - this.lastPointerY;
+      }
       this.lastPointerY = e.clientY;
 
       const delta = deltaY * (this.dayHeight / 100);
