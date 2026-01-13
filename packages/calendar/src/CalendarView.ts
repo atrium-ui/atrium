@@ -249,6 +249,8 @@ export class CalendarViewElement extends LitElement {
 
   set events(value: CalendarEvent[]) {
     this._events = value;
+
+    this.updateFilter();
     this.requestUpdate();
   }
   get events() {
@@ -459,7 +461,7 @@ export class CalendarViewElement extends LitElement {
     }
   }
 
-  protected firstUpdated(): void {
+  firstUpdated(): void {
     this.canvas = this.renderRoot.querySelector("canvas");
     this.scrollContainer = this.renderRoot.querySelector(".scroll-container");
     this.scrollContent = this.renderRoot.querySelector(".scroll-content");
@@ -483,10 +485,12 @@ export class CalendarViewElement extends LitElement {
     });
     this.resizeObserver.observe(this);
 
-    this.filter = this.getAttribute("filter") || this.filter;
-
     this.handleResize();
     this.renderCanvas();
+  }
+
+  updateFilter() {
+    this.filter = this.getAttribute("filter") || this.filter;
   }
 
   handleUpdateLocale() {
@@ -1116,7 +1120,7 @@ export class CalendarViewElement extends LitElement {
       const year = firstDay.getFullYear();
       const monthKey = `${monthIndex}-${year}`;
 
-      if (firstDay.getDate() <= 7 && !seenMonths.has(monthKey)) {
+      if (!seenMonths.has(monthKey)) {
         seenMonths.add(monthKey);
         const monthName = monthNames[monthIndex];
         if (monthName) {
