@@ -3,7 +3,7 @@ export interface CalendarLocaleConfig {
   weekStart?: number;
 }
 
-export class CalendarUtils {
+export class CalendarInternal {
   locale: string;
   weekStart?: number;
 
@@ -11,6 +11,20 @@ export class CalendarUtils {
   constructor(config: CalendarLocaleConfig) {
     this.locale = config.locale;
     this.weekStart = config.weekStart;
+  }
+
+  // TODO: also do layouting to compute selection etc.
+
+  generateWeeks(): void {
+    // TODO
+  }
+
+  getFilteredEvents(): CalendarEvent[] {
+    // TODO
+  }
+
+  getVisibleMonths(): VisibleMonth[] {
+    // TODO
   }
 
   // TODO: this getter is a waste of cpu time
@@ -82,6 +96,6 @@ export class CalendarUtils {
   // Returns timestamp for end of day using pure math (no Date object creation)
   static endOfDayTime(date: Date | undefined): number {
     if (!date) return 0;
-    return CalendarUtils.startOfDayTime(date) + 86400000 - 1;
+    return CalendarInternal.startOfDayTime(date) + 86400000 - 1;
   }
 }

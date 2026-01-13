@@ -1,5 +1,5 @@
 import { LitElement, css, html, render } from "lit";
-import { CalendarUtils } from "./CalendarUtils.js";
+import { CalendarInternal } from "./CalendarInternal.js";
 
 export interface CalendarEvent {
   id: string;
@@ -314,12 +314,27 @@ export class CalendarViewElement extends LitElement {
   set scrollTop(value) {
     this._scrollTop = value;
 
+    if(this.scrollContainer.scrollHeight < value) {
+      this.scrollContent.style.minHeight = (value + window.innerHeight) + "px";
+    }
+
+    this.scrollContainer.scrollTop = value;
+
     this.saveScrollPosition();
     this.renderCanvas();
   }
   get scrollTop() {
     return this._scrollTop;
   }
+
+  onScroll = (): void => {
+    if (this.scrollContainer) {
+      this._scrollTop = this.scrollContainer.scrollTop;
+
+      this.saveScrollPosition();
+      this.renderCanvas();
+    }
+  };
 
   viewportHeight = 0;
 
@@ -347,8 +362,8 @@ export class CalendarViewElement extends LitElement {
 
   // Generate weeks for a year range centered on current date
   startDate = new Date();
-  endDate = CalendarUtils.addDays(new Date(), 365);
-  utils = new CalendarUtils({ locale: this.locale, weekStart: this.weekStart });
+  endDate = CalendarInternal.addDays(new Date(), 365);
+  utils = new CalendarInternal({ locale: this.locale, weekStart: this.weekStart });
 
   loadDayHeight(): number {
     const saved = localStorage.getItem("calendar-dayHeight");
@@ -368,20 +383,26 @@ export class CalendarViewElement extends LitElement {
   }
 
   loadScrollPosition() {
-    let shouldRestoreScroll = false;
     const savedScroll = localStorage.getItem("calendar-scrollTop");
     if (savedScroll) {
       const scrollPos = parseFloat(savedScroll);
-      if (this.scrollContainer) {
-        this.scrollContainer.scrollTop = Math.max(
-          0,
-          Math.min(scrollPos, this.totalHeight - this.viewportHeight),
-        );
-        shouldRestoreScroll = true;
+      this.scrollTop = scrollPos;
+    } else {
+      this.updateWeekOffsets();
+
+      // Scroll to today if no saved position
+      const today = new Date();
+      const weekIndex = this.weeks.findIndex(w =>
+        w.days.some(d => CalendarInternal.isSameDay(d, today)),
+      );
+      if (weekIndex >= 0) {
+        const targetWeek = this.weeks[weekIndex];
+        if (targetWeek) {
+          const targetScroll = targetWeek.yOffset - this.viewportHeight / 2;
+          this.scrollTop = Math.max(0, targetScroll);
+        }
       }
     }
-
-    return shouldRestoreScroll;
   }
 
   saveFilterScrollState(): void {
@@ -398,7 +419,6 @@ export class CalendarViewElement extends LitElement {
           0,
           Math.min(this.preFilterScrollTop, this.totalHeight - this.viewportHeight),
         );
-        this.scrollContainer.scrollTop = clampedScroll;
         this.scrollTop = clampedScroll;
       }
     });
@@ -412,7 +432,7 @@ export class CalendarViewElement extends LitElement {
 
     this.handleUpdateLocale();
 
-    this.startDate = this.utils.getStartOfWeek(CalendarUtils.addDays(new Date(), -365));
+    this.startDate = this.utils.getStartOfWeek(CalendarInternal.addDays(new Date(), -365));
     this.generateWeeks();
 
     window.addEventListener("mousemove", this.onMouseMove);
@@ -445,38 +465,17 @@ export class CalendarViewElement extends LitElement {
     this.scrollContent = this.renderRoot.querySelector(".scroll-content");
     this.ctx = this.canvas?.getContext("2d") ?? null;
 
+    // Restore zoom level from localStorage
+    const savedDayHeight = this.loadDayHeight();
+    if (savedDayHeight !== 80) {
+      this.dayHeight = savedDayHeight;
+    }
+
+    // Try to restore saved scroll position, otherwise scroll to today
+    this.loadScrollPosition();
+
     if (this.scrollContainer) {
       this.scrollContainer.addEventListener("scroll", this.onScroll);
-      this.viewportHeight = this.scrollContainer.clientHeight;
-
-      // TODO: restore calendar view
-      //
-      // Restore zoom level from localStorage
-      // const savedDayHeight = this.loadDayHeight();
-      // if (savedDayHeight !== 80) {
-      //   this.dayHeight = savedDayHeight;
-      // }
-
-      // Try to restore saved scroll position, otherwise scroll to today
-      // const shouldRestoreScroll = this.loadScrollPosition();
-      const shouldRestoreScroll = false;
-
-      if (!shouldRestoreScroll) {
-        this.updateWeekOffsets();
-
-        // Scroll to today if no saved position
-        const today = new Date();
-        const weekIndex = this.weeks.findIndex(w =>
-          w.days.some(d => CalendarUtils.isSameDay(d, today)),
-        );
-        if (weekIndex >= 0) {
-          const targetWeek = this.weeks[weekIndex];
-          if (targetWeek) {
-            const targetScroll = targetWeek.yOffset - this.viewportHeight / 2;
-            this.scrollContainer.scrollTop = Math.max(0, targetScroll);
-          }
-        }
-      }
     }
 
     this.resizeObserver = new ResizeObserver(() => {
@@ -484,13 +483,15 @@ export class CalendarViewElement extends LitElement {
     });
     this.resizeObserver.observe(this);
 
+    this.filter = this.getAttribute("filter") || this.filter;
+
     this.handleResize();
     this.renderCanvas();
   }
 
   handleUpdateLocale() {
-    this.utils = new CalendarUtils({ locale: this.locale, weekStart: this.weekStart });
-    this.startDate = this.utils.getStartOfWeek(CalendarUtils.addDays(new Date(), -365));
+    this.utils = new CalendarInternal({ locale: this.locale, weekStart: this.weekStart });
+    this.startDate = this.utils.getStartOfWeek(CalendarInternal.addDays(new Date(), -365));
     this.generateWeeks();
     this.renderCanvas();
   }
@@ -503,14 +504,14 @@ export class CalendarViewElement extends LitElement {
       const days: Date[] = [];
       for (let i = 0; i < 7; i++) {
         days.push(new Date(current));
-        current = CalendarUtils.addDays(current, 1);
+        current = CalendarInternal.addDays(current, 1);
       }
 
       const firstDay = days[0];
       const thursday = days[3];
       if (firstDay && thursday) {
         this.weeks.push({
-          weekNumber: CalendarUtils.getWeekNumber(firstDay),
+          weekNumber: CalendarInternal.getWeekNumber(firstDay),
           year: thursday.getFullYear(), // Use Thursday for year
           days,
           yOffset: 0,
@@ -530,8 +531,8 @@ export class CalendarViewElement extends LitElement {
 
       // Pre-compute event date ranges once (avoiding repeated startOfDayTime/endOfDayTime calls)
       const eventRanges = filteredEvents.map(e => ({
-        start: CalendarUtils.startOfDayTime(e.start),
-        end: CalendarUtils.endOfDayTime(e.end),
+        start: CalendarInternal.startOfDayTime(e.start),
+        end: CalendarInternal.endOfDayTime(e.end),
       }));
 
       for (const week of this.weeks) {
@@ -609,7 +610,7 @@ export class CalendarViewElement extends LitElement {
 
     // Draw today highlight and current time indicator
     for (const week of visibleWeeks) {
-      const todayIndex = week.days.findIndex(d => CalendarUtils.isSameDay(d, today));
+      const todayIndex = week.days.findIndex(d => CalendarInternal.isSameDay(d, today));
       if (todayIndex >= 0) {
         const x = LEFT_GUTTER_WIDTH + todayIndex * dayWidth;
         const y = week.yOffset - scrollTop;
@@ -762,12 +763,6 @@ export class CalendarViewElement extends LitElement {
     this.requestUpdate();
   }
 
-  onScroll = (): void => {
-    if (this.scrollContainer) {
-      this.scrollTop = this.scrollContainer.scrollTop;
-    }
-  };
-
   onWheel = (e: WheelEvent): void => {
     const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
     const isZoomKey = isMac ? e.metaKey : e.ctrlKey;
@@ -795,7 +790,7 @@ export class CalendarViewElement extends LitElement {
     const newOriginY = this.zoomOriginY * scaleRatio;
 
     // Adjust scroll so that point stays at the same viewport position (where drag started)
-    this.scrollContainer.scrollTop = newOriginY - this.zoomViewportY;
+    this.scrollTop = newOriginY - this.zoomViewportY;
     this.zoomOriginY = newOriginY;
   };
 
@@ -845,7 +840,7 @@ export class CalendarViewElement extends LitElement {
       const newOriginY = this.zoomOriginY * scaleRatio;
 
       // Adjust scroll so that point stays at the same viewport position (where drag started)
-      this.scrollContainer.scrollTop = newOriginY - this.zoomViewportY;
+      this.scrollTop = newOriginY - this.zoomViewportY;
       this.zoomOriginY = newOriginY;
     } else {
       this.updateMousePosition(e);
@@ -924,7 +919,7 @@ export class CalendarViewElement extends LitElement {
     const y = e.clientY - rect.top;
     const ratio = y / rect.height;
     const targetScroll = ratio * this.totalHeight - this.viewportHeight / 2;
-    this.scrollContainer.scrollTop = Math.max(
+    this.scrollTop = Math.max(
       0,
       Math.min(targetScroll, this.totalHeight - this.viewportHeight),
     );
