@@ -762,6 +762,7 @@ export class CalendarViewElement extends LitElement {
     const isZoomKey = isMac ? e.metaKey : e.ctrlKey;
 
     if (!isZoomKey || !this.scrollContainer) {
+      this.updateMousePosition();
       return;
     }
 
@@ -787,6 +788,8 @@ export class CalendarViewElement extends LitElement {
     this.zoomOriginY = newOriginY;
   };
 
+  lastPointerY = 0;
+
   onZoomHandleMouseDown = (e: MouseEvent): void => {
     if (!this.scrollContainer) return;
     e.preventDefault();
@@ -799,14 +802,13 @@ export class CalendarViewElement extends LitElement {
     const viewportY = e.clientY - rect.top;
     this.zoomViewportY = viewportY;
     this.zoomOriginY = viewportY + this.scrollTop;
-  };
 
-  lastPointerY = 0;
+    this.lastPointerY = e.clientY;
+  };
 
   onMouseMove = (e: MouseEvent): void => {
     if (this.isDraggingMinimap) {
       this.onMinimapMouseMove(e);
-      return;
     }
 
     if (this.isDraggingZoom && this.scrollContainer) {
@@ -814,7 +816,6 @@ export class CalendarViewElement extends LitElement {
       if (this.lastPointerY) {
         deltaY = e.clientY - this.lastPointerY;
       }
-      this.lastPointerY = e.clientY;
 
       const delta = deltaY * (this.dayHeight / 100);
 
@@ -836,13 +837,7 @@ export class CalendarViewElement extends LitElement {
       this.scrollContainer.scrollTop = newOriginY - this.zoomViewportY;
       this.zoomOriginY = newOriginY;
     } else {
-      if (this.scrollContainer) {
-        // Store the Y position in content coordinates as zoom origin
-        const rect = this.scrollContainer.getBoundingClientRect();
-        const viewportY = e.clientY - rect.top;
-        this.zoomViewportY = viewportY;
-        this.zoomOriginY = viewportY + this.scrollTop;
-      }
+      this.updateMousePosition(e);
     }
 
     if (this.isSelecting && this.scrollContainer) {
@@ -854,7 +849,19 @@ export class CalendarViewElement extends LitElement {
         endY: e.clientY - rect.top + this.scrollTop,
       };
     }
+
+    this.lastPointerY = e.clientY;
   };
+
+  updateMousePosition(e?: PointerEvent | MouseEvent) {
+    if (this.scrollContainer) {
+      // Store the Y position in content coordinates as zoom origin
+      const rect = this.scrollContainer.getBoundingClientRect();
+      const viewportY = (e?.clientY || this.lastPointerY) - rect.top;
+      this.zoomViewportY = viewportY;
+      this.zoomOriginY = viewportY + this.scrollTop;
+    }
+  }
 
   onMouseUp = (): void => {
     if (this.isDraggingZoom) {
@@ -868,7 +875,6 @@ export class CalendarViewElement extends LitElement {
       this.isSelecting = false;
       this.selection = null;
     }
-    this.lastPointerY = 0;
   };
 
   onScrollContainerMouseMove = (e: MouseEvent): void => {
