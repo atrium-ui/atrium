@@ -408,8 +408,17 @@ export class CalendarViewElement extends LitElement {
       this.scrollContainer.addEventListener("scroll", this.onScroll);
       this.viewportHeight = this.scrollContainer.clientHeight;
 
+      // TODO: restore calendar view
+      //
+      // Restore zoom level from localStorage
+      // const savedDayHeight = this.loadDayHeight();
+      // if (savedDayHeight !== 80) {
+      //   this.dayHeight = savedDayHeight;
+      // }
+
       // Try to restore saved scroll position, otherwise scroll to today
-      const shouldRestoreScroll = this.loadScrollPosition();
+      // const shouldRestoreScroll = this.loadScrollPosition();
+      const shouldRestoreScroll = false;
 
       if (!shouldRestoreScroll) {
         // Scroll to today if no saved position
@@ -434,12 +443,6 @@ export class CalendarViewElement extends LitElement {
 
     this.handleResize();
     this.renderCanvas();
-
-    // Restore zoom level from localStorage
-    const savedDayHeight = this.loadDayHeight();
-    if (savedDayHeight !== 80) {
-      this.dayHeight = savedDayHeight;
-    }
   }
 
   protected updated(changedProps: PropertyValueMap<this>): void {
@@ -651,11 +654,11 @@ export class CalendarViewElement extends LitElement {
         const prevWeekIndex = this.weeks.indexOf(prevWeek);
         const currentWeekIndex = this.weeks.indexOf(week);
         const hiddenWeeks = currentWeekIndex - prevWeekIndex - 1;
-        
+
         if (hiddenWeeks > 0) {
           // Draw gap indicator at the top of the current week
           const gapY = y;
-          
+
           // Draw dashed line
           ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
           ctx.lineWidth = 1;
@@ -665,13 +668,13 @@ export class CalendarViewElement extends LitElement {
           ctx.lineTo(width, gapY);
           ctx.stroke();
           ctx.setLineDash([]);
-          
+
           // Draw ellipsis in the center
           ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
           ctx.font = "12px monospace, system-ui, sans-serif";
           ctx.textAlign = "center";
           const ellipsisText = `⋯ ${hiddenWeeks} week${hiddenWeeks > 1 ? "s" : ""} ⋯`;
-          
+
           // Draw background pill for the ellipsis
           const textWidth = ctx.measureText(ellipsisText).width;
           const pillPadding = 8;
@@ -679,12 +682,12 @@ export class CalendarViewElement extends LitElement {
           const pillY = gapY - 8;
           const pillWidth = textWidth + pillPadding * 2;
           const pillHeight = 16;
-          
+
           ctx.fillStyle = "rgba(30, 30, 30, 0.9)";
           ctx.beginPath();
           ctx.roundRect(pillX, pillY, pillWidth, pillHeight, 8);
           ctx.fill();
-          
+
           ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
           ctx.fillText(ellipsisText, (LEFT_GUTTER_WIDTH + width) / 2, gapY + 4);
         }
@@ -863,6 +866,7 @@ export class CalendarViewElement extends LitElement {
       this.isSelecting = false;
       this.selection = null;
     }
+    this.lastPointerY = 0;
   };
 
   onScrollContainerMouseMove = (e: MouseEvent): void => {
@@ -1218,7 +1222,8 @@ export class CalendarViewElement extends LitElement {
 
       const durationMs = event.end.valueOf() - event.start.valueOf();
       const h24 = 1000 * 60 * 60 * 24;
-      const allDay = durationMs % h24 === 0 && durationMs >= h24;
+      // const allDay = durationMs % h24 === 0 && durationMs >= h24;
+      const allDay = durationMs > h24;
 
       let yStart: number;
       let yEnd: number;

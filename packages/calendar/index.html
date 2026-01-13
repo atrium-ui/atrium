@@ -195,16 +195,16 @@
 
       // Fetch additional events from iCal URL
       fetchICalEvents("/work.ics").then((icalEvents) => {
-        console.log(`Loaded ${icalEvents.length} events from iCal`);
         calendar.events = [...calendar.events, ...icalEvents];
-      }).catch((err) => {
-        console.error("Failed to load iCal events:", err);
       });
       fetchICalEvents("/planning.ics").then((icalEvents) => {
-        console.log(`Loaded ${icalEvents.length} events from iCal`);
         calendar.events = [...calendar.events, ...icalEvents];
-      }).catch((err) => {
-        console.error("Failed to load iCal events:", err);
+      });
+      fetchICalEvents("/social.ics").then((icalEvents) => {
+        calendar.events = [...calendar.events, ...icalEvents];
+      });
+      fetchICalEvents("/s-v.ics").then((icalEvents) => {
+        calendar.events = [...calendar.events, ...icalEvents];
       });
 
       calendar.addEventListener("selection", (e) => {
