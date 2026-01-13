@@ -736,29 +736,27 @@ export class CalendarViewElement extends LitElement {
     this.isDraggingZoom = true;
     this.zoomDragStartY = e.clientY;
     this.zoomDragStartHeight = this.dayHeight;
+
+    // Store the Y position in content coordinates as zoom origin
+    const rect = this.scrollContainer.getBoundingClientRect();
+    const viewportY = e.clientY - rect.top;
+    this.zoomViewportY = viewportY;
+    this.zoomOriginY = viewportY + this.scrollTop;
   };
 
-  lastMouseY = 0;
+  lastPointerY = 0;
 
   onMouseMove = (e: MouseEvent): void => {
-    if (this.scrollContainer) {
-      // Store the Y position in content coordinates as zoom origin
-      const rect = this.scrollContainer.getBoundingClientRect();
-      const viewportY = e.clientY - rect.top;
-      this.zoomViewportY = viewportY;
-      this.zoomOriginY = viewportY + this.scrollTop;
-    }
-
     if (this.isDraggingMinimap) {
       this.onMinimapMouseMove(e);
       return;
     }
 
     if (this.isDraggingZoom && this.scrollContainer) {
-      const deltaY = e.clientY - this.lastMouseY;
-      const delta = deltaY * (this.dayHeight / 300);
+      const deltaY = e.clientY - this.lastPointerY;
+      this.lastPointerY = e.clientY;
 
-      this.lastMouseY = e.clientY;
+      const delta = deltaY * (this.dayHeight / 100);
 
       const newHeight = Math.max(
         MIN_DAY_HEIGHT,
@@ -777,7 +775,14 @@ export class CalendarViewElement extends LitElement {
       // Adjust scroll so that point stays at the same viewport position (where drag started)
       this.scrollContainer.scrollTop = newOriginY - this.zoomViewportY;
       this.zoomOriginY = newOriginY;
-      return;
+    } else {
+      if (this.scrollContainer) {
+        // Store the Y position in content coordinates as zoom origin
+        const rect = this.scrollContainer.getBoundingClientRect();
+        const viewportY = e.clientY - rect.top;
+        this.zoomViewportY = viewportY;
+        this.zoomOriginY = viewportY + this.scrollTop;
+      }
     }
 
     if (this.isSelecting && this.scrollContainer) {
@@ -788,7 +793,6 @@ export class CalendarViewElement extends LitElement {
         endX: e.clientX - rect.left,
         endY: e.clientY - rect.top + this.scrollTop,
       };
-      return;
     }
   };
 
