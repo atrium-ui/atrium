@@ -1,5 +1,4 @@
-import { LitElement, css, html, type PropertyValueMap } from "lit";
-import { property, state } from "lit/decorators.js";
+import { LitElement, css, html, render } from "lit";
 import { CalendarUtils } from "./CalendarUtils.js";
 
 export interface CalendarEvent {
@@ -242,20 +241,33 @@ export class CalendarViewElement extends LitElement {
     }
   `;
 
-  @property({ type: Array })
-  events: CalendarEvent[] = [];
+  _events: CalendarEvent[] = [];
 
-  @property({ type: String })
-  filter = "";
+  set events(value: CalendarEvent[]) {
+    this._events = value;
+    this.requestUpdate();
+  }
+  get events() {
+    return this._events;
+  }
 
-  @property({ type: String })
+  _filter: string | undefined;
+
+  set filter(value) {
+    this.handleFilterUpdate(value);
+    this._filter = value;
+    this.requestUpdate();
+  }
+  get filter() {
+    return this._filter;
+  }
+
   locale: string = navigator.language;
 
   /**
    * First day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday).
    * Defaults to locale-appropriate value.
    */
-  @property({ type: Number, attribute: "week-start" })
   weekStart?: number;
 
   _dayHeight = MIN_DAY_HEIGHT;
@@ -382,6 +394,12 @@ export class CalendarViewElement extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
+
+    this.locale = this.getAttribute("locale") || this.locale;
+    this.weekStart = Number(this.getAttribute("week-start")) || this.weekStart;
+
+    this.handleUpdateLocale();
+
     this.startDate = this.utils.getStartOfWeek(CalendarUtils.addDays(new Date(), -365));
     this.generateWeeks();
 
@@ -457,38 +475,37 @@ export class CalendarViewElement extends LitElement {
     this.renderCanvas();
   }
 
-  protected updated(changedProps: PropertyValueMap<this>): void {
-    if (changedProps.has("locale") || changedProps.has("weekStart")) {
-      this.utils = new CalendarUtils({ locale: this.locale, weekStart: this.weekStart });
-      this.startDate = this.utils.getStartOfWeek(CalendarUtils.addDays(new Date(), -365));
-      this.generateWeeks();
+  handleUpdateLocale() {
+    this.utils = new CalendarUtils({ locale: this.locale, weekStart: this.weekStart });
+    this.startDate = this.utils.getStartOfWeek(CalendarUtils.addDays(new Date(), -365));
+    this.generateWeeks();
+    this.renderCanvas();
+  }
+
+  handleFilterUpdate(newFilter: string | undefined) {
+    const previousFilter = this.filter;
+    const currentFilter = newFilter;
+
+    const wasFiltered = previousFilter && previousFilter.trim().length > 0;
+    const isFiltered = currentFilter && currentFilter.trim().length > 0;
+
+    // If filter was just cleared/reset (was filtered, now empty)
+    if (wasFiltered && !isFiltered) {
+      this.updateWeekOffsets();
       this.renderCanvas();
+      // Restore after render completes
+      requestAnimationFrame(() => {
+        this.restoreFilterScrollState();
+      });
     }
-    if (changedProps.has("filter")) {
-      const previousFilter = changedProps.get("filter") as string | undefined;
-      const currentFilter = this.filter;
-
-      const wasFiltered = previousFilter && previousFilter.trim().length > 0;
-      const isFiltered = currentFilter && currentFilter.trim().length > 0;
-
-      // If filter was just cleared/reset (was filtered, now empty)
-      if (wasFiltered && !isFiltered) {
-        this.updateWeekOffsets();
-        this.renderCanvas();
-        // Restore after render completes
-        requestAnimationFrame(() => {
-          this.restoreFilterScrollState();
-        });
-      }
-      // If filter was just applied (was empty, now filtered)
-      else if (!wasFiltered && isFiltered) {
-        this.saveFilterScrollState();
-        this.updateWeekOffsets();
-        this.renderCanvas();
-      } else {
-        this.updateWeekOffsets();
-        this.renderCanvas();
-      }
+    // If filter was just applied (was empty, now filtered)
+    else if (!wasFiltered && isFiltered) {
+      this.saveFilterScrollState();
+      this.updateWeekOffsets();
+      this.renderCanvas();
+    } else {
+      this.updateWeekOffsets();
+      this.renderCanvas();
     }
   }
 
