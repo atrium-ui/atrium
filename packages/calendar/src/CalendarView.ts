@@ -273,7 +273,7 @@ export class CalendarViewElement extends LitElement {
 
   @state()
   dayHeight = MIN_DAY_HEIGHT;
-a
+
   @state()
   scrollTop = 0;
 
