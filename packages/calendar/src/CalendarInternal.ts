@@ -7,6 +7,8 @@ export class CalendarInternal {
   locale: string;
   weekStart?: number;
 
+  filter?: string;
+
   // TODO: dont instantiate a class for this, wasted memory
   constructor(config: CalendarLocaleConfig) {
     this.locale = config.locale;
@@ -37,6 +39,43 @@ export class CalendarInternal {
         });
       }
     }
+
+    let y = 0;
+
+    if (this.filter) {
+      const filteredEvents = this.getFilteredEvents();
+
+      // Pre-compute event date ranges once (avoiding repeated startOfDayTime/endOfDayTime calls)
+      const eventRanges = filteredEvents.map(e => ({
+        start: CalendarInternal.startOfDayTime(e.start),
+        end: CalendarInternal.endOfDayTime(e.end),
+      }));
+
+      for (const week of weeks) {
+        week.yOffset = y;
+
+        // Check if any day in this week overlaps any event range
+        const weekStartTime = week.days[0]?.getTime() ?? 0;
+        const weekEndTime = week.days[6]?.getTime() ?? 0;
+
+        // Quick check: skip if week is entirely outside all event ranges
+        const hasEvents = eventRanges.some(
+          range => range.end >= weekStartTime && range.start <= weekEndTime,
+        );
+
+        // TODO: height should be determined by the renderer
+        week.height = hasEvents ? this.dayHeight : 0;
+        y += week.height;
+      }
+    } else {
+      for (const week of weeks) {
+        week.yOffset = y;
+        week.height = this.dayHeight;
+        y += week.height;
+      }
+    }
+
+    this.totalHeight = y;
 
     return weeks;
   }

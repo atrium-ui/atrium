@@ -502,7 +502,6 @@ export class CalendarViewElement extends LitElement {
 
   generateWeeks(): void {
     this.weeks = this.utils.generateWeeks(this.startDate, this.endDate);
-    this.updateWeekOffsets();
   }
 
   updateWeekOffsets(): void {
