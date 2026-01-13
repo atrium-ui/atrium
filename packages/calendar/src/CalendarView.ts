@@ -129,6 +129,7 @@ export class CalendarViewElement extends LitElement {
       overflow-x: hidden;
       z-index: 1;
       cursor: default;
+      overflow-anchor: none;
     }
 
     .scroll-container.zoom-cursor {
@@ -703,29 +704,30 @@ export class CalendarViewElement extends LitElement {
     const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
     const isZoomKey = isMac ? e.metaKey : e.ctrlKey;
 
-    if (!isZoomKey || !this.scrollContainer) return;
+    if (!isZoomKey || !this.scrollContainer) {
+      return;
+    }
 
     e.preventDefault();
 
-    // Get the position where the wheel event occurred
-    const rect = this.scrollContainer.getBoundingClientRect();
-    const viewportY = e.clientY - rect.top;
-    const contentY = viewportY + this.scrollTop;
-
-    // Determine zoom direction: deltaY < 0 = zoom in (scroll up), deltaY > 0 = zoom out (scroll down)
+    const delta = e.deltaY * (this.dayHeight / 100);
     const newHeight = Math.max(
       MIN_DAY_HEIGHT,
-      Math.min(MAX_DAY_HEIGHT, this.dayHeight - e.deltaY)
+      Math.min(MAX_DAY_HEIGHT, this.dayHeight - delta)
     );
 
     const oldHeight = this.dayHeight;
     this.dayHeight = newHeight;
 
-    // Maintain the zoom center point under the cursor
+    // Adjust scroll to keep zoom origin in place
     const scaleRatio = newHeight / oldHeight;
-    const newContentY = contentY * scaleRatio;
-    const adjustedScroll = newContentY - viewportY;
-    this.scrollContainer.scrollTop = adjustedScroll;
+
+    // Calculate where the origin point is now after scaling
+    const newOriginY = this.zoomOriginY * scaleRatio;
+
+    // Adjust scroll so that point stays at the same viewport position (where drag started)
+    this.scrollContainer.scrollTop = newOriginY - this.zoomViewportY;
+    this.zoomOriginY = newOriginY;
   };
 
   onZoomHandleMouseDown = (e: MouseEvent): void => {
@@ -734,25 +736,33 @@ export class CalendarViewElement extends LitElement {
     this.isDraggingZoom = true;
     this.zoomDragStartY = e.clientY;
     this.zoomDragStartHeight = this.dayHeight;
-
-    // Store the Y position in content coordinates as zoom origin
-    const rect = this.scrollContainer.getBoundingClientRect();
-    const viewportY = e.clientY - rect.top;
-    this.zoomViewportY = viewportY;
-    this.zoomOriginY = viewportY + this.scrollTop;
   };
 
+  lastMouseY = 0;
+
   onMouseMove = (e: MouseEvent): void => {
+    if (this.scrollContainer) {
+      // Store the Y position in content coordinates as zoom origin
+      const rect = this.scrollContainer.getBoundingClientRect();
+      const viewportY = e.clientY - rect.top;
+      this.zoomViewportY = viewportY;
+      this.zoomOriginY = viewportY + this.scrollTop;
+    }
+
     if (this.isDraggingMinimap) {
       this.onMinimapMouseMove(e);
       return;
     }
+
     if (this.isDraggingZoom && this.scrollContainer) {
-      const delta = e.clientY - this.zoomDragStartY;
-      const scale = 1 + delta / 200;
+      const deltaY = e.clientY - this.lastMouseY;
+      const delta = deltaY * (this.dayHeight / 300);
+
+      this.lastMouseY = e.clientY;
+
       const newHeight = Math.max(
         MIN_DAY_HEIGHT,
-        Math.min(MAX_DAY_HEIGHT, this.zoomDragStartHeight * scale)
+        Math.min(MAX_DAY_HEIGHT, this.dayHeight - delta)
       );
 
       const oldHeight = this.dayHeight;
@@ -763,10 +773,14 @@ export class CalendarViewElement extends LitElement {
 
       // Calculate where the origin point is now after scaling
       const newOriginY = this.zoomOriginY * scaleRatio;
+
       // Adjust scroll so that point stays at the same viewport position (where drag started)
       this.scrollContainer.scrollTop = newOriginY - this.zoomViewportY;
       this.zoomOriginY = newOriginY;
-    } else if (this.isSelecting && this.scrollContainer) {
+      return;
+    }
+
+    if (this.isSelecting && this.scrollContainer) {
       const rect = this.scrollContainer.getBoundingClientRect();
       this.selection = {
         startX: this.selectionStartX,
@@ -774,6 +788,7 @@ export class CalendarViewElement extends LitElement {
         endX: e.clientX - rect.left,
         endY: e.clientY - rect.top + this.scrollTop,
       };
+      return;
     }
   };
 
@@ -1119,7 +1134,11 @@ export class CalendarViewElement extends LitElement {
             yEnd = yStart + MIN_EVENT_HEIGHT;
           }
 
-          const height = Math.max(MIN_EVENT_HEIGHT, yEnd - yStart);
+          const height = Math.max(showTimeScale ? 4 : MIN_EVENT_HEIGHT, yEnd - yStart);
+
+          const durationMs = event.end.valueOf() - event.start.valueOf();
+          const h24 = 1000 * 60 * 60 * 24;
+          const allDay = durationMs % h24 === 0 && durationMs >= h24;
 
           eventElements.push(html`
             <div
@@ -1127,9 +1146,10 @@ export class CalendarViewElement extends LitElement {
               style="
                 left: ${x + 2}px;
                 top: ${yStart}px;
-                width: ${dayWidth - 32}px;
+                width: ${dayWidth - (allDay ? 0 : 15)}px;
                 height: ${height}px;
                 background: ${event.color || "var(--event-default)"};
+                border-radius: ${allDay ? 0 : 12};
               "
               @click=${() => this.onEventClick(event)}
             >
