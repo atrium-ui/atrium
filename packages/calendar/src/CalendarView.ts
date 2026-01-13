@@ -351,49 +351,34 @@ export class CalendarViewElement extends LitElement {
   utils = new CalendarUtils({ locale: this.locale, weekStart: this.weekStart });
 
   loadDayHeight(): number {
-    try {
-      const saved = localStorage.getItem("calendar-dayHeight");
-      if (saved) {
-        return Math.max(MIN_DAY_HEIGHT, Math.min(MAX_DAY_HEIGHT, parseFloat(saved)));
-      }
-    } catch (e) {
-      // localStorage not available
+    const saved = localStorage.getItem("calendar-dayHeight");
+    if (saved) {
+      return Math.max(MIN_DAY_HEIGHT, Math.min(MAX_DAY_HEIGHT, parseFloat(saved)));
     }
-    return 80;
+
+    return MIN_DAY_HEIGHT;
   }
 
   saveDayHeight(): void {
-    try {
-      localStorage.setItem("calendar-dayHeight", this.dayHeight.toString());
-    } catch (e) {
-      // localStorage not available
-    }
+    localStorage.setItem("calendar-dayHeight", this.dayHeight.toString());
   }
 
   saveScrollPosition(): void {
-    try {
-      localStorage.setItem("calendar-scrollTop", this.scrollTop.toString());
-    } catch (e) {
-      // localStorage not available
-    }
+    localStorage.setItem("calendar-scrollTop", this.scrollTop.toString());
   }
 
   loadScrollPosition() {
     let shouldRestoreScroll = false;
-    try {
-      const savedScroll = localStorage.getItem("calendar-scrollTop");
-      if (savedScroll) {
-        const scrollPos = parseFloat(savedScroll);
-        if (this.scrollContainer) {
-          this.scrollContainer.scrollTop = Math.max(
-            0,
-            Math.min(scrollPos, this.totalHeight - this.viewportHeight),
-          );
-          shouldRestoreScroll = true;
-        }
+    const savedScroll = localStorage.getItem("calendar-scrollTop");
+    if (savedScroll) {
+      const scrollPos = parseFloat(savedScroll);
+      if (this.scrollContainer) {
+        this.scrollContainer.scrollTop = Math.max(
+          0,
+          Math.min(scrollPos, this.totalHeight - this.viewportHeight),
+        );
+        shouldRestoreScroll = true;
       }
-    } catch (e) {
-      // localStorage not available
     }
 
     return shouldRestoreScroll;
@@ -1496,7 +1481,7 @@ export class CalendarViewElement extends LitElement {
 
     // Canvas dimensions
     const width = 32;
-    const height = 1200; // Adjust as needed or make dynamic
+    const height = 2000; // Adjust as needed or make dynamic
 
     // Calculate viewport rectangle
     const viewportRatio = this.viewportHeight / this.totalHeight;
@@ -1521,6 +1506,11 @@ export class CalendarViewElement extends LitElement {
 
     // Clear
     ctx.clearRect(0, 0, width, height);
+
+    // Draw viewport rectangle
+    ctx.strokeRect(1, viewportTop, width - 2, viewportHeightPx);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+    ctx.fillRect(2, viewportTop, width - 4, viewportHeightPx);
 
     // Draw event rectangles
     for (const event of events) {
@@ -1559,17 +1549,11 @@ export class CalendarViewElement extends LitElement {
           (week.yOffset / this.totalHeight) * height +
           (endMinutes / 1440) * ((week.height / this.totalHeight) * height);
 
+        ctx.globalAlpha = 0.333;
         ctx.fillStyle = event.color || "#888";
         ctx.fillRect(2, yStart, width - 4, Math.max(yEnd - yStart, 2));
       }
     }
-
-    // Draw viewport rectangle
-    ctx.strokeStyle = "#1976d2";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(1, viewportTop, width - 2, viewportHeightPx);
-    ctx.fillStyle = "rgba(25, 118, 210, 0.08)";
-    ctx.fillRect(2, viewportTop, width - 4, viewportHeightPx);
 
     canvas.onmousedown = this.onMinimapMouseDown;
     canvas.className = "minimap";
