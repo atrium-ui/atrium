@@ -87,6 +87,13 @@
         "lit": "^3.1.3",
       },
     },
+    "packages/calendar": {
+      "name": "@sv/calendar",
+      "version": "0.2.1",
+      "dependencies": {
+        "lit": "^3.1.3",
+      },
+    },
     "packages/charts": {
       "name": "@sv/charts",
       "version": "0.2.1",
@@ -117,7 +124,7 @@
     },
     "packages/elements": {
       "name": "@sv/elements",
-      "version": "4.3.0",
+      "version": "4.4.0",
       "dependencies": {
         "@floating-ui/dom": "^1.6.7",
         "@sv/scroll-lock": "^1.1.1",
@@ -603,6 +610,8 @@
     "@sv/a11y": ["@sv/a11y@workspace:packages/a11y"],
 
     "@sv/animation": ["@sv/animation@workspace:packages/animation"],
+
+    "@sv/calendar": ["@sv/calendar@workspace:packages/calendar"],
 
     "@sv/charts": ["@sv/charts@workspace:packages/charts"],
 

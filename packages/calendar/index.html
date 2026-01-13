@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -17,7 +17,10 @@
         height: 100%;
         background: #1a1a1e;
         color: #fff;
-        font-family: system-ui, -apple-system, sans-serif;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
         overflow: hidden;
       }
 
@@ -75,7 +78,15 @@
         let currentEvent = null;
 
         const color = (() => {
-          const colors = ["#9b59b6", "#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#1abc9c", "#e91e63"];
+          const colors = [
+            "#9b59b6",
+            "#e74c3c",
+            "#3498db",
+            "#2ecc71",
+            "#f39c12",
+            "#1abc9c",
+            "#e91e63",
+          ];
           return colors[Math.floor(Math.random() * colors.length)];
         })();
 
@@ -133,96 +144,96 @@
       // Generate some sample events
       const today = new Date();
       const events = [
-        {
-          id: "1",
-          title: "Team Standup",
-          start: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 9, 0),
-          end: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 9, 30),
-          color: "#9b59b6",
-        },
-        {
-          id: "2",
-          title: "Project Review",
-          start: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 14, 0),
-          end: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 15, 30),
-          color: "#e74c3c",
-        },
-        {
-          id: "3",
-          title: "Lunch with Team",
-          start: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0),
-          end: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 13, 0),
-          color: "#3498db",
-        },
-        {
-          id: "4",
-          title: "Design Workshop",
-          start: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 10, 0),
-          end: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 12, 0),
-          color: "#2ecc71",
-        },
-        {
-          id: "5",
-          title: "Sprint Planning",
-          start: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2, 9, 0),
-          end: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2, 11, 0),
-          color: "#f39c12",
-        },
-        {
-          id: "6",
-          title: "Client Call",
-          start: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1, 15, 0),
-          end: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1, 16, 0),
-          color: "#1abc9c",
-        },
-        {
-          id: "7",
-          title: "Code Review",
-          start: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3, 14, 0),
-          end: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3, 15, 0),
-          color: "#9b59b6",
-        },
-        {
-          id: "8",
-          title: "Team Offsite",
-          start: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7, 9, 0),
-          end: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7, 17, 0),
-          color: "#e91e63",
-        },
+        // {
+        //   id: "1",
+        //   title: "Team Standup",
+        //   start: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 9, 0),
+        //   end: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 9, 30),
+        //   color: "#9b59b6",
+        // },
+        // {
+        //   id: "2",
+        //   title: "Project Review",
+        //   start: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 14, 0),
+        //   end: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 15, 30),
+        //   color: "#e74c3c",
+        // },
+        // {
+        //   id: "3",
+        //   title: "Lunch with Team",
+        //   start: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12, 0),
+        //   end: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 13, 0),
+        //   color: "#3498db",
+        // },
+        // {
+        //   id: "4",
+        //   title: "Design Workshop",
+        //   start: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 10, 0),
+        //   end: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 12, 0),
+        //   color: "#2ecc71",
+        // },
+        // {
+        //   id: "5",
+        //   title: "Sprint Planning",
+        //   start: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2, 9, 0),
+        //   end: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2, 11, 0),
+        //   color: "#f39c12",
+        // },
+        // {
+        //   id: "6",
+        //   title: "Client Call",
+        //   start: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1, 15, 0),
+        //   end: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1, 16, 0),
+        //   color: "#1abc9c",
+        // },
+        // {
+        //   id: "7",
+        //   title: "Code Review",
+        //   start: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3, 14, 0),
+        //   end: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3, 15, 0),
+        //   color: "#9b59b6",
+        // },
+        // {
+        //   id: "8",
+        //   title: "Team Offsite",
+        //   start: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7, 9, 0),
+        //   end: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7, 17, 0),
+        //   color: "#e91e63",
+        // },
       ];
 
       calendar.events = events;
 
       // Fetch additional events from iCal URL
-      fetchICalEvents("/work.ics").then((icalEvents) => {
+      fetchICalEvents("/work.ics").then(icalEvents => {
         calendar.events = [...calendar.events, ...icalEvents];
       });
-      fetchICalEvents("/planning.ics").then((icalEvents) => {
+      fetchICalEvents("/planning.ics").then(icalEvents => {
         calendar.events = [...calendar.events, ...icalEvents];
       });
-      fetchICalEvents("/social.ics").then((icalEvents) => {
+      fetchICalEvents("/social.ics").then(icalEvents => {
         calendar.events = [...calendar.events, ...icalEvents];
       });
-      fetchICalEvents("/s-v.ics").then((icalEvents) => {
+      fetchICalEvents("/s-v.ics").then(icalEvents => {
         calendar.events = [...calendar.events, ...icalEvents];
       });
 
-      calendar.addEventListener("selection", (e) => {
-        console.log("Selection:", e.detail);
-        const title = prompt("New event title:");
-        if (title) {
-          const newEvent = {
-            id: String(Date.now()),
-            title,
-            start: e.detail.start,
-            end: e.detail.end,
-            color: "#9b59b6",
-          };
-          calendar.events = [...calendar.events, newEvent];
-        }
-      });
+      // calendar.addEventListener("selection", e => {
+      //   console.log("Selection:", e.detail);
+      //   const title = prompt("New event title:");
+      //   if (title) {
+      //     const newEvent = {
+      //       id: String(Date.now()),
+      //       title,
+      //       start: e.detail.start,
+      //       end: e.detail.end,
+      //       color: "#9b59b6",
+      //     };
+      //     calendar.events = [...calendar.events, newEvent];
+      //   }
+      // });
 
-      calendar.addEventListener("event-click", (e) => {
+      calendar.addEventListener("event-click", e => {
         console.log("Event clicked:", e.detail);
         alert(`Event: ${e.detail.title}\nStart: ${e.detail.start}\nEnd: ${e.detail.end}`);
       });

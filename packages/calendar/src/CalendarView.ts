@@ -27,7 +27,7 @@ interface VisibleMonth {
 const MIN_DAY_HEIGHT = 100;
 const MAX_DAY_HEIGHT = 2000; // 1px per minute
 const LEFT_GUTTER_WIDTH = 60;
-const MIN_EVENT_HEIGHT = 16;
+const MIN_EVENT_HEIGHT = 20;
 
 export class CalendarViewElement extends LitElement {
   static styles = css`
@@ -251,11 +251,33 @@ export class CalendarViewElement extends LitElement {
     return this._events;
   }
 
-  _filter: string | undefined;
+  _filter = "";
 
-  set filter(value) {
-    this.handleFilterUpdate(value);
-    this._filter = value;
+  set filter(newFilter) {
+    const previousFilter = this.filter;
+
+    const wasFiltered = previousFilter && previousFilter.trim().length > 0;
+    const isFiltered = newFilter && newFilter.trim().length > 0;
+
+    this._filter = newFilter;
+
+    // If filter was just cleared/reset (was filtered, now empty)
+    if (wasFiltered && !isFiltered) {
+      this.updateWeekOffsets();
+      this.renderCanvas();
+      // Restore after render completes
+      this.restoreFilterScrollState();
+    }
+    // If filter was just applied (was empty, now filtered)
+    else if (!wasFiltered && isFiltered) {
+      this.saveFilterScrollState();
+      this.updateWeekOffsets();
+      this.renderCanvas();
+    } else {
+      this.updateWeekOffsets();
+      this.renderCanvas();
+    }
+
     this.requestUpdate();
   }
   get filter() {
@@ -480,33 +502,6 @@ export class CalendarViewElement extends LitElement {
     this.startDate = this.utils.getStartOfWeek(CalendarUtils.addDays(new Date(), -365));
     this.generateWeeks();
     this.renderCanvas();
-  }
-
-  handleFilterUpdate(newFilter: string | undefined) {
-    const previousFilter = this.filter;
-    const currentFilter = newFilter;
-
-    const wasFiltered = previousFilter && previousFilter.trim().length > 0;
-    const isFiltered = currentFilter && currentFilter.trim().length > 0;
-
-    // If filter was just cleared/reset (was filtered, now empty)
-    if (wasFiltered && !isFiltered) {
-      this.updateWeekOffsets();
-      this.renderCanvas();
-      // Restore after render completes
-      requestAnimationFrame(() => {
-        this.restoreFilterScrollState();
-      });
-    }
-    // If filter was just applied (was empty, now filtered)
-    else if (!wasFiltered && isFiltered) {
-      this.saveFilterScrollState();
-      this.updateWeekOffsets();
-      this.renderCanvas();
-    } else {
-      this.updateWeekOffsets();
-      this.renderCanvas();
-    }
   }
 
   generateWeeks(): void {
@@ -1084,7 +1079,7 @@ export class CalendarViewElement extends LitElement {
     const events = this.getFilteredEvents();
     const scrollTop = this.scrollTop;
     const viewportBottom = scrollTop + this.viewportHeight;
-    const showTimeScale = this.dayHeight >= 200;
+    const showTimeScale = this.dayHeight >= 300;
 
     const eventElements: ReturnType<typeof html>[] = [];
     const monthNames = [
@@ -1355,10 +1350,10 @@ export class CalendarViewElement extends LitElement {
           occupied.add(rowIndex);
         }
 
-        const maxEventsInWeek = Math.floor((weekHeight - 28) / (MIN_EVENT_HEIGHT + 2));
+        const maxEventsInWeek = Math.floor((weekHeight - 4) / (MIN_EVENT_HEIGHT + 2));
         if (rowIndex >= maxEventsInWeek) continue;
 
-        yStart = weekYOffset + 28 + rowIndex * (MIN_EVENT_HEIGHT + 2);
+        yStart = weekYOffset + 4 + rowIndex * (MIN_EVENT_HEIGHT + 2);
         yEnd = yStart + MIN_EVENT_HEIGHT;
       }
 
