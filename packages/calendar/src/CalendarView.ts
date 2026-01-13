@@ -203,10 +203,27 @@ export class CalendarViewElement extends LitElement {
       cursor: pointer;
       box-sizing: border-box;
       border-bottom: 3px solid rgba(0, 0, 0, 0.3);
+      transition: filter 0.1s ease;
     }
 
-    .event:hover {
-      filter: brightness(1.1);
+    .event:hover,
+    .event.hovered {
+      filter: brightness(1.2);
+      opacity: 1;
+    }
+
+    .event.span-start {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .event.span-end {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .event.span-middle {
+      border-radius: 0;
     }
 
     .month-label {
@@ -1036,38 +1053,7 @@ export class CalendarViewElement extends LitElement {
     const firstVisibleDay = firstVisibleWeek.days[0]!;
     const lastVisibleDay = lastVisibleWeek.days[6]!;
     const visibleStartTime = firstVisibleDay.getTime();
-    const visibleEndTime = lastVisibleDay.getTime() + 86400000 - 1; // end of last day
-
-    // Build event index by day timestamp for O(1) lookup
-    // Key: day timestamp (start of day), Value: events overlapping that day
-    const eventsByDay = new Map<number, CalendarEvent[]>();
-
-    for (const event of events) {
-      const eventStartTime = event.start.getTime();
-      const eventEndTime = event.end.getTime();
-
-      // Skip events entirely outside visible range
-      if (eventEndTime < visibleStartTime || eventStartTime > visibleEndTime) continue;
-
-      // Compute the day range this event spans (clamped to visible range)
-      const startDay = new Date(Math.max(eventStartTime, visibleStartTime));
-      startDay.setHours(0, 0, 0, 0);
-      const endDay = new Date(Math.min(eventEndTime, visibleEndTime));
-      endDay.setHours(0, 0, 0, 0);
-
-      // Index event for each day it spans
-      const currentDay = new Date(startDay);
-      while (currentDay <= endDay) {
-        const dayKey = currentDay.getTime();
-        let dayEvents = eventsByDay.get(dayKey);
-        if (!dayEvents) {
-          dayEvents = [];
-          eventsByDay.set(dayKey, dayEvents);
-        }
-        dayEvents.push(event);
-        currentDay.setDate(currentDay.getDate() + 1);
-      }
-    }
+    const visibleEndTime = lastVisibleDay.getTime() + 86400000 - 1;
 
     // Collect month boundaries from visible weeks only
     const monthBoundaries: { monthKey: string; monthName: string; year: number; yOffset: number }[] = [];
@@ -1118,92 +1104,247 @@ export class CalendarViewElement extends LitElement {
       `);
     }
 
-    // Track event count per day for stacking when zoomed out
-    const dayEventCount = new Map<string, number>();
-    const dayTotalCount = new Map<string, number>();
+    // Track occupied row slots per day-column for stacking
+    // Key: `weekIndex-dayIndex`, Value: Set of occupied row indices
+    const dayOccupiedRows = new Map<string, Set<number>>();
+    // Track assigned row for each event segment (so multi-day events use same row)
+    // Key: `weekIndex-eventId`, Value: assigned row index
+    const eventRowIndex = new Map<string, number>();
 
-    // Render events by iterating visible weeks and looking up indexed events
-    for (const week of visibleWeeks) {
-      const weekHeight = week.height;
-      const weekYOffset = week.yOffset;
-      const maxEventsInDay = Math.floor(weekHeight / (MIN_EVENT_HEIGHT + 8));
+    // Compute event segments per week
+    interface EventSegment {
+      event: CalendarEvent;
+      weekIndex: number;
+      week: WeekInfo;
+      startDayIndex: number; // 0-6 within week
+      endDayIndex: number; // 0-6 within week
+      isStart: boolean; // Is this the first segment of the event?
+      isEnd: boolean; // Is this the last segment of the event?
+      totalWeeks: number; // Total weeks this event spans
+    }
 
-      for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
-        const day = week.days[dayIndex];
-        if (!day) continue;
+    const segments: EventSegment[] = [];
 
-        // Get cached day boundaries
-        const dayStartTime = new Date(day).setHours(0, 0, 0, 0);
-        const dayEvents = eventsByDay.get(dayStartTime);
-        if (!dayEvents || dayEvents.length === 0) continue;
-
-        const dayKey = `${week.weekNumber}-${dayIndex}`;
-        const x = dayIndex * dayWidth;
-
-        // Set total count for overflow detection
-        dayTotalCount.set(dayKey, dayEvents.length);
-
-        for (const event of dayEvents) {
-          let yStart: number;
-          let yEnd: number;
-
-          if (showTimeScale) {
-            // Position by time - use timestamps for comparison
-            const eventStartTime = event.start.getTime();
-            const eventEndTime = event.end.getTime();
-            const dayEndTime = dayStartTime + 86400000 - 1;
-
-            const effectiveStartTime = Math.max(eventStartTime, dayStartTime);
-            const effectiveEndTime = Math.min(eventEndTime, dayEndTime);
-
-            const effectiveStart = new Date(effectiveStartTime);
-            const effectiveEnd = new Date(effectiveEndTime);
-
-            const startMinutes = effectiveStart.getHours() * 60 + effectiveStart.getMinutes();
-            const endMinutes = effectiveEnd.getHours() * 60 + effectiveEnd.getMinutes();
-
-            yStart = weekYOffset + (startMinutes / 1440) * weekHeight;
-            yEnd = weekYOffset + (endMinutes / 1440) * weekHeight;
-          } else {
-            // Stack events vertically within the day cell
-            const stackIndex = dayEventCount.get(dayKey) || 0;
-
-            if (stackIndex >= maxEventsInDay) continue;
-
-            dayEventCount.set(dayKey, stackIndex + 1);
-
-            yStart = weekYOffset + 28 + stackIndex * (MIN_EVENT_HEIGHT + 2);
-            yEnd = yStart + MIN_EVENT_HEIGHT;
-          }
-
-          const height = Math.max(showTimeScale ? 4 : MIN_EVENT_HEIGHT, yEnd - yStart);
-
-          const durationMs = event.end.valueOf() - event.start.valueOf();
-          const h24 = 1000 * 60 * 60 * 24;
-          const allDay = durationMs % h24 === 0 && durationMs >= h24;
-
-          eventElements.push(html`
-            <div
-              class="event"
-              style="
-                left: ${x + 2}px;
-                top: ${yStart}px;
-                width: ${dayWidth - (allDay ? 0 : 15)}px;
-                height: ${height}px;
-                background: ${event.color || "var(--event-default)"};
-                border-radius: ${allDay ? 0 : 12};
-              "
-              @click=${() => this.onEventClick(event)}
-            >
-              ${event.title}
-            </div>
-          `);
+    // Helper to get day index (0-6) within a week for a given date
+    const getDayIndexInWeek = (week: WeekInfo, date: Date): number => {
+      const dateStart = new Date(date).setHours(0, 0, 0, 0);
+      for (let i = 0; i < 7; i++) {
+        const weekDay = week.days[i];
+        if (weekDay && new Date(weekDay).setHours(0, 0, 0, 0) === dateStart) {
+          return i;
         }
       }
+      // Date is before or after this week
+      const weekStart = new Date(week.days[0]!).setHours(0, 0, 0, 0);
+      if (dateStart < weekStart) return 0;
+      return 6;
+    };
+
+    for (const event of events) {
+      const eventStartTime = event.start.getTime();
+      const eventEndTime = event.end.getTime();
+
+      // Skip events entirely outside visible range
+      if (eventEndTime < visibleStartTime || eventStartTime > visibleEndTime) continue;
+
+      // Find all weeks this event spans
+      const eventWeeks: { weekIndex: number; week: WeekInfo }[] = [];
+      for (let i = 0; i < this.weeks.length; i++) {
+        const week = this.weeks[i]!;
+        if (week.height === 0) continue;
+
+        const weekStart = new Date(week.days[0]!).setHours(0, 0, 0, 0);
+        const weekEnd = new Date(week.days[6]!).setHours(23, 59, 59, 999);
+
+        // Check if event overlaps this week
+        if (eventEndTime >= weekStart && eventStartTime <= weekEnd) {
+          eventWeeks.push({ weekIndex: i, week });
+        }
+
+        // Optimization: stop if we've passed the event's end
+        if (weekStart > eventEndTime) break;
+      }
+
+      const totalWeeks = eventWeeks.length;
+
+      // Create a segment for each week the event spans
+      for (let i = 0; i < eventWeeks.length; i++) {
+        const { weekIndex, week } = eventWeeks[i]!;
+
+        // Check if this week is visible
+        if (week.yOffset + week.height < scrollTop || week.yOffset > viewportBottom) continue;
+
+        const isStart = i === 0;
+        const isEnd = i === eventWeeks.length - 1;
+
+        // Calculate start/end day within this week (0-6)
+        let startDayIndex = 0;
+        let endDayIndex = 6;
+
+        if (isStart) {
+          startDayIndex = getDayIndexInWeek(week, event.start);
+        }
+        if (isEnd) {
+          endDayIndex = getDayIndexInWeek(week, event.end);
+        }
+
+        segments.push({
+          event,
+          weekIndex,
+          week,
+          startDayIndex,
+          endDayIndex,
+          isStart,
+          isEnd,
+          totalWeeks,
+        });
+      }
+    }
+
+    // Sort segments by week, then by start day, then by event duration (longer first)
+    segments.sort((a, b) => {
+      if (a.weekIndex !== b.weekIndex) return a.weekIndex - b.weekIndex;
+      if (a.startDayIndex !== b.startDayIndex) return a.startDayIndex - b.startDayIndex;
+      const aDuration = a.event.end.getTime() - a.event.start.getTime();
+      const bDuration = b.event.end.getTime() - b.event.start.getTime();
+      return bDuration - aDuration; // Longer events first
+    });
+
+    // Assign stack positions and render segments
+    for (const segment of segments) {
+      const { event, week, weekIndex, startDayIndex, endDayIndex, isStart, isEnd, totalWeeks } = segment;
+      const weekHeight = week.height;
+      const weekYOffset = week.yOffset;
+
+      const durationMs = event.end.valueOf() - event.start.valueOf();
+      const h24 = 1000 * 60 * 60 * 24;
+      const allDay = durationMs % h24 === 0 && durationMs >= h24;
+
+      let yStart: number;
+      let yEnd: number;
+
+      if (showTimeScale && !allDay) {
+        // Position by time for non-all-day events
+        const dayStartTime = new Date(week.days[startDayIndex]!).setHours(0, 0, 0, 0);
+        const dayEndTime = new Date(week.days[endDayIndex]!).setHours(23, 59, 59, 999);
+        const eventStartTime = event.start.getTime();
+        const eventEndTime = event.end.getTime();
+
+        const effectiveStartTime = Math.max(eventStartTime, dayStartTime);
+        const effectiveEndTime = Math.min(eventEndTime, dayEndTime);
+
+        const effectiveStart = new Date(effectiveStartTime);
+        const effectiveEnd = new Date(effectiveEndTime);
+
+        const startMinutes = effectiveStart.getHours() * 60 + effectiveStart.getMinutes();
+        const endMinutes = effectiveEnd.getHours() * 60 + effectiveEnd.getMinutes();
+
+        yStart = weekYOffset + (startMinutes / 1440) * weekHeight;
+        yEnd = weekYOffset + (endMinutes / 1440) * weekHeight;
+      } else {
+        // Stack events vertically - find a row that's free across all days this segment spans
+        const eventKey = `${weekIndex}-${event.id}`;
+        let rowIndex = eventRowIndex.get(eventKey);
+
+        if (rowIndex === undefined) {
+          // Find the first row that's free for all days in this segment's span
+          rowIndex = 0;
+          while (true) {
+            let rowFree = true;
+            for (let d = startDayIndex; d <= endDayIndex; d++) {
+              const dayKey = `${weekIndex}-${d}`;
+              const occupied = dayOccupiedRows.get(dayKey);
+              if (occupied?.has(rowIndex)) {
+                rowFree = false;
+                break;
+              }
+            }
+            if (rowFree) break;
+            rowIndex++;
+          }
+          eventRowIndex.set(eventKey, rowIndex);
+        }
+
+        // Mark this row as occupied for all days in this segment's span
+        for (let d = startDayIndex; d <= endDayIndex; d++) {
+          const dayKey = `${weekIndex}-${d}`;
+          let occupied = dayOccupiedRows.get(dayKey);
+          if (!occupied) {
+            occupied = new Set();
+            dayOccupiedRows.set(dayKey, occupied);
+          }
+          occupied.add(rowIndex);
+        }
+
+        const maxEventsInWeek = Math.floor((weekHeight - 28) / (MIN_EVENT_HEIGHT + 2));
+        if (rowIndex >= maxEventsInWeek) continue;
+
+        yStart = weekYOffset + 28 + rowIndex * (MIN_EVENT_HEIGHT + 2);
+        yEnd = yStart + MIN_EVENT_HEIGHT;
+      }
+
+      const height = Math.max(showTimeScale ? 4 : MIN_EVENT_HEIGHT, yEnd - yStart);
+
+      // Calculate horizontal span
+      const x = startDayIndex * dayWidth;
+      const spanWidth = (endDayIndex - startDayIndex + 1) * dayWidth;
+
+      // Determine span class for visual continuity
+      let spanClass = "";
+      if (totalWeeks > 1) {
+        if (isStart && !isEnd) spanClass = "span-start";
+        else if (!isStart && isEnd) spanClass = "span-end";
+        else if (!isStart && !isEnd) spanClass = "span-middle";
+      }
+
+      eventElements.push(html`
+        <div
+          class="event ${spanClass}"
+          data-event-id="${event.id}"
+          style="
+            left: ${x + 2}px;
+            top: ${yStart}px;
+            width: ${spanWidth - 4}px;
+            height: ${height}px;
+            background: ${event.color || "var(--event-default)"};
+          "
+          @click=${() => this.onEventClick(event)}
+          @mouseenter=${this.onEventMouseEnter}
+          @mouseleave=${this.onEventMouseLeave}
+        >
+          ${isStart ? event.title : ""}
+        </div>
+      `);
     }
 
     return html`${eventElements}`;
   }
+
+  onEventMouseEnter = (e: MouseEvent) => {
+    const target = e.currentTarget as HTMLElement;
+    const eventId = target.dataset.eventId;
+    if (!eventId) return;
+
+    const allSegments = this.shadowRoot?.querySelectorAll(`[data-event-id="${eventId}"]`);
+    if (allSegments) {
+      for (const el of allSegments) {
+        el.classList.add("hovered");
+      }
+    }
+  };
+
+  onEventMouseLeave = (e: MouseEvent) => {
+    const target = e.currentTarget as HTMLElement;
+    const eventId = target.dataset.eventId;
+    if (!eventId) return;
+
+    const allSegments = this.shadowRoot?.querySelectorAll(`[data-event-id="${eventId}"]`);
+    if (allSegments) {
+      for (const el of allSegments) {
+        el.classList.remove("hovered");
+      }
+    }
+  };
 
   onEventClick(event: CalendarEvent): void {
     this.dispatchEvent(
