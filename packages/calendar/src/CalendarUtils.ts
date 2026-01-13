@@ -70,4 +70,18 @@ export class CalendarUtils {
     d.setDate(d.getDate() + days);
     return d;
   }
+
+  // Returns timestamp for start of day using pure math (no Date object creation)
+  static startOfDayTime(date: Date | undefined): number {
+    if (!date) return 0;
+    const time = date.getTime();
+    const timezoneOffset = date.getTimezoneOffset() * 60000;
+    return time - ((time - timezoneOffset) % 86400000);
+  }
+
+  // Returns timestamp for end of day using pure math (no Date object creation)
+  static endOfDayTime(date: Date | undefined): number {
+    if (!date) return 0;
+    return CalendarUtils.startOfDayTime(date) + 86400000 - 1;
+  }
 }

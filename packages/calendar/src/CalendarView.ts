@@ -218,6 +218,7 @@ export class CalendarViewElement extends LitElement {
       pointer-events: none;
       white-space: nowrap;
       padding: 12px 0 0 12px;
+      text-shadow: 2px 4px 12px #000000cc;
     }
 
     .selection {
@@ -317,6 +318,24 @@ export class CalendarViewElement extends LitElement {
     }
   }
 
+  loadScrollPosition() {
+    let shouldRestoreScroll = false;
+    try {
+      const savedScroll = localStorage.getItem("calendar-scrollTop");
+      if (savedScroll) {
+        const scrollPos = parseFloat(savedScroll);
+        if (this.scrollContainer) {
+          this.scrollContainer.scrollTop = Math.max(0, Math.min(scrollPos, this.totalHeight - this.viewportHeight));
+          shouldRestoreScroll = true;
+        }
+      }
+    } catch (e) {
+      // localStorage not available
+    }
+
+    return shouldRestoreScroll;
+  }
+
   saveFilterScrollState(): void {
     // Save the current scroll position before applying filter
     this.preFilterScrollTop = this.scrollTop;
@@ -339,19 +358,13 @@ export class CalendarViewElement extends LitElement {
     this.startDate = this.utils.getStartOfWeek(CalendarUtils.addDays(new Date(), -365));
     this.generateWeeks();
 
-    // Restore zoom level from localStorage
-    const savedDayHeight = this.loadDayHeight();
-    if (savedDayHeight !== 80) {
-      this.dayHeight = savedDayHeight;
-    }
-
     window.addEventListener("mousemove", this.onMouseMove);
     window.addEventListener("mouseup", this.onMouseUp);
     window.addEventListener("wheel", this.onWheel, { passive: false });
 
     // Update current time indicator every 10 seconds
     this.timeUpdateInterval = setInterval(() => {
-      this.scheduleRender();
+      this.renderCanvas();
     }, 10000);
   }
 
@@ -379,17 +392,7 @@ export class CalendarViewElement extends LitElement {
       this.viewportHeight = this.scrollContainer.clientHeight;
 
       // Try to restore saved scroll position, otherwise scroll to today
-      let shouldRestoreScroll = false;
-      try {
-        const savedScroll = localStorage.getItem("calendar-scrollTop");
-        if (savedScroll) {
-          const scrollPos = parseFloat(savedScroll);
-          this.scrollContainer.scrollTop = Math.max(0, Math.min(scrollPos, this.totalHeight - this.viewportHeight));
-          shouldRestoreScroll = true;
-        }
-      } catch (e) {
-        // localStorage not available
-      }
+      const shouldRestoreScroll = this.loadScrollPosition();
 
       if (!shouldRestoreScroll) {
         // Scroll to today if no saved position
@@ -413,7 +416,13 @@ export class CalendarViewElement extends LitElement {
     this.resizeObserver.observe(this);
 
     this.handleResize();
-    this.scheduleRender();
+    this.renderCanvas();
+
+    // Restore zoom level from localStorage
+    const savedDayHeight = this.loadDayHeight();
+    if (savedDayHeight !== 80) {
+      this.dayHeight = savedDayHeight;
+    }
   }
 
   protected updated(changedProps: PropertyValueMap<this>): void {
@@ -421,12 +430,12 @@ export class CalendarViewElement extends LitElement {
       this.utils = new CalendarUtils({ locale: this.locale, weekStart: this.weekStart });
       this.startDate = this.utils.getStartOfWeek(CalendarUtils.addDays(new Date(), -365));
       this.generateWeeks();
-      this.scheduleRender();
+      this.renderCanvas();
     }
     if (changedProps.has("dayHeight")) {
       this.saveDayHeight();
       this.updateWeekOffsets();
-      this.scheduleRender();
+      this.renderCanvas();
     }
     if (changedProps.has("filter")) {
       const previousFilter = changedProps.get("filter") as string | undefined;
@@ -438,7 +447,7 @@ export class CalendarViewElement extends LitElement {
       // If filter was just cleared/reset (was filtered, now empty)
       if (wasFiltered && !isFiltered) {
         this.updateWeekOffsets();
-        this.scheduleRender();
+        this.renderCanvas();
         // Restore after render completes
         requestAnimationFrame(() => {
           this.restoreFilterScrollState();
@@ -448,15 +457,15 @@ export class CalendarViewElement extends LitElement {
       else if (!wasFiltered && isFiltered) {
         this.saveFilterScrollState();
         this.updateWeekOffsets();
-        this.scheduleRender();
+        this.renderCanvas();
       } else {
         this.updateWeekOffsets();
-        this.scheduleRender();
+        this.renderCanvas();
       }
     }
     if (changedProps.has("scrollTop")) {
       this.saveScrollPosition();
-      this.scheduleRender();
+      this.renderCanvas();
     }
   }
 
@@ -495,8 +504,8 @@ export class CalendarViewElement extends LitElement {
 
       // Pre-compute event date ranges once (avoiding repeated startOfDayTime/endOfDayTime calls)
       const eventRanges = filteredEvents.map((e) => ({
-        start: this.startOfDayTime(e.start),
-        end: this.endOfDayTime(e.end),
+        start: CalendarUtils.startOfDayTime(e.start),
+        end: CalendarUtils.endOfDayTime(e.end),
       }));
 
       for (const week of this.weeks) {
@@ -525,20 +534,6 @@ export class CalendarViewElement extends LitElement {
     this.totalHeight = y;
   }
 
-  // Returns timestamp for start of day using pure math (no Date object creation)
-  startOfDayTime(date: Date | undefined): number {
-    if (!date) return 0;
-    const time = date.getTime();
-    const timezoneOffset = date.getTimezoneOffset() * 60000;
-    return time - ((time - timezoneOffset) % 86400000);
-  }
-
-  // Returns timestamp for end of day using pure math (no Date object creation)
-  endOfDayTime(date: Date | undefined): number {
-    if (!date) return 0;
-    return this.startOfDayTime(date) + 86400000 - 1;
-  }
-
   getFilteredEvents(): CalendarEvent[] {
     if (!this.filter) return this.events;
     const f = this.filter.toLowerCase();
@@ -561,15 +556,7 @@ export class CalendarViewElement extends LitElement {
       this.ctx.scale(dpr, dpr);
     }
 
-    this.scheduleRender();
-  }
-
-  scheduleRender(): void {
-    if (this.animationFrame) return;
-    this.animationFrame = requestAnimationFrame(() => {
-      this.animationFrame = null;
-      this.renderCanvas();
-    });
+    this.renderCanvas();
   }
 
   renderCanvas(): void {
@@ -1091,7 +1078,7 @@ export class CalendarViewElement extends LitElement {
     for (const week of visibleWeeks) {
       const weekHeight = week.height;
       const weekYOffset = week.yOffset;
-      const maxEventsInDay = Math.floor(weekHeight / (MIN_EVENT_HEIGHT + 2));
+      const maxEventsInDay = Math.floor(weekHeight / (MIN_EVENT_HEIGHT + 8));
 
       for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
         const day = week.days[dayIndex];
@@ -1137,7 +1124,7 @@ export class CalendarViewElement extends LitElement {
 
             dayEventCount.set(dayKey, stackIndex + 1);
 
-            yStart = weekYOffset + 2 + stackIndex * (MIN_EVENT_HEIGHT + 2);
+            yStart = weekYOffset + 28 + stackIndex * (MIN_EVENT_HEIGHT + 2);
             yEnd = yStart + MIN_EVENT_HEIGHT;
           }
 
@@ -1318,9 +1305,6 @@ export class CalendarViewElement extends LitElement {
   }
 
   render() {
-    const visibleMonths = this.getVisibleMonths();
-    const firstMonth = visibleMonths[0];
-
     return html`
       <div class="container">
         <div class="filter-bar">
