@@ -165,7 +165,7 @@ export class CalendarViewElement extends LitElement {
       position: absolute;
       background: var(--event-default);
       opacity: 0.75;
-      border-radius: 3px;
+      border-radius: 6px;
       padding: 2px 6px;
       font-size: 11px;
       color: white;
@@ -176,7 +176,6 @@ export class CalendarViewElement extends LitElement {
       cursor: pointer;
       box-sizing: border-box;
       border-bottom: 3px solid rgba(0, 0, 0, 0.3);
-      transition: filter 0.1s ease;
     }
 
     .event:hover,
@@ -226,6 +225,7 @@ export class CalendarViewElement extends LitElement {
     this._events = value;
 
     this.filter = this.getAttribute("filter") || this.filter;
+    this.renderMinimapBuffer();
     this.requestUpdate();
   }
   get events() {
@@ -246,19 +246,23 @@ export class CalendarViewElement extends LitElement {
       this.updateWeekOffsets();
       this.renderCanvas();
       this.renderDateLabels();
+      this.renderMinimapBuffer();
       // Restore after render completes
       this.restoreFilterScrollState();
     }
-    // If filter was just applied (was empty, now filtered)
+
+    // If we're now filtering or filter changed
     else if (!wasFiltered && isFiltered) {
       this.saveFilterScrollState();
       this.updateWeekOffsets();
       this.renderCanvas();
       this.renderDateLabels();
+      this.renderMinimapBuffer();
     } else {
       this.updateWeekOffsets();
       this.renderCanvas();
       this.renderDateLabels();
+      this.renderMinimapBuffer();
     }
 
     this.requestUpdate();
@@ -326,6 +330,8 @@ export class CalendarViewElement extends LitElement {
   ctx: CanvasRenderingContext2D | null = null;
   overlayCanvas: HTMLCanvasElement | null = null;
   overlayCtx: CanvasRenderingContext2D | null = null;
+  minimapBufferCanvas: HTMLCanvasElement | null = null;
+  minimapBufferCtx: CanvasRenderingContext2D | null = null;
   scrollContainer: HTMLElement | null = null;
   scrollContent: HTMLElement | null = null;
   resizeObserver: ResizeObserver | null = null;
@@ -449,6 +455,9 @@ export class CalendarViewElement extends LitElement {
     this.ctx = this.canvas?.getContext("2d") ?? null;
     this.overlayCtx = this.overlayCanvas?.getContext("2d") ?? null;
 
+    this.minimapBufferCanvas = document.createElement("canvas");
+    this.minimapBufferCtx = this.minimapBufferCanvas.getContext("2d");
+
     // Restore zoom level from localStorage
     const savedDayHeight = this.loadDayHeight();
     if (savedDayHeight !== 80) {
@@ -469,6 +478,7 @@ export class CalendarViewElement extends LitElement {
 
     this.handleResize();
     this.renderCanvas();
+    this.renderMinimapBuffer();
   }
 
   handleUpdateLocale() {
@@ -477,6 +487,7 @@ export class CalendarViewElement extends LitElement {
     this.weeks = this.utils.generateWeeks(this.startDate, this.endDate);
     this.renderCanvas();
     this.renderDateLabels();
+    this.renderMinimapBuffer();
   }
 
   updateWeekOffsets(): void {
@@ -1416,43 +1427,25 @@ export class CalendarViewElement extends LitElement {
     `;
   }
 
-  renderMinimap() {
-    if (this.totalHeight === 0 || this.weeks.length === 0) return html``;
+  renderMinimapBuffer(): void {
+    if (!this.minimapBufferCanvas || !this.minimapBufferCtx) return;
+    if (this.totalHeight === 0 || this.weeks.length === 0) return;
 
-    // Canvas dimensions
     const width = 32;
-    const height = 2000; // Adjust as needed or make dynamic
+    const height = 2000;
+    const ctx = this.minimapBufferCtx;
 
-    // Calculate viewport rectangle
-    const viewportRatio = this.viewportHeight / this.totalHeight;
-    const viewportTop = (this.scrollTop / this.totalHeight) * height;
-    const viewportHeightPx = Math.max(viewportRatio * height, 4);
+    this.minimapBufferCanvas.width = width;
+    this.minimapBufferCanvas.height = height;
 
-    // Prepare event rectangles
+    ctx.clearRect(0, 0, width, height);
+
     const events = this.utils.getFilteredEvents(this.events, this.filter);
     const startDateTimestamp = this.startDate.getTime();
     const msPerWeek = 7 * 24 * 60 * 60 * 1000;
     const msPerDay = 24 * 60 * 60 * 1000;
     const msPerMinute = 60 * 1000;
 
-    // We'll draw after the canvas is rendered
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = width;
-    canvas.height = height;
-
-    if (!ctx) throw new Error("Failed to get 2d context");
-
-    // Clear
-    ctx.clearRect(0, 0, width, height);
-
-    // Draw viewport rectangle
-    ctx.strokeRect(1, viewportTop, width - 2, viewportHeightPx);
-    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-    ctx.fillRect(2, viewportTop, width - 4, viewportHeightPx);
-
-    // Draw event rectangles
     for (const event of events) {
       const eventStartTime = event.start.getTime();
       const eventEndTime = event.end.getTime();
@@ -1494,11 +1487,36 @@ export class CalendarViewElement extends LitElement {
         ctx.fillRect(2, yStart, width - 4, Math.max(yEnd - yStart, 2));
       }
     }
+  }
+
+  renderMinimap() {
+    if (this.totalHeight === 0 || this.weeks.length === 0) return html``;
+    if (!this.minimapBufferCanvas) return html``;
+
+    const width = 32;
+    const height = 2000;
+
+    const viewportRatio = this.viewportHeight / this.totalHeight;
+    const viewportTop = (this.scrollTop / this.totalHeight) * height;
+    const viewportHeightPx = Math.max(viewportRatio * height, 4);
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = width;
+    canvas.height = height;
+
+    if (!ctx) throw new Error("Failed to get 2d context");
+
+    ctx.drawImage(this.minimapBufferCanvas, 0, 0);
+
+    ctx.strokeRect(1, viewportTop, width - 2, viewportHeightPx);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+    ctx.fillRect(2, viewportTop, width - 4, viewportHeightPx);
 
     canvas.onmousedown = this.onMinimapMouseDown;
     canvas.className = "minimap";
 
-    // Render the canvas
     return canvas;
   }
 
