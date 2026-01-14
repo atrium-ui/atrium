@@ -124,6 +124,10 @@ export class CalendarInternal {
     return events.filter(e => e.title.toLowerCase().includes(f));
   }
 
+  getDayIndexInWeek() {
+
+  }
+
   // TODO: this getter is a waste of cpu time
   get firstDayOfWeek(): number {
     if (this.weekStart !== undefined) {
