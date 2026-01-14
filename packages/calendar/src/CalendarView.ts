@@ -142,6 +142,12 @@ export class CalendarViewElement extends LitElement {
       overflow: hidden;
     }
 
+    .overlay-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
     .minimap {
       position: absolute;
       top: 0;
@@ -212,14 +218,7 @@ export class CalendarViewElement extends LitElement {
       pointer-events: none;
     }
 
-    .date-label {
-      position: absolute;
-      font-size: 16px;
-      color: var(--text-muted);
-      padding: 2px 18px;
-      text-align: right;
-      box-sizing: border-box;
-    }
+
   `;
 
   _events: CalendarEvent[] = [];
@@ -246,6 +245,7 @@ export class CalendarViewElement extends LitElement {
     if (wasFiltered && !isFiltered) {
       this.updateWeekOffsets();
       this.renderCanvas();
+      this.renderDateLabels();
       // Restore after render completes
       this.restoreFilterScrollState();
     }
@@ -254,9 +254,11 @@ export class CalendarViewElement extends LitElement {
       this.saveFilterScrollState();
       this.updateWeekOffsets();
       this.renderCanvas();
+      this.renderDateLabels();
     } else {
       this.updateWeekOffsets();
       this.renderCanvas();
+      this.renderDateLabels();
     }
 
     this.requestUpdate();
@@ -280,6 +282,7 @@ export class CalendarViewElement extends LitElement {
     this.saveDayHeight();
     this.updateWeekOffsets();
     this.renderCanvas();
+    this.renderDateLabels();
   }
   get dayHeight() {
     return this._dayHeight;
@@ -289,6 +292,8 @@ export class CalendarViewElement extends LitElement {
   set scrollTop(value) {
     this._scrollTop = value;
 
+    if(!this.scrollContainer || !this.scrollContent) return;
+
     if(this.scrollContainer.scrollHeight < value) {
       this.scrollContent.style.minHeight = (value + window.innerHeight) + "px";
     }
@@ -297,6 +302,7 @@ export class CalendarViewElement extends LitElement {
 
     this.saveScrollPosition();
     this.renderCanvas();
+    this.renderDateLabels();
   }
   get scrollTop() {
     return this._scrollTop;
@@ -308,6 +314,7 @@ export class CalendarViewElement extends LitElement {
 
       this.saveScrollPosition();
       this.renderCanvas();
+      this.renderDateLabels();
     }
   };
 
@@ -317,6 +324,8 @@ export class CalendarViewElement extends LitElement {
 
   canvas: HTMLCanvasElement | null = null;
   ctx: CanvasRenderingContext2D | null = null;
+  overlayCanvas: HTMLCanvasElement | null = null;
+  overlayCtx: CanvasRenderingContext2D | null = null;
   scrollContainer: HTMLElement | null = null;
   scrollContent: HTMLElement | null = null;
   resizeObserver: ResizeObserver | null = null;
@@ -414,6 +423,7 @@ export class CalendarViewElement extends LitElement {
     // Update current time indicator every 10 seconds
     this.timeUpdateInterval = setInterval(() => {
       this.renderCanvas();
+      this.renderDateLabels();
     }, 10000);
   }
 
@@ -432,10 +442,12 @@ export class CalendarViewElement extends LitElement {
   }
 
   firstUpdated(): void {
-    this.canvas = this.renderRoot.querySelector("canvas");
+    this.canvas = this.renderRoot.querySelector(".canvas-layer canvas");
+    this.overlayCanvas = this.renderRoot.querySelector(".overlay-canvas");
     this.scrollContainer = this.renderRoot.querySelector(".scroll-container");
     this.scrollContent = this.renderRoot.querySelector(".scroll-content");
     this.ctx = this.canvas?.getContext("2d") ?? null;
+    this.overlayCtx = this.overlayCanvas?.getContext("2d") ?? null;
 
     // Restore zoom level from localStorage
     const savedDayHeight = this.loadDayHeight();
@@ -464,6 +476,7 @@ export class CalendarViewElement extends LitElement {
     this.startDate = this.utils.getStartOfWeek(CalendarInternal.addDays(new Date(), -365));
     this.weeks = this.utils.generateWeeks(this.startDate, this.endDate);
     this.renderCanvas();
+    this.renderDateLabels();
   }
 
   updateWeekOffsets(): void {
@@ -520,7 +533,22 @@ export class CalendarViewElement extends LitElement {
       this.ctx.scale(dpr, dpr);
     }
 
+    // Resize and configure overlay canvas
+    if (this.overlayCanvas) {
+      const overlayWidth = rect.width - LEFT_GUTTER_WIDTH;
+      this.overlayCanvas.width = overlayWidth * dpr;
+      this.overlayCanvas.height = rect.height * dpr;
+      this.overlayCanvas.style.width = `${overlayWidth}px`;
+      this.overlayCanvas.style.height = `${rect.height}px`;
+
+      this.overlayCtx = this.overlayCanvas.getContext("2d");
+      if (this.overlayCtx) {
+        this.overlayCtx.scale(dpr, dpr);
+      }
+    }
+
     this.renderCanvas();
+    this.renderDateLabels();
   }
 
   renderCanvas(): void {
@@ -1329,16 +1357,22 @@ export class CalendarViewElement extends LitElement {
     );
   }
 
-  renderDateLabels(): ReturnType<typeof html> {
-    if (!this.scrollContainer) return html``;
+  renderDateLabels(): void {
+    if (!this.overlayCanvas || !this.overlayCtx || !this.scrollContainer) return;
 
-    const rect = {
-      width: this.scrollContainer.clientWidth - LEFT_GUTTER_WIDTH,
-      height: this.viewportHeight,
-    };
-    const dayWidth = rect.width / 7;
+    const ctx = this.overlayCtx;
+    const width = this.overlayCanvas.width / (window.devicePixelRatio || 1);
+    const height = this.overlayCanvas.height / (window.devicePixelRatio || 1);
+
+    ctx.clearRect(0, 0, width, height);
+
+    const dayWidth = width / 7;
     const scrollTop = this.scrollTop;
-    const labels: ReturnType<typeof html>[] = [];
+
+    ctx.font = "600 16px system-ui, -apple-system, sans-serif";
+    ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+    ctx.textAlign = "right";
+    ctx.textBaseline = "top";
 
     for (const week of this.weeks) {
       if (week.height === 0) continue;
@@ -1349,28 +1383,16 @@ export class CalendarViewElement extends LitElement {
         const day = week.days[dayIndex];
         if (!day) continue;
         const x = dayIndex * dayWidth;
-        // Position at bottom right, sticky within the day cell
         const dayTop = week.yOffset - scrollTop;
         const dayBottom = dayTop + week.height;
 
-        // Make date sticky at bottom of screen if day extends below
-        const labelY = Math.min(dayBottom - 32, rect.height - 32);
+        const labelY = Math.min(dayBottom - 24, height - 24);
 
-        // Only show if the day cell is visible
-        if (dayTop < rect.height && dayBottom > 0 && labelY > dayTop) {
-          labels.push(html`
-            <div
-              class="date-label"
-              style="left: ${x}px; top: ${labelY}px; width: ${dayWidth}px"
-            >
-              ${day.getDate()}
-            </div>
-          `);
+        if (dayTop < height && dayBottom > 0 && labelY > dayTop) {
+          ctx.fillText(day.getDate().toString(), x + dayWidth - 12, labelY);
         }
       }
     }
-
-    return html`${labels}`;
   }
 
   renderSelection(): ReturnType<typeof html> {
@@ -1516,7 +1538,9 @@ export class CalendarViewElement extends LitElement {
             </div>
             ${this.renderSelection()}
           </div>
-          <div class="overlay-layer">${this.renderDateLabels()}</div>
+          <div class="overlay-layer">
+            <canvas class="overlay-canvas"></canvas>
+          </div>
           ${this.renderMinimap()}
         </div>
       </div>
