@@ -3,22 +3,60 @@ export interface CalendarLocaleConfig {
   weekStart?: number;
 }
 
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  start: Date;
+  end: Date;
+  color?: string;
+}
+
+export interface WeekInfo {
+  weekNumber: number;
+  year: number;
+  days: Date[];
+  yOffset: number;
+}
+
+export interface VisibleMonth {
+  name: string;
+  year: number;
+  yStart: number;
+  yOffset: number;
+}
+
+// Compute event segments per week
+export interface EventSegment {
+  event: CalendarEvent;
+  weekIndex: number;
+  week: WeekInfo;
+  startDayIndex: number; // 0-6 within week
+  endDayIndex: number; // 0-6 within week
+  isStart: boolean; // Is this the first segment of the event?
+  isEnd: boolean; // Is this the last segment of the event?
+  totalWeeks: number; // Total weeks this event spans
+}
+
 export class CalendarInternal {
   locale: string;
   weekStart?: number;
 
   filter?: string;
 
-  // TODO: dont instantiate a class for this, wasted memory
   constructor(config: CalendarLocaleConfig) {
     this.locale = config.locale;
     this.weekStart = config.weekStart;
   }
 
-  // TODO: also do layouting to compute selection etc.
+  // TODO:
+  // - this should be the events source
+  // - selections should be computed here, rendered converts pixels to timestamps,
+  // and timestamps get converted to ranges of events here
+  // - filtering should happen here... event source
+  // - pass timestamp range, get calendar (events) data back, moving window
 
-  generateWeeks(startDate, endDate): void {
-    const weeks = [];
+  generateWeeks(startDate, endDate) {
+    const weeks: WeekInfo[]= [];
     let current = new Date(startDate);
 
     while (current < endDate) {
@@ -40,52 +78,50 @@ export class CalendarInternal {
       }
     }
 
-    let y = 0;
+    // let y = 0;
 
-    if (this.filter) {
-      const filteredEvents = this.getFilteredEvents();
+    // if (this.filter) {
+    //   const filteredEvents = this.getFilteredEvents();
 
-      // Pre-compute event date ranges once (avoiding repeated startOfDayTime/endOfDayTime calls)
-      const eventRanges = filteredEvents.map(e => ({
-        start: CalendarInternal.startOfDayTime(e.start),
-        end: CalendarInternal.endOfDayTime(e.end),
-      }));
+    //   // Pre-compute event date ranges once (avoiding repeated startOfDayTime/endOfDayTime calls)
+    //   const eventRanges = filteredEvents.map(e => ({
+    //     start: CalendarInternal.startOfDayTime(e.start),
+    //     end: CalendarInternal.endOfDayTime(e.end),
+    //   }));
 
-      for (const week of weeks) {
-        week.yOffset = y;
+    //   for (const week of weeks) {
+    //     week.yOffset = y;
 
-        // Check if any day in this week overlaps any event range
-        const weekStartTime = week.days[0]?.getTime() ?? 0;
-        const weekEndTime = week.days[6]?.getTime() ?? 0;
+    //     // Check if any day in this week overlaps any event range
+    //     const weekStartTime = week.days[0]?.getTime() ?? 0;
+    //     const weekEndTime = week.days[6]?.getTime() ?? 0;
 
-        // Quick check: skip if week is entirely outside all event ranges
-        const hasEvents = eventRanges.some(
-          range => range.end >= weekStartTime && range.start <= weekEndTime,
-        );
+    //     // Quick check: skip if week is entirely outside all event ranges
+    //     const hasEvents = eventRanges.some(
+    //       range => range.end >= weekStartTime && range.start <= weekEndTime,
+    //     );
 
-        // TODO: height should be determined by the renderer
-        week.height = hasEvents ? this.dayHeight : 0;
-        y += week.height;
-      }
-    } else {
-      for (const week of weeks) {
-        week.yOffset = y;
-        week.height = this.dayHeight;
-        y += week.height;
-      }
-    }
+    //     // TODO: height should be determined by the renderer
+    //     week.height = hasEvents ? this.dayHeight : 0;
+    //     y += week.height;
+    //   }
+    // } else {
+    //   for (const week of weeks) {
+    //     week.yOffset = y;
+    //     week.height = this.dayHeight;
+    //     y += week.height;
+    //   }
+    // }
 
-    this.totalHeight = y;
+    // this.totalHeight = y;
 
     return weeks;
   }
 
-  getFilteredEvents(): CalendarEvent[] {
-    // TODO
-  }
-
-  getVisibleMonths(): VisibleMonth[] {
-    // TODO
+  getFilteredEvents(events: CalendarEvent[], filter: string) {
+    if (!filter) return events;
+    const f = filter.toLowerCase();
+    return events.filter(e => e.title.toLowerCase().includes(f));
   }
 
   // TODO: this getter is a waste of cpu time

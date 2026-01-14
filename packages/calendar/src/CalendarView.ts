@@ -1,28 +1,5 @@
 import { LitElement, css, html, render } from "lit";
-import { CalendarInternal, hexToRgb, rgbToHsl } from "./CalendarInternal.js";
-
-export interface CalendarEvent {
-  id: string;
-  title: string;
-  start: Date;
-  end: Date;
-  color?: string;
-}
-
-interface WeekInfo {
-  weekNumber: number;
-  year: number;
-  days: Date[];
-  yOffset: number;
-  height: number;
-}
-
-interface VisibleMonth {
-  name: string;
-  year: number;
-  yStart: number;
-  yOffset: number;
-}
+import { CalendarEvent, CalendarInternal, EventSegment, hexToRgb, rgbToHsl, VisibleMonth, WeekInfo } from "./CalendarInternal.js";
 
 const MIN_DAY_HEIGHT = 100;
 const MAX_DAY_HEIGHT = 2000; // 1px per minute
@@ -246,11 +223,10 @@ export class CalendarViewElement extends LitElement {
   `;
 
   _events: CalendarEvent[] = [];
-
   set events(value: CalendarEvent[]) {
     this._events = value;
 
-    this.updateFilter();
+    this.filter = this.getAttribute("filter") || this.filter;
     this.requestUpdate();
   }
   get events() {
@@ -258,7 +234,6 @@ export class CalendarViewElement extends LitElement {
   }
 
   _filter = "";
-
   set filter(newFilter) {
     const previousFilter = this.filter;
 
@@ -299,7 +274,6 @@ export class CalendarViewElement extends LitElement {
   weekStart?: number;
 
   _dayHeight = MIN_DAY_HEIGHT;
-
   set dayHeight(value) {
     this._dayHeight = value;
 
@@ -312,7 +286,6 @@ export class CalendarViewElement extends LitElement {
   }
 
   _scrollTop = 0;
-
   set scrollTop(value) {
     this._scrollTop = value;
 
@@ -434,9 +407,6 @@ export class CalendarViewElement extends LitElement {
 
     this.handleUpdateLocale();
 
-    this.startDate = this.utils.getStartOfWeek(CalendarInternal.addDays(new Date(), -365));
-    this.generateWeeks();
-
     window.addEventListener("mousemove", this.onMouseMove);
     window.addEventListener("mouseup", this.onMouseUp);
     window.addEventListener("wheel", this.onWheel, { passive: false });
@@ -489,26 +459,18 @@ export class CalendarViewElement extends LitElement {
     this.renderCanvas();
   }
 
-  updateFilter() {
-    this.filter = this.getAttribute("filter") || this.filter;
-  }
-
   handleUpdateLocale() {
     this.utils = new CalendarInternal({ locale: this.locale, weekStart: this.weekStart });
     this.startDate = this.utils.getStartOfWeek(CalendarInternal.addDays(new Date(), -365));
-    this.generateWeeks();
-    this.renderCanvas();
-  }
-
-  generateWeeks(): void {
     this.weeks = this.utils.generateWeeks(this.startDate, this.endDate);
+    this.renderCanvas();
   }
 
   updateWeekOffsets(): void {
     let y = 0;
 
     if (this.filter) {
-      const filteredEvents = this.getFilteredEvents();
+      const filteredEvents = this.utils.getFilteredEvents(this.events, this.filter);
 
       // Pre-compute event date ranges once (avoiding repeated startOfDayTime/endOfDayTime calls)
       const eventRanges = filteredEvents.map(e => ({
@@ -540,12 +502,6 @@ export class CalendarViewElement extends LitElement {
     }
 
     this.totalHeight = y;
-  }
-
-  getFilteredEvents(): CalendarEvent[] {
-    if (!this.filter) return this.events;
-    const f = this.filter.toLowerCase();
-    return this.events.filter(e => e.title.toLowerCase().includes(f));
   }
 
   handleResize(): void {
@@ -1038,12 +994,12 @@ export class CalendarViewElement extends LitElement {
     return months;
   }
 
-  renderEvents(): ReturnType<typeof html> {
+  renderEvents() {
     if (!this.scrollContainer) return html``;
 
     const gridWidth = this.scrollContent.clientWidth - LEFT_GUTTER_WIDTH;
     const dayWidth = gridWidth / 7;
-    const events = this.getFilteredEvents();
+    const events = this.utils.getFilteredEvents(this.events, this.filter);
     const scrollTop = this.scrollTop;
     const viewportBottom = scrollTop + this.viewportHeight;
     const showTimeScale = this.dayHeight >= 300;
@@ -1135,18 +1091,6 @@ export class CalendarViewElement extends LitElement {
     // Track assigned row for each event segment (so multi-day events use same row)
     // Key: `weekIndex-eventId`, Value: assigned row index
     const eventRowIndex = new Map<string, number>();
-
-    // Compute event segments per week
-    interface EventSegment {
-      event: CalendarEvent;
-      weekIndex: number;
-      week: WeekInfo;
-      startDayIndex: number; // 0-6 within week
-      endDayIndex: number; // 0-6 within week
-      isStart: boolean; // Is this the first segment of the event?
-      isEnd: boolean; // Is this the last segment of the event?
-      totalWeeks: number; // Total weeks this event spans
-    }
 
     const segments: EventSegment[] = [];
 
@@ -1347,7 +1291,7 @@ export class CalendarViewElement extends LitElement {
       eventElements.push(eventDiv);
     }
 
-    return html`${eventElements}`;
+    return eventElements;
   }
 
   onEventMouseEnter = (e: MouseEvent) => {
@@ -1463,7 +1407,7 @@ export class CalendarViewElement extends LitElement {
     const viewportHeightPx = Math.max(viewportRatio * height, 4);
 
     // Prepare event rectangles
-    const events = this.getFilteredEvents();
+    const events = this.utils.getFilteredEvents(this.events, this.filter);
     const startDateTimestamp = this.startDate.getTime();
     const msPerWeek = 7 * 24 * 60 * 60 * 1000;
     const msPerDay = 24 * 60 * 60 * 1000;

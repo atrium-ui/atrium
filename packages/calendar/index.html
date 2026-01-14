@@ -192,19 +192,19 @@
       calendar.events = events;
 
       // Fetch additional events from iCal URL
-      fetchICalEvents("/events.ics", "#FF6E68").then(icalEvents => {
+      await fetchICalEvents("/events.ics", "#FF6E68").then(icalEvents => {
         calendar.events = [...calendar.events, ...icalEvents];
       });
-      fetchICalEvents("/work.ics", "#888082").then(icalEvents => {
+      await fetchICalEvents("/work.ics", "#888082").then(icalEvents => {
         calendar.events = [...calendar.events, ...icalEvents];
       });
-      fetchICalEvents("/planning.ics", "#83D754").then(icalEvents => {
+      await fetchICalEvents("/planning.ics", "#83D754").then(icalEvents => {
         calendar.events = [...calendar.events, ...icalEvents];
       });
-      fetchICalEvents("/social.ics", "#9FC6E7").then(icalEvents => {
+      await fetchICalEvents("/social.ics", "#9FC6E7").then(icalEvents => {
         calendar.events = [...calendar.events, ...icalEvents];
       });
-      fetchICalEvents("/s-v.ics", "#0095FD").then(icalEvents => {
+      await fetchICalEvents("/s-v.ics", "#0095FD").then(icalEvents => {
         calendar.events = [...calendar.events, ...icalEvents];
       });
 
