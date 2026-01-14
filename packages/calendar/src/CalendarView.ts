@@ -1048,7 +1048,7 @@ export class CalendarViewElement extends LitElement {
     const viewportBottom = scrollTop + this.viewportHeight;
     const showTimeScale = this.dayHeight >= 300;
 
-    const eventElements: ReturnType<typeof html>[] = [];
+    const eventElements: HTMLElement[] = [];
     const monthNames = [
       "January",
       "February",
@@ -1121,17 +1121,12 @@ export class CalendarViewElement extends LitElement {
       const clampedStickyTop = Math.min(stickyTop, maxStickyTop);
       const finalTop = labelY + clampedStickyTop;
 
-      eventElements.push(html`
-        <div
-          class="month-label"
-          style="
-            top: ${finalTop}px;
-            left: 2px;
-          "
-        >
-          ${month.monthName} ${month.year}
-        </div>
-      `);
+      const monthLabelDiv = document.createElement("div");
+      monthLabelDiv.className = "month-label";
+      monthLabelDiv.style.top = `${finalTop}px`;
+      monthLabelDiv.style.left = "2px";
+      monthLabelDiv.textContent = `${month.monthName} ${month.year}`;
+      eventElements.push(monthLabelDiv);
     }
 
     // Track occupied row slots per day-column for stacking
@@ -1180,11 +1175,15 @@ export class CalendarViewElement extends LitElement {
       // Find all weeks this event spans
       const eventWeeks: { weekIndex: number; week: WeekInfo }[] = [];
       for (let i = 0; i < this.weeks.length; i++) {
-        const week = this.weeks[i]!;
-        if (week.height === 0) continue;
+        const week = this.weeks[i];
+        if (!week || week.height === 0) continue;
 
-        const weekStart = new Date(week.days[0]!).setHours(0, 0, 0, 0);
-        const weekEnd = new Date(week.days[6]!).setHours(23, 59, 59, 999);
+        const weekStartDay = week.days[0];
+        const weekEndDay = week.days[6];
+        if (!weekStartDay || !weekEndDay) continue;
+
+        const weekStart = weekStartDay.getTime();
+        const weekEnd = weekEndDay.getTime() + 86399999; // 23:59:59.999
 
         // Check if event overlaps this week
         if (eventEndTime >= weekStart && eventStartTime <= weekEnd) {
@@ -1332,25 +1331,20 @@ export class CalendarViewElement extends LitElement {
       const hsl = rgbToHsl(hexToRgb(event.color));
       const color = event.color?.startsWith("#") ? `hsl(${hsl[0]}deg, ${hsl[1] / 2}%, ${hsl[2] / 2}%)` : event.color;
 
-      eventElements.push(html`
-        <div
-          class="event ${spanClass}"
-          data-event-id="${event.id}"
-          style="
-            left: ${x}px;
-            top: ${yStart}px;
-            width: ${spanWidth - 4}px;
-            height: ${height}px;
-            color: ${event.color};
-            background: ${color};
-          "
-          @click=${() => this.onEventClick(event)}
-          @mouseenter=${this.onEventMouseEnter}
-          @mouseleave=${this.onEventMouseLeave}
-        >
-          ${isStart ? event.title : ""}
-        </div>
-      `);
+      const eventDiv = document.createElement("div");
+      eventDiv.className = `event ${spanClass}`;
+      eventDiv.dataset.eventId = event.id;
+      eventDiv.style.left = `${x}px`;
+      eventDiv.style.top = `${yStart}px`;
+      eventDiv.style.width = `${spanWidth - 4}px`;
+      eventDiv.style.height = `${height}px`;
+      eventDiv.style.color = event.color || "";
+      eventDiv.style.background = color;
+      eventDiv.textContent = isStart ? event.title : "";
+      eventDiv.addEventListener("click", () => this.onEventClick(event));
+      eventDiv.addEventListener("mouseenter", this.onEventMouseEnter);
+      eventDiv.addEventListener("mouseleave", this.onEventMouseLeave);
+      eventElements.push(eventDiv);
     }
 
     return html`${eventElements}`;
