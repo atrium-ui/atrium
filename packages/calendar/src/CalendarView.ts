@@ -1,5 +1,5 @@
 import { LitElement, css, html, render } from "lit";
-import { CalendarInternal } from "./CalendarInternal.js";
+import { CalendarInternal, hexToRgb, rgbToHsl } from "./CalendarInternal.js";
 
 export interface CalendarEvent {
   id: string;
@@ -1329,6 +1329,9 @@ export class CalendarViewElement extends LitElement {
         else if (!isStart && !isEnd) spanClass = "span-middle";
       }
 
+      const hsl = rgbToHsl(hexToRgb(event.color));
+      const color = event.color?.startsWith("#") ? `hsl(${hsl[0]}deg, ${hsl[1] / 2}%, ${hsl[2] / 2}%)` : event.color;
+
       eventElements.push(html`
         <div
           class="event ${spanClass}"
@@ -1338,7 +1341,8 @@ export class CalendarViewElement extends LitElement {
             top: ${yStart}px;
             width: ${spanWidth - 4}px;
             height: ${height}px;
-            background: ${event.color || "var(--event-default)"};
+            color: ${event.color};
+            background: ${color};
           "
           @click=${() => this.onEventClick(event)}
           @mouseenter=${this.onEventMouseEnter}
