@@ -590,7 +590,7 @@ export class CalendarViewElement extends LitElement {
       if (todayIndex >= 0) {
         const x = LEFT_GUTTER_WIDTH + todayIndex * dayWidth;
         const y = week.yOffset - scrollTop;
-        ctx.fillStyle = "rgba(255, 255, 255, 0.03)";
+        ctx.fillStyle = "#1A1A1E";
         ctx.fillRect(x, y, dayWidth, week.height);
 
         // Draw current time indicator line
@@ -1397,9 +1397,15 @@ export class CalendarViewElement extends LitElement {
         const dayTop = week.yOffset - scrollTop;
         const dayBottom = dayTop + week.height;
 
+        if (dayIndex === 5 || dayIndex === 6) {
+          ctx.fillStyle = "rgba(255, 255, 255, 0.01)";
+          ctx.fillRect(x, dayTop, dayWidth, week.height);
+        }
+
         const labelY = Math.min(dayBottom - 24, height - 24);
 
         if (dayTop < height && dayBottom > 0 && labelY > dayTop) {
+          ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
           ctx.fillText(day.getDate().toString(), x + dayWidth - 12, labelY);
         }
       }
