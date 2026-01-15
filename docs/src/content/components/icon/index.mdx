@@ -1,0 +1,39 @@
+---
+title: Icon
+image: "/components/icon.png"
+description: Example Icon Component.
+command: "npx @sv/components icon"
+---
+
+import { Story, ContentTabs } from "package:/components/docs";
+import { Icon } from "@components/src/vue/Icon";
+import { Example, Atrium } from "package:/components";
+import * as IconSet from "@sv/icons";
+
+<Example code={`
+---
+import { Icon } from "./Icon.jsx";
+---
+
+<Icon name="unknown"/>
+`}>
+  <div class="p-6">
+    <div class="text-base">
+      <Icon client:only="vue" name="unknown"/>
+    </div>
+    <br/>
+    <div class="text-lg">
+      <Icon client:only="vue" name="unknown"/>
+    </div>
+  </div>
+</Example>
+
+<br/>
+
+By default icons scale with text-size.
+
+## Included icons
+
+All svg files are included in the `@sv/icons` package.
+
+<Story id="icon--default" />
