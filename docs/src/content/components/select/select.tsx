@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import { Select, SelectItem } from "@components/src/vue/Select";
+import { Select, SelectItem } from "@components/src/vue";
 
 export default function () {
   return (

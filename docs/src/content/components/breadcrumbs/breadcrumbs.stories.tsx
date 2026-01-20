@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 
 import type { Story } from "../../../components/stories/stories.js";
-import { Breadcrumbs } from "@components/src/vue/Breadcrumbs";
+import { Breadcrumbs } from "@components/src/vue";
 
 export default {
   tags: ["public"],

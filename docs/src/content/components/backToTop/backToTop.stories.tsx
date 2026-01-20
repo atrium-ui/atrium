@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import { BackToTop } from "@components/src/vue/BackToTop.jsx";
+import { BackToTop } from "@components/src/vue";
 import type { Story } from "../../../components/stories/stories.js";
 
 export default {

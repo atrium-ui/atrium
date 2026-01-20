@@ -3,7 +3,7 @@ import { html } from "lit";
 import "./FraportCarousel.js";
 import type { Story } from "../../../components/stories/stories.js";
 import { Image } from "package:/components/Image";
-import { Carousel } from "@components/src/vue/Carousel";
+import { Carousel } from "@components/src/vue";
 
 export default {
   tags: ["public"],

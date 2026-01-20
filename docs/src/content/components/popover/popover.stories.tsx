@@ -1,8 +1,8 @@
 /* @jsxImportSource vue */
 import type { Story } from "../../../components/stories/stories.js";
-import { Tooltip as ToolTip } from "@components/src/vue/Tooltip";
-import { Button } from "@components/src/vue/Button";
-import { Popover } from "@components/src/vue/Popover";
+import { Tooltip as ToolTip } from "@components/src/vue";
+import { Button } from "@components/src/vue";
+import { Popover } from "@components/src/vue";
 
 export default {
   tags: ["public"],

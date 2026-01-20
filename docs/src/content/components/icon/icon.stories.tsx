@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 
-import { Icon } from "@components/src/vue/Icon";
+import { Icon } from "@components/src/vue";
 import type { Story } from "../../../components/stories/stories.js";
 import * as IconSet from "@sv/icons";
 

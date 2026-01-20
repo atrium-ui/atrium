@@ -1,8 +1,8 @@
 /* @jsxImportSource vue */
-import { Form, FormField } from "@components/src/vue/Form";
-import { Input } from "@components/src/vue/Input";
-import { Select, SelectItem } from "@components/src/vue/Select";
-import { Checkbox } from "@components/src/vue/Checkbox";
+import { Form, FormField } from "@components/src/vue";
+import { Input } from "@components/src/vue";
+import { Select, SelectItem } from "@components/src/vue";
+import { Checkbox } from "@components/src/vue";
 
 export function SomeForm() {
   return (

@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import { Animation } from "@components/src/vue/Animation.jsx";
+import { Animation } from "@components/src/vue";
 import type { Story } from "../../../components/stories/stories.js";
 
 const base = import.meta.env.BASE_URL;

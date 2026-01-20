@@ -234,9 +234,6 @@ export default defineConfig({
     pagefind(),
     mdx(),
     vue({
-      exclude: ["**/*"],
-      include: ["**/vue/*.{tsx|vue}"],
-      // jsx: true,
       template: {
         compilerOptions: {
           isCustomElement(tag) {

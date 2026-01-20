@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import { Combobox } from "@components/src/vue/Combobox";
+import { Combobox } from "@components/src/vue";
 import { defineComponent } from "vue";
 
 export default defineComponent(() => {

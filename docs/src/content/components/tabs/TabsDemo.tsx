@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import { Tabs, TabItem } from "@components/src/vue/Tabs";
+import { Tabs, TabItem } from "@components/src/vue";
 
 export function TabsDemo() {
   return (

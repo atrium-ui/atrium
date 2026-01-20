@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 
-import { Lightbox } from "@components/src/vue/Lightbox";
+import { Lightbox } from "@components/src/vue";
 import { twMerge } from "tailwind-merge";
 
 const images = {

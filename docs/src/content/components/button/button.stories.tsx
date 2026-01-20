@@ -1,8 +1,8 @@
 /* @jsxImportSource vue */
 
 import type { Story } from "../../../components/stories/stories.js";
-import { Icon } from "@components/src/vue/Icon";
-import { Button } from "@components/src/vue/Button";
+import { Icon } from "@components/src/vue";
+import { Button } from "@components/src/vue";
 
 export default {
   tags: ["public"],

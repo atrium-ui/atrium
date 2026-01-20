@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
 import type { Story } from "../../../components/stories/stories.js";
-import { Button } from "@components/src/vue/Button";
-import { Sheet } from "@components/src/vue/Sheet";
+import { Button } from "@components/src/vue";
+import { Sheet } from "@components/src/vue";
 
 export default {
   tags: ["public"],

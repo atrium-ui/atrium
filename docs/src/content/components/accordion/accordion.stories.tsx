@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 import type { Story } from "../../../components/stories/stories.js";
-import { Accordion, AccordionItem } from "@components/src/vue/Accordion";
+import { Accordion, AccordionItem } from "@components/src/vue";
 
 export default {
   tags: ["public"],
