@@ -73,9 +73,8 @@ export class ListElement extends LitElement {
   public selected?: string;
 
   protected updated(): void {
-    this.updateOptionsDOM();
-
     this.selected = this.value;
+    this.updateOptionsDOM();
   }
 
   /**
@@ -123,6 +122,9 @@ export class ListElement extends LitElement {
     this.tabIndex = 0;
 
     this.onSlotChange();
+
+    this.selected = this.value;
+    this.updateOptionsDOM();
   }
 
   private onKeyDown(event: KeyboardEvent) {

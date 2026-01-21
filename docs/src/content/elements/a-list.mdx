@@ -80,6 +80,46 @@ The `a-list` element provides an accessible list with keyboard navigation and se
   </a-list>
 </Example>
 
+### Preselected value
+
+<Example title="Basic usage">
+  <style>
+    { `
+    a-list {
+      display: flex;
+      flex-flow: column;
+      width: 100%;
+      max-width: 600px;
+      padding: 8px 0;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    a-list-item {
+      padding: 16px 24px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+    a-list-item[aria-selected="true"] {
+      background-color: #f0f0f0;
+    }
+    `}
+  </style>
+  <a-list value="2">
+    <a-list-item value="1">Item 1</a-list-item>
+    <a-list-item value="2">Item 2</a-list-item>
+    <a-list-item value="3">Item 3</a-list-item>
+    <a-list-item value="4">Item 4</a-list-item>
+    <a-list-item value="5">Item 5</a-list-item>
+    <a-list-item value="6">Item 6</a-list-item>
+    <a-list-item value="7">Item 7</a-list-item>
+    <a-list-item value="8">Item 8</a-list-item>
+    <a-list-item value="9">Item 9</a-list-item>
+    <a-list-item value="10">Item 10</a-list-item>
+  </a-list>
+</Example>
+
 
 ## Usage
 

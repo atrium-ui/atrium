@@ -97,7 +97,7 @@
     },
     "packages/components": {
       "name": "@sv/components",
-      "version": "1.9.0",
+      "version": "1.10.0",
       "bin": "./bin/cli.js",
       "dependencies": {
         "chalk": "^5.3.0",
@@ -109,6 +109,7 @@
         "@angular/core": "^21.1.0",
         "@rive-app/canvas-advanced-lite": "2.23.3",
         "@sv/animation": "^0.2.0",
+        "@sv/elements": "^4.4.1",
         "@sv/svg-sprites": "^0.5.3",
         "lit": "^3.1.3",
         "react": "^18.3.1",
@@ -119,7 +120,7 @@
     },
     "packages/elements": {
       "name": "@sv/elements",
-      "version": "4.4.0",
+      "version": "4.4.1",
       "dependencies": {
         "@floating-ui/dom": "^1.6.7",
         "@sv/scroll-lock": "^1.1.1",
