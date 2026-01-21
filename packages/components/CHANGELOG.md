@@ -1,5 +1,12 @@
 # @sv/components
 
+## 1.10.0 (2026-01-21)
+
+### Features
+
+- Update icon component to use the icons package
+- Migrate vue components to single file components
+
 ## 1.9.0 (2026-01-08)
 
 ### Features

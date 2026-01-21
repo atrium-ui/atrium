@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 4.4.1 (2026-01-21)
+
+### Fixes
+
+- a-blur: findActiveElement fails to find document.activeElement in children, if element also has a shadowRoot
+- a-list: Listbox options are not recognized
+
 ## 4.4.0 (2026-01-09)
 
 ### Features
