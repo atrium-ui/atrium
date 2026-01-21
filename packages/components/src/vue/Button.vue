@@ -44,11 +44,7 @@ const emit = defineEmits<{
 }>();
 
 const classes = computed(() =>
-  twJoin(
-    buttonVariants.base,
-    buttonVariants[props.variant ?? "default"],
-    props.class,
-  )
+  twJoin(buttonVariants.base, buttonVariants[props.variant ?? "default"], props.class),
 );
 
 function handleClick(e: MouseEvent) {

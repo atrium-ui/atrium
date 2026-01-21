@@ -1,12 +1,12 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AnimationElement } from '@sv/animation';
-import riveWASMResource from '@rive-app/canvas-advanced-lite/rive.wasm?url';
+import { Component, Input } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { AnimationElement } from "@sv/animation";
+import riveWASMResource from "@rive-app/canvas-advanced-lite/rive.wasm?url";
 
 AnimationElement.riveWasm = riveWASMResource;
 
 @Component({
-  selector: 'fra-animation',
+  selector: "fra-animation",
   standalone: true,
   imports: [CommonModule],
   template: `

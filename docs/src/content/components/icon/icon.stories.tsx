@@ -12,8 +12,10 @@ export default {
 
 export const Default = {
   render: () => (
-    <div class="flex gap-6 flex-wrap p-6 max-w-full" style="font-size: 2rem;">
-      {IconSet.icons.map(icon => <Icon name={icon} />)}
+    <div class="flex max-w-full flex-wrap gap-6 p-6" style="font-size: 2rem;">
+      {IconSet.icons.map((icon) => (
+        <Icon name={icon} />
+      ))}
     </div>
   ),
 };

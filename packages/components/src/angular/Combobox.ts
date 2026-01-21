@@ -1,13 +1,20 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { InputSearch } from './InputSearch';
-import { twMerge } from 'tailwind-merge';
-import '@sv/elements/select';
-import '@sv/elements/expandable';
-import type { OptionElement, Select } from '@sv/elements/select';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+  type ElementRef,
+} from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { InputSearch } from "./InputSearch.js";
+import { twMerge } from "tailwind-merge";
+import "@sv/elements/select";
+import "@sv/elements/expandable";
+import type { OptionElement, Select } from "@sv/elements/select";
 
 @Component({
-  selector: 'fra-combobox-item',
+  selector: "fra-combobox-item",
   standalone: true,
   imports: [CommonModule],
   template: `
@@ -25,7 +32,7 @@ import type { OptionElement, Select } from '@sv/elements/select';
 export class ComboboxItem {
   @Input() value!: string;
   @Input() class?: string;
-  
+
   hasContent = false;
 
   ngAfterContentInit() {
@@ -34,15 +41,15 @@ export class ComboboxItem {
 
   getItemClass() {
     return twMerge(
-      'block cursor-pointer rounded-sm px-2',
-      'hover:bg-zinc-100 active:bg-zinc-200 [&[selected]]:bg-zinc-200',
+      "block cursor-pointer rounded-sm px-2",
+      "hover:bg-zinc-100 active:bg-zinc-200 [&[selected]]:bg-zinc-200",
       this.class,
     );
   }
 }
 
 @Component({
-  selector: 'fra-combobox',
+  selector: "fra-combobox",
   standalone: true,
   imports: [CommonModule, InputSearch, ComboboxItem],
   template: `
@@ -116,21 +123,21 @@ export class Combobox {
   @Input() options: Array<{ label: string; value: string }> = [];
   @Output() changeEvent = new EventEmitter<CustomEvent>();
 
-  @ViewChild('selectElement') selectElement?: ElementRef<Select>;
+  @ViewChild("selectElement") selectElement?: ElementRef<Select>;
 
   values: OptionElement[] = [];
-  filter = '';
+  filter = "";
 
   get filteredOptions() {
     if (!this.filter) {
       return this.options;
     }
-    return this.options.filter(opt => opt.label.match(this.filter));
+    return this.options.filter((opt) => opt.label.match(this.filter));
   }
 
   handleKeydown(e: KeyboardEvent) {
     const target = e.target as HTMLInputElement;
-    if (e.key === 'Backspace' && target.value?.length === 0) {
+    if (e.key === "Backspace" && target.value?.length === 0) {
       this.values.pop();
     }
   }
@@ -141,7 +148,7 @@ export class Combobox {
     if (ev.option && this.values.indexOf(ev.option) === -1) {
       this.values.push(ev.option);
     }
-    this.filter = '';
+    this.filter = "";
   }
 
   handleInput(e: Event) {

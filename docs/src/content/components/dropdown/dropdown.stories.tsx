@@ -64,7 +64,10 @@ export const Default = {
   },
 };
 
-const DropdownMenu = (props: { label: string; items: { title: string; url: string }[] }) => (
+const DropdownMenu = (props: {
+  label: string;
+  items: { title: string; url: string }[];
+}) => (
   <a-popover-trigger class="w-auto">
     <button
       slot="trigger"
@@ -81,10 +84,7 @@ const DropdownMenu = (props: { label: string; items: { title: string; url: strin
           class="group scrollbar-thin scrollbar-transparent -translate-y-1 max-h-[300px] overflow-auto rounded-md bg-white transition-all duration-150 group-[&[enabled]]:translate-y-0"
         >
           {props.items.map((item, index) => (
-            <a-list-item
-              key={index}
-              class="mb-1 last:mb-0 focus-within:bg-blue-100"
-            >
+            <a-list-item key={index} class="mb-1 last:mb-0 focus-within:bg-blue-100">
               <a
                 tabindex="-1"
                 href={item.url}
@@ -104,7 +104,7 @@ export const SettingsPanel = {
   render: () => {
     return (
       <div class="w-full bg-gray-50 p-6">
-        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm max-w-xl mx-auto">
+        <div class="mx-auto max-w-xl rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
           {/* Header */}
           <div class="mb-6 flex items-center gap-3">
             <div class="h-10 w-10 rounded-lg bg-gray-200" />
@@ -122,14 +122,14 @@ export const SettingsPanel = {
             {/* Language setting */}
             <div class="flex items-center justify-between">
               <div class="flex flex-col gap-1">
-                <span class="text-sm font-medium text-gray-700">Language</span>
-                <span class="text-xs text-gray-500">Select your preferred language</span>
+                <span class="font-medium text-gray-700 text-sm">Language</span>
+                <span class="text-gray-500 text-xs">Select your preferred language</span>
               </div>
               <a-popover-trigger>
                 <button
                   slot="trigger"
                   type="button"
-                  class="flex cursor-pointer items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  class="flex cursor-pointer items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 text-sm hover:bg-gray-50"
                 >
                   <span>English</span>
                   <span class="text-gray-400">▼</span>
@@ -156,14 +156,14 @@ export const SettingsPanel = {
             {/* Timezone setting */}
             <div class="flex items-center justify-between">
               <div class="flex flex-col gap-1">
-                <span class="text-sm font-medium text-gray-700">Timezone</span>
-                <span class="text-xs text-gray-500">Set your local timezone</span>
+                <span class="font-medium text-gray-700 text-sm">Timezone</span>
+                <span class="text-gray-500 text-xs">Set your local timezone</span>
               </div>
               <a-popover-trigger>
                 <button
                   slot="trigger"
                   type="button"
-                  class="flex cursor-pointer items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  class="flex cursor-pointer items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 text-sm hover:bg-gray-50"
                 >
                   <span>UTC+0</span>
                   <span class="text-gray-400">▼</span>
@@ -174,7 +174,13 @@ export const SettingsPanel = {
                       style="width: 180px"
                       class="group -translate-y-1 max-h-[200px] overflow-auto rounded-md bg-white transition-all duration-150 group-[&[enabled]]:translate-y-0"
                     >
-                      {["UTC-8 Pacific", "UTC-5 Eastern", "UTC+0 London", "UTC+1 Berlin", "UTC+9 Tokyo"].map((tz, i) => (
+                      {[
+                        "UTC-8 Pacific",
+                        "UTC-5 Eastern",
+                        "UTC+0 London",
+                        "UTC+1 Berlin",
+                        "UTC+9 Tokyo",
+                      ].map((tz, i) => (
                         <a-list-item key={i} class="focus-within:bg-blue-100">
                           <button class="block w-full px-4 py-2 text-left text-gray-900 hover:bg-blue-100">
                             {tz}

@@ -1,12 +1,12 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Button } from './Button';
-import { twMerge } from 'tailwind-merge';
-import '@sv/elements/transition';
-import '@sv/elements/form';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Button } from "./Button.js";
+import { twMerge } from "tailwind-merge";
+import "@sv/elements/transition";
+import "@sv/elements/form";
 
 @Component({
-  selector: 'fra-form',
+  selector: "fra-form",
   standalone: true,
   imports: [CommonModule, Button],
   template: `
@@ -70,12 +70,12 @@ export class Form {
   }
 
   getSubmitClass() {
-    return twMerge('mt-8 overflow-hidden', this.submitClass);
+    return twMerge("mt-8 overflow-hidden", this.submitClass);
   }
 }
 
 @Component({
-  selector: 'fra-form-field',
+  selector: "fra-form-field",
   standalone: true,
   imports: [CommonModule],
   template: `

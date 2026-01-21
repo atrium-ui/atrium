@@ -1,10 +1,10 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Input as InputComponent } from './Input';
-import '@sv/elements/popover';
+import { Component, Output, EventEmitter } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Input as InputComponent } from "./Input.js";
+import "@sv/elements/popover";
 
 @Component({
-  selector: 'fra-datepicker',
+  selector: "fra-datepicker",
   standalone: true,
   imports: [CommonModule, InputComponent],
   template: `
@@ -37,7 +37,7 @@ export class Datepicker {
     this.value = ev.target.value;
     this.changeEvent.emit(ev);
     requestAnimationFrame(() => {
-      ev.target.dispatchEvent(new CustomEvent('exit'));
+      ev.target.dispatchEvent(new CustomEvent("exit"));
     });
   }
 }

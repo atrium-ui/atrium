@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Button } from './Button';
-import '@sv/elements/popover';
+import { Component, Input } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Button } from "./Button.js";
+import "@sv/elements/popover";
 
 @Component({
-  selector: 'fra-popover',
+  selector: "fra-popover",
   standalone: true,
   imports: [CommonModule, Button],
   template: `
@@ -39,6 +39,6 @@ export class Popover {
     return [
       "min-w-[100px] rounded-md border border-zinc-200 bg-zinc-50 p-1",
       "scale-95 transition-all duration-150 group-[&[enabled]]:scale-100",
-    ].join(' ');
+    ].join(" ");
   }
 }

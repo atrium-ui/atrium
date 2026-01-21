@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import '@sv/elements/portal';
-import '@sv/elements/blur';
+import { Component, Input } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import "@sv/elements/portal";
+import "@sv/elements/blur";
 
 @Component({
-  selector: 'fra-sheet',
+  selector: "fra-sheet",
   standalone: true,
   imports: [CommonModule],
   template: `
@@ -29,8 +29,8 @@ export class Sheet {
 
   getSheetClass() {
     return [
-      'group-[&[enabled]]/blur:-translate-x-full absolute top-0 left-full h-full w-full overflow-auto px-4 py-12 transition-all sm:w-96',
-      'bg-zinc-100',
-    ].join(' ');
+      "group-[&[enabled]]/blur:-translate-x-full absolute top-0 left-full h-full w-full overflow-auto px-4 py-12 transition-all sm:w-96",
+      "bg-zinc-100",
+    ].join(" ");
   }
 }

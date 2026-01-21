@@ -1,12 +1,12 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Button } from './Button';
-import { twMerge } from 'tailwind-merge';
-import '@sv/elements/select';
-import '@sv/elements/expandable';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Button } from "./Button.js";
+import { twMerge } from "tailwind-merge";
+import "@sv/elements/select";
+import "@sv/elements/expandable";
 
 @Component({
-  selector: 'fra-select',
+  selector: "fra-select",
   standalone: true,
   imports: [CommonModule, Button],
   template: `
@@ -48,7 +48,7 @@ export class Select {
 }
 
 @Component({
-  selector: 'fra-select-item',
+  selector: "fra-select-item",
   standalone: true,
   imports: [CommonModule],
   template: `
@@ -66,7 +66,7 @@ export class Select {
 export class SelectItem {
   @Input() value!: string;
   @Input() class?: string;
-  
+
   hasContent = false;
 
   ngAfterContentInit() {

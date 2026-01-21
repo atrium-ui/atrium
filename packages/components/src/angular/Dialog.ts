@@ -1,11 +1,11 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Button } from './Button';
-import '@sv/elements/blur';
-import '@sv/elements/portal';
+import { Component, Input } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Button } from "./Button.js";
+import "@sv/elements/blur";
+import "@sv/elements/portal";
 
 @Component({
-  selector: 'fra-dialog',
+  selector: "fra-dialog",
   standalone: true,
   imports: [CommonModule, Button],
   template: `
@@ -36,7 +36,7 @@ import '@sv/elements/portal';
 export class Dialog {
   @Input() label?: string;
   @Input() class?: string;
-  
+
   open = false;
 
   getDialogClass() {
@@ -45,6 +45,6 @@ export class Dialog {
       "border-zinc-200 bg-zinc-50",
       "-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 min-w-[400px]",
       "scale-95 group-[&[enabled]]/dialog:block group-[&[enabled]]/dialog:scale-100 group-[&[enabled]]/dialog:opacity-100",
-    ].join(' ');
+    ].join(" ");
   }
 }

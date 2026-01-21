@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { twMerge } from 'tailwind-merge';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { twMerge } from "tailwind-merge";
 
 export const buttonVariants = {
   base: [
@@ -26,7 +26,7 @@ export const buttonVariants = {
 };
 
 @Component({
-  selector: 'fra-button',
+  selector: "fra-button",
   standalone: true,
   imports: [CommonModule],
   template: `
@@ -45,12 +45,12 @@ export const buttonVariants = {
   `,
 })
 export class Button {
-  @Input() type: 'button' | 'submit' | 'reset' = 'button';
+  @Input() type: "button" | "submit" | "reset" = "button";
   @Input() inert?: boolean;
   @Input() class?: string | string[];
   @Input() slot?: string;
   @Input() disabled?: boolean;
-  @Input() variant?: keyof typeof buttonVariants = 'default';
+  @Input() variant?: keyof typeof buttonVariants = "default";
   @Input() label?: string;
   @Output() clicked = new EventEmitter<MouseEvent>();
 
@@ -74,7 +74,7 @@ export class Button {
 }
 
 @Component({
-  selector: 'fra-link',
+  selector: "fra-link",
   standalone: true,
   imports: [CommonModule],
   template: `
@@ -88,7 +88,7 @@ export class Button {
   `,
 })
 export class Link {
-  @Input() variant?: keyof Omit<typeof buttonVariants, 'base'> = 'default';
+  @Input() variant?: keyof Omit<typeof buttonVariants, "base"> = "default";
   @Input() href!: string;
   @Input() target?: string;
 

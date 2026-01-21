@@ -1,11 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Button } from './Button';
-import { twMerge } from 'tailwind-merge';
-import '@sv/elements/track';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Button } from "./Button.js";
+import { twMerge } from "tailwind-merge";
+import "@sv/elements/track";
 
 @Component({
-  selector: 'fra-tabs',
+  selector: "fra-tabs",
   standalone: true,
   imports: [CommonModule, Button],
   template: `
@@ -45,7 +45,7 @@ export class Tabs {
 }
 
 @Component({
-  selector: 'fra-tab-item',
+  selector: "fra-tab-item",
   standalone: true,
   imports: [CommonModule],
   template: `

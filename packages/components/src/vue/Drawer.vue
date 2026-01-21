@@ -28,7 +28,7 @@ watch(
     if (newValue === true) {
       isOpen.value = true;
     }
-  }
+  },
 );
 
 onMounted(() => {

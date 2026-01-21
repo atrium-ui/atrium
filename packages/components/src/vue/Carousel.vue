@@ -27,9 +27,7 @@ const progress = computed(() => {
   return Math.min(1, Math.max(0, value));
 });
 
-const showNext = computed(
-  () => Math.round(position.value) < meta.value.overflowWidth,
-);
+const showNext = computed(() => Math.round(position.value) < meta.value.overflowWidth);
 const showPrev = computed(() => position.value >= 100);
 
 onMounted(() => {
@@ -64,14 +62,14 @@ function onFormat() {
 }
 
 const containerClass = computed(() =>
-  twMerge("@container group/slider relative w-full", props.class)
+  twMerge("@container group/slider relative w-full", props.class),
 );
 
 const progressBarClass = computed(() =>
   twMerge(
     "relative flex h-[2px] @lg:w-[400px] w-[200px] items-center bg-[rgba(0,0,0,30%)] drak:bg-[rgba(255,255,255,30%)]",
     meta.value.overflowWidth > 0 ? "opacity-100" : "opacity-0",
-  )
+  ),
 );
 </script>
 

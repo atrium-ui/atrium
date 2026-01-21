@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'fra-pager',
+  selector: "fra-pager",
   standalone: true,
   imports: [CommonModule],
   template: `

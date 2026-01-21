@@ -74,7 +74,10 @@ export const FilterableSidebar = {
           {/* Product grid */}
           <div class="grid grid-cols-2 gap-4">
             {[0, 1, 2, 3].map((i) => (
-              <div key={i} class="flex flex-col gap-2 rounded-lg border border-gray-200 bg-white p-3">
+              <div
+                key={i}
+                class="flex flex-col gap-2 rounded-lg border border-gray-200 bg-white p-3"
+              >
                 <div class="h-32 w-full rounded bg-gray-200" />
                 <div class="h-4 w-3/4 rounded bg-gray-300" />
                 <div class="h-3 w-1/2 rounded bg-gray-200" />
@@ -103,7 +106,7 @@ export const BookingForm = {
     return (
       <div class="min-h-[600px] w-full bg-gray-50 p-6">
         {/* Card container */}
-        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm max-w-[540px] mx-auto">
+        <div class="mx-auto max-w-[540px] rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
           {/* Header */}
           <div class="mb-6 flex items-center gap-3">
             <div class="h-12 w-12 rounded-full bg-gray-200" />
@@ -127,7 +130,7 @@ export const BookingForm = {
             {/* Date pickers row */}
             <div class="grid grid-cols-2 gap-4">
               <div class="flex flex-col gap-2">
-                <span class="text-sm font-medium text-gray-700">Check-in</span>
+                <span class="font-medium text-gray-700 text-sm">Check-in</span>
                 <Datepicker
                   onChange={(ev) => {
                     checkInDate.value = ev.detail.date;
@@ -135,7 +138,7 @@ export const BookingForm = {
                 />
               </div>
               <div class="flex flex-col gap-2">
-                <span class="text-sm font-medium text-gray-700">Check-out</span>
+                <span class="font-medium text-gray-700 text-sm">Check-out</span>
                 <Datepicker
                   onChange={(ev) => {
                     checkOutDate.value = ev.detail.date;

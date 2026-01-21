@@ -1,13 +1,13 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Button } from './Button';
-import { Icon } from './Icon';
-import { Toast, ToastFeed } from '@sv/elements/toast';
+import { Component, Input } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Button } from "./Button.js";
+import { Icon } from "./Icon.js";
+import { Toast, ToastFeed } from "@sv/elements/toast";
 
 const TOAST_TYPE = {
-  default: 'default',
-  error: 'error',
-  transparent: 'transparent',
+  default: "default",
+  error: "error",
+  transparent: "transparent",
 };
 
 type ToastButton = {
@@ -35,15 +35,15 @@ export function toast(options: ToastOptions) {
 
   const toast = new Toast({ time: options.time });
   toast.className = `variant-${options.variant || TOAST_TYPE.default}`;
-  
-  const contentElement = document.createElement('toast-content');
-  if (options.message) contentElement.setAttribute('message', options.message);
-  if (options.icon) contentElement.setAttribute('icon', options.icon);
+
+  const contentElement = document.createElement("toast-content");
+  if (options.message) contentElement.setAttribute("message", options.message);
+  if (options.icon) contentElement.setAttribute("icon", options.icon);
   if (options.button) {
-    contentElement.setAttribute('button-label', options.button.label);
-    contentElement.addEventListener('button-click', () => options.button?.onClick());
+    contentElement.setAttribute("button-label", options.button.label);
+    contentElement.addEventListener("button-click", () => options.button?.onClick());
   }
-  
+
   toast.append(contentElement);
 
   const feed = ToastFeed.getInstance();
@@ -54,7 +54,7 @@ export function toast(options: ToastOptions) {
 }
 
 @Component({
-  selector: 'toast-content',
+  selector: "toast-content",
   standalone: true,
   imports: [CommonModule, Button, Icon],
   template: `
@@ -79,7 +79,7 @@ export class ToastContent {
   @Input() buttonLabel?: string;
 
   handleButtonClick() {
-    const event = new CustomEvent('button-click');
+    const event = new CustomEvent("button-click");
     if (this.nativeElement) {
       this.nativeElement.dispatchEvent(event);
     }
@@ -88,14 +88,14 @@ export class ToastContent {
   private nativeElement?: HTMLElement;
 
   ngOnInit() {
-    if (typeof document !== 'undefined') {
-      this.nativeElement = document.querySelector('toast-content') || undefined;
+    if (typeof document !== "undefined") {
+      this.nativeElement = document.querySelector("toast-content") || undefined;
     }
   }
 }
 
 @Component({
-  selector: 'fra-toasts',
+  selector: "fra-toasts",
   standalone: true,
   imports: [CommonModule],
   template: `

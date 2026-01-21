@@ -1,11 +1,20 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Button } from './Button';
-import { Icon } from './Icon';
-import { Track, type InputState, type Easing, type Trait } from '@sv/elements/track';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+  type ElementRef,
+  type OnInit,
+  type AfterViewInit,
+} from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Button } from "./Button.js";
+import { Icon } from "./Icon.js";
+import { Track, type InputState, type Easing, type Trait } from "@sv/elements/track";
 
 @Component({
-  selector: 'fra-drawer',
+  selector: "fra-drawer",
   standalone: true,
   imports: [CommonModule, Button, Icon],
   template: `
@@ -57,9 +66,9 @@ export class Drawer implements OnInit, AfterViewInit {
   @Output() collapseEvent = new EventEmitter<void>();
   @Output() openEvent = new EventEmitter<void>();
 
-  @ViewChild('drawerElement') drawerElement?: ElementRef<DrawerTrack>;
-  @ViewChild('scrollContainer') scrollContainer?: ElementRef<HTMLDivElement>;
-  @ViewChild('contentContainer') contentContainer?: ElementRef<HTMLDivElement>;
+  @ViewChild("drawerElement") drawerElement?: ElementRef<DrawerTrack>;
+  @ViewChild("scrollContainer") scrollContainer?: ElementRef<HTMLDivElement>;
+  @ViewChild("contentContainer") contentContainer?: ElementRef<HTMLDivElement>;
 
   isOpen = false;
   drawerHeight?: number;
@@ -75,7 +84,7 @@ export class Drawer implements OnInit, AfterViewInit {
       if (this.contentContainer) {
         this.drawerHeight = this.contentContainer.nativeElement.offsetHeight;
       }
-      
+
       setTimeout(() => {
         this.drawerElement?.nativeElement?.minimize();
       });
@@ -120,17 +129,17 @@ export class Drawer implements OnInit, AfterViewInit {
 
   getScrollContainerClass() {
     const classes = [
-      'h-[calc(100vh-env(safe-area-inset-top))] touch-auto',
-      this.isOpen ? 'overflow-auto' : 'overflow-hidden',
+      "h-[calc(100vh-env(safe-area-inset-top))] touch-auto",
+      this.isOpen ? "overflow-auto" : "overflow-hidden",
     ];
-    return classes.join(' ');
+    return classes.join(" ");
   }
 }
 
 export class DrawerTrack extends Track {
   public traits: Trait[] = [
     {
-      id: 'drawer',
+      id: "drawer",
       input(track: DrawerTrack, inputState: InputState) {
         const openThresholdFixed = window.innerHeight / 2;
         const openThreshold = window.innerHeight - openThresholdFixed;
@@ -192,22 +201,22 @@ export class DrawerTrack extends Track {
     this.isOpen = value;
 
     if (value === true) {
-      this.dispatchEvent(new Event('open', { bubbles: true }));
+      this.dispatchEvent(new Event("open", { bubbles: true }));
     } else {
-      this.dispatchEvent(new Event('close', { bubbles: true }));
+      this.dispatchEvent(new Event("close", { bubbles: true }));
     }
   }
 
-  open(ease: Easing = 'linear') {
+  open(ease: Easing = "linear") {
     this.acceleration.mul(0.25);
     this.inputForce.mul(0.125);
     this.setTarget(this.getToItemPosition(1), ease);
   }
 
-  minimize(ease: Easing = 'linear') {
+  minimize(ease: Easing = "linear") {
     let height = 200;
     if (this.isStatic) {
-      const value = this.getAttribute('contentheight');
+      const value = this.getAttribute("contentheight");
       const valueInt = value ? +value : Number.NaN;
       const openedPosition = this.getToItemPosition(1);
       height = valueInt > openedPosition.y ? openedPosition.y : valueInt;
@@ -218,11 +227,11 @@ export class DrawerTrack extends Track {
     this.setTarget([0, height], ease);
   }
 
-  close(ease: Easing = 'linear') {
+  close(ease: Easing = "linear") {
     this.acceleration.mul(0.25);
     this.inputForce.mul(0.125);
     this.setTarget([0, 30], ease);
   }
 }
 
-customElements.define('drawer-track', DrawerTrack);
+customElements.define("drawer-track", DrawerTrack);

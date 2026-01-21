@@ -1,13 +1,13 @@
-import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Button } from './Button';
-import { Icon } from './Icon';
-import { twMerge } from 'tailwind-merge';
-import '@sv/elements/track';
-import type { Track } from '@sv/elements/track';
+import { Component, Input, type OnInit, ViewChild, type ElementRef } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Button } from "./Button.js";
+import { Icon } from "./Icon.js";
+import { twMerge } from "tailwind-merge";
+import "@sv/elements/track";
+import type { Track } from "@sv/elements/track";
 
 @Component({
-  selector: 'fra-carousel',
+  selector: "fra-carousel",
   standalone: true,
   imports: [CommonModule, Button, Icon],
   template: `
@@ -63,9 +63,9 @@ import type { Track } from '@sv/elements/track';
 export class Carousel implements OnInit {
   @Input() class?: string;
   @Input() overflow?: string;
-  @Input() align?: 'start' | 'center';
+  @Input() align?: "start" | "center";
 
-  @ViewChild('track') trackElement?: ElementRef<Track>;
+  @ViewChild("track") trackElement?: ElementRef<Track>;
 
   current = 0;
   position = 0;
@@ -76,8 +76,7 @@ export class Carousel implements OnInit {
   };
 
   get progress(): number {
-    const value =
-      1 - (this.meta.overflowWidth - this.position) / this.meta.overflowWidth;
+    const value = 1 - (this.meta.overflowWidth - this.position) / this.meta.overflowWidth;
     return Math.min(1, Math.max(0, value));
   }
 
@@ -93,8 +92,8 @@ export class Carousel implements OnInit {
     setTimeout(() => {
       const track = this.trackElement?.nativeElement;
       if (track?.shadowRoot) {
-        track.shadowRoot.addEventListener('slotchange', () => {
-          track.moveTo(0, 'none');
+        track.shadowRoot.addEventListener("slotchange", () => {
+          track.moveTo(0, "none");
         });
       }
     });
@@ -135,20 +134,20 @@ export class Carousel implements OnInit {
   }
 
   getContainerClass() {
-    return twMerge('@container group/slider relative w-full', this.class);
+    return twMerge("@container group/slider relative w-full", this.class);
   }
 
   getProgressClass() {
     return twMerge(
-      'relative flex h-[2px] @lg:w-[400px] w-[200px] items-center bg-[rgba(0,0,0,30%)] drak:bg-[rgba(255,255,255,30%)]',
-      this.meta.overflowWidth > 0 ? 'opacity-100' : 'opacity-0',
+      "relative flex h-[2px] @lg:w-[400px] w-[200px] items-center bg-[rgba(0,0,0,30%)] drak:bg-[rgba(255,255,255,30%)]",
+      this.meta.overflowWidth > 0 ? "opacity-100" : "opacity-0",
     );
   }
 
   getProgressBarClass() {
     return [
-      '-top-[1px] absolute left-[calc(var(--value)*100%-var(--value)*75px)] h-[4px] w-[75px]',
-      'rounded-md bg-black transition-none',
-    ].join(' ');
+      "-top-[1px] absolute left-[calc(var(--value)*100%-var(--value)*75px)] h-[4px] w-[75px]",
+      "rounded-md bg-black transition-none",
+    ].join(" ");
   }
 }

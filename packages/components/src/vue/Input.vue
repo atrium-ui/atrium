@@ -43,7 +43,7 @@ const containerClass = computed(() =>
     props.error && variants.error,
     props.multiline && "mt-4 min-h-10 px-5 lg:px-2",
     props.class,
-  )
+  ),
 );
 
 function handleInvalid(e: Event) {

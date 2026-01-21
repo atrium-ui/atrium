@@ -22,7 +22,7 @@ watch(
   () => props.value,
   (newValue) => {
     currentValue.value = newValue;
-  }
+  },
 );
 
 function handleChange(ev: Event) {

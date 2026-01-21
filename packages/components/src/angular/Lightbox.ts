@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Button } from './Button';
-import { Icon } from './Icon';
-import '@sv/elements/blur';
-import '@sv/elements/portal';
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Button } from "./Button.js";
+import { Icon } from "./Icon.js";
+import "@sv/elements/blur";
+import "@sv/elements/portal";
 
 @Component({
-  selector: 'fra-lightbox',
+  selector: "fra-lightbox",
   standalone: true,
   imports: [CommonModule, Button, Icon],
   template: `
@@ -54,15 +54,15 @@ export class Lightbox {
 
   getBlurClass() {
     return [
-      'group/dialog fixed top-0 left-0 z-50 block h-screen w-screen opacity-0 transition-all',
-      '[&[enabled]]:bg-[#33333333] [&[enabled]]:opacity-100 [&[enabled]]:backdrop-blur-md',
-    ].join(' ');
+      "group/dialog fixed top-0 left-0 z-50 block h-screen w-screen opacity-0 transition-all",
+      "[&[enabled]]:bg-[#33333333] [&[enabled]]:opacity-100 [&[enabled]]:backdrop-blur-md",
+    ].join(" ");
   }
 
   getContentClass() {
     return [
-      '-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 transition-all',
-      'scale-105 group-[&[enabled]]/dialog:block group-[&[enabled]]/dialog:scale-100',
-    ].join(' ');
+      "-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 transition-all",
+      "scale-105 group-[&[enabled]]/dialog:block group-[&[enabled]]/dialog:scale-100",
+    ].join(" ");
   }
 }

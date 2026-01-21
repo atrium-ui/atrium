@@ -54,9 +54,7 @@ function removeValue(option: OptionElement) {
 }
 
 function filteredOptions() {
-  return props.options.filter(
-    (opt) => !filter.value || opt.label.match(filter.value)
-  );
+  return props.options.filter((opt) => !filter.value || opt.label.match(filter.value));
 }
 </script>
 

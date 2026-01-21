@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { twMerge } from 'tailwind-merge';
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { twMerge } from "tailwind-merge";
 
 @Component({
-  selector: 'fra-breadcrumbs',
+  selector: "fra-breadcrumbs",
   standalone: true,
   imports: [CommonModule],
   template: `

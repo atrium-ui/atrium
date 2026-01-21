@@ -1,12 +1,12 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { twMerge } from 'tailwind-merge';
-import '@sv/svg-sprites/svg-icon';
+import { Component, Input, type OnInit, type OnDestroy } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { twMerge } from "tailwind-merge";
+import "@sv/svg-sprites/svg-icon";
 
 const SHOW_THRESHOLD_SCREEN_HEIGHTS = 3;
 
 @Component({
-  selector: 'fra-back-to-top',
+  selector: "fra-back-to-top",
   standalone: true,
   imports: [CommonModule],
   template: `
@@ -23,18 +23,18 @@ const SHOW_THRESHOLD_SCREEN_HEIGHTS = 3;
 })
 export class BackToTop implements OnInit, OnDestroy {
   @Input() visible = false;
-  
+
   showButton = false;
 
   ngOnInit() {
-    window.addEventListener('scroll', this.updateVisibilityConditions);
-    window.addEventListener('resize', this.updateVisibilityConditions);
+    window.addEventListener("scroll", this.updateVisibilityConditions);
+    window.addEventListener("resize", this.updateVisibilityConditions);
     this.updateVisibilityConditions();
   }
 
   ngOnDestroy() {
-    window.removeEventListener('scroll', this.updateVisibilityConditions);
-    window.removeEventListener('resize', this.updateVisibilityConditions);
+    window.removeEventListener("scroll", this.updateVisibilityConditions);
+    window.removeEventListener("resize", this.updateVisibilityConditions);
   }
 
   updateVisibilityConditions = () => {
@@ -43,14 +43,12 @@ export class BackToTop implements OnInit, OnDestroy {
   };
 
   onButtonClicked() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   getButtonClass() {
     return twMerge(
-      this.showButton || this.visible
-        ? "opacity-100"
-        : "pointer-events-none opacity-0",
+      this.showButton || this.visible ? "opacity-100" : "pointer-events-none opacity-0",
       "absolute mq2:right-3 mq4:right-[44px] right-[128px] bottom-0 transition-opacity ease-linear",
       "flex h-10 w-10 items-center justify-center rounded-md shadow-2xl",
       "hover:text-white active:text-white",

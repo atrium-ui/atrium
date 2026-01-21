@@ -19,7 +19,7 @@ watch(
   () => props.active,
   (newValue) => {
     active.value = newValue;
-  }
+  },
 );
 
 function handleTabClick(index: number) {

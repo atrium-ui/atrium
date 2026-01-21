@@ -20,7 +20,7 @@ watch(
   () => props.checked,
   (newValue) => {
     isChecked.value = newValue;
-  }
+  },
 );
 
 function handleChange(value: boolean) {

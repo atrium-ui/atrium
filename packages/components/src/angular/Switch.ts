@@ -1,8 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'fra-switch',
+  selector: "fra-switch",
   standalone: true,
   imports: [CommonModule],
   template: `
@@ -46,7 +46,7 @@ export class Switch {
       "group inline-flex",
       "mt-[2px] w-12 cursor-pointer overflow-hidden rounded-full border border-zinc-200 bg-transparent",
       "outline-hidden focus:ring-2 focus:ring-[currentColor]",
-    ].join(' ');
+    ].join(" ");
   }
 
   getSwitchClass() {
@@ -54,6 +54,6 @@ export class Switch {
       "relative block h-6 w-12 rounded-full bg-[var(--theme-color,#bfa188)] transition-transform",
       "after:absolute after:top-0 after:right-0 after:h-6 after:w-6 after:rounded-full after:bg-[currentColor] after:content-['']",
       "-translate-x-1/2 group-[&[value='true']]:translate-x-0",
-    ].join(' ');
+    ].join(" ");
   }
 }

@@ -1,9 +1,9 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Button } from './Button';
+import { Component, Input } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Button } from "./Button.js";
 
 @Component({
-  selector: 'fra-image-text',
+  selector: "fra-image-text",
   standalone: true,
   imports: [CommonModule, Button],
   template: `

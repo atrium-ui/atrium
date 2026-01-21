@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import '@sv/elements/expandable';
-import '@sv/svg-sprites/svg-icon';
+import { Component, Input } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import "@sv/elements/expandable";
+import "@sv/svg-sprites/svg-icon";
 
 @Component({
-  selector: 'fra-accordion',
+  selector: "fra-accordion",
   standalone: true,
   imports: [CommonModule],
   template: `
@@ -16,7 +16,7 @@ import '@sv/svg-sprites/svg-icon';
 export class Accordion {}
 
 @Component({
-  selector: 'fra-accordion-item',
+  selector: "fra-accordion-item",
   standalone: true,
   imports: [CommonModule],
   template: `

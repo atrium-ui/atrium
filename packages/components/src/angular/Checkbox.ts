@@ -1,9 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Icon } from './Icon';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Icon } from "./Icon.js";
 
 @Component({
-  selector: 'fra-checkbox',
+  selector: "fra-checkbox",
   standalone: true,
   imports: [CommonModule, Icon],
   template: `
@@ -56,7 +56,7 @@ export class Checkbox {
 
   handleToggle() {
     this.checked = !this.checked;
-    const event = new Event('change', { bubbles: true });
+    const event = new Event("change", { bubbles: true });
     this.changeEvent.emit(event);
   }
 
@@ -69,13 +69,10 @@ export class Checkbox {
     return [
       "mt-[2px] h-6 w-6 cursor-pointer rounded-md border border-zinc-200 bg-transparent p-0 align-bottom hover:border-zinc-600",
       "outline-hidden focus:ring-2 focus:ring-[currentColor]",
-    ].join(' ');
+    ].join(" ");
   }
 
   getIconWrapperClass() {
-    return [
-      "flex items-center justify-center",
-      !this.checked && "hidden"
-    ].join(' ');
+    return ["flex items-center justify-center", !this.checked && "hidden"].join(" ");
   }
 }

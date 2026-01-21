@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { twMerge } from 'tailwind-merge';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { twMerge } from "tailwind-merge";
 
 const variants = {
   default: [
@@ -11,7 +11,7 @@ const variants = {
 };
 
 @Component({
-  selector: 'fra-input',
+  selector: "fra-input",
   standalone: true,
   imports: [CommonModule],
   template: `
