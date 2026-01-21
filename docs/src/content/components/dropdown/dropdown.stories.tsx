@@ -142,7 +142,10 @@ export const SettingsPanel = {
                     >
                       {["English", "Deutsch", "Français", "Español"].map((lang, i) => (
                         <a-list-item key={i} class="focus-within:bg-blue-100">
-                          <button class="block w-full px-4 py-2 text-left text-gray-900 hover:bg-blue-100">
+                          <button
+                            type="button"
+                            class="block w-full px-4 py-2 text-left text-gray-900 hover:bg-blue-100"
+                          >
                             {lang}
                           </button>
                         </a-list-item>
@@ -182,7 +185,10 @@ export const SettingsPanel = {
                         "UTC+9 Tokyo",
                       ].map((tz, i) => (
                         <a-list-item key={i} class="focus-within:bg-blue-100">
-                          <button class="block w-full px-4 py-2 text-left text-gray-900 hover:bg-blue-100">
+                          <button
+                            type="button"
+                            class="block w-full px-4 py-2 text-left text-gray-900 hover:bg-blue-100"
+                          >
                             {tz}
                           </button>
                         </a-list-item>

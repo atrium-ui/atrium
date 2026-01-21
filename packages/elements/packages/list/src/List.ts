@@ -49,16 +49,6 @@ export class ListElement extends LitElement {
     `;
   }
 
-  render() {
-    return html`
-      <slot
-        @click=${(ev) => this.onOptionsClick(ev)}
-        @dblclick=${(ev) => this.onOptionsClick(ev)}
-        @slotchange=${this.onSlotChange}
-      ></slot>
-    `;
-  }
-
   private updateOptionsDOM() {
     const options = this.options;
     for (const option of options) {
@@ -119,19 +109,20 @@ export class ListElement extends LitElement {
 
     this.addEventListener("keydown", this.onKeyDown);
     this.addEventListener("keyup", this.onKeyUp);
+    this.addEventListener("click", (e) => this.onOptionsClick(e));
+    this.addEventListener("dblclick", (e) => this.onOptionsClick(e));
 
     this.observer.observe(this, {
       childList: true,
       subtree: true,
-      characterData: true,
     });
   }
 
   public connectedCallback(): void {
-    super.connectedCallback();
-
     this.role = "listbox";
     this.tabIndex = 0;
+
+    this.onSlotChange();
   }
 
   private onKeyDown(event: KeyboardEvent) {

@@ -55,7 +55,13 @@ export const MobileNavigation = {
             onclick="document.querySelector('#sheet').enabled = true"
           >
             <Button variant="ghost">
-              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -89,6 +95,7 @@ export const MobileNavigation = {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path
                     stroke-linecap="round"
@@ -102,16 +109,28 @@ export const MobileNavigation = {
 
             {/* Navigation links */}
             <nav class="flex flex-col gap-2">
-              <a href="#" class="rounded-lg px-4 py-3 text-gray-900 hover:bg-gray-200">
+              <a
+                href="/home"
+                class="rounded-lg px-4 py-3 text-gray-900 hover:bg-gray-200"
+              >
                 Home
               </a>
-              <a href="#" class="rounded-lg px-4 py-3 text-gray-900 hover:bg-gray-200">
+              <a
+                href="/products"
+                class="rounded-lg px-4 py-3 text-gray-900 hover:bg-gray-200"
+              >
                 Products
               </a>
-              <a href="#" class="rounded-lg px-4 py-3 text-gray-900 hover:bg-gray-200">
+              <a
+                href="/about"
+                class="rounded-lg px-4 py-3 text-gray-900 hover:bg-gray-200"
+              >
                 About
               </a>
-              <a href="#" class="rounded-lg px-4 py-3 text-gray-900 hover:bg-gray-200">
+              <a
+                href="/contact"
+                class="rounded-lg px-4 py-3 text-gray-900 hover:bg-gray-200"
+              >
                 Contact
               </a>
             </nav>
@@ -155,6 +174,7 @@ export const FilterPanel = {
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    aria-hidden="true"
                   >
                     <path
                       stroke-linecap="round"
@@ -198,6 +218,7 @@ export const FilterPanel = {
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    aria-hidden="true"
                   >
                     <path
                       stroke-linecap="round"

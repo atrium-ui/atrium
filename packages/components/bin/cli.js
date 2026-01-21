@@ -9,6 +9,17 @@ import dependencyTree from "dependency-tree";
 
 const componentRoot = resolve(fileURLToPath(import.meta.url), "../../src/");
 
+const frameworkToFileEnding = {
+  "vue": ".vue",
+  "react": ".tsx",
+  "solid": ".tsx",
+  "angular": ".ts",
+};
+
+function fileEnding(framework) {
+  return frameworkToFileEnding[framework];
+}
+
 const HELP = `
   Usage: cli [options] [components]
 
@@ -26,7 +37,7 @@ const HELP = `
  * @param {string} [framework]
  */
 export async function component(name, framework = "vue") {
-  const file = resolve(componentRoot, framework, `${name}.tsx`);
+  const file = resolve(componentRoot, framework, `${name}${fileEnding(framework)}`);
   const files = await peers(file);
   return files;
 }
@@ -79,7 +90,7 @@ export async function use(args = []) {
   const framwork = flags.framework || "vue";
   const availableComponents = [
     ...readdirSync(resolve(componentRoot, framwork)).map((file) =>
-      file.replace(".tsx", ""),
+      file.replace(fileEnding(flags.framework), ""),
     ),
   ];
 
@@ -131,7 +142,7 @@ export async function use(args = []) {
     const files = await component(comp, flags.framework);
     for (const file of files) {
       const name = file.split("/").pop()?.split(".")[0];
-      writeFileSync(`${dist}/${name}.tsx`, readFileSync(file, "utf8"));
+      writeFileSync(`${dist}/${name}${fileEnding(flags.framework)}`, readFileSync(file, "utf8"));
       process.stdout.write(`√ ${name}\n`);
     }
   }
