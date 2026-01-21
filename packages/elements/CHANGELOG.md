@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.4.2 (2026-01-21)
+
+### Fixes
+
+- a-list: uodate selected option on connected
+
 ## 4.4.1 (2026-01-21)
 
 ### Fixes
