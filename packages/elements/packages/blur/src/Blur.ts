@@ -37,7 +37,8 @@ function findActiveElement(element: Element | null) {
   if (element === null) return null;
 
   if (element.shadowRoot) {
-    return findActiveElement(element.shadowRoot.activeElement);
+    const activeElementInShadowRoot = findActiveElement(element.shadowRoot.activeElement);
+    if(activeElementInShadowRoot) return activeElementInShadowRoot;
   }
   return element;
 }
