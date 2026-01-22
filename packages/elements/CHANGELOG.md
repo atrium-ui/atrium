@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.4.8-dev.0 (2026-01-22)
+
+### Fixes
+
+- Optimize finding focusable elements
+
 ## 4.4.7 (2026-01-22)
 
 ### Fixes
