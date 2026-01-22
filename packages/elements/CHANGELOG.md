@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.4.5 (2026-01-22)
+
+### Fixes
+
+- a-blur: traverseShadowRealm does not see shadowRoot of rootNode
+
 ## 4.4.4 (2026-01-22)
 
 ### Fixes
