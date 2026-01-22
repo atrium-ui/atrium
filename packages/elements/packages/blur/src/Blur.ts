@@ -2,11 +2,6 @@ import { LitElement, type PropertyValueMap, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
 import { ScrollLock } from "@sv/scroll-lock";
 
-const SELECTOR_CUSTOM_ELEMENT =
-  "*:not(br,span,script,slot,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)";
-
-const SELECTOR_FOCUSABLE = "button, a[href], input, select, textarea, [tabindex]";
-
 declare global {
   interface HTMLElementTagNameMap {
     "a-blur": Blur;
@@ -51,70 +46,73 @@ function findActiveElement(element: Element | null, visited = new Set<Element>()
 }
 
 /**
- * Traverse DOM tree including shadowRoots.
- */
-function traverseShadowRealm(
-  rootNode: HTMLElement | ShadowRoot,
-  filter: (el: HTMLElement | ShadowRoot) => HTMLElement[],
-) {
-  const elements: HTMLElement[] = [];
-
-  elements.push(...filter(rootNode));
-
-  const allCustomElements: HTMLElement[] = [];
-
-  if (rootNode instanceof HTMLElement && rootNode.shadowRoot) {
-    allCustomElements.push(rootNode);
-  }
-  allCustomElements.push(
-    ...rootNode.querySelectorAll<HTMLElement>(SELECTOR_CUSTOM_ELEMENT),
-  );
-
-  for (const el of allCustomElements) {
-    if (el.shadowRoot) {
-      // how to handle elements with a shadowRoot
-      elements.push(...traverseShadowRealm(el.shadowRoot, filter));
-    }
-  }
-
-  return elements;
-}
-
-/**
  * Find all focusable elements including those in:
  * - body -> el -> button
  * - body -> slot -> assignedElement -> button
  * - body -> shadowRoot -> button
  * - body -> slot -> assignedElement -> shadowRoot -> button
  */
-const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
-  const collectFocusable = (node: HTMLElement | ShadowRoot): HTMLElement[] => {
-    const focusable: HTMLElement[] = [];
+const findFocusableElements = (root: HTMLElement) => {
+  const focusable = new Set<HTMLElement>();
 
-    // Find direct focusable elements in the current node
-    if (
-      !(node instanceof ShadowRoot) &&
-      node.tabIndex >= 0 &&
-      node.matches?.(SELECTOR_FOCUSABLE)
-    ) {
-      focusable.push(node);
-    } else {
-      for (const element of node.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE)) {
-        if (element.tabIndex >= 0) focusable.push(element);
+  function isInert(el) {
+    // `closest` works across shadow boundaries
+    return el.closest("[inert]") !== null;
+  }
+
+  function isVisible(el) {
+    if (!(el instanceof HTMLElement)) return false;
+
+    const style = getComputedStyle(el);
+    return (
+      style.display !== "none" &&
+      style.visibility !== "hidden" &&
+      !el.hasAttribute("hidden")
+    );
+  }
+
+  const focusableTags = new Set(["BUTTON", "INPUT", "SELECT", "TEXTAREA"]);
+
+  function isFocusable(el: HTMLElement): boolean {
+    const tagName = el.tagName;
+    if (focusableTags.has(tagName)) return true;
+    if (tagName === "A" && el.hasAttribute("href")) return true;
+    const tabindex = el.getAttribute("tabindex");
+    if (tabindex !== null && tabindex !== "-1") return true;
+    return false;
+  }
+
+  function walk(node: Element | ShadowRoot) {
+    if (!node) return;
+
+    if (node instanceof HTMLSlotElement) {
+      // Slot handling
+      const assigned = node.assignedElements({ flatten: true });
+      assigned.forEach(walk);
+    } else if (node instanceof HTMLElement) {
+      if (isFocusable(node) && isVisible(node) && !isInert(node)) {
+        focusable.add(node);
+      } else {
+        // Shadow DOM
+        if (node.shadowRoot) {
+          walk(node.shadowRoot);
+        } else {
+          for (const ele of node.children) {
+            walk(ele);
+          }
+        }
       }
     }
 
-    // Handle slotted content - traverse into assigned elements and their shadow roots
-    for (const slot of node.querySelectorAll<HTMLSlotElement>("slot")) {
-      for (const assigned of slot.assignedElements({ flatten: true }) as HTMLElement[]) {
-        focusable.push(...traverseShadowRealm(assigned, collectFocusable));
-      }
+    // document fragment
+    for (const ele of node.children) {
+      walk(ele);
     }
+  }
 
-    return focusable;
-  };
+  walk(root);
 
-  return traverseShadowRealm(el, collectFocusable);
+  return Array.from(focusable);
 };
 
 /**
@@ -211,8 +209,13 @@ export class Blur extends LitElement {
       this.setAttribute("aria-hidden", "true");
     }
 
+    // Store the element to restore focus to before changing enabled state
+    const elementToFocus = this.lastActiveElement as HTMLElement;
+
     this.enabled = false;
-    (this.lastActiveElement as HTMLElement)?.focus();
+
+    // Restore focus after state change
+    elementToFocus?.focus();
   }
 
   /** Enable the blur element */
@@ -248,7 +251,7 @@ export class Blur extends LitElement {
   }
 
   private focusableElements() {
-    return findFocusableElements(this).filter((element) => element.offsetWidth > 0);
+    return findFocusableElements(this);
   }
 
   protected updated(changed: PropertyValueMap<any>): void {
@@ -339,6 +342,7 @@ export class Blur extends LitElement {
 
     this.role = "dialog";
 
+    // Listen for keyboard events globally since they can be dispatched on window or document
     window.addEventListener("keydown", this.keyDownListener);
     window.addEventListener("keyup", this.keyUpListener);
   }
@@ -349,9 +353,10 @@ export class Blur extends LitElement {
     //       it only disables when all are disabled.
     this.tryUnlock();
 
-    super.disconnectedCallback();
-
+    // Remove keyboard event listeners
     window.removeEventListener("keydown", this.keyDownListener);
     window.removeEventListener("keyup", this.keyUpListener);
+
+    super.disconnectedCallback();
   }
 }
