@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.4.6 (2026-01-22)
+
+### Fixes
+
+- a-blur: simplify finding focusable elements
+
 ## 4.4.5 (2026-01-22)
 
 ### Fixes
