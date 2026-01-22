@@ -6,6 +6,7 @@ const SELECTOR_CUSTOM_ELEMENT =
   "*:not(br,span,script,slot,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)";
 
 const SELECTOR_FOCUSABLE = "button, a[href], input, select, textarea, [tabindex]";
+const SELECTOR_UNFOCUSABLE = '&[inert]';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -95,7 +96,8 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
     if (
       !(node instanceof ShadowRoot) &&
       node.tabIndex >= 0 &&
-      node.matches?.(SELECTOR_FOCUSABLE)
+      node.matches?.(SELECTOR_FOCUSABLE) &&
+      !node.matches?.(SELECTOR_UNFOCUSABLE)
     ) {
       focusable.push(node);
     } else {
@@ -107,7 +109,10 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
     // Handle slotted content - traverse into assigned elements and their shadow roots
     for (const slot of node.querySelectorAll<HTMLSlotElement>("slot")) {
       for (const assigned of slot.assignedElements({ flatten: true }) as HTMLElement[]) {
-        focusable.push(...traverseShadowRealm(assigned, collectFocusable));
+        // unoptimized way to ignore child nodes that cant be focused due to "inert" etc.
+        if (!assigned.matches?.(SELECTOR_UNFOCUSABLE)) {
+          focusable.push(...traverseShadowRealm(assigned, collectFocusable));
+        }
       }
     }
 

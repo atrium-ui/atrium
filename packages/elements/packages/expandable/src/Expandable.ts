@@ -108,6 +108,12 @@ export class Expandable extends LitElement {
     const content = this.content;
     if (content) {
       content.setAttribute("aria-hidden", String(!this.opened));
+
+      if (this.opened) {
+        content.setAttribute("inert", "");
+      } else {
+        content.removeAttribute("inert");
+      }
     }
 
     const ev = new CustomEvent("change", { bubbles: true, cancelable: true });
@@ -238,7 +244,6 @@ export class Expandable extends LitElement {
       <div
         class="container"
         part="container"
-        ?inert=${!this.opened}
         hidden=${ifDefined(!this.opened ? "until-found" : undefined)}
         @beforematch=${this.onBeforeMatch}
       >
