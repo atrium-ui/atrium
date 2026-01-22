@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.4.3 (2026-01-22)
+
+### Fixes
+
+- a-popover: double dialog role
+
 ## 4.4.2 (2026-01-21)
 
 ### Fixes
