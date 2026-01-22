@@ -2,11 +2,7 @@ import { LitElement, type PropertyValueMap, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
 import { ScrollLock } from "@sv/scroll-lock";
 
-const SELECTOR_CUSTOM_ELEMENT =
-  "*:not(br,span,script,slot,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)";
-
 const SELECTOR_FOCUSABLE = "button, a[href], input, select, textarea, [tabindex]";
-const SELECTOR_UNFOCUSABLE = "[inert]";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -208,8 +204,13 @@ export class Blur extends LitElement {
       this.setAttribute("aria-hidden", "true");
     }
 
+    // Store the element to restore focus to before changing enabled state
+    const elementToFocus = this.lastActiveElement as HTMLElement;
+
     this.enabled = false;
-    (this.lastActiveElement as HTMLElement)?.focus();
+
+    // Restore focus after state change
+    elementToFocus?.focus();
   }
 
   /** Enable the blur element */
@@ -329,15 +330,18 @@ export class Blur extends LitElement {
       },
       { capture: true },
     );
-
-    this.addEventListener("keydown", this.keyDownListener);
-    this.addEventListener("keyup", this.keyUpListener);
   }
 
   public connectedCallback() {
     super.connectedCallback();
 
     this.role = "dialog";
+
+    // Listen for keyboard events globally since they can be dispatched on window or document
+    if (typeof window !== "undefined") {
+      window.addEventListener("keydown", this.keyDownListener);
+      window.addEventListener("keyup", this.keyUpListener);
+    }
   }
 
   public disconnectedCallback(): void {
@@ -345,6 +349,12 @@ export class Blur extends LitElement {
     //			 So that if multiple blur elements are enabled,
     //       it only disables when all are disabled.
     this.tryUnlock();
+
+    // Remove keyboard event listeners
+    if (typeof window !== "undefined") {
+      window.removeEventListener("keydown", this.keyDownListener);
+      window.removeEventListener("keyup", this.keyUpListener);
+    }
 
     super.disconnectedCallback();
   }
