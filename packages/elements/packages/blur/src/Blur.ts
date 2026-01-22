@@ -71,14 +71,14 @@ const findFocusableElements = (root: HTMLElement) => {
     );
   }
 
-  const focusableTags = new Set(['BUTTON', 'INPUT', 'SELECT', 'TEXTAREA']);
+  const focusableTags = new Set(["BUTTON", "INPUT", "SELECT", "TEXTAREA"]);
 
   function isFocusable(el: HTMLElement): boolean {
     const tagName = el.tagName;
     if (focusableTags.has(tagName)) return true;
-    if (tagName === 'A' && el.hasAttribute('href')) return true;
-    const tabindex = el.getAttribute('tabindex');
-    if (tabindex !== null && tabindex !== '-1') return true;
+    if (tagName === "A" && el.hasAttribute("href")) return true;
+    const tabindex = el.getAttribute("tabindex");
+    if (tabindex !== null && tabindex !== "-1") return true;
     return false;
   }
 
@@ -103,7 +103,6 @@ const findFocusableElements = (root: HTMLElement) => {
         }
       }
     }
-
 
     // document fragment
     for (const ele of node.children) {
