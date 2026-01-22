@@ -1,5 +1,35 @@
 # @sv/elements
 
+## 4.4.7 (2026-01-22)
+
+### Fixes
+
+- a-blur: check for focus loss and reset
+
+## 4.4.6 (2026-01-22)
+
+### Fixes
+
+- a-blur: simplify finding focusable elements
+
+## 4.4.5 (2026-01-22)
+
+### Fixes
+
+- a-blur: traverseShadowRealm does not see shadowRoot of rootNode
+
+## 4.4.4 (2026-01-22)
+
+### Fixes
+
+- a-blur: focusable elements inside shadowRoot within slot not found
+
+## 4.4.3 (2026-01-22)
+
+### Fixes
+
+- a-popover: double dialog role
+
 ## 4.4.2 (2026-01-21)
 
 ### Fixes
