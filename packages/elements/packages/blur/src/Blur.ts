@@ -71,7 +71,16 @@ const findFocusableElements = (root: HTMLElement) => {
     );
   }
 
-  const SELECTOR_FOCUSABLE = `button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])`;
+  const focusableTags = new Set(['BUTTON', 'INPUT', 'SELECT', 'TEXTAREA']);
+
+  function isFocusable(el: HTMLElement): boolean {
+    const tagName = el.tagName;
+    if (focusableTags.has(tagName)) return true;
+    if (tagName === 'A' && el.hasAttribute('href')) return true;
+    const tabindex = el.getAttribute('tabindex');
+    if (tabindex !== null && tabindex !== '-1') return true;
+    return false;
+  }
 
   function walk(node: Element | ShadowRoot) {
     if (!node) return;
@@ -81,10 +90,7 @@ const findFocusableElements = (root: HTMLElement) => {
       const assigned = node.assignedElements({ flatten: true });
       assigned.forEach(walk);
     } else if (node instanceof HTMLElement) {
-      // Skip entire inert subtrees early
-      if (isInert(node)) return;
-
-      if (node.matches(SELECTOR_FOCUSABLE) && isVisible(node)) {
+      if (isFocusable(node) && isVisible(node) && !isInert(node)) {
         focusable.add(node);
       } else {
         // Shadow DOM
@@ -97,6 +103,7 @@ const findFocusableElements = (root: HTMLElement) => {
         }
       }
     }
+
 
     // document fragment
     for (const ele of node.children) {
