@@ -58,8 +58,8 @@ function findActiveElement(element: Element | null, visited = new Set<Element>()
  * - body -> shadowRoot -> button
  * - body -> slot -> assignedElement -> shadowRoot -> button
  */
-const findFocusableElements = (root) => {
-  const focusable = new Set();
+const findFocusableElements = (root: HTMLElement) => {
+  const focusable = new Set<HTMLElement>();
 
   function isInert(el) {
     // `closest` works across shadow boundaries
