@@ -1,5 +1,12 @@
 # @sv/elements
 
+## 4.4.8-dev.3 (2026-01-22)
+
+### Fixes
+
+- Optimize finding focusable elements
+- initial inert state
+
 ## 4.4.8-dev.2 (2026-01-22)
 
 ### Fixes
