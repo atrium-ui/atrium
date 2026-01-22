@@ -80,35 +80,41 @@ function traverseShadowRealm(
   return elements;
 }
 
+/**
+ * Find all focusable elements including those in:
+ * - body -> el -> button
+ * - body -> slot -> assignedElement -> button
+ * - body -> shadowRoot -> button
+ * - body -> slot -> assignedElement -> shadowRoot -> button
+ */
 const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
-  const children: HTMLElement[] = [];
+  const collectFocusable = (node: HTMLElement | ShadowRoot): HTMLElement[] => {
+    const focusable: HTMLElement[] = [];
 
-  if (
-    !(el instanceof ShadowRoot) &&
-    el.tabIndex >= 0 &&
-    el.matches?.(SELECTOR_FOCUSABLE)
-  ) {
-    children.push(el);
-  } else {
-    for (const element of el.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE)) {
-      if (element.tabIndex >= 0) children.push(element);
-    }
-  }
-
-  const slots = el.querySelectorAll<HTMLSlotElement>("slot");
-
-  for (const slot of slots) {
-    const assignedElements = slot.assignedElements({ flatten: true }) as HTMLElement[];
-    for (const assignedElement of assignedElements) {
-      for (const element of assignedElement.querySelectorAll<HTMLElement>(
-        SELECTOR_FOCUSABLE,
-      )) {
-        if (element.tabIndex >= 0) children.push(element);
+    // Find direct focusable elements in the current node
+    if (
+      !(node instanceof ShadowRoot) &&
+      node.tabIndex >= 0 &&
+      node.matches?.(SELECTOR_FOCUSABLE)
+    ) {
+      focusable.push(node);
+    } else {
+      for (const element of node.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE)) {
+        if (element.tabIndex >= 0) focusable.push(element);
       }
     }
-  }
 
-  return children;
+    // Handle slotted content - traverse into assigned elements and their shadow roots
+    for (const slot of node.querySelectorAll<HTMLSlotElement>("slot")) {
+      for (const assigned of slot.assignedElements({ flatten: true }) as HTMLElement[]) {
+        focusable.push(...traverseShadowRealm(assigned, collectFocusable));
+      }
+    }
+
+    return focusable;
+  };
+
+  return traverseShadowRealm(el, collectFocusable);
 };
 
 /**
@@ -242,9 +248,7 @@ export class Blur extends LitElement {
   }
 
   private focusableElements() {
-    return traverseShadowRealm(this, findFocusableElements).filter(
-      (element) => element.offsetWidth > 0,
-    );
+    return findFocusableElements(this).filter((element) => element.offsetWidth > 0);
   }
 
   protected updated(changed: PropertyValueMap<any>): void {
