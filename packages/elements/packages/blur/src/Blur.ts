@@ -76,28 +76,31 @@ const findFocusableElements = (root: HTMLElement) => {
   function walk(node: Element | ShadowRoot) {
     if (!node) return;
 
-    if (node instanceof HTMLElement) {
+    if (node instanceof HTMLSlotElement) {
+      // Slot handling
+      const assigned = node.assignedElements({ flatten: true });
+      assigned.forEach(walk);
+    } else if (node instanceof HTMLElement) {
       // Skip entire inert subtrees early
       if (isInert(node)) return;
 
       if (node.matches(SELECTOR_FOCUSABLE) && isVisible(node)) {
         focusable.add(node);
+      } else {
+        // Shadow DOM
+        if (node.shadowRoot) {
+          walk(node.shadowRoot);
+        } else {
+          for (const ele of node.children) {
+            walk(ele);
+          }
+        }
       }
+    }
 
-      // Shadow DOM
-      if (node.shadowRoot) {
-        walk(node.shadowRoot);
-      }
-
-      // Slot handling
-      if (node instanceof HTMLSlotElement) {
-        const assigned = node.assignedElements({ flatten: true });
-        assigned.forEach(walk);
-      }
-    } else {
-      for (const ele of node.children) {
-        walk(ele);
-      }
+    // document fragment
+    for (const ele of node.children) {
+      walk(ele);
     }
   }
 
