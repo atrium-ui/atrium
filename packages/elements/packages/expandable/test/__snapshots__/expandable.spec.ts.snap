@@ -2,11 +2,11 @@
 
 exports[`open and close: closed 1`] = `
 "<a-expandable direction="down">
-      <button slot="toggle" type="button" aria-controls="expandable_content_4" id="expandable_toggle_4">
+      <button slot="toggle" type="button" aria-controls="expandable_content_4" id="expandable_toggle_4" aria-expanded="false">
         <div class="headline">Title</div>
       </button>
 
-      <div role="region" id="expandable_content_4" aria-labelledby="expandable_toggle_4">Content</div>
+      <div role="region" id="expandable_content_4" aria-labelledby="expandable_toggle_4" aria-hidden="true" inert="">Content</div>
     </a-expandable>"
 `;
 
@@ -16,17 +16,17 @@ exports[`open and close: opened 1`] = `
         <div class="headline">Title</div>
       </button>
 
-      <div role="region" id="expandable_content_4" aria-labelledby="expandable_toggle_4" aria-hidden="false" inert="">Content</div>
+      <div role="region" id="expandable_content_4" aria-labelledby="expandable_toggle_4" aria-hidden="false">Content</div>
     </a-expandable>"
 `;
 
 exports[`open and close: closed 2`] = `
 "<a-expandable direction="down">
-      <button slot="toggle" type="button" aria-controls="expandable_content_13" id="expandable_toggle_13">
+      <button slot="toggle" type="button" aria-controls="expandable_content_13" id="expandable_toggle_13" aria-expanded="false">
         <div class="headline">Title</div>
       </button>
 
-      <div role="region" id="expandable_content_13" aria-labelledby="expandable_toggle_13">Content</div>
+      <div role="region" id="expandable_content_13" aria-labelledby="expandable_toggle_13" aria-hidden="true" inert="">Content</div>
     </a-expandable>"
 `;
 
@@ -36,17 +36,17 @@ exports[`open and close: opened 2`] = `
         <div class="headline">Title</div>
       </button>
 
-      <div role="region" id="expandable_content_13" aria-labelledby="expandable_toggle_13" aria-hidden="false" inert="">Content</div>
+      <div role="region" id="expandable_content_13" aria-labelledby="expandable_toggle_13" aria-hidden="false">Content</div>
     </a-expandable>"
 `;
 
 exports[`open and close: closed 3`] = `
 "<a-expandable direction="down">
-      <button slot="toggle" type="button" aria-controls="expandable_content_22" id="expandable_toggle_22">
+      <button slot="toggle" type="button" aria-controls="expandable_content_22" id="expandable_toggle_22" aria-expanded="false">
         <div class="headline">Title</div>
       </button>
 
-      <div role="region" id="expandable_content_22" aria-labelledby="expandable_toggle_22">Content</div>
+      <div role="region" id="expandable_content_22" aria-labelledby="expandable_toggle_22" aria-hidden="true" inert="">Content</div>
     </a-expandable>"
 `;
 
@@ -56,6 +56,6 @@ exports[`open and close: opened 3`] = `
         <div class="headline">Title</div>
       </button>
 
-      <div role="region" id="expandable_content_22" aria-labelledby="expandable_toggle_22" aria-hidden="false" inert="">Content</div>
+      <div role="region" id="expandable_content_22" aria-labelledby="expandable_toggle_22" aria-hidden="false">Content</div>
     </a-expandable>"
 `;
