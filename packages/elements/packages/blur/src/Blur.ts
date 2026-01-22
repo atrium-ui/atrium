@@ -33,11 +33,15 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
   );
 }
 
-function findActiveElement(element: Element | null) {
+function findActiveElement(element: Element | null, visited = new Set<Element>()) {
   if (element === null) return null;
 
+  // Prevent infinite recursion by tracking visited elements
+  if (visited.has(element)) return element;
+  visited.add(element);
+
   if (element.shadowRoot) {
-    const activeElementInShadowRoot = findActiveElement(element.shadowRoot.activeElement);
+    const activeElementInShadowRoot = findActiveElement(element.shadowRoot.activeElement, visited);
     if (activeElementInShadowRoot) return activeElementInShadowRoot;
   }
   return element;
@@ -54,7 +58,14 @@ function traverseShadowRealm(
 
   elements.push(...filter(rootNode));
 
-  for (const el of rootNode.querySelectorAll<HTMLElement>(SELECTOR_CUSTOM_ELEMENT)) {
+  const allCustomElements: HTMLElement[] = [];
+
+  if(rootNode instanceof HTMLElement && rootNode.shadowRoot) {
+    allCustomElements.push(rootNode);
+  }
+  allCustomElements.push(...rootNode.querySelectorAll<HTMLElement>(SELECTOR_CUSTOM_ELEMENT));
+
+  for (const el of allCustomElements) {
     if (el.shadowRoot) {
       // how to handle elements with a shadowRoot
       elements.push(...traverseShadowRealm(el.shadowRoot, filter));
@@ -74,7 +85,7 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
   ) {
     children.push(el);
   } else {
-    for (const element of el.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE)) {
+    for (const element of traverseShadowRealm(el, findFocusableElements)) {
       if (element.tabIndex >= 0) children.push(element);
     }
   }
