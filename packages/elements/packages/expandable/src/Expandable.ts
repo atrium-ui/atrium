@@ -110,9 +110,9 @@ export class Expandable extends LitElement {
       content.setAttribute("aria-hidden", String(!this.opened));
 
       if (this.opened) {
-        content.setAttribute("inert", "");
-      } else {
         content.removeAttribute("inert");
+      } else {
+        content.setAttribute("inert", "");
       }
     }
 
@@ -159,6 +159,8 @@ export class Expandable extends LitElement {
       content.id = this._id_content;
       content.setAttribute("aria-labelledby", this._id_toggle);
     }
+
+    this.onChange();
   }
 
   onBeforeMatch() {
