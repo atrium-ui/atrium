@@ -58,64 +58,61 @@ function findActiveElement(element: Element | null, visited = new Set<Element>()
  * - body -> shadowRoot -> button
  * - body -> slot -> assignedElement -> shadowRoot -> button
  */
- const findFocusableElements = (root) => {
-   const focusable = new Set();
+const findFocusableElements = (root) => {
+  const focusable = new Set();
 
-   function isInert(el) {
-     // `closest` works across shadow boundaries
-     return el.closest('[inert]') !== null;
-   }
+  function isInert(el) {
+    // `closest` works across shadow boundaries
+    return el.closest("[inert]") !== null;
+  }
 
-   function isVisible(el) {
-     if (!(el instanceof HTMLElement)) return false;
+  function isVisible(el) {
+    if (!(el instanceof HTMLElement)) return false;
 
-     const style = getComputedStyle(el);
-     return (
-       style.display !== 'none' &&
-       style.visibility !== 'hidden' &&
-       !el.hasAttribute('hidden')
-     );
-   }
+    const style = getComputedStyle(el);
+    return (
+      style.display !== "none" &&
+      style.visibility !== "hidden" &&
+      !el.hasAttribute("hidden")
+    );
+  }
 
-   function walk(node) {
-     if (!node) return;
+  function walk(node) {
+    if (!node) return;
 
-     if (node instanceof HTMLElement) {
-       // Skip entire inert subtrees early
-       if (isInert(node)) return;
+    if (node instanceof HTMLElement) {
+      // Skip entire inert subtrees early
+      if (isInert(node)) return;
 
-       if (
-         node.matches(SELECTOR_FOCUSABLE) &&
-         isVisible(node)
-       ) {
-         focusable.add(node);
-       }
+      if (node.matches(SELECTOR_FOCUSABLE) && isVisible(node)) {
+        focusable.add(node);
+      }
 
-       // Shadow DOM
-       if (node.shadowRoot) {
-         walk(node.shadowRoot);
-       }
+      // Shadow DOM
+      if (node.shadowRoot) {
+        walk(node.shadowRoot);
+      }
 
-       // Slot handling
-       if (node instanceof HTMLSlotElement) {
-         const assigned = node.assignedElements({ flatten: true });
-         assigned.forEach(walk);
-       }
-     }
+      // Slot handling
+      if (node instanceof HTMLSlotElement) {
+        const assigned = node.assignedElements({ flatten: true });
+        assigned.forEach(walk);
+      }
+    }
 
-     if (
-       node instanceof Document ||
-       node instanceof DocumentFragment ||
-       node instanceof HTMLElement
-     ) {
-       node.childNodes.forEach(walk);
-     }
-   }
+    if (
+      node instanceof Document ||
+      node instanceof DocumentFragment ||
+      node instanceof HTMLElement
+    ) {
+      node.childNodes.forEach(walk);
+    }
+  }
 
-   walk(root);
+  walk(root);
 
-   return Array.from(focusable);
- }
+  return Array.from(focusable);
+};
 
 /**
  * An a-blur functions like a low-level dialog, it manages the focus and scrolling,
