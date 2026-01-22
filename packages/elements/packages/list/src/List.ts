@@ -41,7 +41,6 @@ export class SelectEvent extends CustomEvent<{ selected: ListItemElement }> {
  * @see https://atrium-ui.dev/elements/a-list/
  */
 export class ListElement extends LitElement {
-
   private updateOptionsDOM() {
     const options = this.options;
     for (const option of options) {
