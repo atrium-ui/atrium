@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.4.7 (2026-01-22)
+
+### Fixes
+
+- a-blur: check for focus loss and reset
+
 ## 4.4.6 (2026-01-22)
 
 ### Fixes
