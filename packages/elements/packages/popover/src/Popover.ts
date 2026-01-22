@@ -197,10 +197,6 @@ export class Popover extends Portal {
         });
     });
 
-    if (this.children[0]) {
-      this.children[0].role = "dialog";
-    }
-
     // waits for DOM mutations to finish, to start transitions no enable
     requestAnimationFrame(() => {
       if (
