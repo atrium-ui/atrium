@@ -52,75 +52,70 @@ function findActiveElement(element: Element | null, visited = new Set<Element>()
 }
 
 /**
- * Traverse DOM tree including shadowRoots.
- */
-function traverseShadowRealm(
-  rootNode: HTMLElement | ShadowRoot,
-  filter: (el: HTMLElement | ShadowRoot) => HTMLElement[],
-) {
-  const elements: HTMLElement[] = [];
-
-  elements.push(...filter(rootNode));
-
-  const allCustomElements: HTMLElement[] = [];
-
-  if (rootNode instanceof HTMLElement && rootNode.shadowRoot) {
-    allCustomElements.push(rootNode);
-  }
-  allCustomElements.push(
-    ...rootNode.querySelectorAll<HTMLElement>(SELECTOR_CUSTOM_ELEMENT),
-  );
-
-  for (const el of allCustomElements) {
-    if (el.shadowRoot) {
-      // how to handle elements with a shadowRoot
-      elements.push(...traverseShadowRealm(el.shadowRoot, filter));
-    }
-  }
-
-  return elements;
-}
-
-/**
  * Find all focusable elements including those in:
  * - body -> el -> button
  * - body -> slot -> assignedElement -> button
  * - body -> shadowRoot -> button
  * - body -> slot -> assignedElement -> shadowRoot -> button
  */
-const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
-  const collectFocusable = (node: HTMLElement | ShadowRoot): HTMLElement[] => {
-    const focusable: HTMLElement[] = [];
+ const findFocusableElements = (root) => {
+   const focusable = new Set();
 
-    // Find direct focusable elements in the current node
-    if (
-      !(node instanceof ShadowRoot) &&
-      node.tabIndex >= 0 &&
-      node.matches?.(SELECTOR_FOCUSABLE) &&
-      !node.matches?.(SELECTOR_UNFOCUSABLE)
-    ) {
-      focusable.push(node);
-    } else {
-      for (const element of node.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE)) {
-        if (element.tabIndex >= 0) focusable.push(element);
-      }
-    }
+   function isInert(el) {
+     // `closest` works across shadow boundaries
+     return el.closest('[inert]') !== null;
+   }
 
-    // Handle slotted content - traverse into assigned elements and their shadow roots
-    for (const slot of node.querySelectorAll<HTMLSlotElement>("slot")) {
-      for (const assigned of slot.assignedElements({ flatten: true }) as HTMLElement[]) {
-        // unoptimized way to ignore child nodes that cant be focused due to "inert" etc.
-        if (!assigned.matches?.(SELECTOR_UNFOCUSABLE)) {
-          focusable.push(...traverseShadowRealm(assigned, collectFocusable));
-        }
-      }
-    }
+   function isVisible(el) {
+     if (!(el instanceof HTMLElement)) return false;
 
-    return focusable;
-  };
+     const style = getComputedStyle(el);
+     return (
+       style.display !== 'none' &&
+       style.visibility !== 'hidden' &&
+       !el.hasAttribute('hidden')
+     );
+   }
 
-  return traverseShadowRealm(el, collectFocusable);
-};
+   function walk(node) {
+     if (!node) return;
+
+     if (node instanceof HTMLElement) {
+       // Skip entire inert subtrees early
+       if (isInert(node)) return;
+
+       if (
+         node.matches(SELECTOR_FOCUSABLE) &&
+         isVisible(node)
+       ) {
+         focusable.add(node);
+       }
+
+       // Shadow DOM
+       if (node.shadowRoot) {
+         walk(node.shadowRoot);
+       }
+
+       // Slot handling
+       if (node instanceof HTMLSlotElement) {
+         const assigned = node.assignedElements({ flatten: true });
+         assigned.forEach(walk);
+       }
+     }
+
+     if (
+       node instanceof Document ||
+       node instanceof DocumentFragment ||
+       node instanceof HTMLElement
+     ) {
+       node.childNodes.forEach(walk);
+     }
+   }
+
+   walk(root);
+
+   return Array.from(focusable);
+ }
 
 /**
  * An a-blur functions like a low-level dialog, it manages the focus and scrolling,
@@ -337,15 +332,15 @@ export class Blur extends LitElement {
       },
       { capture: true },
     );
+
+    this.addEventListener("keydown", this.keyDownListener);
+    this.addEventListener("keyup", this.keyUpListener);
   }
 
   public connectedCallback() {
     super.connectedCallback();
 
     this.role = "dialog";
-
-    window.addEventListener("keydown", this.keyDownListener);
-    window.addEventListener("keyup", this.keyUpListener);
   }
 
   public disconnectedCallback(): void {
@@ -355,8 +350,5 @@ export class Blur extends LitElement {
     this.tryUnlock();
 
     super.disconnectedCallback();
-
-    window.removeEventListener("keydown", this.keyDownListener);
-    window.removeEventListener("keyup", this.keyUpListener);
   }
 }
