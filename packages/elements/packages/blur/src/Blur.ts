@@ -263,6 +263,19 @@ export class Blur extends LitElement {
     this.disable();
   }
 
+  private keyUpListener = (e: KeyboardEvent) => {
+    if (e.key === "Tab") {
+      const elements = this.focusableElements();
+      const activeElement = findActiveElement(document.activeElement);
+
+      // if we stpped outside of the dialog scope, reset focus to first element
+      if(!elements.includes(activeElement)) {
+        elements[0]?.focus();
+        e.preventDefault();
+      }
+    }
+  }
+
   private keyDownListener = (e: KeyboardEvent) => {
     if (!this.enabled) return;
 
@@ -327,6 +340,7 @@ export class Blur extends LitElement {
     this.role = "dialog";
 
     window.addEventListener("keydown", this.keyDownListener);
+    window.addEventListener("keyup", this.keyUpListener);
   }
 
   public disconnectedCallback(): void {
@@ -338,5 +352,6 @@ export class Blur extends LitElement {
     super.disconnectedCallback();
 
     window.removeEventListener("keydown", this.keyDownListener);
+    window.removeEventListener("keyup", this.keyUpListener);
   }
 }
