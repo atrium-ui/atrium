@@ -2,8 +2,6 @@ import { LitElement, type PropertyValueMap, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
 import { ScrollLock } from "@sv/scroll-lock";
 
-const SELECTOR_FOCUSABLE = "button, a[href], input, select, textarea, [tabindex]";
-
 declare global {
   interface HTMLElementTagNameMap {
     "a-blur": Blur;
@@ -73,7 +71,9 @@ const findFocusableElements = (root: HTMLElement) => {
     );
   }
 
-  function walk(node) {
+  const SELECTOR_FOCUSABLE = `button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])`;
+
+  function walk(node: Element | ShadowRoot) {
     if (!node) return;
 
     if (node instanceof HTMLElement) {
@@ -94,14 +94,10 @@ const findFocusableElements = (root: HTMLElement) => {
         const assigned = node.assignedElements({ flatten: true });
         assigned.forEach(walk);
       }
-    }
-
-    if (
-      node instanceof Document ||
-      node instanceof DocumentFragment ||
-      node instanceof HTMLElement
-    ) {
-      node.childNodes.forEach(walk);
+    } else {
+      for (const ele of node.children) {
+        walk(ele);
+      }
     }
   }
 
@@ -246,7 +242,7 @@ export class Blur extends LitElement {
   }
 
   private focusableElements() {
-    return findFocusableElements(this).filter((element) => element.offsetWidth > 0);
+    return findFocusableElements(this);
   }
 
   protected updated(changed: PropertyValueMap<any>): void {
@@ -338,10 +334,8 @@ export class Blur extends LitElement {
     this.role = "dialog";
 
     // Listen for keyboard events globally since they can be dispatched on window or document
-    if (typeof window !== "undefined") {
-      window.addEventListener("keydown", this.keyDownListener);
-      window.addEventListener("keyup", this.keyUpListener);
-    }
+    window.addEventListener("keydown", this.keyDownListener);
+    window.addEventListener("keyup", this.keyUpListener);
   }
 
   public disconnectedCallback(): void {
@@ -351,10 +345,8 @@ export class Blur extends LitElement {
     this.tryUnlock();
 
     // Remove keyboard event listeners
-    if (typeof window !== "undefined") {
-      window.removeEventListener("keydown", this.keyDownListener);
-      window.removeEventListener("keyup", this.keyUpListener);
-    }
+    window.removeEventListener("keydown", this.keyDownListener);
+    window.removeEventListener("keyup", this.keyUpListener);
 
     super.disconnectedCallback();
   }
