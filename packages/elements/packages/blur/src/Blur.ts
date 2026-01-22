@@ -6,7 +6,7 @@ const SELECTOR_CUSTOM_ELEMENT =
   "*:not(br,span,script,slot,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)";
 
 const SELECTOR_FOCUSABLE = "button, a[href], input, select, textarea, [tabindex]";
-const SELECTOR_UNFOCUSABLE = "&[inert]";
+const SELECTOR_UNFOCUSABLE = "[inert]";
 
 declare global {
   interface HTMLElementTagNameMap {
