@@ -269,12 +269,12 @@ export class Blur extends LitElement {
       const activeElement = findActiveElement(document.activeElement);
 
       // if we stpped outside of the dialog scope, reset focus to first element
-      if(!elements.includes(activeElement)) {
+      if (!elements.includes(activeElement)) {
         elements[0]?.focus();
         e.preventDefault();
       }
     }
-  }
+  };
 
   private keyDownListener = (e: KeyboardEvent) => {
     if (!this.enabled) return;
