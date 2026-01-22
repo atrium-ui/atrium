@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.4.4 (2026-01-22)
+
+### Fixes
+
+- a-blur: focusable elements inside shadowRoot within slot not found
+
 ## 4.4.3 (2026-01-22)
 
 ### Fixes
