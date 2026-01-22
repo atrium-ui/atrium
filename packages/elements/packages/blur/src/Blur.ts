@@ -41,7 +41,10 @@ function findActiveElement(element: Element | null, visited = new Set<Element>()
   visited.add(element);
 
   if (element.shadowRoot) {
-    const activeElementInShadowRoot = findActiveElement(element.shadowRoot.activeElement, visited);
+    const activeElementInShadowRoot = findActiveElement(
+      element.shadowRoot.activeElement,
+      visited,
+    );
     if (activeElementInShadowRoot) return activeElementInShadowRoot;
   }
   return element;
@@ -60,10 +63,12 @@ function traverseShadowRealm(
 
   const allCustomElements: HTMLElement[] = [];
 
-  if(rootNode instanceof HTMLElement && rootNode.shadowRoot) {
+  if (rootNode instanceof HTMLElement && rootNode.shadowRoot) {
     allCustomElements.push(rootNode);
   }
-  allCustomElements.push(...rootNode.querySelectorAll<HTMLElement>(SELECTOR_CUSTOM_ELEMENT));
+  allCustomElements.push(
+    ...rootNode.querySelectorAll<HTMLElement>(SELECTOR_CUSTOM_ELEMENT),
+  );
 
   for (const el of allCustomElements) {
     if (el.shadowRoot) {
