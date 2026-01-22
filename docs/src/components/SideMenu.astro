@@ -23,25 +23,35 @@ const allDocs = await getCollection("docs");
 
 <nav>
   <ul class="gap-module-2xl">
-    {allDocs
-      .filter(doc => {
-        const parts = doc.id.split("/");
-        return parts.length === 2 && parts[0] === category;
-      })
-      .sort((a, b) => a.data.title?.localeCompare(b.data.title || "") || 0)
-      .sort((a, b) => (a.data.order || 1) > (b.data.order || 1) ? 1 : -1)
-      .map(doc => {
-        return (
-          <li class="mb-module-xs">
-            <a
-              class="text-link [&[aria-current]]:text-link-active font-medium w-full flex justify-between items-center"
-              href={`/${[...base.split("/"), ...doc.id.split("/")].filter(Boolean).join("/")}`}
-              aria-current={doc.id === slug ? "page" : undefined}
-            >
-              <span>{doc.data.title}</span>
-            </a>
-          </li>
-        )
-      })}
+    {
+      allDocs
+        .filter(doc => {
+          const parts = doc.id.split("/");
+          if (parts.length === 2 && parts[0] === category) return true;
+          if (parts.length === 3 && parts[0] === category && parts[2] === "index")
+            return true;
+          return false;
+        })
+        .sort((a, b) => {
+          const orderA = a.data.order ?? 1;
+          const orderB = b.data.order ?? 1;
+          if (orderA !== orderB) return orderA - orderB;
+          // same order, sort alphabetically
+          return a.data.title?.localeCompare(b.data.title || "") || 0;
+        })
+        .map(doc => {
+          return (
+            <li class="mb-module-xs">
+              <a
+                class="text-link [&[aria-current]]:text-link-active font-medium w-full flex justify-between items-center"
+                href={`/${[...base.split("/"), ...doc.id.split("/")].filter(Boolean).join("/")}`}
+                aria-current={doc.id === slug ? "page" : undefined}
+              >
+                <span>{doc.data.title}</span>
+              </a>
+            </li>
+          );
+        })
+    }
   </ul>
 </nav>
