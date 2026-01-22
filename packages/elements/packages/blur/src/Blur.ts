@@ -84,9 +84,7 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
   for (const slot of slots) {
     const assignedElements = slot.assignedElements({ flatten: true }) as HTMLElement[];
     for (const assignedElement of assignedElements) {
-      for (const element of assignedElement.querySelectorAll<HTMLElement>(
-        SELECTOR_FOCUSABLE,
-      )) {
+      for (const element of traverseShadowRealm(assignedElement, findFocusableElements)) {
         if (element.tabIndex >= 0) children.push(element);
       }
     }
