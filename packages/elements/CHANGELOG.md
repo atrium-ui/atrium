@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.5.2 (2026-01-23)
+
+### Fixes
+
+- a-blur: isInert not actually working across shadow boundaries
+
 ## 4.5.1 (2026-01-23)
 
 ### Fixes
