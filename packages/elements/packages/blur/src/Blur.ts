@@ -45,12 +45,23 @@ function findActiveElement(element: Element | null, visited = new Set<Element>()
   return element;
 }
 
-function isInert(el) {
-  // `closest` works across shadow boundaries
-  return el.closest("[inert]") !== null;
+function isInert(el: Element): boolean {
+  let current: Element | null = el;
+  while (current) {
+    if (current.closest("[inert]") !== null) {
+      return true;
+    }
+    const root = current.getRootNode();
+    if (root instanceof ShadowRoot) {
+      current = root.host;
+    } else {
+      break;
+    }
+  }
+  return false;
 }
 
-const SELECTOR_CUSTOM_ELEMENTS = `*:not(br,span,script,slot,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)`;
+const SELECTOR_CUSTOM_ELEMENTS = `*:not(nav,ul,li,path,a,br,span,script,slot,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)`;
 const SELECTOR_FOCUSABLE = `button, a[href], input, select, textarea, [tabindex]`;
 
 /**
@@ -79,6 +90,7 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
 
       if (node instanceof HTMLSlotElement) {
         for (const assigned of node.assignedElements() as HTMLElement[]) {
+          if(isInert(assigned)) continue;
           focusable.push(...collectFocusable(assigned));
         }
       }
