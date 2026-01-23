@@ -32,7 +32,7 @@ export const Default = {
             <div class="group my-1 inline-block rounded-md border border-gray-300 bg-white opacity-0 shadow-lg transition-opacity duration-100 group-[&[enabled]]:opacity-100">
               <a-list
                 style={`width: ${210}px`}
-                class="group scrollbar-thin scrollbar-transparent -translate-y-1 max-h-[300px] w-auto overflow-auto overflow-hidden rounded-md bg-white transition-all duration-150 group-[&[enabled]]:translate-y-0"
+                class="group scrollbar-thin scrollbar-transparent -translate-y-1 block max-h-[300px] w-auto overflow-auto overflow-hidden rounded-md bg-white transition-all duration-150 group-[&[enabled]]:translate-y-0"
                 onChange={(e: CustomEvent) => {
                   const option = e.detail.selected;
                   const link = option.querySelector("a[href]");
