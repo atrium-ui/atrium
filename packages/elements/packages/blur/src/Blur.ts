@@ -50,7 +50,8 @@ function isInert(el) {
   return el.closest("[inert]") !== null;
 }
 
-const SELECTOR_FOCUSABLE = "button, a[href], input, select, textarea, [tabindex]";
+const SELECTOR_CUSTOM_ELEMENTS = `*:not(br,span,script,slot,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)`;
+const SELECTOR_FOCUSABLE = `button, a[href], input, select, textarea, [tabindex]`;
 
 /**
  * Find all focusable elements including those in:
@@ -85,7 +86,7 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
 
     // check all children
     const children = node.querySelectorAll<HTMLElement>(
-      [SELECTOR_FOCUSABLE, "slot"].join(", "),
+      [SELECTOR_CUSTOM_ELEMENTS, SELECTOR_FOCUSABLE, "slot"].join(", "),
     );
 
     for (const element of children) {
