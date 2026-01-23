@@ -2,11 +2,6 @@ import { LitElement, type PropertyValueMap, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
 import { ScrollLock } from "@sv/scroll-lock";
 
-const SELECTOR_CUSTOM_ELEMENT =
-  "*:not(br,span,script,slot,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)";
-
-const SELECTOR_FOCUSABLE = "button, a[href], input, select, textarea, [tabindex]";
-
 declare global {
   interface HTMLElementTagNameMap {
     "a-blur": Blur;
@@ -50,35 +45,12 @@ function findActiveElement(element: Element | null, visited = new Set<Element>()
   return element;
 }
 
-/**
- * Traverse DOM tree including shadowRoots.
- */
-function traverseShadowRealm(
-  rootNode: HTMLElement | ShadowRoot,
-  filter: (el: HTMLElement | ShadowRoot) => HTMLElement[],
-) {
-  const elements: HTMLElement[] = [];
-
-  elements.push(...filter(rootNode));
-
-  const allCustomElements: HTMLElement[] = [];
-
-  if (rootNode instanceof HTMLElement && rootNode.shadowRoot) {
-    allCustomElements.push(rootNode);
-  }
-  allCustomElements.push(
-    ...rootNode.querySelectorAll<HTMLElement>(SELECTOR_CUSTOM_ELEMENT),
-  );
-
-  for (const el of allCustomElements) {
-    if (el.shadowRoot) {
-      // how to handle elements with a shadowRoot
-      elements.push(...traverseShadowRealm(el.shadowRoot, filter));
-    }
-  }
-
-  return elements;
+function isInert(el) {
+  // `closest` works across shadow boundaries
+  return el.closest("[inert]") !== null;
 }
+
+const SELECTOR_FOCUSABLE = "button, a[href], input, select, textarea, [tabindex]";
 
 /**
  * Find all focusable elements including those in:
@@ -91,30 +63,39 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
   const collectFocusable = (node: HTMLElement | ShadowRoot): HTMLElement[] => {
     const focusable: HTMLElement[] = [];
 
-    // Find direct focusable elements in the current node
-    if (
-      !(node instanceof ShadowRoot) &&
-      node.tabIndex >= 0 &&
-      node.matches?.(SELECTOR_FOCUSABLE)
-    ) {
-      focusable.push(node);
-    } else {
-      for (const element of node.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE)) {
-        if (element.tabIndex >= 0) focusable.push(element);
+    if (node instanceof HTMLElement) {
+      if (node.tabIndex >= 0 && !isInert(node)) {
+        // Find direct focusable elements in the current node
+        // return here, nested focusable elements are not allowed
+        return [node];
+      }
+
+      if (node.shadowRoot) {
+        focusable.push(...collectFocusable(node.shadowRoot));
+        // Return here because shadow root handles all children via slots
+        return focusable;
+      }
+
+      if (node instanceof HTMLSlotElement) {
+        for (const assigned of node.assignedElements() as HTMLElement[]) {
+          focusable.push(...collectFocusable(assigned));
+        }
       }
     }
 
-    // Handle slotted content - traverse into assigned elements and their shadow roots
-    for (const slot of node.querySelectorAll<HTMLSlotElement>("slot")) {
-      for (const assigned of slot.assignedElements({ flatten: true }) as HTMLElement[]) {
-        focusable.push(...traverseShadowRealm(assigned, collectFocusable));
-      }
+    // check all children
+    const children = node.querySelectorAll<HTMLElement>(
+      [SELECTOR_FOCUSABLE, "slot"].join(", "),
+    );
+
+    for (const element of children) {
+      focusable.push(...collectFocusable(element));
     }
 
     return focusable;
   };
 
-  return traverseShadowRealm(el, collectFocusable);
+  return collectFocusable(el);
 };
 
 /**
@@ -211,8 +192,13 @@ export class Blur extends LitElement {
       this.setAttribute("aria-hidden", "true");
     }
 
+    // Store the element to restore focus to before changing enabled state
+    const elementToFocus = this.lastActiveElement as HTMLElement;
+
     this.enabled = false;
-    (this.lastActiveElement as HTMLElement)?.focus();
+
+    // Restore focus after state change
+    elementToFocus?.focus();
   }
 
   /** Enable the blur element */
@@ -248,7 +234,7 @@ export class Blur extends LitElement {
   }
 
   private focusableElements() {
-    return findFocusableElements(this).filter((element) => element.offsetWidth > 0);
+    return findFocusableElements(this);
   }
 
   protected updated(changed: PropertyValueMap<any>): void {
@@ -262,19 +248,6 @@ export class Blur extends LitElement {
     if (closeEvent.defaultPrevented) return;
     this.disable();
   }
-
-  private keyUpListener = (e: KeyboardEvent) => {
-    if (e.key === "Tab") {
-      const elements = this.focusableElements();
-      const activeElement = findActiveElement(document.activeElement);
-
-      // if we stpped outside of the dialog scope, reset focus to first element
-      if (!elements.includes(activeElement)) {
-        elements[0]?.focus();
-        e.preventDefault();
-      }
-    }
-  };
 
   private keyDownListener = (e: KeyboardEvent) => {
     if (!this.enabled) return;
@@ -339,8 +312,8 @@ export class Blur extends LitElement {
 
     this.role = "dialog";
 
+    // Listen for keyboard events globally since they can be dispatched on window or document
     window.addEventListener("keydown", this.keyDownListener);
-    window.addEventListener("keyup", this.keyUpListener);
   }
 
   public disconnectedCallback(): void {
@@ -349,9 +322,9 @@ export class Blur extends LitElement {
     //       it only disables when all are disabled.
     this.tryUnlock();
 
-    super.disconnectedCallback();
-
+    // Remove keyboard event listeners
     window.removeEventListener("keydown", this.keyDownListener);
-    window.removeEventListener("keyup", this.keyUpListener);
+
+    super.disconnectedCallback();
   }
 }

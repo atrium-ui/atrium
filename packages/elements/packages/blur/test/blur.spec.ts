@@ -230,6 +230,9 @@ test("findFocusableElements: scenario 1 - direct button", async () => {
   const blur = container.querySelector("a-blur");
   const button = container.querySelector(".direct-button");
 
+  // Wait for custom element to be upgraded
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
   // Hack offsetWidth to make focusableElements() work
   Object.defineProperty(button, "offsetWidth", { value: 100 });
 
@@ -256,6 +259,9 @@ test("findFocusableElements: scenario 2 - slotted button", async () => {
 
   const blur = container.querySelector("a-blur");
   const button = container.querySelector(".slotted-button");
+
+  // Wait for custom element to be upgraded
+  await new Promise((resolve) => setTimeout(resolve, 0));
 
   // Hack offsetWidth to make focusableElements() work
   Object.defineProperty(button, "offsetWidth", { value: 100 });
