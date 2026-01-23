@@ -1,5 +1,15 @@
 # @sv/elements
 
+## 4.5.0 (2026-01-23)
+
+### Features
+
+- a-blur: fix focus control in some edge-cases (svp/atrium!57)
+
+### Fixes
+
+- a-blur: Ignore focusable elements that are not visible
+
 ## 4.4.8-dev.4 (2026-01-23)
 
 ### Fixes
