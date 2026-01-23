@@ -71,8 +71,8 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
       }
 
       if (node.shadowRoot) {
-        // return here, we look in slots for children of shadowRoot elements
-        return collectFocusable(node.shadowRoot);
+        collectFocusable(node.shadowRoot);
+        // TODO: return here? we look in slots for children of shadowRoot elements
       }
 
       if (node instanceof HTMLSlotElement) {
@@ -83,9 +83,11 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
     }
 
     // check all children
-    for (const element of node.querySelectorAll<HTMLElement>(
+    const children = node.querySelectorAll<HTMLElement>(
       [SELECTOR_FOCUSABLE, "slot"].join(", "),
-    )) {
+    );
+
+    for (const element of children) {
       focusable.push(...collectFocusable(element));
     }
 
@@ -246,19 +248,6 @@ export class Blur extends LitElement {
     this.disable();
   }
 
-  private keyUpListener = (e: KeyboardEvent) => {
-    if (e.key === "Tab") {
-      const elements = this.focusableElements();
-      const activeElement = findActiveElement(document.activeElement);
-
-      // if we stpped outside of the dialog scope, reset focus to first element
-      if (!elements.includes(activeElement)) {
-        elements[0]?.focus();
-        e.preventDefault();
-      }
-    }
-  };
-
   private keyDownListener = (e: KeyboardEvent) => {
     if (!this.enabled) return;
 
@@ -324,7 +313,6 @@ export class Blur extends LitElement {
 
     // Listen for keyboard events globally since they can be dispatched on window or document
     window.addEventListener("keydown", this.keyDownListener);
-    window.addEventListener("keyup", this.keyUpListener);
   }
 
   public disconnectedCallback(): void {
@@ -335,7 +323,6 @@ export class Blur extends LitElement {
 
     // Remove keyboard event listeners
     window.removeEventListener("keydown", this.keyDownListener);
-    window.removeEventListener("keyup", this.keyUpListener);
 
     super.disconnectedCallback();
   }
