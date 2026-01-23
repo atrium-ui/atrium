@@ -90,7 +90,7 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
 
       if (node instanceof HTMLSlotElement) {
         for (const assigned of node.assignedElements() as HTMLElement[]) {
-          if(isInert(assigned)) continue;
+          if (isInert(assigned)) continue;
           focusable.push(...collectFocusable(assigned));
         }
       }
