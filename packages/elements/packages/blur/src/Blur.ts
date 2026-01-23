@@ -71,8 +71,9 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
       }
 
       if (node.shadowRoot) {
-        collectFocusable(node.shadowRoot);
-        // TODO: return here? we look in slots for children of shadowRoot elements
+        focusable.push(...collectFocusable(node.shadowRoot));
+        // Return here because shadow root handles all children via slots
+        return focusable;
       }
 
       if (node instanceof HTMLSlotElement) {
