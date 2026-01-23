@@ -45,6 +45,13 @@ function findActiveElement(element: Element | null, visited = new Set<Element>()
   return element;
 }
 
+function isInert(el) {
+  // `closest` works across shadow boundaries
+  return el.closest("[inert]") !== null;
+}
+
+const SELECTOR_FOCUSABLE = "button, a[href], input, select, textarea, [tabindex]";
+
 /**
  * Find all focusable elements including those in:
  * - body -> el -> button
@@ -52,67 +59,40 @@ function findActiveElement(element: Element | null, visited = new Set<Element>()
  * - body -> shadowRoot -> button
  * - body -> slot -> assignedElement -> shadowRoot -> button
  */
-const findFocusableElements = (root: HTMLElement) => {
-  const focusable = new Set<HTMLElement>();
+const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
+  const collectFocusable = (node: HTMLElement | ShadowRoot): HTMLElement[] => {
+    const focusable: HTMLElement[] = [];
 
-  function isInert(el) {
-    // `closest` works across shadow boundaries
-    return el.closest("[inert]") !== null;
-  }
+    if (node instanceof HTMLElement) {
+      if (node.tabIndex >= 0 && !isInert(node)) {
+        // Find direct focusable elements in the current node
+        // return here, nested focusable elements are not allowed
+        return [node];
+      }
 
-  function isVisible(el) {
-    if (!(el instanceof HTMLElement)) return false;
+      if (node.shadowRoot) {
+        // return here, we look in slots for children of shadowRoot elements
+        return collectFocusable(node.shadowRoot);
+      }
 
-    const style = getComputedStyle(el);
-    return (
-      style.display !== "none" &&
-      style.visibility !== "hidden" &&
-      !el.hasAttribute("hidden")
-    );
-  }
-
-  const focusableTags = new Set(["BUTTON", "INPUT", "SELECT", "TEXTAREA"]);
-
-  function isFocusable(el: HTMLElement): boolean {
-    const tagName = el.tagName;
-    if (focusableTags.has(tagName)) return true;
-    if (tagName === "A" && el.hasAttribute("href")) return true;
-    const tabindex = el.getAttribute("tabindex");
-    if (tabindex !== null && tabindex !== "-1") return true;
-    return false;
-  }
-
-  function walk(node: Element | ShadowRoot) {
-    if (!node) return;
-
-    if (node instanceof HTMLSlotElement) {
-      // Slot handling
-      const assigned = node.assignedElements({ flatten: true });
-      assigned.forEach(walk);
-    } else if (node instanceof HTMLElement) {
-      if (isFocusable(node) && isVisible(node) && !isInert(node)) {
-        focusable.add(node);
-      } else {
-        // Shadow DOM
-        if (node.shadowRoot) {
-          walk(node.shadowRoot);
-        } else {
-          for (const ele of node.children) {
-            walk(ele);
-          }
+      if (node instanceof HTMLSlotElement) {
+        for (const assigned of node.assignedElements() as HTMLElement[]) {
+          focusable.push(...collectFocusable(assigned));
         }
       }
     }
 
-    // document fragment
-    for (const ele of node.children) {
-      walk(ele);
+    // check all children
+    for (const element of node.querySelectorAll<HTMLElement>(
+      [SELECTOR_FOCUSABLE, "slot"].join(", "),
+    )) {
+      focusable.push(...collectFocusable(element));
     }
-  }
 
-  walk(root);
+    return focusable;
+  };
 
-  return Array.from(focusable);
+  return collectFocusable(el);
 };
 
 /**
