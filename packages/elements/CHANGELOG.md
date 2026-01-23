@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.5.1 (2026-01-23)
+
+### Fixes
+
+- a-blur: Ignores buttons inside custom-elements shadowRoot
+
 ## 4.5.0 (2026-01-23)
 
 ### Features
