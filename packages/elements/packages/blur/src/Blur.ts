@@ -64,7 +64,7 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
     const focusable: HTMLElement[] = [];
 
     if (node instanceof HTMLElement) {
-      if (node.tabIndex >= 0 && !isInert(node)) {
+      if (node.tabIndex >= 0 && node.offsetWidth > 0 && !isInert(node)) {
         // Find direct focusable elements in the current node
         // return here, nested focusable elements are not allowed
         return [node];
