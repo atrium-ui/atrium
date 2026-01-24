@@ -2,6 +2,7 @@ import { LitElement, type TemplateResult, html, css } from "lit";
 import { property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { ref, createRef } from "lit/directives/ref.js";
+import type { Track } from "@sv/elements/track";
 
 export const generateTabId = (index: number): string => {
   return `tab-${index}`;
@@ -213,8 +214,8 @@ export class TabsListElement extends LitElement {
   @state()
   private showRightArrow = false;
 
-  trackRef = createRef();
-  innerTrackRef = createRef();
+  trackRef = createRef<Track>();
+  innerTrackRef = createRef<HTMLElement>();
 
   connectedCallback() {
     super.connectedCallback();
@@ -234,10 +235,13 @@ export class TabsListElement extends LitElement {
       return;
     }
 
+    const overflowWidth = track.overflowWidth as number | undefined ?? 0;
+    const currentPosition = track.currentPosition as number | undefined;
+
     this.showRightArrow =
-      track.overflowWidth > 10 &&
-      !(Math.floor(track.currentPosition || 0) >= Math.floor(track.overflowWidth));
-    this.showLeftArrow = Math.floor(track.currentPosition || 0) > 10;
+      overflowWidth > 10 &&
+      !(Math.floor(currentPosition || 0) >= Math.floor(overflowWidth));
+    this.showLeftArrow = Math.floor(currentPosition || 0) > 10;
   }
 
   onLeftArrowClick = () => {
@@ -245,8 +249,9 @@ export class TabsListElement extends LitElement {
       return;
     }
 
-    let scrollTarget =
-      this.trackRef.value.currentPosition - this.trackRef.value.width / 2;
+    const currentPosition = this.trackRef.value.currentPosition as number | undefined ?? 0;
+    const width = this.trackRef.value.width as number | undefined ?? 0;
+    let scrollTarget = currentPosition - width / 2;
     scrollTarget = Math.max(scrollTarget, 0);
 
     this.trackRef.value.setTarget([scrollTarget, 0]);
@@ -257,9 +262,11 @@ export class TabsListElement extends LitElement {
       return;
     }
 
-    let scrollTarget =
-      this.trackRef.value.currentPosition + this.trackRef.value.width / 2;
-    scrollTarget = Math.min(scrollTarget, this.trackRef.value.overflowWidth);
+    const currentPosition = this.trackRef.value.currentPosition as number | undefined ?? 0;
+    const width = this.trackRef.value.width as number | undefined ?? 0;
+    const overflowWidth = this.trackRef.value.overflowWidth as number | undefined ?? 0;
+    let scrollTarget = currentPosition + width / 2;
+    scrollTarget = Math.min(scrollTarget, overflowWidth);
 
     this.trackRef.value.setTarget([scrollTarget, 0]);
   };
@@ -270,9 +277,9 @@ export class TabsListElement extends LitElement {
     ) as TabsTabElement | null;
     const selectedTabBounds = selectedTab?.getRect();
     const innerTrackBounds = this.innerTrackRef.value?.getBoundingClientRect();
-    const maxScroll = this.trackRef.value?.overflowWidth;
+    const maxScroll = this.trackRef.value?.overflowWidth as number | undefined;
 
-    if (selectedTabBounds && innerTrackBounds && maxScroll) {
+    if (selectedTabBounds && innerTrackBounds && maxScroll !== undefined) {
       const selectedTabX = selectedTabBounds.x - innerTrackBounds.x;
       const scrollTo = Math.max(Math.min(selectedTabX - 90, maxScroll), 0);
       this.trackRef.value?.setTarget([scrollTo, 0]);
@@ -479,12 +486,12 @@ export class TabsPanelElement extends LitElement {
 
   protected render(): TemplateResult {
     const index = this.index;
-    const hiddenValue = !this.selected ? "until-found" : null;
+    const hiddenValue = !this.selected ? "until-found" : undefined;
 
     return html`
       <div
         class="tabs-panel"
-        hidden="${ifDefined(hiddenValue)}"
+        hidden$="${ifDefined(hiddenValue)}"
         tabindex="${!this.selected ? "-1" : ""}"
         aria-hidden="${!this.selected ? "true" : "false"}"
         id="${generatePanelId(index)}"
@@ -536,7 +543,7 @@ export class TabsTabElement extends LitElement {
     `;
   }
 
-  buttonRef = createRef();
+  buttonRef = createRef<HTMLElement>();
 
   @property({ type: Boolean, reflect: true })
   public selected = false;
