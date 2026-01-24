@@ -4,7 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { TabsListElement, TabsPanelElement, TabsElement, TabsTabElement } from "./Tabs.js";
+import {
+  TabsListElement,
+  TabsPanelElement,
+  TabsElement,
+  TabsTabElement,
+} from "./Tabs.js";
 
 // define global interface for typescript check
 declare global {

@@ -16,3 +16,4 @@ import "@sv/elements/box";
 import "@sv/elements/list";
 import "@sv/elements/loader";
 import "@sv/elements/calendar";
+import "@sv/elements/tabs";

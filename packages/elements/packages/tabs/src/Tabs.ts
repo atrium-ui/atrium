@@ -162,78 +162,44 @@ export class TabsListElement extends LitElement {
       }
 
       .tabs-track {
-        overflow: hidden;
+        overflow: visible;
+        display: flex;
         width: 100%;
+      }
+
+      a-track:not(:defined) {
+        overflow: auto;
       }
 
       .tabs-inner-track {
         display: flex;
         gap: 3px;
         position: relative;
-        background-clip: content-box;
       }
 
       .arrow-container {
         position: absolute;
         top: 0;
-        width: 100px;
-        display: none;
+        height: 100%;
         pointer-events: none;
       }
 
       .arrow-container.left {
         left: 0;
-        background: linear-gradient(to right, var(--color-blue-10, #f0f4ff) 0%, var(--color-blue-10, #f0f4ff) 70%, transparent 100%);
       }
 
       .arrow-container.right {
         right: 0;
         justify-content: flex-end;
-        background: linear-gradient(to left, var(--color-blue-10, #f0f4ff) 0%, var(--color-blue-10, #f0f4ff) 70%, transparent 100%);
-      }
-
-      @media (min-width: 768px) {
-        .arrow-container {
-          display: flex;
-        }
       }
 
       .arrow-button {
+        all: unset;
         display: block;
-        padding: 12px;
         pointer-events: auto;
-      }
-
-      .arrow-button.left {
-        padding-left: 12px;
-      }
-
-      .arrow-button.right {
-        padding-right: 12px;
-      }
-
-      .gradient-overlay {
-        position: absolute;
-        top: 0;
+        width: 100%;
         height: 100%;
-        width: 48px;
-        pointer-events: none;
-      }
-
-      .gradient-overlay.left {
-        left: 0;
-        background: linear-gradient(to right, white 0%, white 8%, transparent 100%);
-      }
-
-      .gradient-overlay.right {
-        right: 0;
-        background: linear-gradient(to left, white 0%, white 8%, transparent 100%);
-      }
-
-      @media (min-width: 768px) {
-        .gradient-overlay {
-          display: none;
-        }
+        cursor: pointer;
       }
     `;
   }
@@ -326,14 +292,18 @@ export class TabsListElement extends LitElement {
             ? html`
           <div class="arrow-container left">
             <button
+              type="button"
               tabindex="-1"
-              variant="icon-white"
-              icon="chevron_left_24x24"
               class="arrow-button left"
               @click="${this.onLeftArrowClick}"
-            />
+            >
+              <slot name="arrow-button-left">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15.4238 17.5761C15.6581 17.8104 15.6581 18.1895 15.4238 18.4238C15.1895 18.6581 14.8105 18.6581 14.5762 18.4238L8.57617 12.4238L8.15137 12L8.57617 11.5761L14.5762 5.57613C14.8105 5.34181 15.1895 5.34181 15.4238 5.57613C15.6581 5.81044 15.6581 6.18947 15.4238 6.42378L9.84766 12L15.4238 17.5761Z" fill="#000091"/>
+                </svg>
+              </slot>
+            </button>
           </div>
-          <div class="gradient-overlay left"></div>
         `
             : ""
         }
@@ -342,14 +312,18 @@ export class TabsListElement extends LitElement {
             ? html`
           <div class="arrow-container right">
             <button
+              type="button"
               tabindex="-1"
-              variant="icon-white"
-              icon="chevron_right_24x24"
               class="arrow-button right"
               @click="${this.onRightArrowClick}"
-            />
+            >
+              <slot name="arrow-button-right">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8.57613 6.42378C8.34181 6.18947 8.34181 5.81044 8.57613 5.57613C8.81044 5.34181 9.18947 5.34181 9.42378 5.57613L15.4238 11.5761L15.8486 12L15.4238 12.4238L9.42378 18.4238C9.18947 18.6581 8.81044 18.6581 8.57613 18.4238C8.34181 18.1895 8.34181 17.8104 8.57613 17.5761L14.1523 12L8.57613 6.42378Z" fill="#000091"/>
+                </svg>
+              </slot>
+            </button>
           </div>
-          <div class="gradient-overlay right"></div>
         `
             : ""
         }
