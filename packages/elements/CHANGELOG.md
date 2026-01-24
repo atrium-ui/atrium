@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.6.0 (2026-01-24)
+
+### Features
+
+- Adds a-tabs elements
+
 ## 4.5.2 (2026-01-23)
 
 ### Fixes
