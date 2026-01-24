@@ -39,6 +39,7 @@ await Promise.all([
   buildLib("./packages/track"),
   buildLib("./packages/transition"),
   buildLib("./packages/calendar"),
+  buildLib("./packages/tabs"),
 ]);
 
 export {};

@@ -131,6 +131,11 @@
       "types": "./packages/calendar/src/index.ts",
       "import": "./packages/calendar/dist/index.js",
       "require": "./packages/calendar/dist/index.cjs"
+    },
+    "./tabs": {
+      "types": "./packages/tabs/src/index.ts",
+      "import": "./packages/tabs/dist/index.js",
+      "require": "./packages/tabs/dist/index.cjs"
     }
   }
 }
