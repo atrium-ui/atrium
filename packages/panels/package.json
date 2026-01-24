@@ -1,0 +1,25 @@
+{
+  "name": "@sv/panels",
+  "version": "0.1.0",
+  "author": "Tim Havlicek",
+  "description": "A simple panel layout framework based on css grid.",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "type": "module",
+  "types": "index.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2"
+  },
+  "tsup": {
+    "entry": ["src/index.ts"],
+    "format": ["esm"],
+    "sourcemap": true,
+    "clean": true
+  }
+}
