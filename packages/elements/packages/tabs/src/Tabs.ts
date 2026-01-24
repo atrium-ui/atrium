@@ -235,7 +235,7 @@ export class TabsListElement extends LitElement {
       return;
     }
 
-    const overflowWidth = track.overflowWidth as number | undefined ?? 0;
+    const overflowWidth = (track.overflowWidth as number | undefined) ?? 0;
     const currentPosition = track.currentPosition as number | undefined;
 
     this.showRightArrow =
@@ -249,8 +249,9 @@ export class TabsListElement extends LitElement {
       return;
     }
 
-    const currentPosition = this.trackRef.value.currentPosition as number | undefined ?? 0;
-    const width = this.trackRef.value.width as number | undefined ?? 0;
+    const currentPosition =
+      (this.trackRef.value.currentPosition as number | undefined) ?? 0;
+    const width = (this.trackRef.value.width as number | undefined) ?? 0;
     let scrollTarget = currentPosition - width / 2;
     scrollTarget = Math.max(scrollTarget, 0);
 
@@ -262,9 +263,10 @@ export class TabsListElement extends LitElement {
       return;
     }
 
-    const currentPosition = this.trackRef.value.currentPosition as number | undefined ?? 0;
-    const width = this.trackRef.value.width as number | undefined ?? 0;
-    const overflowWidth = this.trackRef.value.overflowWidth as number | undefined ?? 0;
+    const currentPosition =
+      (this.trackRef.value.currentPosition as number | undefined) ?? 0;
+    const width = (this.trackRef.value.width as number | undefined) ?? 0;
+    const overflowWidth = (this.trackRef.value.overflowWidth as number | undefined) ?? 0;
     let scrollTarget = currentPosition + width / 2;
     scrollTarget = Math.min(scrollTarget, overflowWidth);
 
