@@ -20,9 +20,13 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
   );
 
   document.addEventListener(
-    "pointerdown",
+    "pointerup",
     (event) => {
-      isKeyboard = false;
+      // Screenreaders like JAWS emulate a mouse click,
+      //  so setting this to isKeyboard=false too early will result in missing focus management.
+      setTimeout(() => {
+        isKeyboard = false;
+      }, 120);
     },
     true,
   );
