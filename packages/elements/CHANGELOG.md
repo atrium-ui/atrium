@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.6.1 (2026-01-27)
+
+### Fixes
+
+- Improve support for JAWS screenreader on windows
+
 ## 4.6.0 (2026-01-24)
 
 ### Features
