@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.6.2 (2026-01-30)
+
+### Fixes
+
+- Expandable calls scrollIntoView on mount
+
 ## 4.6.1 (2026-01-27)
 
 ### Fixes
