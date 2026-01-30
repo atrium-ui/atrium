@@ -1,6 +1,5 @@
 import "./Playground.css";
 
-
 // esbuild
 import * as esbuild from "esbuild-wasm";
 import esbuildUrl from "esbuild-wasm/esbuild.wasm?url";
@@ -136,7 +135,9 @@ export function PlaygroundView() {
   const [aiPrompt, setAiPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [chatHistory, setChatHistory] = useState<Array<{ role: "user" | "assistant"; content: string }>>([]);
+  const [chatHistory, setChatHistory] = useState<
+    Array<{ role: "user" | "assistant"; content: string }>
+  >([]);
   const [aiConfig, setAiConfig] = useState(() => {
     const saved = localStorage.getItem("playground_ai_config");
     return saved
@@ -189,7 +190,7 @@ export function PlaygroundView() {
 
     const root = iframe.contentWindow?.document.querySelector("#root");
     if (root) {
-      root.innerHTML = files["index.html"]?.model?.getValue() || '';
+      root.innerHTML = files["index.html"]?.model?.getValue() || "";
       console.info(script);
       iframe.contentWindow?.document.body.appendChild(script);
     }
@@ -249,15 +250,14 @@ export function PlaygroundView() {
             model: aiConfig.model,
             max_tokens: 4096,
             system: systemPrompt,
-            messages: [
-              ...chatHistory,
-              { role: "user", content: userMessage },
-            ],
+            messages: [...chatHistory, { role: "user", content: userMessage }],
           }),
         });
 
         if (!response.ok) {
-          throw new Error(response.status === 401 ? "Invalid API key" : "Failed to generate layout");
+          throw new Error(
+            response.status === 401 ? "Invalid API key" : "Failed to generate layout",
+          );
         }
 
         const data = await response.json();
@@ -296,7 +296,9 @@ export function PlaygroundView() {
     const htmlCode = files["index.html"]?.model?.getValue() || "";
     const tsxCode = files["index.tsx"]?.model?.getValue() || "";
 
-    const blob = new Blob([`<!DOCTYPE html>
+    const blob = new Blob(
+      [
+        `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -317,7 +319,10 @@ export function PlaygroundView() {
     ${tsxCode}
   </script>
 </body>
-</html>`], { type: "text/html" });
+</html>`,
+      ],
+      { type: "text/html" },
+    );
 
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -344,180 +349,192 @@ export function PlaygroundView() {
     <div className="flex h-full w-full overflow-hidden px-(--site-padding)">
       {/* Sidebar */}
       <div
-        className={`border-r border-(--style-typography-body)/10 bg-(--style-typography-body)/5 transition-all duration-500 ease-in-out overflow-hidden ${
+        className={`overflow-hidden border-(--style-typography-body)/10 border-r bg-(--style-typography-body)/5 transition-all duration-500 ease-in-out ${
           sidebarOpen ? "w-96" : "w-0"
         }`}
         style={{ transitionTimingFunction: "cubic-bezier(0.4, 0.0, 0.2, 1)" }}
       >
-        <div className="flex flex-col w-96 h-full">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-(--style-typography-body)/10 shrink-0">
-          <h2 className="text-sm font-semibold">AI Assistant</h2>
-          {chatHistory.length > 0 && (
-            <button
-              type="button"
-              onClick={() => setChatHistory([])}
-              className="p-1 hover:bg-(--style-typography-body)/10 rounded text-xs"
-              title="Clear chat"
-            >
-              Clear
-            </button>
-          )}
-        </div>
-
-        {/* Chat History */}
-        <div ref={chatContainerRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
-          {chatHistory.length === 0 && !generating && (
-            <div className="text-xs opacity-70 px-2 py-8 space-y-3">
-              <div className="font-semibold">Welcome to the AI Playground!</div>
-              <div className="space-y-1.5 opacity-80">
-                <div>• Describe layouts and the AI will generate Vue 3 components</div>
-                <div>• Uses local Ollama by default (make sure it's running)</div>
-                <div>• Press <kbd className="px-1.5 py-0.5 rounded bg-(--style-typography-body)/10">Cmd+B</kbd> to toggle this panel</div>
-              </div>
-              <div className="pt-2 text-[11px] opacity-60">
-                Example: "Create a landing page with a hero section and three feature cards"
-              </div>
-            </div>
-          )}
-          {chatHistory.map((msg, idx) => (
-            <div
-              key={idx}
-              className={`text-xs p-3 rounded-lg ${
-                msg.role === "user"
-                  ? "bg-(--style-typography-body)/10 ml-4"
-                  : "bg-(--style-typography-body)/5 mr-4"
-              }`}
-            >
-              <div className="font-semibold mb-1 opacity-70">
-                {msg.role === "user" ? "You" : "AI"}
-              </div>
-              <div className={`whitespace-pre-wrap break-words ${msg.role === "assistant" ? "font-mono text-[11px]" : ""}`}>
-                {msg.content}
-              </div>
-            </div>
-          ))}
-          {generating && (
-            <div className="text-xs p-3 rounded-lg bg-(--style-typography-body)/5 mr-4">
-              <div className="font-semibold mb-1 opacity-70">AI</div>
-              <div className="opacity-50">Generating...</div>
-            </div>
-          )}
-        </div>
-
-        {/* AI Config */}
-        <div className="px-4 py-3 border-t border-(--style-typography-body)/10 shrink-0">
-          <details className="group">
-            <summary className="text-xs font-semibold cursor-pointer mb-2 flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 256 256"
-                className="h-3 w-3 transition-transform group-open:rotate-90"
+        <div className="flex h-full w-96 flex-col">
+          <div className="flex shrink-0 items-center justify-between border-(--style-typography-body)/10 border-b px-4 py-3">
+            <h2 className="font-semibold text-sm">AI Assistant</h2>
+            {chatHistory.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setChatHistory([])}
+                className="rounded p-1 text-xs hover:bg-(--style-typography-body)/10"
+                title="Clear chat"
               >
-                <path
-                  fill="currentColor"
-                  d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"
-                />
-              </svg>
-              Configuration
-            </summary>
-            <div className="space-y-2 text-xs">
-              <div>
-                <label className="block mb-1 opacity-70">Provider</label>
-                <select
-                  value={aiConfig.provider}
-                  onChange={(e) =>
-                    setAiConfig((prev) => ({
-                      ...prev,
-                      provider: e.target.value as "ollama" | "anthropic",
-                      endpoint:
-                        e.target.value === "ollama"
-                          ? "http://localhost:11434/v1/chat/completions"
-                          : "https://api.anthropic.com/v1/messages",
-                      model:
-                        e.target.value === "ollama"
-                          ? "qwen2.5-coder:7b"
-                          : "claude-sonnet-4-5-20250929",
-                    }))
-                  }
-                  className="w-full rounded border border-(--style-typography-body)/20 bg-transparent px-2 py-1.5"
+                Clear
+              </button>
+            )}
+          </div>
+
+          {/* Chat History */}
+          <div
+            ref={chatContainerRef}
+            className="flex-1 space-y-3 overflow-y-auto px-4 py-3"
+          >
+            {chatHistory.length === 0 && !generating && (
+              <div className="space-y-3 px-2 py-8 text-xs opacity-70">
+                <div className="font-semibold">Welcome to the AI Playground!</div>
+                <div className="space-y-1.5 opacity-80">
+                  <div>• Describe layouts and the AI will generate Vue 3 components</div>
+                  <div>• Uses local Ollama by default (make sure it's running)</div>
+                  <div>
+                    • Press{" "}
+                    <kbd className="rounded bg-(--style-typography-body)/10 px-1.5 py-0.5">
+                      Cmd+B
+                    </kbd>{" "}
+                    to toggle this panel
+                  </div>
+                </div>
+                <div className="pt-2 text-[11px] opacity-60">
+                  Example: "Create a landing page with a hero section and three feature
+                  cards"
+                </div>
+              </div>
+            )}
+            {chatHistory.map((msg, idx) => (
+              <div
+                key={idx}
+                className={`rounded-lg p-3 text-xs ${
+                  msg.role === "user"
+                    ? "ml-4 bg-(--style-typography-body)/10"
+                    : "mr-4 bg-(--style-typography-body)/5"
+                }`}
+              >
+                <div className="mb-1 font-semibold opacity-70">
+                  {msg.role === "user" ? "You" : "AI"}
+                </div>
+                <div
+                  className={`whitespace-pre-wrap break-words ${msg.role === "assistant" ? "font-mono text-[11px]" : ""}`}
                 >
-                  <option value="ollama">Ollama (Local)</option>
-                  <option value="anthropic">Anthropic</option>
-                </select>
+                  {msg.content}
+                </div>
               </div>
-              <div>
-                <label className="block mb-1 opacity-70">Endpoint</label>
-                <input
-                  type="text"
-                  value={aiConfig.endpoint}
-                  onChange={(e) =>
-                    setAiConfig((prev) => ({ ...prev, endpoint: e.target.value }))
-                  }
-                  className="w-full rounded border border-(--style-typography-body)/20 bg-transparent px-2 py-1.5"
-                />
+            ))}
+            {generating && (
+              <div className="mr-4 rounded-lg bg-(--style-typography-body)/5 p-3 text-xs">
+                <div className="mb-1 font-semibold opacity-70">AI</div>
+                <div className="opacity-50">Generating...</div>
               </div>
-              <div>
-                <label className="block mb-1 opacity-70">Model</label>
-                <input
-                  type="text"
-                  value={aiConfig.model}
-                  onChange={(e) =>
-                    setAiConfig((prev) => ({ ...prev, model: e.target.value }))
-                  }
-                  className="w-full rounded border border-(--style-typography-body)/20 bg-transparent px-2 py-1.5"
-                />
-              </div>
-              {aiConfig.provider === "anthropic" && (
+            )}
+          </div>
+
+          {/* AI Config */}
+          <div className="shrink-0 border-(--style-typography-body)/10 border-t px-4 py-3">
+            <details className="group">
+              <summary className="mb-2 flex cursor-pointer items-center gap-2 font-semibold text-xs">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 256 256"
+                  className="h-3 w-3 transition-transform group-open:rotate-90"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"
+                  />
+                </svg>
+                Configuration
+              </summary>
+              <div className="space-y-2 text-xs">
                 <div>
-                  <label className="block mb-1 opacity-70">API Key</label>
+                  <label className="mb-1 block opacity-70">Provider</label>
+                  <select
+                    value={aiConfig.provider}
+                    onChange={(e) =>
+                      setAiConfig((prev) => ({
+                        ...prev,
+                        provider: e.target.value as "ollama" | "anthropic",
+                        endpoint:
+                          e.target.value === "ollama"
+                            ? "http://localhost:11434/v1/chat/completions"
+                            : "https://api.anthropic.com/v1/messages",
+                        model:
+                          e.target.value === "ollama"
+                            ? "qwen2.5-coder:7b"
+                            : "claude-sonnet-4-5-20250929",
+                      }))
+                    }
+                    className="w-full rounded border border-(--style-typography-body)/20 bg-transparent px-2 py-1.5"
+                  >
+                    <option value="ollama">Ollama (Local)</option>
+                    <option value="anthropic">Anthropic</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="mb-1 block opacity-70">Endpoint</label>
                   <input
-                    type="password"
-                    value={aiConfig.apiKey}
-                    onChange={(e) => {
-                      const key = e.target.value;
-                      setAiConfig((prev) => ({ ...prev, apiKey: key }));
-                      localStorage.setItem("anthropic_api_key", key);
-                    }}
-                    placeholder="sk-ant-..."
+                    type="text"
+                    value={aiConfig.endpoint}
+                    onChange={(e) =>
+                      setAiConfig((prev) => ({ ...prev, endpoint: e.target.value }))
+                    }
                     className="w-full rounded border border-(--style-typography-body)/20 bg-transparent px-2 py-1.5"
                   />
                 </div>
-              )}
-            </div>
-          </details>
-        </div>
-
-        {/* Chat Input */}
-        <div className="px-4 py-3 border-t border-(--style-typography-body)/10 shrink-0">
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={aiPrompt}
-              onChange={(e) => setAiPrompt(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && !generating && generateWithAI()}
-              placeholder="Describe a layout..."
-              className="flex-1 rounded border border-(--style-typography-body)/20 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-(--style-typography-body)/30"
-              disabled={generating}
-            />
-            <button
-              type="button"
-              className="px-3 py-2 rounded bg-(--style-typography-body) text-white text-sm font-medium hover:opacity-90 disabled:opacity-50 transition-opacity"
-              onClick={() => generateWithAI()}
-              disabled={generating || !aiPrompt.trim()}
-            >
-              {generating ? "..." : "Send"}
-            </button>
+                <div>
+                  <label className="mb-1 block opacity-70">Model</label>
+                  <input
+                    type="text"
+                    value={aiConfig.model}
+                    onChange={(e) =>
+                      setAiConfig((prev) => ({ ...prev, model: e.target.value }))
+                    }
+                    className="w-full rounded border border-(--style-typography-body)/20 bg-transparent px-2 py-1.5"
+                  />
+                </div>
+                {aiConfig.provider === "anthropic" && (
+                  <div>
+                    <label className="mb-1 block opacity-70">API Key</label>
+                    <input
+                      type="password"
+                      value={aiConfig.apiKey}
+                      onChange={(e) => {
+                        const key = e.target.value;
+                        setAiConfig((prev) => ({ ...prev, apiKey: key }));
+                        localStorage.setItem("anthropic_api_key", key);
+                      }}
+                      placeholder="sk-ant-..."
+                      className="w-full rounded border border-(--style-typography-body)/20 bg-transparent px-2 py-1.5"
+                    />
+                  </div>
+                )}
+              </div>
+            </details>
           </div>
-        </div>
+
+          {/* Chat Input */}
+          <div className="shrink-0 border-(--style-typography-body)/10 border-t px-4 py-3">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={aiPrompt}
+                onChange={(e) => setAiPrompt(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && !generating && generateWithAI()}
+                placeholder="Describe a layout..."
+                className="flex-1 rounded border border-(--style-typography-body)/20 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-(--style-typography-body)/30 focus:ring-2"
+                disabled={generating}
+              />
+              <button
+                type="button"
+                className="rounded bg-(--style-typography-body) px-3 py-2 font-medium text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                onClick={() => generateWithAI()}
+                disabled={generating || !aiPrompt.trim()}
+              >
+                {generating ? "..." : "Send"}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Button Sidebar */}
-      <div className="flex flex-col items-center gap-3 py-4 px-2 border-r border-(--style-typography-body)/10 bg-(--style-typography-body)/5">
+      <div className="flex flex-col items-center gap-3 border-(--style-typography-body)/10 border-r bg-(--style-typography-body)/5 px-2 py-4">
         <button
           type="button"
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="p-2 rounded-lg hover:bg-(--style-typography-body)/10 transition-colors"
+          className="rounded-lg p-2 transition-colors hover:bg-(--style-typography-body)/10"
           title={`${sidebarOpen ? "Hide" : "Show"} AI sidebar (Cmd+B)`}
         >
           {sidebarOpen ? (
@@ -547,7 +564,7 @@ export function PlaygroundView() {
 
         <button
           type="button"
-          className="p-2 rounded-lg hover:bg-(--style-typography-body)/10 transition-colors"
+          className="rounded-lg p-2 transition-colors hover:bg-(--style-typography-body)/10"
           onClick={() => exportCode()}
           title="Export layout as HTML"
         >
@@ -565,8 +582,8 @@ export function PlaygroundView() {
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-col flex-1 overflow-hidden h-full">
-        <a-panel-layout className="flex-1 h-full">
+      <div className="flex h-full flex-1 flex-col overflow-hidden">
+        <a-panel-layout className="h-full flex-1">
           <a-panel-group className="grid-rows-[1.5fr_0.5fr]">
             <a-panel>
               <div className={twMerge("flex h-full flex-col", loading && "opacity-40")}>
