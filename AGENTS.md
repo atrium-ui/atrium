@@ -29,6 +29,12 @@ To keep the amount of logic in Components small, Elements are built as unstyled 
 We use gotask for a common interface to run scripts. 
 All available tasks can be found in the /Taskfile.yml in the root of the project.
 
+## Running tests
+
+Most packages have tests that are using the bun test runner.
+
+The elements package uses a preload config to load the happy-dom DOM emulation. The tests can be execute by running `bun test <element_name>` in ./packages/elements. 
+
 ## Documentation Guidelines
 
 ### Components

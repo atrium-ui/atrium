@@ -1,8 +1,7 @@
 import path from "node:path";
 import svgSprite from "../../dist/vite-plugin.js";
-import { defineConfig } from "vite";
 
-export default defineConfig({
+export default {
   clearScreen: false,
   plugins: [
     svgSprite({
@@ -17,4 +16,4 @@ export default defineConfig({
       },
     }),
   ],
-});
+}

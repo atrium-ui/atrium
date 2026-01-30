@@ -99,7 +99,7 @@ export class Expandable extends LitElement {
     this.opened ? this.close() : this.open();
   }
 
-  onChange() {
+  updateAttributes() {
     const trigger = this.trigger;
     if (trigger) {
       this.trigger.setAttribute("aria-expanded", this.opened.toString());
@@ -115,6 +115,10 @@ export class Expandable extends LitElement {
         content.setAttribute("inert", "");
       }
     }
+  }
+
+  onChange() {
+    this.updateAttributes();
 
     const ev = new CustomEvent("change", { bubbles: true, cancelable: true });
     this.dispatchEvent(ev);
@@ -160,7 +164,7 @@ export class Expandable extends LitElement {
       content.setAttribute("aria-labelledby", this._id_toggle);
     }
 
-    this.onChange();
+    this.updateAttributes();
   }
 
   onBeforeMatch() {
