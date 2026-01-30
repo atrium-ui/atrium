@@ -365,10 +365,20 @@ export class Panel extends HTMLElement {
     if (children.length === 1) {
       this.columns = [1];
       this.rows = [1];
+    } else if (this.width === 0 || this.height === 0) {
+      // Dimensions not ready yet, use equal distribution
+      for (let i = 0; i < children.length; i++) {
+        this.columns[i] = 1;
+        this.rows[i] = 1;
+      }
     } else {
       for (let i = 0; i < children.length; i++) {
-        this.columns[i] = (children[i].width / this.width) * children.length;
-        this.rows[i] = (children[i].height / this.height) * children.length;
+        const columnFraction = (children[i].width / this.width) * children.length;
+        const rowFraction = (children[i].height / this.height) * children.length;
+
+        // Ensure we have valid values, fallback to equal distribution
+        this.columns[i] = columnFraction > 0 ? columnFraction : 1;
+        this.rows[i] = rowFraction > 0 ? rowFraction : 1;
       }
     }
 
