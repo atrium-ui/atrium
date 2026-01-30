@@ -1,4 +1,5 @@
 import { test, expect, afterEach, describe, beforeEach } from "bun:test";
+import { Expandable } from "../src/index.js";
 
 const NODE_NAME = "a-expandable";
 
@@ -12,7 +13,6 @@ describe("Expandable", () => {
   });
 
   test("import element", async () => {
-    const { Expandable } = await import("../src/index.js");
     expect(Expandable).toBeDefined();
 
     // is defined in custom element registry
