@@ -481,9 +481,8 @@
   pointer-events: none;
   opacity: 0;
   transition:
-    width 0.175s ease-in-out,
-    transform 0.05s ease-out,
-    opacity 0.15s ease-in-out;
+    width 0.05s ease,
+    transform 0.05s ease;
 }
 
 .text-link span {

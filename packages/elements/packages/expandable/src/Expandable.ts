@@ -150,6 +150,10 @@ export class Expandable extends LitElement {
   _id_toggle = `expandable_toggle_${++accordionIncrement}`;
   _id_content = `expandable_content_${accordionIncrement}`;
 
+  updated() {
+    this.updateAttributes();
+  }
+
   onSlotChange() {
     const trigger = this.trigger;
     if (trigger) {

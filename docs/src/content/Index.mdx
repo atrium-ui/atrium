@@ -3,18 +3,13 @@ title: Atrium UI
 description: Copy-paste components you own. Framework-agnostic custom elements under the hood. No dependencies, no lock-in.
 ---
 
+import { Code } from "astro:components";
 import { Command } from "../components";
 
-<section className="flex flex-col items-center text-center gap-module-xl mb-module-8xl">
-  <div className="pb-module-l">
-    <img className="light-mode-only" width="120" src={`${import.meta.env.BASE_URL}atrium-light.png`} />
-    <img className="dark-mode-only" width="120" src={`${import.meta.env.BASE_URL}atrium-dark.png`} />
-  </div>
-
+<section className="flex flex-col items-center text-center gap-module-xl mb-module-8xl pt-module-8xl">
   <h1 className="typo-title-1 pb-module-s">Build Better, Ship Faster</h1>
 
-
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1">
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 lg:px-module-4xl">
     <a className="home-card" href={`${import.meta.env.BASE_URL}components/accordion`}>
       <a-animation
         src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
@@ -69,14 +64,14 @@ import { Command } from "../components";
     </a>
   </div>
 
-  <p className="typo-body max-w-[600px] text-balance opacity-80">
-    Copy-paste components that you own. Framework-agnostic custom elements under the hood.
-    No dependencies, no lock-in, just clean code.
-  </p>
+  <div className="typo-body max-w-[800px] text-balance opacity-80">
+    Built on standard Custom-Elements. Use the same component in React today, Vue tomorrow, vanilla next week.
+    A single dependency.
+  </div>
 
   <div className="flex flex-wrap gap-module-m pt-module-xl justify-center">
-    <a href={`${import.meta.env.BASE_URL}guides/setup`} className="inline-flex items-center gap-2 rounded-lg bg-(--style-typography-body) text-white px-6 py-3 font-medium hover:opacity-90 transition-opacity">
-      Get Started
+    <a href={`${import.meta.env.BASE_URL}components/accordion`} className="inline-flex items-center gap-2 rounded-lg bg-(--style-typography-body) text-white px-6 py-3 font-medium hover:opacity-90 transition-opacity">
+      Browse Components
     </a>
     <a href={`${import.meta.env.BASE_URL}playground`} className="inline-flex items-center gap-2 rounded-lg border border-current px-6 py-3 font-medium hover:bg-(--style-typography-body) hover:text-white transition-colors">
       Try Playground
@@ -87,28 +82,40 @@ import { Command } from "../components";
 <section className="pb-module-8xl">
   <h2 className="typo-title-2 text-center pb-module-3xl">Why Atrium?</h2>
 
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-module-2xl lg:px-module-4xl">
-    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10">
-      <h3 className="typo-headline pb-element-xs">🎨 You Own the Code</h3>
-      <p className="opacity-80">Components are copied into your project, not imported. Modify anything without waiting for upstream changes or fighting abstraction layers.</p>
+  <div className="flex flex-wrap gap-module-2xl lg:px-module-4xl">
+    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10 flex-1">
+      <h3 className="typo-headline pb-element-m">🔧 Framework Agnostic</h3>
+      Built on Custom-Elements, not adapters. Use the same component in React today, vanilla tomorrow. Works everywhere.
     </div>
-    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10">
-      <h3 className="typo-headline pb-element-xs">⚡ Tiny Bundle Size</h3>
-      <p className="opacity-80">Minimal Dependencies. The entire elements package has minimal dependencies.</p>
+    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10 flex-1">
+      <h3 className="typo-headline pb-element-m">♿ Accessible by Default</h3>
+      WAI-ARIA patterns, keyboard navigation, focus management — baked in, not optional. Accessibility isn't an afterthought.
     </div>
-    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10">
-      <h3 className="typo-headline pb-element-xs">🔧 Framework Agnostic</h3>
-      <p className="opacity-80">Works with Vue, React, Astro, or vanilla JS. Custom elements play nice with everything.</p>
-    </div>
-    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10">
-      <h3 className="typo-headline pb-element-xs">♿ Accessible by Default</h3>
-      <p className="opacity-80">Keyboard navigation, ARIA attributes, and focus management baked into every element. A11y isn't an afterthought.</p>
+
+    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10 w-full">
+      <h3 className="typo-headline pb-element-m">🧩 Compose into anything</h3>
+      Components are composed from highly reusable custom-elements.
+
+      <Code lang="html" code={`<a-popover-trigger>
+    <!-- Use any component as a trigger -->
+    <button type="button" slot="trigger">
+      {{ label }}
+    </button>
+
+    <a-popover class="group">
+      <!-- Put anything in the popover -->
+      <div>
+        Lorem Ipsum
+      </div>
+    </a-popover>
+  </a-popover-trigger>`} />
+
     </div>
   </div>
 </section>
 
 <section className="pb-module-8xl lg:px-module-4xl">
-  <h2 className="typo-title-2 text-center pb-module-xl">Get Started in Seconds</h2>
+  <h2 className="typo-title-2 text-center pb-module-s">Get Started in Seconds</h2>
 
   <div className="markdown-content max-w-[700px] mx-auto">
     <p className="text-center pb-module-xl opacity-80">Install the elements package and copy your first component:</p>
@@ -117,33 +124,31 @@ import { Command } from "../components";
 
     <br/>
 
-    ```sh
-    npx @sv/components button
-    ```
+    <Command sh="npx @sv/components button" />
 
-    <p className="text-center pt-module-xl">
+    <div className="text-right pt-module-xl">
       <a href={`${import.meta.env.BASE_URL}guides/setup`} className="underline underline-offset-4 hover:opacity-80">
         Read the full setup guide →
       </a>
-    </p>
+    </div>
   </div>
 </section>
 
 <section className="pb-module-6xl">
-  <h2 className="typo-title-2 text-center pb-module-4xl">Two Layers, Maximum Flexibility</h2>
+  <h2 className="typo-title-2 text-center pb-module-4xl">Go deeper</h2>
 
   <div className="markdown-content lg:px-module-4xl">
     <div className="grid grid-cols-1 md:grid-cols-2 gap-module-2xl pb-module-2xl">
       <div>
         <h3 className="typo-headline pb-element-xs">Components</h3>
-        <p className="opacity-80">Pre-styled, ready-to-use templates built with TailwindCSS. Copy them into your project and make them yours.</p>
+        <p className="opacity-80">Pre-styled templates built with TailwindCSS. Copy them into your project, customize everything, ship immediately.</p>
         <p className="pt-module-s">
-          <a href={`${import.meta.env.BASE_URL}playground`} className="underline underline-offset-4 hover:opacity-80">Try Playground →</a>
+          <a href={`${import.meta.env.BASE_URL}components/accordion`} className="underline underline-offset-4 hover:opacity-80">Browse Components →</a>
         </p>
       </div>
       <div>
         <h3 className="typo-headline pb-element-xs">Elements</h3>
-        <p className="opacity-80">Headless custom elements that handle behaviour and accessibility.</p>
+        <p className="opacity-80">Headless Custom-Elements that handle behavior and accessibility. Style them however you want.</p>
         <p className="pt-module-s">
           <a href={`${import.meta.env.BASE_URL}elements/a-expandable`} className="underline underline-offset-4 hover:opacity-80">Browse Elements →</a>
         </p>

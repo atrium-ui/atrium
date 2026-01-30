@@ -32,22 +32,14 @@ function handleExit() {
   <a-portal>
     <a-blur
       :enabled="open || undefined"
-      :class="[
-        'group/dialog fixed top-0 left-0 z-50 block h-screen w-screen opacity-0 transition-all',
-        '[&[enabled]]:bg-[#33333333] [&[enabled]]:opacity-100 [&[enabled]]:backdrop-blur-md',
-      ]"
+      class="group/dialog fixed inset-0 z-50 block h-screen w-screen opacity-0 transition-opacity bg-[#33333333] [&[enabled]]:opacity-100 flex justify-center items-center"
       @exit="handleExit"
     >
-      <div
-        :class="[
-          '-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 transition-all',
-          'scale-105 group-[&[enabled]]/dialog:block group-[&[enabled]]/dialog:scale-100',
-        ]"
-      >
+      <div class="relative scale-95 flex group-[&[enabled]]/dialog:scale-100 max-w-[95vw] max-h-[95vh] [&>img]:object-contain">
         <slot />
       </div>
 
-      <div class="absolute top-8 right-4 z-50 text-2xl lg:top-20 lg:right-20">
+      <div class="absolute top-2 right-2 z-50 text-2xl lg:top-5 lg:right-5">
         <Button
           label="close"
           variant="ghost"

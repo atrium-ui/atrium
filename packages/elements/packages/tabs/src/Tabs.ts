@@ -160,6 +160,7 @@ export class TabsListElement extends LitElement {
     return css`
       .tabs-list-container {
         position: relative;
+        width: 100%;
       }
 
       .tabs-track {

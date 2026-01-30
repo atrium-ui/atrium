@@ -13,22 +13,13 @@ Configure your package manager to install packages from the Gitlab package regis
 
 Create a .npmrc file in the root of your package to configure the registry:
 
-- src/
-- README.md
-- package.json
-- .npmrc ⬅
-
-```sh
-echo @sv:registry=https://gitlab.s-v.de/api/v4/projects/1560/packages/npm/ >> .npmrc
-```
+<Command sh={'echo @sv:registry=https://gitlab.s-v.de/api/v4/projects/1560/packages/npm/ >> .npmrc'} />
 
 ## Usage
 
 Components require **tailwindcss** to be installed in the project. Here links for [NuxtJS](https://www.npmjs.com/package/@nuxtjs/tailwindcss), [Vite](https://tailwindcss.com/docs/guides/vite) or [Tailwind cli](https://tailwindcss.com/docs/installation).
 
-<br/>
-
-1. Install elements
+### Install the elements
 
     <Command
       pnpm="pnpm add @sv/elements"
@@ -36,21 +27,15 @@ Components require **tailwindcss** to be installed in the project. Here links fo
       bun="bun add @sv/elements"
     />
 
-2. Copy a component into your project.
+### Copy a component into your project.
 
     This **copies** a component template into your project.
 
-    ```bash
-    npx @sv/components button
-    ```
+    <Command
+      sh="npx @sv/components button"
+    />
 
-    - src/components/
-      - Button.tsx
-    - README.md
-    - package.json
-    - ...
-
-3. Change styling or behavior of the component in the copy inside your project.
+### Change styling or behavior of the component in the copy inside your project.
 
     ```diff lang="tsx"
     // ~/components/Button.tsx
@@ -84,7 +69,7 @@ Components require **tailwindcss** to be installed in the project. Here links fo
 
 ### Use elements without a framework
 
-Or optionally use the custom-elements directly for most compatibility with, or without, a framework.
+Or optionally use the custom-elements directly for most compatibility with, or without, any framework.
 
 ```tsx
 // src/App.tsx
@@ -98,5 +83,3 @@ export function App() {
   )
 }
 ```
-
-<br/>
