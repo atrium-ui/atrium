@@ -175,7 +175,7 @@ export class Group extends Column {
     this.setActiveTab(index);
   }
 
-  get tabs() {
+  get tabElements() {
     const elements = this.shadowRoot?.querySelectorAll(".tab[data-groupid]");
     return elements ? [...elements] : [];
   }
@@ -393,14 +393,14 @@ export class Group extends Column {
       this.activeTab = 0;
     }
 
-    if (this.activeTab > this.tabs?.length - 1) {
-      this.activeTab = Math.max(this.tabs?.length - 1, 0);
+    if (this.activeTab > this.tabElements?.length - 1) {
+      this.activeTab = Math.max(this.tabElements?.length - 1, 0);
     }
   }
 
   // updates components and tab bar if active tab changed
   setActiveTab(index: number) {
-    const tabs = this.tabs;
+    const tabs = this.tabElements;
     const components = this.components;
 
     for (let i = 0; i < components.length; i++) {

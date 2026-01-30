@@ -110,7 +110,11 @@ export function StoryFrame() {
         )}
         ref={rootRef}
       >
-        {!story ? (
+        {story === undefined && currentStoryId ? (
+          <div className="flex h-screen w-full flex-col items-center justify-center opacity-50">
+            Loading...
+          </div>
+        ) : story === null && currentStoryId ? (
           <pre className="flex h-fill w-full flex-col items-center justify-center text-red-500 opacity-50">
             Story not found "{currentStoryId}"
           </pre>

@@ -493,7 +493,7 @@ export class TabsPanelElement extends LitElement {
     return html`
       <div
         class="tabs-panel"
-        hidden$="${ifDefined(hiddenValue)}"
+        hidden="${ifDefined(hiddenValue)}"
         tabindex="${!this.selected ? "-1" : ""}"
         aria-hidden="${!this.selected ? "true" : "false"}"
         id="${generatePanelId(index)}"

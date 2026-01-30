@@ -26,7 +26,6 @@
         "@astrojs/solid-js": "6.0.0-beta.2",
         "@astrojs/tailwind": "^6.0.2",
         "@astrojs/vue": "6.0.0-beta.0",
-        "@atrium-ui/layout": "^2.0.0",
         "@fontsource/roboto": "^5.2.6",
         "@fontsource/roboto-condensed": "^5.2.6",
         "@lexical/history": "^0.33.1",
@@ -40,6 +39,7 @@
         "@sv/components": "workspace:*",
         "@sv/elements": "workspace:*",
         "@sv/icons": "workspace:*",
+        "@sv/panels": "workspace:*",
         "@sv/scroll-lock": "workspace:*",
         "@sv/svg-sprites": "workspace:*",
         "@tailwindcss/browser": "^4.0.15",
@@ -213,8 +213,6 @@
     "@astrojs/vue": ["@astrojs/vue@6.0.0-beta.0", "", { "dependencies": { "@vitejs/plugin-vue": "5.2.4", "@vitejs/plugin-vue-jsx": "^4.2.0", "@vue/compiler-sfc": "^3.5.26", "vite": "^7.1.7", "vite-plugin-vue-devtools": "^7.7.9" }, "peerDependencies": { "astro": "^6.0.0-alpha.0", "vue": "^3.5.24" } }, "sha512-jYezx7Z2LR+NiZMKjJj+buf/FSu0Tftc2tQH0chT0Q4HZnQOfzv5yWG1avlu8tQXZMW09N/6aUbMFrx7/MTQTg=="],
 
     "@astrojs/yaml2ts": ["@astrojs/yaml2ts@0.2.2", "", { "dependencies": { "yaml": "^2.5.0" } }, "sha512-GOfvSr5Nqy2z5XiwqTouBBpy5FyI6DEe+/g/Mk5am9SjILN1S5fOEvYK0GuWHg98yS/dobP4m8qyqw/URW35fQ=="],
-
-    "@atrium-ui/layout": ["@atrium-ui/layout@2.0.0", "", {}, "sha512-hNIA9Iaf+06W1cPcZ5BS/ANjQPsuwuEhkiFjYQZlYufmRKLRMlmlSuKSb9Bk5RQeZKyZpnusTpWe/djMmKyceA=="],
 
     "@babel/code-frame": ["@babel/code-frame@7.28.6", "", { "dependencies": { "@babel/helper-validator-identifier": "^7.28.5", "js-tokens": "^4.0.0", "picocolors": "^1.1.1" } }, "sha512-JYgintcMjRiCvS8mMECzaEn+m3PfoQiyqukOMCCVQtoJGYJw8j/8LBJEiqkHLkfwCcs74E3pbAUFNg7d9VNJ+Q=="],
 

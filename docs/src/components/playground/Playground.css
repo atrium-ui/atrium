@@ -1,10 +1,6 @@
 @reference "../../layout.css";
 
-a-layout {
-  height: calc(100vh - 4.45rem);
-}
-
-a-layout-group {
+a-panel {
   --tab-background: white;
   --tab-hover-background: #eee;
   --tab-active-background: #eee;
@@ -24,11 +20,11 @@ iframe {
   border: 1px solid #e0e0e0;
 }
 
-.content-panel:not(:has(a-layout)) {
+.content-panel:not(:has(a-panel-layout)) {
   display: none;
 }
 
-.content-panel:has(a-layout) {
+.content-panel:has(a-panel-layout) {
   padding: 0rem;
 }
 
