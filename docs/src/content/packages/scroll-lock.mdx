@@ -1,0 +1,42 @@
+---
+title: "@sv/scroll-lock"
+description: A reference page.
+command: bun add @sv/scroll-lock
+---
+
+import { Command } from "package:/components";
+import Changelog from "@sv/scroll-lock/CHANGELOG.md";
+
+A small library for consitent scroll-locking across browsers.
+
+Used in [a-blur](/elements/a-blur/).
+
+## Installation
+
+Make sure your project is set up with access to the registry as described in [Setup](/guides/setup).
+
+<Command
+  pnpm="pnpm add @sv/scroll-lock"
+  npm="npm i @sv/scroll-lock"
+  bun="bun add @sv/scroll-lock"
+/>
+
+## Usage
+
+```ts
+import { ScrollLock } from '@sv/scroll-lock';
+
+const scrollLock = new ScrollLock();
+
+// lock page scrolling
+scrollLock.enable();
+// unlock page scrolling
+scrollLock.disable();
+```
+
+## Changelog
+
+<br/>
+<Changelog />
+<br/>
+<a target="_blank" href={`https://gitlab.s-v.de/svp/atrium/-/blob/main/packages/scroll-lock/CHANGELOG.md`}>Full changelog</a>

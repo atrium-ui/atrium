@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="module" src="./src/index.ts"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      a-box {
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+        background: green;
+        font-size: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <a-box>
+      <div id="ele">
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
+      </div>
+      <div id="ele">
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
+      </div>
+    </a-box>
+
+    <script>
+      const box = document.querySelector("a-box");
+      box.addEventListener("resize", ev => {
+        console.log("box resize", ev);
+      });
+    </script>
+  </body>
+</html>

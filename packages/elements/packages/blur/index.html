@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script type="module" src="./src/Blur.ts"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="./src/index.ts"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <style>
       a-blur {
@@ -11,11 +11,11 @@
         left: 0;
         width: 100%;
         height: 100%;
-        transition: all .2s ease;
+        transition: all 0.2s ease;
       }
       a-blur[enabled] {
         backdrop-filter: blur(12px);
-        background: rgba(0,0,0,0.1);
+        background: rgba(0, 0, 0, 0.1);
       }
       body {
         display: flex;
@@ -38,71 +38,130 @@
         background: grey;
         border: 1px solid #333;
         height: 100%;
-        transition: transform .15s ease;
+        transition: transform 0.15s ease;
       }
       [enabled] .menu {
         transform: translateX(-100%);
       }
     </style>
+
+    <script>
+      customElements.define(
+        "a-blur-trigger",
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: "open" });
+            this.shadowRoot.innerHTML = `
+              <button>
+                <slot></slot>
+              </button>
+            `;
+          }
+
+          connectedCallback() {
+            this.addEventListener("click", () => {
+              const blur = document.getElementById(this.getAttribute("data-id"));
+              blur.enabled = !blur.enabled;
+            });
+          }
+        },
+      );
+    </script>
   </head>
   <body>
-    <button onclick="document.querySelector('a-blur').enabled = true">Open</button>
+    <a-blur-trigger data-id="blura">Open</a-blur-trigger>
 
-    <a-blur>
+    <a-blur id="blura" scrolllock>
       <div class="menu">
-        <button onclick="document.querySelector('a-blur').enabled = false">Close</button>
+        <a-blur-trigger data-id="blura">Close</a-blur-trigger>
+        <!-- <button>Fake</button> -->
 
         <div>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+            obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem,
+            soluta dolores atque illum sit quam dicta.
           </p>
         </div>
       </div>
@@ -110,55 +169,89 @@
 
     <div style="max-width: 900px">
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta dolores atque illum sit quam dicta.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo illo enim cum
+        obcaecati ad facilis cupiditate est ducimus, temporibus nihil id ut autem, soluta
+        dolores atque illum sit quam dicta.
       </p>
     </div>
   </body>

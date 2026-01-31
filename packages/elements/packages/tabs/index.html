@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <title>Tabs Component</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        margin: 0;
+        padding: 40px;
+        background: #f5f5f5;
+      }
+
+      a-tabs {
+        display: block;
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      a-tabs-list {
+        display: block;
+        background: #f0f4ff;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      a-tabs-tab {
+        display: inline-block;
+        font-size: 16px;
+        font-weight: 500;
+        color: #4b5563;
+        transition: background 0.2s ease;
+        border-bottom: 3px solid transparent;
+        background: transparent;
+        white-space: nowrap;
+        text-align: center;
+        user-select: none;
+        padding: 1rem 24px;
+      }
+
+      a-tabs-tab:hover {
+        background: rgba(59, 130, 246, 0.08);
+        color: #1f2937;
+      }
+
+      a-tabs-tab:active {
+        background: rgba(59, 130, 246, 0.12);
+      }
+
+      a-tabs-tab[selected] {
+        color: #3b82f6;
+        border-bottom-color: #3b82f6;
+        background: rgba(59, 130, 246, 0.1);
+      }
+
+      a-tabs-panel {
+        display: block;
+      }
+
+      a-tabs-panel > div {
+        padding: 32px;
+      }
+
+      .a-rich-text {
+        line-height: 1.6;
+        color: #1f2937;
+      }
+
+      .a-rich-text h2,
+      .a-rich-text h3 {
+        margin-top: 0;
+        margin-bottom: 16px;
+        color: #111827;
+      }
+
+      .a-rich-text h2 {
+        font-size: 28px;
+        font-weight: 600;
+      }
+
+      .a-rich-text h3 {
+        font-size: 24px;
+        font-weight: 600;
+      }
+
+      .a-rich-text p {
+        margin-bottom: 16px;
+      }
+
+      .a-rich-text p:last-child {
+        margin-bottom: 0;
+      }
+
+      .a-rich-text hgroup {
+        margin-bottom: 24px;
+      }
+
+      .a-rich-text .text-subtitle {
+        font-size: 16px;
+        color: #6b7280;
+        margin-top: 8px;
+      }
+
+      .a-text-link {
+        color: #3b82f6;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .a-text-link:hover {
+        color: #2563eb;
+      }
+
+      .a-text-link-underline {
+        text-decoration: underline;
+      }
+
+      a-tabs-panel:not(:defined):not([selected]) {
+        display: none;
+      }
+    </style>
+
+    <script type="module">
+      import "@sv/elements/track";
+      import "./src/index.ts";
+    </script>
+  </head>
+
+  <body>
+    <a-tabs>
+      <a-tabs-list>
+        <a-tabs-tab>
+          <span>mollit duis Lorem</span>
+        </a-tabs-tab>
+        <a-tabs-tab>
+          <span>nisi mollit sunt</span>
+        </a-tabs-tab>
+        <a-tabs-tab selected>
+          <span>Tab 3 (Preselected)</span>
+        </a-tabs-tab>
+        <a-tabs-tab>
+          <span>reprehenderit sint</span>
+        </a-tabs-tab>
+        <a-tabs-tab>
+          <span>aute magna magna</span>
+        </a-tabs-tab>
+      </a-tabs-list>
+
+      <a-tabs-panel>
+        <div class="a-rich-text">
+          <hgroup>
+            <h2 class="text-title-2">Title (T2)</h2>
+            <p role="doc-subtitle" class="text-subtitle">This is a Subline</p>
+          </hgroup>
+
+          <p>
+            <strong>Bold Text</strong>ipsum <i>kursiver Text</i>sit amet, consetetur
+            sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+            magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+            dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+            <a class="a-text-link a-text-link-underline" href="/" target="_blank"
+              >Textlink</a
+            >
+            sed diam nonumy eirmod tempor invidunt ut labore et dolore aliquyam erat, sed
+            diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+            clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+            eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
+            kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem
+            ipsum dolor sit amet,
+            <a class="a-text-link a-text-link-underline" href="/" target="_blank"
+              >Textlink</a
+            >
+            sed diam nonumy eirmod tempor invidunt ut labore et dolore aliquyam erat, sed
+            diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+            clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+          </p>
+        </div>
+      </a-tabs-panel>
+
+      <a-tabs-panel>
+        <div class="a-rich-text">
+          <hgroup>
+            <h3 class="text-title-2">Title (T2)</h3>
+            <p role="doc-subtitle" class="text-subtitle">This is a Subline</p>
+          </hgroup>
+
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+            eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+            in culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+            eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+            in culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+            eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+            in culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+            eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+            in culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+          </p>
+        </div>
+      </a-tabs-panel>
+
+      <a-tabs-panel>
+        <div class="a-rich-text">
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+            eu fugiat nulla pariatur.
+          </p>
+        </div>
+      </a-tabs-panel>
+
+      <a-tabs-panel>
+        <div class="a-rich-text">
+          <h3 class="text-title-3">Headline</h3>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+          </p>
+        </div>
+      </a-tabs-panel>
+
+      <a-tabs-panel>
+        <div class="a-rich-text">
+          <h3 class="text-title-3">Headline</h3>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+            eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+            in culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+          </p>
+        </div>
+      </a-tabs-panel>
+    </a-tabs>
+  </body>
+</html>

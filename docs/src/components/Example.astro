@@ -1,48 +1,13 @@
----
-import { Tabs, TabItem, Code } from "@astrojs/starlight/components";
-import { Headline, Icon } from "package:/components";
-
-export interface Props {
-  title?: string;
-  code: string;
-}
-
-const file = Astro.props.code?.trim();
----
-
-<Headline>{Astro.props.title || "Example"}</Headline>
-
-<div class="not-content box w-full flex flex-col items-left justify-center">
-  <div class="p-4">
-    <slot />
+<div data-html-node class="relative mr-12">
+  <div class="not-content w-full flex flex-col items-left justify-center relative">
+    <div class="box">
+      <div class="w-full h-full min-h-40">
+        <slot />
+      </div>
+    </div>
   </div>
 
-  <hr class="mt-10 mb-4 border-b border-b-[var(--sl-color-hairline)]" />
-
-  <a-expandable class="group">
-    <button
-      slot="toggle"
-      type="button"
-      class="items-center border border-zinc-800 rounded-md hover:bg-zinc-50 dark:hover:bg-zinc-800 p-2 px-4 cursor-pointer w-full bg-transparent text-left text-lg flex justify-between"
-    >
-      <span>Show Code</span>
-
-      <Icon class="block group-[[opened]]:hidden" name="expand" />
-      <Icon class="hidden group-[[opened]]:block" name="collapse" />
-    </button>
-
-    <div ssr-hidden>
-      <Code code={file} lang="tsx" />
-    </div>
-  </a-expandable>
+  <script>
+    document.body.classList.add("hydrated");
+  </script>
 </div>
-
-<script>
-  document.body.classList.add("hydrated");
-</script>
-
-<style is:global>
-  body:not(.hydrated) [ssr-hidden] {
-    display: none;
-  }
-</style>

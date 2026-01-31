@@ -1,5 +1,79 @@
 # @sv/components
 
+## 1.10.0 (2026-01-21)
+
+### Features
+
+- Update icon component to use the icons package
+- Migrate vue components to single file components
+
+## 1.9.0 (2026-01-08)
+
+### Features
+
+- Adds a-calendar to elements with docs (#7)
+- Remove air-datepicker dependency
+
+## 0.1.0-dev.1 (2025-10-17)
+
+### Breaking Changes
+
+- Move chart and animation elemnts into own package
+
+## 0.1.0-dev.0 (2025-10-16)
+
+### Breaking Changes
+
+- Move chart and animation elemnts into own package
+
+## 1.8.1 (2025-03-01)
+
+### Fixes
+
+- Make slider buttons appear on hover
+
+## 1.8.0 (2025-02-28)
+
+### Features
+
+- Minor fixes to component styling
+
+## 1.7.3 (2024-11-14)
+
+### Fixes
+
+- Make accordion content inert if closed
+
+## 1.7.2 (2024-10-15)
+
+### Fixes
+
+- search input slots not working
+
+## 1.7.1 (2024-10-15)
+
+### Fixes
+
+- peers are not copied
+
+## 1.7.0 (2024-10-15)
+
+### Features
+
+- update components package
+
+## 1.6.1 (2024-09-04)
+
+### Fixes
+
+- make combobox filterable
+
+## 1.6.0 (2024-09-03)
+
+### Features
+
+- display selected items in combobox
+
 ## 1.5.0 (2024-08-22)
 
 ### Features
@@ -80,15 +154,3 @@
 ### Minor Changes
 
 - ad5b85d: Framework specific components
-
-## 0.7.1
-
-### Patch Changes
-
-- 00fd8a1: Update scrollLock to apply passed options
-
-## 0.7.0
-
-### Minor Changes
-
-- 2a85ce6: Regular js cli

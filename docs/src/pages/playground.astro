@@ -1,0 +1,13 @@
+---
+import Layout from "../layout.astro";
+import { PlaygroundView } from "../components/playground/Playground.js";
+---
+
+<Layout>
+  <title slot="head">Playground | Atrium UI</title>
+  <meta name="description" slot="head" content="Playground for Atrium UI components and features." />
+
+  <div class="absolute inset-0">
+    <PlaygroundView client:only="react" />
+  </div>
+</Layout>

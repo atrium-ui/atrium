@@ -1,5 +1,1147 @@
 # @sv/elements
 
+## 4.6.2 (2026-01-30)
+
+### Fixes
+
+- Expandable calls scrollIntoView on mount
+
+## 4.6.1 (2026-01-27)
+
+### Fixes
+
+- Improve support for JAWS screenreader on windows
+
+## 4.6.0 (2026-01-24)
+
+### Features
+
+- Adds a-tabs elements
+
+## 4.5.2 (2026-01-23)
+
+### Fixes
+
+- a-blur: isInert not actually working across shadow boundaries
+
+## 4.5.1 (2026-01-23)
+
+### Fixes
+
+- a-blur: Ignores buttons inside custom-elements shadowRoot
+
+## 4.5.0 (2026-01-23)
+
+### Features
+
+- a-blur: fix focus control in some edge-cases (svp/atrium!57)
+
+### Fixes
+
+- a-blur: Ignore focusable elements that are not visible
+
+## 4.4.8-dev.4 (2026-01-23)
+
+### Fixes
+
+- initial inert state
+
+## 4.4.8-dev.3 (2026-01-22)
+
+### Fixes
+
+- Optimize finding focusable elements
+- initial inert state
+
+## 4.4.8-dev.2 (2026-01-22)
+
+### Fixes
+
+- Optimize finding focusable elements
+- initial inert state
+
+## 4.4.8-dev.1 (2026-01-22)
+
+### Fixes
+
+- Optimize finding focusable elements
+- initial inert state
+
+## 4.4.8-dev.0 (2026-01-22)
+
+### Fixes
+
+- Optimize finding focusable elements
+
+## 4.4.7 (2026-01-22)
+
+### Fixes
+
+- a-blur: check for focus loss and reset
+
+## 4.4.6 (2026-01-22)
+
+### Fixes
+
+- a-blur: simplify finding focusable elements
+
+## 4.4.5 (2026-01-22)
+
+### Fixes
+
+- a-blur: traverseShadowRealm does not see shadowRoot of rootNode
+
+## 4.4.4 (2026-01-22)
+
+### Fixes
+
+- a-blur: focusable elements inside shadowRoot within slot not found
+
+## 4.4.3 (2026-01-22)
+
+### Fixes
+
+- a-popover: double dialog role
+
+## 4.4.2 (2026-01-21)
+
+### Fixes
+
+- a-list: uodate selected option on connected
+
+## 4.4.1 (2026-01-21)
+
+### Fixes
+
+- a-blur: findActiveElement fails to find document.activeElement in children, if element also has a shadowRoot
+- a-list: Listbox options are not recognized
+
+## 4.4.0 (2026-01-09)
+
+### Features
+
+- Give option to define if start or end date is focused initially
+
+### Fixes
+
+- a-calendar: improve range seelction preview
+
+## 4.3.0 (2026-01-08)
+
+### Features
+
+- Add year-picker to a-calendar
+
+## 4.2.0 (2026-01-08)
+
+### Features
+
+- Adds a-calendar to elements with docs (#7)
+
+## 4.1.1 (2025-12-23)
+
+### Fixes
+
+- a-expandable: content still inert when open
+
+## 4.1.0 (2025-12-23)
+
+### Features
+
+- a-expandable: support opening for native cmd+f search matches
+
+## 4.0.3 (2025-11-22)
+
+### Fixes
+
+- a-popover: Prevent exit event loop in popover
+
+## 4.0.2 (2025-11-22)
+
+### Fixes
+
+- a-blur: Captured exit event infinite loop
+
+## 4.0.1 (2025-11-22)
+
+### Fixes
+
+- a-blur: Captured exit event cant be prevented
+
+## 4.0.0 (2025-11-08)
+
+### Breaking Changes
+
+- Track does not listen on touchend events (svp/atrium!54)
+
+### Fixes
+
+- Add shortcut element to package exports
+
+## 2.13.3-dev.0 (2025-10-17)
+
+### Fixes
+
+- Catch error when finding deeplink in expandable
+- Fix track listeners
+
+## 2.13.2-dev.0 (2025-10-17)
+
+### Fixes
+
+- Only prevent default, if overflow
+- Catch error when finding deeplink in expandable
+
+## 3.0.0-dev.1 (2025-10-17)
+
+### Breaking Changes
+
+- Move chart and animation elemnts into own package
+
+### Fixes
+
+- Track does not listen on touchend events
+- a-track: Dont prevent pointerdown events for focus on inputs etc
+- Only prevent default, if overflow
+- Only prevent default, if overflow
+- Catch error when finding deeplink in expandable
+
+## 3.0.0-dev.0 (2025-10-16)
+
+### Breaking Changes
+
+- Move chart and animation elemnts into own package
+
+### Fixes
+
+- Track does not listen on touchend events
+- a-track: Dont prevent pointerdown events for focus on inputs etc
+- Only prevent default, if overflow
+- Only prevent default, if overflow
+- Catch error when finding deeplink in expandable
+
+## 2.13.2-dev.3 (2025-10-14)
+
+### Fixes
+
+- Track does not listen on touchend events
+- a-track: Dont prevent pointerdown events for focus on inputs etc
+- Only prevent default, if overflow
+- Only prevent default, if overflow
+- Catch error when finding deeplink in expandable
+
+## 2.13.2-dev.2 (2025-10-13)
+
+### Fixes
+
+- Track does not listen on touchend events
+- a-track: Dont prevent pointerdown events for focus on inputs etc
+- Only prevent default, if overflow
+- Only prevent default, if overflow
+
+## 2.13.2-dev.1 (2025-10-13)
+
+### Fixes
+
+- Track does not listen on touchend events
+- a-track: Dont prevent pointerdown events for focus on inputs etc
+- Only prevent default, if overflow
+
+## 2.13.2-dev.0 (2025-09-15)
+
+### Fixes
+
+- Track does not listen on touchend events
+
+## 2.13.1 (2025-09-03)
+
+### Fixes
+
+- Ensure TouchEvent class is defined.
+
+## 2.13.0 (2025-09-03)
+
+### Features
+
+- a-track: Clamp to max-index or bounds on snapping
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: itemsInView off by one
+
+### Fixes
+
+- Solve for new tests
+- Solve for new tests
+- a-track: role attribute is overwritten
+- Moveing out of bounds wraps without loop enabled
+- a-transition: Observe attribute changes too
+
+## 2.13.0-dev.8 (2025-08-19)
+
+### Features
+
+- a-track: Dont clamp toTargetPositon index
+- a-track: Clamp to max-index or bounds on snapping
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: itemsInView off by one
+
+### Fixes
+
+- Solve for new tests
+- Solve for new tests
+- a-track: role attribute is overwritten
+- Moveing out of bounds wraps without loop enabled
+- a-transition: Observe attribute changes too
+
+## 2.13.0-dev.7 (2025-08-18)
+
+### Features
+
+- a-track: Ignore snapping bounds if overflow=ignore
+- a-track: Dont clamp toTargetPositon index
+- a-track: Clamp to max-index or bounds on snapping
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: itemsInView off by one
+
+### Fixes
+
+- Solve for new tests
+- a-track: role attribute is overwritten
+- Solve for new tests
+- a-transition: Observe attribute changes too
+
+## 2.13.0-dev.6 (2025-08-15)
+
+### Features
+
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Move track to the end within bounds, if the last item is the target
+- a-track: Ignore snapping bounds if overflow=ignore
+- a-track: Dont clamp toTargetPositon index
+- a-track: Clamp to max-index or bounds on snapping
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: itemsInView off by one
+
+### Fixes
+
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+
+## 2.13.0-dev.5 (2025-08-14)
+
+### Features
+
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Move track to the end within bounds, if the last item is the target
+- a-track: Ignore snapping bounds if overflow=ignore
+- a-track: Dont clamp toTargetPositon index
+- a-track: Clamp to max-index or bounds on snapping
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: Fix itemsInView when track is smaller than one item
+
+### Fixes
+
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+
+## 2.13.0-dev.4 (2025-08-14)
+
+### Features
+
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Move track to the end within bounds, if the last item is the target
+- a-track: Ignore snapping bounds if overflow=ignore
+- a-track: Dont clamp toTargetPositon index
+
+### Fixes
+
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+
+## 2.13.0-dev.3 (2025-08-14)
+
+### Features
+
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Move track to the end within bounds, if the last item is the target
+- a-track: Ignore snapping bounds if overflow=ignore
+
+### Fixes
+
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+
+## 2.13.0-dev.2 (2025-08-14)
+
+### Features
+
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Move track to the end within bounds, if the last item is the target
+
+### Fixes
+
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+
+## 2.13.0-dev.1 (2025-08-14)
+
+### Features
+
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+
+### Fixes
+
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+
+## 2.13.0-dev.0 (2025-08-14)
+
+### Features
+
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+
+### Fixes
+
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+
+## 2.12.1 (2025-07-28)
+
+### Fixes
+
+- a-popover: Remove debug logs
+
+## 2.12.0 (2025-07-28)
+
+### Features
+
+- Adds a-loader element for loading and error states (svp/atrium!51)
+
+## 2.11.1 (2025-07-28)
+
+### Fixes
+
+- a-track: Fix track not moving with darkreader
+- Exception when reattatching a popover
+
+## 2.11.1-dev.0 (2025-07-23)
+
+### Fixes
+
+- a-tooltip: Layout not working
+- a-track: Fix track not moving with darkreader
+
+## 2.12.0-dev.1 (2025-07-22)
+
+### Features
+
+- Popover variant for tooltips
+
+### Fixes
+
+- Dunamically check for show and hide functions in trigger
+- a-tooltip: Layout not working
+
+## 2.12.0-dev.0 (2025-07-22)
+
+### Features
+
+- Popover variant for tooltips
+
+### Fixes
+
+- Transition behaviour
+- Overwriteable popover instance check for triggers
+- Dunamically check for show and hide functions in trigger
+- a-tooltip: Layout not working
+
+## 2.11.0 (2025-07-22)
+
+### Features
+
+- a-track: Sets slot to `all: inherit`, a-popover-trigger: Renames `.close` of a-popover-trigger to `.hide` (svp/atrium!48)
+
+## 2.11.0-dev.8 (2025-07-08)
+
+### Features
+
+- Popover respects temporary portals
+
+### Fixes
+
+- Popover is not hidden when "exit" of blur is called
+- a-popover: emit events
+- Overrideable popover trigger selector
+- Transition behaviour
+- Overwriteable popover instance check for triggers
+- Dunamically check for show and hide functions in trigger
+
+## 2.11.0-dev.7 (2025-07-08)
+
+### Features
+
+- Popover respects temporary portals
+
+### Fixes
+
+- Popover is not hidden when "exit" of blur is called
+- a-popover: emit events
+- Overrideable popover trigger selector
+- Transition behaviour
+- Overwriteable popover instance check for triggers
+
+## 2.11.0-dev.6 (2025-07-07)
+
+### Features
+
+- Popover respects temporary portals
+
+### Fixes
+
+- Popover is not hidden when "exit" of blur is called
+- a-popover: emit events
+- Overrideable popover trigger selector
+- Transition behaviour
+
+## 2.11.0-dev.5 (2025-07-06)
+
+### Features
+
+- Popover respects temporary portals
+
+### Fixes
+
+- Popover is not hidden when "exit" of blur is called
+- a-popover: emit events
+- Overrideable popover trigger selector
+
+## 2.11.0-dev.4 (2025-07-06)
+
+### Features
+
+- refactor how items are counted, respecting the layout, when items are wrapped
+- Popover respects temporary portals
+
+### Fixes
+
+- Popover is not hidden when "exit" of blur is called
+- a-popover: emit events
+
+## 2.11.0-dev.3 (2025-07-06)
+
+### Features
+
+- Set track slot element to all: inherit
+- refactor how items are counted, respecting the layout, when items are wrapped
+
+### Fixes
+
+- Popover is not hidden when "exit" of blur is called
+
+## 2.11.0-dev.2 (2025-06-30)
+
+### Features
+
+- Set track slot element to all: inherit
+- refactor how items are counted, respecting the layout, when items are wrapped
+
+## 2.11.0-dev.1 (2025-06-30)
+
+### Features
+
+- Set track slot element to all: inherit
+- refactor how items are counted, respecting the layout, when items are wrapped
+
+## 2.11.0-dev.0 (2025-06-26)
+
+### Features
+
+- Set track slot element to all: inherit
+- refactor how items are counted, respecting the layout, when items are wrapped
+
+## 2.10.0 (2025-06-26)
+
+### Features
+
+- Adds a-list element, fixes a-blur finding tabindex=-1 elements as focusable (svp/atrium!47)
+
+## 2.10.0-dev.0 (2025-06-20)
+
+### Features
+
+- Set track slot element to all: inherit
+
+## 2.9.0 (2025-06-05)
+
+### Features
+
+- a-track: listen to touch events for better touch responsiveness (svp/atrium!45)
+
+## 2.9.0-dev.1 (2025-06-05)
+
+### Features
+
+- a-track: Listen to touch events too
+
+### Fixes
+
+- a-track: Click not working
+
+## 2.8.1 (2025-05-20)
+
+### Fixes
+
+- Type fixes
+
+## 2.9.0-dev.0 (2025-05-14)
+
+### Features
+
+- a-track: Listen to touch events too
+
+## 2.8.0 (2025-04-24)
+
+### Features
+
+- Fix a-blur expecting anchor without href to be focusable, Adds a-blur to be aware of slots, Adds a-transition animation with using FLIP (svp/atrium!44)
+
+## 2.8.0-dev.4 (2025-04-19)
+
+### Features
+
+- Add flip animation to a-transition
+
+### Fixes
+
+- Blur regards any element with href as focusable
+- Blur does not see children in slots
+- Blur does not see children in slots
+- Fix check
+- Fix slots handling
+
+## 2.8.0-dev.3 (2025-04-19)
+
+### Features
+
+- Add flip animation to a-transition
+
+### Fixes
+
+- Blur regards any element with href as focusable
+- Blur does not see children in slots
+- Blur does not see children in slots
+- Fix check
+
+## 2.8.0-dev.2 (2025-04-19)
+
+### Features
+
+- Add flip animation to a-transition
+
+### Fixes
+
+- Blur regards any element with href as focusable
+- Blur does not see children in slots
+
+## 2.8.0-dev.1 (2025-04-19)
+
+### Features
+
+- Add flip animation to a-transition
+
+### Fixes
+
+- Blur regards any element with href as focusable
+
+## 2.8.0-dev.0 (2025-04-17)
+
+### Features
+
+- Add flip animation to a-transition
+
+## 2.7.1 (2025-04-12)
+
+### Fixes
+
+- Blur outside click should cancel click event propagation
+
+## 2.7.0 (2025-04-04)
+
+### Features
+
+- Customizable range slider (svp/atrium!42)
+
+### Fixes
+
+- Blur focus-trap not working in shadowDOM (svp/atrium!43)
+- Improve toast animations (svp/atrium!38)
+
+## 2.7.0-dev.1 (2025-04-03)
+
+### Features
+
+- Customizable range slider
+- Customizable range slider
+
+## 2.7.0-dev.0 (2025-04-03)
+
+### Features
+
+- Customizable range slider
+
+## 2.6.0 (2025-03-22)
+
+### Features
+
+- Fix bugs in a-track, add a-list element (svp/atrium!34)
+
+## 2.6.0-dev.4 (2025-03-22)
+
+### Features
+
+- Fix package version
+
+### Fixes
+
+- Dont calculate velocity on position
+
+## 2.5.3-dev.0 (2025-03-22)
+
+### Fixes
+
+- Dont calculate velocity on position
+
+## 2.6.0-dev.2 (2025-03-21)
+
+### Features
+
+- a-track: major refactor
+
+### Fixes
+
+- Add wrap param for findIndex
+
+## 2.6.0-dev.1 (2025-03-15)
+
+### Features
+
+- a-track: major refactor
+
+### Fixes
+
+- Add wrap param for findIndex
+
+## 2.6.0-dev.0 (2025-03-14)
+
+### Features
+
+- a-track: major refactor
+
+## 2.5.1 (2025-03-13)
+
+### Fixes
+
+- a-track: Fix bug where inputs where skipping frames on high refreshrate displays
+
+## 2.5.0 (2025-03-12)
+
+### Features
+
+- Several a-track improvements (svp/atrium!33)
+
+## 0.0.1-dev.3 (2025-03-09)
+
+### Fixes
+
+- package version
+
+## 0.0.1-dev.2 (2025-03-09)
+
+### Fixes
+
+- Grab wont allow clicking on items
+
+## 0.0.1-dev.1 (2025-03-09)
+
+### Fixes
+
+- Grab wont allow clicking on items
+
+## 0.0.1-dev.0 (2025-03-09)
+
+### Fixes
+
+- Grab wont allow clicking on items
+
+## 2.4.2-dev.3 (2025-03-08)
+
+### Fixes
+
+- Improve track behaviour on different variable hardware
+- Fix check
+- Bug whre snap with align center did not snap to the last item
+- Grab wont allow clicking on items
+
+## 2.4.2-dev.2 (2025-03-08)
+
+### Fixes
+
+- Improve track behaviour on different variable hardware
+- Fix check
+- Bug whre snap with align center did not snap to the last item
+- Grab wont allow clicking on items
+
+## 2.4.2-dev.1 (2025-03-08)
+
+### Fixes
+
+- Improve track behaviour on different variable hardware
+- Fix check
+- Bug whre snap with align center did not snap to the last item
+
+## 2.4.2-dev.0 (2025-03-08)
+
+### Fixes
+
+- Improve track behaviour on different variable hardware
+- Fix check
+- Bug whre snap with align center did not snap to the last item
+
+## 2.4.1 (2025-03-04)
+
+### Fixes
+
+- a-track: vertical track not interactable
+
+## 2.4.0 (2025-03-01)
+
+### Features
+
+- Make `overflowscroll` default behaviour and add `overflow` attribute.
+
+## 2.3.0 (2025-02-28)
+
+### Features
+
+- Multiple fixes for a-track and adds `initialfocus` ans `allowscroll` attributes to a-blur (svp/atrium!31)
+
+### Fixes
+
+- Give `a-blur` the option to not inert when disabled
+
+## 2.2.0 (2025-02-27)
+
+### Features
+
+- Multiple fixes for a-track and adds `initialfocus` ans `allowscroll` attributes to a-blur (svp/atrium!31)
+
+## 2.2.0-dev.6 (2025-02-27)
+
+### Features
+
+- a-track: find items through slots
+- Give 'a-blur' the option  to disable automatic focus on first focusable element
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+- reformat on align prop change
+- track moves on both axis at the same time
+- Add a some buffer pixels to maxIndex calculation
+- add allowscroll attribute, rename allowinert to `autoinert`, added test for new attributes
+
+## 2.2.0-dev.5 (2025-02-27)
+
+### Features
+
+- a-track: find items through slots
+- Give 'a-blur' the option  to disable automatic focus on first focusable element
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+- reformat on align prop change
+- track moves on both axis at the same time
+- Add a some buffer pixels to maxIndex calculation
+- add allowscroll attribute, rename allowinert to `autoinert`, added test for new attributes
+
+## 2.2.0-dev.4 (2025-02-25)
+
+### Features
+
+- a-track: find items through slots
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+- reformat on align prop change
+- track moves on both axis at the same time
+- Add a some buffer pixels to maxIndex calculation
+
+## 2.2.0-dev.3 (2025-02-20)
+
+### Features
+
+- a-track: find items through slots
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+- reformat on align prop change
+- track moves on both axis at the same time
+
+## 2.2.0-dev.2 (2025-02-20)
+
+### Features
+
+- a-track: find items through slots
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+- reformat on align prop change
+
+## 2.2.0-dev.1 (2025-02-20)
+
+### Features
+
+- a-track: find items through slots
+
+### Fixes
+
+- remove weird scroll logic
+- Fix scroll jitter on low hz displays
+
+## 2.2.0-dev.0 (2025-02-20)
+
+### Features
+
+- a-track: find items through slots
+
+## 2.1.2 (2025-02-19)
+
+### Fixes
+
+- Give `a-blur` the option to not inert when disabled
+
+## 2.1.1 (2025-02-07)
+
+### Fixes
+
+- a-transition: Make transition timing configruable through css
+
+## 2.1.0 (2025-01-30)
+
+### Features
+
+- a-form-field: Add invalid prop for styling of invalid states (#4)
+
+## 2.0.10 (2025-01-24)
+
+### Fixes
+
+- a-track: Added `current` attribute to dynamically set current item
+
+## 2.0.9 (2025-01-24)
+
+### Fixes
+
+- a-track: Calculate maxIndex based on overflowWidth
+
+## 2.0.8 (2025-01-22)
+
+### Fixes
+
+- a-track: Overflowscroll off by one error
+
+## 2.0.7 (2025-01-05)
+
+### Fixes
+
+- Fix portal proxied events being duplicated (svp/atrium!29)
+
+## 2.0.6 (2025-01-03)
+
+### Fixes
+
+- Dont use crypto api for portal ids
+
+## 2.0.5 (2025-01-02)
+
+### Fixes
+
+- Portal event proxy improvments
+
+## 2.0.4 (2025-01-02)
+
+### Fixes
+
+- Popover blur listening on wrong event
+
+## 2.0.3 (2025-01-01)
+
+### Fixes
+
+- Fix popover-arrow double define exception
+
+## 2.0.2 (2025-01-01)
+
+### Fixes
+
+- Rename blur event to "exit"
+
+## 2.0.1 (2024-12-26)
+
+### Fixes
+
+- a-blur: Find focusable elements within shadowRoots
+- a-transition: Animate size to 0
+
+## 2.0.0 (2024-12-23)
+
+### Breaking Changes
+
+- Change the blur to *not* scrollock by default (svp/atrium!22)
+
+### Features
+
+- Expandable open on anchor link (svp/atrium!23)
+- Add a-box component (svp/atrium!26)
+
+### Fixes
+
+- Fix expandable deeplink not working, if link is inside a slot
+- Expandable find deeplinks of direct children of slots
+- Find active element of trigger button, within a shadowDOM
+
+## 2.0.0-dev.1 (2024-12-11)
+
+### Breaking Changes
+
+- Change the blur to *not* scrollock by default (svp/atrium!22)
+
+### Features
+
+- Expandable open on anchor link (svp/atrium!23)
+- Add a-box component (svp/atrium!26)
+
+## 2.0.0-dev.0 (2024-12-11)
+
+### Breaking Changes
+
+- Change the blur to *not* scrollock by default (svp/atrium!22)
+
+### Features
+
+- Expandable open on anchor link (svp/atrium!23)
+- Add a-box component (svp/atrium!26)
+
+## 1.18.1 (2024-12-04)
+
+### Fixes
+
+- Do not move the focus automatically on invalid fields, just scroll to it
+
+## 1.18.0 (2024-12-03)
+
+### Features
+
+- Remove arbitrary default time for toast
+
+## 1.17.0 (2024-11-14)
+
+### Features
+
+- Update rive for text and layout support (svp/atrium!21)
+
+### Fixes
+
+- Make accordion content inert if closed
+
+## 1.16.0 (2024-10-15)
+
+### Features
+
+- a-expandable: add css part to expandable container
+- add option to add arrow to popover
+
+## 1.16.0-dev.0 (2024-09-24)
+
+### Features
+
+- a-expandable: add css part to expandable container
+
+## 1.15.0 (2024-09-23)
+
+### Features
+
+- a-track: added centered attribute and handling
+
+### Fixes
+
+- a-track: uses wrong item to center itself
+- a-track: first element not cetnered correctly when align=center
+
+## 1.15.0-dev.2 (2024-09-20)
+
+### Features
+
+- a-track: added centered attribute and handling
+
+### Fixes
+
+- a-track: uses wrong item to center itself
+- a-track: first element not cetnered correctly when align=center
+
+## 1.15.0-dev.1 (2024-09-20)
+
+### Features
+
+- a-track: added centered attribute and handling
+
+### Fixes
+
+- a-track: uses wrong item to center itself
+
+## 1.15.0-dev.0 (2024-09-19)
+
+### Features
+
+- a-track: added centered attribute and handling
+
+## 1.14.4 (2024-09-18)
+
+### Fixes
+
+- a-select: scroll into view on invalid
+- a-select: fix scrollIntoView on invalid, even if already in view
+- fix form fields validating on inputs
+
+## 1.14.3 (2024-09-04)
+
+### Fixes
+
+- fix form fields validating on inputs
+
 ## 1.14.2 (2024-08-23)
 
 ### Fixes

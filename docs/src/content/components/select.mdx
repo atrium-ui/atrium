@@ -1,0 +1,15 @@
+---
+title: Select
+image: "/components/select.png"
+description: A dropdown with specific options to select.
+tags: [["a-select", "elements/select"], ["Button", "components/button"]]
+command: "npx @sv/components select"
+order: 2
+---
+import SelectDemoRaw from "./select/select?raw";
+import SelectDemo from "./select/select";
+import { Example, Atrium } from "package:/components";
+
+<Example code={SelectDemoRaw}>
+  <SelectDemo client:only="vue"/>
+</Example>

@@ -1,0 +1,214 @@
+---
+title: a-expandable
+description: A collapsible element with smooth expand/collapse animations for accordions and disclosure widgets.
+command: import "@sv/elements/expandable";
+order: 0
+---
+
+import { paragraph } from "txtgen";
+import { TypeDoc, Icon, Lit } from "package:/components"
+
+The `a-expandable` element creates collapsible content sections with smooth CSS Grid-based animations. It handles accessibility automatically, including ARIA attributes, keyboard navigation, and anchor link support.
+
+<div class="not-content box">
+  <a-expandable class="accordion">
+
+    <div slot="toggle">
+      <button class="w-full text-left rounded-md my-1">
+        <div class="headline">Expand</div>
+      </button>
+    </div>
+
+    <div class="accordion-content">{paragraph(4)}</div>
+
+  </a-expandable>
+</div>
+
+Used by [Accordion](/components/accordion), [Combobox](/components/combobox), [Filter](/components/filter), and [Select](/components/select).
+
+## Installation
+
+```ts
+import "@sv/elements/expandable";
+```
+
+## Usage
+
+### Basic Usage
+
+```html
+<a-expandable>
+  <button slot="toggle" type="button">
+    Click to expand
+  </button>
+  <div>
+    Hidden content that will be revealed
+  </div>
+</a-expandable>
+```
+
+<div class="not-content box">
+  <a-expandable>
+    <button slot="toggle" type="button">
+      Click to expand
+    </button>
+    <div>
+      Hidden content that will be revealed
+    </div>
+  </a-expandable>
+</div>
+
+### Initially Opened
+
+```html
+<a-expandable opened>
+  <button slot="toggle" type="button">
+    This starts open
+  </button>
+  <div>
+    Visible content
+  </div>
+</a-expandable>
+```
+
+<div class="not-content box">
+  <a-expandable opened>
+    <button slot="toggle" type="button">
+      This starts open
+    </button>
+    <div>
+      Visible content
+    </div>
+  </a-expandable>
+</div>
+
+### Expand up
+
+<div class="not-content box">
+  <div>
+    <a-expandable class="accordion" direction="up">
+
+      <div slot="toggle">
+        <button class="w-full text-left rounded-md my-1">
+          <div class="headline">Expand up</div>
+        </button>
+      </div>
+
+      <div class="accordion-content">{paragraph(4)}</div>
+
+    </a-expandable>
+  </div>
+</div>
+
+### Expand a Paragraph
+
+<div class="not-content box">
+  <div>
+    <p>{paragraph(4)}</p>
+
+    <a-expandable class="accordion" direction="up" data-id="one">
+      <p>{paragraph(4)}</p>
+
+      <div slot="toggle" class="flex justify-center cursor-pointer p-6">
+        <Icon name="expand" />
+      </div>
+
+    </a-expandable>
+  </div>
+</div>
+
+
+### Programmatic Control
+
+```ts
+const expandable = document.querySelector('a-expandable');
+
+// Open the expandable
+expandable.open();
+
+// Close the expandable
+expandable.close();
+
+// Toggle the state
+expandable.toggle();
+
+// Check current state
+if (expandable.opened) {
+  console.log('Currently expanded');
+}
+```
+
+### Listening for Changes
+
+```ts
+const expandable = document.querySelector('a-expandable');
+
+expandable.addEventListener('change', (event) => {
+  console.log('Expanded:', event.target.opened);
+});
+```
+
+## Styling
+
+The expandable uses CSS Grid for smooth height animations. Customise timing with CSS custom properties:
+
+```css
+a-expandable {
+  --transition-speed: 0.33s;
+  --animation-easing: ease;
+}
+
+/* Faster animation */
+a-expandable.fast {
+  --transition-speed: 0.15s;
+}
+
+/* Slower, more dramatic */
+a-expandable.slow {
+  --transition-speed: 0.5s;
+  --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+```
+
+### Styling the Toggle
+
+```css
+a-expandable [slot="toggle"] {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Rotate icon when opened */
+a-expandable[opened] [slot="toggle"] .icon {
+  transform: rotate(180deg);
+}
+```
+
+## Accessibility
+
+- **ARIA Attributes**: Automatically sets `aria-expanded` on the toggle and `aria-labelledby` on the content region.
+- **Keyboard Support**: Toggle responds to Enter and Space keys when focused.
+- **Focus Management**: Focusable elements inside collapsed content are removed from tab order.
+- **Anchor Links**: When a URL hash matches an element inside the expandable, it automatically opens to reveal the content.
+- **Scroll Into View**: When opened or closed, the expandable scrolls into view to prevent content from shifting off-screen.
+- **Hidden Until Found**: Uses `hidden="until-found"` for browser find-in-page support (where available).
+
+## CSS Custom Properties
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--transition-speed` | `0.33s` | Duration of the expand/collapse animation |
+| `--animation-easing` | `ease` | Easing function for the animation |
+
+<br/>
+
+
+<TypeDoc source="../packages/elements/packages/expandable" symbol="Expandable" />
+
+
+## References
+
+- [WAI-ARIA Accordion Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/)
+- [WAI-ARIA Disclosure Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/)

@@ -13,7 +13,14 @@ declare global {
   }
 }
 
-let globalStyles: HTMLStyleElement;
+function msFromCSS(string: string) {
+  const unit = string.match(/m?s/)?.[0];
+  let ms = Number.parseFloat(string);
+  if (unit === "s") {
+    ms *= 1000;
+  }
+  return ms;
+}
 
 /**
  * Transitions dom elements between two state automatically.
@@ -25,7 +32,7 @@ let globalStyles: HTMLStyleElement;
  * </a-transition>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-transition/
+ * @see https://atrium-ui.dev/elements/a-transition/
  */
 class Transition extends LitElement {
   // TODO: these should also work with page navigations
@@ -34,6 +41,8 @@ class Transition extends LitElement {
     return css`
       :host {
         display: block;
+        transition-duration: 0.3s;
+        transition-timing-function: ease-in-out;
       }
       slot {
         display: inherit;
@@ -46,10 +55,13 @@ class Transition extends LitElement {
   }
 
   /**
-   * Whether the blur is enabled or not.
+   * What type of transition to use.
+   * - size: Transition just the size of the element.
+   * - transition: Usees the View-Transitions API
+   * - animation: Animate layout changes using CSS animations with the FLIP technique.
    */
   @property({ type: String })
-  public type: "size" | "animation" = "size";
+  public type: "size" | "transition" | "animation" = "size";
 
   /**
    * Set a custom "view-transition-name"
@@ -64,6 +76,7 @@ class Transition extends LitElement {
   observer?: MutationObserver;
 
   childrenCache?: Element[];
+
   lock = false;
 
   lastHeight = this.offsetHeight;
@@ -76,7 +89,7 @@ class Transition extends LitElement {
       this.animateSizes();
     }
 
-    if (this.type === "animation") {
+    if (this.type === "transition") {
       // @ts-ignore
       this.style.setProperty("view-transition-name", this.name);
     }
@@ -90,33 +103,40 @@ class Transition extends LitElement {
         this.requestUpdate();
       }
 
-      if (this.type === "animation" && !this.lock) {
+      if (this.type === "transition" && !this.lock) {
         this.lock = true;
-        await this.animateChildChanges();
+        await this.transitionChildChanges();
         this.lock = false;
+      }
+
+      if (this.type === "animation") {
+        await this.animateLayout();
+        this.cacheLayout();
       }
     });
 
     this.observer.observe(this, {
       childList: true,
+      attributes: true,
       subtree: true,
       characterData: true,
     });
 
     window.addEventListener("resize", this.onResize);
 
-    requestAnimationFrame(() => {
-      this.initialised = true;
-      this.lastHeight = this.offsetHeight;
-      this.lastWidth = this.offsetWidth;
-    });
+    requestAnimationFrame(() => this.initialise());
+  }
+
+  initialise() {
+    this.initialised = true;
+    this.lastHeight = this.offsetHeight;
+    this.lastWidth = this.offsetWidth;
+    this.cacheLayout();
   }
 
   disconnectedCallback(): void {
     window.removeEventListener("resize", this.onResize);
-
     this.observer?.disconnect();
-
     super.disconnectedCallback();
   }
 
@@ -127,7 +147,82 @@ class Transition extends LitElement {
     }
   };
 
-  async animateChildChanges() {
+  startLayout: Map<Element, DOMRect> = new Map();
+
+  async animateLayout() {
+    const delayMultiplier = 150;
+    const duration = 400;
+    const easeFunction = "cubic-bezier(0.31, 0.17, 0, 1.01)";
+
+    if (this.initialised) {
+      const targetLayout: Map<Element, DOMRect> = new Map();
+      for (const child of this.children) {
+        targetLayout.set(child, child.getBoundingClientRect());
+      }
+
+      // animate by deltas
+      let index = 0;
+      for (const [child] of targetLayout.entries()) {
+        const start = this.startLayout.get(child);
+        const target = targetLayout.get(child);
+
+        const delay = (1 - index / targetLayout.size) * delayMultiplier;
+
+        if (!start) {
+          // new element
+          child.animate([{ transform: "scale(0)" }, { transform: "scale(1)" }], {
+            duration,
+            delay,
+            easing: easeFunction,
+            fill: "backwards",
+          });
+          continue;
+        }
+
+        if (!target) {
+          // element disappeared
+          continue;
+        }
+
+        const { x, y } = start
+          ? {
+              x: target.x - start.x,
+              y: target.y - start.y,
+            }
+          : { x: 0, y: 0 };
+
+        child.animate(
+          [
+            { transform: `translate(${-x}px, ${-y}px)` },
+            { transform: "translate(0px, 0px)" },
+          ],
+          {
+            duration,
+            delay,
+            easing: easeFunction,
+            fill: "backwards",
+          },
+        );
+
+        index++;
+      }
+    }
+  }
+
+  cacheLayout() {
+    const delayMultiplier = 150;
+
+    for (const child of this.children) {
+      this.startLayout.set(child, child.getBoundingClientRect());
+    }
+    for (let index = 0; index < this.startLayout.size; index++) {
+      const child = this.children[index] as HTMLElement;
+      const delay = (1 - index / this.startLayout.size) * delayMultiplier;
+      child.style.transitionDelay = `${delay}ms`;
+    }
+  }
+
+  async transitionChildChanges() {
     // cache current dom nodes for later use
 
     const lastChildren = this.childrenCache;
@@ -171,24 +266,27 @@ class Transition extends LitElement {
     const height = this.offsetHeight;
     const width = this.offsetWidth;
 
-    if (height && width) {
-      await this.animate(
-        [
-          {
-            height: `${this.lastHeight}px`,
-            width: `${this.lastWidth}px`,
-          },
-          {
-            height: `${height}px`,
-            width: `${width}px`,
-          },
-        ],
+    const easing = getComputedStyle(this).getPropertyValue("transition-timing-function");
+    const duration = msFromCSS(
+      getComputedStyle(this).getPropertyValue("transition-duration"),
+    );
+
+    await this.animate(
+      [
         {
-          duration: 200,
-          easing: "ease-out",
+          height: `${this.lastHeight}px`,
+          width: `${this.lastWidth}px`,
         },
-      ).finished;
-    }
+        {
+          height: `${height}px`,
+          width: `${width}px`,
+        },
+      ],
+      {
+        duration,
+        easing,
+      },
+    ).finished;
 
     this.lastHeight = height;
     this.lastWidth = width;

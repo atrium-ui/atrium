@@ -2,6 +2,19 @@
 
 version: "3"
 
+interval: "50ms"
+
+vars:
+  PACKAGES:
+    [
+      "packages/a11y",
+      "packages/components",
+      "packages/elements",
+      "packages/scroll-lock",
+      "packages/icons",
+      "packages/svg-sprites",
+    ]
+
 includes:
   docs:
     taskfile: docs/Taskfile.yml
@@ -15,14 +28,9 @@ tasks:
       - task -l --sort none
 
   setup:
-    desc: Install tools and dependencies
-    run: when_changed
-    sources:
-      - .mise.toml
-      - "package.json"
-      - "**/package.json"
+    desc: Install dependencies
     cmds:
-      - bun install
+      - bun install --linker=hoisted
 
   build:
     desc: Build all packages
@@ -43,19 +51,22 @@ tasks:
     cmd: bun build --target=browser {{.ENTRY}} --outdir dist --sourcemap=external --format {{.FORMAT}} {{.EXTERNAL}} {{.CLI_ARGS}}
 
   dev:
-    desc: Start docs and watch for changes
+    desc: Start packages in dev mode
     deps: [setup]
+    watch: true
+    sources:
+      - "packages/elements/**/*.{ts,tsx}"
     cmds:
-      - task --parallel docs build:watch
+      - bun x turbo build
 
   build:watch:
     desc: Watch-build packages for development
     deps: [setup]
     cmds:
-      - bun x turbo dev --filter "./packages/**"
+      - bun x turbo watch build --filter "./packages/**"
 
   test:
-    desc: "Run tests on all packages (Run specific test: t test --  -t prettier)"
+    desc: "Run tests on all packages (Run specific test: t test -- -t prettier)"
     deps: [build]
     cmds:
       - bun x turbo test -- {{.CLI_ARGS}}
@@ -80,15 +91,15 @@ tasks:
       - bun x turbo check
       - bun x biome check --diagnostic-level=error .
 
-  fix:
+  check:fix:
     desc: Apply all (unsafe) autofixes
     cmds:
-      - bun x biome check --apply .
+      - bun x biome check --write .
 
-  fix:unsafe:
+  check:fix:unsafe:
     desc: Apply all (unsafe) autofixes
     cmds:
-      - bun x biome check --apply-unsafe .
+      - bun x biome check --write --unsafe .
 
   clean:
     desc: Clean untracked files
@@ -105,41 +116,52 @@ tasks:
 
   release:
     deps: [build]
+    env:
+      RELEASE_LABEL: "latest"
     cmds:
-      - knope -v release | tee .task/publish.txt
+      - git config user.email "gitlab@s-v.de"
+      - git config user.name "CI"
+      - git fetch --prune --prune-tags -f
+      - knope -v release | tee .publish
       - task notify || true
-
-  prerelease:
-    deps: [build]
-    vars:
-      PRERELEASE_LABEL: "dev"
-    cmds:
-      - PRERELEASE_LABEL={{.PRERELEASE_LABEL}} knope -v release --prerelease-label=$PRERELEASE_LABEL
 
   release:preview:
     cmds:
       - knope release --dry-run
 
+  prerelease:
+    deps: [build]
+    env:
+      RELEASE_LABEL: "dev"
+    cmds:
+      - "echo Prerelease tag: $RELEASE_LABEL"
+      - knope -v release --prerelease-label=$RELEASE_LABEL
+
+  publish-packages:
+    cmds:
+      - "echo Packages release tag: $RELEASE_LABEL"
+      - for: { var: PACKAGES }
+        cmd: cd {{.ITEM}} && task publish
+
   publish:
     dir: "{{.USER_WORKING_DIR}}"
     vars:
-      PRERELEASE_LABEL:
-        sh: echo $PRERELEASE_LABEL
       NAME:
         sh: bun x npm version --json | jq "keys[0]"
       VERSION:
         sh: bun x npm version --json | jq ".[keys[0]]"
     cmds:
-      - bun x npm publish --tag {{.PRERELEASE_LABEL | default "latest"}} && echo info Publishing \"{{.NAME}}\" at \"{{.VERSION}}\" || true
+      - "echo Publish tag: $RELEASE_LABEL"
+      - bun x npm publish --access public --tag $RELEASE_LABEL && echo info Publishing \"{{.NAME}}\" at \"{{.VERSION}}\" || true
 
   notify:
     silent: true
     dir: "./"
     cmds:
-      - bun ./scripts/generate-notify > .task/notify.txt
-      - defer: rm .task/notify.txt
-      - 'echo "$(cat .task/notify.txt)"'
-      - 'curl -X POST -d "$(cat .task/notify.txt)" $SLACK_WEBHOOK_URL'
+      - bun ./scripts/generate-notify > .notify
+      - defer: rm .notify
+      - 'echo "$(cat .notify)"'
+      - 'curl -X POST -d "$(cat .notify)" $SLACK_WEBHOOK_URL'
 
   docker:build:
     desc: Build docker image, pass --push to push to registry

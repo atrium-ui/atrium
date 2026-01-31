@@ -1,0 +1,61 @@
+---
+title: Input
+image: "/components/input.png"
+description: A styles input with error states and label.
+command: "npx @sv/components input"
+order: 1
+---
+import { Input } from "@components/src/vue";
+import { InputEmail } from "@components/src/vue";
+import { InputPassword } from "@components/src/vue";
+import { InputSearch } from "@components/src/vue";
+import { InputNumber } from "@components/src/vue";
+import { Example, Atrium } from "package:/components";
+
+<Example title="Text" code={`
+---
+import { Input } from "./Input.jsx";
+---
+
+<Input placeholder="Text" label="Input" />
+<br />
+<Input placeholder="Text" label="Input" error="Can not be empty" />
+`}>
+  <div class="max-w-[300px]">
+    <Input placeholder="Text" label="Input" client:only="vue" />
+    <br />
+    <Input placeholder="Text" label="Input" error="Can not be empty" client:only="vue" />
+  </div>
+</Example>
+
+<Example title="Email" code={`
+// TODO
+`}>
+  <div class="max-w-[300px]">
+    <InputEmail placeholder="muster@example.com" label="Email" client:only="vue" />
+  </div>
+</Example>
+
+<Example title="Password" code={`
+// TODO
+`}>
+  <div class="max-w-[300px]">
+    <InputPassword placeholder="Password" label="Password" client:only="vue" />
+  </div>
+</Example>
+
+<Example title="Search" code={`
+// TODO
+`}>
+  <div class="max-w-[300px]">
+    <InputSearch placeholder="Search for something.." label="Search" client:only="vue" />
+  </div>
+</Example>
+
+<Example title="Number" code={`
+// TODO
+`}>
+  <div class="max-w-[300px]">
+    <InputNumber placeholder="Number" label="Number" client:only="vue" />
+  </div>
+</Example>

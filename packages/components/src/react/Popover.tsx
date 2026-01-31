@@ -1,6 +1,6 @@
 /* @jsx React */
 import type { PropsWithChildren } from "react";
-import { Button } from "./Button";
+import { Button } from "./Button.js";
 import "@sv/elements/popover";
 
 export function Popover(props: { label?: string } & PropsWithChildren) {
@@ -23,7 +23,7 @@ export function Popover(props: { label?: string } & PropsWithChildren) {
         >
           <div
             className={[
-              "min-w-[100px] rounded-md border border-zinc-700 bg-zinc-50 p-1 dark:bg-zinc-800",
+              "min-w-[100px] rounded-md border border-zinc-200 bg-zinc-50 p-1 dark:bg-zinc-800",
               "scale-95 transition-all duration-150 group-[&[enabled]]:scale-100",
             ].join(" ")}
           >

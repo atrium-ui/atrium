@@ -1,35 +1,29 @@
 /* @jsxImportSource vue */
 
-import { Lightbox } from "@components/src/vue/Lightbox";
+import { Lightbox } from "@components/src/vue";
 import { twMerge } from "tailwind-merge";
 
-const landscape = import.meta.glob("../../assets/images/landscape/*.webp", {
-  eager: true,
-  as: "url",
-});
-
-const portrait = import.meta.glob("../../assets/images/portrait/*.webp", {
-  eager: true,
-  as: "url",
-});
-
-const images = Object.assign(landscape, portrait);
+const images = {
+  1: {
+    default: "/placeholder.svg",
+  },
+};
 
 export function randomImage() {
   const keys = Object.keys(images);
   const uid = Math.floor(Math.random() * keys.length);
   const src = images[keys[uid] || 0];
-
-  return src;
+  return src?.default;
 }
 
 export function Image(props: {
+  src?: string;
   class?: string;
   width?: number;
   height?: number;
   lightbox?: boolean;
 }) {
-  const src = randomImage();
+  const src = props.src || randomImage();
 
   if (props.lightbox) {
     return (

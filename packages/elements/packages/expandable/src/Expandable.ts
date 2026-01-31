@@ -1,10 +1,19 @@
 import { type HTMLTemplateResult, LitElement, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 declare global {
   interface HTMLElementTagNameMap {
     "a-expandable": Expandable;
   }
+}
+
+let windowLoaded = false;
+
+if (typeof window !== "undefined") {
+  window.addEventListener("load", () => {
+    windowLoaded = true;
+  });
 }
 
 let accordionIncrement = 0;
@@ -25,7 +34,7 @@ let accordionIncrement = 0;
  *  </a-expandable>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-expandable/
+ * @see https://atrium-ui.dev/elements/a-expandable/
  */
 export class Expandable extends LitElement {
   public static get styles() {
@@ -41,9 +50,10 @@ export class Expandable extends LitElement {
         .container {
           display: grid;
           grid-template-rows: 0fr;
-					grid-template-columns: 100%;
+          grid-template-columns: 100%;
           overflow: hidden;
           transition: grid-template-rows var(--transition-speed) var(--animation-easing);
+          content-visibility: visible;
         }
 
         :host([opened]) .container {
@@ -89,7 +99,7 @@ export class Expandable extends LitElement {
     this.opened ? this.close() : this.open();
   }
 
-  private onChange() {
+  updateAttributes() {
     const trigger = this.trigger;
     if (trigger) {
       this.trigger.setAttribute("aria-expanded", this.opened.toString());
@@ -98,20 +108,31 @@ export class Expandable extends LitElement {
     const content = this.content;
     if (content) {
       content.setAttribute("aria-hidden", String(!this.opened));
+
+      if (this.opened) {
+        content.removeAttribute("inert");
+      } else {
+        content.setAttribute("inert", "");
+      }
     }
+  }
+
+  onChange() {
+    this.updateAttributes();
 
     const ev = new CustomEvent("change", { bubbles: true, cancelable: true });
     this.dispatchEvent(ev);
 
-    if (!ev.defaultPrevented)
+    if (!ev.defaultPrevented && windowLoaded) {
       this.scrollIntoView({
         behavior: "smooth",
         block: "nearest",
         inline: "nearest",
       });
+    }
   }
 
-  private get content() {
+  get content() {
     for (const ele of this.children) {
       // default slot
       if (!ele.slot) return ele;
@@ -119,17 +140,21 @@ export class Expandable extends LitElement {
     return undefined;
   }
 
-  private get trigger() {
+  get trigger() {
     for (const ele of this.children) {
       if (ele.slot === "toggle") return ele;
     }
     return undefined;
   }
 
-  private _id_toggle = `expandable_toggle_${++accordionIncrement}`;
-  private _id_content = `expandable_content_${accordionIncrement}`;
+  _id_toggle = `expandable_toggle_${++accordionIncrement}`;
+  _id_content = `expandable_content_${accordionIncrement}`;
 
-  private onSlotChange() {
+  updated() {
+    this.updateAttributes();
+  }
+
+  onSlotChange() {
     const trigger = this.trigger;
     if (trigger) {
       trigger.setAttribute("aria-controls", this._id_content);
@@ -142,20 +167,96 @@ export class Expandable extends LitElement {
       content.id = this._id_content;
       content.setAttribute("aria-labelledby", this._id_toggle);
     }
+
+    this.updateAttributes();
   }
 
-  private onClick(e: Event) {
+  onBeforeMatch() {
+    if (!this.opened) this.open();
+  }
+
+  onClick(e: Event) {
     if (this.trigger?.contains(e.target as HTMLElement)) this.toggle();
   }
 
-  private renderToggle() {
-    return html`<slot name="toggle" @slotchange=${this.onSlotChange} @click=${this.onClick}></slot>`;
+  findDeeplink() {
+    if (!location.hash) {
+      return undefined;
+    }
+
+    try {
+      const ele = this.querySelector<HTMLElement>(location.hash);
+      if (ele) {
+        return ele;
+      }
+    } catch (_err: unknown) {
+      // invalid selector or ele not found
+    }
+
+    const slots = this.querySelectorAll("slot");
+    if (!slots) {
+      return undefined;
+    }
+
+    const hashId = location.hash.substring(1);
+
+    for (const slot of slots) {
+      for (const ele of slot.assignedElements()) {
+        if (ele.id === hashId) {
+          return ele;
+        }
+
+        try {
+          const link = ele?.querySelector<HTMLElement>(`#${hashId}`);
+          if (link) {
+            return link;
+          }
+        } catch (_err: unknown) {
+          // invalid selector or ele not found
+        }
+      }
+    }
+
+    return undefined;
+  }
+
+  onDeeplink = () => {
+    if (!this.opened && this.findDeeplink()) {
+      this.open();
+    }
+  };
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.onDeeplink();
+
+    window.addEventListener("hashchange", this.onDeeplink);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    window.removeEventListener("hashchange", this.onDeeplink);
+  }
+
+  renderToggle() {
+    return html`<slot
+      name="toggle"
+      @slotchange=${this.onSlotChange}
+      @click=${this.onClick}
+    ></slot>`;
   }
 
   protected render(): HTMLTemplateResult {
     return html`
       ${this.direction === "down" ? this.renderToggle() : undefined}
-      <div class="container">
+      <div
+        class="container"
+        part="container"
+        hidden=${ifDefined(!this.opened ? "until-found" : undefined)}
+        @beforematch=${this.onBeforeMatch}
+      >
         <slot @slotchange=${this.onSlotChange} class="content"></slot>
       </div>
       ${this.direction === "up" ? this.renderToggle() : undefined}

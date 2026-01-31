@@ -1,6 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { property, query } from "lit/decorators.js";
-import type { OptionElement } from "./Option";
+import type { OptionElement } from "./Option.js";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -39,7 +39,7 @@ export class SelectEvent extends CustomEvent<{ selected: OptionElement }> {
  *     <div class="w-[150px] text-left">Select</div>
  *   </button>
  *
- *   <div class="mt-1 border border-zinc-700 bg-zinc-800 p-1">
+ *   <div class="mt-1 border border-zinc-200 bg-zinc-800 p-1">
  *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-1">Option 1</a-option>
  *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-2">Option 2</a-option>
  *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-3">Option 3</a-option>
@@ -49,7 +49,7 @@ export class SelectEvent extends CustomEvent<{ selected: OptionElement }> {
  * </form>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-select/
+ * @see https://atrium-ui.dev/elements/a-select/
  */
 export class Select extends LitElement {
   static get styles() {
@@ -85,6 +85,7 @@ export class Select extends LitElement {
       .dropdown {
         max-height: var(--dropdown-max-height);
         overflow: auto;
+        height: 100%;
         width: 100%;
       }
     `;

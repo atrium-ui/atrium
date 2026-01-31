@@ -1,10 +1,14 @@
-import { test, expect, it, beforeAll } from "bun:test";
+import { test, expect, it, beforeAll, afterEach } from "bun:test";
 import type { Blur } from "../src/Blur.js";
 
 const NODE_NAME = "a-blur";
 
+afterEach(() => {
+  document.body.innerHTML = "";
+});
+
 test("import element", async () => {
-  const { Blur } = await import("@sv/elements/blur");
+  const { Blur } = await import("../dist/index.js");
   expect(Blur).toBeDefined();
 
   // is defined in custom element registry
@@ -76,6 +80,7 @@ test("focus first focusable element", async () => {
 test("scroll lock", async () => {
   const root = await createBlur();
   const blur = root.querySelector("a-blur");
+  blur.setAttribute("scrolllock", "");
   blur.enable();
 
   // blur is scroll locked
@@ -85,7 +90,7 @@ test("scroll lock", async () => {
   expect(blur.lock.enabled).toBe(false);
 
   // disable scroll lock
-  blur.removeAttribute("scroll-lock");
+  blur.removeAttribute("scrolllock");
 
   blur.enable();
   expect(blur.lock.enabled).toBe(false);
@@ -99,11 +104,11 @@ test("aria attributes", async () => {
   expect(blur.getAttribute("role")).toBe("dialog");
 
   expect(blur.hasAttribute("inert")).toBe(false);
-  expect(blur.getAttribute("aria-hidden")).toBe("false");
+  expect(blur.hasAttribute("aria-hidden")).toBe(false);
 
   blur.disable();
   expect(blur.hasAttribute("inert")).toBe(true);
-  expect(blur.getAttribute("aria-hidden")).toBe("true");
+  expect(blur.hasAttribute("aria-hidden")).toBe(true);
 });
 
 test("allowed scroll elements match content", async () => {
@@ -128,12 +133,11 @@ function press(ele: HTMLElement, key: string) {
 }
 
 function click(ele: HTMLElement) {
-  ele.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-  ele.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+  ele.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 }
 
 async function createBlur() {
-  await import("@sv/elements/blur");
+  await import("../dist/index.js");
   const ele = document.createElement("div");
   document.body.appendChild(ele);
 
@@ -165,3 +169,242 @@ async function createBlur() {
 
   return ele;
 }
+
+test("autoinert attribute disables inert", async () => {
+  const root = await createBlur();
+  const blur = root.querySelector("a-blur");
+  blur.setAttribute("autoinert", "false");
+
+  blur.enable();
+  expect(blur.hasAttribute("inert")).toBe(false);
+  expect(blur.hasAttribute("aria-hidden")).toBe(false);
+
+  blur.disable();
+  expect(blur.hasAttribute("inert")).toBe(false);
+  expect(blur.hasAttribute("aria-hidden")).toBe(false);
+});
+
+test("initialfocus=false prevent autofocusing", async () => {
+  const root = await createBlur();
+  const blur = root.querySelector("a-blur");
+  blur.setAttribute("initialfocus", "false");
+
+  const trigger = document.querySelector("button.trigger");
+  trigger.focus();
+
+  blur.enable();
+  expect(document.activeElement.className).toBe("trigger");
+
+  blur.disable();
+  expect(document.activeElement.className).toBe("trigger");
+});
+
+// Helper custom element with shadow root for testing
+class TestShadowElement extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+  }
+
+  connectedCallback() {
+    this.shadowRoot.innerHTML = `<button class="shadow-button">Shadow Button</button>`;
+  }
+}
+
+// Define custom element if not already defined
+if (!customElements.get("test-shadow-element")) {
+  customElements.define("test-shadow-element", TestShadowElement);
+}
+
+test("findFocusableElements: scenario 1 - direct button", async () => {
+  await import("../dist/index.js");
+  const container = document.createElement("div");
+  document.body.appendChild(container);
+
+  container.innerHTML = `
+    <a-blur enabled>
+      <button class="direct-button">Direct Button</button>
+    </a-blur>
+  `;
+
+  const blur = container.querySelector("a-blur");
+  const button = container.querySelector(".direct-button");
+
+  // Wait for custom element to be upgraded
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  // Hack offsetWidth to make focusableElements() work
+  Object.defineProperty(button, "offsetWidth", { value: 100 });
+
+  // Trigger keyboard mode for autofocus
+  press(document, "Tab");
+  blur.enable();
+
+  // Should focus the direct button
+  expect(document.activeElement).toBe(button);
+
+  document.body.removeChild(container);
+});
+
+test("findFocusableElements: scenario 2 - slotted button", async () => {
+  await import("../dist/index.js");
+  const container = document.createElement("div");
+  document.body.appendChild(container);
+
+  container.innerHTML = `
+    <a-blur enabled>
+      <button class="slotted-button">Slotted Button</button>
+    </a-blur>
+  `;
+
+  const blur = container.querySelector("a-blur");
+  const button = container.querySelector(".slotted-button");
+
+  // Wait for custom element to be upgraded
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  // Hack offsetWidth to make focusableElements() work
+  Object.defineProperty(button, "offsetWidth", { value: 100 });
+
+  // Trigger keyboard mode for autofocus
+  press(document, "Tab");
+  blur.enable();
+
+  // Should focus the slotted button
+  expect(document.activeElement).toBe(button);
+
+  document.body.removeChild(container);
+});
+
+test("findFocusableElements: scenario 3 - shadow root button", async () => {
+  await import("../dist/index.js");
+  const container = document.createElement("div");
+  document.body.appendChild(container);
+
+  container.innerHTML = `
+    <a-blur enabled>
+      <test-shadow-element></test-shadow-element>
+    </a-blur>
+  `;
+
+  const blur = container.querySelector("a-blur");
+  const shadowElement = container.querySelector("test-shadow-element");
+
+  // Wait for custom element to be upgraded
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  const shadowButton = shadowElement.shadowRoot.querySelector(".shadow-button");
+
+  // Hack offsetWidth to make focusableElements() work
+  Object.defineProperty(shadowButton, "offsetWidth", { value: 100 });
+
+  // Trigger keyboard mode for autofocus
+  press(document, "Tab");
+  blur.enable();
+
+  // Should focus the button inside shadow root
+  expect(document.activeElement).toBe(shadowElement);
+  expect(shadowElement.shadowRoot.activeElement).toBe(shadowButton);
+
+  document.body.removeChild(container);
+});
+
+test("findFocusableElements: scenario 4 - slotted element with shadow root button", async () => {
+  await import("../dist/index.js");
+  const container = document.createElement("div");
+  document.body.appendChild(container);
+
+  container.innerHTML = `
+    <a-blur enabled>
+      <test-shadow-element class="slotted-shadow"></test-shadow-element>
+    </a-blur>
+  `;
+
+  const blur = container.querySelector("a-blur");
+  const shadowElement = container.querySelector(".slotted-shadow");
+
+  // Wait for custom element to be upgraded
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  const shadowButton = shadowElement.shadowRoot.querySelector(".shadow-button");
+
+  // Hack offsetWidth to make focusableElements() work
+  Object.defineProperty(shadowButton, "offsetWidth", { value: 100 });
+
+  // Trigger keyboard mode for autofocus
+  press(document, "Tab");
+  blur.enable();
+
+  // Should focus the button inside the slotted element's shadow root
+  expect(document.activeElement).toBe(shadowElement);
+  expect(shadowElement.shadowRoot.activeElement).toBe(shadowButton);
+
+  document.body.removeChild(container);
+});
+
+test("findFocusableElements: all 4 scenarios together with tab navigation", async () => {
+  await import("../dist/index.js");
+  const container = document.createElement("div");
+  document.body.appendChild(container);
+
+  container.innerHTML = `
+    <a-blur enabled>
+      <button class="btn-1">Button 1 - Direct</button>
+      <button class="btn-2">Button 2 - Slotted</button>
+      <test-shadow-element class="shadow-1"></test-shadow-element>
+      <test-shadow-element class="shadow-2"></test-shadow-element>
+    </a-blur>
+  `;
+
+  const blur = container.querySelector("a-blur");
+  const btn1 = container.querySelector(".btn-1");
+  const btn2 = container.querySelector(".btn-2");
+  const shadow1 = container.querySelector(".shadow-1");
+  const shadow2 = container.querySelector(".shadow-2");
+
+  // Wait for custom elements to be upgraded
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  const shadowBtn1 = shadow1.shadowRoot.querySelector(".shadow-button");
+  const shadowBtn2 = shadow2.shadowRoot.querySelector(".shadow-button");
+
+  // Hack offsetWidth for all buttons
+  [btn1, btn2, shadowBtn1, shadowBtn2].forEach((btn) => {
+    Object.defineProperty(btn, "offsetWidth", { value: 100 });
+  });
+
+  // Trigger keyboard mode for autofocus
+  press(document, "Tab");
+  blur.enable();
+
+  // Should focus first button
+  expect(document.activeElement).toBe(btn1);
+
+  // Manually simulate Tab navigation since test environment doesn't have native Tab behavior
+  // The blur component only handles wrapping at boundaries, not middle navigation
+  btn2.focus();
+  expect(document.activeElement).toBe(btn2);
+
+  shadowBtn1.focus();
+  expect(document.activeElement).toBe(shadow1);
+  expect(shadow1.shadowRoot.activeElement).toBe(shadowBtn1);
+
+  shadowBtn2.focus();
+  expect(document.activeElement).toBe(shadow2);
+  expect(shadow2.shadowRoot.activeElement).toBe(shadowBtn2);
+
+  // Tab from last element should wrap around to first button (this is handled by blur component)
+  press(document, "Tab");
+  expect(document.activeElement).toBe(btn1);
+
+  // Shift+Tab from first element should go to last element (this is handled by blur component)
+  const reverseTab = new KeyboardEvent("keydown", {
+    key: "Tab",
+    shiftKey: true,
+    bubbles: true,
+  });
+  document.dispatchEvent(reverseTab);
+  expect(document.activeElement).toBe(shadow2);
+
+  document.body.removeChild(container);
+});

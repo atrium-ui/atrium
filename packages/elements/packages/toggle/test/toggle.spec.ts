@@ -2,11 +2,7 @@ import { test, expect, describe } from "bun:test";
 
 const NODE_NAME = "a-toggle";
 
-async function newElement(
-  options: {
-    value?: string;
-  } = {},
-) {
+async function newElement(options: { value?: string } = {}) {
   const ele = document.createElement("div");
   ele.innerHTML = `
     <a-toggle value="${options.value}">
@@ -19,7 +15,7 @@ async function newElement(
 }
 
 test("import a-toggle element", async () => {
-  const { ToggleElement } = await import("@sv/elements/toggle");
+  const { ToggleElement } = await import("../dist/index.js");
   expect(ToggleElement).toBeDefined();
 
   // is defined in custom element registry
@@ -27,7 +23,7 @@ test("import a-toggle element", async () => {
 });
 
 test("construct a-toggle element", async () => {
-  const { ToggleElement } = await import("@sv/elements/toggle");
+  const { ToggleElement } = await import("../dist/index.js");
 
   // is constructable
   expect(new ToggleElement()).toBeInstanceOf(ToggleElement);

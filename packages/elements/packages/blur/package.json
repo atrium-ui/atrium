@@ -1,5 +1,5 @@
 {
-  "name": "@atrium-ui/blur",
+  "name": "@sv/blur",
   "author": "atrium",
   "contributors": [],
   "private": true,
@@ -7,19 +7,7 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "src/index.ts",
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
-  "tsup": {
-    "entry": ["src/index.ts"],
-    "format": ["esm", "cjs"],
-    "external": [
-      "lit",
-      "@sv/elements",
-      "@sv/scroll-lock"
-    ],
-    "sourcemap": true,
-    "clean": true
+  "dependencies": {
+    "@sv/scroll-lock": "workspace:*"
   }
 }

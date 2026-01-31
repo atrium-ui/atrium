@@ -1,0 +1,15 @@
+---
+title: Combobox
+image: "/components/combobox.png"
+description: A combobox dropdown
+tags: [["a-select", "elements/select"], ["Button", "components/button"]]
+command: "npx @sv/components combobox"
+order: 1
+---
+import ComboboxDemoRaw from "./combobox.tsx?raw";
+import ComboboxDemo from "./combobox";
+import { Example, Atrium } from "package:/components";
+
+<Example code={ComboboxDemoRaw}>
+  <ComboboxDemo client:only="vue"/>
+</Example>

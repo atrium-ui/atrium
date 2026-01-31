@@ -1,0 +1,95 @@
+---
+title: a-select
+description: A customisable dropdown select element for choosing from a list of options.
+command: import "@sv/elements/select";
+order: 1
+---
+
+import { TypeDoc, Lit } from "package:/components"
+
+The `a-select` element provides a fully customisable dropdown for selecting options. It integrates with native forms, supports keyboard navigation, and handles accessibility automatically.
+
+<div class="not-content box">
+  <form onchange="console.log(event.target.value)" onsubmit="event.preventDefault()">
+  <a-select name="test" class="text-base">
+    <button type="button" slot="trigger" class="cursor-pointer">
+      <div class="w-[150px] text-left">Select</div>
+    </button>
+
+    <div class="mt-1 border border-zinc-200 bg-zinc-50 p-1">
+      <a-option class="block p-1 [&[selected]]:bg-zinc-100 active:bg-zinc-200 hover:bg-zinc-400" value="option-1">Option 1</a-option>
+      <a-option class="block p-1 [&[selected]]:bg-zinc-100 active:bg-zinc-200 hover:bg-zinc-400" value="option-2">Option 2</a-option>
+      <a-option class="block p-1 [&[selected]]:bg-zinc-100 active:bg-zinc-200 hover:bg-zinc-400" value="option-3">Option 3</a-option>
+      <a-option class="block p-1 [&[selected]]:bg-zinc-100 active:bg-zinc-200 hover:bg-zinc-400" value="option-4">Option 4</a-option>
+    </div>
+  </a-select>
+  </form>
+</div>
+
+Used by the [Select](/components/select) and [Combobox](/components/combobox) components.
+
+## Usage
+
+### Basic Usage
+
+```html
+<a-select name="country">
+  <button slot="trigger" type="button">
+    Select a country
+  </button>
+
+  <div class="options">
+    <a-option value="au">Australia</a-option>
+    <a-option value="nz">New Zealand</a-option>
+    <a-option value="uk">United Kingdom</a-option>
+  </div>
+</a-select>
+```
+
+## Form Integration
+
+The `a-select` element works seamlessly with native HTML forms:
+
+```html
+<form id="order-form">
+  <label for="size-select">Size</label>
+  <a-select id="size-select" name="size">
+    <button slot="trigger" type="button">Choose size</button>
+    <div class="options">
+      <a-option value="s">Small</a-option>
+      <a-option value="m">Medium</a-option>
+      <a-option value="l">Large</a-option>
+    </div>
+  </a-select>
+
+  <button type="submit">Submit Order</button>
+</form>
+
+<script>
+  document.getElementById('order-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    console.log('Selected size:', formData.get('size'));
+  });
+</script>
+```
+
+## Keyboard Navigation
+
+The select element supports full keyboard navigation:
+
+| Key | Action |
+|-----|--------|
+| `Enter` / `Space` | Open dropdown or select focused option |
+| `ArrowDown` | Move focus to next option |
+| `ArrowUp` | Move focus to previous option |
+| `Escape` | Close dropdown without selecting |
+| `Home` | Move focus to first option |
+| `End` | Move focus to last option |
+| Type character | Jump to option starting with that letter |
+
+<TypeDoc source="../packages/elements/packages/select" symbol="Select" />
+
+## References
+
+- [WAI-ARIA Listbox Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/)

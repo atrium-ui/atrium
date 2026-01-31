@@ -1,0 +1,30 @@
+---
+title: a-chart
+description: A chart rendered with chart.js.
+command: import "@sv/charts";
+order: 2
+---
+
+import { TypeDoc, Pill, Lit, Rive } from "package:/components"
+
+<div class="not-content">
+
+  <a-chart
+    type="bar"
+    width="600"
+    height="300"
+    class="h-[300px] aspect-2/1 text-black stroke-black/5 dark:stroke-white/5 dark:text-white"
+    src="/chart/chart-data.json"
+  />
+
+  <a-chart
+    type="line"
+    width="600"
+    height="300"
+    class="h-[300px] aspect-2/1 text-black stroke-black/5 dark:stroke-white/5 dark:text-white"
+    src="/chart/chart-data-stock.json"
+  />
+
+</div>
+
+<TypeDoc source="../packages/charts" symbol="ChartElement" />

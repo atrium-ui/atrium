@@ -1,27 +1,91 @@
 ---
-import { Tabs, TabItem, Code } from "@astrojs/starlight/components";
-
 const props = Astro.props;
+const command = props.bun || props.npm || props.sh;
 ---
 
-<div class="terminal-command">
-  <Tabs syncKey="packageManagerCommand">
-    <TabItem label="pnpm" icon="pnpm">
-      <Code code={props.pnpm} lang="sh" />
-    </TabItem>
-    <TabItem label="npm" icon="seti:npm">
-      <Code code={props.npm} lang="sh" />
-    </TabItem>
-    <TabItem label="bun" icon="bun">
-      <Code code={props.bun} lang="sh" />
-    </TabItem>
-  </Tabs>
+<div class="terminal-window">
+  <div class="terminal-header">
+    <div class="terminal-buttons">
+      <span class="terminal-button terminal-button-close"></span>
+      <span class="terminal-button terminal-button-minimize"></span>
+      <span class="terminal-button terminal-button-maximize"></span>
+    </div>
+  </div>
+  <div class="terminal-body text-sm">
+    <span class="terminal-prompt">$</span>
+    <pre class="text-white">{command}</pre>
+  </div>
 </div>
 
 <style is:global>
-  .terminal-command .not-content {
+  .terminal-window {
+    background: #1e1e1e;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  .terminal-header {
+    background: #2d2d2d;
+    padding: 8px 12px;
+    border-bottom: 1px solid #3d3d3d;
+  }
+
+  .terminal-buttons {
+    display: flex;
+    gap: 6px;
+  }
+
+  .terminal-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .terminal-button-close {
+    background: #ff5f56;
+  }
+
+  .terminal-button-minimize {
+    background: #ffbd2e;
+  }
+
+  .terminal-button-maximize {
+    background: #27c93f;
+  }
+
+  .terminal-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 16px;
+  }
+
+  .terminal-prompt {
+    color: #4ade80;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    user-select: none;
+  }
+
+  .terminal-body .not-content {
+    flex: 1;
     padding: 0;
+    margin: 0;
     border: none;
     min-height: 0;
+    background: transparent !important;
+  }
+
+  .terminal-body .not-content pre {
+    margin: 0;
+    background: transparent !important;
+  }
+
+  .terminal-body .not-content code {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #e5e7eb;
   }
 </style>

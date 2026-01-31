@@ -1,28 +1,10 @@
 {
-  "name": "@atrium-ui/example",
+  "name": "@sv/example",
   "version": "0.0.1",
   "description": "",
   "type": "module",
   "main": "dist/example.js",
   "types": "src/index.ts",
   "author": "",
-  "license": "MIT",
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
-  "tsup": {
-    "entry": [
-      "src/index.ts"
-    ],
-    "format": [
-      "esm",
-      "cjs"
-    ],
-    "external": [
-      "@sv/*"
-    ],
-    "sourcemap": true,
-    "clean": true
-  }
+  "license": "MIT"
 }

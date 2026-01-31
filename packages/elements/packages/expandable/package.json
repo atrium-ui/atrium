@@ -1,24 +1,10 @@
 {
-  "name": "@atrium-ui/expandable",
+  "name": "@sv/expandable",
   "author": "atrium",
   "contributors": [],
   "private": true,
   "description": "",
   "main": "dist/index.js",
   "types": "src/index.ts",
-  "type": "module",
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
-  "tsup": {
-    "entry": ["src/index.ts"],
-    "format": ["esm", "cjs"],
-    "external": [
-      "lit",
-      "@sv/elements"
-    ],
-    "sourcemap": true,
-    "clean": true
-  }
+  "type": "module"
 }

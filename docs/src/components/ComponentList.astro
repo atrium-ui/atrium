@@ -1,46 +1,35 @@
 ---
-import { LinkCard, CardGrid, Aside } from "@astrojs/starlight/components";
-import fs from "node:fs";
-import matter from "gray-matter";
+import { getCollection } from "astro:content";
 
-const basePath = "./src/content/docs/components";
-const files = fs.readdirSync(basePath).filter((p) => {
-  return p.endsWith(".mdx") && !p.includes("---") && !p.includes("index");
-});
+const base = import.meta.env.BASE_URL;
 
-const components: any[] = [];
-
-for (const file of files) {
-  const name = file.replace(".mdx", "");
-  const meta = matter(fs.readFileSync(`${basePath}/${file}`, "utf8"));
-
-  components.push({
-    id: name,
-    ...meta.data,
-  });
-}
+const components = await getCollection("docs").then((docs) =>
+  docs.filter((doc) => doc.id.startsWith("components")),
+);
 ---
 
-<CardGrid>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-12">
   {
     components.map(comp => {
       return (
         <a
-          href={`./${comp.id}`}
-          class="block relative rounded-md border dark:border-zinc-700 text-inherit overflow-hidden no-underline"
+          href={`${base}${comp.id}/`}
+          class="block relative rounded-md border style-contour-grey-disabled"
         >
-          <div>
+          <!-- <div>
             <img
-              src={`/atrium${comp.image || "/components/placeholder.png"}`}
+              src={`/${comp.image || "/components/placeholder.png"}`}
+              class="object-contain bg-[#F3F3F3]"
               width="100%"
+              height="230px"
             />
-          </div>
-          <div class="p-5 !m-0">
-            <h3 class="!text-2xl">{comp.title}</h3>
-            <p class="!mt-1">{comp.description}</p>
+          </div> -->
+          <div class="p-5 m-0!">
+            <h3 class="text-2xl!">{comp.data.title}</h3>
+            <p class="mt-1!">{comp.data.description}</p>
           </div>
         </a>
       );
     })
   }
-</CardGrid>
+</div>

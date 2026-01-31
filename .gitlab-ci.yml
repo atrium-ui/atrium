@@ -1,22 +1,16 @@
+include:
+  - component: $CI_SERVER_FQDN/sv/taskfiles/mise@2.1.0
+
 stages:
   - test
   - merge
-  - publish
   - docs
+  - publish
 
 image: luckydye/atrium:latest
 
 variables:
   GIT_PUSH_TOKEN: $GIT_PUSH_TOKEN # A Gitlab access token to push to the repo
-
-cache: &global_cache
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - node_modules
-    - .task
-    - .turbo
-    - .mise
-  policy: pull-push
 
 check:
   stage: test
@@ -24,7 +18,6 @@ check:
     - tags
   only:
     - merge_requests
-    - /^release\/.+$/
     - main
   script: task check
 
@@ -34,47 +27,27 @@ test:
     - tags
   only:
     - merge_requests
-    - /^release\/.+$/
     - main
   script: task test
 
-a11y:
-  allow_failure: true
-  stage: test
-  artifacts:
-    when: always
-    paths:
-      - docs/.reports
-  except:
-    - tags
-  only:
-    - /^release\/.+$/
-    - main
-  script: task a11y
-
-merge_release_preview:
-  stage: merge
-  only:
-    - merge_requests
-  script: task release:preview
-
 publish-dev:
   stage: publish
+  when: manual
   only:
-    - /^release\/.+$/
+    - merge_requests
   script:
     - git config user.email "gitlab@s-v.de"
     - git config user.name "CI"
     - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
-    - git checkout "$CI_COMMIT_REF_NAME"
-    - git fetch --prune --prune-tags -f
-    - git pull
     - bun x npm config set //gitlab.s-v.de/api/v4/projects/1560/packages/npm/:_authToken="$CI_JOB_TOKEN"
     - bun x npm config list
     - task prerelease
+    - git push origin -o ci.skip HEAD:$CI_COMMIT_REF_NAME
+    - git push origin --tags
 
 publish:
   stage: publish
+  allow_failure: true
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
       when: on_success
@@ -83,24 +56,22 @@ publish:
     - git config user.email "gitlab@s-v.de"
     - git config user.name "CI"
     - git remote set-url origin https://oauth2:$GIT_PUSH_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
-    - git checkout "$CI_COMMIT_REF_NAME"
-    - git fetch --prune --prune-tags -f
-    - git pull
     - bun x npm config set //gitlab.s-v.de/api/v4/projects/1560/packages/npm/:_authToken="$CI_JOB_TOKEN"
     - bun x npm config list
     - task release
+    - git push origin -o ci.skip HEAD:$CI_COMMIT_REF_NAME
+    - git push origin --tags
 
 pages:
   stage: docs
-  dependencies:
-    - a11y
-    - publish
+  when: manual
   only:
     - main
+    - merge_requests
   environment:
     name: docs
     url: https://svp.pages.s-v.de/atrium
   artifacts:
     paths:
       - public
-  script: task docs:build
+  script: SITE="https://svp.pages.s-v.de/atrium" task docs:build -- --base /atrium/

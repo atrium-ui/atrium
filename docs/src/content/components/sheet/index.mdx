@@ -1,0 +1,36 @@
+---
+title: Sheet
+description: A sheet is basically a burger menu. Composed of a-blur.
+tags: [["a-blur", "elements/a-blur"], ["Button", "components/button"]]
+command: "npx @sv/components sheet"
+order: 0
+---
+import { Story, ContentTabs } from "package:/components/docs";
+import { Code } from "astro:components";
+import sheetCode from "@components/src/vue/Sheet.vue?raw";
+
+A sheet is a panel that slides in from the edge of the screen, commonly used for mobile navigation menus or filter panels. It uses [a-blur](/elements/a-blur) for the overlay backdrop.
+
+## Example
+
+<ContentTabs labels={["Preview", "Code"]}>
+  <Story id="sheet--default" />
+  <Code lang="tsx" code={sheetCode} />
+</ContentTabs>
+
+## Examples with context
+
+### Mobile Navigation
+
+<Story id="sheet--MobileNavigation" />
+
+### Filter Panel
+
+<Story id="sheet--FilterPanel" />
+
+## Accessibility
+
+- Focus is trapped within the sheet while open
+- Pressing Escape closes the sheet
+- The backdrop prevents interaction with the main content
+- Should provide a clear way to close the sheet (close button, backdrop click, or escape key)

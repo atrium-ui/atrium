@@ -1,0 +1,25 @@
+---
+export interface Props {
+  href: string;
+  label: string;
+}
+
+const props = Astro.props;
+---
+
+<a href={props.href} target="_blank" class="pill">
+  <span class="align-bottom">{props.label}</span>
+</a>
+
+<style is:global>
+@reference "../../layout.css";
+
+.pill {
+  @apply flex rounded-full px-2 py-1 leading-none items-center;
+  @apply border style-contour-grey-disabled style-fill-grey-default hover:style-fill-grey-hover style-typography-body gap-2;
+}
+
+.pill span {
+  @apply text-xs font-bold;
+}
+</style>

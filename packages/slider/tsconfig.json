@@ -1,4 +1,0 @@
-{
-  "extends": "@sv/codestyle/tsconfig.json",
-  "exclude": ["."]
-}

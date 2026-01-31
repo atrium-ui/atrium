@@ -21,7 +21,7 @@ declare global {
  * @example
  * ```html
  * <a-toggle
- *   class="m-1 p-2 leading-none cursor-pointer border hover:border-zinc-600 border-zinc-700 bg-zinc-800 focus:ring-4 [&[value='true']]:bg-zinc-700"
+ *   class="m-1 p-2 leading-none cursor-pointer border hover:border-zinc-600 border-zinc-200 bg-zinc-800 focus:ring-2 [&[value='true']]:bg-zinc-700"
  *   name="true"
  *   value="true"
  * >

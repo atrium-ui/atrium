@@ -1,0 +1,75 @@
+---
+import { Button } from "@components/src/vue";
+---
+
+<div class="w-full flex justify-center transition-demo-button">
+  <Button client:only="vue" class="overflow-hidden">
+    <div class="inner-demo-button">
+      <span>Click me</span>
+    </div>
+  </Button>
+</div>
+
+<style is:global>
+  .inner-demo-button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+    white-space: nowrap;
+  }
+
+  .loading-indicator {
+    flex: none;
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 100%;
+    border: 2px solid currentColor;
+    border-bottom-color: transparent;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  hr {
+    margin: 2rem 0;
+    border-bottom: 1px solid #5c5c5c;
+  }
+</style>
+
+<hr />
+
+<a-transition type="animation" class="container"></a-transition>
+
+<hr />
+
+<script>
+  import { paragraph } from "txtgen";
+  import "@sv/elements/transition";
+
+  const gen = () => {
+    const text = paragraph(1 + Math.random() * 4);
+
+    const content = document.createElement("div");
+    content.innerHTML = text;
+
+    const container = document.querySelector(".container");
+    if (container) {
+      container.innerHTML = "";
+      container.appendChild(content);
+    }
+  };
+  gen();
+
+  const button = document.querySelector(".transition-demo-button");
+  if (button)
+    button.addEventListener("click", () => {
+      gen();
+    });
+</script>

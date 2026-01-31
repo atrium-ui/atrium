@@ -1,0 +1,212 @@
+---
+title: a-tabs
+description: An accessible tabs component for organizing content into multiple panels with keyboard navigation and browser search support.
+command: import "@sv/elements/tabs";
+order: 1
+---
+
+import { TypeDoc, Lit } from "package:/components"
+
+The `a-tabs` element provides a complete tabs implementation with keyboard navigation, accessibility features, and support for browser find-in-page that automatically reveals hidden content.
+
+<div class="not-content box">
+  <a-tabs class="block bg-white rounded-lg shadow-sm overflow-hidden">
+    <a-tabs-list class="block bg-zinc-50 border-b border-zinc-200" label="Example tabs">
+      <a-tabs-tab class="px-6 py-3 text-zinc-600 border-b-2 border-transparent transition-all hover:bg-zinc-100 hover:text-zinc-900 [&[selected]]:text-blue-600 [&[selected]]:border-blue-600 whitespace-nowrap">First Tab</a-tabs-tab>
+      <a-tabs-tab class="px-6 py-3 text-zinc-600 border-b-2 border-transparent transition-all hover:bg-zinc-100 hover:text-zinc-900 [&[selected]]:text-blue-600 [&[selected]]:border-blue-600 whitespace-nowrap">Second Tab</a-tabs-tab>
+      <a-tabs-tab class="px-6 py-3 text-zinc-600 border-b-2 border-transparent transition-all hover:bg-zinc-100 hover:text-zinc-900 [&[selected]]:text-blue-600 [&[selected]]:border-blue-600 whitespace-nowrap">Third Tab</a-tabs-tab>
+    </a-tabs-list>
+
+    <a-tabs-panel class="block">
+      <div class="p-6">Content for the first tab</div>
+    </a-tabs-panel>
+
+    <a-tabs-panel class="block">
+      <div class="p-6">Content for the second tab</div>
+    </a-tabs-panel>
+
+    <a-tabs-panel class="block">
+      <div class="p-6">Content for the third tab</div>
+    </a-tabs-panel>
+  </a-tabs>
+</div>
+
+## Installation
+
+```ts
+import "@sv/elements/tabs";
+```
+
+## Usage
+
+### Basic Usage
+
+```html
+<a-tabs>
+  <a-tabs-list label="Main navigation">
+    <a-tabs-tab>Overview</a-tabs-tab>
+    <a-tabs-tab>Details</a-tabs-tab>
+    <a-tabs-tab>Settings</a-tabs-tab>
+  </a-tabs-list>
+
+  <a-tabs-panel>
+    <h2>Overview</h2>
+    <p>Overview content goes here</p>
+  </a-tabs-panel>
+
+  <a-tabs-panel>
+    <h2>Details</h2>
+    <p>Detailed information goes here</p>
+  </a-tabs-panel>
+
+  <a-tabs-panel>
+    <h2>Settings</h2>
+    <p>Settings content goes here</p>
+  </a-tabs-panel>
+</a-tabs>
+```
+
+### Preselected Tab
+
+Use the `selected` attribute to specify which tab should be active initially:
+
+```html
+<a-tabs>
+  <a-tabs-list>
+    <a-tabs-tab>Tab 1</a-tabs-tab>
+    <a-tabs-tab selected>Tab 2</a-tabs-tab>
+    <a-tabs-tab>Tab 3</a-tabs-tab>
+  </a-tabs-list>
+
+  <a-tabs-panel>Panel 1</a-tabs-panel>
+  <a-tabs-panel>Panel 2</a-tabs-panel>
+  <a-tabs-panel>Panel 3</a-tabs-panel>
+</a-tabs>
+```
+
+### With Accessible Label
+
+Provide an `aria-label` for the tab list to improve accessibility:
+
+```html
+<a-tabs>
+  <a-tabs-list label="Product information tabs">
+    <a-tabs-tab>Description</a-tabs-tab>
+    <a-tabs-tab>Specifications</a-tabs-tab>
+    <a-tabs-tab>Reviews</a-tabs-tab>
+  </a-tabs-list>
+
+  <a-tabs-panel>...</a-tabs-panel>
+  <a-tabs-panel>...</a-tabs-panel>
+  <a-tabs-panel>...</a-tabs-panel>
+</a-tabs>
+```
+
+## Keyboard Navigation
+
+The tabs support full keyboard navigation following WAI-ARIA best practices:
+
+| Key | Action |
+|-----|--------|
+| `ArrowLeft` | Move focus to previous tab |
+| `ArrowRight` | Move focus to next tab |
+| `Home` | Move focus to first tab |
+| `End` | Move focus to last tab |
+
+## Styling
+
+The tabs elements use minimal styling to allow full customization from outside the shadow DOM:
+
+```css
+/* Style the tabs container */
+a-tabs {
+  display: block;
+  background: white;
+  border-radius: 8px;
+}
+
+/* Style the tab list background */
+a-tabs-list {
+  display: block;
+  background: #f5f5f5;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+/* Style individual tab buttons */
+a-tabs-tab {
+  padding: 12px 24px;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+a-tabs-tab:hover {
+  color: #333;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Style selected tab */
+a-tabs-tab[selected] {
+  color: #0066cc;
+  border-bottom-color: #0066cc;
+  font-weight: 600;
+}
+
+/* Style the panels */
+a-tabs-panel {
+  display: block;
+  padding: 24px;
+}
+```
+
+### Scrollable Tabs
+
+The tabs-list can be __**optionaly**__ enhanced by importing `@sv/elements/track`, which will handle scrolling to selected tabs and handle overflow with arrow buttons automatically.
+
+## Accessibility
+
+- **ARIA Attributes**: Automatically manages `role="tab"`, `role="tabpanel"`, `aria-selected`, `aria-controls`, and `aria-labelledby`.
+- **Keyboard Navigation**: Full arrow key navigation with Home/End support.
+- **Focus Management**: Only the selected tab is in the tab order (`tabindex="0"`), others have `tabindex="-1"`.
+- **Unique IDs**: Automatically generates unique IDs for tab/panel associations.
+- **Hidden Until Found**: Non-selected panels use `hidden="until-found"`, allowing browser find-in-page to search hidden content and automatically reveal the matching tab.
+- **Hash Navigation**: Clicking anchor links within panels automatically selects the correct tab.
+
+## Browser Search Support
+
+The tabs use `hidden="until-found"` which enables modern browsers to search through hidden tab content. When a user uses Ctrl+F (Cmd+F) to search and finds text in a hidden panel:
+
+- The browser fires a `beforematch` event
+- The corresponding tab automatically becomes selected
+- The panel is revealed
+- The search result is highlighted
+
+This works in browsers that support the `hidden="until-found"` feature (Chrome 102+, Edge 102+).
+
+## Programmatic Control
+
+```ts
+const tabs = document.querySelector('a-tabs');
+
+// Select a specific tab by index
+tabs.selectTabByIndex(2);
+
+// Navigate tabs programmatically
+tabs.selectNextTab();
+tabs.selectPreviousTab();
+tabs.selectFirstTab();
+tabs.selectLastTab();
+
+// Scroll the selected tab into view
+tabs.scrollSelectedIntoView();
+```
+
+<TypeDoc source="../packages/elements/packages/tabs" symbol="TabsElement" />
+<TypeDoc source="../packages/elements/packages/tabs" symbol="TabsTabElement" />
+<TypeDoc source="../packages/elements/packages/tabs" symbol="TabsListElement" />
+<TypeDoc source="../packages/elements/packages/tabs" symbol="TabsPanelElement" />
+
+## References
+
+- [WAI-ARIA Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/)
+- [HTML `hidden="until-found"` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/hidden)

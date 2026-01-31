@@ -1,7 +1,0 @@
-a-track [active] > canvas {
-  box-shadow: inset 0 0 0 4px white;
-}
-
-a-track canvas {
-  display: block;
-}

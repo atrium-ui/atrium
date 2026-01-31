@@ -1,0 +1,237 @@
+---
+import "./layout.css";
+import { ClientRouter } from "astro:transitions";
+import Header from "./components/Header.astro";
+import { svg } from "@sv/svg-sprites/sheet";
+import { Elements } from "./components/index.js";
+
+import roboto400 from "@fontsource/roboto/files/roboto-latin-400-normal.woff2?url";
+import roboto700 from "@fontsource/roboto/files/roboto-latin-700-normal.woff2?url";
+import roboto500 from "@fontsource/roboto/files/roboto-latin-500-normal.woff2?url";
+import robotoCondesned800 from "@fontsource/roboto-condensed/files/roboto-condensed-latin-800-normal.woff2?url";
+
+const iocnSheet = await svg();
+
+const base = import.meta.env.BASE_URL;
+---
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="favicon" href={`${base}favicon.png`} />
+    <link rel="icon" href={`${base}favicon.png`} />
+    <link rel="apple-touch-icon" href={`${base}favicon.png`} />
+
+    <link rel="preload" as="font" type="font/woff2" href={roboto400} crossorigin="anonymous" />
+    <link rel="preload" as="font" type="font/woff2" href={roboto700} crossorigin="anonymous" />
+    <link rel="preload" as="font" type="font/woff2" href={roboto500} crossorigin="anonymous" />
+    <link rel="preload" as="font" type="font/woff2" href={robotoCondesned800} crossorigin="anonymous" />
+
+    <slot name="head" />
+
+    <script>
+      import "@sv/elements/toggle";
+      import "@sv/elements/expandable";
+      import "@sv/elements/track";
+      import "@sv/elements/blur";
+      import "@sv/elements/popover";
+      import "@sv/elements/time";
+      import "@sv/elements/range";
+      import "@sv/elements/toast";
+      import "@sv/elements/form";
+      import "@sv/elements/portal";
+      import "@sv/elements/transition";
+      import "@sv/elements/select";
+      import "@sv/elements/scroll";
+      import "@sv/elements/box";
+      import "@sv/elements/list";
+      import "@sv/elements/loader";
+      import "@sv/charts";
+      import "@sv/animation";
+    </script>
+
+    <script>
+      import { AnimationElement } from "@sv/animation";
+      import riveWASMResource from "@rive-app/canvas-advanced-lite/rive.wasm?url";
+      AnimationElement.riveWasm = riveWASMResource;
+    </script>
+
+    <script>
+      import './components/Editor.jsx';
+    </script>
+
+    <script>
+      import { Toast, ToastFeed } from "@sv/elements/toast";
+      import { css, html } from "lit";
+      import type { ToastOptions } from "../../packages/elements/packages/toast/src/Toast";
+
+      class CustomToast extends Toast {
+        static get styles() {
+          return css`
+            :host {
+              display: block;
+              position: relative;
+              transition: opacity .5s ease, height 0.5s ease, margin 0.5s ease, transform 0.5s ease;
+              min-width: 220px;
+              max-width: 500px;
+              margin-top: 1rem;
+              margin-bottom: 1rem;
+            }
+            div {
+              padding: 0.5rem 1rem;
+              background: var(--color-primary-400);
+              color: var(--color-white);
+              border-radius: 12px;
+            }
+          `;
+        }
+
+        constructor(options: ToastOptions & { id?: string }) {
+          super(options);
+          this.id = options.id;
+        }
+
+        protected render() {
+          return html`<slot><div><slot>${this.message}</slot></div></slot>`;
+        }
+      }
+
+      customElements.define("docs-toast", CustomToast);
+
+      const toastfeed = new ToastFeed();
+      document.body.append(toastfeed);
+
+      globalThis.showToast = function showToast(str: string, onclick?: () => void, id?: string) {
+
+        const existingToast = document.querySelector<Toast>(`#${id}`);
+        if(existingToast) {
+          existingToast.kill();
+        }
+
+        const toast = new CustomToast({
+          id: id,
+          message: str,
+          onClick: () => {
+            onclick?.();
+            toast.kill();
+          },
+        });
+        toastfeed.append(toast);
+        return toast;
+      }
+    </script>
+
+    <style is:global>
+      a-toast-feed {
+        position: fixed;
+        top: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+      }
+      docs-toast {
+        margin-top: 0.5rem;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+      }
+    </style>
+
+    <!-- <ClientRouter /> -->
+  </head>
+  <body class="style-fill-white-background">
+    <div class="hidden" set:html={iocnSheet} />
+
+    <div class="root min-h-screen flex flex-col">
+
+      <Header transition:persist />
+
+      <div class="flex-1 w-full px-(--site-padding) relative mx-auto max-w-(--site-width) overflow-clip">
+        <slot />
+      </div>
+
+      <footer>
+        <div class="max-w-(--site-width) px-(--site-padding) mx-auto flex items-center justify-between gap-6 py-2">
+          <div>
+            <span class="typo-footnote">© Atrium Contributers</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style is:global>
+@reference "./layout.css";
+
+:root {
+  min-width: 320px;
+
+  --site-width: 1900px;
+  --site-padding: var(--module-2xl);
+
+  @apply typo-body text-(--style-typography-body) font-sans;
+
+  --scrollbar-color-track: transparent;
+  --scrollbar-color-thumb: #1c1c1c;
+  --outline-color: blue;
+
+  --theme-color: var(--color-primary-400);
+}
+
+body {
+  scrollbar-gutter: stable;
+}
+
+section {
+  overflow: hidden;
+  padding-inline: var(--site-padding);
+}
+
+* {
+  scrollbar-color: var(--scrollbar-color-thumb) var(--scrollbar-color-track);
+  outline-color: var(--outline-color);
+  outline-offset: 3px;
+}
+
+* {
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.astro-code {
+  @apply typo-footnote my-element-m py-element-2xs px-element-xs rounded-md;
+}
+
+.box {
+  border: 1px solid var(--color-grey-200);
+  border-radius: var(--radius-xs);
+  display: flex;
+}
+
+/* trying to prevent layout shift with unstyled elements */
+
+svg-icon {
+  display: inline-block;
+  vertical-align: top;
+  width: 1em;
+  height: 1em;
+}
+
+a-overlay:not(:defined) {
+  display: none;
+}
+
+a-expandable:not(:defined) > * {
+  display: none;
+}
+
+.dark-mode-only {
+  display: none;
+}
+
+docs-editor.hydrated {
+  @apply block focus-within:outline-none [&>div]:pointer-events-none [&>div]:opacity-70;
+}
+</style>

@@ -1,0 +1,48 @@
+---
+import { twMerge } from "tailwind-merge";
+import Sidebar from "./Sidebar.astro";
+
+const props: {
+  class: string;
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+---
+
+<div
+  class="absolute w-auto left-module-2xl right-module-2xl md:hidden flex justify-between"
+>
+  <div class="flex-none">
+    <a href={base}>
+      <img
+        class="light-mode-only w-12 aspect-square"
+        width="600"
+        src={`${base}atrium-light.png`}
+      />
+      <img
+        class="dark-mode-only w-12 aspect-square"
+        width="600"
+        src={`${base}atrium-dark.png`}
+      />
+    </a>
+  </div>
+  <button
+    type="button"
+    class="button-icon"
+    onclick="event?.target?.dispatchEvent(new CustomEvent('exit', { bubbles: true }))"
+  >
+    <svg-icon name="close"></svg-icon>
+    <span class="sr-only">Close</span>
+  </button>
+</div>
+
+<div
+  class={twMerge(
+    "group flex overflow-auto h-[calc(100%-var(--module-6xl))] mt-module-7xl md:mt-0 md:hidden relative",
+    props.class,
+  )}
+>
+  <nav class="flex-none w-full group-[&.open]:hidden">
+    <Sidebar />
+  </nav>
+</div>

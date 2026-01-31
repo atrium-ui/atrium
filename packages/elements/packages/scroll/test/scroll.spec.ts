@@ -3,7 +3,7 @@ import { test, expect, describe } from "bun:test";
 const NODE_NAME = "a-scroll";
 
 test("import element", async () => {
-  const { ScrollElement } = await import("@sv/elements/scroll");
+  const { ScrollElement } = await import("../dist/index.js");
   expect(ScrollElement).toBeDefined();
 
   // is defined in custom element registry
@@ -11,7 +11,7 @@ test("import element", async () => {
 });
 
 test("construct element", async () => {
-  const { ScrollElement } = await import("@sv/elements/scroll");
+  const { ScrollElement } = await import("../dist/index.js");
 
   // is constructable
   expect(new ScrollElement()).toBeInstanceOf(ScrollElement);
@@ -39,14 +39,14 @@ test("scroll position is restored from sessionStorage", async () => {
 });
 
 test("name attribute", async () => {
-  const ele = await newElementWithName("foo");
+  const ele = await newElementWithId("foo");
 
   const scroll = ele.querySelector("a-scroll");
   scroll.scrollTop = 100;
   // TOOD: weird, that this doesnt work withput this
-  scroll.attributeChangedCallback("name", undefined, "foo");
+  scroll.attributeChangedCallback("id", undefined, "foo");
 
-  expect(scroll.name).toBe("foo");
+  expect(scroll.id).toBe("foo");
 
   const ele2 = await newElement();
   const scroll2 = ele2.querySelector("a-scroll");
@@ -79,10 +79,10 @@ async function newElement() {
   return ele;
 }
 
-async function newElementWithName(name: string) {
+async function newElementWithId(name: string) {
   const ele = document.createElement("div");
   ele.innerHTML = `
-    <a-scroll name="${name}">
+    <a-scroll id="${name}">
       <button type="button">Button</button>
     </a-scroll>
   `;

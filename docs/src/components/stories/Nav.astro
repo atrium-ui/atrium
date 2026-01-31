@@ -1,0 +1,62 @@
+---
+const storiesImports = import.meta.glob("/src/**/*.stories.*", { eager: true });
+
+const stories: any[] = [];
+
+const subpath = "components/";
+const base = import.meta.env.BASE_URL;
+
+for (const key in storiesImports) {
+  const story = {
+    name: key.split("/").pop()?.replace(".stories.tsx", "").replace(".stories.ts", ""),
+    slug: key
+      .split("/")
+      .pop()
+      ?.replace(".stories.tsx", "")
+      .replace(".stories.ts", "")
+      .toLowerCase(),
+    entries: [] as any[],
+  };
+  const module = storiesImports[key] as any;
+
+  if (!key.match(subpath)) continue;
+
+  const exports = Object.keys(module).filter((key) => !["default", "_id"].includes(key));
+  for (const key of exports) {
+    if (import.meta.env.DEV || !key.startsWith("_")) {
+      story.entries.push({
+        name: key,
+        slug: key.toLowerCase(),
+        path: key,
+      });
+    }
+  }
+
+  if (story.name === Astro.params.slug) {
+    stories.push(story);
+  }
+}
+---
+
+{stories.length > 0 ? (
+  <nav>
+   	<ul class="p-0 m-0 list-none">
+      {stories.map((story) => (
+  		<li class="pb-2">
+        <ul class="p-0 m-0 list-none -ml-1">
+          {story.entries.map((entry) => (
+            <li>
+              <a
+                class="docs-nav-link-variant"
+                href={`${base}${subpath}${story.slug}?id=${story.slug}--${entry.slug}`}
+              >{entry.name}</a>
+            </li>
+          ))}
+        </ul>
+  		</li>
+  	 ))}
+   	</ul>
+  </nav>
+) : <div>
+  <span class="style-typography-disabled">No variants</span>
+</div>}

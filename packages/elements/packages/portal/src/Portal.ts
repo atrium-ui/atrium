@@ -1,3 +1,5 @@
+let portalIdIncrement = 10000;
+
 /**
  * The a-portal element is used to render elements (its children) in a different location in the DOM.
  * Most frameworks have their own primitives for this. Vue has [Teleports](https://vuejs.org/guide/built-ins/teleport.html),
@@ -12,10 +14,36 @@
  * </a-portal>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-portal/
+ * @see https://atrium-ui.dev/elements/a-portal/
  */
 export class Portal extends (globalThis.HTMLElement || class {}) {
-  private proxiedEvents = ["blur", "change"];
+  private proxiedEvents = [
+    "blur",
+    "focus",
+    "change",
+    "exit",
+    "keyup",
+    "keydown",
+    "transitionstart",
+    "animationstart",
+    "transitionend",
+    "animationend",
+  ];
+
+  // Real children, .children is override to return children of portal
+  private _children = this.children;
+
+  get children() {
+    return this.portal?.children || this._children;
+  }
+
+  constructor() {
+    super();
+
+    for (const event of this.proxiedEvents) {
+      this.addEventListener(event, (e: Event) => e.stopPropagation());
+    }
+  }
 
   private createPortal: () => HTMLElement = () => {
     const ele = this.portalGun();
@@ -27,9 +55,8 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
     return ele;
   };
 
-  // TODO: make simpler id generator
-  public portalId = crypto.randomUUID();
-  public portal!: HTMLElement;
+  public portalId = (++portalIdIncrement).toString();
+  public portal?: HTMLElement;
 
   // TODO: try to find existing portal with this.dataset.portal
   protected portalGun() {
@@ -42,35 +69,63 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
     return ele;
   }
 
-  proxyEvent(name: string) {
+  protected onEventProxy(ev: Event) {}
+
+  private proxyEvent(name: string) {
     return (e: Event) => {
+      this.onEventProxy(e);
+
+      if (e.defaultPrevented) {
+        return;
+      }
+
+      const bubbles = true;
+
       if (e instanceof CustomEvent) {
-        this.dispatchEvent(new CustomEvent(name, { detail: e.detail, bubbles: true }));
+        this.dispatchEvent(new CustomEvent(name, e));
+      } else if (e instanceof MouseEvent) {
+        this.dispatchEvent(new MouseEvent(name, e));
+      } else if (e instanceof KeyboardEvent) {
+        this.dispatchEvent(new KeyboardEvent(name, e));
       } else {
-        this.dispatchEvent(new Event(name));
+        this.dispatchEvent(new Event(name, { bubbles }));
       }
     };
   }
 
-  get children() {
-    return this.portal.children;
+  private onMutation() {
+    if (this.childNodes.length && this.portal) {
+      this.portal.innerHTML = "";
+      this.portal.append(...this.childNodes);
+    }
   }
 
-  observer = new MutationObserver(() => {
+  private observer = new MutationObserver(() => {
     requestAnimationFrame(() => {
-      if (this.childNodes.length) {
-        this.portal.innerHTML = "";
-        this.portal.append(...this.childNodes);
-      }
+      this.onMutation();
     });
   });
 
   disconnectedCallback(): void {
-    this.portal.remove();
+    this.removePortal();
+  }
+
+  public autoplace = true;
+
+  connectedCallback(): void {
+    this.portal = this.createPortal();
+
+    if (this.autoplace) {
+      this.placePortal();
+    }
+  }
+
+  removePortal() {
+    this.portal?.remove();
     this.observer.disconnect();
   }
 
-  connectedCallback(): void {
+  placePortal() {
     this.observer.observe(this, {
       subtree: true,
       childList: true,
@@ -78,10 +133,14 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
       characterData: true,
     });
 
-    this.portal = this.createPortal();
-
-    document.body.append(this.portal);
+    if (this.portal) {
+      document.body.append(this.portal);
+    } else {
+      console.error("Cant place portal, no portal element found");
+    }
 
     this.dataset.portal = this.portalId;
+
+    this.onMutation();
   }
 }

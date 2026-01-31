@@ -1,0 +1,26 @@
+# git
+.git
+.gitignore
+.github
+
+# logs
+npm-debug.log
+
+# configs
+rollup.config.js
+.eslintrc
+.editorconfig
+.gitlab-ci.yml
+.prettierrc
+.npmrc
+vite.config.ts
+.eslintrc.json
+
+# other
+.DS_Store
+
+# src
+src
+test
+
+TODO

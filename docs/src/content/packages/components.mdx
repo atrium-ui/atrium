@@ -1,0 +1,146 @@
+---
+title: "@sv/components"
+description: Copy-paste component templates with a convenient CLI for scaffolding UI components.
+command: bun add @sv/components
+---
+
+import { Vue, Command } from "package:/components";
+import Changelog from "@sv/components/CHANGELOG.md";
+
+This package distributes all Component Templates including a convenient CLI for copying them into your project. Components are not installed as dependencies — they're copied as source files, giving you full ownership and customisation control.
+
+## Installation
+
+Make sure your project is set up with access to the registry as described in [Setup](/guides/setup).
+
+<Command
+  pnpm="pnpm add @sv/components -D"
+  npm="npm i @sv/components -D"
+  bun="bun add @sv/components -d"
+/>
+
+## CLI
+
+The CLI copies component templates into your project. It automatically detects your framework (Vue, React, etc.) and copies the appropriate version.
+
+<Command
+  pnpm="pnpm exec @sv/components"
+  npm="npx @sv/components"
+  bun="bun x @sv/components"
+/>
+
+### Copying a Component
+
+```bash
+# Copy a single component
+npx @sv/components button
+
+# Copy multiple components
+npx @sv/components button dialog accordion
+
+# List all available components
+npx @sv/components --list
+```
+
+### CLI Flags
+
+| Flag | Description |
+|------|-------------|
+| `--vue` | Force Vue component output (overrides auto-detection) |
+| `--react` | Force React component output (overrides auto-detection) |
+| `--stdout` | Output template to stdout instead of writing to file |
+| `--list` | List all available components |
+| `--help` | Show help information |
+
+### Framework Detection
+
+The CLI automatically detects your framework by checking your `package.json` for framework dependencies:
+
+- **Vue**: Detected if `vue` is in dependencies
+- **React**: Detected if `react` is in dependencies
+- **Preact**: Detected if `preact` is in dependencies
+
+Override detection with the `--vue` or `--react` flags when needed.
+
+### Output Directory
+
+Components are copied to your project's component directory:
+
+```
+your-project/
+├── src/
+│   └── components/
+│       ├── Button.tsx      ← Copied here
+│       ├── Dialog.tsx
+│       └── Accordion.tsx
+├── package.json
+└── ...
+```
+
+The CLI looks for common component directories (`src/components`, `components`, etc.) or prompts you to specify one.
+
+## Customising Components
+
+After copying, components are yours to modify. Common customisations include:
+
+### Changing Styles
+
+Components use TailwindCSS classes. Modify them directly:
+
+```diff
+// Button.tsx
+export const buttonVariants = {
+-  solid: "rounded-lg bg-blue-500 px-6 py-2",
++  solid: "rounded-full bg-brand-primary px-8 py-3",
+};
+```
+
+## Component Dependencies
+
+Some components depend on elements from `@sv/elements`. These are listed in each component's documentation. Make sure to install the required elements:
+
+```bash
+# Install elements package
+pnpm add @sv/elements
+
+# Copy a component that uses elements
+npx @sv/components accordion
+```
+
+The component will import the necessary elements:
+
+```tsx
+// Accordion.tsx
+import "@sv/elements/expandable";
+
+export function Accordion() {
+  return (
+    <a-expandable>
+      {/* ... */}
+    </a-expandable>
+  );
+}
+```
+
+## Updating Components
+
+Since components are copied (not imported), they don't automatically update. To update a component:
+
+- Check the changelog for breaking changes
+- Re-run the CLI to get the latest version
+- Manually merge changes with your customisations
+
+```bash
+# Get the latest version of a component
+npx @sv/components button --stdout > Button.new.tsx
+
+# Compare and merge manually
+diff src/components/Button.tsx Button.new.tsx
+```
+
+## Changelog
+
+<br/>
+<Changelog />
+<br/>
+<a target="_blank" href={`https://gitlab.s-v.de/svp/atrium/-/blob/main/packages/components/CHANGELOG.md`}>Full changelog</a>

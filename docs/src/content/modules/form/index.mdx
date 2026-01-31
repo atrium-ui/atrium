@@ -1,0 +1,15 @@
+---
+title: Form
+image: "/components/form.png"
+description: A Form
+tags: [["Button", "components/button"], ["Input", "components/input"], ["Checkbox", "components/checkbox"], ["Select", "components/select"]]
+command: "npx @sv/components form"
+---
+
+import SomeFormExample from "./SomeForm.jsx?raw";
+import { SomeForm } from "./SomeForm.jsx";
+import { Example, Atrium } from "package:/components";
+
+<Example code={SomeFormExample}>
+  <SomeForm client:only="vue" />
+</Example>

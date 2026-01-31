@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.7" />
+    <title>Layout</title>
+
+    <script type="module" src="./src/index.ts"></script>
+
+    <style>
+            body {
+                background: #1b1b1b;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                margin: 0;
+                display: flex;
+                justify-content: center;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            placeholder {
+                display: flex;
+                justify-content: center;
+                height: 100%;
+                align-items: center;
+                font-size: 42px;
+                font-weight: 100;
+                color: white;
+                background: #252527;
+            }
+
+            a-panel-layout {
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+                grid-template-rows: 1fr 1fr;
+                flex: 1;
+            }
+
+            @media (prefers-color-scheme: light) {
+                body {
+                    background: #e6e6e6;
+                }
+            }
+        </style>
+  </head>
+
+  <body>
+    <a-panel-layout>
+      <a-panel-group>
+        <a-panel tabs>
+          <placeholder tab="Component 1">1</placeholder>
+        </a-panel>
+        <a-panel tabs>
+          <placeholder tab="Component 2">2</placeholder>
+        </a-panel>
+      </a-panel-group>
+
+      <a-panel-group>
+        <a-panel tabs>
+          <placeholder tab="Component 3">3</placeholder>
+        </a-panel>
+        <a-panel tabs>
+          <placeholder tab="Component 4">4</placeholder>
+        </a-panel>
+      </a-panel-group>
+    </a-panel-layout>
+  </body>
+</html>

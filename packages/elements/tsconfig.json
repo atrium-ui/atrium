@@ -1,14 +1,18 @@
 {
-  "extends": "@sv/codestyle/tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "useDefineForClassFields": false,
     "experimentalDecorators": true,
-    "types": ["@types/bun"],
     "plugins": [
       {
         "name": "ts-lit-plugin"
       }
-    ]
+    ],
+    "paths": {
+      "@sv/elements/*": [
+        "./packages/*/dist/index.js"
+      ]
+    }
   },
   "exclude": [
     "node_modules",

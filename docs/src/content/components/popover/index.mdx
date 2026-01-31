@@ -1,0 +1,37 @@
+---
+title: Popover
+image: "/components/popover.png"
+description: A popover.
+headline: Atrium // Components
+tags: [["a-popover", "elements/a-popover"], ["Button", "components/button"]]
+command: "npx @sv/components popover"
+order: 0
+---
+import { Popover } from "@components/src/vue";
+import { Example, Atrium } from "package:/components";
+import { Story } from "package:/components/docs";
+
+"A tooltip is a popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it. It typically appears after a small delay and disappears when Escape is pressed or on mouse out."
+
+## Example
+
+Click the button to open the popover. This type of popover is a modal popover, so the rest of the page is blocked.
+
+<Story id="popover--default" />
+
+### Tooltip
+
+In this example, the popover opens when the pointer hovers over the button. This type of popover is a non-modal popover, so the rest of the page is **not** blocked.
+
+<Story id="popover--tooltip" />
+
+## Accessibility
+
+- Escape always dismisses the popover.
+- Aria attributes indicate the role and state.
+- Popovers can be modal or non-modal. Non-modal popovers do not block interactions on the page while it is open.
+
+## References
+
+- [Dialog (Modal) Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
+- [Tooltip Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/)

@@ -1,0 +1,57 @@
+---
+import { getCollection } from "astro:content";
+
+const { headline } = Astro.props;
+
+const category = Astro.props.category || Astro.params.category;
+
+const base = import.meta.env.BASE_URL;
+
+const slug = Astro.url.pathname
+  .replace(base, "")
+  .split("/")
+  .filter((str) => str !== "/")
+  .filter(Boolean)
+  .join("/");
+
+const allDocs = await getCollection("docs");
+---
+
+<div class="pb-module-xl typo-info text-grey-500">
+  <span>{headline || category}</span>
+</div>
+
+<nav>
+  <ul class="gap-module-2xl">
+    {
+      allDocs
+        .filter(doc => {
+          const parts = doc.id.split("/");
+          if (parts.length === 2 && parts[0] === category) return true;
+          if (parts.length === 3 && parts[0] === category && parts[2] === "index")
+            return true;
+          return false;
+        })
+        .sort((a, b) => {
+          const orderA = a.data.order ?? 1;
+          const orderB = b.data.order ?? 1;
+          if (orderA !== orderB) return orderA - orderB;
+          // same order, sort alphabetically
+          return a.data.title?.localeCompare(b.data.title || "") || 0;
+        })
+        .map(doc => {
+          return (
+            <li class="mb-module-xs">
+              <a
+                class="text-link [&[aria-current]]:text-link-active font-medium w-full flex justify-between items-center"
+                href={`/${[...base.split("/"), ...doc.id.split("/")].filter(Boolean).join("/")}`}
+                aria-current={doc.id === slug ? "page" : undefined}
+              >
+                <span>{doc.data.title}</span>
+              </a>
+            </li>
+          );
+        })
+    }
+  </ul>
+</nav>

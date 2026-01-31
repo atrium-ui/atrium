@@ -1,10 +1,10 @@
 import { test, expect, describe } from "bun:test";
-import { SelectEvent } from "../src/Select";
+import { SelectEvent } from "../src/Select.js";
 
 const NODE_NAME = "a-select";
 
 test("import a-select element", async () => {
-  const { Select } = await import("@sv/elements/select");
+  const { Select } = await import("../dist/index.js");
   expect(Select).toBeDefined();
 
   // is defined in custom element registry
@@ -12,7 +12,7 @@ test("import a-select element", async () => {
 });
 
 test("construct a-select element", async () => {
-  const { Select } = await import("@sv/elements/select");
+  const { Select } = await import("../dist/index.js");
 
   // is constructable
   expect(new Select()).toBeInstanceOf(Select);

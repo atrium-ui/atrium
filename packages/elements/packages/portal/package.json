@@ -1,25 +1,10 @@
 {
-  "name": "@atrium-ui/portal",
+  "name": "@sv/portal",
   "author": "atrium",
   "contributors": [],
   "private": true,
   "description": "",
   "type": "module",
   "main": "dist/index.js",
-  "types": "src/index.ts",
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
-  "tsup": {
-    "entry": [
-      "src/index.ts"
-    ],
-    "format": [
-      "esm",
-      "cjs"
-    ],
-    "sourcemap": true,
-    "clean": true
-  }
+  "types": "src/index.ts"
 }

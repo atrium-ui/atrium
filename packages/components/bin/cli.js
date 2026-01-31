@@ -9,6 +9,17 @@ import dependencyTree from "dependency-tree";
 
 const componentRoot = resolve(fileURLToPath(import.meta.url), "../../src/");
 
+const frameworkToFileEnding = {
+  vue: ".vue",
+  react: ".tsx",
+  solid: ".tsx",
+  angular: ".ts",
+};
+
+function fileEnding(framework) {
+  return frameworkToFileEnding[framework];
+}
+
 const HELP = `
   Usage: cli [options] [components]
 
@@ -26,7 +37,7 @@ const HELP = `
  * @param {string} [framework]
  */
 export async function component(name, framework = "vue") {
-  const file = resolve(componentRoot, framework, `${name}.tsx`);
+  const file = resolve(componentRoot, framework, `${name}${fileEnding(framework)}`);
   const files = await peers(file);
   return files;
 }
@@ -51,7 +62,7 @@ export async function peers(file) {
     filename: file,
     directory: componentRoot,
     filter(mod) {
-      return !mod.match("node_modules");
+      return !!mod.match("components/src");
     },
   });
   return list;
@@ -76,10 +87,10 @@ export async function use(args = []) {
     return;
   }
 
-  const framwork = flags.framework || "vue";
+  const framework = flags.framework || "vue";
   const availableComponents = [
-    ...readdirSync(resolve(componentRoot, framwork)).map((file) =>
-      file.replace(".tsx", ""),
+    ...readdirSync(resolve(componentRoot, framework)).map((file) =>
+      file.replace(fileEnding(framework), ""),
     ),
   ];
 
@@ -111,7 +122,7 @@ export async function use(args = []) {
 
   if (flags.stdout) {
     for (const comp of components) {
-      const files = await component(comp, flags.framework);
+      const files = await component(comp, framework);
       for (const file of files) {
         process.stdout.write(readFileSync(file, "utf8"));
       }
@@ -128,10 +139,13 @@ export async function use(args = []) {
   }
 
   for (const comp of components) {
-    const files = await component(comp, flags.framework);
+    const files = await component(comp, framework);
     for (const file of files) {
       const name = file.split("/").pop()?.split(".")[0];
-      writeFileSync(`${dist}/${name}.tsx`, readFileSync(file, "utf8"));
+      writeFileSync(
+        `${dist}/${name}${fileEnding(framework)}`,
+        readFileSync(file, "utf8"),
+      );
       process.stdout.write(`√ ${name}\n`);
     }
   }

@@ -3,8 +3,8 @@ import { twMerge } from "tailwind-merge";
 
 const inputVariants = {
   default: [
-    "group w-full resize-y rounded-md border border-zinc-700 bg-transparent leading-normal px-3 py-1 hover:border-zinc-600",
-    "focus:border-zinc-500 outline-none focus:ring focus:ring-[currentColor]",
+    "group w-full resize-y rounded-md border border-zinc-200 bg-transparent leading-normal px-3 py-1 hover:border-zinc-400",
+    "outline-none focus:ring-2 focus:ring-[currentColor]",
   ],
   error: ["border-red-600"],
 };
@@ -30,6 +30,7 @@ export function Input(props: {
   return (
     <div class={props.class}>
       <div class="text-sm">
+        {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
         <label>{props.label}</label>
       </div>
 
@@ -73,6 +74,7 @@ export function Input(props: {
 
       {props.error ? (
         <div class="mt-1 text-red-600 text-sm">
+          {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
           <label>{props.error}</label>
         </div>
       ) : null}

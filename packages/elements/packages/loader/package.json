@@ -1,0 +1,10 @@
+{
+  "name": "@sv/loader",
+  "author": "atrium",
+  "contributors": [],
+  "private": true,
+  "description": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.ts"
+}

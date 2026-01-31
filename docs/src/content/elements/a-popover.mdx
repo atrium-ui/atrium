@@ -1,0 +1,274 @@
+---
+title: a-popover
+description: A floating element that positions itself relative to a trigger, using Floating UI for smart placement.
+command: import "@sv/elements/popover";
+order: 0
+---
+
+import { Lit, TypeDoc } from "package:/components"
+
+The `a-popover` element creates floating content that positions itself intelligently relative to a trigger element. It uses [Floating UI](https://floating-ui.com/) for positioning and includes built-in support for focus management, click-outside detection, and smooth transitions.
+
+<div class="not-content box">
+  <a-popover-trigger class="group relative z-10">
+    <div slot="trigger">
+      <button class="px-4 py-2 bg-zinc-200 rounded-md cursor-pointer">
+        Click to open popover
+      </button>
+    </div>
+
+    <a-popover>
+      <div
+        class="w-[max-content] rounded-md border p-4 border-zinc-200 bg-zinc-50 shadow-lg"
+      >
+        <p class="font-medium mb-2">Popover Content</p>
+        <p class="text-sm text-zinc-600 ">Click outside to close</p>
+      </div>
+    </a-popover>
+  </a-popover-trigger>
+</div>
+
+Used by the [Popover](/components/popover), [Dropdown](/components/dropdown), and [Combobox](/components/combobox) components.
+
+## Usage
+
+### Basic Popover
+
+The popover system consists of two elements: `a-popover-trigger` (the wrapper) and `a-popover` (the floating content).
+
+```html
+<a-popover-trigger>
+  <button slot="trigger" type="button">
+    Open Menu
+  </button>
+
+  <a-popover>
+    <div class="popover-content">
+      <p>Popover content here</p>
+    </div>
+  </a-popover>
+</a-popover-trigger>
+```
+
+### Controlling Placement
+
+Use the `placements` attribute to specify allowed positions. The popover will automatically choose the best available placement:
+
+```html
+<!-- Prefer bottom, fall back to top -->
+<a-popover placements="bottom,top">
+  <div>Content</div>
+</a-popover>
+
+<!-- Prefer bottom-start with alignment -->
+<a-popover placements="bottom-start,bottom-end,top-start,top-end" alignment="start">
+  <div>Content</div>
+</a-popover>
+```
+
+**Available placements:**
+- `top`, `top-start`, `top-end`
+- `bottom`, `bottom-start`, `bottom-end`
+- `left`, `right`
+
+### With Arrow Indicator
+
+Add a `<a-popover-arrow>` element to show a pointing arrow:
+
+```html
+<a-popover placements="bottom,top">
+  <div class="popover-content">
+    <a-popover-arrow>
+      <div class="arrow"></div>
+    </a-popover-arrow>
+    <p>Content with arrow</p>
+  </div>
+</a-popover>
+```
+
+Style the arrow based on placement:
+
+```css
+.arrow {
+  width: 10px;
+  height: 10px;
+  background: white;
+  transform: rotate(45deg);
+}
+
+[data-placement="top"] .arrow {
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+[data-placement="bottom"] .arrow {
+  box-shadow: -2px -2px 2px rgba(0, 0, 0, 0.1);
+}
+```
+
+## Tooltips
+
+For hover-based tooltips, use `a-tooltip` instead of `a-popover`. Tooltips are non-modal and don't trap focus:
+
+```html
+<a-popover-trigger showdelay="300" hidedelay="100">
+  <button slot="trigger" type="button">
+    Hover me
+  </button>
+
+  <a-tooltip>
+    <div class="tooltip">
+      Helpful tooltip text
+    </div>
+  </a-tooltip>
+</a-popover-trigger>
+```
+
+## Programmatic Control
+
+### Show and Hide
+
+```ts
+const trigger = document.querySelector('a-popover-trigger');
+
+// Show the popover
+trigger.show();
+
+// Hide the popover
+trigger.hide();
+
+// Toggle visibility
+trigger.toggle();
+```
+
+### Listening to Events
+
+```ts
+const trigger = document.querySelector('a-popover-trigger');
+
+trigger.addEventListener('show', () => {
+  console.log('Popover opened');
+});
+
+trigger.addEventListener('hide', () => {
+  console.log('Popover closed');
+});
+```
+
+### Checking State
+
+```ts
+const trigger = document.querySelector('a-popover-trigger');
+
+if (trigger.opened) {
+  console.log('Popover is visible');
+}
+```
+
+## Styling
+
+### Transition Animations
+
+The popover content can be animated using CSS transitions. The `enabled` attribute on the portal indicates visibility:
+
+```css
+/* Popover content styling */
+a-popover > div {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+[enabled] a-popover > div {
+  opacity: 1;
+  transform: translateY(0);
+}
+```
+
+### Placement-Based Styling
+
+The `data-placement` attribute is set on the content element, allowing placement-specific styles:
+
+```css
+[data-placement="top"] {
+  transform-origin: bottom center;
+}
+
+[data-placement="bottom"] {
+  transform-origin: top center;
+}
+
+[data-placement^="top"] .popover-content {
+  margin-bottom: 8px;
+}
+
+[data-placement^="bottom"] .popover-content {
+  margin-top: 8px;
+}
+```
+
+### Full Styled Example
+
+```html
+<style>
+  .popover-content {
+    background: white;
+    width: max-content;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+  }
+</style>
+
+<a-popover-trigger>
+  <button slot="trigger">Open</button>
+  <a-popover>
+    <div class="popover-content">
+      <h3>Title</h3>
+      <p>Description text</p>
+    </div>
+  </a-popover>
+</a-popover-trigger>
+```
+
+<div class="box not-content">
+  <style>
+  { `
+  .popover-content {
+    background: white;
+    width: max-content;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+  }`}
+  </style>
+
+  <a-popover-trigger>
+    <button slot="trigger">Open</button>
+    <a-popover>
+      <div class="popover-content">
+        <h3>Title</h3>
+        <p>Description text</p>
+      </div>
+    </a-popover>
+  </a-popover-trigger>
+</div>
+
+## Accessibility
+
+- **Focus Management**: When opened focus moves into the popover. When closed, focus returns to the trigger.
+- **ARIA Attributes**: The trigger automatically sets `aria-haspopup="dialog"` and `aria-expanded`.
+- **Escape Key**: Pressing Escape closes the popover.
+- **Click Outside**: Clicking outside the popover closes it.
+- **Keyboard Navigation**: Tab key cycles through focusable elements inside the popover.
+
+<TypeDoc source="../packages/elements/packages/popover" symbol="Popover" />
+
+<TypeDoc source="../packages/elements/packages/popover" symbol="PopoverTrigger" />
+
+## References
+
+- [Floating UI Documentation](https://floating-ui.com/)

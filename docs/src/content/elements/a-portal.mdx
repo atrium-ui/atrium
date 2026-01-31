@@ -1,0 +1,137 @@
+---
+title: a-portal
+description: An element that teleports its content to a different location in the DOM, typically the document body.
+command: import "@sv/elements/portal";
+order: 0
+---
+
+import { TypeDoc, Lit } from "package:/components"
+
+The `a-portal` element renders its children at a different location in the DOM tree, typically at the end of `document.body`. This is essential for elements that need to break out of their parent's stacking context, overflow constraints, or z-index limitations.
+
+Used internally by [Popover](/elements/a-popover), [Dialog](/components/dialog), and [Sheet](/components/sheet).
+
+## Usage
+
+### Basic Usage
+
+Content placed inside the portal will be rendered at the document body:
+
+```html
+<div class="container">
+  <a-portal>
+    <div class="tooltip">
+      This content is rendered at document.body
+    </div>
+  </a-portal>
+</div>
+```
+
+### Escaping Overflow Hidden
+
+A common use case is rendering tooltips or dropdowns from within containers that have `overflow: hidden`:
+
+```html
+<div style="overflow: hidden; height: 100px;">
+  <p>Some content...</p>
+
+  <a-portal>
+    <div class="dropdown-menu">
+      <!-- This menu won't be clipped by the parent's overflow -->
+      <button>Option 1</button>
+      <button>Option 2</button>
+    </div>
+  </a-portal>
+</div>
+```
+
+### Z-Index Stacking Context
+
+Portals help escape stacking context limitations:
+
+```html
+<div style="position: relative; z-index: 1;">
+  <a-portal>
+    <div class="modal" style="z-index: 1000;">
+      <!-- This modal renders above everything because it's at body level -->
+    </div>
+  </a-portal>
+</div>
+```
+
+### Cleanup Behaviour
+
+The portal automatically cleans up its rendered content when removed from the DOM:
+
+```ts
+const portal = document.querySelector('a-portal');
+
+// Content is rendered at document.body
+document.body.appendChild(portal);
+
+// Content is removed from document.body
+portal.remove();
+```
+
+## How It Works
+
+1. When the portal is connected to the DOM, it creates a container element at `document.body`
+2. The portal's children are moved into this container
+3. The original portal element renders nothing
+4. When disconnected, the container is removed from the body
+
+```html
+<!-- Before portal connects -->
+<body>
+  <div class="parent">
+    <a-portal>
+      <div class="content">Hello</div>
+    </a-portal>
+  </div>
+</body>
+
+<!-- After portal connects -->
+<body>
+  <div class="parent">
+    <a-portal></a-portal>
+  </div>
+
+  <div>
+    <div class="content">Hello</div>
+  </div>
+</body>
+```
+
+## Styling Portaled Content
+
+Since content is moved to the body, it may lose inherited styles. Be explicit with your styling:
+
+```css
+/* Won't work - portal content isn't a child anymore */
+.parent a-portal .content {
+  color: red;
+}
+
+/* Use direct selectors instead */
+[data-portal] .content {
+  color: red;
+}
+```
+
+## Accessibility
+
+The portal by itself does not affect accessibility. Ensure that any interactive content within the portal is properly labeled and focusable.
+
+## When to Use Portals
+
+- Modal dialogs and sheets
+- Tooltips and popovers
+- Dropdown menus
+- Any overlay that needs to escape parent constraints
+
+<TypeDoc source="../packages/elements/packages/portal" symbol="Portal" />
+
+## References
+
+- [React Portal Concept](https://react.dev/reference/react-dom/createPortal)
+- [Stacking Context (MDN)](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context)

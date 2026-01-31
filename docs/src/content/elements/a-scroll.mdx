@@ -1,0 +1,67 @@
+---
+title: a-scroll
+description: A scroll container that remembers and restores its scroll position across page navigations.
+command: import "@sv/elements/scroll";
+order: 1
+---
+
+import { TypeDoc, Lit, Rive } from "package:/components"
+
+The `a-scroll` element is a scroll container that automatically persists and restores its scroll position. This is particularly useful for maintaining scroll state during client-side navigation, page refreshes, or when returning to a previously visited section.
+
+<div class="not-content box">
+  <a-scroll class="h-[200px] overflow-auto border border-zinc-300 dark:border-zinc-600 rounded-lg p-4">
+    <div class="space-y-4">
+      <p>Scroll down and navigate away — when you return, the scroll position will be restored.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+      <p>Duis aute irure dolor in reprehenderit in voluptate velit.</p>
+      <p>Excepteur sint occaecat cupidatat non proident.</p>
+      <p>Sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <p>Curabitur pretium tincidunt lacus.</p>
+      <p>Nulla gravida orci a odio.</p>
+      <p>Nullam varius, turpis et commodo pharetra.</p>
+    </div>
+  </a-scroll>
+</div>
+
+## Usage
+
+### Basic Usage
+
+Wrap your scrollable content in an `a-scroll` element:
+
+```html
+<a-scroll class="h-[400px] overflow-auto">
+  <div class="content">
+    <!-- Long scrollable content -->
+  </div>
+</a-scroll>
+```
+
+### With Unique Identifier
+
+For pages with multiple scroll containers, use a unique `id` to distinguish them:
+
+```html
+<a-scroll id="sidebar-scroll" class="h-screen overflow-auto">
+  <nav>
+    <!-- Navigation items -->
+  </nav>
+</a-scroll>
+
+<a-scroll id="main-content" class="h-screen overflow-auto">
+  <main>
+    <!-- Main content -->
+  </main>
+</a-scroll>
+```
+
+<TypeDoc source="../packages/elements/packages/scroll" symbol="ScrollElement" />
+
+## References
+
+- [CSS Scroll Snap](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll_snap)
+- [Scroll Restoration](https://developer.mozilla.org/en-US/docs/Web/API/History/scrollRestoration)
+- [scrollIntoView API](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView)

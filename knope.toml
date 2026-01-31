@@ -1,8 +1,3 @@
-[packages.codestyle]
-versioned_files = ["packages/codestyle/package.json"]
-changelog = "packages/codestyle/CHANGELOG.md"
-scopes = ["codestyle"]
-
 [packages.components]
 versioned_files = ["packages/components/package.json"]
 changelog = "packages/components/CHANGELOG.md"
@@ -13,25 +8,35 @@ versioned_files = ["packages/a11y/package.json"]
 changelog = "packages/a11y/CHANGELOG.md"
 scopes = ["a11y"]
 
+[packages.animation]
+versioned_files = ["packages/animation/package.json"]
+changelog = "packages/animation/CHANGELOG.md"
+scopes = ["animation"]
+
+[packages.charts]
+versioned_files = ["packages/charts/package.json"]
+changelog = "packages/charts/CHANGELOG.md"
+scopes = ["charts"]
+
 [packages.elements]
 versioned_files = ["packages/elements/package.json"]
 changelog = "packages/elements/CHANGELOG.md"
 scopes = ["elements"]
-
-[packages.html-to-custom-tag-replacement]
-versioned_files = ["packages/html-to-custom-tag-replacement/package.json"]
-changelog = "packages/html-to-custom-tag-replacement/CHANGELOG.md"
-scopes = ["htctr"]
 
 [packages.scroll-lock]
 versioned_files = ["packages/scroll-lock/package.json"]
 changelog = "packages/scroll-lock/CHANGELOG.md"
 scopes = ["scroll-lock"]
 
-[packages.slider]
-versioned_files = ["packages/slider/package.json"]
-changelog = "packages/slider/CHANGELOG.md"
-scopes = ["slider"]
+[packages.svg-sprites]
+versioned_files = ["packages/svg-sprites/package.json"]
+changelog = "packages/svg-sprites/CHANGELOG.md"
+scopes = ["svg-sprites"]
+
+[packages.icons]
+versioned_files = ["packages/icons/package.json"]
+changelog = "packages/icons/CHANGELOG.md"
+scopes = ["icons"]
 
 [[workflows]]
 name = "release"
@@ -55,12 +60,7 @@ type = "Release"
 
 [[workflows.steps]]
 type = "Command"
-command = "bun x turbo run publish-package"
-shell = true
-
-[[workflows.steps]]
-type = "Command"
-command = "git push origin HEAD:main -o ci.skip && git push --tags"
+command = "task publish-packages"
 shell = true
 
 [[workflows]]

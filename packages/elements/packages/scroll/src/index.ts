@@ -26,22 +26,22 @@ const historyStorage = {
  * </a-scroll>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-scroll/
+ * @see https://atrium-ui.dev/elements/a-scroll/
  */
 class ScrollElement extends HTMLElement {
   /** The unique name of the scroll container. Fallback is className + className of the parent element. */
-  public name = "";
+  public id = "";
 
   /** Strategy to use for storing the scroll position, can be "session" or "history" */
   public strategy: "session" | "history" = "session";
 
-  private fallbackName() {
+  private fallbackId() {
     return `${this.className}-${this.parentElement?.className}`.replace(" ", ".");
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (name === "name") {
-      this.name = newValue || this.fallbackName();
+    if (name === "id") {
+      this.id = newValue || this.fallbackId();
     }
     if (name === "strategy") {
       this.strategy = (newValue as any) || "session";
@@ -49,7 +49,7 @@ class ScrollElement extends HTMLElement {
   }
 
   connectedCallback() {
-    this.name = this.name || this.fallbackName();
+    this.id = this.id || this.fallbackId();
 
     const storage =
       this.strategy === "session"
@@ -59,13 +59,13 @@ class ScrollElement extends HTMLElement {
           : undefined;
 
     if (storage) {
-      const top = storage.getItem(this.name);
+      const top = storage.getItem(this.id);
       if (top !== null) {
         this.scrollTop = Number.parseInt(top, 10);
       }
 
       window.addEventListener("beforeunload", () => {
-        storage.setItem(this.name, this.scrollTop.toString());
+        storage.setItem(this.id, this.scrollTop.toString());
       });
     }
   }

@@ -1,0 +1,101 @@
+---
+title: "@sv/icons"
+description: A small collection of commonly used icons.
+command: bun add @sv/icons
+---
+
+import { Command } from "package:/components";
+import Changelog from "@sv/icons/CHANGELOG.md";
+
+A curated collection of commonly used icons, optimised for use with Atrium components. Icons are provided as SVG and can be used directly or through the included utilities.
+
+## Installation
+
+Make sure your project is set up with access to the registry as described in [Setup](/guides/setup).
+
+<Command
+  pnpm="pnpm add @sv/icons"
+  npm="npm i @sv/icons"
+  bun="bun add @sv/icons"
+/>
+
+## Usage
+
+### Importing Individual Icons
+
+Import icons directly as SVG strings or components:
+
+```ts
+import { arrowLeft, arrowRight, close, check } from '@sv/icons';
+
+// Use in your framework
+document.querySelector('.icon').innerHTML = arrowLeft;
+```
+
+### With the Icon Component
+
+If you're using the [Icon component](/components/icon), icons are automatically available:
+
+```tsx
+import { Icon } from './components/Icon';
+
+<Icon name="arrow-left" />
+<Icon name="close" />
+<Icon name="check" />
+```
+
+### Styling Icons
+
+Icons inherit `currentColor` by default, making them easy to style:
+
+```css
+.icon {
+  color: #3b82f6;
+  width: 24px;
+  height: 24px;
+}
+
+.icon:hover {
+  color: #1d4ed8;
+}
+```
+
+### Dynamic Icon Loading
+
+For applications with many icons, consider lazy loading:
+
+```ts
+async function loadIcon(name: string): Promise<string> {
+  const icons = await import('@sv/icons');
+  return icons[name];
+}
+
+// Usage
+const icon = await loadIcon('arrow-left');
+element.innerHTML = icon;
+```
+
+## Best Practices
+
+- **Size**: Set explicit width/height or use font-size for consistent sizing
+- **Accessibility**: Add `aria-hidden="true"` for decorative icons, or `aria-label` for meaningful icons
+- **Colour**: Use `currentColor` to inherit text colour, or set explicit colours
+
+```html
+<!-- Decorative icon (hidden from screen readers) -->
+<span aria-hidden="true">
+  <Icon name="arrow-right" />
+</span>
+
+<!-- Meaningful icon (announced to screen readers) -->
+<button aria-label="Close dialog">
+  <Icon name="close" />
+</button>
+```
+
+## Changelog
+
+<br/>
+<Changelog />
+<br/>
+<a target="_blank" href={`https://gitlab.s-v.de/svp/atrium/-/blob/main/packages/icons/CHANGELOG.md`}>Full changelog</a>

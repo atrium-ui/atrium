@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "vite": "^4.5.3",
+    "@sv/icons": "file://../../../icons"
+  }
+}

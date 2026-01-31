@@ -1,0 +1,23 @@
+{
+  "name": "@sv/test",
+  "author": "atrium",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Testing utilities",
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "_check": "tsc -p ./tsconfig.json --pretty",
+    "_test": "bun test",
+    "_publish-package": "task publish"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "devDependencies": {
+    "@testing-library/user-event": "^14.6.1",
+    "@happy-dom/global-registrator": "^18.0.1",
+    "intersection-observer": "^0.12.2",
+    "rand-seed": "^2.1.7",
+    "@types/bun": "^1.1.0"
+  }
+}

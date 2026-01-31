@@ -1,0 +1,27 @@
+---
+import SideMenu from "../components/SideMenu.astro";
+import ContentToggle from "../components/ContentToggle.vue";
+
+const pathname = Astro.url.pathname;
+const category = pathname.split("/").filter(Boolean)[0];
+
+const initialTab = category === "elements" ? "right" : "left";
+---
+
+<SideMenu category="guides" headline="Getting Started" />
+<div class="pt-4"></div>
+<ContentToggle
+  client:load
+  id="guides"
+  leftLabel="Components"
+  rightLabel="Elements"
+  modelValue={initialTab}
+>
+  <div slot="left">
+    <SideMenu category="components" headline="All components" />
+    <div class="pt-4"></div>
+    <SideMenu category="modules" headline="Modules" />
+  </div>
+  <SideMenu slot="right" category="elements" headline="Elements" />
+</ContentToggle>
+<div class="pb-module-2xl"></div>

@@ -9,7 +9,6 @@ declare global {
 
 // TODO: form integration
 // TODO: multi value range
-// TODO: better restyling
 
 /**
  * A simple range slider component for a single value.
@@ -19,77 +18,76 @@ declare global {
  * <a-range value="0.5"></a-range>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-select/
+ * @see https://atrium-ui.dev/elements/a-select/
  */
-@customElement("a-range")
 export class Range extends LitElement {
   static get styles() {
     return css`
       :host {
         display: inline-block;
 
-        --slider-handle-background: orange;
-        --slider-progress-background: orange;
-        --slider-progress-backdrop: #eee;
-        --slider-outline-color: grey;
+        --range-handle-background: var(--theme-color, #bfa188);
+        --range-progress-background: var(--theme-color, #bfa188);
+        --range-track-background: #eee;
+        --range-track-height: 0.125rem;
+        --range-track-padding: 0.25rem 0;
+        --range-handle-size: 0.625rem;
       }
 
-      .horizontal-slider {
+      .range {
         outline: none;
-      }
-
-      .slider {
         position: relative;
-        padding: 1rem 0;
-        margin: 0 1rem 0 1rem;
         touch-action: none;
+        user-select: none;
+        user-drag: none;
+        cursor: pointer;
+        padding: var(--range-track-padding);
+        margin-right: var(--range-handle-size);
       }
 
       .progress {
-        height: 0.5rem;
+        height: var(--range-track-height);
         position: relative;
         cursor: pointer;
       }
       .progress::before {
         content: "";
         display: block;
-        width: calc(100% + 1rem);
+        width: calc(100% + var(--range-handle-size));
         height: 100%;
-        background: var(--slider-progress-backdrop);
+        background: var(--range-track-background);
         opacity: 0.5;
         border-radius: 1rem;
-        margin: 0 -0.5rem;
+        margin: 0 calc(var(--range-handle-size) / -2px);
         transition: outline 0.15s ease;
         outline: solid 1px transparent;
         outline-offset: 1px;
       }
+      .range:focus-visible .progress::before {
+        outline-color: var(--range-outline-color);
+      }
       .progress::after {
         content: "";
         display: block;
-        width: calc((var(--progress) * 100%) + 1rem);
+        width: calc((var(--progress) * 100%) + var(--range-handle-size));
         pointer-events: none;
         height: 100%;
-        background: var(--slider-progress-background);
+        background: var(--range-progress-background);
         border-radius: 1rem;
-        margin: 0 -0.5rem;
+        margin: 0 calc(var(--range-handle-size) / -2px);
         position: absolute;
         top: 0;
       }
 
-      .horizontal-slider:focus .progress::before {
-        outline-color: var(--slider-outline-color);
-      }
-
       .handle {
-        width: 1.5rem;
-        height: 1.5rem;
+        width: var(--range-handle-size);
+        height: var(--range-handle-size);
         border-radius: 50%;
-        background: var(--slider-handle-background);
+        background: var(--range-handle-background);
         position: absolute;
-        left: calc(var(--progress) * 100%);
+        left: calc(var(--progress) * 100% + (var(--range-handle-size) / 2));
         top: 50%;
         transform: translate(-50%, -50%);
-        box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.1);
         cursor: pointer;
       }
       .handle:hover {
@@ -98,66 +96,92 @@ export class Range extends LitElement {
       .handle:active {
         transform: translate(-50%, -50%) scale(0.985);
         filter: brightness(1.05);
-        cursor: grabbing;
       }
     `;
   }
 
-  @property({ type: String, reflect: true })
-  public title = "";
-
-  @property({ type: String, reflect: true })
-  public subtitle = "";
-
-  /** The current value of the slider. */
-  @property({ type: Number, reflect: true })
+  /** The current value of the range. */
+  @property({ type: Number })
   public value = 0;
 
-  @query("#progressElement")
+  public get valueAsNumber(): number {
+    return this.value;
+  }
+
+  /** Minimum value of the range. */
+  @property({ type: Number })
+  public min = 0;
+
+  /** Maximum value of the range. */
+  @property({ type: Number })
+  public max = 1;
+
+  /** Step value of the range. */
+  @property({ type: Number })
+  public step = 0.01;
+
+  /** Disabled state of the range. */
+  @property({ type: Boolean })
+  public disabled = false;
+
+  @query(".progress")
   private readonly progressElement!: HTMLElement;
 
-  private dragging = false;
-
-  private dragStartPosition = 0;
+  private dragStartPosition: number | undefined = 0;
 
   private lastProgress = 0;
 
   protected onHandleMouseDown(event: MouseEvent): void {
-    this.lastProgress = this.value;
+    this.lastProgress = this.progress;
     this.dragStartPosition = event.clientX;
-    this.dragging = true;
   }
 
   protected onMouseUp(): void {
-    this.dragging = false;
+    this.dragStartPosition = undefined;
   }
 
   protected onMouseMove(e: MouseEvent): void {
-    if (this.dragging) {
-      const deltaPixels = (e.x - this.dragStartPosition) / window.devicePixelRatio;
-      const deltaProgress =
-        (deltaPixels / this.progressElement.clientWidth) * devicePixelRatio;
+    if (this.dragStartPosition) {
+      const deltaPixels = e.x - this.dragStartPosition;
+      const rect = this.progressElement.getClientRects()[0];
+      if (!rect) throw new Error("Progress element not found");
+
+      const deltaProgress = deltaPixels / rect.width;
 
       const progress = Math.min(1, Math.max(this.lastProgress + deltaProgress, 0));
 
       this.updateProgress(progress);
+      e.preventDefault();
     }
   }
 
-  protected onProgressClick(e: MouseEvent): void {
+  protected onProgressClick(event: MouseEvent): void {
+    if ((event.target as HTMLElement)?.className === "handle") {
+      return;
+    }
+
     const rect = this.progressElement.getClientRects()[0];
+    if (!rect) throw new Error("Progress element not found");
 
-    if (!rect) return;
-
-    const progress = (e.x - rect.x) / this.progressElement.clientWidth;
+    const handleWidth = 5;
+    const progress = (event.x - handleWidth - rect.x) / rect.width;
     this.updateProgress(progress);
 
-    this.onHandleMouseDown(e);
+    this.onHandleMouseDown(event);
+  }
+
+  private get progress() {
+    return this.value / (this.max - this.min);
   }
 
   protected updateProgress(progress: number): void {
-    this.value = progress;
-    this.dispatchEvent(new CustomEvent("input", { detail: { value: progress } }));
+    if (this.disabled) return;
+
+    // map progress range to value
+    const value = this.min + progress * (this.max - this.min);
+    this.value = Math.round(value / this.step) * this.step;
+
+    this.dispatchEvent(new CustomEvent("input", { detail: { value: this.value } }));
   }
 
   protected onKeyDown(e): void {
@@ -165,10 +189,10 @@ export class Range extends LitElement {
 
     switch (ev.key) {
       case "ArrowLeft":
-        this.dispatchEvent(new Event("input-jump-back"));
+        this.dispatchEvent(new CustomEvent("input:backward"));
         break;
       case "ArrowRight":
-        this.dispatchEvent(new Event("input-jump-forward"));
+        this.dispatchEvent(new CustomEvent("input:forward"));
         break;
     }
   }
@@ -183,17 +207,21 @@ export class Range extends LitElement {
   }
 
   render() {
-    const value = this.value || 0;
     return html`
-      <div class="horizontal-slider" tabindex="0">
-        <div class="slider" style="--progress: ${value}">
-          <div
-            id="progressElement"
-            class="progress"
-            @mousedown="${(e) => this.onProgressClick(e)}"
-          ></div>
-          <div class="handle" @pointerdown="${(e) => this.onHandleMouseDown(e)}"></div>
-        </div>
+      <div
+        style="--progress: ${this.progress}"
+        class="range"
+        role="slider"
+        aria-valuemin=${this.min}
+        aria-valuemax=${this.max}
+        aria-valuenow="${this.value}"
+        aria-orientation="horizontal"
+        aria-disabled="${this.disabled}"
+        tabindex="0"
+        @mousedown="${(e) => this.onProgressClick(e)}"
+      >
+        <div part="track" class="progress"></div>
+        <div part="handle" class="handle" @pointerdown="${(e) => this.onHandleMouseDown(e)}"></div>
       </div>
     `;
   }

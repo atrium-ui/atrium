@@ -1,5 +1,5 @@
 {
-  "name": "@atrium-ui/track",
+  "name": "@sv/track",
   "author": "atrium",
   "contributors": [],
   "private": true,
@@ -8,21 +8,8 @@
   "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
-    "build": "tsup",
+    "build": "bun ./build.ts",
     "check": "tsc",
-    "dev": "tsup --watch"
-  },
-  "tsup": {
-    "entry": [
-      "src/index.ts",
-      "src/traits.ts"
-    ],
-    "format": ["esm", "cjs"],
-    "external": [
-      "lit",
-      "@sv/elements"
-    ],
-    "sourcemap": true,
-    "clean": true
+    "dev": "bun --watch ./build.ts"
   }
 }

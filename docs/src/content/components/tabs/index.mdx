@@ -1,0 +1,48 @@
+---
+title: Tabs
+description: An accessible tabs component for organizing content into multiple panels with keyboard navigation and browser search support.
+tags: [["a-tabs", "elements/a-tabs"]]
+command: "npx @sv/components tabs"
+order: 0
+---
+
+import { Example, Atrium } from "package:/components";
+import { Story } from "package:/components/docs";
+
+A tabs component that organizes content into multiple panels, allowing users to navigate between different sections without leaving the page. Built on the `a-tabs` element, it provides full keyboard navigation, accessibility features, and browser find-in-page support.
+
+## Examples
+
+### Basic Tabs
+
+Click on tabs to switch between panels. Use arrow keys to navigate between tabs when focused.
+
+<Story id="tabs--default" />
+
+### Many Tabs
+
+When there are many tabs, the tab list can scroll horizontally. The layout remains functional and accessible.
+
+<Story id="tabs--manytabs" />
+
+## Guidelines
+
+- **Content Organization**: Use tabs to organize related content that doesn't need to be viewed simultaneously.
+- **Tab Labels**: Keep tab labels short and descriptive (1-2 words when possible).
+- **Tab Count**: Limit to 3-7 tabs for optimal usability. Consider alternative navigation patterns for more than 7 tabs.
+- **Responsive Design**: For mobile views, consider whether tabs remain the best pattern or if another approach (accordion, vertical navigation) would work better.
+- **State Persistence**: Consider persisting the selected tab in URL hash or local storage for better user experience.
+
+## Accessibility
+
+- **ARIA Attributes**: Automatically manages `role="tab"`, `role="tabpanel"`, `aria-selected`, `aria-controls`, and `aria-labelledby`.
+- **Keyboard Navigation**: Full arrow key navigation following WAI-ARIA best practices:
+  - `Arrow Left/Right`: Navigate between tabs
+  - `Home/End`: Jump to first/last tab
+- **Focus Management**: Only the selected tab is in tab order, improving keyboard navigation efficiency.
+- **Browser Search**: Uses `hidden="until-found"` to allow browser find-in-page (Ctrl+F/Cmd+F) to search hidden panels and automatically reveal matching tabs.
+
+## References
+
+- [WAI-ARIA Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/)
+- [a-tabs element](../elements/a-tabs)

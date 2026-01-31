@@ -1,0 +1,62 @@
+{
+  "name": "@sv/svg-sprites",
+  "version": "0.5.4",
+  "description": "Utility to compile svgs from a directory to a spritesheet and make it available as text or blob.",
+  "author": "atrium",
+  "contributors": [
+    "luckydye"
+  ],
+  "license": "MIT",
+  "main": "dist/sprite-sheet.js",
+  "module": "dist/sprite-sheet.js",
+  "type": "module",
+  "exports": {
+    "./CHANGELOG.md": {
+      "import": "./CHANGELOG.md"
+    },
+    "./sheet": {
+      "types": "./src/sprite-sheet.ts",
+      "import": "./dist/sprite-sheet.js",
+      "require": "./dist/sprite-sheet.cjs"
+    },
+    "./svg-icon": {
+      "types": "./src/component/Icon.ts",
+      "import": "./dist/Icon.js",
+      "require": "./dist/Icon.cjs"
+    },
+    "./loader": {
+      "types": "./src/loader/webpack-loader.ts",
+      "import": "./dist/webpack-loader.js",
+      "require": "./dist/webpack-loader.cjs"
+    },
+    "./vite": {
+      "types": "./src/plugin/vite-plugin.ts",
+      "import": "./dist/vite-plugin.js",
+      "require": "./dist/vite-plugin.cjs"
+    }
+  },
+  "keywords": [
+    "svg",
+    "sprite",
+    "icons"
+  ],
+  "scripts": {
+    "test": "bun run test:vite && bun run test:webpack",
+    "test:vite": "cd test/vite && bun i && vite build",
+    "test:webpack": "cd test/wp && webpack build -c ./webpack.config.js",
+    "build": "bun ./build.ts"
+  },
+  "dependencies": {
+    "chokidar": "^4.0.3",
+    "fast-glob": "^3.3.2",
+    "svg-sprite": "^2.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.49",
+    "@types/svg-sprite": "^0.0.34",
+    "vite": "^4.5.3",
+    "vitest": "^2.1.1",
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@sv/box",
+  "author": "atrium",
+  "contributors": [],
+  "private": true,
+  "description": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.ts"
+}

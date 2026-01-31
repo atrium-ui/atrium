@@ -1,5 +1,5 @@
 {
-  "name": "@atrium-ui/time",
+  "name": "@sv/time",
   "author": "atrium",
   "contributors": [],
   "private": true,
@@ -8,16 +8,6 @@
   "main": "dist/index.js",
   "types": "src/index.ts",
   "scripts": {
-    "build": "tsup"
-  },
-  "tsup": {
-    "entry": ["src/index.ts"],
-    "format": ["esm", "cjs"],
-    "external": [
-      "lit",
-      "@sv/elements"
-    ],
-    "sourcemap": true,
-    "clean": true
+    "build": "bun ./build.ts"
   }
 }

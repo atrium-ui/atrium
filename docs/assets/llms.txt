@@ -1,0 +1,457 @@
+# Atrium Elements
+
+This project contains a collection of functional web primitives that can be used in any framework or library, available as custom elements. All elements are built using LitElement and provide fr1amework-agnostic functionality.
+
+## Elements Overview
+
+### Animation (`a-animation`)
+
+- **Purpose**: Interface for including Rive animations in HTML, similar to an image tag
+- **Features**: Supports autoplay, state machines, artboards, mouse interactions, and intersection-based performance optimization
+- **Key Properties**:
+  - `src` (string): URL to .riv file
+  - `width` (number, default: 300): Width in pixels
+  - `height` (number, default: 150): Height in pixels
+  - `autoplay` (boolean, default: true): Whether to autoplay on load
+  - `layout` (string, default: "contain"): Fit mode - "contain", "cover", or "fill"
+  - `stateMachine` (string): Name of state machine to use
+  - `artboard` (string): Name of artboard to use
+- **Methods**: `play()`, `pause()`, `trigger(name)`, `text(name, text?)`, `input(name)`
+- **Events**: `load`, `play`, `pause`
+
+**Example:**
+```ts
+import "@sv/animation";
+```
+```html
+<a-animation
+  height="200"
+  width="200"
+  src="/loading.riv"
+  autoplay
+  layout="contain"
+  stateMachine="idle"
+  artboard="main"
+/>
+```
+
+### Box (`a-box`)
+
+- **Purpose**: Provides an interface to resize events for elements with performance optimization
+- **Features**: Uses a single ResizeObserver for all instances, debounced resize events
+- **Key Properties**:
+  - `retain` (boolean, default: false): Maintains size during resize by temporarily setting explicit dimensions
+- **Events**: `resize`
+
+**Example:**
+```ts
+import "@sv/elements/box";
+```
+```html
+<a-box retain>
+  <div class="resizable-content">
+    Content that responds to resize events
+  </div>
+</a-box>
+```
+
+### Blur (`a-blur`)
+
+- **Purpose**: Focus management utility for modal-like interfaces
+- **Features**: Manages focus trapping and outside click detection
+- **Key Properties**: No specific properties
+- **Events**: `exit` (when clicking outside or pressing escape)
+
+**Example:**
+```ts
+import "@sv/elements/blur";
+```
+```html
+<a-blur style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
+  <div style="width: 400px; height: 400px; background: grey;">
+    <h1>Modal</h1>
+    <p>Click outside of this modal to close it.</p>
+  </div>
+</a-blur>
+```
+
+### Chart (`a-chart`)
+
+- **Purpose**: Simple chart component with data loaded from URLs, styleable with CSS
+- **Features**: Built on Chart.js, supports bar and line charts, dark mode awareness
+- **Key Properties**:
+  - `src` (string): URL to chart data (Chart.js data structure)
+  - `type` (string, default: "bar"): Chart type - "bar" or "line"
+- **Data Format**: Chart.js data structure
+- **Events**: `load`
+- **Methods**: `options()`, `cleanup()`
+
+**Example:**
+```ts
+import "@sv/charts";
+```
+```html
+<a-chart
+  type="bar"
+  class="h-[300px] aspect-[2/1] text-black stroke-black/5 dark:stroke-white/5 dark:text-white"
+  src="/chart-data.json"
+/>
+```
+
+### Expandable (`a-expandable`)
+
+- **Purpose**: Collapsible content sections with smooth animations
+- **Key Properties**:
+  - `opened` (boolean, default: false): Whether the element is open or not
+  - `direction` (string, default: "down"): Direction to open - "down" or "up"
+- **Methods**: `open()`, `close()`, `toggle()`
+- **Events**: `change`
+- **CSS Variables**: `--transition-speed` (default: 0.33s), `--animation-easing` (default: ease)
+
+**Example:**
+```ts
+import "@sv/elements/expandable";
+```
+```html
+<a-expandable opened direction="down">
+  <button slot="toggle" type="button">Toggle Content</button>
+  <div>
+    <p>This content can be expanded and collapsed.</p>
+  </div>
+</a-expandable>
+```
+
+### Form (`a-form-field`, `a-form-field-error`)
+
+- **Purpose**: Form field validation and error handling
+- **Components**: `FormFieldElement`, `FormFieldErrorElement`
+- **Key Properties**:
+  - `invalid` (boolean): Whether the field is invalid
+  - `valid` (boolean): Whether the field is valid
+- **Methods**: `setValid(valid)`, `getInput()`, `getForm()`
+- **Events**: `field-state`
+- **Styling**: Content can be styled using the state based `valid` and `invalid` attributes on the `a-form-field` element.
+
+**Example:**
+```ts
+import "@sv/elements/form";
+```
+```html
+<form>
+  <a-form-field>
+    <label for="email">Email</label>
+    <input type="email" id="email" required />
+    <a-form-field-error></a-form-field-error>
+  </a-form-field>
+</form>
+```
+
+### List (`a-list`, `a-list-item`)
+
+- **Purpose**: Enhanced list functionality with keyboard navigation
+- **Components**: `ListElement`, `ListItemElement`
+- **Key Properties**: No specific properties documented
+- **Features**: Keyboard navigation support
+
+**Example:**
+```ts
+import "@sv/elements/list";
+```
+```html
+<a-list>
+  <a-list-item>Item 1</a-list-item>
+  <a-list-item>Item 2</a-list-item>
+  <a-list-item>Item 3</a-list-item>
+</a-list>
+```
+
+### Popover (`a-popover`, `a-popover-trigger`)
+
+- **Purpose**: Positioned overlay elements using Floating UI
+- **Features**: Smart positioning relative to trigger elements, focus management
+- **Key Properties**:
+  - **a-popover**:
+    - `alignment` (string): "start" or "end" alignment
+    - `placements` (string): Comma-separated list of allowed placements ("top", "bottom", "left", "right", etc.)
+  - **a-popover-trigger**:
+    - `opened` (boolean, default: false): Whether the content is shown
+    - `showdelay` (number, default: 750): Time in ms to wait before showing
+    - `hidedelay` (number, default: 250): Time in ms to wait before hiding
+- **Methods**:
+  - **a-popover**: `show()`, `hide()`
+  - **a-popover-trigger**: `show()`, `hide()`, `toggle()`
+- **Events**: `show`, `hide`
+
+**Example:**
+```ts
+import "@sv/elements/popover";
+```
+```html
+<a-popover-trigger showdelay="500" hidedelay="200">
+  <button type="button" slot="trigger">
+    Open Popover
+  </button>
+
+  <a-popover alignment="start" placements="top,bottom">
+    <div>Popover content here</div>
+    <a-popover-arrow>↓</a-popover-arrow>
+  </a-popover>
+</a-popover-trigger>
+```
+
+### Portal (`a-portal`)
+
+- **Purpose**: Renders content in different DOM locations (typically document.body)
+- **Features**: Useful for modals, tooltips, and overlays that need to escape stacking contexts
+- **Key Properties**:
+  - `autoplace` (boolean): Whether to automatically place the portal
+
+**Example:**
+```ts
+import "@sv/elements/portal";
+```
+```html
+<a-portal>
+  <div class="modal">
+    Content rendered at document.body level
+  </div>
+</a-portal>
+```
+
+### Range (`a-range`)
+
+- **Purpose**: Custom range/slider input controls
+- **Key Properties**:
+  - `value` (number, default: 0): The current value of the range
+  - `min` (number, default: 0): Minimum value of the range
+  - `max` (number, default: 1): Maximum value of the range
+  - `step` (number, default: 0.01): Step value of the range
+  - `disabled` (boolean, default: false): Disabled state of the range
+- **Properties**: `valueAsNumber` (getter)
+- **Events**: `input`, `input:backward`, `input:forward`
+- **CSS Variables**: `--range-handle-background`, `--range-progress-background`, `--range-track-background`, `--range-track-height`, `--range-track-padding`, `--range-handle-size`
+
+**Example:**
+```ts
+import "@sv/elements/range";
+```
+```html
+<a-range
+  value="0.5"
+  min="0"
+  max="1"
+  step="0.1"
+  class="w-full"
+></a-range>
+```
+
+### Scroll (`a-scroll`)
+
+- **Purpose**: Enhanced scrolling functionality with scroll position management throughout navigation
+- **Key Properties**: No specific properties documented
+
+**Example:**
+```ts
+import "@sv/elements/scroll";
+```
+```html
+<a-scroll>
+  <div class="sidebar-content">
+    <div>Scrollable content item 1</div>
+    <div>Scrollable content item 2</div>
+    <div>Scrollable content item 3</div>
+  </div>
+</a-scroll>
+```
+
+### Select (`a-select`, `a-option`)
+
+- **Purpose**: Custom select dropdown functionality
+- **Components**: Select element, `OptionElement`
+- **Features**: Form integration, keyboard navigation
+- **Key Properties**:
+  - **a-select**:
+    - `direction` (string, default: "down"): Direction dropdown opens - "up" or "down"
+    - `value` (string): The selected option value
+    - `opened` (boolean, default: false): Whether the dropdown is open
+    - `disabled` (boolean, default: false): Whether the dropdown is disabled
+    - `required` (boolean, default: false): Whether the input is required
+    - `name` (string): The name or key used in form data
+  - **a-option**:
+    - `value` (string): The value of the option
+    - `selected` (boolean): Whether the option is selected
+- **Methods**: `selectNext()`, `selectPrev()`, `reportValidity()`, `reset()`, `close()`, `open()`
+- **Events**: `change`, `input`, `open`, `close`
+- **CSS Variables**: `--dropdown-max-height`, `--dropdown-speed`, `--dropdown-position`
+
+**Example:**
+```ts
+import "@sv/elements/select";
+```
+```html
+<form onchange="console.log(event.target.value)">
+  <a-select name="test" class="text-base" direction="down" required>
+    <button type="button" slot="trigger" class="cursor-pointer">
+      <div class="w-[150px] text-left">Select an option</div>
+    </button>
+
+    <div class="mt-1 border border-zinc-200 bg-zinc-800 p-1">
+      <a-option class="block p-1 hover:bg-zinc-600" value="option-1">Option 1</a-option>
+      <a-option class="block p-1 hover:bg-zinc-600" value="option-2">Option 2</a-option>
+      <a-option class="block p-1 hover:bg-zinc-600" value="option-3">Option 3</a-option>
+    </div>
+  </a-select>
+</form>
+```
+
+### Toast (`a-toast`, `a-toast-feed`)
+
+- **Purpose**: Notification system with automatic positioning and animations
+- **Components**: `ToastFeed` (container), `Toast` (individual notifications)
+- **Key Properties**:
+  - **Toast**: Takes options object with `message`, `time`, `onClick`
+- **Methods**:
+  - **Toast**: `dismiss()`, `kill()`
+  - **ToastFeed**: `getInstance()` (static)
+- **Events**: `killed` (when toast is dismissed)
+- **CSS Variables**: `--transition-duration`, `--transition-timing-function`
+
+**Example:**
+```ts
+import "@sv/elements/toast";
+```
+```html
+<a-portal>
+  <a-toast-feed class="fixed right-4 bottom-4 text-base"></a-toast-feed>
+</a-portal>
+
+<script>
+  // Create a toast programmatically
+  const toast = new Toast({
+    message: "Operation completed!",
+    time: 5000,
+    onClick: (e) => console.log("Toast clicked")
+  });
+  const feed = ToastFeed.getInstance();
+  feed?.append(toast);
+</script>
+```
+
+### Toggle (`a-toggle`)
+
+- **Purpose**: Toggle/switch input control with form integration
+- **Features**: Form-associated custom element, supports form internals API
+- **Key Properties**:
+  - `name` (string): FormData name of the field
+  - `value` (string|boolean, default: "false"): The value of the field, which is submitted with the form data
+- **Methods**: `toggle()`
+- **Properties**: `form` (getter)
+- **Events**: `change`, `input`
+
+**Example:**
+```ts
+import "@sv/elements/toggle";
+```
+```html
+<a-toggle
+  class="p-2 cursor-pointer border hover:border-zinc-600 [&[value='true']]:bg-zinc-700"
+  name="notifications"
+  value="true"
+>
+  <span slot="true">Enabled</span>
+  <span slot="false">Disabled</span>
+</a-toggle>
+```
+
+### Track (`a-track`)
+
+- **Purpose**: Interface for scrolling content (carousels, slideshows)
+- **Features**: Navigate to specific child elements, input device optimization, snap scrolling
+- **Key Properties**:
+  - `current` (number): Current item index
+  - `vertical` (boolean, default: false): Whether the track should scroll vertically
+  - `loop` (boolean, default: false): Whether the track should loop back to the start
+  - `snap` (boolean, default: false): Whether the track should snap to the closest child
+  - `align` (string, default: "start"): Item alignment in the track - "start" or "center"
+  - `overflow` (string, default: "auto"): Change overflow behavior - "auto", "scroll", or "ignore"
+  - `debug` (boolean, default: false): Enable debug mode
+- **Methods**: `getClosestItemPosition()`, `elementItemIndex()`, `getToItemPosition()`, `setTarget()`, `moveBy()`, `moveTo()`
+- **Properties**: Multiple getters for track state (width, height, currentPosition, etc.)
+- **Styling**: The a-track element automatically handles overflowing content as slidable, without overflow it won't allow sliding by default. Also if items wrap to a new line, they will be ignored as slide items.
+
+**Example:**
+```ts
+import "@sv/elements/track";
+```
+```html
+<a-track snap loop align="center" class="flex w-full overflow-visible">
+  <div class="flex-none w-full">
+    <img src="/slide1.jpg" class="w-full" alt="Slide 1" />
+  </div>
+  <div class="flex-none w-full">
+    <img src="/slide2.jpg" class="w-full" alt="Slide 2" />
+  </div>
+  <div class="flex-none w-full">
+    <img src="/slide3.jpg" class="w-full" alt="Slide 3" />
+  </div>
+</a-track>
+```
+
+### Transition (`a-transition`)
+
+- **Purpose**: Animation and transition utilities for content changes
+- **Features**: Smooth transitions between different content states
+- **Key Properties**: No specific properties documented
+
+**Example:**
+```ts
+import "@sv/elements/transition";
+```
+```html
+<a-transition>
+  <div key="content1">Initial content</div>
+  <!-- Content changes trigger transitions -->
+</a-transition>
+```
+
+## Technical Details
+
+- **Framework**: Built with LitElement for cross-framework compatibility
+- **Browser Support**: Modern browsers with custom element support
+- **Performance**: Optimized with intersection observers, resize observers, and debouncing
+- **Accessibility**: Includes ARIA attributes and semantic HTML where applicable
+- **Styling**: CSS custom properties and part selectors for theming
+- **Dependencies**: Chart.js (charts), Rive (animations), Floating UI (popovers)
+
+## Common Patterns
+
+### CSS Custom Properties
+Many elements support CSS custom properties for theming:
+- `--transition-speed`, `--transition-duration`
+- `--animation-easing`, `--transition-timing-function`
+- Element-specific properties (see individual element documentation)
+
+### Form Integration
+Several elements integrate with forms:
+- `a-toggle`: Uses form internals API
+- `a-select`: Supports form validation and submission
+- `a-form-field`: Provides form validation wrapper
+
+### Event Handling
+Common event patterns:
+- `change`: Value changes
+- `input`: Input events
+- `load`: Resource loading completion
+- `show`/`hide`: Visibility state changes
+
+## Usage Pattern
+
+All elements follow a consistent pattern:
+1. Import the element: `import "@sv/elements/{element-name}"`
+2. Use as HTML: `<a-{element-name} properties...></a-{element-name}>`
+3. Style with CSS using custom properties and part selectors
+4. Listen for custom events for interaction handling
+
+The elements are designed to be framework-agnostic and can be used in vanilla HTML, React, Vue, Angular, or any other web framework.
+
+More information can be found in the docs at "https://svp.pages.s-v.de/atrium/elements/a-{element-name}".

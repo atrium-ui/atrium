@@ -1,0 +1,27 @@
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
+@import "tailwindcss/theme";
+
+@import "./theme/theme.css";
+@import "./theme/markdown.css";
+
+/* Fonts */
+@import "@fontsource/roboto/latin.css";
+@import "@fontsource/roboto-condensed/latin.css";
+
+@source '../../packages/components/**/*.tsx';
+
+/* Index page */
+
+.home-card {
+  @apply min-h-[200px] bg-[#ececec] rounded-xl transition-transform border-4 border-white;
+}
+/*.home-card:nth-last-child(2) {
+  @apply opacity-60;
+}
+.home-card:nth-last-child(1) {
+  @apply opacity-30;
+}*/
+.home-card:hover {
+  @apply scale-[1.02] duration-400 delay-100 ease-[var(--ease-smooth)];
+}

@@ -1,0 +1,38 @@
+---
+title: Lightbox
+description: A lightbox component for displaying images in a full-screen overlay with backdrop blur and smooth transitions.
+tags: [["a-blur", "elements/a-blur"], ["Button", "components/button"]]
+command: "npx @sv/components lightbox"
+order: 0
+---
+import { Lightbox } from "@components/src/vue";
+import { Example, Atrium } from "package:/components";
+import { Story } from "package:/components/docs";
+
+A lightbox component that displays images in an immersive full-screen overlay. When clicked, the thumbnail expands to show the full-resolution image with a darkened backdrop,
+providing focus on the content while maintaining visual context of the underlying page.
+
+## Examples
+
+### Single Image
+
+Click the image to open it in the lightbox. The lightbox will display the full-resolution image with a backdrop blur effect. Click the close button or press Escape to exit.
+
+<Story id="lightbox--default" />
+
+## Guidelines
+
+- **Use for Focus**: Use lightbox when you want users to focus on visual content without leaving the current page context.
+
+## Accessibility
+
+- **Keyboard Navigation**: Pressing the Escape key closes the lightbox.
+- **Focus Management**: Focus is trapped within the lightbox when open, and returns to the trigger element when closed.
+- **Screen Readers**: Images should have descriptive alt text to convey content to screen reader users.
+- **Visual Feedback**: The backdrop blur provides clear visual separation between the lightbox and page content.
+- **Close Button**: A clearly labeled close button is always visible and accessible.
+
+## References
+
+- [Dialog (Modal) Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
+- [a-blur element](../elements/a-blur)

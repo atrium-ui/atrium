@@ -1,23 +1,14 @@
-<img width="100%" height="auto" src="docs/assets/header.png" alt="atrium header">
-
+<p align="center">
+  <img width="180px" height="auto" src="docs/assets/atrium-dark.png" alt="atrium header">
+</p>
+ 
 <p align="center" style="text-align:cetner;">
-	<h1 align="center" style="text-align:cetner;"><b>Atrium</b></h1>
+	<h1 align="center" style="text-align:cetner;"><b>atrium</b></h1>
 	<p align="center" style="text-align:cetner;">
-    A collection of framework agnostic and functional web-components and templates for building Websites.
-    <br />
-    <br />
-    <a href="https://svp.pages.s-v.de/atrium/">Docs</a> ·
-    <a href="https://gitlab.s-v.de/svp/atrium/-/issues">Issues</a> ·
-    <a href="https://gitlab.s-v.de/svp/atrium/-/packages">Packages</a>
-    <br />
+    A curated collection of libraries, custom-elements and components for different frameworks for building websites.
   </p>
 </p>
 <br />
-
-## Use in other projects
-
-See [Usage](https://svp.pages.s-v.de/atrium/usage/) in the docs for instructions.
-
 <br />
 
 ## Packages

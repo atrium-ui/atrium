@@ -1,0 +1,96 @@
+.markdown-content {
+  & > h1 {
+    @apply typo-title-2 mb-module-2xl;
+  }
+
+  & > a > h2,
+  & > h2 {
+    @apply typo-title-4 mb-module-2xl;
+  }
+
+  & > h3 {
+    @apply typo-subtitle mb-module-m;
+  }
+
+  & > h4 {
+    @apply typo-headline mb-module-m;
+  }
+
+  & > h2:not(:first-child),
+  & > h3:not(:first-child),
+  & > h4:not(:first-child) {
+    @apply mt-module-4xl;
+  }
+
+  & > blockquote {
+    @apply rounded-md border-1 border-solid border-gray-200 bg-gray-100 p-4;
+    @apply not-last:mb-module-xl not-first:my-module-xl;
+  }
+
+  & > div > p,
+  & > p {
+    @apply typo-body not-last:mb-module-m;
+  }
+
+  & > ul a[href],
+  & > p a[href] {
+    color: blue;
+    text-decoration: underline;
+  }
+
+  & > a[href]:hover {
+    text-decoration: underline;
+  }
+
+  & > table {
+    border-spacing: 0;
+    border-collapse: separate;
+    border-radius: 8px;
+    border: 1px solid #bdbdbd;
+    width: 100%;
+    background: white;
+  }
+
+  & > table th {
+    text-align: left;
+    padding-bottom: 1rem;
+    font-weight: bold;
+  }
+
+  & > table th,
+  & > table td {
+    padding: 0.5rem;
+  }
+
+  & > table tr:not(:last-child) th,
+  & > table tr:not(:last-child) td {
+    border-bottom: 1px solid #eaeaea;
+  }
+
+  & > table tr th:not(:last-child),
+  & > table tr td:not(:last-child) {
+    border-right: 1px solid #eaeaea;
+  }
+
+  & > table td p {
+    margin: 0.5rem 0;
+  }
+
+  & > hr {
+    @apply my-element-m border-t-1;
+  }
+
+  & > ul:not(:where(.not-content *)) {
+    padding-left: 1rem;
+
+    li {
+      list-style-type: disc;
+      margin-bottom: 1rem;
+    }
+  }
+
+  & > .directive-dev::before {
+    content: "For Developers";
+    @apply block text-sm text-gray-500 font-medium mb-module-s;
+  }
+}

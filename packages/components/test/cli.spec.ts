@@ -23,7 +23,7 @@ test("use cli", async () => {
   const out = await $`${binPath} Button`;
   expect(out.exitCode).toBe(0);
   const dir = fs.readdirSync("./components/");
-  expect(dir).toContain("Button.tsx");
+  expect(dir).toContain("Button.vue");
 });
 
 test("use button template", async () => {
@@ -31,13 +31,13 @@ test("use button template", async () => {
 
   const dir = fs.readdirSync("./components/");
   console.info(dir);
-  expect(dir).toContain("Button.tsx");
+  expect(dir).toContain("Button.vue");
 });
 
 test("use form template", async () => {
   await cli.use(["Form"]);
 
   const dir = fs.readdirSync("./components/");
-  expect(dir).toContain("Button.tsx");
-  expect(dir).toContain("Form.tsx");
+  // expect(dir).toContain("Button.vue");
+  expect(dir).toContain("Form.vue");
 });

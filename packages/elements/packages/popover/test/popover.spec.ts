@@ -3,7 +3,7 @@ import { test, expect } from "bun:test";
 const NODE_NAME = "a-popover";
 
 test("import element", async () => {
-  const { Popover } = await import("@sv/elements/popover");
+  const { Popover } = await import("../dist/index.js");
   expect(Popover).toBeDefined();
 
   // is defined in custom element registry
@@ -20,7 +20,7 @@ test("import element", async () => {
 });
 
 test("initial state", async () => {
-  const { PopoverTrigger } = await import("@sv/elements/popover");
+  const { PopoverTrigger } = await import("../dist/index.js");
   const ele = new PopoverTrigger();
 
   expect(ele.opened).toBe(false);
@@ -58,7 +58,7 @@ test("popover no scrolllock", async () => {
   expect(content.lock.enabled).toBe(false);
 });
 
-test("slotting names", async () => {
+test("reattach", async () => {
   const ele = await createPopover();
   const popover = ele.querySelector("a-popover");
   const trigger = ele.querySelector("a-popover-trigger");
@@ -66,8 +66,20 @@ test("slotting names", async () => {
   // TOOD: find a way to test assigned slots
 });
 
+test("slotting names", async () => {
+  const ele = await createPopover();
+  const popover = ele.querySelector("a-popover");
+  const trigger = ele.querySelector("a-popover-trigger");
+
+  expect(popover).toBeDefined();
+  expect(trigger).toBeDefined();
+
+  // should not error, when reappending the popover
+  trigger.append(popover);
+});
+
 async function createPopover() {
-  await import("@sv/elements/popover");
+  await import("../dist/index.js");
   const ele = document.createElement("div");
   ele.innerHTML = `
     <a-popover-trigger>

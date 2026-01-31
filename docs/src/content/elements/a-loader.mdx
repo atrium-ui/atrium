@@ -1,0 +1,91 @@
+---
+title: a-loader
+description: A wrapper element to handle loading states for asynchronous content.
+command: import "@sv/elements/loader";
+order: 1
+---
+
+import { TypeDoc, Lit, Rive } from "package:/components"
+
+The `a-loader` element manages loading states for its children. It provides a standardised way to show loading indicators and handle loading/loaded transitions.
+
+<div class="not-content box">
+  <a-loader class="block p-4 min-h-[100px]">
+    <div slot="loading" class="flex items-center justify-center gap-2">
+      <span class="animate-spin">⏳</span>
+      <span>Loading...</span>
+    </div>
+    <div>
+      <img src="/placeholder.svg" />
+    </div>
+  </a-loader>
+</div>
+
+## Usage
+
+### Basic Usage
+
+The loader shows the `loading` slot content as long as the `loading` attribute is set.
+It also listens to ny "load" events bubbleing up from the content.
+
+```html
+<a-loader loading>
+  <div slot="loading">
+    <span class="spinner"></span>
+    Loading...
+  </div>
+  <div slot="content">
+    Your loaded content here
+  </div>
+</a-loader>
+```
+
+### Skeleton Loading Pattern
+
+Use with skeleton placeholders for a smooth loading experience:
+
+```html
+<a-loader>
+  <div slot="loading" class="space-y-2">
+    <div class="h-4 bg-zinc-200 rounded animate-pulse w-3/4"></div>
+    <div class="h-4 bg-zinc-200 rounded animate-pulse w-1/2"></div>
+    <div class="h-4 bg-zinc-200 rounded animate-pulse w-5/6"></div>
+  </div>
+  <div slot="content">
+    <p>Actual content appears here</p>
+  </div>
+</a-loader>
+```
+
+## Styling
+
+Style the loading and content states with CSS:
+
+```css
+a-loader {
+  display: block;
+  min-height: 100px;
+  position: relative;
+}
+
+a-loader[loading] [slot="content"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+a-loader:not([loading]) [slot="loading"] {
+  display: none;
+}
+
+/* Fade transition */
+a-loader [slot="content"] {
+  transition: opacity 0.2s ease;
+}
+```
+
+<TypeDoc source="../packages/elements/packages/loader" symbol="LoaderElement" />
+
+## References
+
+- [ARIA Live Regions](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
+- [Skeleton Loading Pattern](https://www.nngroup.com/articles/skeleton-screens/)

@@ -1,0 +1,151 @@
+---
+title: "@sv/elements"
+description: A collection of headless custom-elements for building accessible, framework-agnostic UI components.
+command: bun add @sv/elements
+---
+
+import { Lit, Command } from "package:/components";
+import Changelog from "@sv/elements/CHANGELOG.md";
+
+This package includes all custom-elements used in Atrium components. Elements are headless (unstyled) and focus purely on behaviour and accessibility, making them framework-agnostic and highly customisable.
+
+## Installation
+
+Make sure your project is set up with access to the registry as described in [Setup](/guides/setup).
+
+<Command
+  pnpm="pnpm add @sv/elements --save-exact"
+  npm="npm i @sv/elements --save-exact"
+  bun="bun add @sv/elements --exact"
+/>
+
+**Note:** We recommend using `--save-exact` to pin the version, as elements may receive breaking changes between minor versions.
+
+## Usage
+
+### Importing Elements
+
+Import elements individually to keep your bundle size small:
+
+```ts
+// Import specific elements
+import "@sv/elements/expandable";
+import "@sv/elements/popover";
+import "@sv/elements/toggle";
+```
+
+### Using in HTML
+
+Once imported, elements are available as custom HTML tags:
+
+```html
+<a-expandable opened>
+  <button slot="toggle" type="button">Click to toggle</button>
+  <div>Collapsible content here</div>
+</a-expandable>
+```
+
+### With Frameworks
+
+Elements work with any framework that supports custom elements:
+
+```tsx
+// React/Preact
+import "@sv/elements/toggle";
+
+function App() {
+  return (
+    <a-toggle name="notifications" value="false">
+      <span slot="true">On</span>
+      <span slot="false">Off</span>
+    </a-toggle>
+  );
+}
+```
+
+```vue
+<!-- Vue -->
+<script setup>
+import "@sv/elements/expandable";
+</script>
+
+<template>
+  <a-expandable>
+    <button slot="toggle">Expand</button>
+    <p>Hidden content</p>
+  </a-expandable>
+</template>
+```
+
+```astro
+---
+// Astro
+import "@sv/elements/popover";
+---
+
+<a-popover-trigger>
+  <button slot="trigger">Open Menu</button>
+  <a-popover>
+    <div class="menu">Menu content</div>
+  </a-popover>
+</a-popover-trigger>
+```
+
+## Styling Elements
+
+Elements are intentionally unstyled. Apply your own styles using standard CSS:
+
+```css
+/* Target the element directly */
+a-expandable {
+  display: block;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+}
+
+/* Use attribute selectors for state */
+a-expandable[opened] {
+  border-color: #3b82f6;
+}
+
+a-toggle[value="true"] {
+  background-color: #10b981;
+}
+
+/* Target slots */
+a-expandable [slot="toggle"] {
+  padding: 1rem;
+  cursor: pointer;
+}
+```
+
+## Preventing Layout Shift
+
+Custom elements may cause layout shifts before they're defined. Use CSS to hide undefined elements:
+
+```css
+:not(:defined) {
+  opacity: 0;
+}
+
+/* Or hide children that should be invisible */
+a-expandable:not(:defined) > :not([slot="toggle"]) {
+  display: none;
+}
+```
+
+## Bundle Size
+
+Elements are designed for minimal bundle size. Each element is independently importable, and the shared Lit dependency is small and efficient.
+
+Typical element sizes (minified + gzipped):
+- `a-toggle`: ~1.5KB
+- `a-expandable`: ~2KB
+- `a-popover`: ~3KB (includes positioning logic)
+
+## Changelog
+
+<br/>
+<Changelog />
+<br/>
+<a target="_blank" href={`https://gitlab.s-v.de/svp/atrium/-/blob/main/packages/elements/CHANGELOG.md`}>Full changelog</a>
