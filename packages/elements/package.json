@@ -4,12 +4,14 @@
   "contributors": [
     "luckydye"
   ],
-  "version": "1.14.2",
+  "version": "4.6.2",
   "description": "Atrium Elements",
   "type": "module",
   "scripts": {
-    "check": "tsc --pretty",
-    "test": "bun test --rerun-each 5 .",
+    "build": "bun ./build.ts",
+    "dev": "bun --watch ./build.ts",
+    "test": "bun test --rerun-each 3 --coverage",
+    "check": "tsc",
     "publish-package": "task publish"
   },
   "files": [
@@ -22,119 +24,118 @@
   "keywords": [],
   "license": "MIT",
   "dependencies": {
-    "lit": "^3.1.3"
+    "lit": "^3.1.3",
+    "@floating-ui/dom": "^1.6.7",
+    "@sv/scroll-lock": "^1.1.1"
   },
   "devDependencies": {
-    "@happy-dom/global-registrator": "^14.7.1",
-    "install": "^0.13.0",
-    "intersection-observer": "^0.12.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/bun": "^1.3.5",
+    "@sv/test": "^0.1.0",
     "ts-lit-plugin": "^2.0.2"
   },
-  "peerDependencies": {
-    "@floating-ui/dom": "^1.6.7",
-    "@rive-app/canvas-advanced": "2.7.8",
-    "@sv/scroll-lock": "^1.0.0",
-    "chart.js": "^4.4.3"
-  },
   "exports": {
+    "./CHANGELOG.md": {
+      "import": "./CHANGELOG.md"
+    },
     ".": {
-      "import": "./index.js",
-      "types": "./index.d.ts"
+      "types": "./index.d.ts",
+      "import": "./index.js"
     },
     "./toggle": {
+      "types": "./packages/toggle/src/index.ts",
       "import": "./packages/toggle/dist/index.js",
-      "require": "./packages/toggle/dist/index.cjs",
-      "types": "./packages/toggle/src/index.ts"
+      "require": "./packages/toggle/dist/index.cjs"
     },
     "./expandable": {
+      "types": "./packages/expandable/src/index.ts",
       "import": "./packages/expandable/dist/index.js",
-      "require": "./packages/expandable/dist/index.cjs",
-      "types": "./packages/expandable/src/index.ts"
-    },
-    "./dropdown": {
-      "import": "./packages/dropdown/dist/index.js",
-      "require": "./packages/dropdown/dist/index.cjs",
-      "types": "./packages/dropdown/src/index.ts"
+      "require": "./packages/expandable/dist/index.cjs"
     },
     "./track": {
+      "types": "./packages/track/src/index.ts",
       "import": "./packages/track/dist/index.js",
-      "require": "./packages/track/dist/index.cjs",
-      "types": "./packages/track/src/index.ts"
+      "require": "./packages/track/dist/index.cjs"
     },
     "./blur": {
+      "types": "./packages/blur/src/index.ts",
       "import": "./packages/blur/dist/index.js",
-      "require": "./packages/blur/dist/index.cjs",
-      "types": "./packages/blur/src/index.ts"
+      "require": "./packages/blur/dist/index.cjs"
     },
     "./popover": {
+      "types": "./packages/popover/src/index.ts",
       "import": "./packages/popover/dist/index.js",
-      "require": "./packages/popover/dist/index.cjs",
-      "types": "./packages/popover/src/index.ts"
-    },
-    "./animation": {
-      "import": "./packages/animation/dist/index.js",
-      "require": "./packages/animation/dist/index.cjs",
-      "types": "./packages/animation/src/index.ts"
+      "require": "./packages/popover/dist/index.cjs"
     },
     "./time": {
+      "types": "./packages/time/src/index.ts",
       "import": "./packages/time/dist/index.js",
-      "require": "./packages/time/dist/index.cjs",
-      "types": "./packages/time/src/index.ts"
-    },
-    "./pager": {
-      "import": "./packages/pager/dist/index.js",
-      "require": "./packages/pager/dist/index.cjs",
-      "types": "./packages/pager/src/index.ts"
+      "require": "./packages/time/dist/index.cjs"
     },
     "./range": {
+      "types": "./packages/range/src/index.ts",
       "import": "./packages/range/dist/index.js",
-      "require": "./packages/range/dist/index.cjs",
-      "types": "./packages/range/src/index.ts"
-    },
-    "./filter": {
-      "import": "./packages/filter/dist/index.js",
-      "require": "./packages/filter/dist/index.cjs",
-      "types": "./packages/filter/src/index.ts"
+      "require": "./packages/range/dist/index.cjs"
     },
     "./toast": {
+      "types": "./packages/toast/src/index.ts",
       "import": "./packages/toast/dist/index.js",
-      "require": "./packages/toast/dist/index.cjs",
-      "types": "./packages/toast/src/index.ts"
+      "require": "./packages/toast/dist/index.cjs"
     },
     "./form": {
+      "types": "./packages/form/src/index.ts",
       "import": "./packages/form/dist/index.js",
-      "require": "./packages/form/dist/index.cjs",
-      "types": "./packages/form/src/index.ts"
+      "require": "./packages/form/dist/index.cjs"
     },
     "./portal": {
+      "types": "./packages/portal/src/index.ts",
       "import": "./packages/portal/dist/index.js",
-      "require": "./packages/portal/dist/index.cjs",
-      "types": "./packages/portal/src/index.ts"
+      "require": "./packages/portal/dist/index.cjs"
     },
     "./transition": {
+      "types": "./packages/transition/src/index.ts",
       "import": "./packages/transition/dist/index.js",
-      "require": "./packages/transition/dist/index.cjs",
-      "types": "./packages/transition/src/index.ts"
+      "require": "./packages/transition/dist/index.cjs"
     },
     "./select": {
+      "types": "./packages/select/src/index.ts",
       "import": "./packages/select/dist/index.js",
-      "require": "./packages/select/dist/index.cjs",
-      "types": "./packages/select/src/index.ts"
+      "require": "./packages/select/dist/index.cjs"
     },
     "./scroll": {
+      "types": "./packages/scroll/src/index.ts",
       "import": "./packages/scroll/dist/index.js",
-      "require": "./packages/scroll/dist/index.cjs",
-      "types": "./packages/scroll/src/index.ts"
+      "require": "./packages/scroll/dist/index.cjs"
     },
-    "./chart": {
-      "import": "./packages/chart/dist/index.js",
-      "require": "./packages/chart/dist/index.cjs",
-      "types": "./packages/chart/src/index.ts"
+    "./box": {
+      "types": "./packages/box/src/index.ts",
+      "import": "./packages/box/dist/index.js",
+      "require": "./packages/box/dist/index.cjs"
     },
-    "./dropzone": {
-      "import": "./packages/dropzone/dist/index.js",
-      "require": "./packages/dropzone/dist/index.cjs",
-      "types": "./packages/dropzone/src/index.ts"
+    "./list": {
+      "types": "./packages/list/src/index.ts",
+      "import": "./packages/list/dist/index.js",
+      "require": "./packages/list/dist/index.cjs"
+    },
+    "./loader": {
+      "types": "./packages/loader/src/index.ts",
+      "import": "./packages/loader/dist/index.js",
+      "require": "./packages/loader/dist/index.cjs"
+    },
+    "./shortcut": {
+      "types": "./packages/shortcut/src/index.ts",
+      "import": "./packages/shortcut/dist/index.js",
+      "require": "./packages/shortcut/dist/index.cjs"
+    },
+    "./calendar": {
+      "types": "./packages/calendar/src/index.ts",
+      "import": "./packages/calendar/dist/index.js",
+      "require": "./packages/calendar/dist/index.cjs"
+    },
+    "./tabs": {
+      "types": "./packages/tabs/src/index.ts",
+      "import": "./packages/tabs/dist/index.js",
+      "require": "./packages/tabs/dist/index.cjs"
     }
   }
 }
