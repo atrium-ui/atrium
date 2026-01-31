@@ -137,75 +137,6 @@
         "chart.js": "^4.4.3",
       },
     },
-    "packages/elements/packages/blur": {
-      "name": "@sv/blur",
-      "dependencies": {
-        "@sv/scroll-lock": "workspace:*",
-      },
-    },
-    "packages/elements/packages/box": {
-      "name": "@sv/box",
-    },
-    "packages/elements/packages/calendar": {
-      "name": "@sv/calendar",
-    },
-    "packages/elements/packages/dropzone": {
-      "name": "@atrium-ui/dropzone",
-    },
-    "packages/elements/packages/expandable": {
-      "name": "@sv/expandable",
-    },
-    "packages/elements/packages/fluid-input": {
-      "name": "@atrium-ui/fluid-input",
-    },
-    "packages/elements/packages/form": {
-      "name": "@sv/form",
-    },
-    "packages/elements/packages/knob": {
-      "name": "@atrium-ui/knob",
-    },
-    "packages/elements/packages/list": {
-      "name": "@sv/list",
-    },
-    "packages/elements/packages/loader": {
-      "name": "@sv/loader",
-    },
-    "packages/elements/packages/popover": {
-      "name": "@sv/popover",
-    },
-    "packages/elements/packages/portal": {
-      "name": "@sv/portal",
-    },
-    "packages/elements/packages/range": {
-      "name": "@sv/range",
-    },
-    "packages/elements/packages/scroll": {
-      "name": "@sv/scroll",
-    },
-    "packages/elements/packages/select": {
-      "name": "@sv/select",
-    },
-    "packages/elements/packages/shortcut": {
-      "name": "@sv/elements-shortcut",
-    },
-    "packages/elements/packages/tabs": {
-      "name": "@sv/tabs",
-    },
-    "packages/elements/packages/time": {
-      "name": "@sv/time",
-    },
-    "packages/elements/packages/toast": {
-      "name": "@sv/toast",
-    },
-    "packages/elements/packages/toggle": {
-      "name": "@sv/toggle",
-    },
-    "packages/elements/packages/track": {
-      "name": "@sv/track",
-    },
-    "packages/elements/packages/transition": {
-      "name": "@sv/transition",
-    },
     "packages/icons": {
       "name": "@sv/icons",
       "version": "1.2.0",
@@ -286,12 +217,6 @@
     "@astrojs/vue": ["@astrojs/vue@6.0.0-beta.0", "", { "dependencies": { "@vitejs/plugin-vue": "5.2.4", "@vitejs/plugin-vue-jsx": "^4.2.0", "@vue/compiler-sfc": "^3.5.26", "vite": "^7.1.7", "vite-plugin-vue-devtools": "^7.7.9" }, "peerDependencies": { "astro": "^6.0.0-alpha.0", "vue": "^3.5.24" } }, "sha512-jYezx7Z2LR+NiZMKjJj+buf/FSu0Tftc2tQH0chT0Q4HZnQOfzv5yWG1avlu8tQXZMW09N/6aUbMFrx7/MTQTg=="],
 
     "@astrojs/yaml2ts": ["@astrojs/yaml2ts@0.2.2", "", { "dependencies": { "yaml": "^2.5.0" } }, "sha512-GOfvSr5Nqy2z5XiwqTouBBpy5FyI6DEe+/g/Mk5am9SjILN1S5fOEvYK0GuWHg98yS/dobP4m8qyqw/URW35fQ=="],
-
-    "@atrium-ui/dropzone": ["@atrium-ui/dropzone@workspace:packages/elements/packages/dropzone"],
-
-    "@atrium-ui/fluid-input": ["@atrium-ui/fluid-input@workspace:packages/elements/packages/fluid-input"],
-
-    "@atrium-ui/knob": ["@atrium-ui/knob@workspace:packages/elements/packages/knob"],
 
     "@babel/code-frame": ["@babel/code-frame@7.28.6", "", { "dependencies": { "@babel/helper-validator-identifier": "^7.28.5", "js-tokens": "^4.0.0", "picocolors": "^1.1.1" } }, "sha512-JYgintcMjRiCvS8mMECzaEn+m3PfoQiyqukOMCCVQtoJGYJw8j/8LBJEiqkHLkfwCcs74E3pbAUFNg7d9VNJ+Q=="],
 
@@ -719,12 +644,6 @@
 
     "@sv/animation": ["@sv/animation@workspace:packages/animation"],
 
-    "@sv/blur": ["@sv/blur@workspace:packages/elements/packages/blur"],
-
-    "@sv/box": ["@sv/box@workspace:packages/elements/packages/box"],
-
-    "@sv/calendar": ["@sv/calendar@workspace:packages/elements/packages/calendar"],
-
     "@sv/charts": ["@sv/charts@workspace:packages/charts"],
 
     "@sv/components": ["@sv/components@workspace:packages/components"],
@@ -733,47 +652,15 @@
 
     "@sv/elements": ["@sv/elements@workspace:packages/elements"],
 
-    "@sv/elements-shortcut": ["@sv/elements-shortcut@workspace:packages/elements/packages/shortcut"],
-
-    "@sv/expandable": ["@sv/expandable@workspace:packages/elements/packages/expandable"],
-
-    "@sv/form": ["@sv/form@workspace:packages/elements/packages/form"],
-
     "@sv/icons": ["@sv/icons@workspace:packages/icons"],
-
-    "@sv/list": ["@sv/list@workspace:packages/elements/packages/list"],
-
-    "@sv/loader": ["@sv/loader@workspace:packages/elements/packages/loader"],
 
     "@sv/panels": ["@sv/panels@workspace:packages/panels"],
 
-    "@sv/popover": ["@sv/popover@workspace:packages/elements/packages/popover"],
-
-    "@sv/portal": ["@sv/portal@workspace:packages/elements/packages/portal"],
-
-    "@sv/range": ["@sv/range@workspace:packages/elements/packages/range"],
-
-    "@sv/scroll": ["@sv/scroll@workspace:packages/elements/packages/scroll"],
-
     "@sv/scroll-lock": ["@sv/scroll-lock@workspace:packages/scroll-lock"],
-
-    "@sv/select": ["@sv/select@workspace:packages/elements/packages/select"],
 
     "@sv/svg-sprites": ["@sv/svg-sprites@workspace:packages/svg-sprites"],
 
-    "@sv/tabs": ["@sv/tabs@workspace:packages/elements/packages/tabs"],
-
     "@sv/test": ["@sv/test@workspace:packages/test"],
-
-    "@sv/time": ["@sv/time@workspace:packages/elements/packages/time"],
-
-    "@sv/toast": ["@sv/toast@workspace:packages/elements/packages/toast"],
-
-    "@sv/toggle": ["@sv/toggle@workspace:packages/elements/packages/toggle"],
-
-    "@sv/track": ["@sv/track@workspace:packages/elements/packages/track"],
-
-    "@sv/transition": ["@sv/transition@workspace:packages/elements/packages/transition"],
 
     "@tailwindcss/browser": ["@tailwindcss/browser@4.1.18", "", {}, "sha512-cnAUsj2TXGslPmDEnM469b4MAFT/ifxjt+Bla/2vBTBzp/PIPo6pjKxRrd8x+S84/S1bAtEIlzbJaaJxgZUV8Q=="],
 
