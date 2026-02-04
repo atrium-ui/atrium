@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.6.3 (2026-02-04)
+
+### Fixes
+
+- Stale inert state in a-expandable
+
 ## 4.6.2 (2026-01-30)
 
 ### Fixes
