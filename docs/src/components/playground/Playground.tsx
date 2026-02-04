@@ -268,10 +268,8 @@ export function PlaygroundView() {
         throw new Error("No response from AI");
       }
 
-      console.log("AI Response:", generatedCode);
       setChatHistory((prev) => {
         const updated = [...prev, { role: "assistant", content: generatedCode }];
-        console.log("Updated chat history:", updated);
         return updated;
       });
 
@@ -429,6 +427,8 @@ export function PlaygroundView() {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 256 256"
                   className="h-3 w-3 transition-transform group-open:rotate-90"
+                  role="img"
+                  aria-label="Configuration"
                 >
                   <path
                     fill="currentColor"
@@ -439,8 +439,11 @@ export function PlaygroundView() {
               </summary>
               <div className="space-y-2 text-xs">
                 <div>
-                  <label className="mb-1 block opacity-70">Provider</label>
+                  <label htmlFor="provider" className="mb-1 block opacity-70">
+                    Provider
+                  </label>
                   <select
+                    id="provider"
                     value={aiConfig.provider}
                     onChange={(e) =>
                       setAiConfig((prev) => ({
@@ -463,8 +466,11 @@ export function PlaygroundView() {
                   </select>
                 </div>
                 <div>
-                  <label className="mb-1 block opacity-70">Endpoint</label>
+                  <label htmlFor="endpoint" className="mb-1 block opacity-70">
+                    Endpoint
+                  </label>
                   <input
+                    id="endpoint"
                     type="text"
                     value={aiConfig.endpoint}
                     onChange={(e) =>
@@ -474,8 +480,11 @@ export function PlaygroundView() {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block opacity-70">Model</label>
+                  <label htmlFor="model" className="mb-1 block opacity-70">
+                    Model
+                  </label>
                   <input
+                    id="model"
                     type="text"
                     value={aiConfig.model}
                     onChange={(e) =>
@@ -486,8 +495,11 @@ export function PlaygroundView() {
                 </div>
                 {aiConfig.provider === "anthropic" && (
                   <div>
-                    <label className="mb-1 block opacity-70">API Key</label>
+                    <label htmlFor="apiKey" className="mb-1 block opacity-70">
+                      API Key
+                    </label>
                     <input
+                      id="apiKey"
                       type="password"
                       value={aiConfig.apiKey}
                       onChange={(e) => {
@@ -542,6 +554,8 @@ export function PlaygroundView() {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 256 256"
               className="h-5 w-5"
+              role="img"
+              aria-label="Hide sidebar"
             >
               <path
                 fill="currentColor"
@@ -553,6 +567,8 @@ export function PlaygroundView() {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 256 256"
               className="h-5 w-5"
+              role="img"
+              aria-label="Show sidebar"
             >
               <path
                 fill="currentColor"
@@ -572,6 +588,8 @@ export function PlaygroundView() {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 256 256"
             className="h-5 w-5"
+            role="img"
+            aria-label="Export"
           >
             <path
               fill="currentColor"

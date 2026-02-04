@@ -71,14 +71,17 @@ export const ManyTabs = {
             label="Many tabs example"
           >
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-              <a-tabs-tab class="cursor-pointer whitespace-nowrap border-transparent border-b-2 px-6 py-3 text-zinc-600 transition-all hover:bg-zinc-50 hover:text-zinc-900 [&[selected]]:border-blue-600 [&[selected]]:text-blue-600">
+              <a-tabs-tab
+                key={num}
+                class="cursor-pointer whitespace-nowrap border-transparent border-b-2 px-6 py-3 text-zinc-600 transition-all hover:bg-zinc-50 hover:text-zinc-900 [&[selected]]:border-blue-600 [&[selected]]:text-blue-600"
+              >
                 Tab {num}
               </a-tabs-tab>
             ))}
           </a-tabs-list>
 
           {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-            <a-tabs-panel class="block">
+            <a-tabs-panel key={num} class="block">
               <div class="p-6">
                 <p class="text-zinc-600">Content for tab {num}</p>
               </div>
