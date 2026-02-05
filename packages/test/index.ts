@@ -25,6 +25,21 @@ export function preload() {
 
   GlobalRegistrator.register();
 
+  // Mock Element.animate for components that use animations
+  Object.defineProperty(Element.prototype, "animate", {
+    value: () => {
+      return {
+        onfinish: null,
+        cancel: () => {},
+        play: () => {},
+        pause: () => {},
+        finish: () => {},
+        finished: new Promise((resolve) => resolve(1)),
+      };
+    },
+    writable: true,
+  });
+
   require("intersection-observer");
   globalThis.IntersectionObserver = window.IntersectionObserver;
 

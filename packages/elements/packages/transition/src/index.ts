@@ -271,7 +271,7 @@ class Transition extends LitElement {
       getComputedStyle(this).getPropertyValue("transition-duration"),
     );
 
-    await this.animate(
+    const animation = this.animate(
       [
         {
           height: `${this.lastHeight}px`,
@@ -286,7 +286,11 @@ class Transition extends LitElement {
         duration,
         easing,
       },
-    ).finished;
+    );
+
+    if (animation) {
+      await animation.finished;
+    }
 
     this.lastHeight = height;
     this.lastWidth = width;
