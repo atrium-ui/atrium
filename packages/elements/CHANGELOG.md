@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.6.4 (2026-02-05)
+
+### Fixes
+
+- Improve transition element stability for test enviroment
+
 ## 4.6.3 (2026-02-04)
 
 ### Fixes
