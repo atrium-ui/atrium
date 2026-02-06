@@ -50,12 +50,12 @@ const name = entry.data.title || "";
 
   <div class="flex items-start">
     <div
-      class="sticky top-module-4xl w-module-9xl hidden md:block pl-2 max-h-[calc(100vh-6rem)] overflow-auto bg-(--style-fill-white-background) z-1 flex-none"
+      class="sticky top-0 w-module-9xl hidden md:block pl-2 pr-6 pt-module-4xl max-h-screen overflow-auto z-1 bg-(--style-fill-white-background) border-r border-neutral-200"
     >
       <Sidebar />
     </div>
 
-    <main class="md:px-0 md:ml-module-2xl w-full md:w-[calc(100%-var(--module-9xl))]">
+    <main class="md:px-0 md:ml-module-2xl pt-module-4xl w-full md:w-[calc(100%-var(--module-9xl))]">
       <hgroup>
         {
           entry.data.headline ? (

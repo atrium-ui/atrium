@@ -6,10 +6,10 @@ description: Copy-paste components you own. Framework-agnostic custom elements u
 import { Code } from "astro:components";
 import { Command } from "../components";
 
-<section className="flex flex-col items-center text-center gap-module-xl mb-module-8xl pt-module-8xl">
+<section className="flex flex-col items-center text-center gap-module-xl mb-module-8xl pt-module-6xl">
   <h1 className="typo-title-1 pb-module-s">Build Better, Ship Faster</h1>
 
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 lg:px-module-4xl">
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 lg:px-module-2xl max-w-[980px]">
     <a className="home-card" href={`${import.meta.env.BASE_URL}components/accordion`}>
       <a-animation
         src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
@@ -17,7 +17,7 @@ import { Command } from "../components";
         height={200}
         width={320}
         loop
-        className="w-full h-full"
+        className="w-full h-auto"
         layout="contain"
         artboard="Accordion"
       ></a-animation>
@@ -30,7 +30,7 @@ import { Command } from "../components";
         height={200}
         width={320}
         loop
-        className="w-full h-full"
+        className="w-full h-auto"
         layout="contain"
         artboard="Dialog"
       ></a-animation>
@@ -43,7 +43,7 @@ import { Command } from "../components";
         height={200}
         width={320}
         loop
-        className="w-full h-full"
+        className="w-full h-auto"
         layout="contain"
         artboard="Popover"
       ></a-animation>
@@ -56,7 +56,7 @@ import { Command } from "../components";
         height={200}
         width={320}
         loop
-        className="w-full h-full"
+        className="w-full h-auto"
         layout="contain"
         artboard="Slider"
       ></a-animation>

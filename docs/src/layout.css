@@ -14,7 +14,7 @@
 /* Index page */
 
 .home-card {
-  @apply min-h-[200px] bg-[#ececec] rounded-xl transition-transform border-4 border-white;
+  @apply bg-[#ececec] rounded-xl transition-transform border-4 border-white;
 }
 /*.home-card:nth-last-child(2) {
   @apply opacity-60;
