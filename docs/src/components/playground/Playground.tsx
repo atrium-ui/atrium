@@ -344,7 +344,7 @@ export function PlaygroundView() {
   }, [chatHistory, generating]);
 
   return (
-    <div className="flex h-full w-full overflow-hidden px-(--site-padding)">
+    <div className="flex h-full w-full overflow-hidden">
       {/* Sidebar */}
       <div
         className={`overflow-hidden border-(--style-typography-body)/10 border-r bg-(--style-typography-body)/5 transition-all duration-500 ease-in-out ${
