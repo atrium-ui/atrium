@@ -12,6 +12,15 @@ import exampleCodeTsx from "./Examplecode.tsx.txt?raw";
 import { useEffect, useMemo, useRef, useState } from "react";
 import systemPrompt from "./system-prompt.txt?raw";
 import { twMerge } from "tailwind-merge";
+import {
+  deleteSession,
+  formatSessionDate,
+  generateSessionId,
+  listSessions,
+  loadSession,
+  saveSession,
+  type Session,
+} from "./session-storage";
 
 const files = {
   "index.html": {
@@ -135,6 +144,9 @@ export function PlaygroundView() {
   const [aiPrompt, setAiPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [currentSessionId, setCurrentSessionId] = useState<string>(() => generateSessionId());
+  const [currentSessionName, setCurrentSessionName] = useState("Untitled Session");
   const [chatHistory, setChatHistory] = useState<
     Array<{ role: "user" | "assistant"; content: string }>
   >([]);
@@ -143,16 +155,93 @@ export function PlaygroundView() {
     return saved
       ? JSON.parse(saved)
       : {
-          provider: "ollama" as "ollama" | "anthropic",
+          provider: "ollama" as "ollama",
           endpoint: "http://localhost:11434/v1/chat/completions",
           model: "qwen2.5-coder:7b",
-          apiKey: localStorage.getItem("anthropic_api_key") || "",
         };
   });
 
   useEffect(() => {
     localStorage.setItem("playground_ai_config", JSON.stringify(aiConfig));
   }, [aiConfig]);
+
+  useEffect(() => {
+    loadSessionsList();
+  }, []);
+
+  async function loadSessionsList() {
+    const loadedSessions = await listSessions();
+    setSessions(loadedSessions);
+  }
+
+  async function saveCurrentSession() {
+    const session: Session = {
+      id: currentSessionId,
+      name: currentSessionName,
+      timestamp: Date.now(),
+      chatHistory,
+      files: {
+        "index.html": files["index.html"]?.model?.getValue() || exampleCodeHtml,
+        "index.tsx": files["index.tsx"]?.model?.getValue() || exampleCodeTsx,
+      },
+    };
+    await saveSession(session);
+    await loadSessionsList();
+  }
+
+  async function loadSessionById(id: string) {
+    const session = await loadSession(id);
+    if (!session) {
+      throw new Error("Session not found");
+    }
+
+    setCurrentSessionId(session.id);
+    setCurrentSessionName(session.name);
+    setChatHistory(session.chatHistory);
+
+    files["index.html"].model?.setValue(session.files["index.html"]);
+    files["index.tsx"].model?.setValue(session.files["index.tsx"]);
+
+    await pushCode();
+  }
+
+  async function createNewSession() {
+    const newId = generateSessionId();
+    setCurrentSessionId(newId);
+    setCurrentSessionName("Untitled Session");
+    setChatHistory([]);
+
+    files["index.html"].model?.setValue(exampleCodeHtml);
+    files["index.tsx"].model?.setValue(exampleCodeTsx);
+
+    await pushCode();
+  }
+
+  async function handleDeleteSession(id: string) {
+    await deleteSession(id);
+    await loadSessionsList();
+    if (id === currentSessionId) {
+      await createNewSession();
+    }
+  }
+
+  useEffect(() => {
+    if (chatHistory.length > 0) {
+      const debounce = setTimeout(() => {
+        saveCurrentSession();
+      }, 1000);
+      return () => clearTimeout(debounce);
+    }
+  }, [chatHistory, currentSessionName]);
+
+  const handleCodeChange = () => {
+    const debounce = setTimeout(() => {
+      if (chatHistory.length > 0) {
+        saveCurrentSession();
+      }
+    }, 2000);
+    return () => clearTimeout(debounce);
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -215,54 +304,28 @@ export function PlaygroundView() {
     try {
       let generatedCode = "";
 
-      if (aiConfig.provider === "ollama") {
-        const response = await fetch(aiConfig.endpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: aiConfig.model,
-            messages: [
-              { role: "system", content: systemPrompt },
-              ...chatHistory,
-              { role: "user", content: userMessage },
-            ],
-            stream: false,
-          }),
-        });
+      const response = await fetch(aiConfig.endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: aiConfig.model,
+          messages: [
+            { role: "system", content: systemPrompt },
+            ...chatHistory,
+            { role: "user", content: userMessage },
+          ],
+          stream: false,
+        }),
+      });
 
-        if (!response.ok) {
-          throw new Error("Failed to generate layout. Check Ollama is running.");
-        }
-
-        const data = await response.json();
-        generatedCode = data.choices[0].message.content;
-      } else {
-        const response = await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": aiConfig.apiKey,
-            "anthropic-version": "2023-06-01",
-          },
-          body: JSON.stringify({
-            model: aiConfig.model,
-            max_tokens: 4096,
-            system: systemPrompt,
-            messages: [...chatHistory, { role: "user", content: userMessage }],
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(
-            response.status === 401 ? "Invalid API key" : "Failed to generate layout",
-          );
-        }
-
-        const data = await response.json();
-        generatedCode = data.content[0].text;
+      if (!response.ok) {
+        throw new Error("Failed to generate layout. Check Ollama is running.");
       }
+
+      const data = await response.json();
+      generatedCode = data.choices[0].message.content;
 
       if (!generatedCode) {
         throw new Error("No response from AI");
@@ -345,7 +408,7 @@ export function PlaygroundView() {
 
   return (
     <div className="flex h-full w-full overflow-hidden">
-      {/* Sidebar */}
+      {/* AI Sidebar */}
       <div
         className={`overflow-hidden border-(--style-typography-body)/10 border-r bg-(--style-typography-body)/5 transition-all duration-500 ease-in-out ${
           sidebarOpen ? "w-96" : "w-0"
@@ -353,43 +416,123 @@ export function PlaygroundView() {
         style={{ transitionTimingFunction: "cubic-bezier(0.4, 0.0, 0.2, 1)" }}
       >
         <div className="flex h-full w-96 flex-col">
-          <div className="flex shrink-0 items-center justify-between border-(--style-typography-body)/10 border-b px-4 py-3">
-            <h2 className="font-semibold text-sm">AI Assistant</h2>
+          <div className="flex shrink-0 flex-col border-(--style-typography-body)/10 border-b">
+            <div className="flex items-center justify-between px-4 py-3">
+              <h2 className="font-semibold text-sm">
+                {chatHistory.length === 0 ? "Sessions" : "AI Assistant"}
+              </h2>
+              <div className="flex gap-2">
+                {chatHistory.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => createNewSession()}
+                    className="rounded p-1 text-xs hover:bg-(--style-typography-body)/10"
+                    title="New session"
+                  >
+                    New
+                  </button>
+                )}
+                {chatHistory.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => saveCurrentSession()}
+                    className="rounded p-1 text-xs hover:bg-(--style-typography-body)/10"
+                    title="Save session"
+                  >
+                    Save
+                  </button>
+                )}
+              </div>
+            </div>
             {chatHistory.length > 0 && (
-              <button
-                type="button"
-                onClick={() => setChatHistory([])}
-                className="rounded p-1 text-xs hover:bg-(--style-typography-body)/10"
-                title="Clear chat"
-              >
-                Clear
-              </button>
+              <div className="border-(--style-typography-body)/10 border-t px-4 py-2">
+                <input
+                  type="text"
+                  value={currentSessionName}
+                  onChange={(e) => setCurrentSessionName(e.target.value)}
+                  placeholder="Session name..."
+                  className="w-full rounded border border-(--style-typography-body)/20 bg-transparent px-2 py-1.5 text-xs"
+                />
+              </div>
             )}
           </div>
 
-          {/* Chat History */}
+          {/* Chat History / Sessions List */}
           <div
             ref={chatContainerRef}
             className="flex-1 space-y-3 overflow-y-auto px-4 py-3"
           >
             {chatHistory.length === 0 && !generating && (
-              <div className="space-y-3 px-2 py-8 text-xs opacity-70">
-                <div className="font-semibold">Welcome to the AI Playground!</div>
-                <div className="space-y-1.5 opacity-80">
-                  <div>• Describe layouts and the AI will generate Vue 3 components</div>
-                  <div>• Uses local Ollama by default (make sure it's running)</div>
-                  <div>
-                    • Press{" "}
-                    <kbd className="rounded bg-(--style-typography-body)/10 px-1.5 py-0.5">
-                      Cmd+B
-                    </kbd>{" "}
-                    to toggle this panel
+              <div className="space-y-3">
+                {sessions.length === 0 ? (
+                  <div className="space-y-3 px-2 py-8 text-xs opacity-70">
+                    <div className="font-semibold">Welcome to the AI Playground!</div>
+                    <div className="space-y-1.5 opacity-80">
+                      <div>• Describe layouts and the AI will generate Vue 3 components</div>
+                      <div>• Uses local Ollama by default (make sure it's running)</div>
+                      <div>
+                        • Press{" "}
+                        <kbd className="rounded bg-(--style-typography-body)/10 px-1.5 py-0.5">
+                          Cmd+B
+                        </kbd>{" "}
+                        to toggle this panel
+                      </div>
+                    </div>
+                    <div className="pt-2 text-[11px] opacity-60">
+                      Example: "Create a landing page with a hero section and three feature
+                      cards"
+                    </div>
                   </div>
-                </div>
-                <div className="pt-2 text-[11px] opacity-60">
-                  Example: "Create a landing page with a hero section and three feature
-                  cards"
-                </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="px-2 py-2 text-xs font-semibold opacity-70">
+                      Previous Sessions
+                    </div>
+                    {sessions.map((session) => (
+                      <div
+                        key={session.id}
+                        className="group relative rounded-lg p-3 text-xs transition-colors hover:bg-(--style-typography-body)/10"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => loadSessionById(session.id)}
+                          className="w-full text-left"
+                        >
+                          <div className="mb-1 truncate font-semibold">{session.name}</div>
+                          <div className="opacity-60">
+                            {formatSessionDate(session.timestamp)}
+                          </div>
+                          <div className="opacity-50">
+                            {session.chatHistory.length} message
+                            {session.chatHistory.length !== 1 ? "s" : ""}
+                          </div>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteSession(session.id);
+                          }}
+                          className="absolute top-2 right-2 rounded p-1 opacity-0 transition-opacity hover:bg-(--style-typography-body)/20 group-hover:opacity-100"
+                          title="Delete session"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 256 256"
+                            className="h-3 w-3"
+                            role="img"
+                            aria-label="Delete"
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
             {chatHistory.map((msg, idx) => (
@@ -422,7 +565,7 @@ export function PlaygroundView() {
           {/* AI Config */}
           <div className="shrink-0 border-(--style-typography-body)/10 border-t px-4 py-3">
             <details className="group">
-              <summary className="mb-2 flex cursor-pointer items-center gap-2 font-semibold text-xs">
+              <summary className="flex cursor-pointer items-center gap-2 font-semibold text-xs">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 256 256"
@@ -437,34 +580,8 @@ export function PlaygroundView() {
                 </svg>
                 Configuration
               </summary>
-              <div className="space-y-2 text-xs">
-                <div>
-                  <label htmlFor="provider" className="mb-1 block opacity-70">
-                    Provider
-                  </label>
-                  <select
-                    id="provider"
-                    value={aiConfig.provider}
-                    onChange={(e) =>
-                      setAiConfig((prev) => ({
-                        ...prev,
-                        provider: e.target.value as "ollama" | "anthropic",
-                        endpoint:
-                          e.target.value === "ollama"
-                            ? "http://localhost:11434/v1/chat/completions"
-                            : "https://api.anthropic.com/v1/messages",
-                        model:
-                          e.target.value === "ollama"
-                            ? "qwen2.5-coder:7b"
-                            : "claude-sonnet-4-5-20250929",
-                      }))
-                    }
-                    className="w-full rounded border border-(--style-typography-body)/20 bg-transparent px-2 py-1.5"
-                  >
-                    <option value="ollama">Ollama (Local)</option>
-                    <option value="anthropic">Anthropic</option>
-                  </select>
-                </div>
+
+              <div className="space-y-2 text-xs mt-4">
                 <div>
                   <label htmlFor="endpoint" className="mb-1 block opacity-70">
                     Endpoint
@@ -493,25 +610,23 @@ export function PlaygroundView() {
                     className="w-full rounded border border-(--style-typography-body)/20 bg-transparent px-2 py-1.5"
                   />
                 </div>
-                {aiConfig.provider === "anthropic" && (
-                  <div>
-                    <label htmlFor="apiKey" className="mb-1 block opacity-70">
-                      API Key
-                    </label>
-                    <input
-                      id="apiKey"
-                      type="password"
-                      value={aiConfig.apiKey}
-                      onChange={(e) => {
-                        const key = e.target.value;
-                        setAiConfig((prev) => ({ ...prev, apiKey: key }));
-                        localStorage.setItem("anthropic_api_key", key);
-                      }}
-                      placeholder="sk-ant-..."
-                      className="w-full rounded border border-(--style-typography-body)/20 bg-transparent px-2 py-1.5"
-                    />
-                  </div>
-                )}
+              </div>
+
+              <div className="mt-4 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setAiConfig({
+                      provider: "ollama",
+                      endpoint: "http://localhost:11434/v1/chat/completions",
+                      model: "qwen2.5-coder:7b",
+                    })
+                  }
+                  className="rounded px-2 py-1 text-xs hover:bg-(--style-typography-body)/10"
+                  title="Reset to default"
+                >
+                  Reset
+                </button>
               </div>
             </details>
           </div>
@@ -608,7 +723,13 @@ export function PlaygroundView() {
                 <div className="flex-1" ref={iframeContainerRef} />
               </div>
             </a-panel>
-            <a-panel tabs onChange={pushCode}>
+            <a-panel
+              tabs
+              onChange={() => {
+                pushCode();
+                handleCodeChange();
+              }}
+            >
               <monaco-editor data-file="index.html" tab="index.html" />
               <monaco-editor data-file="index.tsx" tab="index.tsx" />
             </a-panel>

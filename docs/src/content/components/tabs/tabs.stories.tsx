@@ -67,7 +67,7 @@ export const ManyTabs = {
       <div class="flex min-h-[400px] max-w-full items-center justify-center p-4">
         <a-tabs class="w-full max-w-2xl">
           <a-tabs-list
-            class="flex gap-1 overflow-x-auto border-zinc-200 border-b bg-white"
+            class="flex gap-1 overflow-hidden border-zinc-200 border-b bg-white"
             label="Many tabs example"
           >
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (

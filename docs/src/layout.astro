@@ -1,18 +1,19 @@
 ---
 import "./layout.css";
-import { ClientRouter } from "astro:transitions";
 import Header from "./components/Header.astro";
 import { svg } from "@sv/svg-sprites/sheet";
-import { Elements } from "./components/index.js";
 
 import roboto400 from "@fontsource/roboto/files/roboto-latin-400-normal.woff2?url";
 import roboto700 from "@fontsource/roboto/files/roboto-latin-700-normal.woff2?url";
 import roboto500 from "@fontsource/roboto/files/roboto-latin-500-normal.woff2?url";
 import robotoCondesned800 from "@fontsource/roboto-condensed/files/roboto-condensed-latin-800-normal.woff2?url";
+import { twMerge } from "tailwind-merge";
 
 const iocnSheet = await svg();
 
 const base = import.meta.env.BASE_URL;
+
+const layoutClasses = Astro.props.class;
 ---
 
 <html>
@@ -147,7 +148,7 @@ const base = import.meta.env.BASE_URL;
 
       <Header transition:persist />
 
-      <div class="flex-1 w-full px-(--site-padding) relative mx-auto max-w-(--site-width) overflow-clip">
+      <div class={twMerge("flex-1 w-full px-(--site-padding) relative mx-auto max-w-(--site-width) overflow-clip", layoutClasses)}>
         <slot />
       </div>
 
