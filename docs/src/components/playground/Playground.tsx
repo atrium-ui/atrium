@@ -20,7 +20,7 @@ import {
   loadSession,
   saveSession,
   type Session,
-} from "./session-storage";
+} from "./session-storage.js";
 
 const files = {
   "index.html": {
@@ -145,7 +145,9 @@ export function PlaygroundView() {
   const [generating, setGenerating] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sessions, setSessions] = useState<Session[]>([]);
-  const [currentSessionId, setCurrentSessionId] = useState<string>(() => generateSessionId());
+  const [currentSessionId, setCurrentSessionId] = useState<string>(() =>
+    generateSessionId(),
+  );
   const [currentSessionName, setCurrentSessionName] = useState("Untitled Session");
   const [chatHistory, setChatHistory] = useState<
     Array<{ role: "user" | "assistant"; content: string }>
@@ -468,7 +470,9 @@ export function PlaygroundView() {
                   <div className="space-y-3 px-2 py-8 text-xs opacity-70">
                     <div className="font-semibold">Welcome to the AI Playground!</div>
                     <div className="space-y-1.5 opacity-80">
-                      <div>• Describe layouts and the AI will generate Vue 3 components</div>
+                      <div>
+                        • Describe layouts and the AI will generate Vue 3 components
+                      </div>
                       <div>• Uses local Ollama by default (make sure it's running)</div>
                       <div>
                         • Press{" "}
@@ -479,13 +483,13 @@ export function PlaygroundView() {
                       </div>
                     </div>
                     <div className="pt-2 text-[11px] opacity-60">
-                      Example: "Create a landing page with a hero section and three feature
-                      cards"
+                      Example: "Create a landing page with a hero section and three
+                      feature cards"
                     </div>
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <div className="px-2 py-2 text-xs font-semibold opacity-70">
+                    <div className="px-2 py-2 font-semibold text-xs opacity-70">
                       Previous Sessions
                     </div>
                     {sessions.map((session) => (
@@ -498,7 +502,9 @@ export function PlaygroundView() {
                           onClick={() => loadSessionById(session.id)}
                           className="w-full text-left"
                         >
-                          <div className="mb-1 truncate font-semibold">{session.name}</div>
+                          <div className="mb-1 truncate font-semibold">
+                            {session.name}
+                          </div>
                           <div className="opacity-60">
                             {formatSessionDate(session.timestamp)}
                           </div>
@@ -581,7 +587,7 @@ export function PlaygroundView() {
                 Configuration
               </summary>
 
-              <div className="space-y-2 text-xs mt-4">
+              <div className="mt-4 space-y-2 text-xs">
                 <div>
                   <label htmlFor="endpoint" className="mb-1 block opacity-70">
                     Endpoint

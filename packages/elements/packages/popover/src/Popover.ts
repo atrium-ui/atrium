@@ -394,21 +394,25 @@ export class PopoverTrigger extends LitElement {
 
     let lastPointerType: string | undefined;
 
-    this.addEventListener("click", (e) => {
-      if (this.content instanceof Tooltip) {
-        // prevent click event after a long-press (hoverTimeout)
-        if (lastPointerType !== "mouse" && this.hoverTimeout) {
-          e.preventDefault();
-          e.stopPropagation();
+    this.addEventListener(
+      "click",
+      (e) => {
+        if (this.content instanceof Tooltip) {
+          // prevent click event after a long-press (hoverTimeout)
+          if (lastPointerType !== "mouse" && this.hoverTimeout) {
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+          }
           return;
         }
-        return;
-      }
 
-      if (this.trigger?.contains(e.target as Node)) {
-        this.toggle();
-      }
-    }, { capture: true });
+        if (this.trigger?.contains(e.target as Node)) {
+          this.toggle();
+        }
+      },
+      { capture: true },
+    );
 
     // Tooltip integration
 
@@ -437,7 +441,7 @@ export class PopoverTrigger extends LitElement {
 
       if (!(this.content instanceof Tooltip)) return;
 
-      if(!this.opened) {
+      if (!this.opened) {
         clearTimeout(this.hoverTimeout);
         this.hoverTimeout = setTimeout(() => {
           this.show();
@@ -571,7 +575,7 @@ export class PopoverTrigger extends LitElement {
     if (!this.elementContains(e.target as HTMLElement)) {
       this.hide();
     }
-  }
+  };
 
   /**
    * Show the inner popover.
