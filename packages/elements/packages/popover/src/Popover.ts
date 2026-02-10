@@ -338,7 +338,7 @@ export class PopoverTrigger extends LitElement {
    * The time in milliseconds to wait before showing the popover.
    */
   @property({ type: Number })
-  public showdelay = 750;
+  public showdelay = 550;
 
   /**
    * The time in milliseconds to wait before hiding the popover.
@@ -354,6 +354,8 @@ export class PopoverTrigger extends LitElement {
 
     ::slotted([slot="trigger"]) {
       touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
   `;
 
@@ -393,12 +395,20 @@ export class PopoverTrigger extends LitElement {
     let lastPointerType: string | undefined;
 
     this.addEventListener("click", (e) => {
-      if (this.content instanceof Tooltip) return; // not tooltip
+      if (this.content instanceof Tooltip) {
+        // prevent click event after a long-press (hoverTimeout)
+        if (lastPointerType !== "mouse" && this.hoverTimeout) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        return;
+      }
 
       if (this.trigger?.contains(e.target as Node)) {
         this.toggle();
       }
-    });
+    }, { capture: true });
 
     // Tooltip integration
 
@@ -422,13 +432,45 @@ export class PopoverTrigger extends LitElement {
       this.onPointerEvent(e);
     });
 
-    this.addEventListener("contextmenu", (e) => {
-      // longpress to show tooltip
+    this.addEventListener("pointerdown", (e) => {
+      if (e.pointerType !== "touch") return;
+
+      if (!(this.content instanceof Tooltip)) return;
+
+      if(!this.opened) {
+        clearTimeout(this.hoverTimeout);
+        this.hoverTimeout = setTimeout(() => {
+          this.show();
+        }, this.showdelay);
+      }
+    });
+
+    this.addEventListener("pointerup", (e) => {
       if (lastPointerType !== "touch") return;
+
+      clearTimeout(this.hoverTimeout);
+      requestAnimationFrame(() => {
+        this.hoverTimeout = undefined;
+      });
+    });
+
+    this.addEventListener("pointercancel", () => {
+      if (lastPointerType !== "touch") return;
+
+      clearTimeout(this.hoverTimeout);
+      requestAnimationFrame(() => {
+        this.hoverTimeout = undefined;
+      });
+    });
+
+    this.addEventListener("contextmenu", (e) => {
+      if (!(this.content instanceof Tooltip)) return;
 
       e.preventDefault();
 
-      this.show();
+      if (lastPointerType !== "touch") {
+        this.show();
+      }
     });
 
     this.addEventListener(
@@ -454,9 +496,6 @@ export class PopoverTrigger extends LitElement {
     this.addEventListener(
       "blur",
       (e) => {
-        // ignore this on a touch device
-        if (lastPointerType === "touch") return;
-
         // this is only for the tooltip
         if (!(this.content instanceof Tooltip)) return;
 
@@ -528,6 +567,12 @@ export class PopoverTrigger extends LitElement {
     }
   };
 
+  private onDismiss = (e: PointerEvent) => {
+    if (!this.elementContains(e.target as HTMLElement)) {
+      this.hide();
+    }
+  }
+
   /**
    * Show the inner popover.
    */
@@ -541,6 +586,10 @@ export class PopoverTrigger extends LitElement {
 
     this.contentElement?.addEventListener("pointerover", this.onPointerEventContent);
     this.contentElement?.addEventListener("pointerleave", this.onPointerEventContent);
+
+    if (this.content instanceof Tooltip) {
+      window.addEventListener("pointerdown", this.onDismiss);
+    }
 
     this.trigger?.setAttribute("aria-haspopup", "dialog");
     this.trigger?.setAttribute("aria-expanded", "true");
@@ -558,6 +607,8 @@ export class PopoverTrigger extends LitElement {
 
     this.contentElement?.removeEventListener("pointerover", this.onPointerEventContent);
     this.contentElement?.removeEventListener("pointerleave", this.onPointerEventContent);
+
+    window.removeEventListener("pointerdown", this.onDismiss);
 
     this.trigger?.setAttribute("aria-haspopup", "dialog");
     this.trigger?.setAttribute("aria-expanded", "false");
