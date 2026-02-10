@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.7.0 (2026-02-10)
+
+### Features
+
+- a-popover: Improve tooltip popover handling on touch devices
+
 ## 4.6.4 (2026-02-05)
 
 ### Fixes
