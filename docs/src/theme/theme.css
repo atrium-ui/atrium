@@ -37,6 +37,8 @@
   --text-6xl: 2rem; /* 6xl: 32px */
   --text-7xl: 2.25rem; /* 7xl: 36px */
   --text-8xl: 2.875rem; /* 8xl: 46px */
+  --text-9xl: 4.5rem; /* 9xl: 72px */
+  --text-10xl: 4.5rem; /* 10xl: 72px */
 
   --leading-8: 0.5rem; /* 8px */
   --leading-16: 1rem; /* 16px */

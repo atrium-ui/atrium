@@ -6,76 +6,103 @@ description: Copy-paste components you own. Framework-agnostic custom elements u
 import { Code } from "astro:components";
 import { Command } from "../components";
 
-<section className="flex flex-col items-center text-center gap-module-xl mb-module-8xl pt-module-6xl">
-  <h1 className="typo-title-1 pb-module-s">Build Better, Ship Faster</h1>
+<section class="aspect-2/1 max-w-[1400px] mx-auto overflow-visible px-0">
+    <div
+        class="aspect-4/1 flex justify-end items-center flex-col text-center pt-10"
+    >
+        <div
+            class="flex items-center gap-2 border border-gray-200 rounded-full px-4 py-1.5 text-sm text-gray-600 mb-10"
+        >
+            <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
+            v4.6.0 — Adds Tabs Elements
+        </div>
 
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 lg:px-module-2xl max-w-[980px]">
-    <a className="home-card" href={`${import.meta.env.BASE_URL}components/accordion`}>
-      <a-animation
-        src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
-        autoplay
-        height={200}
-        width={320}
-        loop
-        className="w-full h-auto"
-        layout="contain"
-        artboard="Accordion"
-      ></a-animation>
-      <span className="sr-only">Accordion</span>
-    </a>
-    <a className="home-card" href={`${import.meta.env.BASE_URL}components/dialog`}>
-      <a-animation
-        src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
-        autoplay
-        height={200}
-        width={320}
-        loop
-        className="w-full h-auto"
-        layout="contain"
-        artboard="Dialog"
-      ></a-animation>
-      <span className="sr-only">Dialog</span>
-    </a>
-    <a className="home-card" href={`${import.meta.env.BASE_URL}components/popover`}>
-      <a-animation
-        src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
-        autoplay
-        height={200}
-        width={320}
-        loop
-        className="w-full h-auto"
-        layout="contain"
-        artboard="Popover"
-      ></a-animation>
-      <span className="sr-only">Popover</span>
-    </a>
-    <a className="home-card" href={`${import.meta.env.BASE_URL}components/carousel`}>
-      <a-animation
-        src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
-        autoplay
-        height={200}
-        width={320}
-        loop
-        className="w-full h-auto"
-        layout="contain"
-        artboard="Slider"
-      ></a-animation>
-      <span className="sr-only">Carousel</span>
-    </a>
-  </div>
+        <h1
+            class="text-9xl md:text-10xl font-black uppercase leading-none tracking-tight max-w-2xl -mb-[10px] text-black"
+        >
+          Build Better<br/>
+          Ship Faster
+        </h1>
+    </div>
 
-  <div className="typo-body max-w-[800px] text-balance opacity-80">
-    Built on standard Custom-Elements. Use the same component in React today, Vue tomorrow, vanilla next week.
-    A single dependency.
-  </div>
+    <div
+      className="aspect-4/1 flex justify-start items-center flex-col text-center gap-10 py-10"
+    >
+      <div className="max-w-[500px]">
+        <p className="text-gray-500 text-lg">
+          Built on standard Custom-Elements.
+          Use the same component in React today, Vue tomorrow, vanilla next week.
+          A single dependency.
+        </p>
+      </div>
 
-  <div className="flex flex-wrap gap-module-m pt-module-xl justify-center">
-    <a href={`${import.meta.env.BASE_URL}components/accordion`} className="inline-flex items-center gap-2 rounded-lg bg-(--style-typography-body) text-white px-6 py-3 font-medium hover:opacity-90 transition-opacity">
-      Browse Components
-    </a>
-    <a href={`${import.meta.env.BASE_URL}playground`} className="inline-flex items-center gap-2 rounded-lg border border-current px-6 py-3 font-medium hover:bg-(--style-typography-body) hover:text-white transition-colors">
-      Try Playground
-    </a>
+      <div className="flex items-center gap-4">
+        <a href={`${import.meta.env.BASE_URL}components/accordion`} className="inline-flex items-center gap-2 rounded-lg bg-(--style-typography-body) text-white px-6 py-3 font-medium hover:opacity-90 transition-opacity">
+          Browse Components
+        </a>
+        <a href={`${import.meta.env.BASE_URL}playground`} className="inline-flex items-center gap-2 rounded-lg border border-current px-6 py-3 font-medium hover:bg-(--style-typography-body) hover:text-white transition-colors">
+          Try Playground
+        </a>
+      </div>
+    </div>
+</section>
+
+<section className="pb-20 max-w-[1400px] mx-auto">
+  <div className="flex flex-col items-center text-center gap-module-xl mb-module-2xl">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 lg:px-module-2xl">
+      <a className="home-card" href={`${import.meta.env.BASE_URL}components/accordion`}>
+        <a-animation
+          src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
+          autoplay
+          height={200}
+          width={320}
+          loop
+          className="w-full h-auto"
+          layout="contain"
+          artboard="Accordion"
+        ></a-animation>
+        <span className="sr-only">Accordion</span>
+      </a>
+      <a className="home-card" href={`${import.meta.env.BASE_URL}components/dialog`}>
+        <a-animation
+          src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
+          autoplay
+          height={200}
+          width={320}
+          loop
+          className="w-full h-auto"
+          layout="contain"
+          artboard="Dialog"
+        ></a-animation>
+        <span className="sr-only">Dialog</span>
+      </a>
+      <a className="home-card" href={`${import.meta.env.BASE_URL}components/popover`}>
+        <a-animation
+          src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
+          autoplay
+          height={200}
+          width={320}
+          loop
+          className="w-full h-auto"
+          layout="contain"
+          artboard="Popover"
+        ></a-animation>
+        <span className="sr-only">Popover</span>
+      </a>
+      <a className="home-card" href={`${import.meta.env.BASE_URL}components/carousel`}>
+        <a-animation
+          src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
+          autoplay
+          height={200}
+          width={320}
+          loop
+          className="w-full h-auto"
+          layout="contain"
+          artboard="Slider"
+        ></a-animation>
+        <span className="sr-only">Carousel</span>
+      </a>
+    </div>
   </div>
 </section>
 
