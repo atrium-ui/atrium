@@ -197,8 +197,8 @@ export class PagerElement extends LitElement {
     }
 
     const indices = this.pageIndices();
-    const first = indices[0];
-    const last = indices[indices.length - 1];
+    const first = indices[0]!;
+    const last = indices[indices.length - 1]!;
     const items: TemplateResult[] = [];
 
     if (first > 1) items.push(this.renderPageLink(1));
