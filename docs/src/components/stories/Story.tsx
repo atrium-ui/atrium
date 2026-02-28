@@ -49,7 +49,7 @@ export function StoryFrame() {
       return;
     }
 
-    const args = storyDefinition.args;
+    const args = storyDefinition.args ?? {};
     const parameters = storyDefinition.parameters || {};
     const globals = storyDefinition.globals || {};
 

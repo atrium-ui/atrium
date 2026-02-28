@@ -18,15 +18,6 @@ function handleChange(event: Event) {
 
 <template>
   <div class="flex items-center gap-3">
-    <label
-      v-if="$slots.default"
-      :id="`label_${name}`"
-      :for="`input_${name}`"
-      class="cursor-pointer text-lg"
-    >
-      <slot />
-    </label>
-
     <a-toggle
       :class="[
         'group inline-flex',
