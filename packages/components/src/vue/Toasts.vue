@@ -19,8 +19,6 @@ type ToastButton = {
 export interface ToastOptions {
   id?: string;
   message?: string;
-  button?: ToastButton;
-  icon?: string;
   time?: number;
   variant?: keyof typeof TOAST_TYPE;
 }
@@ -38,29 +36,14 @@ export function toast(options: ToastOptions) {
   newToast.className = `variant-${options.variant || TOAST_TYPE.default}`;
 
   const content = document.createElement("div");
-  content.className = "flex gap-4 rounded-lg bg-white px-6 py-4 text-black shadow-md";
-
-  if (options.icon) {
-    const icon = document.createElement("svg-icon");
-    icon.className = "flex-none text-xl";
-    icon.setAttribute("name", options.icon);
-    content.appendChild(icon);
-  }
+  content.className = "flex gap-4 rounded-md bg-white px-6 py-4 text-black text-sm shadow-lg";
 
   const textContainer = document.createElement("div");
 
   const message = document.createElement("div");
-  message.className = "pointer-events-none pb-4";
+  message.className = "pointer-events-none select-none";
   message.textContent = options.message || "";
   textContainer.appendChild(message);
-
-  if (options.button) {
-    const button = document.createElement("button");
-    button.className = "text-button";
-    button.textContent = options.button.label;
-    button.addEventListener("click", () => options.button?.onClick());
-    textContainer.appendChild(button);
-  }
 
   content.appendChild(textContainer);
   newToast.appendChild(content);
@@ -76,6 +59,6 @@ export function toast(options: ToastOptions) {
 
 <template>
   <div class="pointer-events-none absolute right-0 bottom-4 z-100 w-full md:max-w-[460px] lg:right-4">
-    <a-toast-feed class="px-4 text-base *:pointer-events-auto" />
+    <a-toast-feed class="px-4 text-base [&>*]:pointer-events-auto [&>*]:mb-2" />
   </div>
 </template>

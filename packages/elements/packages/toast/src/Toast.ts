@@ -103,6 +103,13 @@ export class Toast extends LitElement {
         margin-top: 1rem;
         margin-bottom: 1rem;
       }
+      /* default styling */
+      :host {
+        padding: 1rem 1.5rem;
+        border-radius: 0.25rem;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
     `;
   }
 
