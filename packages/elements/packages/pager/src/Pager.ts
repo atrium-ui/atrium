@@ -120,11 +120,13 @@ export class PagerElement extends LitElement {
     if (!(target instanceof Element)) return;
 
     const isInSlot = (name: string): boolean => {
-      const slot = this.shadowRoot?.querySelector<HTMLSlotElement>(`slot[name="${name}"]`);
+      const slot = this.shadowRoot?.querySelector<HTMLSlotElement>(
+        `slot[name="${name}"]`,
+      );
       return (
-        slot?.assignedElements({ flatten: true }).some(
-          (el) => el === target || el.contains(target),
-        ) ?? false
+        slot
+          ?.assignedElements({ flatten: true })
+          .some((el) => el === target || el.contains(target)) ?? false
       );
     };
 
@@ -205,7 +207,8 @@ export class PagerElement extends LitElement {
 
     items.push(...indices.map((p) => this.renderPageLink(p)));
 
-    if (this.pageCount - last > 2) items.push(html`<span part="ellipsis" aria-hidden="true">…</span>`);
+    if (this.pageCount - last > 2)
+      items.push(html`<span part="ellipsis" aria-hidden="true">…</span>`);
     if (this.pageCount - last === 2) items.push(this.renderPageLink(this.pageCount - 1));
     if (last < this.pageCount) items.push(this.renderPageLink(this.pageCount));
 

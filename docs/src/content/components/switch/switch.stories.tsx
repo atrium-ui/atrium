@@ -12,7 +12,10 @@ export const Default = {
     const value = ref(false);
     return (
       <div class="flex min-h-[100px] items-center justify-center gap-4">
-        <Switch value={value.value} onChange={(e) => (value.value = (e.target as HTMLInputElement).checked)} />
+        <Switch
+          value={value.value}
+          onChange={(e) => (value.value = (e.target as HTMLInputElement).checked)}
+        />
         <span class="text-sm">{value.value ? "On" : "Off"}</span>
       </div>
     );

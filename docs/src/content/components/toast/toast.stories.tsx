@@ -6,10 +6,8 @@ import { paragraph } from "txtgen";
 
 export default {
   tags: ["public"],
-  args: {
-  },
-  argTypes: {
-  },
+  args: {},
+  argTypes: {},
 } satisfies Story;
 
 export const Default = {
