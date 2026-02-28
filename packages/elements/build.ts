@@ -40,6 +40,7 @@ await Promise.all([
   buildLib("./packages/transition"),
   buildLib("./packages/calendar"),
   buildLib("./packages/tabs"),
+  buildLib("./packages/pager"),
 ]);
 
 export {};

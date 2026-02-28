@@ -1,16 +1,79 @@
 ---
 title: Pager
-description: Pager
-headline: Atrium // Components
-tags: []
+description: A headless pagination element with slotted controls and CSS part styling.
+headline: Atrium // Elements
+tags: [["a-pager", "elements/a-pager"]]
+command: "import \"@sv/elements/pager\""
 order: 2
 ---
 
-import { Example } from "package:/components";
 import { Story } from "package:/components/docs";
 
-Pager component for pagination.
+A headless `a-pager` element that renders numbered page links and accepts your own prev/next controls as slots.
 
 ## Example
 
+Start on page 5 to see the ellipsis truncation in action. Click a number or the arrow buttons.
+
 <Story id="pager--default" />
+
+### Many pages
+
+<Story id="pager--manypages" />
+
+## Usage
+
+```html
+<a-pager page="1" count="20" url="/results/{page}">
+  <button slot="prev">← Prev</button>
+  <button slot="next">Next →</button>
+</a-pager>
+```
+
+## Styling
+
+Style page numbers via CSS shadow parts:
+
+```css
+/* Layout */
+a-pager::part(pages) {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Individual page links */
+a-pager::part(page) {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Active page */
+a-pager::part(page active) {
+  background: blue;
+  color: white;
+  border-color: blue;
+}
+
+/* The "…" truncation spans */
+a-pager::part(ellipsis) {
+  color: #999;
+}
+```
+
+Disable the boundary controls with the `at-start` / `at-end` host attributes:
+
+```css
+a-pager[at-start] [slot="prev"],
+a-pager[at-end]   [slot="next"] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+```
+
+## Accessibility
+
+- Page links use `aria-current="page"` on the active item.
+- Prev/next controls retain their native semantics (button or anchor).
+- The page number list is wrapped in `<nav aria-label="Pagination">`.

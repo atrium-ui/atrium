@@ -136,6 +136,11 @@
       "types": "./packages/tabs/src/index.ts",
       "import": "./packages/tabs/dist/index.js",
       "require": "./packages/tabs/dist/index.cjs"
+    },
+    "./pager": {
+      "types": "./packages/pager/src/index.ts",
+      "import": "./packages/pager/dist/index.js",
+      "require": "./packages/pager/dist/index.cjs"
     }
   }
 }

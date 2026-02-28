@@ -1,0 +1,162 @@
+---
+title: a-pager
+description: A headless pagination element with slotted prev/next controls and CSS part styling.
+command: import "@sv/elements/pager";
+order: 0
+---
+
+import { TypeDoc } from "package:/components"
+
+The `a-pager` element renders numbered page links and manages pagination logic. It is intentionally unstyled — all visual design comes from the outside via CSS `::part()` selectors and your own slotted controls.
+
+<div class="not-content box">
+  <style>{`
+    #pager-demo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #pager-demo::part(pages) {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    #pager-demo::part(page) {
+      box-sizing: border-box;
+      min-width: 2rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #e4e4e7;
+      background: white;
+      color: #3f3f46;
+      font-size: 0.875rem;
+      text-align: center;
+      transition: background 100ms;
+    }
+    #pager-demo::part(page):hover { background: #f4f4f5; }
+    #pager-demo::part(page active) {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      color: white;
+    }
+    #pager-demo::part(ellipsis) {
+      min-width: 2rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #a1a1aa;
+    }
+    #pager-demo[at-start] [slot="prev"],
+    #pager-demo[at-end]   [slot="next"] { opacity: 0.4; pointer-events: none; }
+    .demo-btn {
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      border: 1px solid #e4e4e7;
+      background: white;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .demo-btn:hover { background: #f4f4f5; }
+  `}</style>
+  <a-pager id="pager-demo" page="5" count="20">
+    <button slot="prev" class="demo-btn">← Prev</button>
+    <button slot="next" class="demo-btn">Next →</button>
+  </a-pager>
+  <script>{`
+    document.querySelector('#pager-demo').addEventListener('change', (e) => {
+      e.currentTarget.setAttribute('page', e.detail.page);
+    });
+  `}</script>
+</div>
+
+## Usage
+
+```html
+<a-pager page="1" count="20" url="/results/{page}">
+  <button slot="prev">← Prev</button>
+  <button slot="next">Next →</button>
+</a-pager>
+
+<script>
+  document.querySelector('a-pager').addEventListener('change', (e) => {
+    e.currentTarget.setAttribute('page', e.detail.page);
+  });
+</script>
+```
+
+### URL generation
+
+By default, page links append `?page=N` to the current URL. Provide a `url` template to override this:
+
+```html
+<!-- /results/1, /results/2, ... -->
+<a-pager url="/results/{page}" count="20"></a-pager>
+
+<!-- /search?q=cats&page=3 -->
+<a-pager url="/search" query="q=cats" count="20"></a-pager>
+```
+
+### Prev / next slots
+
+The `prev` and `next` slots accept any element. Clicks inside them are intercepted and fire a `change` event — no extra JavaScript needed on your buttons.
+
+```html
+<a-pager page="3" count="10">
+  <!-- anchor tags work too — navigation is prevented and replaced by the change event -->
+  <a href="/page/2" slot="prev">← Previous</a>
+  <a href="/page/4" slot="next">Next →</a>
+</a-pager>
+```
+
+## Styling
+
+### Page number links
+
+Page links live in the shadow DOM and are exposed via CSS parts:
+
+| Part | Description |
+|------|-------------|
+| `page` | Every page number link |
+| `page active` | The currently selected page link |
+| `ellipsis` | The `…` truncation indicator |
+| `pages` | The `<nav>` wrapping all page links |
+
+```css
+a-pager::part(pages)       { display: flex; gap: 4px; }
+a-pager::part(page)        { padding: 0.25rem 0.5rem; border: 1px solid #ccc; }
+a-pager::part(page active) { background: blue; color: white; }
+a-pager::part(ellipsis)    { color: #999; }
+```
+
+### Boundary state
+
+The `at-start` and `at-end` attributes are automatically toggled on the host element when the pager is at the first or last page. Use them to disable or hide your slotted controls:
+
+```css
+a-pager[at-start] [slot="prev"],
+a-pager[at-end]   [slot="next"] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+```
+
+## Events
+
+```ts
+pager.addEventListener('change', (e: CustomEvent<{ page: number, url: string }>) => {
+  // Update the page attribute to reflect the new page
+  pager.setAttribute('page', String(e.detail.page));
+
+  // Or navigate to the generated URL
+  // window.location.href = e.detail.url;
+});
+```
+
+Calling `e.preventDefault()` cancels both the browser navigation (if the page links are anchors) and the `change` event propagation.
+
+## Accessibility
+
+- The page link list is wrapped in `<nav aria-label="Pagination">`.
+- The active page link has `aria-current="page"`.
+- Prev/next controls are fully slotted, so their native semantics (button role, focus behaviour) are preserved.
+
+<TypeDoc source="../packages/elements/packages/pager" symbol="PagerElement" />
