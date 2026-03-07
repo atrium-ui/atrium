@@ -1,5 +1,11 @@
 # @sv/scroll-lock
 
+## 1.2.1 (2026-03-07)
+
+### Fixes
+
+- Adds showToast function export to toast package
+
 ## 1.2.0 (2026-01-08)
 
 ### Features

@@ -1,5 +1,11 @@
 # @sv/components
 
+## 1.10.1 (2026-03-07)
+
+### Fixes
+
+- Adds showToast function export to toast package
+
 ## 1.10.0 (2026-01-21)
 
 ### Features

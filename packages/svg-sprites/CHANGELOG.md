@@ -1,3 +1,9 @@
+## 0.5.5 (2026-03-07)
+
+### Fixes
+
+- Adds showToast function export to toast package
+
 ## 0.5.4 (2026-01-08)
 
 ### Features

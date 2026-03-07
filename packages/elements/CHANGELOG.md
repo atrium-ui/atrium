@@ -1,5 +1,16 @@
 # @sv/elements
 
+## 4.8.0 (2026-03-07)
+
+### Features
+
+- Adds a-pager element
+- Rewrite of a-transition element
+
+### Fixes
+
+- Adds showToast function export to toast package
+
 ## 4.7.0 (2026-02-10)
 
 ### Features
