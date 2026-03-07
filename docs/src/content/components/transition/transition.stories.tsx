@@ -31,9 +31,7 @@ export const Default = {
         <Button variant="outline" onClick={shuffle}>
           Shuffle
         </Button>
-        <a-transition
-          style="transition-duration: 400ms; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; width: 100%; max-width: 420px;"
-        >
+        <a-transition style="transition-duration: 400ms; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; width: 100%; max-width: 420px;">
           {items.value.map((item) => (
             <div
               key={item.id}
@@ -74,7 +72,7 @@ export const TaskList = {
     const filter = ref("all");
     const tags = ["all", ...new Set(TASKS.map((t) => t.tag))];
     const filtered = computed(() =>
-      filter.value === "all" ? TASKS : TASKS.filter((t) => t.tag === filter.value)
+      filter.value === "all" ? TASKS : TASKS.filter((t) => t.tag === filter.value),
     );
 
     return () => (
@@ -83,7 +81,9 @@ export const TaskList = {
           {tags.map((tag) => (
             <button
               key={tag}
-              onClick={() => { filter.value = tag; }}
+              onClick={() => {
+                filter.value = tag;
+              }}
               class={`rounded-full px-3 py-1 text-sm capitalize transition-colors ${
                 filter.value === tag
                   ? "bg-zinc-900 text-white"
@@ -100,10 +100,12 @@ export const TaskList = {
             <div
               key={task.id}
               data-key={task.id}
-              class="flex items-center justify-between rounded-lg border border-zinc-200 bg-white px-4 py-3 mb-2"
+              class="mb-2 flex items-center justify-between rounded-lg border border-zinc-200 bg-white px-4 py-3"
             >
               <span class="text-sm text-zinc-800">{task.title}</span>
-              <span class={`rounded-full px-2 py-0.5 text-xs font-medium capitalize ${TAG_COLORS[task.tag]}`}>
+              <span
+                class={`rounded-full px-2 py-0.5 font-medium text-xs capitalize ${TAG_COLORS[task.tag]}`}
+              >
                 {task.tag}
               </span>
             </div>

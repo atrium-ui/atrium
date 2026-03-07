@@ -111,13 +111,17 @@ export class FlipLayoutElement extends LitElement {
 
   getHostRect(): Rect {
     const r = this.rect(this.getBoundingClientRect());
-    const slotRect = this.slotElement ? this.rect(this.slotElement.getBoundingClientRect()) : null;
+    const slotRect = this.slotElement
+      ? this.rect(this.slotElement.getBoundingClientRect())
+      : null;
     const children = this.assignedElements;
     if (!children.length) return slotRect ?? r;
 
     const styles = getComputedStyle(this);
-    const insetX = this.parsePixels(styles.paddingRight) + this.parsePixels(styles.borderRightWidth);
-    const insetY = this.parsePixels(styles.paddingBottom) + this.parsePixels(styles.borderBottomWidth);
+    const insetX =
+      this.parsePixels(styles.paddingRight) + this.parsePixels(styles.borderRightWidth);
+    const insetY =
+      this.parsePixels(styles.paddingBottom) + this.parsePixels(styles.borderBottomWidth);
     const originX = slotRect?.x ?? r.x;
     const originY = slotRect?.y ?? r.y;
     const baseWidth = slotRect?.width ?? r.width;
@@ -146,8 +150,13 @@ export class FlipLayoutElement extends LitElement {
   // Returns a cancel function that cancels both animation frames.
   afterNextFrame(fn: () => void): () => void {
     let inner = 0;
-    const outer = requestAnimationFrame(() => { inner = requestAnimationFrame(fn); });
-    return () => { cancelAnimationFrame(outer); cancelAnimationFrame(inner); };
+    const outer = requestAnimationFrame(() => {
+      inner = requestAnimationFrame(fn);
+    });
+    return () => {
+      cancelAnimationFrame(outer);
+      cancelAnimationFrame(inner);
+    };
   }
 
   public snapshot() {
@@ -192,7 +201,8 @@ export class FlipLayoutElement extends LitElement {
         entering.push(el);
       } else {
         const to = this.measureRect(el);
-        if (this.rectChanged(snapshot.rect, to)) moving.push({ el, from: snapshot.rect, to });
+        if (this.rectChanged(snapshot.rect, to))
+          moving.push({ el, from: snapshot.rect, to });
       }
     }
 
@@ -200,7 +210,8 @@ export class FlipLayoutElement extends LitElement {
       if (!currentKeys.has(key)) exiting.push(snapshot);
     }
 
-    const hostChanged = !!this.hostSnapshot && this.rectChanged(this.hostSnapshot, currentHostRect);
+    const hostChanged =
+      !!this.hostSnapshot && this.rectChanged(this.hostSnapshot, currentHostRect);
     if (!moving.length && !entering.length && !exiting.length && !hostChanged) {
       this.snapshot();
       return;
@@ -208,10 +219,11 @@ export class FlipLayoutElement extends LitElement {
 
     this.dispatchEvent(new CustomEvent("flip-start", { bubbles: true }));
 
-    const finished: Promise<void>[] = [];
+    const finished: Promise<unknown>[] = [];
     const opts = this.getAnimationOptions();
 
-    if (hostChanged) this.animateHost(this.hostSnapshot!, currentHostRect, finished, opts);
+    if (hostChanged)
+      this.animateHost(this.hostSnapshot!, currentHostRect, finished, opts);
 
     for (const { el, from, to } of moving) {
       const snapshot = this.snapshots.get(this.keyOf(el));
@@ -220,13 +232,15 @@ export class FlipLayoutElement extends LitElement {
 
     if (this.animateEnter) {
       for (const el of entering) {
-        const anim = this.trackAnimation((el as HTMLElement).animate(
-          [
-            { opacity: "0", transform: "scale(0.98)", transformOrigin: "center" },
-            { opacity: "1", transform: "scale(1)", transformOrigin: "center" },
-          ],
-          opts
-        ));
+        const anim = this.trackAnimation(
+          (el as HTMLElement).animate(
+            [
+              { opacity: "0", transform: "scale(0.98)", transformOrigin: "center" },
+              { opacity: "1", transform: "scale(1)", transformOrigin: "center" },
+            ],
+            opts,
+          ),
+        );
         finished.push(anim.finished.catch(ignoreError));
       }
     }
@@ -254,7 +268,7 @@ export class FlipLayoutElement extends LitElement {
     from: Rect,
     to: Rect,
     clone: HTMLElement | null,
-    finished: Promise<void>[],
+    finished: Promise<unknown>[],
     opts: KeyframeAnimationOptions,
   ) {
     const ghost = this.createGhost(clone, from);
@@ -262,13 +276,15 @@ export class FlipLayoutElement extends LitElement {
     if (!ghost) {
       const dx = from.x - to.x;
       const dy = from.y - to.y;
-      const anim = this.trackAnimation(el.animate(
-        [
-          { transform: `translate(${dx}px, ${dy}px)` },
-          { transform: "translate(0, 0)" },
-        ],
-        opts
-      ));
+      const anim = this.trackAnimation(
+        el.animate(
+          [
+            { transform: `translate(${dx}px, ${dy}px)` },
+            { transform: "translate(0, 0)" },
+          ],
+          opts,
+        ),
+      );
       finished.push(anim.finished.catch(ignoreError));
       return;
     }
@@ -284,17 +300,21 @@ export class FlipLayoutElement extends LitElement {
 
     const dx = to.x - from.x;
     const dy = to.y - from.y;
-    const anim = this.trackAnimation(ghost.animate(
-      [
-        { transform: "translate(0, 0)" },
-        { transform: `translate(${dx}px, ${dy}px)` },
-      ],
-      { ...opts, fill: "forwards" }
-    ));
+    const anim = this.trackAnimation(
+      ghost.animate(
+        [{ transform: "translate(0, 0)" }, { transform: `translate(${dx}px, ${dy}px)` }],
+        { ...opts, fill: "forwards" },
+      ),
+    );
     finished.push(anim.finished.catch(ignoreError).then(cleanup));
   }
 
-  animateExitEl(from: Rect, clone: HTMLElement | null, finished: Promise<void>[], opts: KeyframeAnimationOptions) {
+  animateExitEl(
+    from: Rect,
+    clone: HTMLElement | null,
+    finished: Promise<unknown>[],
+    opts: KeyframeAnimationOptions,
+  ) {
     const ghost = this.createGhost(clone, from);
     if (!ghost) return;
 
@@ -304,41 +324,59 @@ export class FlipLayoutElement extends LitElement {
     ghost.style.transform = "scale(1)";
     ghost.style.transformOrigin = "center";
 
-    finished.push(new Promise<void>((resolve) => {
-      const start = this.afterFrame(() => {
-        this.pendingAnimationStarts.delete(cancelStart);
-        const anim = this.trackAnimation(ghost.animate(
-          [
-            { opacity: "1", transform: "scale(1)", transformOrigin: "center", offset: 0 },
-            { opacity: "0", transform: "scale(0.98)", transformOrigin: "center", offset: 1 },
-          ],
-          { ...opts, fill: "forwards" }
-        ));
-        anim.finished.catch(ignoreError).then(() => {
+    finished.push(
+      new Promise<void>((resolve) => {
+        const start = this.afterFrame(() => {
+          this.pendingAnimationStarts.delete(cancelStart);
+          const anim = this.trackAnimation(
+            ghost.animate(
+              [
+                {
+                  opacity: "1",
+                  transform: "scale(1)",
+                  transformOrigin: "center",
+                  offset: 0,
+                },
+                {
+                  opacity: "0",
+                  transform: "scale(0.98)",
+                  transformOrigin: "center",
+                  offset: 1,
+                },
+              ],
+              { ...opts, fill: "forwards" },
+            ),
+          );
+          anim.finished.catch(ignoreError).then(() => {
+            // cleanup();
+            resolve();
+          });
+        });
+
+        const cancelStart = () => {
+          start();
+          this.pendingAnimationStarts.delete(cancelStart);
           // cleanup();
           resolve();
-        });
-      });
+        };
 
-      const cancelStart = () => {
-        start();
-        this.pendingAnimationStarts.delete(cancelStart);
-        // cleanup();
-        resolve();
-      };
-
-      this.pendingAnimationStarts.add(cancelStart);
-    }));
+        this.pendingAnimationStarts.add(cancelStart);
+      }),
+    );
   }
 
-  animateHost(from: Rect, to: Rect, finished: Promise<void>[], opts: KeyframeAnimationOptions) {
+  animateHost(
+    from: Rect,
+    to: Rect,
+    finished: Promise<unknown>[],
+    opts: KeyframeAnimationOptions,
+  ) {
     this.style.overflow = "hidden";
     this.style.height = `${from.height}px`;
 
-    const anim = this.trackAnimation(this.animate(
-      [{ height: `${from.height}px` }, { height: `${to.height}px` }],
-      opts
-    ));
+    const anim = this.trackAnimation(
+      this.animate([{ height: `${from.height}px` }, { height: `${to.height}px` }], opts),
+    );
 
     this.style.height = `${to.height}px`;
     finished.push(anim.finished.catch(ignoreError).then(this.clearHostSizing));
@@ -470,7 +508,11 @@ export class FlipLayoutElement extends LitElement {
     this.mutationObserver.disconnect();
     for (const child of children) {
       this.resizeObserver.observe(child);
-      this.mutationObserver.observe(child, { childList: true, characterData: true, subtree: true });
+      this.mutationObserver.observe(child, {
+        childList: true,
+        characterData: true,
+        subtree: true,
+      });
     }
   }
 

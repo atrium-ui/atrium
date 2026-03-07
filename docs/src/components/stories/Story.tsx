@@ -92,7 +92,7 @@ export function StoryFrame() {
         vueApp.current = createApp(
           typeof template === "function"
             ? { setup: () => template }
-            : { render: () => template }
+            : { render: () => template },
         );
         vueApp.current.mount(rootRef.current);
         setRenderer("vue");

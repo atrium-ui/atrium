@@ -1,4 +1,12 @@
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "bun:test";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  test,
+} from "bun:test";
 import { FlipLayoutElement } from "../src/index.js";
 
 const NODE_NAME = "a-transition";
@@ -156,10 +164,11 @@ describe("FlipLayoutElement", () => {
 
     transition.flip();
 
-    const moveCalls = animationCalls.filter((call) =>
-      call.target !== alpha &&
-      call.target !== beta &&
-      ["Alpha", "Beta"].includes(call.target.textContent ?? ""),
+    const moveCalls = animationCalls.filter(
+      (call) =>
+        call.target !== alpha &&
+        call.target !== beta &&
+        ["Alpha", "Beta"].includes(call.target.textContent ?? ""),
     );
 
     expect(moveCalls.length).toBe(2);
@@ -189,9 +198,8 @@ describe("FlipLayoutElement", () => {
 
     transition.flip();
 
-    const moveCall = animationCalls.find((call) =>
-      call.target !== alpha &&
-      call.target.textContent === "Alpha",
+    const moveCall = animationCalls.find(
+      (call) => call.target !== alpha && call.target.textContent === "Alpha",
     );
     expect(moveCall?.options.duration).toBe(450);
     expect(moveCall?.options.easing).toBe("linear");
@@ -388,10 +396,11 @@ describe("FlipLayoutElement", () => {
     getMutationObserver(transition).trigger();
     await Promise.resolve();
 
-    const alphaCall = animationCalls.find((call) =>
-      call.target !== transition &&
-      call.target !== alpha &&
-      call.target.textContent?.trim() === "Alpha",
+    const alphaCall = animationCalls.find(
+      (call) =>
+        call.target !== transition &&
+        call.target !== alpha &&
+        call.target.textContent?.trim() === "Alpha",
     );
     expect(alphaCall).toBeDefined();
     expect(alphaCall?.keyframes[0]?.transform).toContain("translate(");
@@ -417,11 +426,14 @@ describe("FlipLayoutElement", () => {
 
     transition.flip();
 
-    const liveMoveCall = animationCalls.find((call) => call.target === alpha || call.target === beta);
-    const ghostMoveCall = animationCalls.find((call) =>
-      call.target !== alpha &&
-      call.target !== beta &&
-      call.target.textContent === "Alpha",
+    const liveMoveCall = animationCalls.find(
+      (call) => call.target === alpha || call.target === beta,
+    );
+    const ghostMoveCall = animationCalls.find(
+      (call) =>
+        call.target !== alpha &&
+        call.target !== beta &&
+        call.target.textContent === "Alpha",
     );
 
     expect(liveMoveCall).toBeUndefined();
@@ -445,9 +457,8 @@ describe("FlipLayoutElement", () => {
 
     transition.flip();
 
-    const ghostMoveCall = animationCalls.find((call) =>
-      call.target !== alpha &&
-      call.target.textContent === "Alpha",
+    const ghostMoveCall = animationCalls.find(
+      (call) => call.target !== alpha && call.target.textContent === "Alpha",
     );
 
     expect(ghostMoveCall).toBeDefined();
@@ -505,7 +516,9 @@ describe("FlipLayoutElement", () => {
     expect(alpha.style.visibility).toBe("hidden");
     expect(beta.style.visibility).toBe("hidden");
     expect(controlledAnimations.length).toBeGreaterThan(0);
-    expect(controlledAnimations.some(({ target }) => target.textContent === "Alpha")).toBe(true);
+    expect(
+      controlledAnimations.some(({ target }) => target.textContent === "Alpha"),
+    ).toBe(true);
 
     for (const { resolve } of controlledAnimations.splice(0)) resolve();
     await Promise.resolve();
@@ -516,12 +529,15 @@ describe("FlipLayoutElement", () => {
   });
 
   test("animates removed keyed children when animate-exit is enabled", async () => {
-    const transition = await newTransition(`
+    const transition = await newTransition(
+      `
       <div data-key="a">Alpha</div>
       <div data-key="b">Beta</div>
-    `, {
-      animateExit: true,
-    });
+    `,
+      {
+        animateExit: true,
+      },
+    );
 
     const [alpha, beta] = Array.from(transition.children) as HTMLElement[];
 
@@ -539,10 +555,11 @@ describe("FlipLayoutElement", () => {
 
     await new Promise((resolve) => setTimeout(resolve, 20));
 
-    const exitCall = animationCalls.find((call) =>
-      call.target !== alpha &&
-      call.target !== beta &&
-      call.target.textContent === "Beta",
+    const exitCall = animationCalls.find(
+      (call) =>
+        call.target !== alpha &&
+        call.target !== beta &&
+        call.target.textContent === "Beta",
     );
 
     expect(exitCall).toBeDefined();
@@ -573,10 +590,11 @@ describe("FlipLayoutElement", () => {
 
     transition.flip();
 
-    const exitCall = animationCalls.find((call) =>
-      call.target !== alpha &&
-      call.target !== beta &&
-      call.target.textContent === "Beta",
+    const exitCall = animationCalls.find(
+      (call) =>
+        call.target !== alpha &&
+        call.target !== beta &&
+        call.target.textContent === "Beta",
     );
 
     expect(exitCall).toBeUndefined();
