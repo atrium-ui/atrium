@@ -14,6 +14,7 @@ async function buildLib(root: string) {
     format: "esm",
     sourcemap: "linked" as const,
     naming: "[dir]/[name].js",
+    tsconfig: "./tsconfig.json",
   });
 }
 

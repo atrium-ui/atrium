@@ -1,62 +1,39 @@
 ---
 title: a-transition
-description: A wrapper element, which adapts its size to the size of its child.
+description: Animates children using FLIP whenever their layout changes (reorder, add, remove).
 command: import "@sv/elements/transition";
 order: 2
 ---
 
-import { TypeDoc, Icon, Lit } from "package:/components"
-import AdaptiveDemo from "./a-transition/AdaptiveDemo.astro"
+import { TypeDoc } from "package:/components"
 import TransitionDemo from "./a-transition/TransitionDemo.astro"
 
-[Browser compatible](https://caniuse.com/?search=view%20transition%20api) of the View Transition API.
-
-<TypeDoc source="../packages/elements/packages/transition" symbol="Transition" />
-
-## Preview
-
-Different example confugrations of adative elements.
-
-### By width & height
+Wraps slotted children and plays smooth FLIP animations whenever they reorder, are added, or are removed.
 
 <div class="not-content box">
-  <AdaptiveDemo />
+  <div>
+    <TransitionDemo />
+  </div>
 </div>
 
-### Using View Transition API
+## Usage
 
-<div class="not-content box">
-  <TransitionDemo />
-</div>
+```html
+<a-transition animate-enter animate-exit>
+  <div data-key="1">Item 1</div>
+  <div data-key="2">Item 2</div>
+</a-transition>
+```
 
-#### Define custom transition animations using CSS:
+Use `data-key` on children so the element can track identity across DOM mutations. Without it, element identity falls back to object reference, which breaks move detection after a re-render.
 
-[MDN](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API/Using#the_view_transition_pseudo-element_tree)
+Control timing via CSS:
 
 ```css
-@keyframes move-out {
-  to {
-    transform: translateX(-100px);
-    opacity: 0;
-  }
-}
-
-@keyframes move-in {
-  from {
-    transform: translateX(200px);
-    opacity: 0;
-  }
-}
-
-::view-transition-old[<name>] {
-  animation: 0.33s ease both move-out;
-}
-::view-transition-new[<name>] {
-  animation: 0.33s ease both move-in;
-}
-
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
+a-transition {
+  transition-duration: 350ms;
+  transition-timing-function: ease-in-out;
 }
 ```
+
+<TypeDoc source="../packages/elements/packages/transition" symbol="FlipLayoutElement" />

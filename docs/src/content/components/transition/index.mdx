@@ -1,0 +1,36 @@
+---
+title: Transition
+description: Animates children with FLIP when they reorder, enter, or exit the DOM.
+tags: [["a-transition", "elements/a-transition"]]
+command: import "@sv/elements/transition";
+order: 3
+---
+
+import { Story } from "package:/components/docs";
+
+Wraps a list of children and automatically plays smooth layout animations whenever they move, are added, or are removed.
+
+## Examples
+
+### Shuffle
+
+Click shuffle to see items animate to their new positions.
+
+<Story id="transition--default" />
+
+### Filtered list
+
+Filter tasks by tag — items animate in and out as the list changes.
+
+<Story id="transition--tasklist" />
+
+## Guidelines
+
+- Add `data-key` to every child so the element can track identity across re-renders. Without it, move detection breaks after DOM changes.
+- Control speed and easing via CSS `transition-duration` and `transition-timing-function` on the `a-transition` element.
+- Use `animate-enter` / `animate-exit` only when the list is the primary focus — avoid them in dense UIs where many items change at once.
+
+## References
+
+- [a-transition element](/elements/a-transition)
+- [FLIP technique](https://aerotwist.com/blog/flip-your-animations/)

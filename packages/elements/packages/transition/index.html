@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="module" src="./src/index.ts"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 2rem;
+      }
+
+      button {
+        margin-bottom: 1.5rem;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+      }
+
+      a-transition {
+        display: block;
+        background: grey;
+        transition-duration: 0.5s;
+      }
+
+      .item {
+        padding: 1rem;
+        border: 1px solid #d0d0d0;
+        background: #f2f2f2;
+      }
+
+      a-transition::part(slot) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <button type="button" id="randomize">Randomize children</button>
+    <a-transition id="transition" animate-enter animate-exit></a-transition>
+
+    <script type="module">
+      const transition = document.querySelector("#transition");
+      const button = document.querySelector("#randomize");
+
+      const sentences = [
+        "Fast interfaces feel intentional when motion and content stay in sync.",
+        "Reusable elements should stay small, predictable, and framework agnostic.",
+        "A good demo makes state changes obvious without extra explanation.",
+        "Transitions are easier to debug when the DOM changes are deliberate.",
+        "Randomized fixtures help surface issues that static examples can hide.",
+        "Compact components are easier to copy, adapt, and maintain."
+      ];
+
+      function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function randomText() {
+        const count = randomInt(4, 8);
+        const pool = [...sentences].sort(() => Math.random() - 0.5);
+        return pool.slice(0, count).join(" ");
+      }
+
+      function renderItems() {
+        const itemCount = randomInt(10, 20);
+        const fragment = document.createDocumentFragment();
+        const keys = new Set();
+
+        for (let index = 0; index < itemCount; index += 1) {
+          let key = "";
+          do {
+            key = Math.floor(Math.random() * itemCount);
+          } while (keys.has(key) && key < itemCount);
+
+          keys.add(key);
+
+          const item = document.createElement("div");
+          item.setAttribute("data-key", key);
+          item.className = "item";
+          item.textContent = key;
+          fragment.appendChild(item);
+        }
+
+        keys.clear();
+
+        transition.replaceChildren(fragment);
+      }
+
+      button.addEventListener("click", renderItems);
+      renderItems();
+    </script>
+  </body>
+</html>

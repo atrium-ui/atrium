@@ -1,5 +1,5 @@
 import { render as renderLit } from "lit";
-import { render as renderVue } from "vue";
+import { createApp, type App as VueApp } from "vue";
 import { createRoot, type Root as ReactRoot } from "react-dom/client";
 import { stories, type Story } from "./stories.js";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -16,6 +16,7 @@ export function StoryFrame() {
   const [globals, setGlobals] = useState<Story["globals"]>({});
 
   const [reactRoot, setReactRoot] = useState<ReactRoot>();
+  const vueApp = useRef<VueApp | null>(null);
 
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -85,9 +86,15 @@ export function StoryFrame() {
         }
         reactRoot?.render(template);
         setRenderer("react");
-      } else if (template.__v_isVNode) {
-        // vue
-        renderVue(template, rootRef.current);
+      } else if (template.__v_isVNode || typeof template === "function") {
+        // vue — if render returned a function, treat it as setup() returning a render fn
+        vueApp.current?.unmount();
+        vueApp.current = createApp(
+          typeof template === "function"
+            ? { setup: () => template }
+            : { render: () => template }
+        );
+        vueApp.current.mount(rootRef.current);
         setRenderer("vue");
       } else {
         // lit (default)
