@@ -80,6 +80,7 @@ export const TaskList = {
         <div class="flex flex-wrap gap-2">
           {tags.map((tag) => (
             <button
+              type="button"
               key={tag}
               onClick={() => {
                 filter.value = tag;
