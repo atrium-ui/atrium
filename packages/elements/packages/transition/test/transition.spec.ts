@@ -528,6 +528,38 @@ describe("FlipLayoutElement", () => {
     expect(beta.style.visibility).toBe("");
   });
 
+  test("does not animate removed keyed children when animate-exit is disabled", async () => {
+    const transition = await newTransition(`
+      <div data-key="a">Alpha</div>
+      <div data-key="b">Beta</div>
+    `);
+
+    const [alpha, beta] = Array.from(transition.children) as HTMLElement[];
+
+    setRect(transition, rect(0, 0, 200, 90));
+    setRect(alpha, childRect(0, 0, 200, 40));
+    setRect(beta, childRect(0, 50, 200, 40));
+
+    transition.snapshot();
+    enableAnimations(transition);
+
+    beta.remove();
+
+    setRect(transition, rect(0, 0, 200, 40));
+    setRect(alpha, childRect(0, 0, 200, 40));
+
+    transition.flip();
+
+    const exitCall = animationCalls.find(
+      (call) =>
+        call.target !== alpha &&
+        call.target !== beta &&
+        call.target.textContent === "Beta",
+    );
+
+    expect(exitCall).toBeUndefined();
+  });
+
   test("animates removed keyed children when animate-exit is enabled", async () => {
     const transition = await newTransition(
       `
@@ -564,40 +596,8 @@ describe("FlipLayoutElement", () => {
 
     expect(exitCall).toBeDefined();
     expect(exitCall?.keyframes[0]?.opacity).toBe("1");
-    expect(exitCall?.keyframes[1]?.transform).toBe("scale(1)");
-    expect(exitCall?.keyframes[2]?.transform).toBe("scale(0.98)");
-  });
-
-  test("does not animate removed keyed children when animate-exit is disabled", async () => {
-    const transition = await newTransition(`
-      <div data-key="a">Alpha</div>
-      <div data-key="b">Beta</div>
-    `);
-
-    const [alpha, beta] = Array.from(transition.children) as HTMLElement[];
-
-    setRect(transition, rect(0, 0, 200, 90));
-    setRect(alpha, childRect(0, 0, 200, 40));
-    setRect(beta, childRect(0, 50, 200, 40));
-
-    transition.snapshot();
-    enableAnimations(transition);
-
-    beta.remove();
-
-    setRect(transition, rect(0, 0, 200, 40));
-    setRect(alpha, childRect(0, 0, 200, 40));
-
-    transition.flip();
-
-    const exitCall = animationCalls.find(
-      (call) =>
-        call.target !== alpha &&
-        call.target !== beta &&
-        call.target.textContent === "Beta",
-    );
-
-    expect(exitCall).toBeUndefined();
+    expect(exitCall?.keyframes[0]?.transform).toBe("scale(1)");
+    expect(exitCall?.keyframes.at(-1)?.transform).toBe("scale(0.98)");
   });
 
   test("disconnects cleanly when removed from the document", async () => {
