@@ -3,10 +3,6 @@ import "./layout.css";
 import Header from "./components/Header.astro";
 import { svg } from "@sv/svg-sprites/sheet";
 
-import roboto400 from "@fontsource/roboto/files/roboto-latin-400-normal.woff2?url";
-import roboto700 from "@fontsource/roboto/files/roboto-latin-700-normal.woff2?url";
-import roboto500 from "@fontsource/roboto/files/roboto-latin-500-normal.woff2?url";
-import robotoCondesned800 from "@fontsource/roboto-condensed/files/roboto-condensed-latin-800-normal.woff2?url";
 import { twMerge } from "tailwind-merge";
 
 const iocnSheet = await svg();
@@ -24,11 +20,6 @@ const layoutClasses = Astro.props.class;
     <link rel="favicon" href={`${base}favicon.png`} />
     <link rel="icon" href={`${base}favicon.png`} />
     <link rel="apple-touch-icon" href={`${base}favicon.png`} />
-
-    <link rel="preload" as="font" type="font/woff2" href={roboto400} crossorigin="anonymous" />
-    <link rel="preload" as="font" type="font/woff2" href={roboto700} crossorigin="anonymous" />
-    <link rel="preload" as="font" type="font/woff2" href={roboto500} crossorigin="anonymous" />
-    <link rel="preload" as="font" type="font/woff2" href={robotoCondesned800} crossorigin="anonymous" />
 
     <slot name="head" />
 
