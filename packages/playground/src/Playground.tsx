@@ -184,40 +184,7 @@ export const PlaygroundProvider = forwardRef<PlaygroundApi, PlaygroundProviderPr
     };
 
     const exportCode = () => {
-      const blob = new Blob(
-        [
-          `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Atrium Playground Export</title>
-  <script type="importmap">
-  {
-    "imports": {
-      "vue": "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.prod.js"
-    }
-  }
-  </script>
-</head>
-<body>
-  <div id="root">${currentFilesRef.current["index.html"]}</div>
-  <script type="module">
-    ${frameworkPrelude}
-    ${currentFilesRef.current["index.tsx"]}
-  </script>
-</body>
-</html>`,
-        ],
-        { type: "text/html" },
-      );
-
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "playground.html";
-      link.click();
-      URL.revokeObjectURL(url);
+      throw new Error("Not implemenetd.");
     };
 
     const registerEditor = (fileName: FileName, editor: SvCodeEditorElement | null) => {

@@ -80,7 +80,6 @@ export function DocsPlayground({ previewUrl }: { previewUrl: string }) {
       const encoded = await encodeSharedPlaygroundFiles(currentFiles);
       const url = new URL(window.location.href);
       url.hash = new URLSearchParams({ [SHARE_PARAM]: encoded }).toString();
-      window.history.replaceState(null, "", url);
 
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(url.toString());
@@ -88,7 +87,7 @@ export function DocsPlayground({ previewUrl }: { previewUrl: string }) {
         return;
       }
 
-      setShareStatus("Link ready in URL");
+      setShareStatus("Clipboard unavailable");
     } catch (error) {
       console.error("Failed to share playground state.", error);
       setShareStatus("Share failed");
@@ -143,14 +142,6 @@ export function DocsPlayground({ previewUrl }: { previewUrl: string }) {
                   title="Copy a shareable URL with the current files"
                 >
                   Share
-                </button>
-                <button
-                  type="button"
-                  className="rounded px-3 py-1.5 font-medium text-xs transition-colors hover:bg-black/5"
-                  onClick={() => playgroundRef.current?.exportCode()}
-                  title="Export layout as HTML"
-                >
-                  Export
                 </button>
               </div>
             </div>
