@@ -75,6 +75,7 @@ type AIChatPanelProps = {
   currentFiles: PlaygroundFiles;
   defaultFiles: PlaygroundFiles;
   playgroundRef: RefObject<PlaygroundApi | null>;
+  loadPlaygroundFiles: (files: PlaygroundFiles) => Promise<void>;
   setCurrentFiles: (files: PlaygroundFiles) => void;
 };
 
@@ -128,7 +129,8 @@ const TOOL_DEFINITIONS = [
         additionalProperties: false,
         properties: {
           query: {
-            description: "Element tag, package name, or capability to search for, like a-popover, tabs, form, or calendar.",
+            description:
+              "Element tag, package name, or capability to search for, like a-popover, tabs, form, or calendar.",
             type: "string",
           },
         },
@@ -211,12 +213,17 @@ function normalizeAssistantContent(content: unknown): string {
 
   if (Array.isArray(content)) {
     return content
-      .map((part) => {
+      .map(part => {
         if (typeof part === "string") {
           return part;
         }
 
-        if (part && typeof part === "object" && "text" in part && typeof part.text === "string") {
+        if (
+          part &&
+          typeof part === "object" &&
+          "text" in part &&
+          typeof part.text === "string"
+        ) {
           return part.text;
         }
 
@@ -242,7 +249,7 @@ function parseToolArguments(value: string) {
 }
 
 function buildInitialConversation(history: ChatMessage[]): ProviderMessage[] {
-  return history.map((message) => ({
+  return history.map(message => ({
     content: message.content,
     role: message.role,
   }));
@@ -271,7 +278,7 @@ function updateAssistantMessage(
   setChatHistory: Dispatch<SetStateAction<ChatMessage[]>>,
   content: string,
 ) {
-  setChatHistory((prev) => {
+  setChatHistory(prev => {
     if (prev.length === 0) {
       return prev;
     }
@@ -315,6 +322,7 @@ export function AIChatPanel({
   currentFiles,
   defaultFiles,
   playgroundRef,
+  loadPlaygroundFiles,
   setCurrentFiles,
 }: AIChatPanelProps) {
   const saveTimeoutRef = useRef<number | null>(null);
@@ -351,7 +359,7 @@ export function AIChatPanel({
     }
 
     const sections = elementsDocs.split(/\n(?=### )/g);
-    const matches = sections.filter((section) => {
+    const matches = sections.filter(section => {
       const normalizedSection = section.toLowerCase();
       return normalizedSection.includes(normalizedQuery);
     });
@@ -383,10 +391,8 @@ export function AIChatPanel({
     setCurrentSessionName("Untitled Session");
     setChatHistory([]);
     setConversationHistory([]);
-    setCurrentFiles(defaultFiles);
     currentFilesRef.current = defaultFiles;
-    playgroundRef.current?.setFiles(defaultFiles);
-    await playgroundRef.current?.pushCode();
+    await loadPlaygroundFiles(defaultFiles);
   }
 
   async function loadSessionById(id: string) {
@@ -399,10 +405,8 @@ export function AIChatPanel({
     setCurrentSessionName(session.name);
     setChatHistory(session.chatHistory);
     setConversationHistory(buildInitialConversation(session.chatHistory));
-    setCurrentFiles(session.files);
     currentFilesRef.current = session.files;
-    playgroundRef.current?.setFiles(session.files);
-    await playgroundRef.current?.pushCode();
+    await loadPlaygroundFiles(session.files);
   }
 
   async function handleDeleteSession(id: string) {
@@ -470,13 +474,13 @@ export function AIChatPanel({
     const processEvent = (rawEvent: string) => {
       const lines = rawEvent
         .split("\n")
-        .map((line) => line.trimEnd())
+        .map(line => line.trimEnd())
         .filter(Boolean);
 
       const dataLines = lines
-        .filter((line) => !line.startsWith(":"))
-        .filter((line) => line.startsWith("data:"))
-        .map((line) => line.slice(5).trim());
+        .filter(line => !line.startsWith(":"))
+        .filter(line => line.startsWith("data:"))
+        .map(line => line.slice(5).trim());
 
       if (dataLines.length === 0) {
         return false;
@@ -673,7 +677,11 @@ export function AIChatPanel({
       { content: userMessage, role: "user" as const },
     ];
 
-    setChatHistory((prev) => [...prev, userChatMessage, { content: "", role: "assistant" }]);
+    setChatHistory(prev => [
+      ...prev,
+      userChatMessage,
+      { content: "", role: "assistant" },
+    ]);
     setConversationHistory(nextConversation);
     setAiPrompt("");
     setGenerating(true);
@@ -692,7 +700,8 @@ export function AIChatPanel({
         const toolCalls = assistantMessage.tool_calls ?? [];
         if (toolCalls.length === 0) {
           finalAssistantText =
-            normalizeAssistantContent(assistantMessage.content) || "Updated the playground.";
+            normalizeAssistantContent(assistantMessage.content) ||
+            "Updated the playground.";
           break;
         }
 
@@ -793,7 +802,7 @@ export function AIChatPanel({
           <div className="relative flex items-center gap-2" ref={providerPopoverRef}>
             <button
               type="button"
-              onClick={() => setShowProviderPopover((prev) => !prev)}
+              onClick={() => setShowProviderPopover(prev => !prev)}
               className="rounded-full border border-black/10 px-3 py-1.5 font-medium text-xs transition-colors hover:bg-black/5"
               aria-expanded={showProviderPopover}
             >
@@ -823,7 +832,9 @@ export function AIChatPanel({
                 <div className="mb-4 grid grid-cols-2 gap-2">
                   <button
                     type="button"
-                    onClick={() => setAiConfig((prev) => ({ ...prev, provider: "openrouter" }))}
+                    onClick={() =>
+                      setAiConfig(prev => ({ ...prev, provider: "openrouter" }))
+                    }
                     className={twMerge(
                       "rounded-xl border px-3 py-2 text-left transition-colors",
                       aiConfig.provider === "openrouter"
@@ -835,7 +846,9 @@ export function AIChatPanel({
                     <div
                       className={twMerge(
                         "mt-1 text-[11px]",
-                        aiConfig.provider === "openrouter" ? "text-white/70" : "opacity-60",
+                        aiConfig.provider === "openrouter"
+                          ? "text-white/70"
+                          : "opacity-60",
                       )}
                     >
                       Cloud API
@@ -844,7 +857,7 @@ export function AIChatPanel({
 
                   <button
                     type="button"
-                    onClick={() => setAiConfig((prev) => ({ ...prev, provider: "ollama" }))}
+                    onClick={() => setAiConfig(prev => ({ ...prev, provider: "ollama" }))}
                     className={twMerge(
                       "rounded-xl border px-3 py-2 text-left transition-colors",
                       aiConfig.provider === "ollama"
@@ -882,8 +895,8 @@ export function AIChatPanel({
                           id="openrouter-api-key"
                           type="password"
                           value={aiConfig.openrouterApiKey}
-                          onChange={(event) =>
-                            setAiConfig((prev) => ({
+                          onChange={event =>
+                            setAiConfig(prev => ({
                               ...prev,
                               openrouterApiKey: event.target.value,
                             }))
@@ -904,8 +917,8 @@ export function AIChatPanel({
                           id="openrouter-model"
                           type="text"
                           value={aiConfig.openrouterModel}
-                          onChange={(event) =>
-                            setAiConfig((prev) => ({
+                          onChange={event =>
+                            setAiConfig(prev => ({
                               ...prev,
                               openrouterModel: event.target.value,
                             }))
@@ -927,8 +940,8 @@ export function AIChatPanel({
                           id="ollama-endpoint"
                           type="text"
                           value={aiConfig.ollamaEndpoint}
-                          onChange={(event) =>
-                            setAiConfig((prev) => ({
+                          onChange={event =>
+                            setAiConfig(prev => ({
                               ...prev,
                               ollamaEndpoint: event.target.value,
                             }))
@@ -948,8 +961,8 @@ export function AIChatPanel({
                           id="ollama-model"
                           type="text"
                           value={aiConfig.ollamaModel}
-                          onChange={(event) =>
-                            setAiConfig((prev) => ({
+                          onChange={event =>
+                            setAiConfig(prev => ({
                               ...prev,
                               ollamaModel: event.target.value,
                             }))
@@ -970,7 +983,7 @@ export function AIChatPanel({
             <input
               type="text"
               value={currentSessionName}
-              onChange={(event) => setCurrentSessionName(event.target.value)}
+              onChange={event => setCurrentSessionName(event.target.value)}
               placeholder="Session name..."
               className="w-full rounded border border-black/10 bg-transparent px-2 py-1.5 text-xs"
             />
@@ -986,20 +999,22 @@ export function AIChatPanel({
               <div className="mt-2 space-y-1.5 opacity-80">
                 <div>Use OpenRouter with an API key or Ollama locally.</div>
                 <div>
-                  The assistant can inspect the current files and update the playground with tool
-                  calls.
+                  The assistant can inspect the current files and update the playground
+                  with tool calls.
                 </div>
                 <div>
-                  Press <kbd className="rounded bg-black/5 px-1.5 py-0.5">Cmd+B</kbd> to switch
-                  between Code and AI.
+                  Press <kbd className="rounded bg-black/5 px-1.5 py-0.5">Cmd+B</kbd> to
+                  switch between Code and AI.
                 </div>
               </div>
             </div>
 
             {sessions.length > 0 && (
               <div className="space-y-2">
-                <div className="px-2 py-2 font-semibold text-xs opacity-70">Previous Sessions</div>
-                {sessions.map((session) => (
+                <div className="px-2 py-2 font-semibold text-xs opacity-70">
+                  Previous Sessions
+                </div>
+                {sessions.map(session => (
                   <div
                     key={session.id}
                     className="group relative rounded-lg p-3 text-xs transition-colors hover:bg-black/5"
@@ -1010,7 +1025,9 @@ export function AIChatPanel({
                       className="w-full text-left"
                     >
                       <div className="mb-1 truncate font-semibold">{session.name}</div>
-                      <div className="opacity-60">{formatSessionDate(session.timestamp)}</div>
+                      <div className="opacity-60">
+                        {formatSessionDate(session.timestamp)}
+                      </div>
                       <div className="opacity-50">
                         {session.chatHistory.length} message
                         {session.chatHistory.length !== 1 ? "s" : ""}
@@ -1018,7 +1035,7 @@ export function AIChatPanel({
                     </button>
                     <button
                       type="button"
-                      onClick={(event) => {
+                      onClick={event => {
                         event.stopPropagation();
                         void handleDeleteSession(session.id);
                       }}
@@ -1063,8 +1080,8 @@ export function AIChatPanel({
         <div className="flex gap-2">
           <textarea
             value={aiPrompt}
-            onChange={(event) => setAiPrompt(event.target.value)}
-            onKeyDown={(event) => {
+            onChange={event => setAiPrompt(event.target.value)}
+            onKeyDown={event => {
               if (event.key === "Enter" && !event.shiftKey && !generating) {
                 event.preventDefault();
                 void generateWithAI();
