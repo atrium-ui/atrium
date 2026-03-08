@@ -1,0 +1,48 @@
+import { createApp, defineComponent, ref } from "vue";
+
+const App = defineComponent({
+  setup() {
+    const count = ref(0);
+
+    return () => (
+      <main class="min-h-screen bg-slate-950 px-6 py-12 text-slate-50">
+        <div class="mx-auto grid max-w-4xl gap-8 rounded-[32px] border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur">
+          <div class="space-y-4">
+            <p class="text-sm uppercase tracking-[0.35em] text-cyan-300">
+              Atrium Playground
+            </p>
+            <h1 class="max-w-2xl text-5xl font-semibold tracking-tight">
+              Edit the files below and render Vue JSX in the preview.
+            </h1>
+            <p class="max-w-2xl text-lg text-slate-300">
+              This example uses a plain Vite preview page with Vue from an import
+              map and Tailwind's browser runtime.
+            </p>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-[1.3fr_0.7fr]">
+            <div class="rounded-3xl border border-white/10 bg-slate-900/80 p-6">
+              <div class="mb-3 text-xs uppercase tracking-[0.3em] text-slate-400">
+                Live State
+              </div>
+              <div class="text-7xl font-semibold">{count.value}</div>
+            </div>
+
+            <button
+              type="button"
+              class="rounded-3xl bg-cyan-400 px-6 py-5 text-left text-slate-950 transition hover:bg-cyan-300"
+              onClick={() => {
+                count.value += 1;
+              }}
+            >
+              <div class="text-sm uppercase tracking-[0.3em]">Action</div>
+              <div class="mt-2 text-2xl font-semibold">Increment Counter</div>
+            </button>
+          </div>
+        </div>
+      </main>
+    );
+  },
+});
+
+createApp(App).mount("#app");

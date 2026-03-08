@@ -1,0 +1,39 @@
+{
+  "name": "@sv/playground",
+  "version": "0.1.0",
+  "author": "atrium",
+  "description": "Reusable browser playground for Vue JSX experiments.",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "files": [
+    "dist",
+    "src",
+    "index.html",
+    "preview.html",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "check": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@codemirror/commands": "^6.10.2",
+    "@codemirror/lang-html": "^6.4.11",
+    "@codemirror/lang-javascript": "^6.2.5",
+    "@codemirror/language": "^6.12.2",
+    "@codemirror/state": "^6.5.4",
+    "@codemirror/view": "^6.39.16",
+    "@lezer/highlight": "^1.2.3",
+    "@tailwindcss/vite": "^4.2.1",
+    "codemirror": "^6.0.2",
+    "esbuild-wasm": "^0.25.0",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
+    "typescript": "^5.9.2",
+    "vite": "^5.4.2"
+  }
+}

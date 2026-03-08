@@ -9,9 +9,6 @@
 
   /* fonts */
 
-  --font-sans: Roboto, sans-serif;
-  --font-sans-condensed: Roboto Condensed, sans-serif;
-
   --font-weight-thin: 200;
   --font-weight-light: 300;
   --font-weight-regular: 400;
@@ -218,22 +215,22 @@
 /* Typography Styles */
 
 @utility typo-title-1 {
-  @apply font-sans-condensed font-bold uppercase;
+  @apply font-bold uppercase;
   @apply text-[4.5rem] -ml-[3px] -mt-[16px] -mb-[16px];
   @apply leading-[125%];
 }
 @utility typo-title-2 {
-  @apply font-sans-condensed font-bold;
+  @apply font-bold;
   @apply text-[3.75rem];
   @apply leading-[125%];
 }
 @utility typo-title-3 {
-  @apply font-sans-condensed font-bold;
+  @apply font-bold;
   @apply text-[3.625rem];
   @apply leading-[125%];
 }
 @utility typo-title-4 {
-  @apply font-sans-condensed font-bold;
+  @apply font-bold;
   @apply text-[2.5rem];
   @apply leading-[125%];
 }

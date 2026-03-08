@@ -8,6 +8,14 @@ const category = pathname.split("/").filter(Boolean)[0];
 const initialTab = category === "elements" ? "right" : "left";
 ---
 
+<a
+  class="text-link [&[aria-current]]:text-link-active font-medium w-full flex justify-between items-center"
+  href="/playground"
+>
+  <span>Playground</span>
+</a>
+<div class="pt-10"></div>
+
 <SideMenu category="guides" headline="Getting Started" />
 <div class="pt-4"></div>
 <ContentToggle

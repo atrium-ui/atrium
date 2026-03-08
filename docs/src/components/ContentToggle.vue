@@ -67,12 +67,12 @@ watch(
 
 <template>
     <div class="content-toggle-wrapper">
-        <div class="grid grid-cols-2 bg-(--style-fill-grey-active) rounded p-1 md:-ml-2 w-full cursor-pointer"
+        <div class="inline-flex bg-(--style-fill-grey-active) rounded-full p-1 md:-ml-2 cursor-pointer gap-1"
             @click="handleToggle">
             <input :id="`${id}-left`" type="radio" :name="id" :checked="selectedSide === 'left'"
                 class="peer/left hidden" />
             <label :for="`${id}-left`" :class="[
-                'px-2 py-1 text-xs font-medium rounded cursor-pointer transition-all whitespace-nowrap text-center',
+                'px-2.5 py-1 text-xs font-medium rounded-full cursor-pointer transition-all whitespace-nowrap text-center',
                 selectedSide === 'left'
                     ? 'text-(--style-typography-body) bg-white shadow-sm'
                     : 'text-(--style-typography-disabled) hover:bg-white/50'
@@ -83,7 +83,7 @@ watch(
             <input :id="`${id}-right`" type="radio" :name="id" :checked="selectedSide === 'right'"
                 class="peer/right hidden" />
             <label :for="`${id}-right`" :class="[
-                'px-2 py-1 text-xs font-medium rounded cursor-pointer transition-all whitespace-nowrap text-center',
+                'px-2.5 py-1 text-xs font-medium rounded-full cursor-pointer transition-all whitespace-nowrap text-center',
                 selectedSide === 'right'
                     ? 'text-(--style-typography-body) bg-white shadow-sm'
                     : 'text-(--style-typography-disabled) hover:bg-white/50'

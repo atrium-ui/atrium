@@ -5,10 +5,6 @@
 @import "./theme/theme.css";
 @import "./theme/markdown.css";
 
-/* Fonts */
-@import "@fontsource/roboto/latin.css";
-@import "@fontsource/roboto-condensed/latin.css";
-
 @source '../../packages/components/**/*.tsx';
 
 /* Index page */

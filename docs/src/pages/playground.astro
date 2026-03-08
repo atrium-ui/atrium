@@ -1,13 +1,32 @@
 ---
 import Layout from "../layout.astro";
-import { PlaygroundView } from "../components/playground/Playground.js";
+import Sidebar from "../components/Sidebar.astro";
+import { DocsPlayground } from "../components/playground/Playground.js";
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <Layout class="max-w-screen">
   <title slot="head">Playground | Atrium UI</title>
   <meta name="description" slot="head" content="Playground for Atrium UI components and features." />
 
-  <div class="absolute inset-0">
-    <PlaygroundView client:only="react" />
+  <div class="flex items-start">
+    <div
+      class="sticky top-0 hidden max-h-screen w-module-9xl overflow-auto border-r border-neutral-200 bg-(--style-fill-white-background) pl-2 pr-6 pt-module-3xl z-1 md:block"
+    >
+      <div class="mb-10 hidden md:block">
+        <a href={base}>
+          <img class="light-mode-only aspect-square w-12" width="600" src={`${base}atrium-light.png`} />
+          <img class="dark-mode-only aspect-square w-12" width="600" src={`${base}atrium-dark.png`} />
+        </a>
+      </div>
+      <Sidebar />
+    </div>
+
+    <main class="relative h-screen w-full">
+      <div class="relative h-full">
+        <DocsPlayground client:only="react" previewUrl={`${base}story`} />
+      </div>
+    </main>
   </div>
 </Layout>

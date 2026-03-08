@@ -12,6 +12,7 @@ vars:
       "packages/elements",
       "packages/scroll-lock",
       "packages/icons",
+      "packages/playground",
       "packages/svg-sprites",
     ]
 

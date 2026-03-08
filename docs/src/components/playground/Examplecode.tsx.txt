@@ -270,17 +270,11 @@ const App = () => (
           {/* Tab 4: Gallery */}
           <a-tabs-panel>
             <div class="p-8">
-              <h2 class="text-2xl font-bold text-slate-900 mb-6">Image Gallery Carousel</h2>
-
+              <h2 class="text-2xl font-bold text-slate-900 mb-6">Interactive Gallery</h2>
               <Carousel />
             </div>
           </a-tabs-panel>
         </a-tabs>
-      </div>
-
-      {/* Footer Note */}
-      <div class="text-center mt-8 text-sm text-slate-600">
-        <p>Built with Atrium UI • Modern Web Components</p>
       </div>
     </div>
   </div>

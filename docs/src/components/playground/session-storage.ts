@@ -1,17 +1,22 @@
-const DB_NAME = "playground-sessions";
-const DB_VERSION = 1;
-const SESSIONS_STORE = "sessions";
+export type ChatMessage = {
+  role: "user" | "assistant";
+  content: string;
+};
 
 export type Session = {
   id: string;
   name: string;
   timestamp: number;
-  chatHistory: Array<{ role: "user" | "assistant"; content: string }>;
+  chatHistory: ChatMessage[];
   files: {
     "index.html": string;
     "index.tsx": string;
   };
 };
+
+const DB_NAME = "docs-playground-sessions";
+const DB_VERSION = 1;
+const SESSIONS_STORE = "sessions";
 
 function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -61,7 +66,6 @@ export async function listSessions(): Promise<Session[]> {
     const store = transaction.objectStore(SESSIONS_STORE);
     const index = store.index("timestamp");
     const request = index.openCursor(null, "prev");
-
     const sessions: Session[] = [];
 
     request.onerror = () => reject(request.error);
@@ -70,9 +74,10 @@ export async function listSessions(): Promise<Session[]> {
       if (cursor) {
         sessions.push(cursor.value);
         cursor.continue();
-      } else {
-        resolve(sessions);
+        return;
       }
+
+      resolve(sessions);
     };
   });
 }
@@ -105,6 +110,5 @@ export function formatSessionDate(timestamp: number): string {
   if (hours < 24) return `${hours}h ago`;
   if (days < 7) return `${days}d ago`;
 
-  const date = new Date(timestamp);
-  return date.toLocaleDateString();
+  return new Date(timestamp).toLocaleDateString();
 }

@@ -247,6 +247,7 @@ export default defineConfig({
         //
         "**/react/*.{tsx}",
         "**/playground/Playground.tsx",
+        "../packages/playground/src/**/*.tsx",
         "./src/pages/components/docs-editor.tsx",
         "**/stories/Preview.tsx",
         "**/stories/Controls.tsx",
