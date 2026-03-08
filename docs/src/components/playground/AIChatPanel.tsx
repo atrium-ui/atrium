@@ -1,4 +1,5 @@
 import type { PlaygroundApi, PlaygroundFiles } from "@sv/playground";
+import elementsDocs from "../../../assets/llms.txt?raw";
 import systemPrompt from "./system-prompt.txt?raw";
 import {
   useEffect,
@@ -94,6 +95,44 @@ const TOOL_DEFINITIONS = [
       parameters: {
         additionalProperties: false,
         properties: {},
+        type: "object",
+      },
+    },
+    type: "function",
+  },
+  {
+    function: {
+      description:
+        "Set a short session title that summarizes the user's request. Use this as the first tool call in a new chat before other tools.",
+      name: "set_session_title",
+      parameters: {
+        additionalProperties: false,
+        properties: {
+          title: {
+            description: "A concise session title, ideally 2 to 6 words.",
+            type: "string",
+          },
+        },
+        required: ["title"],
+        type: "object",
+      },
+    },
+    type: "function",
+  },
+  {
+    function: {
+      description:
+        "Look up documentation details for an Atrium custom element or related primitive from the local docs knowledge base.",
+      name: "search_custom_element_docs",
+      parameters: {
+        additionalProperties: false,
+        properties: {
+          query: {
+            description: "Element tag, package name, or capability to search for, like a-popover, tabs, form, or calendar.",
+            type: "string",
+          },
+        },
+        required: ["query"],
         type: "object",
       },
     },
@@ -209,6 +248,25 @@ function buildInitialConversation(history: ChatMessage[]): ProviderMessage[] {
   }));
 }
 
+const ELEMENTS_LIBRARY_SUMMARY = `Available Atrium custom elements from @sv/elements:
+- Layout and disclosure: a-box, a-expandable, a-list, a-list-item, a-tabs, a-tabs-list, a-tabs-tab, a-tabs-panel
+- Overlay and portal: a-popover, a-popover-trigger, a-popover-arrow, a-popover-portal, a-tooltip, a-portal, a-blur
+- Inputs and forms: a-toggle, a-range, a-select, a-option, a-form-field, a-form-field-error
+- Feedback and utilities: a-loader, a-toast, a-toast-feed, a-time, a-scroll, a-track, a-transition
+- Date and navigation: a-calendar, a-pager
+
+Usage notes:
+- Atrium custom elements are already available in this docs playground. Do not add import statements for them.
+- Prefer these custom elements when they fit the task instead of rebuilding the same primitive from scratch.`;
+
+function buildSystemPrompt(shouldSetTitle: boolean) {
+  return `${systemPrompt}\n\n${ELEMENTS_LIBRARY_SUMMARY}\n\nSession title instruction: ${
+    shouldSetTitle
+      ? "This session is empty. Call set_session_title before any other tool or assistant text."
+      : "This session already has messages. Do not call set_session_title unless the user explicitly asks to rename the session."
+  }`;
+}
+
 function updateAssistantMessage(
   setChatHistory: Dispatch<SetStateAction<ChatMessage[]>>,
   content: string,
@@ -232,6 +290,26 @@ function updateAssistantMessage(
   });
 }
 
+function formatToolStatus(toolCall: ToolCall) {
+  if (toolCall.function.name === "get_playground_state") {
+    return "Inspecting the current playground files...";
+  }
+
+  if (toolCall.function.name === "set_session_title") {
+    return "Naming this session...";
+  }
+
+  if (toolCall.function.name === "search_custom_element_docs") {
+    return "Looking up custom element details...";
+  }
+
+  if (toolCall.function.name === "update_playground_files") {
+    return "Updating the playground files and preview...";
+  }
+
+  return `Running ${toolCall.function.name}...`;
+}
+
 export function AIChatPanel({
   className,
   currentFiles,
@@ -242,6 +320,7 @@ export function AIChatPanel({
   const saveTimeoutRef = useRef<number | null>(null);
   const currentFilesRef = useRef<PlaygroundFiles>(currentFiles);
   const providerPopoverRef = useRef<HTMLDivElement | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const [showProviderPopover, setShowProviderPopover] = useState(false);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [currentSessionId, setCurrentSessionId] = useState(() => generateSessionId());
@@ -264,6 +343,25 @@ export function AIChatPanel({
   });
 
   const providerLabel = useMemo(() => getProviderLabel(aiConfig), [aiConfig]);
+
+  function searchCustomElementDocs(query: string) {
+    const normalizedQuery = query.trim().toLowerCase();
+    if (!normalizedQuery) {
+      throw new Error("search_custom_element_docs requires a query.");
+    }
+
+    const sections = elementsDocs.split(/\n(?=### )/g);
+    const matches = sections.filter((section) => {
+      const normalizedSection = section.toLowerCase();
+      return normalizedSection.includes(normalizedQuery);
+    });
+
+    if (matches.length === 0) {
+      return `No exact match found for "${query}" in the Atrium elements docs. Available tags include a-box, a-expandable, a-list, a-popover, a-portal, a-blur, a-toggle, a-range, a-select, a-form-field, a-loader, a-time, a-scroll, a-track, a-transition, a-calendar, a-tabs, and a-pager.`;
+    }
+
+    return matches.slice(0, 3).join("\n\n---\n\n");
+  }
 
   async function loadSessionsList() {
     setSessions(await listSessions());
@@ -315,17 +413,42 @@ export function AIChatPanel({
     }
   }
 
-  async function requestAssistant(messages: ProviderMessage[]) {
+  async function requestAssistant(
+    messages: ProviderMessage[],
+    options?: {
+      forceTitleTool?: boolean;
+      shouldSetTitle?: boolean;
+    },
+  ) {
+    abortControllerRef.current?.abort();
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+    const toolChoice = options?.forceTitleTool
+      ? {
+          function: {
+            name: "set_session_title",
+          },
+          type: "function" as const,
+        }
+      : "auto";
+
     const response = await fetch(getEndpoint(aiConfig), {
       body: JSON.stringify({
-        messages: [{ content: systemPrompt, role: "system" }, ...messages],
+        messages: [
+          {
+            content: buildSystemPrompt(Boolean(options?.shouldSetTitle)),
+            role: "system",
+          },
+          ...messages,
+        ],
         model: getModel(aiConfig),
         stream: true,
-        tool_choice: "auto",
+        tool_choice: toolChoice,
         tools: TOOL_DEFINITIONS,
       }),
       headers: getHeaders(aiConfig),
       method: "POST",
+      signal: abortController.signal,
     });
 
     if (!response.ok) {
@@ -444,6 +567,13 @@ export function AIChatPanel({
     } satisfies ProviderMessage;
   }
 
+  function cancelGeneration() {
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
+    setGenerating(false);
+    updateAssistantMessage(setChatHistory, "Canceled.");
+  }
+
   async function executeToolCall(toolCall: ToolCall): Promise<ProviderMessage> {
     const args = parseToolArguments(toolCall.function.arguments);
 
@@ -451,6 +581,32 @@ export function AIChatPanel({
       const files = playgroundRef.current?.getFiles() ?? currentFilesRef.current;
       return {
         content: JSON.stringify({ files }, null, 2),
+        role: "tool",
+        tool_call_id: toolCall.id,
+      };
+    }
+
+    if (toolCall.function.name === "set_session_title") {
+      const title =
+        typeof args.title === "string" ? args.title.trim().replace(/\s+/g, " ") : "";
+
+      if (!title) {
+        throw new Error("set_session_title requires a non-empty title.");
+      }
+
+      setCurrentSessionName(title);
+
+      return {
+        content: JSON.stringify({ title }, null, 2),
+        role: "tool",
+        tool_call_id: toolCall.id,
+      };
+    }
+
+    if (toolCall.function.name === "search_custom_element_docs") {
+      const query = typeof args.query === "string" ? args.query : "";
+      return {
+        content: searchCustomElementDocs(query),
         role: "tool",
         tool_call_id: toolCall.id,
       };
@@ -506,6 +662,7 @@ export function AIChatPanel({
       return;
     }
 
+    const shouldSetTitle = chatHistory.length === 0;
     const userMessage = aiPrompt.trim();
     const userChatMessage: ChatMessage = {
       content: userMessage,
@@ -526,7 +683,10 @@ export function AIChatPanel({
       let finalAssistantText = "";
 
       for (let step = 0; step < 8; step += 1) {
-        const assistantMessage = await requestAssistant(messages);
+        const assistantMessage = await requestAssistant(messages, {
+          forceTitleTool: shouldSetTitle && step === 0,
+          shouldSetTitle: shouldSetTitle && step === 0,
+        });
         messages = [...messages, assistantMessage];
 
         const toolCalls = assistantMessage.tool_calls ?? [];
@@ -537,6 +697,7 @@ export function AIChatPanel({
         }
 
         for (const toolCall of toolCalls) {
+          updateAssistantMessage(setChatHistory, formatToolStatus(toolCall));
           const toolResult = await executeToolCall(toolCall);
           messages = [...messages, toolResult];
         }
@@ -550,11 +711,16 @@ export function AIChatPanel({
       setConversationHistory(messages);
       updateAssistantMessage(setChatHistory, assistantChatMessage.content);
     } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return;
+      }
+
       updateAssistantMessage(
         setChatHistory,
         error instanceof Error ? error.message : "The AI request failed.",
       );
     } finally {
+      abortControllerRef.current = null;
       setGenerating(false);
     }
   }
@@ -580,6 +746,12 @@ export function AIChatPanel({
     document.addEventListener("mousedown", handlePointerDown);
     return () => document.removeEventListener("mousedown", handlePointerDown);
   }, [showProviderPopover]);
+
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("docs_playground_ai_config", JSON.stringify(aiConfig));
@@ -879,9 +1051,10 @@ export function AIChatPanel({
         ))}
 
         {generating && (
-          <div className="mr-4 rounded-lg border border-black/10 bg-white p-3 text-xs">
-            <div className="mb-1 font-semibold opacity-70">AI</div>
-            <div className="opacity-50">Thinking and updating the playground...</div>
+          <div className="mr-4 flex items-center gap-1 px-3 text-black/45">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current [animation-delay:0ms]" />
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current [animation-delay:150ms]" />
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current [animation-delay:300ms]" />
           </div>
         )}
       </div>
@@ -892,22 +1065,28 @@ export function AIChatPanel({
             value={aiPrompt}
             onChange={(event) => setAiPrompt(event.target.value)}
             onKeyDown={(event) => {
-              if (event.key === "Enter" && !event.shiftKey) {
+              if (event.key === "Enter" && !event.shiftKey && !generating) {
                 event.preventDefault();
                 void generateWithAI();
               }
             }}
             placeholder="Describe a change to the playground..."
             className="min-h-24 flex-1 resize-none rounded border border-black/10 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black/10"
-            disabled={generating}
           />
           <button
             type="button"
             className="self-end rounded bg-black px-3 py-2 font-medium text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-            onClick={() => void generateWithAI()}
-            disabled={generating || !aiPrompt.trim()}
+            onClick={() => {
+              if (generating) {
+                cancelGeneration();
+                return;
+              }
+
+              void generateWithAI();
+            }}
+            disabled={!generating && !aiPrompt.trim()}
           >
-            {generating ? "..." : "Send"}
+            {generating ? "Cancel" : "Send"}
           </button>
         </div>
       </div>

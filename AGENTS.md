@@ -46,7 +46,6 @@ Doc pages for components should consist of a couple sections in given order:
   - Elements in stories should be centerd in the frame
   - Examples shold reflect some common usecase
   - They need to look good
-  - 
 - "Guidelines" for usage
 - "Accessibility" things to consider and features
 - "References" links
