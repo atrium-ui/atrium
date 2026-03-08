@@ -255,18 +255,16 @@ export const PlaygroundProvider = forwardRef<PlaygroundApi, PlaygroundProviderPr
     }, [initialFiles, previewUrl, frameworkPrelude]);
 
     return (
-      <PlaygroundContext.Provider value={{ editorRefs, iframeRef, loading, registerEditor }}>
+      <PlaygroundContext.Provider
+        value={{ editorRefs, iframeRef, loading, registerEditor }}
+      >
         {children}
       </PlaygroundContext.Provider>
     );
   },
 );
 
-export function PlaygroundPreviewPanel({
-  className,
-}: {
-  className?: string;
-}) {
+export function PlaygroundPreviewPanel({ className }: { className?: string }) {
   const { iframeRef, loading } = usePlaygroundContext();
 
   return (
@@ -284,17 +282,20 @@ export function PlaygroundPreviewPanel({
   );
 }
 
-export function PlaygroundEditorsPanel({
-  className,
-}: {
-  className?: string;
-}) {
+export function PlaygroundEditorsPanel({ className }: { className?: string }) {
   const { registerEditor } = usePlaygroundContext();
 
   return (
-    <div className={twMerge("sv-playground-panel grid min-h-0 gap-px bg-black/10", className)}>
+    <div
+      className={twMerge(
+        "sv-playground-panel grid min-h-0 gap-px bg-black/10",
+        className,
+      )}
+    >
       <div className="flex min-h-0 flex-col bg-white">
-        <div className="border-black/10 border-b px-3 py-2 font-medium text-xs">index.html</div>
+        <div className="border-black/10 border-b px-3 py-2 font-medium text-xs">
+          index.html
+        </div>
         <sv-code-editor
           className="sv-playground-editor min-h-0 flex-1"
           language="html"
@@ -304,7 +305,9 @@ export function PlaygroundEditorsPanel({
         />
       </div>
       <div className="flex min-h-0 flex-col bg-white">
-        <div className="border-black/10 border-b px-3 py-2 font-medium text-xs">index.tsx</div>
+        <div className="border-black/10 border-b px-3 py-2 font-medium text-xs">
+          index.tsx
+        </div>
         <sv-code-editor
           className="sv-playground-editor min-h-0 flex-1"
           language="tsx"

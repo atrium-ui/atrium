@@ -1,5 +1,5 @@
 import type { PlaygroundApi, PlaygroundFiles } from "@sv/playground";
-import elementsDocs from "../../../assets/llms.txt?raw";
+import elementsDocs from "../../assets/llms.txt?raw";
 import systemPrompt from "./system-prompt.txt?raw";
 import {
   useEffect,
@@ -213,7 +213,7 @@ function normalizeAssistantContent(content: unknown): string {
 
   if (Array.isArray(content)) {
     return content
-      .map(part => {
+      .map((part) => {
         if (typeof part === "string") {
           return part;
         }
@@ -249,7 +249,7 @@ function parseToolArguments(value: string) {
 }
 
 function buildInitialConversation(history: ChatMessage[]): ProviderMessage[] {
-  return history.map(message => ({
+  return history.map((message) => ({
     content: message.content,
     role: message.role,
   }));
@@ -278,7 +278,7 @@ function updateAssistantMessage(
   setChatHistory: Dispatch<SetStateAction<ChatMessage[]>>,
   content: string,
 ) {
-  setChatHistory(prev => {
+  setChatHistory((prev) => {
     if (prev.length === 0) {
       return prev;
     }
@@ -359,7 +359,7 @@ export function AIChatPanel({
     }
 
     const sections = elementsDocs.split(/\n(?=### )/g);
-    const matches = sections.filter(section => {
+    const matches = sections.filter((section) => {
       const normalizedSection = section.toLowerCase();
       return normalizedSection.includes(normalizedQuery);
     });
@@ -474,13 +474,13 @@ export function AIChatPanel({
     const processEvent = (rawEvent: string) => {
       const lines = rawEvent
         .split("\n")
-        .map(line => line.trimEnd())
+        .map((line) => line.trimEnd())
         .filter(Boolean);
 
       const dataLines = lines
-        .filter(line => !line.startsWith(":"))
-        .filter(line => line.startsWith("data:"))
-        .map(line => line.slice(5).trim());
+        .filter((line) => !line.startsWith(":"))
+        .filter((line) => line.startsWith("data:"))
+        .map((line) => line.slice(5).trim());
 
       if (dataLines.length === 0) {
         return false;
@@ -677,7 +677,7 @@ export function AIChatPanel({
       { content: userMessage, role: "user" as const },
     ];
 
-    setChatHistory(prev => [
+    setChatHistory((prev) => [
       ...prev,
       userChatMessage,
       { content: "", role: "assistant" },
@@ -802,7 +802,7 @@ export function AIChatPanel({
           <div className="relative flex items-center gap-2" ref={providerPopoverRef}>
             <button
               type="button"
-              onClick={() => setShowProviderPopover(prev => !prev)}
+              onClick={() => setShowProviderPopover((prev) => !prev)}
               className="rounded-full border border-black/10 px-3 py-1.5 font-medium text-xs transition-colors hover:bg-black/5"
               aria-expanded={showProviderPopover}
             >
@@ -825,7 +825,7 @@ export function AIChatPanel({
 
             {showProviderPopover && (
               <div className="absolute top-full right-0 z-20 mt-2 w-80 rounded-2xl border border-black/10 bg-white p-3 shadow-lg">
-                <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] opacity-50">
+                <div className="mb-3 font-semibold text-[11px] uppercase tracking-[0.08em] opacity-50">
                   Provider
                 </div>
 
@@ -833,7 +833,7 @@ export function AIChatPanel({
                   <button
                     type="button"
                     onClick={() =>
-                      setAiConfig(prev => ({ ...prev, provider: "openrouter" }))
+                      setAiConfig((prev) => ({ ...prev, provider: "openrouter" }))
                     }
                     className={twMerge(
                       "rounded-xl border px-3 py-2 text-left transition-colors",
@@ -857,7 +857,9 @@ export function AIChatPanel({
 
                   <button
                     type="button"
-                    onClick={() => setAiConfig(prev => ({ ...prev, provider: "ollama" }))}
+                    onClick={() =>
+                      setAiConfig((prev) => ({ ...prev, provider: "ollama" }))
+                    }
                     className={twMerge(
                       "rounded-xl border px-3 py-2 text-left transition-colors",
                       aiConfig.provider === "ollama"
@@ -877,7 +879,7 @@ export function AIChatPanel({
                   </button>
                 </div>
 
-                <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] opacity-50">
+                <div className="mb-3 font-semibold text-[11px] uppercase tracking-[0.08em] opacity-50">
                   Configuration
                 </div>
 
@@ -895,8 +897,8 @@ export function AIChatPanel({
                           id="openrouter-api-key"
                           type="password"
                           value={aiConfig.openrouterApiKey}
-                          onChange={event =>
-                            setAiConfig(prev => ({
+                          onChange={(event) =>
+                            setAiConfig((prev) => ({
                               ...prev,
                               openrouterApiKey: event.target.value,
                             }))
@@ -917,8 +919,8 @@ export function AIChatPanel({
                           id="openrouter-model"
                           type="text"
                           value={aiConfig.openrouterModel}
-                          onChange={event =>
-                            setAiConfig(prev => ({
+                          onChange={(event) =>
+                            setAiConfig((prev) => ({
                               ...prev,
                               openrouterModel: event.target.value,
                             }))
@@ -940,8 +942,8 @@ export function AIChatPanel({
                           id="ollama-endpoint"
                           type="text"
                           value={aiConfig.ollamaEndpoint}
-                          onChange={event =>
-                            setAiConfig(prev => ({
+                          onChange={(event) =>
+                            setAiConfig((prev) => ({
                               ...prev,
                               ollamaEndpoint: event.target.value,
                             }))
@@ -961,8 +963,8 @@ export function AIChatPanel({
                           id="ollama-model"
                           type="text"
                           value={aiConfig.ollamaModel}
-                          onChange={event =>
-                            setAiConfig(prev => ({
+                          onChange={(event) =>
+                            setAiConfig((prev) => ({
                               ...prev,
                               ollamaModel: event.target.value,
                             }))
@@ -983,7 +985,7 @@ export function AIChatPanel({
             <input
               type="text"
               value={currentSessionName}
-              onChange={event => setCurrentSessionName(event.target.value)}
+              onChange={(event) => setCurrentSessionName(event.target.value)}
               placeholder="Session name..."
               className="w-full rounded border border-black/10 bg-transparent px-2 py-1.5 text-xs"
             />
@@ -1014,7 +1016,7 @@ export function AIChatPanel({
                 <div className="px-2 py-2 font-semibold text-xs opacity-70">
                   Previous Sessions
                 </div>
-                {sessions.map(session => (
+                {sessions.map((session) => (
                   <div
                     key={session.id}
                     className="group relative rounded-lg p-3 text-xs transition-colors hover:bg-black/5"
@@ -1035,7 +1037,7 @@ export function AIChatPanel({
                     </button>
                     <button
                       type="button"
-                      onClick={event => {
+                      onClick={(event) => {
                         event.stopPropagation();
                         void handleDeleteSession(session.id);
                       }}
@@ -1080,8 +1082,8 @@ export function AIChatPanel({
         <div className="flex gap-2">
           <textarea
             value={aiPrompt}
-            onChange={event => setAiPrompt(event.target.value)}
-            onKeyDown={event => {
+            onChange={(event) => setAiPrompt(event.target.value)}
+            onKeyDown={(event) => {
               if (event.key === "Enter" && !event.shiftKey && !generating) {
                 event.preventDefault();
                 void generateWithAI();

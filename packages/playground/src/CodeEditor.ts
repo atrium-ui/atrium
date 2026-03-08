@@ -57,10 +57,16 @@ const atriumHighlightStyle = HighlightStyle.define([
   { tag: [tags.keyword, tags.modifier], color: "#c2410c" },
   { tag: [tags.name, tags.deleted, tags.character, tags.propertyName], color: "#3b1d0f" },
   { tag: [tags.function(tags.variableName), tags.labelName], color: "#9a3412" },
-  { tag: [tags.color, tags.constant(tags.name), tags.standard(tags.name)], color: "#ea580c" },
+  {
+    tag: [tags.color, tags.constant(tags.name), tags.standard(tags.name)],
+    color: "#ea580c",
+  },
   { tag: [tags.definition(tags.name), tags.separator], color: "#3b1d0f" },
   { tag: [tags.className], color: "#d97706" },
-  { tag: [tags.number, tags.changed, tags.annotation, tags.self, tags.namespace], color: "#ea580c" },
+  {
+    tag: [tags.number, tags.changed, tags.annotation, tags.self, tags.namespace],
+    color: "#ea580c",
+  },
   { tag: [tags.typeName], color: "#d97706" },
   { tag: [tags.operator, tags.operatorKeyword], color: "#c2410c" },
   { tag: [tags.tagName], color: "#b45309" },

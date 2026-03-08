@@ -37,7 +37,7 @@ export function DocsPlayground({ previewUrl }: { previewUrl: string }) {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key === "b") {
         event.preventDefault();
-        setLeftTab(prev => (prev === "code" ? "ai" : "code"));
+        setLeftTab((prev) => (prev === "code" ? "ai" : "code"));
       }
     };
 
@@ -100,7 +100,7 @@ export function DocsPlayground({ previewUrl }: { previewUrl: string }) {
         ref={playgroundRef}
         previewUrl={previewUrl}
         defaultFiles={DEFAULT_FILES}
-        onFilesChange={files => setCurrentFiles(files)}
+        onFilesChange={(files) => setCurrentFiles(files)}
       >
         <div className="grid min-h-0 flex-1 gap-px bg-black/10 lg:grid-cols-[minmax(0,2fr)_minmax(0,4fr)]">
           <div className="flex min-h-[45vh] min-w-0 flex-col bg-white">
@@ -152,7 +152,7 @@ export function DocsPlayground({ previewUrl }: { previewUrl: string }) {
                 leftTab === "code" ? "block" : "hidden",
               )}
             >
-              <PlaygroundEditorsPanel className="min-h-0 h-full bg-white" />
+              <PlaygroundEditorsPanel className="h-full min-h-0 bg-white" />
             </div>
 
             <AIChatPanel
