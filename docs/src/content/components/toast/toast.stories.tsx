@@ -37,7 +37,7 @@ export const LandingPage = {
     return (
       <div class="flex min-h-[220px] items-end justify-start p-4">
         <div class="w-full max-w-xs border border-zinc-200 bg-white p-3">
-          <div class="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.16em] text-zinc-400">
+          <div class="mb-2 flex items-center justify-between text-xs text-zinc-400 uppercase tracking-[0.16em]">
             <span>Toast</span>
             <button
               type="button"

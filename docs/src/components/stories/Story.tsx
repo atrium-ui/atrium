@@ -116,7 +116,6 @@ export function StoryFrame() {
         window.dispatchEvent(new Event("story.loaded"));
       });
     });
-
   }, [story, variant, currentStoryId, reactRoot, searchParams]);
 
   return (

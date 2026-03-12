@@ -188,10 +188,14 @@ export const LandingPage = {
         <div class="grid h-full content-start gap-4 border border-zinc-200 bg-white p-4">
           <div class="flex items-start justify-between">
             <div>
-              <div class="text-[10px] uppercase tracking-[0.2em] text-zinc-400">Datepicker</div>
-              <div class="text-sm text-zinc-700">Schedule a launch review without leaving the plan.</div>
+              <div class="text-[10px] text-zinc-400 uppercase tracking-[0.2em]">
+                Datepicker
+              </div>
+              <div class="text-sm text-zinc-700">
+                Schedule a launch review without leaving the plan.
+              </div>
             </div>
-            <div class="border border-emerald-200 bg-emerald-50 px-2 py-1 text-[10px] uppercase tracking-[0.16em] text-emerald-700">
+            <div class="border border-emerald-200 bg-emerald-50 px-2 py-1 text-[10px] text-emerald-700 uppercase tracking-[0.16em]">
               March
             </div>
           </div>
@@ -206,14 +210,12 @@ export const LandingPage = {
                 <div class="text-sm text-zinc-800">Selected review</div>
                 <div class="text-xs text-zinc-500">Wednesday, March 18 at 2:00 PM</div>
               </div>
-              <div class="text-xs uppercase tracking-[0.16em] text-zinc-500">Team A</div>
+              <div class="text-xs text-zinc-500 uppercase tracking-[0.16em]">Team A</div>
             </div>
 
             <div class="grid grid-cols-3 gap-2">
               {["Brief", "QA", "Launch"].map((slot) => (
-                <div
-                  class="border border-zinc-200 px-3 py-2 text-center text-xs uppercase tracking-[0.16em] text-zinc-600"
-                >
+                <div class="border border-zinc-200 px-3 py-2 text-center text-xs text-zinc-600 uppercase tracking-[0.16em]">
                   {slot}
                 </div>
               ))}

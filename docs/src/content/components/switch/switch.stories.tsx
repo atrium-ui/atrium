@@ -44,10 +44,12 @@ export const LandingPage = {
       <div class="flex h-full items-start justify-center p-3">
         <div class="w-full max-w-2xl overflow-hidden border border-zinc-200 bg-white">
           <div class="flex flex-col gap-px bg-zinc-200">
-            <div class="flex items-center justify-between bg-white px-4 py-2 gap-2">
+            <div class="flex items-center justify-between gap-2 bg-white px-4 py-2">
               <div class="w-full min-w-0">
-                <div class="text-sm font-medium text-zinc-900">Marketing emails</div>
-                <div class="mt-1 text-sm text-zinc-600 whitespace-nowrap overflow-hidden">Announcements and product news.</div>
+                <div class="font-medium text-sm text-zinc-900">Marketing emails</div>
+                <div class="mt-1 overflow-hidden whitespace-nowrap text-sm text-zinc-600">
+                  Announcements and product news.
+                </div>
               </div>
               <Switch
                 value={marketingEmails.value}
@@ -57,10 +59,12 @@ export const LandingPage = {
               />
             </div>
 
-            <div class="flex items-center justify-between bg-white px-4 py-2 gap-2">
+            <div class="flex items-center justify-between gap-2 bg-white px-4 py-2">
               <div class="w-full min-w-0">
-                <div class="text-sm font-medium text-zinc-900">Push alerts</div>
-                <div class="mt-1 text-sm text-zinc-600 whitespace-nowrap overflow-hidden">Mentions and activity alerts.</div>
+                <div class="font-medium text-sm text-zinc-900">Push alerts</div>
+                <div class="mt-1 overflow-hidden whitespace-nowrap text-sm text-zinc-600">
+                  Mentions and activity alerts.
+                </div>
               </div>
               <Switch
                 value={pushAlerts.value}
@@ -70,10 +74,12 @@ export const LandingPage = {
               />
             </div>
 
-            <div class="flex items-center justify-between bg-white px-4 py-2 gap-2">
+            <div class="flex items-center justify-between gap-2 bg-white px-4 py-2">
               <div class="w-full min-w-0">
-                <div class="text-sm font-medium text-zinc-900">Weekly reports</div>
-                <div class="mt-1 text-sm text-zinc-600 whitespace-nowrap overflow-hidden">A weekly team summary.</div>
+                <div class="font-medium text-sm text-zinc-900">Weekly reports</div>
+                <div class="mt-1 overflow-hidden whitespace-nowrap text-sm text-zinc-600">
+                  A weekly team summary.
+                </div>
               </div>
               <Switch
                 value={weeklyReports.value}

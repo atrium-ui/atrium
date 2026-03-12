@@ -212,8 +212,16 @@ export class Lightbox extends LitElement {
       return;
     }
 
-    this.moveElements(this.sourceContentElements, this.contentMount, "a-lightbox content mount");
-    this.moveElements(this.sourceCloseElements, this.closeMount, "a-lightbox close mount");
+    this.moveElements(
+      this.sourceContentElements,
+      this.contentMount,
+      "a-lightbox content mount",
+    );
+    this.moveElements(
+      this.sourceCloseElements,
+      this.closeMount,
+      "a-lightbox close mount",
+    );
   }
 
   public restoreStructure() {
@@ -343,7 +351,8 @@ export class Lightbox extends LitElement {
   public matchesAssignedPath(path: EventTarget[], elements: Element[]) {
     return elements.some((element) =>
       path.some(
-        (target) => target instanceof Node && (target === element || element.contains(target)),
+        (target) =>
+          target instanceof Node && (target === element || element.contains(target)),
       ),
     );
   }
@@ -460,12 +469,16 @@ export class Lightbox extends LitElement {
     }
 
     if (image.complete && image.naturalWidth === 0) {
-      throw new Error(`a-lightbox image failed to load: ${image.currentSrc || image.src}`);
+      throw new Error(
+        `a-lightbox image failed to load: ${image.currentSrc || image.src}`,
+      );
     }
 
     if (image.decode instanceof Function) {
       await image.decode().catch(() => {
-        throw new Error(`a-lightbox image failed to decode: ${image.currentSrc || image.src}`);
+        throw new Error(
+          `a-lightbox image failed to decode: ${image.currentSrc || image.src}`,
+        );
       });
     }
   }

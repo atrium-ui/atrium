@@ -236,15 +236,19 @@ export const LandingPage = {
         <div class="grid h-full content-start gap-3 border border-zinc-200 bg-white p-3">
           <div class="flex items-start justify-between">
             <div>
-              <div class="mb-1 text-[10px] uppercase tracking-[0.2em] text-zinc-400">Dropdown</div>
-              <div class="text-sm text-zinc-700">Switch between compact workspace presets.</div>
+              <div class="mb-1 text-[10px] text-zinc-400 uppercase tracking-[0.2em]">
+                Dropdown
+              </div>
+              <div class="text-sm text-zinc-700">
+                Switch between compact workspace presets.
+              </div>
             </div>
 
             <a-popover-trigger class="w-auto">
               <button
                 slot="trigger"
                 type="button"
-                class="border border-zinc-200 px-3 py-2 text-xs uppercase tracking-[0.16em] text-zinc-600"
+                class="border border-zinc-200 px-3 py-2 text-xs text-zinc-600 uppercase tracking-[0.16em]"
               >
                 Preset
               </button>

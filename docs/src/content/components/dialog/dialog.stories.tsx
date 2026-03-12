@@ -19,7 +19,7 @@ export const Default = {
         <div class="mt-4 flex justify-end">
           <Button
             variant="outline"
-            onClick={ev => {
+            onClick={(ev) => {
               ev.target?.dispatchEvent(new CustomEvent("exit", { bubbles: true }));
             }}
           >
@@ -41,7 +41,7 @@ export const Confirmation = {
         <div class="mt-4 flex justify-end">
           <Button
             variant="outline"
-            onClick={ev => {
+            onClick={(ev) => {
               ev.target?.dispatchEvent(new CustomEvent("exit", { bubbles: true }));
             }}
           >
@@ -61,7 +61,7 @@ export const FormDialog = {
         <h2 class="mb-2 text-2xl">Create Account</h2>
         <form
           class="space-y-4"
-          onSubmit={ev => {
+          onSubmit={(ev) => {
             ev.preventDefault();
           }}
         >
@@ -91,7 +91,7 @@ export const FormDialog = {
           <div class="mt-4 flex justify-end">
             <Button
               variant="outline"
-              onClick={ev => {
+              onClick={(ev) => {
                 ev.target?.dispatchEvent(new CustomEvent("exit", { bubbles: true }));
               }}
             >
@@ -109,10 +109,10 @@ export const FormDialog = {
 
 export const LandingPage = {
   render: () => (
-    <div class="h-full px-8 py-7 flex items-start">
-      <div class="grid content-start gap-6 bg-white w-full">
+    <div class="flex h-full items-start px-8 py-7">
+      <div class="grid w-full content-start gap-6 bg-white">
         <div class="flex gap-6">
-          <div class="rounded-md border border-zinc-200 bg-white p-3 w-[250px]">
+          <div class="w-[250px] rounded-md border border-zinc-200 bg-white p-3">
             <a-calendar value="2026-03-18" />
           </div>
           <div class="grid flex-1 content-start gap-3">
@@ -123,9 +123,7 @@ export const LandingPage = {
               </div>
               <Dialog label="Invite team">
                 <div class="w-[22rem]">
-                  <h2 class="mb-2 font-medium text-lg text-zinc-900">
-                    Invite teammates
-                  </h2>
+                  <h2 class="mb-2 font-medium text-lg text-zinc-900">Invite teammates</h2>
                   <p class="text-sm text-zinc-600">
                     Add people before the review starts.
                   </p>
@@ -146,10 +144,7 @@ export const LandingPage = {
                     </div>
 
                     <div class="grid gap-1.5">
-                      <label
-                        for="invite-role"
-                        class="font-medium text-xs text-zinc-700"
-                      >
+                      <label for="invite-role" class="font-medium text-xs text-zinc-700">
                         Access
                       </label>
                       <a-popover-trigger class="relative z-10 w-full">
@@ -165,10 +160,7 @@ export const LandingPage = {
                           </span>
                         </button>
 
-                        <a-popover
-                          class="group block w-full"
-                          placements="bottom-center"
-                        >
+                        <a-popover class="group block w-full" placements="bottom-center">
                           <div class="group z-50 mt-1 block w-[350px] rounded-md border border-zinc-200 bg-white opacity-0 shadow-lg transition-opacity duration-100 group-[&[enabled]]:opacity-100">
                             <a-list class="group -translate-y-1 max-h-[200px] overflow-auto rounded-md bg-white transition-all duration-150 group-[&[enabled]]:translate-y-0">
                               {["Can edit", "Can comment", "View only"].map(
@@ -196,7 +188,7 @@ export const LandingPage = {
                   <div class="mt-4 flex justify-end gap-2">
                     <Button
                       variant="outline"
-                      onClick={ev => {
+                      onClick={(ev) => {
                         ev.target?.dispatchEvent(
                           new CustomEvent("exit", { bubbles: true }),
                         );

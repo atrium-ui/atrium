@@ -291,14 +291,18 @@ export const LandingPage = {
   render: () => {
     return (
       <div class="min-h-[320px] w-full bg-stone-50">
-        <div class="flex items-center justify-between border-b border-zinc-200 bg-white px-4 py-3">
+        <div class="flex items-center justify-between border-zinc-200 border-b bg-white px-4 py-3">
           <div class="flex flex-col gap-1">
-            <span class="text-[10px] uppercase tracking-[0.24em] text-zinc-400">Collection</span>
+            <span class="text-[10px] text-zinc-400 uppercase tracking-[0.24em]">
+              Collection
+            </span>
             <span class="font-medium text-sm text-zinc-900">Studio objects</span>
           </div>
 
           <div onclick="document.querySelector('#sheet').enabled = true">
-            <Button variant="outline" size="sm">Filters</Button>
+            <Button variant="outline" size="sm">
+              Filters
+            </Button>
           </div>
         </div>
 
@@ -315,9 +319,13 @@ export const LandingPage = {
         <Sheet>
           <div class="flex flex-col gap-5">
             <div class="flex items-center justify-between">
-              <span class="font-medium text-sm uppercase tracking-[0.16em] text-zinc-500">Filters</span>
+              <span class="font-medium text-sm text-zinc-500 uppercase tracking-[0.16em]">
+                Filters
+              </span>
               <div onclick="document.querySelector('#sheet').enabled = false">
-                <Button variant="ghost" size="sm">Close</Button>
+                <Button variant="ghost" size="sm">
+                  Close
+                </Button>
               </div>
             </div>
 
@@ -331,7 +339,7 @@ export const LandingPage = {
             </div>
 
             <div class="grid gap-2">
-              <span class="text-xs uppercase tracking-[0.16em] text-zinc-400">Price</span>
+              <span class="text-xs text-zinc-400 uppercase tracking-[0.16em]">Price</span>
               <div class="h-2 bg-zinc-100" />
               <div class="flex justify-between text-xs text-zinc-500">
                 <span>50</span>
