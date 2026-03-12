@@ -202,39 +202,39 @@ export const _StripSnappingAtTheEnd: Story = {
 
 export const landingpage = {
   render: () => (
-    <div class="p-4 flex justify-center items-center h-full">
+    <div class="flex h-full items-center justify-center p-4">
       <Carousel>
-        <a href="/" class="block flex-none p-2 w-1/3">
+        <a href="/" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full object-cover"
           />
         </a>
-        <a href="/" class="block flex-none p-2 w-1/3">
+        <a href="/" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full object-cover"
           />
         </a>
-        <a href="/" class="block flex-none p-2 w-1/3">
+        <a href="/" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full object-cover"
           />
         </a>
-        <a href="/" class="block flex-none p-2 w-1/3">
+        <a href="/" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full object-cover"
           />
         </a>
-        <a href="/" class="block flex-none p-2 w-1/3">
+        <a href="/" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full object-cover"
           />
         </a>
-        <a href="/" class="block flex-none p-2 w-1/3">
+        <a href="/" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full object-cover"
