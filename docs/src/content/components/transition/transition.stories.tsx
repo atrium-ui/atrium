@@ -129,7 +129,7 @@ export const LandingPage = {
     );
 
     return () => (
-      <div class="flex h-full w-full flex-col gap-3 p-4">
+      <div class="flex h-full w-full flex-col gap-3 p-3">
         <div class="flex flex-wrap gap-2">
           {tags.map((tag) => (
             <button

@@ -199,3 +199,48 @@ export const _StripSnappingAtTheEnd: Story = {
     `;
   },
 };
+
+export const landingpage = {
+  render: () => (
+    <div class="p-4 flex justify-center items-center h-full">
+      <Carousel>
+        <a href="/" class="block flex-none p-2 w-1/3">
+          <Image
+            src={`${import.meta.env.BASE_URL}placeholder.svg`}
+            class="aspect-square w-full object-cover"
+          />
+        </a>
+        <a href="/" class="block flex-none p-2 w-1/3">
+          <Image
+            src={`${import.meta.env.BASE_URL}placeholder.svg`}
+            class="aspect-square w-full object-cover"
+          />
+        </a>
+        <a href="/" class="block flex-none p-2 w-1/3">
+          <Image
+            src={`${import.meta.env.BASE_URL}placeholder.svg`}
+            class="aspect-square w-full object-cover"
+          />
+        </a>
+        <a href="/" class="block flex-none p-2 w-1/3">
+          <Image
+            src={`${import.meta.env.BASE_URL}placeholder.svg`}
+            class="aspect-square w-full object-cover"
+          />
+        </a>
+        <a href="/" class="block flex-none p-2 w-1/3">
+          <Image
+            src={`${import.meta.env.BASE_URL}placeholder.svg`}
+            class="aspect-square w-full object-cover"
+          />
+        </a>
+        <a href="/" class="block flex-none p-2 w-1/3">
+          <Image
+            src={`${import.meta.env.BASE_URL}placeholder.svg`}
+            class="aspect-square w-full object-cover"
+          />
+        </a>
+      </Carousel>
+    </div>
+  ),
+};

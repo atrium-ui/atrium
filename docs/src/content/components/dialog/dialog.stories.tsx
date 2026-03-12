@@ -109,7 +109,7 @@ export const FormDialog = {
 
 export const LandingPage = {
   render: () => (
-    <div class="flex h-full items-start px-8 py-7">
+    <div class="flex h-full items-center px-8 py-7">
       <div class="grid w-full content-start gap-6 bg-white">
         <div class="flex gap-6">
           <div class="w-[250px] rounded-md border border-zinc-200 bg-white p-3">

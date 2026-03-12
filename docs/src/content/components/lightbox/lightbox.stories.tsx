@@ -63,20 +63,20 @@ export const LandingPage = {
         <div class="grid h-full content-start gap-2">
           {[
             [
-              "Maya Chen",
-              "This crop works. We should check the image at full size before approving the final placement.",
-              "Now",
-            ],
-            [
               "Alex Rivera",
               "Open this attachment from the thread and compare the edges against the mobile breakpoints.",
               "2 min ago",
             ],
             [
-              "Jordan Lee",
-              "Looks great — let's finalize the crop and upload the optimized file.",
-              "5 min ago",
+              "Maya Chen",
+              "This crop works. We should check the image at full size before approving the final placement.",
+              "Now",
             ],
+            // [
+            //   "Jordan Lee",
+            //   "Looks great — let's finalize the crop and upload the optimized file.",
+            //   "5 min ago",
+            // ],
           ].map(([name, body, time], index) => (
             <div key={`${name}-${time}-${index}`} class="flex gap-2 py-3">
               <div class="h-8 w-8 flex-none rounded-full bg-zinc-200" />
@@ -89,12 +89,12 @@ export const LandingPage = {
                 </div>
                 <p
                   class={
-                    index === 1 ? "mb-3 text-sm text-zinc-600" : "text-sm text-zinc-600"
+                    index === 0 ? "mb-3 text-sm text-zinc-600" : "text-sm text-zinc-600"
                   }
                 >
                   {body}
                 </p>
-                {index === 1 && (
+                {index === 0 && (
                   <Lightbox>
                     <img
                       src="https://picsum.photos/id/12/1280/720"
