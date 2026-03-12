@@ -331,7 +331,7 @@ export const LandingPage = {
 
             <div class="grid gap-2">
               {["New arrivals", "Lighting", "Furniture", "Objects"].map((item) => (
-                <label class="flex items-center gap-2 text-sm text-zinc-700">
+                <label key={item} class="flex items-center gap-2 text-sm text-zinc-700">
                   <input type="checkbox" class="h-4 w-4 rounded border-zinc-300" />
                   <span>{item}</span>
                 </label>

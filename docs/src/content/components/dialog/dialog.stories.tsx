@@ -210,7 +210,10 @@ export const LandingPage = {
                 ["Alex Rivera", "Can edit launch deck", "Pending", "text-zinc-500"],
                 ["Priya Patel", "Comment access for notes", "Queued", "text-zinc-500"],
               ].map(([name, role, status, color]) => (
-                <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 border border-zinc-200 bg-white px-3 py-2">
+                <div
+                  key={name}
+                  class="grid grid-cols-[auto_1fr_auto] items-center gap-3 border border-zinc-200 bg-white px-3 py-2"
+                >
                   <div class="h-8 w-8 flex-none rounded-full bg-zinc-200" />
                   <div>
                     <div class="text-sm text-zinc-800">{name}</div>

@@ -169,7 +169,11 @@ export class Lightbox extends LitElement {
   public onStageClick = (event: MouseEvent) => {
     event.stopPropagation();
 
-    if (this.matchesAssignedPath(event.composedPath(), this.closeElements)) {
+    const path = event
+      .composedPath()
+      .filter((target): target is EventTarget => target !== undefined);
+
+    if (this.matchesAssignedPath(path, this.closeElements)) {
       void this.hide();
     }
   };
@@ -214,12 +218,12 @@ export class Lightbox extends LitElement {
 
     this.moveElements(
       this.sourceContentElements,
-      this.contentMount,
+      this.contentMount ?? undefined,
       "a-lightbox content mount",
     );
     this.moveElements(
       this.sourceCloseElements,
-      this.closeMount,
+      this.closeMount ?? undefined,
       "a-lightbox close mount",
     );
   }

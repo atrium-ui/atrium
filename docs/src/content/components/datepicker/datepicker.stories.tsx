@@ -215,7 +215,10 @@ export const LandingPage = {
 
             <div class="grid grid-cols-3 gap-2">
               {["Brief", "QA", "Launch"].map((slot) => (
-                <div class="border border-zinc-200 px-3 py-2 text-center text-xs text-zinc-600 uppercase tracking-[0.16em]">
+                <div
+                  key={slot}
+                  class="border border-zinc-200 px-3 py-2 text-center text-xs text-zinc-600 uppercase tracking-[0.16em]"
+                >
                   {slot}
                 </div>
               ))}

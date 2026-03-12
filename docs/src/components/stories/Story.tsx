@@ -149,6 +149,7 @@ export function StoryFrame() {
             "h-8 w-8 animate-spin rounded-full border-2 border-zinc-200 border-t-zinc-900 transition-opacity duration-200",
             isLoading ? "opacity-100" : "opacity-0",
           )}
+          role="status"
           aria-label="Loading story"
         />
       </div>

@@ -78,7 +78,7 @@ export const LandingPage = {
               "5 min ago",
             ],
           ].map(([name, body, time], index) => (
-            <div class="flex gap-2 py-3">
+            <div key={`${name}-${time}-${index}`} class="flex gap-2 py-3">
               <div class="h-8 w-8 flex-none rounded-full bg-zinc-200" />
               <div>
                 <div class="my-1.5 grid grid-cols-[auto_1fr_auto] items-center gap-3">

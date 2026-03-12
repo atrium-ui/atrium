@@ -10,7 +10,7 @@
     ],
     "paths": {
       "@sv/elements/*": [
-        "./packages/*/dist/index.js"
+        "./packages/*/src/index.ts"
       ]
     }
   },
