@@ -21,7 +21,7 @@ export class Accordion {}
   imports: [CommonModule],
   template: `
     <li>
-      <a-expandable class="group block rounded-md bg-gray-100" [attr.opened]="opened || null">
+      <a-expandable class="group block rounded-md" [attr.opened]="opened || null">
         <button
           slot="toggle"
           type="button"

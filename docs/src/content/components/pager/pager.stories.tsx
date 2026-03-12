@@ -29,3 +29,13 @@ export const ManyPages = {
     </div>
   ),
 };
+
+export const LandingPage = {
+  render: () => (
+    <div class="flex h-full items-center justify-center p-3">
+      <div class="flex justify-center">
+        <Pager count={12} page={4} />
+      </div>
+    </div>
+  ),
+};

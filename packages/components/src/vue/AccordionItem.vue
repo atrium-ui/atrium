@@ -10,7 +10,7 @@ defineProps<{
 
 <template>
   <li>
-    <a-expandable class="group block rounded-md bg-gray-100" :opened="opened">
+    <a-expandable class="group block rounded-md" :opened="opened">
       <button
         slot="toggle"
         type="button"

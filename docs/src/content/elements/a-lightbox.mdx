@@ -1,0 +1,136 @@
+---
+title: a-lightbox
+description: A slot-based image lightbox element with built-in overlay behavior and shared image transitions via the View Transitions API.
+command: import "@sv/elements/lightbox";
+order: 0
+---
+
+import { TypeDoc } from "package:/components"
+
+The `a-lightbox` element turns a trigger image into a modal image viewer. It owns the overlay state, scroll locking, focus management, Escape handling, and the transition between the trigger image and the enlarged image.
+
+<div class="not-content box">
+  <a-lightbox>
+    <button
+      slot="trigger"
+      type="button"
+      class="m-0 block cursor-pointer overflow-hidden rounded-md border border-zinc-200 bg-transparent p-0"
+    >
+      <img
+        src="https://picsum.photos/id/12/320/180"
+        alt="Forest path between tall trees"
+        class="block h-auto w-full max-w-[320px] object-cover"
+      />
+    </button>
+
+    <div slot="content" class="flex max-h-[95vh] max-w-[95vw] items-center justify-center">
+      <img
+        src="https://picsum.photos/id/12/1280/720"
+        alt="Forest path between tall trees"
+        class="block max-h-[95vh] max-w-[95vw] object-contain"
+      />
+    </div>
+
+    <button
+      slot="close"
+      type="button"
+      class="rounded-md bg-white/90 px-3 py-2 text-sm font-medium text-zinc-900 shadow-sm"
+    >
+      Close
+    </button>
+  </a-lightbox>
+</div>
+
+## Featured example
+
+```html
+<a-lightbox>
+  <button slot="trigger" type="button">
+    <img src="/images/thumb.jpg" alt="Gallery preview" />
+  </button>
+
+  <div slot="content">
+    <img src="/images/large.jpg" alt="Gallery preview" />
+  </div>
+
+  <button slot="close" type="button">
+    Close
+  </button>
+</a-lightbox>
+```
+
+The element requires an `<img>` in the `trigger` slot and an `<img>` in the `content` slot. It uses those two images as the shared transition endpoints.
+
+## Accessibility features
+
+- Focus moves into the lightbox when it opens and returns to the previously focused element when it closes.
+- Pressing `Escape` closes the overlay.
+- The overlay uses `role="dialog"` and `aria-modal="true"`.
+- The trigger receives `aria-haspopup="dialog"` and an updated `aria-expanded` state.
+- The trigger image and enlarged image should use meaningful `alt` text when the image content is important.
+
+## How to use it with examples
+
+### Programmatic control
+
+```ts
+import "@sv/elements/lightbox";
+
+const lightbox = document.querySelector("a-lightbox");
+
+await lightbox.show();
+await lightbox.hide();
+lightbox.toggle();
+```
+
+### Styling slotted content
+
+```css
+[slot="content"] img {
+  max-width: 96vw;
+  max-height: 96vh;
+  object-fit: contain;
+}
+
+[slot="close"] button {
+  border-radius: 0.5rem;
+  background: rgb(255 255 255 / 0.9);
+  padding: 0.5rem 0.75rem;
+}
+```
+
+### Using custom close content
+
+```html
+<a-lightbox>
+  <button slot="trigger" type="button">
+    <img src="/thumb.jpg" alt="Preview" />
+  </button>
+
+  <div slot="content">
+    <img src="/large.jpg" alt="Preview" />
+  </div>
+
+  <div slot="close">
+    <button type="button" aria-label="Close image viewer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><!-- icon --></svg>
+    </button>
+  </div>
+</a-lightbox>
+```
+
+## Customization options
+
+- Use the `trigger`, `content`, and `close` slots to provide your own markup.
+- Style the trigger, content, and close markup directly in the nodes you pass into those slots.
+- Call `show()`, `hide()`, or `toggle()` for programmatic control.
+- The element requires `document.startViewTransition()`. It throws instead of falling back when the API is unavailable.
+
+## Type Documentation
+
+<TypeDoc source="../packages/elements/packages/lightbox" symbol="Lightbox" />
+
+## References
+
+- [View Transitions API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API)
+- [WAI-ARIA Dialog (Modal) Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialogmodal/)

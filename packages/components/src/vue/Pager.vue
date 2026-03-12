@@ -58,7 +58,7 @@ function onPageChange(e: Event) {
   min-width: 2rem;
   padding: calc(0.5rem - 1px) calc(1rem - 1px);
   border-radius: 0.375rem;
-  border: 1px solid var(--color-blue-300, #93c5fd);
+  border: 1px solid var(--color-gray-300);
   background: transparent;
   color: inherit;
   font-size: inherit;
@@ -68,19 +68,19 @@ function onPageChange(e: Event) {
 }
 
 .pager-sv::part(page):hover {
-  background: var(--color-blue-200, #bfdbfe);
-  color: white;
+  background: var(--color-gray-100);
+  color: var(--color-gray-900);
 }
 
 .pager-sv::part(page active) {
-  background: var(--color-blue-400, #60a5fa);
-  border-color: var(--color-blue-400, #60a5fa);
+  background: var(--color-gray-900);
+  border-color: var(--color-gray-900);
   color: white;
 }
 
 .pager-sv::part(ellipsis) {
   min-width: 2rem;
   text-align: center;
-  color: var(--color-gray-300, #d1d5db);
+  color: var(--color-gray-300);
 }
 </style>

@@ -116,3 +116,56 @@ export const TaskList = {
     );
   },
 };
+
+export const LandingPage = {
+  render: () => {
+    const filter = ref("all");
+    const tags = ["all", "bug", "feature"];
+    const featuredTasks = TASKS.filter((task) => tags.includes(task.tag));
+    const filtered = computed(() =>
+      filter.value === "all"
+        ? featuredTasks
+        : featuredTasks.filter((task) => task.tag === filter.value),
+    );
+
+    return () => (
+      <div class="flex h-full w-full flex-col gap-3 p-4">
+        <div class="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <button
+              type="button"
+              key={tag}
+              onClick={() => {
+                filter.value = tag;
+              }}
+              class={`rounded-md border px-2.5 py-1 text-[10px] uppercase tracking-[0.18em] transition-colors ${
+                filter.value === tag
+                  ? "border-zinc-900 bg-zinc-900 text-white"
+                  : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-400"
+              }`}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+
+        <a-transition animate-enter animate-exit style="transition-duration: 260ms;">
+          {filtered.value.slice(0, 3).map((task) => (
+            <div
+              key={task.id}
+              data-key={task.id}
+              class="mb-2 grid grid-cols-[1fr_auto] items-center gap-3 border border-zinc-200 bg-white px-3 py-2.5"
+            >
+              <span class="text-sm text-zinc-800">{task.title}</span>
+              <span
+                class={`px-2 py-1 font-medium text-[10px] uppercase tracking-[0.16em] ${TAG_COLORS[task.tag]}`}
+              >
+                {task.tag}
+              </span>
+            </div>
+          ))}
+        </a-transition>
+      </div>
+    );
+  },
+};

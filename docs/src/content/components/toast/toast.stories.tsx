@@ -31,3 +31,35 @@ export const Default = {
     );
   },
 };
+
+export const LandingPage = {
+  render: () => {
+    return (
+      <div class="flex min-h-[220px] items-end justify-start p-4">
+        <div class="w-full max-w-xs border border-zinc-200 bg-white p-3">
+          <div class="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.16em] text-zinc-400">
+            <span>Toast</span>
+            <button
+              type="button"
+              class="border border-zinc-200 px-2 py-1 text-zinc-600"
+              onClick={() => {
+                toast({
+                  message: paragraph(1),
+                  time: 4000,
+                });
+              }}
+            >
+              Trigger
+            </button>
+          </div>
+
+          <p class="text-sm text-zinc-600">
+            Trigger a lightweight notification stack from inside the tile.
+          </p>
+        </div>
+
+        <Toasts />
+      </div>
+    );
+  },
+};

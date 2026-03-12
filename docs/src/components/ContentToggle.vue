@@ -67,7 +67,7 @@ watch(
 
 <template>
     <div class="content-toggle-wrapper">
-        <div class="inline-flex bg-(--style-fill-grey-active) rounded-full p-1 md:-ml-2 cursor-pointer gap-1"
+        <div class="inline-flex bg-(--style-fill-gray-active) rounded-full p-1 md:-ml-2 cursor-pointer gap-1"
             @click="handleToggle">
             <input :id="`${id}-left`" type="radio" :name="id" :checked="selectedSide === 'left'"
                 class="peer/left hidden" />

@@ -286,7 +286,7 @@ export class Tooltip extends Popover {
     ele.style.position = "fixed";
     ele.style.top = "0px";
     ele.style.left = "0px";
-    ele.style.zIndex = "10000000";
+    ele.style.zIndex = "40";
     ele.className = this.className;
     ele.dataset.portal = this.portalId;
     ele.setAttribute("tooltip", "");

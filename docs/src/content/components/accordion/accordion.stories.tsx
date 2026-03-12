@@ -88,3 +88,34 @@ export const Opened: Story = {
     );
   },
 };
+
+export const LandingPage: Story = {
+  render: () => {
+    return (
+      <div class="h-full p-4">
+        <Accordion>
+          <AccordionItem
+            opened
+            class="block border border-zinc-200 bg-white"
+            title="Shipping options"
+          >
+            <p class="text-sm text-zinc-600">
+              Express delivery in 2 days, studio pickup tomorrow, or standard shipping
+              within the week.
+            </p>
+          </AccordionItem>
+          <AccordionItem class="block border border-zinc-200 bg-white" title="Materials">
+            <p class="text-sm text-zinc-600">
+              Oak veneer, powder-coated steel, and machine-washable textile covers.
+            </p>
+          </AccordionItem>
+          <AccordionItem class="block border border-zinc-200 bg-white" title="Care">
+            <p class="text-sm text-zinc-600">
+              Wipe surfaces dry and avoid direct sunlight for prolonged periods.
+            </p>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    );
+  },
+};

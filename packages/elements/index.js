@@ -8,6 +8,7 @@ import "@sv/elements/time";
 import "@sv/elements/range";
 import "@sv/elements/toast";
 import "@sv/elements/form";
+import "@sv/elements/lightbox";
 import "@sv/elements/portal";
 import "@sv/elements/transition";
 import "@sv/elements/select";

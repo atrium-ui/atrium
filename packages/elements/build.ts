@@ -26,6 +26,7 @@ await Promise.all([
   // buildLib("./packages/chart"),
   buildLib("./packages/expandable"),
   buildLib("./packages/form"),
+  buildLib("./packages/lightbox"),
   buildLib("./packages/list"),
   buildLib("./packages/loader"),
   buildLib("./packages/popover"),

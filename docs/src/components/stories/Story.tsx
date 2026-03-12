@@ -8,19 +8,24 @@ import { twMerge } from "tailwind-merge";
 export function StoryFrame() {
   const searchParams = useMemo(() => new URLSearchParams(location.search), []);
   const currentStoryId = searchParams?.get("id");
+  const fill = searchParams?.has("fill");
 
   const [story, setStory] = useState<Story | null | undefined>();
   const [variant, setVariant] = useState<Story>();
   const [renderer, setRenderer] = useState<string>();
   const [layout, setLayout] = useState("default");
   const [globals, setGlobals] = useState<Story["globals"]>({});
+  const [loaded, setLoaded] = useState(false);
 
   const [reactRoot, setReactRoot] = useState<ReactRoot>();
   const vueApp = useRef<VueApp | null>(null);
 
   const rootRef = useRef<HTMLDivElement>(null);
+  const isLoading = story === undefined && Boolean(currentStoryId);
 
   useEffect(() => {
+    setLoaded(false);
+
     if (currentStoryId) {
       const id = currentStoryId.split("--")[0];
       const variant = currentStoryId.split("--")[1];
@@ -105,27 +110,48 @@ export function StoryFrame() {
       console.warn("No render function found on story", currentStoryId);
     }
 
-    window.dispatchEvent(new Event("story.loaded"));
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setLoaded(true);
+        window.dispatchEvent(new Event("story.loaded"));
+      });
+    });
+
   }, [story, variant, currentStoryId, reactRoot, searchParams]);
 
   return (
-    <div data-story-renderer={renderer}>
+    <div
+      data-story-renderer={renderer}
+      className={twMerge(fill ? "h-full" : "min-h-64", "relative")}
+    >
       <div
         className={twMerge(
-          `story-root overflow-hidden p-0 story-layout-${layout}`,
+          `story-root ${fill ? "h-full" : "min-h-64"} overflow-hidden p-0 story-layout-${layout} transition-opacity duration-300`,
+          loaded ? "opacity-100" : "opacity-0",
           globals.theme ? `fra-context-background fra-context-${globals.theme}` : "",
         )}
         ref={rootRef}
       >
-        {story === undefined && currentStoryId ? (
-          <div className="flex h-screen w-full flex-col items-center justify-center opacity-50">
-            Loading...
-          </div>
-        ) : story === null && currentStoryId ? (
+        {story === null && currentStoryId ? (
           <pre className="flex h-fill w-full flex-col items-center justify-center text-red-500 opacity-50">
             Story not found "{currentStoryId}"
           </pre>
         ) : null}
+      </div>
+
+      <div
+        className={twMerge(
+          "pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-200",
+          isLoading ? "opacity-100" : "opacity-0",
+        )}
+      >
+        <div
+          className={twMerge(
+            "h-8 w-8 animate-spin rounded-full border-2 border-zinc-200 border-t-zinc-900 transition-opacity duration-200",
+            isLoading ? "opacity-100" : "opacity-0",
+          )}
+          aria-label="Loading story"
+        />
       </div>
     </div>
   );

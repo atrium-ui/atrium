@@ -228,3 +228,52 @@ export const SettingsPanel = {
     );
   },
 };
+
+export const LandingPage = {
+  render: () => {
+    return (
+      <div class="h-full p-3">
+        <div class="grid h-full content-start gap-3 border border-zinc-200 bg-white p-3">
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="mb-1 text-[10px] uppercase tracking-[0.2em] text-zinc-400">Dropdown</div>
+              <div class="text-sm text-zinc-700">Switch between compact workspace presets.</div>
+            </div>
+
+            <a-popover-trigger class="w-auto">
+              <button
+                slot="trigger"
+                type="button"
+                class="border border-zinc-200 px-3 py-2 text-xs uppercase tracking-[0.16em] text-zinc-600"
+              >
+                Preset
+              </button>
+
+              <a-popover class="group">
+                <div class="my-1 inline-block border border-zinc-200 bg-white opacity-0 transition-opacity group-[&[enabled]]:opacity-100">
+                  <a-list class="w-[12rem] bg-white">
+                    {["Overview", "Assets"].map((item, index) => (
+                      <a-list-item key={index}>
+                        <button
+                          type="button"
+                          class="block w-full px-4 py-2 text-left text-sm text-zinc-700 hover:bg-zinc-100"
+                        >
+                          {item}
+                        </button>
+                      </a-list-item>
+                    ))}
+                  </a-list>
+                </div>
+              </a-popover>
+            </a-popover-trigger>
+          </div>
+
+          <div class="grid gap-2">
+            <div class="h-9 border border-zinc-200 bg-zinc-50" />
+            <div class="h-9 border border-zinc-200 bg-zinc-50" />
+          </div>
+        </div>
+      </div>
+    );
+  },
+};

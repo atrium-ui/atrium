@@ -44,3 +44,39 @@ export const Tooltip = {
     );
   },
 };
+
+export const LandingPage = {
+  render: () => {
+    return (
+      <div class="h-full p-4">
+        <div class="grid h-full content-start gap-4 border border-zinc-200 bg-white p-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="mb-1 text-[10px] uppercase tracking-[0.2em] text-zinc-400">Popover</div>
+              <div class="text-sm text-zinc-700">Attach tools and context to nearby controls.</div>
+            </div>
+
+            <Popover label="Actions">
+              <div class="grid min-w-[12rem] gap-2 p-3">
+                <button type="button" class="border border-zinc-200 px-3 py-2 text-left text-sm text-zinc-700">
+                  Duplicate block
+                </button>
+                <button type="button" class="border border-zinc-200 px-3 py-2 text-left text-sm text-zinc-700">
+                  Assign owner
+                </button>
+                <button type="button" class="border border-zinc-200 px-3 py-2 text-left text-sm text-zinc-700">
+                  Move to draft
+                </button>
+              </div>
+            </Popover>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div class="h-16 border border-zinc-200 bg-zinc-50" />
+            <div class="h-16 border border-zinc-200 bg-zinc-50" />
+          </div>
+        </div>
+      </div>
+    );
+  },
+};

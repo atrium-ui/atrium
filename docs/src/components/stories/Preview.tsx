@@ -38,10 +38,11 @@ export function StoryCanvas(props: { id: string; params: string }) {
     frameRef.current.appendChild(iframe);
     iframe.style.height = "100%";
     iframe.style.width = "100%";
+    iframe.style.minHeight = "16rem";
   }, [iframe]);
 
   return (
-    <div className="relative h-full min-h-40">
+    <div className="relative h-full min-h-64">
       <div className="absolute bottom-0 left-full">
         <div className="flex flex-col gap-module-xl px-6 py-2">
           <a

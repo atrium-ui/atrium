@@ -65,7 +65,7 @@ export class Portal extends (globalThis.HTMLElement || class {}) {
     ele.style.position = "fixed";
     ele.style.top = "0px";
     ele.style.left = "0px";
-    ele.style.zIndex = "10000000";
+    ele.style.zIndex = "40";
     return ele;
   }
 

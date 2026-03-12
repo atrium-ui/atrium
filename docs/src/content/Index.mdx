@@ -5,9 +5,10 @@ description: Copy-paste components you own. Framework-agnostic custom elements u
 
 import { Code } from "astro:components";
 import { Command } from "../components";
+import LatestComponentsBento from "../components/home/LatestComponentsBento.astro";
 
 
-<section class="aspect-2/1 max-w-[1400px] mx-auto overflow-visible px-6 mt-6">
+<section class="aspect-2/1 max-w-[1400px] mx-auto overflow-visible px-6 mt-module-2xl">
 
   <div
       class="aspect-4/1 relative flex justify-end items-center flex-col text-center pt-10"
@@ -21,7 +22,7 @@ import { Command } from "../components";
         class="flex items-center gap-2 border border-gray-200 rounded-full px-4 py-1.5 text-sm text-gray-600 mb-10"
     >
         <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
-        v4.6.0 — Adds Tabs Elements
+        v4.8.0 — Layout Transition Element
     </div>
 
     <h1
@@ -54,64 +55,7 @@ import { Command } from "../components";
   </div>
 </section>
 
-<section className="pb-20 max-w-[1400px] mx-auto">
-  <div className="flex flex-col items-center text-center gap-module-xl mb-module-2xl">
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 lg:px-module-2xl">
-      <a className="home-card" href={`${import.meta.env.BASE_URL}components/accordion`}>
-        <a-animation
-          src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
-          autoplay
-          height={200}
-          width={320}
-          loop
-          className="w-full h-auto"
-          layout="contain"
-          artboard="Accordion"
-        ></a-animation>
-        <span className="sr-only">Accordion</span>
-      </a>
-      <a className="home-card" href={`${import.meta.env.BASE_URL}components/dialog`}>
-        <a-animation
-          src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
-          autoplay
-          height={200}
-          width={320}
-          loop
-          className="w-full h-auto"
-          layout="contain"
-          artboard="Dialog"
-        ></a-animation>
-        <span className="sr-only">Dialog</span>
-      </a>
-      <a className="home-card" href={`${import.meta.env.BASE_URL}components/popover`}>
-        <a-animation
-          src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
-          autoplay
-          height={200}
-          width={320}
-          loop
-          className="w-full h-auto"
-          layout="contain"
-          artboard="Popover"
-        ></a-animation>
-        <span className="sr-only">Popover</span>
-      </a>
-      <a className="home-card" href={`${import.meta.env.BASE_URL}components/carousel`}>
-        <a-animation
-          src={`${import.meta.env.BASE_URL}animation/atrium_components.riv`}
-          autoplay
-          height={200}
-          width={320}
-          loop
-          className="w-full h-auto"
-          layout="contain"
-          artboard="Slider"
-        ></a-animation>
-        <span className="sr-only">Carousel</span>
-      </a>
-    </div>
-  </div>
-</section>
+<LatestComponentsBento />
 
 <section className="pb-module-8xl">
   <h2 className="typo-title-2 text-center pb-module-3xl">Why Atrium?</h2>

@@ -92,3 +92,48 @@ export const ManyTabs = {
     );
   },
 };
+
+export const LandingPage = {
+  render: () => {
+    return (
+      <div class="h-full p-4">
+        <a-tabs class="block h-full w-full border border-zinc-200 bg-white">
+          <a-tabs-list
+            class="border-b border-zinc-200 bg-white"
+            label="Landing page tabs"
+          >
+            <a-tabs-tab class="cursor-pointer border-r border-zinc-200 px-4 py-3 text-xs uppercase tracking-[0.16em] text-zinc-500 transition-colors hover:bg-zinc-50 [&[selected]]:bg-zinc-900 [&[selected]]:text-white">
+              Specs
+            </a-tabs-tab>
+            <a-tabs-tab class="cursor-pointer border-r border-zinc-200 px-4 py-3 text-xs uppercase tracking-[0.16em] text-zinc-500 transition-colors hover:bg-zinc-50 [&[selected]]:bg-zinc-900 [&[selected]]:text-white">
+              Notes
+            </a-tabs-tab>
+            <a-tabs-tab class="cursor-pointer px-4 py-3 text-xs uppercase tracking-[0.16em] text-zinc-500 transition-colors hover:bg-zinc-50 [&[selected]]:bg-zinc-900 [&[selected]]:text-white">
+              Files
+            </a-tabs-tab>
+          </a-tabs-list>
+
+          <a-tabs-panel class="block">
+            <div class="grid gap-3 p-4 text-sm text-zinc-600">
+              <div class="flex justify-between border border-zinc-200 px-3 py-2"><span>Variant</span><span>Compact</span></div>
+              <div class="flex justify-between border border-zinc-200 px-3 py-2"><span>Theme</span><span>Neutral</span></div>
+            </div>
+          </a-tabs-panel>
+
+          <a-tabs-panel class="block">
+            <div class="p-4 text-sm text-zinc-600">
+              Focused panels keep dense content grouped without leaving the page.
+            </div>
+          </a-tabs-panel>
+
+          <a-tabs-panel class="block">
+            <div class="grid gap-2 p-4">
+              <div class="h-8 border border-zinc-200 bg-zinc-50" />
+              <div class="h-8 border border-zinc-200 bg-zinc-50" />
+            </div>
+          </a-tabs-panel>
+        </a-tabs>
+      </div>
+    );
+  },
+};

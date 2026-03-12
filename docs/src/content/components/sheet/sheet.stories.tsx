@@ -286,3 +286,61 @@ export const FilterPanel = {
     );
   },
 };
+
+export const LandingPage = {
+  render: () => {
+    return (
+      <div class="min-h-[320px] w-full bg-stone-50">
+        <div class="flex items-center justify-between border-b border-zinc-200 bg-white px-4 py-3">
+          <div class="flex flex-col gap-1">
+            <span class="text-[10px] uppercase tracking-[0.24em] text-zinc-400">Collection</span>
+            <span class="font-medium text-sm text-zinc-900">Studio objects</span>
+          </div>
+
+          <div onclick="document.querySelector('#sheet').enabled = true">
+            <Button variant="outline" size="sm">Filters</Button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 p-4">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} class="aspect-square border border-zinc-200 bg-white p-3">
+              <div class="mb-3 aspect-square bg-zinc-100" />
+              <div class="mb-2 h-3 w-3/4 bg-zinc-300" />
+              <div class="h-3 w-1/2 bg-zinc-100" />
+            </div>
+          ))}
+        </div>
+
+        <Sheet>
+          <div class="flex flex-col gap-5">
+            <div class="flex items-center justify-between">
+              <span class="font-medium text-sm uppercase tracking-[0.16em] text-zinc-500">Filters</span>
+              <div onclick="document.querySelector('#sheet').enabled = false">
+                <Button variant="ghost" size="sm">Close</Button>
+              </div>
+            </div>
+
+            <div class="grid gap-2">
+              {["New arrivals", "Lighting", "Furniture", "Objects"].map((item) => (
+                <label class="flex items-center gap-2 text-sm text-zinc-700">
+                  <input type="checkbox" class="h-4 w-4 rounded border-zinc-300" />
+                  <span>{item}</span>
+                </label>
+              ))}
+            </div>
+
+            <div class="grid gap-2">
+              <span class="text-xs uppercase tracking-[0.16em] text-zinc-400">Price</span>
+              <div class="h-2 bg-zinc-100" />
+              <div class="flex justify-between text-xs text-zinc-500">
+                <span>50</span>
+                <span>300</span>
+              </div>
+            </div>
+          </div>
+        </Sheet>
+      </div>
+    );
+  },
+};
