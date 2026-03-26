@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
-import type { Story } from "../../../components/stories/stories.js";
-import { Switch } from "@components/src/vue";
+import type { Story } from "@sv/astro-stories";
+import Switch from "@components/src/vue/Switch.vue";
 import { ref } from "vue";
 
 export default {

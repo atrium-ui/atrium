@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
-import type { Story } from "../../../components/stories/stories.js";
-import { Button } from "@components/src/vue";
-import { Toasts, toast } from "@components/src/vue";
+import type { Story } from "@sv/astro-stories";
+import Button from "@components/src/vue/Button.vue";
+import Toasts, { toast } from "@components/src/vue/Toasts.vue";
 import { paragraph } from "txtgen";
 
 export default {

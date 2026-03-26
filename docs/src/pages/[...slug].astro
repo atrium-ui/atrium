@@ -2,21 +2,12 @@
 import { getEntry } from "astro:content";
 import { getCollection, render } from "astro:content";
 import Layout from "../layout.astro";
-import SideMenu from "../components/SideMenu.astro";
 import {
   Git,
-  Accessibility,
-  Atrium,
-  Rive,
-  Lit,
-  Vue,
-  Elements,
   Headings,
   Tags,
 } from "package:/components";
 import { Code } from "astro:components";
-import StoryNav from "../components/stories/Nav.astro";
-import { Preview } from "../components/stories/Preview.js";
 import Sidebar from "../components/Sidebar.astro";
 
 export async function getStaticPaths() {
@@ -92,11 +83,6 @@ const base = import.meta.env.BASE_URL;
           </a-overlay-trigger>
         </div>
       </div>
-
-      <div class="relative my-module-3xl">
-        <Preview client:only="react" />
-      </div>
-
       <Headings headings={headings} />
 
       <div class="border-b-1 border-gray-200 pb-module-s mb-module-xl"></div>
@@ -111,9 +97,6 @@ const base = import.meta.env.BASE_URL;
 
             <div class="typo-info font-bold mb-module-m mt-module-2xl">Usage</div>
             {entry.data.command ? <Code lang="sh" code={entry.data.command} /> : ""}
-
-            <div class="typo-info font-bold mb-module-m mt-module-2xl">Variants</div>
-            <StoryNav />
           </aside>
         ) : null
       }

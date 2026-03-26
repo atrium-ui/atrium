@@ -7,6 +7,7 @@ interval: "50ms"
 vars:
   PACKAGES:
     [
+      "packages/astro-stories",
       "packages/a11y",
       "packages/components",
       "packages/elements",

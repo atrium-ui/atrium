@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
-import type { Story } from "../../../components/stories/stories.js";
-import { Lightbox } from "@components/src/vue";
+import type { Story } from "@sv/astro-stories";
+import Lightbox from "@components/src/vue/Lightbox.vue";
 
 export default {
   tags: ["public"],

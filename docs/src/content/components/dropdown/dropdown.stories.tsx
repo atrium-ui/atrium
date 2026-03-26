@@ -1,5 +1,8 @@
 /* @jsxImportSource vue */
-import type { Story } from "../../../components/stories/stories.js";
+import type { Story } from "@sv/astro-stories";
+import "@sv/elements/box";
+import "@sv/elements/list";
+import "@sv/elements/popover";
 
 export default {
   tags: ["public"],

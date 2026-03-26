@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import type { Story } from "../../../components/stories/stories.js";
+import type { Story } from "@sv/astro-stories";
 import "@sv/elements/tabs";
 import "@sv/elements/track";
 

@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
-import type { Story } from "../../../components/stories/stories.js";
-import { Datepicker } from "@components/src/vue";
+import type { Story } from "@sv/astro-stories";
+import Datepicker from "@components/src/vue/Datepicker.vue";
 import { ref } from "vue";
 import "@sv/elements/calendar";
 

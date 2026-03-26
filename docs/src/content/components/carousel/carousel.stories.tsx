@@ -1,9 +1,10 @@
 /* @jsxImportSource vue */
 import { html } from "lit";
 import "./FraportCarousel.js";
-import type { Story } from "../../../components/stories/stories.js";
+import type { Story } from "@sv/astro-stories";
+import "@sv/elements/track";
 import { Image } from "package:/components/Image";
-import { Carousel } from "@components/src/vue";
+import Carousel from "@components/src/vue/Carousel.vue";
 
 export default {
   tags: ["public"],

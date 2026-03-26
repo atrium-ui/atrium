@@ -1,6 +1,7 @@
 /* @jsxImportSource vue */
-import type { Story } from "../../../components/stories/stories.js";
-import { Accordion, AccordionItem } from "@components/src/vue";
+import type { Story } from "@sv/astro-stories";
+import Accordion from "@components/src/vue/Accordion.vue";
+import AccordionItem from "@components/src/vue/AccordionItem.vue";
 
 export default {
   tags: ["public"],

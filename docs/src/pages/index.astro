@@ -3,20 +3,6 @@ import { getEntry } from "astro:content";
 import { getCollection, render } from "astro:content";
 import Layout from "../layout.astro";
 import Sidebar from "../components/Sidebar.astro";
-import {
-  Git,
-  Accessibility,
-  Atrium,
-  Rive,
-  Lit,
-  Vue,
-  Elements,
-  Headings,
-  Tags,
-} from "package:/components";
-import { Code } from "astro:components";
-import StoryNav from "../components/stories/Nav.astro";
-import { Preview } from "../components/stories/Preview.js";
 
 export async function getStaticPaths() {
   const allDocs = await getCollection("docs");

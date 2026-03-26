@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
-import type { Story } from "../../../components/stories/stories.js";
-import { Pager } from "@components/src/vue";
+import type { Story } from "@sv/astro-stories";
+import Pager from "@components/src/vue/Pager.vue";
 
 export default {
   tags: ["public"],

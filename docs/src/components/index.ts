@@ -14,4 +14,3 @@ export { default as Tags } from "./Tags.astro";
 export { default as TypeDoc } from "./TypeDoc.astro";
 
 export { default as Icon } from "./Icon.astro";
-export { Accordion, AccordionItem } from "@components/src/vue";

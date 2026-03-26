@@ -1,13 +1,26 @@
 import { LitElement, html, css } from "lit";
 import { property } from "lit/decorators.js";
 
-const resizeObserver = new ResizeObserver((entries) => {
-  for (const entry of entries) {
-    if (entry.target instanceof BoxElement) {
-      entry.target.resize();
-    }
+let resizeObserver: ResizeObserver | undefined;
+
+function getResizeObserver() {
+  if (resizeObserver) {
+    return resizeObserver;
   }
-});
+  if (!("ResizeObserver" in globalThis)) {
+    throw new Error("a-box requires ResizeObserver");
+  }
+
+  resizeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.target instanceof BoxElement) {
+        entry.target.resize();
+      }
+    }
+  });
+
+  return resizeObserver;
+}
 
 /**
  * An a-box element provides an interface to the resize events of a single element.
@@ -83,12 +96,12 @@ export class BoxElement extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    resizeObserver.observe(this);
+    getResizeObserver().observe(this);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    resizeObserver.unobserve(this);
+    resizeObserver?.unobserve(this);
   }
 
   static styles = css`

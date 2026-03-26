@@ -1,0 +1,67 @@
+---
+import { inlineStyles } from "virtual:astro-stories/config";
+import { StoryFrame } from "./StoryFrame";
+
+const baseStyles = `
+  :root {
+    color-scheme: light;
+  }
+
+  html,
+  body {
+    background: transparent;
+    margin: 0;
+    min-height: 100%;
+    padding: 0;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <style is:inline set:html={baseStyles}></style>
+    {inlineStyles ? <style is:inline set:html={inlineStyles}></style> : null}
+  </head>
+  <body>
+    <StoryFrame client:only="react" />
+
+    <script>
+      import "./setup";
+    </script>
+
+    <script type="module" is:inline>
+      const searchParams = new URLSearchParams(window.location.search);
+      const fill = searchParams.has("fill");
+
+      if (fill) {
+        document.documentElement.style.height = "100%";
+        document.documentElement.style.width = "100%";
+        document.body.style.height = "100%";
+        document.body.style.width = "100%";
+        document.body.style.overflow = "hidden";
+      }
+
+      new ResizeObserver(() => {
+        const height = document.body.scrollHeight;
+        if (!height) {
+          return;
+        }
+
+        parent.postMessage(
+          {
+            id: searchParams.get("id"),
+            height,
+          },
+          "*",
+        );
+      }).observe(document.body);
+    </script>
+  </body>
+</html>
