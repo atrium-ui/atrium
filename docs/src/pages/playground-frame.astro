@@ -1,0 +1,34 @@
+---
+// Minimal iframe page for the playground preview panel.
+// The playground injects user HTML into #root and appends a <script type="module">.
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://esm.sh/vue",
+          "lit": "https://esm.sh/lit"
+        }
+      }
+    </script>
+    <style is:inline>
+      html, body {
+        background: white;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      import "@sv/elements";
+      import "@tailwindcss/browser";
+    </script>
+  </body>
+</html>
