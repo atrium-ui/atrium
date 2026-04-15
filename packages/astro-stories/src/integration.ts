@@ -1,5 +1,5 @@
 import { fileURLToPath } from "node:url";
-import { astroStoriesPlugin } from "./plugin";
+import { astroStoriesPlugin } from "./plugin.js";
 
 export type AstroStoriesOptions = {
   route?: `/${string}`;

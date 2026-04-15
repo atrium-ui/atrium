@@ -1,4 +1,4 @@
-import type { Story, StoryArgType, StoryArgValue, StoryModule } from "../story";
+import type { Story, StoryArgType, StoryArgValue, StoryModule } from "../story.js";
 
 export type ControlItem = {
   description?: string;
@@ -15,7 +15,10 @@ export type ResolvedStory = {
   variantId?: string;
 };
 
-function getControlType(argType: StoryArgType | undefined, value: StoryArgValue | undefined) {
+function getControlType(
+  argType: StoryArgType | undefined,
+  value: StoryArgValue | undefined,
+) {
   return argType?.control?.type ?? typeof value ?? "string";
 }
 

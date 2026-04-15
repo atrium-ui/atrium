@@ -10,8 +10,8 @@ import { render as renderLit } from "lit";
 import { createApp, isVNode, type App as VueApp } from "vue";
 import { createRoot, type Root as ReactRoot } from "react-dom/client";
 import { stories } from "virtual:astro-stories/lazy";
-import type { StoryModule } from "../story";
-import { resolveStory } from "./story-helpers";
+import type { StoryModule } from "../story.js";
+import { resolveStory } from "./story-helpers.js";
 import "./styles.css";
 
 function resetTarget(

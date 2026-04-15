@@ -1,4 +1,4 @@
-import type { AstroStoriesOptions } from "./integration";
+import type { AstroStoriesOptions } from "./integration.js";
 
 const CONFIG_MODULE = "virtual:astro-stories/config";
 const LAZY_MODULE = "virtual:astro-stories/lazy";
@@ -66,7 +66,9 @@ export const inlineStyles = ${JSON.stringify(options.inlineStyles)};
       }
 
       if (id === RESOLVED_SETUP_MODULE) {
-        return options.imports.map((specifier) => `import ${JSON.stringify(specifier)};`).join("\n");
+        return options.imports
+          .map((specifier) => `import ${JSON.stringify(specifier)};`)
+          .join("\n");
       }
 
       return null;

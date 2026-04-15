@@ -1,1 +1,1 @@
-export { Controls } from "./runtime/Controls";
+export { Controls } from "./runtime/Controls.js";

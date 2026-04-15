@@ -5,7 +5,7 @@ declare module "virtual:astro-stories/config" {
 }
 
 declare module "virtual:astro-stories/lazy" {
-  import type { StoryModuleLoader } from "./story";
+  import type { StoryModuleLoader } from "./story.js";
 
   export const stories: Map<string, StoryModuleLoader>;
 }

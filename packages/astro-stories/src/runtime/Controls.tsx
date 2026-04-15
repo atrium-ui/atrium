@@ -1,6 +1,6 @@
 import type { ChangeEvent } from "react";
-import type { StoryArgValue } from "../story";
-import type { ControlItem } from "./story-helpers";
+import type { StoryArgValue } from "../story.js";
+import type { ControlItem } from "./story-helpers.js";
 
 type ControlsProps = {
   items: ControlItem[];
@@ -68,7 +68,7 @@ export function Controls(props: ControlsProps) {
   return (
     <form className="astro-stories-controls">
       {props.items.map((item) => (
-        <label key={item.name} className="astro-stories-control">
+        <div key={item.name} className="astro-stories-control">
           <span className="astro-stories-control-header">
             <code>{item.name}</code>
             <code>{item.type}</code>
@@ -77,7 +77,7 @@ export function Controls(props: ControlsProps) {
           {item.description ? (
             <span className="astro-stories-control-description">{item.description}</span>
           ) : null}
-        </label>
+        </div>
       ))}
     </form>
   );
