@@ -87,16 +87,20 @@ describe("Track", () => {
     // Items have varying heights (100, 150, 120, 100) but first 3 share the same row
     const items = track.items as HTMLElement[];
     const rects = [
-      { left: 0,   top: 0,   width: 100, height: 100 },
-      { left: 100, top: 0,   width: 150, height: 150 }, // taller item, same row
-      { left: 250, top: 0,   width: 120, height: 120 },
-      { left: 0,   top: 150, width: 100, height: 100 }, // wrapped
+      { left: 0, top: 0, width: 100, height: 100 },
+      { left: 100, top: 0, width: 150, height: 150 }, // taller item, same row
+      { left: 250, top: 0, width: 120, height: 120 },
+      { left: 0, top: 150, width: 100, height: 100 }, // wrapped
     ];
 
     for (let i = 0; i < items.length; i++) {
       const r = rects[i];
       // @ts-ignore — property is writable after fixElementSizes
-      items[i].getBoundingClientRect = () => ({ ...r, right: r.left + r.width, bottom: r.top + r.height });
+      items[i].getBoundingClientRect = () => ({
+        ...r,
+        right: r.left + r.width,
+        bottom: r.top + r.height,
+      });
     }
 
     // @ts-ignore
@@ -115,15 +119,19 @@ describe("Track", () => {
 
     const items = track.items as HTMLElement[];
     const rects = [
-      { left: 0,   top: 0, width: 100, height: 50  },
+      { left: 0, top: 0, width: 100, height: 50 },
       { left: 100, top: 0, width: 200, height: 200 }, // much taller
-      { left: 300, top: 0, width: 150, height: 80  },
+      { left: 300, top: 0, width: 150, height: 80 },
     ];
 
     for (let i = 0; i < items.length; i++) {
       const r = rects[i];
       // @ts-ignore — property is writable after fixElementSizes
-      items[i].getBoundingClientRect = () => ({ ...r, right: r.left + r.width, bottom: r.top + r.height });
+      items[i].getBoundingClientRect = () => ({
+        ...r,
+        right: r.left + r.width,
+        bottom: r.top + r.height,
+      });
     }
 
     // @ts-ignore
@@ -143,16 +151,20 @@ describe("Track", () => {
     const items = track.items as HTMLElement[];
     // 3 items in first column, 1 wrapped to second column
     const rects = [
-      { left: 0,   top: 0,   width: 100, height: 100 },
-      { left: 0,   top: 100, width: 150, height: 120 }, // wider item, same column
-      { left: 0,   top: 220, width: 100, height: 80  },
-      { left: 150, top: 0,   width: 100, height: 100 }, // wrapped to new column
+      { left: 0, top: 0, width: 100, height: 100 },
+      { left: 0, top: 100, width: 150, height: 120 }, // wider item, same column
+      { left: 0, top: 220, width: 100, height: 80 },
+      { left: 150, top: 0, width: 100, height: 100 }, // wrapped to new column
     ];
 
     for (let i = 0; i < items.length; i++) {
       const r = rects[i];
       // @ts-ignore — property is writable after fixElementSizes
-      items[i].getBoundingClientRect = () => ({ ...r, right: r.left + r.width, bottom: r.top + r.height });
+      items[i].getBoundingClientRect = () => ({
+        ...r,
+        right: r.left + r.width,
+        bottom: r.top + r.height,
+      });
     }
 
     // @ts-ignore
