@@ -1,5 +1,16 @@
 # @sv/elements
 
+## 4.9.0 (2026-04-15)
+
+### Features
+
+- Adds a-lightbox element
+
+### Fixes
+
+- Check
+- Track assumes all items have the same top edge
+
 ## 4.8.0 (2026-03-07)
 
 ### Features
