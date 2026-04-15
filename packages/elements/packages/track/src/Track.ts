@@ -380,8 +380,8 @@ export class Track extends LitElement {
   private _itemRects: Vec2[] | undefined = undefined;
   private get itemRects() {
     if (this._itemRects === undefined) {
-      let topEdge: number | undefined;
-      let leftEdge: number | undefined;
+      let rowBottom: number | undefined;
+      let colRight: number | undefined;
 
       // @ts-ignore
       this._itemRects = this.items
@@ -391,16 +391,20 @@ export class Track extends LitElement {
           const { width, height, top, left } = item.getBoundingClientRect();
 
           if (this.vertical) {
-            if (!leftEdge) {
-              leftEdge = left;
-            } else if (left !== leftEdge) {
-              return;
+            if (colRight === undefined) {
+              colRight = left + width;
+            } else if (left >= colRight) {
+              return; // wrapped to new column
+            } else {
+              colRight = Math.max(colRight, left + width);
             }
           } else {
-            if (!topEdge) {
-              topEdge = top;
-            } else if (top !== topEdge) {
-              return;
+            if (rowBottom === undefined) {
+              rowBottom = top + height;
+            } else if (top >= rowBottom) {
+              return; // wrapped to new row
+            } else {
+              rowBottom = Math.max(rowBottom, top + height);
             }
           }
 
