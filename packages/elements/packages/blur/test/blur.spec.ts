@@ -8,7 +8,7 @@ afterEach(() => {
 });
 
 test("import element", async () => {
-  const { Blur } = await import("../dist/index.js");
+  const { Blur } = await import("@sv/elements/blur");
   expect(Blur).toBeDefined();
 
   // is defined in custom element registry

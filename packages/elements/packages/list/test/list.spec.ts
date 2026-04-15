@@ -11,7 +11,7 @@ test("import a-list element", async () => {
 });
 
 test("construct a-list element", async () => {
-  const { List } = await import("@sv/elements/list");
+  const { List } = await import("../dist/index.js");
 
   // is constructable
   expect(new List()).toBeInstanceOf(List);
