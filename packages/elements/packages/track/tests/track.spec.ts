@@ -519,7 +519,9 @@ describe("Track", () => {
   });
 
   test(label("snap to second last item works"), async () => {
-    const track = await trackWithChildren(6, { snap: true, width: 600 });
+    // itemWidth=350 ensures the last two items sum to 700 > 600 (track width), so item 4
+    // stays within maxIndex and moveTo doesn't clamp to overflowWidth instead.
+    const track = await trackWithChildren(6, { snap: true, width: 600, itemWidth: 350 });
 
     const secondLastItemIndex = track.itemCount - 2;
 
@@ -544,6 +546,74 @@ describe("Track", () => {
     expect(track.currentIndex).toBe(0);
   });
 
+  test(label("overflowWidth is stable with fractional track width"), async () => {
+    // Regression: when the track has a fractional CSS width (e.g. 315.5px), the old
+    // offsetWidth-based measurement rounds to an integer (315 or 316) while items are
+    // measured via getBoundingClientRect which returns fractional values. This caused
+    // overflowWidth to oscillate between a negative and a large positive value each
+    // time the ResizeObserver fired.
+    const track = await trackWithChildren(2);
+
+    const trackWidth = 315.5;
+    // Two items whose widths sum to more than the track, ensuring real overflow
+    const item0Width = 315.828125 / 2;
+    const item1Width = 315.828125 / 2;
+
+    // Mock the track's own getBoundingClientRect with the fractional width
+    // and offsetWidth with the integer-rounded value (the old bug source)
+    Object.defineProperty(track, "offsetWidth", { writable: true });
+    // @ts-ignore
+    track.offsetWidth = Math.round(trackWidth); // 316 — what the old code used
+    // @ts-ignore
+    track.getBoundingClientRect = () => ({
+      width: trackWidth,
+      height: 200,
+      top: 0,
+      left: 0,
+      right: trackWidth,
+      bottom: 200,
+    });
+
+    const items = track.items as HTMLElement[];
+    const rects = [
+      { left: 0, top: 0, width: item0Width, height: 200 },
+      { left: item0Width, top: 0, width: item1Width, height: 200 },
+    ];
+    for (let i = 0; i < items.length; i++) {
+      const r = rects[i];
+      // @ts-ignore
+      items[i].getBoundingClientRect = () => ({
+        ...r,
+        right: r.left + r.width,
+        bottom: r.top + r.height,
+      });
+    }
+
+    // @ts-ignore
+    track._width = undefined;
+    // @ts-ignore
+    track._itemRects = undefined;
+    // @ts-ignore
+    track._itemWidths = undefined;
+
+    const overflow1 = track.overflowWidth;
+
+    // Simulate a second ResizeObserver firing (clears cached values again)
+    // @ts-ignore
+    track._width = undefined;
+    // @ts-ignore
+    track._itemRects = undefined;
+    // @ts-ignore
+    track._itemWidths = undefined;
+
+    const overflow2 = track.overflowWidth;
+
+    // Both reads must agree — no oscillation
+    expect(overflow1).toBeCloseTo(overflow2, 5);
+    // And it must reflect the real fractional overflow: 315.828125 - 315.5 = 0.328125
+    expect(overflow1).toBeCloseTo(315.828125 - trackWidth, 5);
+  });
+
   test(label("loop with snap"), async () => {
     const track = await trackWithChildren(10, { snap: true, width: 800, loop: true });
 
@@ -561,26 +631,26 @@ describe("Track", () => {
 
 async function trackWithChildren(
   itemCount = 10,
-  attributes: Record<string, string | boolean | number> = {},
+  attributes: Record<string, string | boolean | number> & { itemWidth?: number } = {},
 ) {
   await import("../src/index.js");
 
-  // TODO: track width should be an argument to this
+  const { itemWidth: fixedItemWidth, ...trackAttributes } = attributes;
 
   const widths = new Array<number>(itemCount)
     .fill(0)
-    .map(() => Math.floor(random() * 500 + 150));
+    .map(() => fixedItemWidth ?? Math.floor(random() * 500 + 150));
 
   const totalSize = widths.reduce((acc, w) => acc + w, 0);
-  const width = +(attributes.width || 0) || random() * (totalSize / 4);
-  const height = +(attributes.height || 0) || random() * 800;
+  const width = +(trackAttributes.width || 0) || random() * (totalSize / 4);
+  const height = +(trackAttributes.height || 0) || random() * 800;
 
   console.info("items", widths);
 
   const div = document.createElement("div");
   const markup = `
     <a-track id="track" class="outline-2 outline-red-500 overflow-visible w-[${width}px] h-[${height}px]" ${Object.entries(
-      attributes,
+      trackAttributes,
     )
       .map(([key, value]) => `${key}="${value}"`)
       .join(" ")}>
