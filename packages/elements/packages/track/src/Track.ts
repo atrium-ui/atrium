@@ -523,7 +523,7 @@ export class Track extends LitElement {
   private _width;
   public get width() {
     if (this._width === undefined) {
-      this._width = this.offsetWidth;
+      this._width = this.getBoundingClientRect().width;
     }
     return this._width;
   }
@@ -531,7 +531,7 @@ export class Track extends LitElement {
   private _height;
   public get height() {
     if (this._height === undefined) {
-      this._height = this.offsetHeight;
+      this._height = this.getBoundingClientRect().height;
     }
     return this._height;
   }
