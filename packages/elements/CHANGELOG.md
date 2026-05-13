@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.10.0 (2026-05-13)
+
+### Features
+
+- a-blur: Try to focus the first "autofocus" input element before falling back to the first focusable element
+
 ## 4.9.0 (2026-04-15)
 
 ### Features
