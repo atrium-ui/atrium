@@ -239,7 +239,8 @@ export class Blur extends LitElement {
     // TODO: idk
     if (isKeyboard && this.initialfocus === "auto") {
       const elements = this.focusableElements();
-      elements[0]?.focus();
+      const autofocusEl = elements.find((el) => el.hasAttribute("autofocus"));
+      (autofocusEl ?? elements[0])?.focus();
     }
   }
 
