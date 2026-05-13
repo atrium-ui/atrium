@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.10.1 (2026-05-13)
+
+### Fixes
+
+- a-track: Precision feedback loop
+
 ## 4.10.0 (2026-05-13)
 
 ### Features
