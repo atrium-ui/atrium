@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.10.2 (2026-05-19)
+
+### Fixes
+
+- a-track: Overflow feedbackloop for sub-pixel difference
+
 ## 4.10.1 (2026-05-13)
 
 ### Fixes
