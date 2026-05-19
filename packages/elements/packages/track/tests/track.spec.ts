@@ -614,55 +614,58 @@ describe("Track", () => {
     expect(overflow1).toBeCloseTo(315.828125 - trackWidth, 5);
   });
 
-  test(label("hasOverflow is false when items match container within subpixel tolerance"), async () => {
-    // Regression: when the summed item widths equal the container width but differ
-    // by a tiny subpixel amount (e.g. 0.5px from getBoundingClientRect rounding),
-    // hasOverflow flipped between true/false on every layout, causing a feedback
-    // loop between overflowing and not-overflowing states.
-    const track = await trackWithChildren(2);
+  test(
+    label("hasOverflow is false when items match container within subpixel tolerance"),
+    async () => {
+      // Regression: when the summed item widths equal the container width but differ
+      // by a tiny subpixel amount (e.g. 0.5px from getBoundingClientRect rounding),
+      // hasOverflow flipped between true/false on every layout, causing a feedback
+      // loop between overflowing and not-overflowing states.
+      const track = await trackWithChildren(2);
 
-    const trackWidth = 600;
-    // Two items whose widths sum to *just barely* more than the container —
-    // the kind of sub-pixel drift you get when an item is sized to fill its parent.
-    const item0Width = 300.25;
-    const item1Width = 300.25;
+      const trackWidth = 600;
+      // Two items whose widths sum to *just barely* more than the container —
+      // the kind of sub-pixel drift you get when an item is sized to fill its parent.
+      const item0Width = 300.25;
+      const item1Width = 300.25;
 
-    // @ts-ignore
-    track.getBoundingClientRect = () => ({
-      width: trackWidth,
-      height: 200,
-      top: 0,
-      left: 0,
-      right: trackWidth,
-      bottom: 200,
-    });
-
-    const items = track.items as HTMLElement[];
-    const rects = [
-      { left: 0, top: 0, width: item0Width, height: 200 },
-      { left: item0Width, top: 0, width: item1Width, height: 200 },
-    ];
-    for (let i = 0; i < items.length; i++) {
-      const r = rects[i];
       // @ts-ignore
-      items[i].getBoundingClientRect = () => ({
-        ...r,
-        right: r.left + r.width,
-        bottom: r.top + r.height,
+      track.getBoundingClientRect = () => ({
+        width: trackWidth,
+        height: 200,
+        top: 0,
+        left: 0,
+        right: trackWidth,
+        bottom: 200,
       });
-    }
 
-    // @ts-ignore
-    track._width = undefined;
-    // @ts-ignore
-    track._itemRects = undefined;
-    // @ts-ignore
-    track._itemWidths = undefined;
+      const items = track.items as HTMLElement[];
+      const rects = [
+        { left: 0, top: 0, width: item0Width, height: 200 },
+        { left: item0Width, top: 0, width: item1Width, height: 200 },
+      ];
+      for (let i = 0; i < items.length; i++) {
+        const r = rects[i];
+        // @ts-ignore
+        items[i].getBoundingClientRect = () => ({
+          ...r,
+          right: r.left + r.width,
+          bottom: r.top + r.height,
+        });
+      }
 
-    // 600.5 - 600 = 0.5px — not real overflow, just rounding noise.
-    expect(track.overflowWidth).toBeCloseTo(0.5, 5);
-    expect(track.hasOverflow).toBe(false);
-  });
+      // @ts-ignore
+      track._width = undefined;
+      // @ts-ignore
+      track._itemRects = undefined;
+      // @ts-ignore
+      track._itemWidths = undefined;
+
+      // 600.5 - 600 = 0.5px — not real overflow, just rounding noise.
+      expect(track.overflowWidth).toBeCloseTo(0.5, 5);
+      expect(track.hasOverflow).toBe(false);
+    },
+  );
 
   test(label("loop with snap"), async () => {
     const track = await trackWithChildren(10, { snap: true, width: 800, loop: true });
