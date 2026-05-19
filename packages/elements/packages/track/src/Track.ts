@@ -382,6 +382,8 @@ export class Track extends LitElement {
     if (this._itemRects === undefined) {
       let rowBottom: number | undefined;
       let colRight: number | undefined;
+      let prevLeft: number | undefined;
+      let prevTop: number | undefined;
 
       // @ts-ignore
       this._itemRects = this.items
@@ -393,21 +395,29 @@ export class Track extends LitElement {
           if (this.vertical) {
             if (colRight === undefined) {
               colRight = left + width;
-            } else if (left >= colRight) {
-              return; // wrapped to new column
+            } else if (left >= colRight && prevTop !== undefined && top < prevTop) {
+              // Real column wrap: item moved right past previous column AND
+              // its top reset backward. Without the top-reset check, sub-pixel
+              // drift at the column edge would falsely flag items as wrapped.
+              return;
             } else {
               colRight = Math.max(colRight, left + width);
             }
           } else {
             if (rowBottom === undefined) {
               rowBottom = top + height;
-            } else if (top >= rowBottom) {
-              return; // wrapped to new row
+            } else if (top >= rowBottom && prevLeft !== undefined && left < prevLeft) {
+              // Real row wrap: item moved down past previous row AND its left
+              // reset backward. Without the left-reset check, sub-pixel drift
+              // at the row edge would falsely flag items as wrapped.
+              return;
             } else {
               rowBottom = Math.max(rowBottom, top + height);
             }
           }
 
+          prevLeft = left;
+          prevTop = top;
           return new Vec2(width, height);
         })
         .filter(Boolean);

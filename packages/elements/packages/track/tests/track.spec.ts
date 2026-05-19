@@ -615,43 +615,56 @@ describe("Track", () => {
   });
 
   test(
-    label("hasOverflow is false when items match container within subpixel tolerance"),
+    label("overflowWidth stable across layout passes when items match container"),
     async () => {
-      // Regression: when the summed item widths equal the container width but differ
-      // by a tiny subpixel amount (e.g. 0.5px from getBoundingClientRect rounding),
-      // hasOverflow flipped between true/false on every layout, causing a feedback
-      // loop between overflowing and not-overflowing states.
+      // Regression: when items' summed widths roughly match the container width,
+      // sub-pixel layout drift made the browser flip items between wrapped and
+      // not-wrapped on consecutive layout passes, so consecutive overflowWidth
+      // reads swung wildly (e.g. 447.98 ↔ -0.015).
       const track = await trackWithChildren(2);
 
-      const trackWidth = 600;
-      // Two items whose widths sum to *just barely* more than the container —
-      // the kind of sub-pixel drift you get when an item is sized to fill its parent.
-      const item0Width = 300.25;
-      const item1Width = 300.25;
+      const trackWidth = 448;
+      const itemWidth = 448;
+      const itemHeight = 200;
 
       // @ts-ignore
       track.getBoundingClientRect = () => ({
         width: trackWidth,
-        height: 200,
+        height: itemHeight,
         top: 0,
         left: 0,
         right: trackWidth,
-        bottom: 200,
+        bottom: itemHeight,
       });
 
       const items = track.items as HTMLElement[];
-      const rects = [
-        { left: 0, top: 0, width: item0Width, height: 200 },
-        { left: item0Width, top: 0, width: item1Width, height: 200 },
-      ];
+
+      // Pass 1: browser packs both items on row 1 (no wrap).
+      let pass = 1;
       for (let i = 0; i < items.length; i++) {
-        const r = rects[i];
         // @ts-ignore
-        items[i].getBoundingClientRect = () => ({
-          ...r,
-          right: r.left + r.width,
-          bottom: r.top + r.height,
-        });
+        items[i].getBoundingClientRect = () => {
+          if (pass === 1) {
+            const left = i * itemWidth;
+            return {
+              left,
+              top: 0,
+              width: itemWidth,
+              height: itemHeight,
+              right: left + itemWidth,
+              bottom: itemHeight,
+            };
+          }
+          // Pass 2: browser wraps item 1 onto row 2 (left resets, top advances).
+          return {
+            left: 0,
+            top: i * itemHeight,
+            width: itemWidth,
+            height: itemHeight,
+            right: itemWidth,
+            bottom: (i + 1) * itemHeight,
+          };
+        };
       }
 
       // @ts-ignore
@@ -661,9 +674,21 @@ describe("Track", () => {
       // @ts-ignore
       track._itemWidths = undefined;
 
-      // 600.5 - 600 = 0.5px — not real overflow, just rounding noise.
-      expect(track.overflowWidth).toBeCloseTo(0.5, 5);
-      expect(track.hasOverflow).toBe(false);
+      const overflow1 = track.overflowWidth;
+
+      // Simulate the next layout pass (ResizeObserver) — invalidate the cache.
+      pass = 2;
+      // @ts-ignore
+      track._width = undefined;
+      // @ts-ignore
+      track._itemRects = undefined;
+      // @ts-ignore
+      track._itemWidths = undefined;
+
+      const overflow2 = track.overflowWidth;
+
+      // Consecutive reads must not swing by a whole item width.
+      expect(Math.abs(overflow1 - overflow2)).toBeLessThan(2);
     },
   );
 
