@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.10.3 (2026-05-19)
+
+### Fixes
+
+- a-track: itemsInView should ignore zero-sized items
+
 ## 4.10.2 (2026-05-19)
 
 ### Fixes
