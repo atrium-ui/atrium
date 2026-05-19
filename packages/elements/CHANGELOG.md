@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.10.3 (2026-05-19)
+
+### Fixes
+
+- a-track: Wrapping feedbackloop for sub-pixel difference
+
 ## 4.10.2 (2026-05-19)
 
 ### Fixes
