@@ -550,9 +550,9 @@ export class Track extends LitElement {
 
   public get hasOverflow() {
     if (this.vertical) {
-      return this.overflowHeight > 0;
+      return this.overflowHeight > 1;
     }
-    return this.overflowWidth > 0;
+    return this.overflowWidth > 1;
   }
 
   public get currentIndex() {
