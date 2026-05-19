@@ -474,6 +474,55 @@ describe("Track", () => {
     expect(track.itemsInView).toBeGreaterThan(0);
   });
 
+  test(label("itemsInView ignores zero-sized items"), async () => {
+    const track = await trackWithChildren(5);
+
+    const containerWidth = 600;
+    const itemHeight = 200;
+    // Items 1 and 3 are zero-width — should be skipped, not counted toward fit.
+    const widths = [200, 0, 200, 0, 200];
+
+    // @ts-ignore
+    track.getBoundingClientRect = () => ({
+      width: containerWidth,
+      height: itemHeight,
+      top: 0,
+      left: 0,
+      right: containerWidth,
+      bottom: itemHeight,
+    });
+
+    const items = track.items as HTMLElement[];
+    let acc = 0;
+    for (let i = 0; i < items.length; i++) {
+      const w = widths[i];
+      const left = acc;
+      acc += w;
+      // @ts-ignore
+      items[i].getBoundingClientRect = () => ({
+        left,
+        top: 0,
+        width: w,
+        height: itemHeight,
+        right: left + w,
+        bottom: itemHeight,
+      });
+    }
+
+    // @ts-ignore
+    track._width = undefined;
+    // @ts-ignore
+    track._itemRects = undefined;
+    // @ts-ignore
+    track._itemWidths = undefined;
+    // @ts-ignore
+    track._itemsInView = undefined;
+
+    // 3 real items of 200px each fit exactly in 600px. The two zero-sized
+    // items must not be counted, and must not cause an infinite loop.
+    expect(track.itemsInView).toBe(3);
+  });
+
   test(label("should snap to the end with overflow auto"), async () => {
     const track = await trackWithChildren(10, {
       snap: true,

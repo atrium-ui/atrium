@@ -461,9 +461,11 @@ export class Track extends LitElement {
         const size = itemSizes[sizeIndex];
         if (size === undefined) break;
 
-        accumulatedSize += size;
-        if (accumulatedSize <= viewportSize) {
-          itemsInView++;
+        if (size > 0) {
+          accumulatedSize += size;
+          if (accumulatedSize <= viewportSize) {
+            itemsInView++;
+          }
         }
         itemIndex++;
 
