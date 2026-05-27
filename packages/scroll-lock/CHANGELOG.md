@@ -1,5 +1,11 @@
 # @sv/scroll-lock
 
+## 1.3.0 (2026-05-27)
+
+### Features
+
+- Use TC39 decorators instead of experimental typsecript decorators and fields
+
 ## 1.2.2 (2026-04-15)
 
 ### Fixes

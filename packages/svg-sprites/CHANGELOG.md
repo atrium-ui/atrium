@@ -1,3 +1,9 @@
+## 0.5.7 (2026-05-27)
+
+### Features
+
+- Use TC39 decorators instead of experimental typsecript decorators and fields
+
 ## 0.5.6 (2026-04-15)
 
 ### Fixes
