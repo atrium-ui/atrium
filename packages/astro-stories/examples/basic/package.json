@@ -1,0 +1,25 @@
+{
+  "name": "@sv/astro-stories-example-basic",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@astrojs/react": "5.0.0-beta.3",
+    "@sv/astro-stories": "file:../..",
+    "astro": "6.0.0-beta.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.21",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.9.2"
+  }
+}

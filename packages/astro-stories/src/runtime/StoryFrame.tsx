@@ -135,8 +135,10 @@ export function StoryFrame() {
     };
   }, [identifier, searchParams, storyModule]);
 
+  const visible = loaded || Boolean(error);
+
   return (
-    <div className={`astro-stories-root${loaded ? " astro-stories-root-loaded" : ""}`}>
+    <div className={`astro-stories-root${visible ? " astro-stories-root-loaded" : ""}`}>
       <div className="astro-stories-frame-target" ref={targetRef} />
       {error ? <pre className="astro-stories-error">{error}</pre> : null}
     </div>

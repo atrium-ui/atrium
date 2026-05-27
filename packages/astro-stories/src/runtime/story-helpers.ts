@@ -51,18 +51,14 @@ function parseArgValue(rawValue: string, type: string) {
 }
 
 function findVariant(module: StoryModule, variantId: string | undefined) {
-  if (!variantId) {
-    return undefined;
-  }
-
-  const normalizedVariantId = variantId.toLowerCase();
+  const normalizedVariantId = variantId?.toLowerCase();
 
   for (const key of Object.keys(module)) {
     if (key === "default") {
       continue;
     }
 
-    if (key.toLowerCase() === normalizedVariantId) {
+    if (!normalizedVariantId || key.toLowerCase() === normalizedVariantId) {
       return module[key] as Story;
     }
   }
