@@ -39,7 +39,7 @@ export class BoxElement extends LitElement {
   /**
    * Whether to retain the size of the element while resizing.
    */
-  @property({ type: Boolean }) retain = false;
+  @property({ type: Boolean }) accessor retain = false;
 
   private get ele() {
     return this.shadowRoot?.children[0] as HTMLElement;

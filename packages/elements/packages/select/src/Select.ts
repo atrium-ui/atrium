@@ -108,13 +108,13 @@ export class Select extends LitElement {
    * In what direction the dropdown openes.
    */
   @property({ type: String, reflect: true })
-  public direction: "up" | "down" = "down";
+  public accessor direction: "up" | "down" = "down";
 
   /**
    * The selected option.
    */
   @property({ type: String })
-  public value?: string;
+  public accessor value?: string;
 
   public selected?: string;
 
@@ -122,28 +122,28 @@ export class Select extends LitElement {
    * Whether the dropdown is open.
    */
   @property({ type: Boolean, reflect: true })
-  public opened = false;
+  public accessor opened = false;
 
   /**
    * Whether the dropdown is disabled.
    */
   @property({ type: Boolean, reflect: true })
-  public disabled = false;
+  public accessor disabled = false;
 
   /**
    * Wether the input is required.
    */
   @property({ type: Boolean, reflect: true })
-  public required = false;
+  public accessor required = false;
 
   /**
    * The name or key used in form data.
    */
   @property({ type: String, reflect: true })
-  public name?: string;
+  public accessor name?: string;
 
   @query(".dropdown")
-  public dropdown!: HTMLElement;
+  public accessor dropdown!: HTMLElement;
 
   private options: OptionElement[] = [];
 

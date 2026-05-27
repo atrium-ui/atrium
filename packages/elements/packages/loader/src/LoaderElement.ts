@@ -90,22 +90,22 @@ export class LoaderElement extends LitElement {
   /**
    * Set, if the child element is in an error state.
    */
-  @property({ type: Boolean, reflect: true }) public error = false;
+  @property({ type: Boolean, reflect: true }) public accessor error = false;
 
   /**
    * Set, if the child element is currently still loading.
    */
-  @property({ type: Boolean, reflect: true }) public loading = false;
+  @property({ type: Boolean, reflect: true }) public accessor loading = false;
 
   /**
    * Set, if the loader is visible.
    */
-  @property({ type: Boolean, reflect: true }) private visible = false;
+  @property({ type: Boolean, reflect: true }) private accessor visible = false;
 
   /**
    * The delay in ms, before the loader is shown.
    */
-  @property({ type: Number }) public delay = 300;
+  @property({ type: Number }) public accessor delay = 300;
 
   private timeoutId: ReturnType<typeof setTimeout> | undefined = undefined;
 

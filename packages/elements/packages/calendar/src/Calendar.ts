@@ -224,7 +224,7 @@ export class CalendarElement extends LitElement {
    * FormData name of the field.
    */
   @property({ type: String })
-  name?: string;
+  accessor name?: string;
 
   /**
    * The value of the field.
@@ -232,38 +232,38 @@ export class CalendarElement extends LitElement {
    * Range mode: "YYYY-MM-DD/YYYY-MM-DD"
    */
   @property({ type: String, reflect: true })
-  value?: string;
+  accessor value?: string;
 
   /**
    * Selection mode: "single" for single date, "range" for date range.
    */
   @property({ type: String, reflect: true })
-  mode: "single" | "range" = "single";
+  accessor mode: "single" | "range" = "single";
 
   /**
    * BCP 47 locale tag for month/day names.
    */
   @property({ type: String })
-  locale: string = navigator.language;
+  accessor locale: string = navigator.language;
 
   /**
    * First day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday).
    * Defaults to locale-appropriate value.
    */
   @property({ type: Number, attribute: "week-start" })
-  weekStart?: number;
+  accessor weekStart?: number;
 
   /**
    * Minimum selectable date (YYYY-MM-DD).
    */
   @property({ type: String })
-  min?: string;
+  accessor min?: string;
 
   /**
    * Maximum selectable date (YYYY-MM-DD).
    */
   @property({ type: String })
-  max?: string;
+  accessor max?: string;
 
   /**
    * Dates or ranges to highlight visually.
@@ -273,7 +273,7 @@ export class CalendarElement extends LitElement {
    * @example "2024-03-15,2024-03-20/2024-03-25,2024-04-01" - multiple
    */
   @property({ type: String })
-  highlight?: string;
+  accessor highlight?: string;
 
   /**
    * Dates or ranges to mark as unavailable.
@@ -283,13 +283,13 @@ export class CalendarElement extends LitElement {
    * @example "2024-03-15,2024-03-20/2024-03-25,2024-04-01" - multiple
    */
   @property({ type: String })
-  unavailable?: string;
+  accessor unavailable?: string;
 
   /**
    * Whether the calendar is disabled.
    */
   @property({ type: Boolean, reflect: true })
-  disabled = false;
+  accessor disabled = false;
 
   /**
    * Which date of a range to focus for initial view month.
@@ -297,43 +297,43 @@ export class CalendarElement extends LitElement {
    * @default "start"
    */
   @property({ type: String, attribute: "range-focus" })
-  rangeFocus: "start" | "end" = "start";
+  accessor rangeFocus: "start" | "end" = "start";
 
   /**
    * Currently displayed month/year for navigation.
    */
   @state()
-  viewDate: Date = new Date();
+  accessor viewDate: Date = new Date();
 
   /**
    * Whether the year picker menu is open.
    */
   @state()
-  yearPickerOpen = false;
+  accessor yearPickerOpen = false;
 
   /**
    * Currently focused year for keyboard navigation in year picker.
    */
   @state()
-  focusedYear?: number;
+  accessor focusedYear?: number;
 
   /**
    * Temporary range start during range selection.
    */
   @state()
-  rangeStart?: string;
+  accessor rangeStart?: string;
 
   /**
    * Hovered date for range preview.
    */
   @state()
-  hoverDate?: string;
+  accessor hoverDate?: string;
 
   /**
    * Currently focused date for keyboard navigation.
    */
   @state()
-  focusedDate?: string;
+  accessor focusedDate?: string;
 
   input = document.createElement("input");
 

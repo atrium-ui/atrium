@@ -61,25 +61,25 @@ export class PagerElement extends LitElement {
 
   /** Current page (1-indexed). */
   @property({ type: Number, reflect: true })
-  page = 1;
+  accessor page = 1;
 
   /** Total number of pages. */
   @property({ type: Number, reflect: true })
-  count = 1;
+  accessor count = 1;
 
   /**
    * URL template with `{page}` placeholder.
    * Falls back to `?page=N` on the current URL.
    */
   @property({ type: String })
-  url?: string;
+  accessor url?: string;
 
   /** Additional query string params appended to every generated page URL. */
   @property({ type: String })
-  query?: string;
+  accessor query?: string;
 
   @state()
-  chunkSize = 3;
+  accessor chunkSize = 3;
 
   get currentPage() {
     return +this.page;

@@ -207,13 +207,13 @@ export class TabsListElement extends LitElement {
   }
 
   @property({ type: String })
-  public label?: string;
+  public accessor label?: string;
 
   @state()
-  private showLeftArrow = false;
+  private accessor showLeftArrow = false;
 
   @state()
-  private showRightArrow = false;
+  private accessor showRightArrow = false;
 
   trackRef = createRef<Track>();
   innerTrackRef = createRef<HTMLElement>();
@@ -370,7 +370,7 @@ export class TabsPanelElement extends LitElement {
   }
 
   @property({ type: Boolean, reflect: true })
-  public selected = false;
+  public accessor selected = false;
 
   get index(): number {
     const parent = this.parentElement;
@@ -549,7 +549,7 @@ export class TabsTabElement extends LitElement {
   buttonRef = createRef<HTMLElement>();
 
   @property({ type: Boolean, reflect: true })
-  public selected = false;
+  public accessor selected = false;
 
   get index(): number {
     const parent = this.parentElement;

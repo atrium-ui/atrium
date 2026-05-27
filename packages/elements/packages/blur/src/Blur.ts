@@ -155,34 +155,34 @@ export class Blur extends LitElement {
    * Whether the blur should be set to inert, when not enabled.
    */
   @property({ type: String })
-  public autoinert: "true" | "false" = "true";
+  public accessor autoinert: "true" | "false" = "true";
 
   /**
    * (experimental)
    * Whether the blur should set the focus to the first focusable element, when enabled.
    */
   @property({ type: String })
-  public initialfocus: "auto" | "false" = "auto";
+  public accessor initialfocus: "auto" | "false" = "auto";
 
   /**
    * (experimental)
    * Comma separated list of selectors to exclude from the scroll-lock.
    */
   @property({ type: String })
-  public allowscroll = "";
+  public accessor allowscroll = "";
 
   /**
    * The "enabled" will enable or disabled all functionality.
    * All other properties only apply, when the element is enabled.
    */
   @property({ type: Boolean, reflect: true })
-  public enabled = false;
+  public accessor enabled = false;
 
   /**
    * Whether the blur should lock scrolling, when enabled.
    */
   @property({ type: Boolean, reflect: true })
-  public scrolllock = false;
+  public accessor scrolllock = false;
 
   public lock: ScrollLock;
 

@@ -332,19 +332,19 @@ export class PopoverTrigger extends LitElement {
    * Wether the content is shown or not.
    */
   @property({ type: Boolean, reflect: true })
-  public opened = false;
+  public accessor opened = false;
 
   /**
    * The time in milliseconds to wait before showing the popover.
    */
   @property({ type: Number })
-  public showdelay = 550;
+  public accessor showdelay = 550;
 
   /**
    * The time in milliseconds to wait before hiding the popover.
    */
   @property({ type: Number })
-  public hidedelay = 250;
+  public accessor hidedelay = 250;
 
   public static styles = css`
     :host {
@@ -359,8 +359,8 @@ export class PopoverTrigger extends LitElement {
     }
   `;
 
-  @query(".trigger") input?: HTMLSlotElement;
-  @query(".content") contentSlot?: HTMLSlotElement;
+  @query(".trigger") accessor input?: HTMLSlotElement;
+  @query(".content") accessor contentSlot?: HTMLSlotElement;
 
   render(): HTMLTemplateResult {
     return html`

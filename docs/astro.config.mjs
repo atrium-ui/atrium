@@ -79,6 +79,9 @@ export default defineConfig({
     optimizeDeps: {
       exclude: ["@sv/elements"],
     },
+    ssr: {
+      external: ["@sv/elements"],
+    },
     plugins: [
       tailwindcss(),
       svgSprite({

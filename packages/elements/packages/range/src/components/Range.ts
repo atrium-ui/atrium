@@ -102,7 +102,7 @@ export class Range extends LitElement {
 
   /** The current value of the range. */
   @property({ type: Number })
-  public value = 0;
+  public accessor value = 0;
 
   public get valueAsNumber(): number {
     return this.value;
@@ -110,22 +110,22 @@ export class Range extends LitElement {
 
   /** Minimum value of the range. */
   @property({ type: Number })
-  public min = 0;
+  public accessor min = 0;
 
   /** Maximum value of the range. */
   @property({ type: Number })
-  public max = 1;
+  public accessor max = 1;
 
   /** Step value of the range. */
   @property({ type: Number })
-  public step = 0.01;
+  public accessor step = 0.01;
 
   /** Disabled state of the range. */
   @property({ type: Boolean })
-  public disabled = false;
+  public accessor disabled = false;
 
   @query(".progress")
-  private readonly progressElement!: HTMLElement;
+  private accessor progressElement!: HTMLElement;
 
   private dragStartPosition: number | undefined = 0;
 

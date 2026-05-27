@@ -790,28 +790,28 @@ export class Track extends LitElement {
   };
 
   /** The index of the current item. */
-  @property({ type: Number, reflect: true }) public current: number | undefined;
+  @property({ type: Number, reflect: true }) public accessor current: number | undefined;
 
   /** Whether the track should scroll vertically, instead of horizontally. */
-  @property({ type: Boolean, reflect: true }) public vertical = false;
+  @property({ type: Boolean, reflect: true }) public accessor vertical = false;
 
   /** Whether the track should loop back to the start when reaching the end. */
-  @property({ type: Boolean, reflect: true }) public loop = false;
+  @property({ type: Boolean, reflect: true }) public accessor loop = false;
 
   /** Whether the track should snap to the closest child element. */
-  @property({ type: Boolean, reflect: true }) public snap = false;
+  @property({ type: Boolean, reflect: true }) public accessor snap = false;
 
   /** Item alignment in the track. "start" (left/top) or "center" */
-  @property({ type: String }) public align: "start" | "center" = "start";
+  @property({ type: String }) public accessor align: "start" | "center" = "start";
 
   /** Change the overflow behavior.
    * - "auto" - Only scrollable when necessary.
    * - "scroll" - Always scrollable.
    * - "ignore" - Ignore any overflow.
    */
-  @property({ type: String }) public overflow: "auto" | "scroll" | "ignore" = "auto";
+  @property({ type: String }) public accessor overflow: "auto" | "scroll" | "ignore" = "auto";
 
-  @property({ type: Boolean }) public debug = false;
+  @property({ type: Boolean }) public accessor debug = false;
 
   private trait(callback: (t: Trait) => void) {
     for (const t of this.traits) {

@@ -25,7 +25,7 @@ export class FormFieldElement extends LitElement {
   valid = true;
 
   @property({ type: Boolean, reflect: true })
-  invalid = false;
+  accessor invalid = false;
 
   setValid(valid: boolean) {
     this.valid = valid;
@@ -138,7 +138,7 @@ export class FormFieldErrorElement extends LitElement {
   ];
 
   @state()
-  private _message: string | undefined;
+  private accessor _message: string | undefined;
 
   onState = (e) => {
     const field = e.detail as FormFieldElement;

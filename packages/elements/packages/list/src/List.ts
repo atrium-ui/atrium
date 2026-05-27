@@ -73,25 +73,25 @@ export class ListElement extends LitElement {
    * The selected option.
    */
   @property({ type: String })
-  public value?: string;
+  public accessor value?: string;
 
   /**
    * Whether the dropdown is disabled.
    */
   @property({ type: Boolean, reflect: true })
-  public disabled = false;
+  public accessor disabled = false;
 
   /**
    * The name or key used in form data.
    */
   @property({ type: String, reflect: true })
-  public name?: string;
+  public accessor name?: string;
 
   /**
    * Direction of the list.
    */
   @property({ type: String, reflect: true })
-  public direction: "up" | "down" = "up";
+  public accessor direction: "up" | "down" = "up";
 
   private options: ListItemElement[] = [];
 
@@ -272,7 +272,7 @@ export class ListItemElement extends LitElement {
   }
 
   @property({ type: String })
-  public value!: string;
+  public accessor value!: string;
 
   render() {
     return html`<slot></slot>`;

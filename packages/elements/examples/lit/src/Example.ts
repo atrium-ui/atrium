@@ -10,7 +10,7 @@ export class Example extends LitElement {
 	`);
 
   @property({ type: Boolean, reflect: true })
-  public prop?: boolean;
+  public accessor prop?: boolean;
 
   protected render(): HTMLTemplateResult {
     return html`

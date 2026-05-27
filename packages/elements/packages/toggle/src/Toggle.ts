@@ -63,13 +63,13 @@ export class ToggleElement extends LitElement {
    * FormData name of the field.
    */
   @property({ type: String })
-  public name?: string;
+  public accessor name?: string;
 
   /**
    * The value of the field, which is submitted with the form data.
    */
   @property({ type: String, reflect: true })
-  public value: string | boolean = "false";
+  public accessor value: string | boolean = "false";
 
   protected updated(_changedProperties: PropertyValues): void {
     if (_changedProperties.has("value")) {
