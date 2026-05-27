@@ -790,7 +790,8 @@ export class Track extends LitElement {
   };
 
   /** The index of the current item. */
-  @property({ type: Number, reflect: true }) public accessor current: number | undefined;
+  @property({ type: Number, reflect: true }) public accessor current: number | undefined =
+    undefined;
 
   /** Whether the track should scroll vertically, instead of horizontally. */
   @property({ type: Boolean, reflect: true }) public accessor vertical = false;
@@ -809,7 +810,8 @@ export class Track extends LitElement {
    * - "scroll" - Always scrollable.
    * - "ignore" - Ignore any overflow.
    */
-  @property({ type: String }) public accessor overflow: "auto" | "scroll" | "ignore" = "auto";
+  @property({ type: String }) public accessor overflow: "auto" | "scroll" | "ignore" =
+    "auto";
 
   @property({ type: Boolean }) public accessor debug = false;
 

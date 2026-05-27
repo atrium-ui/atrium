@@ -85,10 +85,10 @@ export class Lightbox extends LitElement {
   public accessor mounted = false;
 
   @query('slot[name="trigger"]')
-  public accessor triggerSlot?: HTMLSlotElement;
+  public accessor triggerSlot: HTMLSlotElement | null = null;
 
   @query("a-portal")
-  public accessor portalElement?: Portal;
+  public accessor portalElement: Portal | null = null;
 
   public transitionName = `a-lightbox-${++lightboxId}`;
   public lastActiveElement: HTMLElement | null = null;

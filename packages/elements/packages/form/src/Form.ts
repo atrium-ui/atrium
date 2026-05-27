@@ -138,7 +138,7 @@ export class FormFieldErrorElement extends LitElement {
   ];
 
   @state()
-  private accessor _message: string | undefined;
+  private accessor _message: string | undefined = undefined;
 
   onState = (e) => {
     const field = e.detail as FormFieldElement;

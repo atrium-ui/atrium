@@ -207,7 +207,7 @@ export class TabsListElement extends LitElement {
   }
 
   @property({ type: String })
-  public accessor label?: string;
+  public accessor label: string | undefined = undefined;
 
   @state()
   private accessor showLeftArrow = false;

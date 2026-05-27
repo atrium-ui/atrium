@@ -54,5 +54,3 @@ await Promise.all([
   buildLib("./packages/tabs"),
   buildLib("./packages/pager"),
 ]);
-
-export {};

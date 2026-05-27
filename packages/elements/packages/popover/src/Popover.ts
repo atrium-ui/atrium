@@ -359,8 +359,8 @@ export class PopoverTrigger extends LitElement {
     }
   `;
 
-  @query(".trigger") accessor input?: HTMLSlotElement;
-  @query(".content") accessor contentSlot?: HTMLSlotElement;
+  @query(".trigger") accessor input: HTMLSlotElement | null = null;
+  @query(".content") accessor contentSlot: HTMLSlotElement | null = null;
 
   render(): HTMLTemplateResult {
     return html`

@@ -63,7 +63,7 @@ export class ToggleElement extends LitElement {
    * FormData name of the field.
    */
   @property({ type: String })
-  public accessor name?: string;
+  public accessor name: string | undefined = undefined;
 
   /**
    * The value of the field, which is submitted with the form data.

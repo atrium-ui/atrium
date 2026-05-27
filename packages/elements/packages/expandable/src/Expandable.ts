@@ -83,7 +83,8 @@ export class Expandable extends LitElement {
   @property({ type: Boolean, reflect: true }) public accessor opened = false;
 
   /** What direction to open */
-  @property({ type: String, reflect: true }) public accessor direction: "down" | "up" = "down";
+  @property({ type: String, reflect: true }) public accessor direction: "down" | "up" =
+    "down";
 
   public close(): void {
     this.opened = false;

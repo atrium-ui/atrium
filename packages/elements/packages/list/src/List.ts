@@ -73,7 +73,7 @@ export class ListElement extends LitElement {
    * The selected option.
    */
   @property({ type: String })
-  public accessor value?: string;
+  public accessor value: string | undefined = undefined;
 
   /**
    * Whether the dropdown is disabled.
@@ -85,7 +85,7 @@ export class ListElement extends LitElement {
    * The name or key used in form data.
    */
   @property({ type: String, reflect: true })
-  public accessor name?: string;
+  public accessor name: string | undefined = undefined;
 
   /**
    * Direction of the list.

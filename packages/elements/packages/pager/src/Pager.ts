@@ -72,11 +72,11 @@ export class PagerElement extends LitElement {
    * Falls back to `?page=N` on the current URL.
    */
   @property({ type: String })
-  accessor url?: string;
+  accessor url: string | undefined = undefined;
 
   /** Additional query string params appended to every generated page URL. */
   @property({ type: String })
-  accessor query?: string;
+  accessor query: string | undefined = undefined;
 
   @state()
   accessor chunkSize = 3;

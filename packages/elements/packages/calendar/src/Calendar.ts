@@ -224,7 +224,7 @@ export class CalendarElement extends LitElement {
    * FormData name of the field.
    */
   @property({ type: String })
-  accessor name?: string;
+  accessor name: string | undefined = undefined;
 
   /**
    * The value of the field.
@@ -232,7 +232,7 @@ export class CalendarElement extends LitElement {
    * Range mode: "YYYY-MM-DD/YYYY-MM-DD"
    */
   @property({ type: String, reflect: true })
-  accessor value?: string;
+  accessor value: string | undefined = undefined;
 
   /**
    * Selection mode: "single" for single date, "range" for date range.
@@ -251,19 +251,19 @@ export class CalendarElement extends LitElement {
    * Defaults to locale-appropriate value.
    */
   @property({ type: Number, attribute: "week-start" })
-  accessor weekStart?: number;
+  accessor weekStart: number | undefined = undefined;
 
   /**
    * Minimum selectable date (YYYY-MM-DD).
    */
   @property({ type: String })
-  accessor min?: string;
+  accessor min: string | undefined = undefined;
 
   /**
    * Maximum selectable date (YYYY-MM-DD).
    */
   @property({ type: String })
-  accessor max?: string;
+  accessor max: string | undefined = undefined;
 
   /**
    * Dates or ranges to highlight visually.
@@ -273,7 +273,7 @@ export class CalendarElement extends LitElement {
    * @example "2024-03-15,2024-03-20/2024-03-25,2024-04-01" - multiple
    */
   @property({ type: String })
-  accessor highlight?: string;
+  accessor highlight: string | undefined = undefined;
 
   /**
    * Dates or ranges to mark as unavailable.
@@ -283,7 +283,7 @@ export class CalendarElement extends LitElement {
    * @example "2024-03-15,2024-03-20/2024-03-25,2024-04-01" - multiple
    */
   @property({ type: String })
-  accessor unavailable?: string;
+  accessor unavailable: string | undefined = undefined;
 
   /**
    * Whether the calendar is disabled.
@@ -315,25 +315,25 @@ export class CalendarElement extends LitElement {
    * Currently focused year for keyboard navigation in year picker.
    */
   @state()
-  accessor focusedYear?: number;
+  accessor focusedYear: number | undefined = undefined;
 
   /**
    * Temporary range start during range selection.
    */
   @state()
-  accessor rangeStart?: string;
+  accessor rangeStart: string | undefined = undefined;
 
   /**
    * Hovered date for range preview.
    */
   @state()
-  accessor hoverDate?: string;
+  accessor hoverDate: string | undefined = undefined;
 
   /**
    * Currently focused date for keyboard navigation.
    */
   @state()
-  accessor focusedDate?: string;
+  accessor focusedDate: string | undefined = undefined;
 
   input = document.createElement("input");
 

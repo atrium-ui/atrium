@@ -114,7 +114,7 @@ export class Select extends LitElement {
    * The selected option.
    */
   @property({ type: String })
-  public accessor value?: string;
+  public accessor value: string | undefined = undefined;
 
   public selected?: string;
 
@@ -140,7 +140,7 @@ export class Select extends LitElement {
    * The name or key used in form data.
    */
   @property({ type: String, reflect: true })
-  public accessor name?: string;
+  public accessor name: string | undefined = undefined;
 
   @query(".dropdown")
   public accessor dropdown!: HTMLElement;

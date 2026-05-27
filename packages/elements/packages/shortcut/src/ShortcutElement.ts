@@ -74,7 +74,7 @@ export class ShortcutElement extends LitElement {
    * Comma seperated shortcut key combinations. Zed syntax.
    */
   @property({ type: String })
-  public accessor value?: string;
+  public accessor value: string | undefined = undefined;
 
   render() {
     const combinations = this.value?.split(",").map((c) => c.trim());
