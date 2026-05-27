@@ -16,7 +16,18 @@ if (typeof window !== "undefined") {
   });
 }
 
-let accordionIncrement = 0;
+// Counter lives on globalThis so tests can reset it (and so multiple bundled
+// copies of this module share the same sequence).
+declare global {
+  // biome-ignore lint: global augmentation requires var
+  var __atriumExpandableIdCounter: number | undefined;
+}
+
+function nextExpandableId(): number {
+  const next = (globalThis.__atriumExpandableIdCounter ?? 0) + 1;
+  globalThis.__atriumExpandableIdCounter = next;
+  return next;
+}
 
 /**
  * A element that can collapse and expand its content with an animation.
@@ -148,8 +159,9 @@ export class Expandable extends LitElement {
     return undefined;
   }
 
-  _id_toggle = `expandable_toggle_${++accordionIncrement}`;
-  _id_content = `expandable_content_${accordionIncrement}`;
+  _id = nextExpandableId();
+  _id_toggle = `expandable_toggle_${this._id}`;
+  _id_content = `expandable_content_${this._id}`;
 
   updated() {
     this.updateAttributes();

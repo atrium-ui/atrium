@@ -9,6 +9,7 @@ describe("Expandable", () => {
   });
 
   beforeEach(() => {
+    globalThis.__atriumExpandableIdCounter = 0;
     window.dispatchEvent(new Event("load"));
   });
 
