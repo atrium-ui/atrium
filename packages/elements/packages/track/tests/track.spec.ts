@@ -44,16 +44,19 @@ describe("Track", () => {
   });
 
   test("construct track element", async () => {
-    const { Track } = await import("../src/index.js");
+    await import("../src/index.js");
+
+    const TrackConstructor = customElements.get("a-track");
+    expect(TrackConstructor).toBeDefined();
 
     const track = document.createElement("a-track");
-    expect(track).toBeInstanceOf(Track);
+    expect(track).toBeInstanceOf(TrackConstructor!);
 
     const html = "<a-track></a-track>";
     const ele = document.createElement("div");
     ele.innerHTML = html;
 
-    expect(ele.children[0]).toBeInstanceOf(Track);
+    expect(ele.children[0]).toBeInstanceOf(TrackConstructor!);
   });
 
   test(label("import track element"), async () => {
