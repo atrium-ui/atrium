@@ -46,8 +46,8 @@ describe("Track", () => {
   test("construct track element", async () => {
     const { Track } = await import("../src/index.js");
 
-    // is constructable
-    expect(new Track()).toBeInstanceOf(Track);
+    const track = document.createElement("a-track");
+    expect(track).toBeInstanceOf(Track);
 
     const html = "<a-track></a-track>";
     const ele = document.createElement("div");
