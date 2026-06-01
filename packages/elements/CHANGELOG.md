@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.11.1 (2026-06-01)
+
+### Fixes
+
+- Improve screen reader accessibility for date selection
+
 ## 4.11.0 (2026-05-27)
 
 ### Features
