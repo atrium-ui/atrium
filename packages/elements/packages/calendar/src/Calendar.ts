@@ -29,6 +29,16 @@ import { property, state } from "lit/decorators.js";
  * ```
  */
 export class CalendarElement extends LitElement {
+  // Delegate focus so the host is always a valid focus target
+  // (`calendar.focus()`, click, sequential tab) while the actual focus lands
+  // on a focusable element inside the shadow root. This keeps a fallback
+  // "focus the calendar" target without making a screen reader read the
+  // accessible name of the entire subtree (every button) at once.
+  static shadowRootOptions: ShadowRootInit = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   static styles = css`
     :host {
       display: inline-block;
@@ -40,7 +50,12 @@ export class CalendarElement extends LitElement {
       --_selected-color: var(--calendar-selected-color, white);
       --_range-bg: var(--calendar-range-bg, rgba(29, 78, 216, 0.2));
       --_highlight-bg: var(--calendar-highlight-bg, rgba(234, 179, 8, 0.4));
-      --_focus-outline: var(--calendar-focus-outline, currentColor);
+      --_focus-outline: var(--calendar-focus-outline, black);
+      --_bg: var(--calendar-bg, Canvas);
+    }
+
+    .body {
+      position: relative;
     }
 
     .header {
@@ -71,12 +86,18 @@ export class CalendarElement extends LitElement {
       gap: 0.25rem;
     }
 
+    /* Overlay the calendar body so toggling the picker does not change the
+       element's dimensions. The day grid stays in flow and governs size. */
     .year-picker {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
+      align-content: start;
       gap: 0.25rem;
-      max-height: 250px;
       overflow-y: auto;
+      background: var(--_bg);
     }
 
     .year-option {
@@ -136,6 +157,15 @@ export class CalendarElement extends LitElement {
     }
 
     .days {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    /* Real row boxes (not display:contents): some browsers drop the ARIA
+       role of a display:contents element, which breaks the grid structure
+       and makes screen readers read the whole row of cells at once. */
+    .week {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 1px;
@@ -198,9 +228,19 @@ export class CalendarElement extends LitElement {
       cursor: not-allowed;
     }
 
-    :host(:focus-visible) .day[data-focused] {
+    /* Roving tabindex: the focused day cell holds DOM focus directly. Show a
+       ring only for keyboard focus, not when clicked with a pointer. */
+    .day:focus-visible {
       outline: 2px solid var(--_focus-outline);
       outline-offset: -2px;
+    }
+
+    .day:focus:not(:focus-visible) {
+      outline: none;
+    }
+
+    .year-picker:focus {
+      outline: none;
     }
 
     .day[data-highlighted] {
@@ -217,6 +257,18 @@ export class CalendarElement extends LitElement {
 
     .day[data-highlight-start][data-highlight-end] {
       border-radius: 0.25rem;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
   `;
 
@@ -335,11 +387,21 @@ export class CalendarElement extends LitElement {
   @state()
   accessor focusedDate: string | undefined = undefined;
 
+  /**
+   * Message announced to screen readers via the live region.
+   * Updated on navigation and selection so assistive tech gets feedback.
+   */
+  @state()
+  accessor announcement: string = "";
+
   input = document.createElement("input");
 
   connectedCallback() {
     super.connectedCallback();
-    this.tabIndex = 0;
+    // The host itself is not focusable: a focusable host with no role makes
+    // screen readers announce the accessible name of the whole subtree (every
+    // button label) at once. Focus lives on the inner grid / year listbox
+    // instead, which expose proper roles and drive aria-activedescendant.
 
     if (this.value) {
       const parsed = this.parseValue(this.value);
@@ -403,6 +465,37 @@ export class CalendarElement extends LitElement {
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Format a date string as a localized, human-readable label
+   * (e.g. "Friday, March 15, 2024") for screen readers.
+   */
+  formatDateLong(dateStr: string): string {
+    const formatter = new Intl.DateTimeFormat(this.locale, {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    return formatter.format(this.parseDate(dateStr));
+  }
+
+  /**
+   * Build an accessible label for a day cell: the localized date plus any
+   * relevant state (today, selected, range bounds, unavailable) so screen
+   * reader users get full context as they navigate.
+   */
+  describeDate(dateStr: string): string {
+    const parts = [this.formatDateLong(dateStr)];
+    if (this.isToday(dateStr)) parts.push("Today");
+    if (this.isRangeStart(dateStr)) parts.push("Range start");
+    if (this.isRangeEnd(dateStr)) parts.push("Range end");
+    if (this.isSelected(dateStr) && !this.isRangeStart(dateStr) && !this.isRangeEnd(dateStr)) {
+      parts.push("Selected");
+    }
+    if (this.isDateDisabled(dateStr)) parts.push("Unavailable");
+    return parts.join(", ");
   }
 
   /**
@@ -671,6 +764,7 @@ export class CalendarElement extends LitElement {
       1,
     );
     this.focusedDate = this.formatDate(this.viewDate);
+    // The moved active cell is announced via aria-activedescendant.
   }
 
   /**
@@ -683,6 +777,7 @@ export class CalendarElement extends LitElement {
       1,
     );
     this.focusedDate = this.formatDate(this.viewDate);
+    // The moved active cell is announced via aria-activedescendant.
   }
 
   /**
@@ -692,15 +787,91 @@ export class CalendarElement extends LitElement {
     this.viewDate = new Date();
   }
 
+  /**
+   * Focus the calendar's active control — the focused day cell (roving
+   * tabindex), or the year listbox while the year picker is open. Overrides
+   * the default so an external `calendar.focus()` reliably lands on the
+   * meaningful control rather than delegating to the first focusable
+   * descendant (the title button).
+   */
+  override focus(options?: FocusOptions) {
+    const selector = this.yearPickerOpen
+      ? ".year-picker"
+      : `[data-date="${this.focusedDate}"]`;
+    const target = this.shadowRoot?.querySelector<HTMLElement>(selector);
+    if (target) {
+      target.focus(options);
+    } else {
+      super.focus(options);
+    }
+  }
+
+  /**
+   * Move DOM focus to the currently focused day cell (after the next render).
+   * With roving tabindex this is the single tabbable cell in the grid, so a
+   * screen reader announces just that cell — not the whole row.
+   */
+  focusActiveDay() {
+    this.updateComplete.then(() => {
+      // preventScroll: focusing must not scroll the page to the calendar.
+      this.shadowRoot
+        ?.querySelector<HTMLElement>(`[data-date="${this.focusedDate}"]`)
+        ?.focus({ preventScroll: true });
+    });
+  }
+
+  /**
+   * Move keyboard focus to the year listbox (after the next render).
+   */
+  focusYearPicker() {
+    this.updateComplete.then(() => {
+      // preventScroll: focusing must not scroll the page to the calendar.
+      this.shadowRoot?.querySelector<HTMLElement>(".year-picker")?.focus({
+        preventScroll: true,
+      });
+    });
+  }
+
+  /**
+   * Scroll a year option into view *within the picker only*.
+   * Element.scrollIntoView scrolls every scrollable ancestor (including the
+   * document), which would jump the whole page when the picker opens — so we
+   * adjust the picker's own scrollTop instead.
+   */
+  scrollYearIntoView(option: HTMLElement | null | undefined, center: boolean) {
+    const picker = this.shadowRoot?.querySelector<HTMLElement>(".year-picker");
+    if (!picker || !option) return;
+
+    if (center) {
+      picker.scrollTop =
+        option.offsetTop - picker.clientHeight / 2 + option.clientHeight / 2;
+      return;
+    }
+
+    // "nearest": only scroll when the option is outside the visible area.
+    const top = option.offsetTop;
+    const bottom = top + option.clientHeight;
+    if (top < picker.scrollTop) {
+      picker.scrollTop = top;
+    } else if (bottom > picker.scrollTop + picker.clientHeight) {
+      picker.scrollTop = bottom - picker.clientHeight;
+    }
+  }
+
   toggleYearPicker(ev: Event) {
     this.yearPickerOpen = !this.yearPickerOpen;
     this.focusedYear = this.yearPickerOpen ? this.viewDate.getFullYear() : undefined;
     ev.stopPropagation();
     if (this.yearPickerOpen) {
+      this.focusYearPicker();
       this.updateComplete.then(() => {
-        const selected = this.shadowRoot?.querySelector(".year-option[data-selected]");
-        selected?.scrollIntoView({ block: "center" });
+        const selected = this.shadowRoot?.querySelector<HTMLElement>(
+          ".year-option[data-selected]",
+        );
+        this.scrollYearIntoView(selected, true);
       });
+    } else {
+      this.focusActiveDay();
     }
   }
 
@@ -711,6 +882,8 @@ export class CalendarElement extends LitElement {
     this.focusedDate = this.formatDate(new Date(year, newDate.getMonth(), 1));
     this.yearPickerOpen = false;
     this.focusedYear = undefined;
+    this.announce(this.getMonthYearString());
+    this.focusActiveDay();
   }
 
   getYearOptions(): number[] {
@@ -733,8 +906,10 @@ export class CalendarElement extends LitElement {
     const newIndex = Math.max(0, Math.min(years.length - 1, currentIndex + delta));
     this.focusedYear = years[newIndex]!;
     this.updateComplete.then(() => {
-      const focused = this.shadowRoot?.querySelector(".year-option[data-focused]");
-      focused?.scrollIntoView({ block: "nearest" });
+      const focused = this.shadowRoot?.querySelector<HTMLElement>(
+        ".year-option[data-focused]",
+      );
+      this.scrollYearIntoView(focused, false);
     });
   }
 
@@ -756,12 +931,16 @@ export class CalendarElement extends LitElement {
     if (this.mode === "single") {
       this.value = dateStr;
       this.input.value = this.value;
+      this.announce(`Selected ${this.formatDateLong(dateStr)}`);
       this.dispatchEvent(new Event("change", { bubbles: true }));
     } else {
       // Range mode
       if (!this.rangeStart) {
         // First click - start range
         this.rangeStart = dateStr;
+        this.announce(
+          `Range start ${this.formatDateLong(dateStr)}. Select end date.`,
+        );
         this.dispatchEvent(new Event("input", { bubbles: true }));
       } else {
         // Second click - complete range
@@ -770,9 +949,23 @@ export class CalendarElement extends LitElement {
         this.input.value = this.value;
         this.rangeStart = undefined;
         this.hoverDate = undefined;
+        this.announce(
+          `Selected range ${this.formatDateLong(start!)} to ${this.formatDateLong(end!)}`,
+        );
         this.dispatchEvent(new Event("change", { bubbles: true }));
       }
     }
+  }
+
+  /**
+   * Update the screen reader live region. Resets first so identical
+   * consecutive messages are still re-announced by assistive tech.
+   */
+  announce(message: string) {
+    this.announcement = "";
+    this.updateComplete.then(() => {
+      this.announcement = message;
+    });
   }
 
   /**
@@ -811,6 +1004,11 @@ export class CalendarElement extends LitElement {
     if (this.mode === "range" && this.rangeStart) {
       this.hoverDate = newDateStr;
     }
+
+    // Move real DOM focus to the new cell (roving tabindex). No live-region
+    // announcement needed: focusing the cell makes assistive tech read it,
+    // and its accessible name already carries the full date and its state.
+    this.focusActiveDay();
   }
 
   /**
@@ -845,6 +1043,7 @@ export class CalendarElement extends LitElement {
         case "Escape":
           this.yearPickerOpen = false;
           this.focusedYear = undefined;
+          this.focusActiveDay();
           e.preventDefault();
           e.stopPropagation();
           break;
@@ -856,8 +1055,9 @@ export class CalendarElement extends LitElement {
         target.classList.contains("header-title") &&
         (e.key === "Enter" || e.key === " ")
       ) {
-        // open year-picker
-        requestAnimationFrame(() => this.focus());
+        // Let the button's native click toggle the year picker (which moves
+        // focus to the listbox). Stop here so Enter/Space isn't also treated
+        // as a date selection by the grid handler below.
         return;
       }
     }
@@ -888,10 +1088,12 @@ export class CalendarElement extends LitElement {
         break;
       case "PageUp":
         this.prevMonth();
+        this.focusActiveDay();
         e.preventDefault();
         break;
       case "PageDown":
         this.nextMonth();
+        this.focusActiveDay();
         e.preventDefault();
         break;
       case "Escape":
@@ -907,6 +1109,12 @@ export class CalendarElement extends LitElement {
     const currentYear = this.viewDate.getFullYear();
     const weekdays = this.getWeekdayNames();
     const days = this.getDaysInView();
+
+    // Group days into weeks so the grid has proper row semantics.
+    const weeks: Array<typeof days> = [];
+    for (let i = 0; i < days.length; i += 7) {
+      weeks.push(days.slice(i, i + 7));
+    }
 
     return html`
       <div class="header" part="header">
@@ -952,92 +1160,113 @@ export class CalendarElement extends LitElement {
         }
       </div>
 
-      ${
-        this.yearPickerOpen
-          ? html`
-            <div
-              class="year-picker"
-              part="year-picker"
-              role="listbox"
-              aria-label="Select year"
-              aria-activedescendant=${this.focusedYear ? `year-${this.focusedYear}` : nothing}
-            >
-              ${this.getYearOptions().map(
-                (year) => html`
-                  <button
-                    type="button"
-                    id="year-${year}"
-                    class="year-option"
-                    role="option"
-                    tabindex="-1"
-                    aria-selected=${year === currentYear ? "true" : "false"}
-                    ?data-selected=${year === currentYear}
-                    ?data-focused=${year === this.focusedYear}
-                    @click=${() => this.selectYear(year)}
-                  >
-                    ${year}
-                  </button>
+      <div class="body" part="body">
+        <div class="weekdays" part="weekdays" aria-hidden="true">
+          ${weekdays.map((name) => html`<span class="weekday">${name}</span>`)}
+        </div>
+
+        <div
+          class="days"
+          part="days"
+          role="group"
+          aria-hidden=${this.yearPickerOpen ? "true" : nothing}
+          aria-label=${this.getMonthYearString()}
+        >
+              ${weeks.map(
+                (week) => html`
+                  <div class="week" part="week">
+                    ${week.map(({ dateStr, isOtherMonth }) => {
+                      const disabled = this.isDateDisabled(dateStr);
+                      const selected = this.isSelected(dateStr);
+                      const inRange = this.isInRange(dateStr);
+                      const rangeStart = this.isRangeStart(dateStr);
+                      const rangeEnd = this.isRangeEnd(dateStr);
+                      const today = this.isToday(dateStr);
+                      const focused = this.focusedDate === dateStr;
+                      const highlighted = this.isHighlighted(dateStr);
+                      const highlightStart = this.isHighlightStart(dateStr);
+                      const highlightEnd = this.isHighlightEnd(dateStr);
+                      const dayNum = parseInt(dateStr.split("-")[2]!, 10);
+
+                      return html`
+                        <button
+                          type="button"
+                          id="day-${dateStr}"
+                          class="day"
+                          part="day"
+                          tabindex=${focused && !this.yearPickerOpen ? "0" : "-1"}
+                          data-date=${dateStr}
+                          ?disabled=${disabled}
+                          ?data-other-month=${isOtherMonth}
+                          ?data-today=${today}
+                          ?data-selected=${selected}
+                          ?data-in-range=${inRange}
+                          ?data-range-start=${rangeStart}
+                          ?data-range-end=${rangeEnd}
+                          ?data-focused=${focused}
+                          ?data-highlighted=${highlighted}
+                          ?data-highlight-start=${highlightStart}
+                          ?data-highlight-end=${highlightEnd}
+                          aria-current=${today ? "date" : nothing}
+                          aria-disabled=${disabled ? "true" : nothing}
+                          aria-label=${this.describeDate(dateStr)}
+                          @click=${() => this.selectDate(dateStr)}
+                          @mouseenter=${() => this.onDayHover(dateStr)}
+                        >
+                          <span aria-hidden="true">${dayNum}</span>
+                        </button>
+                      `;
+                    })}
+                  </div>
                 `,
               )}
             </div>
-          `
-          : html`
-            <div class="weekdays" part="weekdays">
-              ${weekdays.map((name) => html`<span class="weekday">${name}</span>`)}
-            </div>
 
-            <div class="days" part="days" role="grid">
-              ${days.map(({ dateStr, isOtherMonth }) => {
-                const disabled = this.isDateDisabled(dateStr);
-                const selected = this.isSelected(dateStr);
-                const inRange = this.isInRange(dateStr);
-                const rangeStart = this.isRangeStart(dateStr);
-                const rangeEnd = this.isRangeEnd(dateStr);
-                const today = this.isToday(dateStr);
-                const focused = this.focusedDate === dateStr;
-                const highlighted = this.isHighlighted(dateStr);
-                const highlightStart = this.isHighlightStart(dateStr);
-                const highlightEnd = this.isHighlightEnd(dateStr);
-                const dayNum = parseInt(dateStr.split("-")[2]!, 10);
+        ${
+          this.rangeStart && !this.yearPickerOpen
+            ? html`<div part="hint" style="font-size: 0.75rem; opacity: 0.6; margin-top: 0.5rem; text-align: center;">
+              Select end date
+            </div>`
+            : nothing
+        }
 
-                return html`
-                  <button
-                    type="button"
-                    class="day"
-                    part="day"
-                    role="gridcell"
-                    tabindex="-1"
-                    ?disabled=${disabled}
-                    ?data-other-month=${isOtherMonth}
-                    ?data-today=${today}
-                    ?data-selected=${selected}
-                    ?data-in-range=${inRange}
-                    ?data-range-start=${rangeStart}
-                    ?data-range-end=${rangeEnd}
-                    ?data-focused=${focused}
-                    ?data-highlighted=${highlighted}
-                    ?data-highlight-start=${highlightStart}
-                    ?data-highlight-end=${highlightEnd}
-                    aria-selected=${selected ? "true" : "false"}
-                    aria-label=${dateStr}
-                    @click=${() => this.selectDate(dateStr)}
-                    @mouseenter=${() => this.onDayHover(dateStr)}
-                  >
-                    ${dayNum}
-                  </button>
-                `;
-              })}
-            </div>
+        ${
+          this.yearPickerOpen
+            ? html`
+              <div
+                class="year-picker"
+                part="year-picker"
+                role="listbox"
+                tabindex="0"
+                aria-label="Select year"
+                aria-activedescendant=${this.focusedYear ? `year-${this.focusedYear}` : nothing}
+              >
+                ${this.getYearOptions().map(
+                  (year) => html`
+                    <button
+                      type="button"
+                      id="year-${year}"
+                      class="year-option"
+                      role="option"
+                      tabindex="-1"
+                      aria-selected=${year === currentYear ? "true" : "false"}
+                      ?data-selected=${year === currentYear}
+                      ?data-focused=${year === this.focusedYear}
+                      @click=${() => this.selectYear(year)}
+                    >
+                      ${year}
+                    </button>
+                  `,
+                )}
+              </div>
+            `
+            : nothing
+        }
+      </div>
 
-            ${
-              this.rangeStart
-                ? html`<div part="hint" style="font-size: 0.75rem; opacity: 0.6; margin-top: 0.5rem; text-align: center;">
-                  Select end date
-                </div>`
-                : nothing
-            }
-          `
-      }
+      <div class="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        ${this.announcement}
+      </div>
     `;
   }
 }

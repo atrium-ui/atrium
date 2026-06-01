@@ -1,4 +1,6 @@
 import { beforeEach, afterEach, test, expect, describe } from "bun:test";
+import { within } from "@testing-library/dom";
+import { computeAccessibleName } from "dom-accessibility-api";
 
 const NODE_NAME = "a-calendar";
 
@@ -39,13 +41,13 @@ function cleanup(root: HTMLElement) {
 }
 
 function clickDay(calendar: any, dateStr: string) {
-  const dayBtn = calendar.shadowRoot?.querySelector(`[aria-label="${dateStr}"]`);
+  const dayBtn = calendar.shadowRoot?.querySelector(`[data-date="${dateStr}"]`);
   if (!dayBtn) throw new Error(`Day button not found for ${dateStr}`);
   dayBtn.click();
 }
 
 function getDayButton(calendar: any, dateStr: string) {
-  return calendar.shadowRoot?.querySelector(`[aria-label="${dateStr}"]`);
+  return calendar.shadowRoot?.querySelector(`[data-date="${dateStr}"]`);
 }
 
 // Import and registration tests
@@ -529,6 +531,274 @@ describe("selection state", () => {
     expect(calendar.isRangeStart("2024-03-15")).toBe(false);
     expect(calendar.isRangeEnd("2024-03-20")).toBe(true);
     expect(calendar.isRangeEnd("2024-03-15")).toBe(false);
+
+    cleanup(root);
+  });
+});
+
+// Accessibility tests — assert against the computed accessibility tree
+// (roles + accessible names) via Testing Library rather than raw markup.
+describe("accessibility", () => {
+  // Scope Testing Library queries to the component's shadow root.
+  function a11y(calendar: any) {
+    return within(calendar.shadowRoot as unknown as HTMLElement);
+  }
+
+  // The polite live region is exposed as role="status".
+  async function liveText(calendar: any) {
+    // announce() clears then sets the message on the next update tick.
+    await calendar.updateComplete;
+    await calendar.updateComplete;
+    return a11y(calendar).getByRole("status").textContent?.trim();
+  }
+
+  // The day collection avoids grid/row/gridcell roles on purpose: a row's
+  // accessible name is the concatenation of its cells, so screen readers
+  // (VoiceOver) read the whole week when a cell is focused. A labelled group
+  // of plain buttons keeps each day's announcement isolated.
+  test("days are exposed as a labelled group, not a grid", async () => {
+    const { root, calendar } = await newCalendar({
+      value: "2024-03-15",
+      locale: "en-US",
+    });
+
+    const sr = a11y(calendar);
+    expect(sr.getByRole("group", { name: "March 2024" })).toBeTruthy();
+    // No grid/row/gridcell roles anywhere in the day collection.
+    expect(sr.queryAllByRole("grid").length).toBe(0);
+    expect(sr.queryAllByRole("row").length).toBe(0);
+    expect(sr.queryAllByRole("gridcell").length).toBe(0);
+
+    cleanup(root);
+  });
+
+  test("no week wrapper exposes the concatenation of its days as a name", async () => {
+    const { root, calendar } = await newCalendar({
+      value: "1967-03-15",
+      locale: "en-US",
+    });
+
+    // Reproduces the original bug: a role="row" wrapper computed its
+    // accessible name from all 7 day labels, so VoiceOver read the entire
+    // week ("…row Sunday March 12, Monday March 13, …") on cell focus.
+    const weeks = calendar.shadowRoot.querySelectorAll(".week");
+    expect(weeks.length).toBe(6);
+    for (const week of weeks) {
+      expect(computeAccessibleName(week as HTMLElement)).toBe("");
+    }
+
+    cleanup(root);
+  });
+
+  test("each day is reachable by its human-readable accessible name", async () => {
+    const { root, calendar } = await newCalendar({
+      value: "2024-03-15",
+      locale: "en-US",
+    });
+
+    // The accessible name a screen reader would announce, not the ISO string.
+    const day = a11y(calendar).getByRole("button", {
+      name: /Friday, March 15, 2024/,
+    });
+    expect(day.getAttribute("data-date")).toBe("2024-03-15");
+
+    cleanup(root);
+  });
+
+  test("a day's accessible name carries its selection state", async () => {
+    const { root, calendar } = await newCalendar({
+      value: "2024-03-15",
+      locale: "en-US",
+    });
+
+    // Selection is conveyed in the label (no aria-selected, which is invalid
+    // on a plain button anyway).
+    const day = a11y(calendar).getByRole("button", { name: /Selected/ });
+    expect(day.getAttribute("data-date")).toBe("2024-03-15");
+    expect(computeAccessibleName(day)).toContain("Selected");
+
+    cleanup(root);
+  });
+
+  test("today's cell exposes aria-current=date in its accessible name", async () => {
+    const { root, calendar } = await newCalendar();
+
+    const todayStr = calendar.formatDate(new Date());
+    const day = a11y(calendar).getByRole("button", { name: /Today/ });
+    expect(day.getAttribute("data-date")).toBe(todayStr);
+    expect(day.getAttribute("aria-current")).toBe("date");
+
+    cleanup(root);
+  });
+
+  test("selecting a date announces it via the live region", async () => {
+    const { root, calendar } = await newCalendar({
+      value: "2024-03-15",
+      locale: "en-US",
+    });
+
+    clickDay(calendar, "2024-03-20");
+
+    const text = await liveText(calendar);
+    expect(text).toContain("Selected");
+    expect(text).toContain("March 20, 2024");
+
+    cleanup(root);
+  });
+
+  test("range selection announces start then completed range", async () => {
+    const { root, calendar } = await newCalendar({
+      mode: "range",
+      value: "2024-03-15",
+      locale: "en-US",
+    });
+
+    clickDay(calendar, "2024-03-10");
+    expect(await liveText(calendar)).toContain("Range start");
+
+    clickDay(calendar, "2024-03-20");
+    const text = await liveText(calendar);
+    expect(text).toContain("Selected range");
+    expect(text).toContain("March 10, 2024");
+    expect(text).toContain("March 20, 2024");
+
+    cleanup(root);
+  });
+
+  test("roving tabindex: only the focused day cell is tabbable", async () => {
+    const { root, calendar } = await newCalendar({ value: "2024-03-15" });
+
+    // The host carries no tabindex/role of its own — a focusable host with no
+    // role would make a screen reader read the accessible name of the whole
+    // subtree (every button) at once. The group container is not a tab stop.
+    expect(calendar.getAttribute("tabindex")).toBeNull();
+    expect(a11y(calendar).getByRole("group").getAttribute("tabindex")).toBeNull();
+
+    const cells = [...calendar.shadowRoot.querySelectorAll(".day")];
+    const tabbable = cells.filter((c) => c.getAttribute("tabindex") === "0");
+    expect(tabbable.length).toBe(1);
+    expect(tabbable[0].getAttribute("data-date")).toBe("2024-03-15");
+
+    cleanup(root);
+  });
+
+  test("calendar.focus() delegates focus to the focused day cell", async () => {
+    const { root, calendar } = await newCalendar({ value: "2024-03-15" });
+
+    calendar.focus();
+
+    // The host is a valid focus target (fallback "focus the calendar"),
+    // but real focus lands on the focused day cell inside the shadow root.
+    expect(document.activeElement).toBe(calendar);
+    expect(calendar.shadowRoot.activeElement).toBe(
+      getDayButton(calendar, "2024-03-15"),
+    );
+
+    cleanup(root);
+  });
+
+  test("calendar.focus() targets the year listbox while it is open", async () => {
+    const { root, calendar } = await newCalendar({ value: "2024-03-15" });
+
+    calendar.toggleYearPicker(new Event("click"));
+    await calendar.updateComplete;
+
+    calendar.focus();
+    expect(calendar.shadowRoot.activeElement).toBe(
+      calendar.shadowRoot.querySelector(".year-picker"),
+    );
+
+    cleanup(root);
+  });
+
+  test("keyboard navigation moves DOM focus to the new day cell", async () => {
+    const { root, calendar } = await newCalendar({
+      value: "2024-03-15",
+      locale: "en-US",
+    });
+
+    calendar.focus();
+    expect(calendar.shadowRoot.activeElement).toBe(
+      getDayButton(calendar, "2024-03-15"),
+    );
+
+    calendar.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }),
+    );
+    await calendar.updateComplete;
+
+    expect(calendar.focusedDate).toBe("2024-03-16");
+
+    // Roving tabindex: real focus moved to the next cell, which becomes the
+    // sole tab stop. A screen reader announces just this cell.
+    const newCell = getDayButton(calendar, "2024-03-16");
+    expect(calendar.shadowRoot.activeElement).toBe(newCell);
+    expect(newCell.getAttribute("tabindex")).toBe("0");
+    expect(newCell.getAttribute("aria-label")).toContain("March 16, 2024");
+    // The previously focused cell is no longer tabbable.
+    expect(getDayButton(calendar, "2024-03-15").getAttribute("tabindex")).toBe(
+      "-1",
+    );
+
+    cleanup(root);
+  });
+
+  test("year listbox is exposed with role, label, and active option", async () => {
+    const { root, calendar } = await newCalendar({ value: "2024-03-15" });
+
+    calendar.toggleYearPicker(new Event("click"));
+    await calendar.updateComplete;
+
+    const listbox = a11y(calendar).getByRole("listbox", { name: "Select year" });
+    expect(listbox.getAttribute("tabindex")).toBe("0");
+    expect(listbox.getAttribute("aria-activedescendant")).toBe("year-2024");
+
+    cleanup(root);
+  });
+
+  test("year picker overlays the grid without removing it from layout", async () => {
+    const { root, calendar } = await newCalendar({ value: "2024-03-15" });
+
+    const body = calendar.shadowRoot.querySelector(".body");
+    const grid = calendar.shadowRoot.querySelector(".days");
+    expect(grid).toBeTruthy();
+
+    calendar.toggleYearPicker(new Event("click"));
+    await calendar.updateComplete;
+
+    // The day grid is still rendered (so the element keeps its dimensions),
+    // but hidden from AT and removed from the tab order while the picker is up.
+    expect(calendar.shadowRoot.querySelector(".days")).toBe(grid);
+    expect(grid.getAttribute("aria-hidden")).toBe("true");
+    // No day cell is tabbable while the (hidden) grid is behind the overlay.
+    const tabbableCells = calendar.shadowRoot
+      .querySelectorAll('.day[tabindex="0"]');
+    expect(tabbableCells.length).toBe(0);
+
+    // The picker is an absolutely-positioned overlay inside the same body box.
+    const picker = calendar.shadowRoot.querySelector(".year-picker");
+    expect(picker.parentElement).toBe(body);
+    const pos = getComputedStyle(picker).position;
+    if (pos) expect(pos).toBe("absolute"); // happy-dom may not resolve shadow CSS
+
+    cleanup(root);
+  });
+
+  test("selecting a year announces the new month and year", async () => {
+    const { root, calendar } = await newCalendar({
+      value: "2024-03-15",
+      locale: "en-US",
+    });
+
+    calendar.toggleYearPicker(new Event("click"));
+    await calendar.updateComplete;
+
+    calendar.selectYear(2027);
+
+    expect(calendar.yearPickerOpen).toBe(false);
+    const text = await liveText(calendar);
+    expect(text).toContain("March");
+    expect(text).toContain("2027");
 
     cleanup(root);
   });
