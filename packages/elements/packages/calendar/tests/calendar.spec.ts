@@ -690,9 +690,7 @@ describe("accessibility", () => {
     // The host is a valid focus target (fallback "focus the calendar"),
     // but real focus lands on the focused day cell inside the shadow root.
     expect(document.activeElement).toBe(calendar);
-    expect(calendar.shadowRoot.activeElement).toBe(
-      getDayButton(calendar, "2024-03-15"),
-    );
+    expect(calendar.shadowRoot.activeElement).toBe(getDayButton(calendar, "2024-03-15"));
 
     cleanup(root);
   });
@@ -718,9 +716,7 @@ describe("accessibility", () => {
     });
 
     calendar.focus();
-    expect(calendar.shadowRoot.activeElement).toBe(
-      getDayButton(calendar, "2024-03-15"),
-    );
+    expect(calendar.shadowRoot.activeElement).toBe(getDayButton(calendar, "2024-03-15"));
 
     calendar.dispatchEvent(
       new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }),
@@ -736,9 +732,7 @@ describe("accessibility", () => {
     expect(newCell.getAttribute("tabindex")).toBe("0");
     expect(newCell.getAttribute("aria-label")).toContain("March 16, 2024");
     // The previously focused cell is no longer tabbable.
-    expect(getDayButton(calendar, "2024-03-15").getAttribute("tabindex")).toBe(
-      "-1",
-    );
+    expect(getDayButton(calendar, "2024-03-15").getAttribute("tabindex")).toBe("-1");
 
     cleanup(root);
   });
@@ -771,8 +765,7 @@ describe("accessibility", () => {
     expect(calendar.shadowRoot.querySelector(".days")).toBe(grid);
     expect(grid.getAttribute("aria-hidden")).toBe("true");
     // No day cell is tabbable while the (hidden) grid is behind the overlay.
-    const tabbableCells = calendar.shadowRoot
-      .querySelectorAll('.day[tabindex="0"]');
+    const tabbableCells = calendar.shadowRoot.querySelectorAll('.day[tabindex="0"]');
     expect(tabbableCells.length).toBe(0);
 
     // The picker is an absolutely-positioned overlay inside the same body box.

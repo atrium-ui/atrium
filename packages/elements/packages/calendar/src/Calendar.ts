@@ -491,7 +491,11 @@ export class CalendarElement extends LitElement {
     if (this.isToday(dateStr)) parts.push("Today");
     if (this.isRangeStart(dateStr)) parts.push("Range start");
     if (this.isRangeEnd(dateStr)) parts.push("Range end");
-    if (this.isSelected(dateStr) && !this.isRangeStart(dateStr) && !this.isRangeEnd(dateStr)) {
+    if (
+      this.isSelected(dateStr) &&
+      !this.isRangeStart(dateStr) &&
+      !this.isRangeEnd(dateStr)
+    ) {
       parts.push("Selected");
     }
     if (this.isDateDisabled(dateStr)) parts.push("Unavailable");
@@ -938,9 +942,7 @@ export class CalendarElement extends LitElement {
       if (!this.rangeStart) {
         // First click - start range
         this.rangeStart = dateStr;
-        this.announce(
-          `Range start ${this.formatDateLong(dateStr)}. Select end date.`,
-        );
+        this.announce(`Range start ${this.formatDateLong(dateStr)}. Select end date.`);
         this.dispatchEvent(new Event("input", { bubbles: true }));
       } else {
         // Second click - complete range
