@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.11.2 (2026-06-11)
+
+### Fixes
+
+- a-track layout thrashing while DOM construction
+
 ## 4.11.1 (2026-06-01)
 
 ### Fixes
