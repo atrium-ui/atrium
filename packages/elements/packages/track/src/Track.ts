@@ -276,8 +276,6 @@ export class Track extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.updateItems();
-
     this.ariaRoleDescription = "carousel";
 
     this.role = this.role || "region"; // fallback to region if no role is set
@@ -292,8 +290,11 @@ export class Track extends LitElement {
     const intersectionObserver = new IntersectionObserver((intersections) => {
       for (const entry of intersections) {
         if (entry.isIntersecting) {
+          this.visible = true;
+          this.flushFormat();
           this.startAnimate();
         } else {
+          this.visible = false;
           this.stopAnimate();
         }
       }
@@ -315,11 +316,20 @@ export class Track extends LitElement {
       hostDisconnected: () => this.resizeObserver?.disconnect(),
     });
 
-    this.computeCurrentItem();
+    // Measuring children forces a synchronous reflow while the surrounding
+    // DOM may still be under construction (e.g. many tracks mounting in one
+    // pass). Defer the initial format until the track is visible; the lazy
+    // getters still measure on demand if queried earlier.
+    this.scheduleFormat();
   }
 
   disconnectedCallback(): void {
     this.stopAnimate();
+    if (this.formatRaf !== undefined) {
+      cancelAnimationFrame(this.formatRaf);
+      this.formatRaf = undefined;
+    }
+    this.visible = false;
     super.disconnectedCallback();
   }
 
@@ -358,15 +368,77 @@ export class Track extends LitElement {
   }
 
   private _children: Element[] = [];
+  private itemsDirty = true;
+  private formatPending = false;
+  private visible = false;
+  private formatRaf?: number;
 
   public get items() {
+    if (this.itemsDirty) {
+      this.syncItems();
+    }
     return this._children;
   }
 
-  private updateItems() {
+  /**
+   * Re-read children and keep aria roles and resize observation in sync.
+   * Reads computed styles, so it forces a style recalc — only called lazily
+   * or from flushFormat.
+   */
+  private syncItems() {
+    this.itemsDirty = false;
     this._children = getCSSChildren(this);
+
+    for (const node of this.observedChildren) {
+      if (node instanceof HTMLElement && !this._children.includes(node)) {
+        this.resizeObserver?.unobserve(node);
+        this.observedChildren.delete(node);
+      }
+    }
+
+    for (const node of this._children) {
+      if (node instanceof HTMLElement) {
+        node.ariaRoleDescription = "slide";
+      }
+
+      if (
+        this.resizeObserver &&
+        node instanceof HTMLElement &&
+        !this.observedChildren.has(node)
+      ) {
+        this.observedChildren.add(node);
+        this.resizeObserver.observe(node);
+      }
+    }
+  }
+
+  private updateItems() {
+    this.syncItems();
     this.updateLayout();
     this.onFormat();
+  }
+
+  /**
+   * Mark items dirty and schedule a re-format. Batched to the next animation
+   * frame while visible; deferred to the first intersection while hidden, so
+   * that mounting many tracks does not cause layout thrashing.
+   */
+  private scheduleFormat() {
+    this.itemsDirty = true;
+    this.formatPending = true;
+    if (!this.visible || this.formatRaf !== undefined) return;
+    this.formatRaf = requestAnimationFrame(() => {
+      this.formatRaf = undefined;
+      this.flushFormat();
+    });
+  }
+
+  private flushFormat() {
+    if (!this.formatPending) return;
+    this.formatPending = false;
+    this.itemsDirty = true;
+    this.updateItems();
+    this.computeCurrentItem();
   }
 
   public get itemCount() {
@@ -848,25 +920,7 @@ export class Track extends LitElement {
   private observedChildren = new Set<Node>();
 
   private onSlotChange = () => {
-    this.updateItems();
-
-    for (const node of this.observedChildren) {
-      if (node instanceof HTMLElement && !this.items.includes(node)) {
-        this.resizeObserver?.unobserve(node);
-        this.observedChildren.delete(node);
-      }
-    }
-
-    for (const node of this.items) {
-      if (node instanceof HTMLElement) {
-        node.ariaRoleDescription = "slide";
-      }
-
-      if (node instanceof HTMLElement && !this.observedChildren.has(node)) {
-        this.observedChildren.add(node);
-        this.resizeObserver?.observe(node);
-      }
-    }
+    this.scheduleFormat();
   };
 
   /**
