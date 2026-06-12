@@ -1,5 +1,11 @@
 # @sv/elements
 
+## 4.12.0 (2026-06-12)
+
+### Features
+
+- Set popover trigger width to popover content as variable
+
 ## 4.11.2 (2026-06-11)
 
 ### Fixes
