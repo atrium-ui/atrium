@@ -166,7 +166,11 @@ export class Popover extends Portal {
     if (!trigger || !content) return;
 
     this.cleanup = autoUpdate(trigger, content, () => {
-      if (content)
+      if (content) {
+        // expose the trigger's width to the content, so it can be used for styling
+        // (e.g. matching the popover width to the trigger). Kept in sync by autoUpdate.
+        content.style.setProperty("--trigger-width", `${trigger.offsetWidth}px`);
+
         computePosition(trigger, content, {
           middleware: [
             autoPlacement({
@@ -195,6 +199,7 @@ export class Popover extends Portal {
             }
           }
         });
+      }
     });
 
     // waits for DOM mutations to finish, to start transitions no enable
