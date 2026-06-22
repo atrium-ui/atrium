@@ -53,4 +53,5 @@ await Promise.all([
   buildLib("./packages/calendar"),
   buildLib("./packages/tabs"),
   buildLib("./packages/pager"),
+  buildLib("./packages/color-picker"),
 ]);

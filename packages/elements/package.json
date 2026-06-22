@@ -147,6 +147,11 @@
       "types": "./packages/pager/src/index.ts",
       "import": "./packages/pager/dist/index.js",
       "require": "./packages/pager/dist/index.cjs"
+    },
+    "./color-picker": {
+      "types": "./packages/color-picker/src/index.ts",
+      "import": "./packages/color-picker/dist/index.js",
+      "require": "./packages/color-picker/dist/index.cjs"
     }
   }
 }

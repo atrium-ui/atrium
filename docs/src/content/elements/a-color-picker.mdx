@@ -1,0 +1,164 @@
+---
+title: a-color-picker
+description: HSL color picker with sliders, hex input, palette presets, and eye dropper support.
+command: import "@sv/elements/color-picker";
+order: 0
+---
+
+import { TypeDoc } from "package:/components"
+
+The `a-color-picker` element provides an accessible color picker with a 2D saturation/value field, a hue slider, optional alpha slider, hex input, palette presets, and an eye dropper for sampling colors from the screen.
+
+## Installation
+
+```ts
+import "@sv/elements/color-picker";
+```
+
+<div class="not-content box">
+  <a-color-picker
+    value="#1d4ed8"
+    palette="#ef4444,#f97316,#eab308,#22c55e,#3b82f6,#8b5cf6,#ec4899"
+    style="padding: 1rem; background: var(--color-surface); border-radius: 0.5rem; width: 260px;"
+  ></a-color-picker>
+</div>
+
+## Usage
+
+### Basic
+
+```html
+<a-color-picker name="color" value="#1d4ed8"></a-color-picker>
+```
+
+<div class="not-content box">
+  <a-color-picker name="color" value="#1d4ed8" style="padding: 1rem; background: var(--color-surface); border-radius: 0.5rem; width: 260px;"></a-color-picker>
+</div>
+
+### With Alpha Channel
+
+Add the `alpha` attribute to show a fourth slider and include the alpha channel in the value (`#rrggbbaa`).
+
+```html
+<a-color-picker alpha value="#3b82f680"></a-color-picker>
+```
+
+<div class="not-content box">
+  <a-color-picker alpha value="#3b82f680" style="padding: 1rem; background: var(--color-surface); border-radius: 0.5rem; width: 260px;"></a-color-picker>
+</div>
+
+### Palette Presets
+
+Pass a comma-separated list of hex colors to the `palette` attribute. Clicking a swatch sets the color immediately and marks it as selected.
+
+```html
+<a-color-picker palette="#ef4444,#f97316,#eab308,#22c55e,#3b82f6,#8b5cf6,#ec4899"></a-color-picker>
+```
+
+<div class="not-content box">
+  <a-color-picker palette="#ef4444,#f97316,#eab308,#22c55e,#3b82f6,#8b5cf6,#ec4899" style="padding: 1rem; background: var(--color-surface); border-radius: 0.5rem; width: 260px;"></a-color-picker>
+</div>
+
+### Eye Dropper
+
+In browsers that support the [EyeDropper API](https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper_API) (Chromium 95+), a pipette button appears next to the hex input. Clicking it lets the user sample any color from anywhere on the screen.
+
+```html
+<a-color-picker value="#22c55e"></a-color-picker>
+```
+
+The button is rendered automatically when the API is available and hidden otherwise — no configuration needed.
+
+### Form Integration
+
+Set the `name` attribute to participate in `FormData`. The element creates a hidden `<input type="hidden">` that stays in sync with the selected color.
+
+```html
+<form>
+  <a-color-picker name="brand_color" value="#1d4ed8"></a-color-picker>
+  <button type="submit">Submit</button>
+</form>
+```
+
+The submitted value is a lowercase hex string: `#rrggbb`, or `#rrggbbaa` when `alpha` is enabled.
+
+### Disabled
+
+```html
+<a-color-picker disabled value="#1d4ed8"></a-color-picker>
+```
+
+<div class="not-content box">
+  <a-color-picker disabled value="#1d4ed8" style="padding: 1rem; background: var(--color-surface); border-radius: 0.5rem; width: 260px;"></a-color-picker>
+</div>
+
+## Events
+
+| Event | When |
+|-------|------|
+| `input` | Fires continuously while a slider is being dragged. |
+| `change` | Fires when a value is committed: slider release, hex input blur or Enter, or palette swatch click. |
+
+```js
+picker.addEventListener("change", (e) => {
+  console.log(e.target.value); // "#1d4ed8"
+});
+```
+
+## Value Format
+
+| Mode | Format | Example |
+|------|--------|---------|
+| Default | `#rrggbb` | `#1d4ed8` |
+| With `alpha` | `#rrggbbaa` | `#1d4ed880` |
+
+## CSS Custom Properties
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--color-picker-focus-outline` | `black` | Focus ring color |
+| `--color-picker-border` | `rgba(0,0,0,0.2)` | Border color for tracks, inputs, and swatches |
+| `--color-picker-swatch-size` | `1.75rem` | Width and height of each palette swatch |
+
+## CSS Parts
+
+| Part | Element |
+|------|---------|
+| `picker` | Root container |
+| `palette` | Palette swatch container |
+| `palette-swatch` | Individual preset color button |
+| `sv-field` | 2D saturation/value gradient field |
+| `sv-gradient` | Gradient overlay inside the field |
+| `sv-thumb` | Circle cursor inside the field |
+| `controls` | Row containing eye dropper + slider stack |
+| `slider-stack` | Column of sliders |
+| `slider-track` | Individual slider gradient track |
+| `hue-track` | Hue slider track |
+| `alpha-track` | Alpha slider track (only with `alpha`) |
+| `slider-input` | `<input type="range">` element |
+| `hue-input` | Hue range input |
+| `alpha-input` | Alpha range input |
+| `slider-thumb-dot` | Custom circular thumb indicator |
+| `eyedropper-btn` | Eye dropper button |
+| `bottom-row` | Hex input + opacity row |
+| `hex-wrap` | `#` prefix + hex text input wrapper |
+| `hex-input` | Hex text `<input>` |
+| `opacity-wrap` | Opacity number input + `%` wrapper (only with `alpha`) |
+| `opacity-input` | Opacity `<input type="number">` |
+
+## Accessibility
+
+- The 2D field has `role="img"` with a descriptive label; it responds to pointer and touch events.
+- Hue and alpha sliders are native `<input type="range">` with `aria-label` and `aria-valuetext`.
+- The hex input (`aria-label="Hex color value"`) accepts a 6-character hex string; Enter or blur commits.
+- When `alpha` is set, the opacity `<input type="number">` is labelled `"Opacity percentage"`.
+- The eye dropper button has `aria-label="Pick color from screen"`.
+- Palette swatches use `aria-pressed` to convey the selected state.
+- Focus is delegated from the host to the hex input.
+
+## References
+
+- [EyeDropper API (MDN)](https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper_API)
+- [HSL color model (MDN)](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/hsl)
+
+<TypeDoc source="../packages/elements/packages/color-picker" symbol="ColorPickerElement" />
