@@ -110,9 +110,13 @@ describe("2D field", () => {
     const field = sr.querySelector<HTMLElement>(".sv-field")!;
 
     let inputFired = false;
-    picker.addEventListener("input", () => { inputFired = true; });
+    picker.addEventListener("input", () => {
+      inputFired = true;
+    });
 
-    field.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 0, clientY: 0 }));
+    field.dispatchEvent(
+      new PointerEvent("pointerdown", { bubbles: true, clientX: 0, clientY: 0 }),
+    );
     await picker.updateComplete;
 
     expect(inputFired).toBe(true);
@@ -125,7 +129,9 @@ describe("2D field", () => {
     const field = sr.querySelector<HTMLElement>(".sv-field")!;
 
     let changeFired = false;
-    picker.addEventListener("change", () => { changeFired = true; });
+    picker.addEventListener("change", () => {
+      changeFired = true;
+    });
 
     field.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
     field.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
@@ -155,9 +161,11 @@ describe("2D field", () => {
 
     // Mock getBoundingClientRect to give a sensible size
     field.getBoundingClientRect = () =>
-      ({ left: 0, top: 0, width: 200, height: 200, right: 200, bottom: 200 } as DOMRect);
+      ({ left: 0, top: 0, width: 200, height: 200, right: 200, bottom: 200 }) as DOMRect;
 
-    field.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 100, clientY: 50 }));
+    field.dispatchEvent(
+      new PointerEvent("pointerdown", { bubbles: true, clientX: 100, clientY: 50 }),
+    );
     await picker.updateComplete;
     expect(picker.svSat).toBeGreaterThanOrEqual(0);
     expect(picker.svSat).toBeLessThanOrEqual(100);
@@ -172,10 +180,12 @@ describe("2D field", () => {
     const field = sr.querySelector<HTMLElement>(".sv-field")!;
 
     field.getBoundingClientRect = () =>
-      ({ left: 0, top: 0, width: 100, height: 100, right: 100, bottom: 100 } as DOMRect);
+      ({ left: 0, top: 0, width: 100, height: 100, right: 100, bottom: 100 }) as DOMRect;
 
     // Click at 75% x, 25% y → svSat=75, svVal=75 (inverted y)
-    field.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 75, clientY: 25 }));
+    field.dispatchEvent(
+      new PointerEvent("pointerdown", { bubbles: true, clientX: 75, clientY: 25 }),
+    );
     await picker.updateComplete;
 
     expect(picker.svSat).toBe(75);
@@ -190,7 +200,7 @@ describe("hue slider", () => {
   function mockHueTrack(sr: ShadowRoot, width = 360) {
     const slider = sr.querySelector<HTMLElement>("[part~='hue-slider']")!;
     slider.getBoundingClientRect = () =>
-      ({ left: 0, top: 0, width, height: 28, right: width, bottom: 28 } as DOMRect);
+      ({ left: 0, top: 0, width, height: 28, right: width, bottom: 28 }) as DOMRect;
     return slider;
   }
 
@@ -201,7 +211,7 @@ describe("hue slider", () => {
 
     track.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 0 }));
     track.dispatchEvent(new PointerEvent("pointermove", { bubbles: true, clientX: 120 }));
-    track.dispatchEvent(new PointerEvent("pointerup",   { bubbles: true, clientX: 120 }));
+    track.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, clientX: 120 }));
     await picker.updateComplete;
 
     expect(picker.hue).toBe(120);
@@ -214,7 +224,7 @@ describe("hue slider", () => {
     const track = mockHueTrack(sr, 360);
 
     track.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 200 }));
-    track.dispatchEvent(new PointerEvent("pointerup",   { bubbles: true, clientX: 80  }));
+    track.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, clientX: 80 }));
     await picker.updateComplete;
 
     expect(picker.hue).toBe(0); // 120 - 120 = 0
@@ -227,7 +237,7 @@ describe("hue slider", () => {
     const track = mockHueTrack(sr, 360);
 
     track.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 100 }));
-    track.dispatchEvent(new PointerEvent("pointerup",   { bubbles: true, clientX: -50 })); // would go to -150°
+    track.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, clientX: -50 })); // would go to -150°
     await picker.updateComplete;
 
     expect(picker.hue).toBe(0);
@@ -240,7 +250,7 @@ describe("hue slider", () => {
     const track = mockHueTrack(sr, 360);
 
     track.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 0 }));
-    track.dispatchEvent(new PointerEvent("pointerup",   { bubbles: true, clientX: 500 })); // way past end
+    track.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, clientX: 500 })); // way past end
     await picker.updateComplete;
 
     expect(picker.hue).toBe(360);
@@ -253,7 +263,9 @@ describe("hue slider", () => {
     const track = mockHueTrack(sr, 360);
 
     let inputFired = false;
-    picker.addEventListener("input", () => { inputFired = true; });
+    picker.addEventListener("input", () => {
+      inputFired = true;
+    });
 
     track.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 0 }));
     track.dispatchEvent(new PointerEvent("pointermove", { bubbles: true, clientX: 60 }));
@@ -269,10 +281,12 @@ describe("hue slider", () => {
     const track = mockHueTrack(sr, 360);
 
     let changeFired = false;
-    picker.addEventListener("change", () => { changeFired = true; });
+    picker.addEventListener("change", () => {
+      changeFired = true;
+    });
 
     track.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 0 }));
-    track.dispatchEvent(new PointerEvent("pointerup",   { bubbles: true, clientX: 60 }));
+    track.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, clientX: 60 }));
     await picker.updateComplete;
 
     expect(changeFired).toBe(true);
@@ -285,9 +299,13 @@ describe("hue slider", () => {
     const hueSlider = sr.querySelector<HTMLElement>("[part~='hue-slider']")!;
 
     let changeFired = false;
-    picker.addEventListener("change", () => { changeFired = true; });
+    picker.addEventListener("change", () => {
+      changeFired = true;
+    });
 
-    hueSlider.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    hueSlider.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }),
+    );
     await picker.updateComplete;
 
     expect(changeFired).toBe(true);
@@ -326,11 +344,13 @@ describe("alpha", () => {
     const sr = picker.shadowRoot!;
     const slider = sr.querySelector<HTMLElement>("[part~='alpha-slider']")!;
     slider.getBoundingClientRect = () =>
-      ({ left: 0, top: 0, width: 100, height: 28, right: 100, bottom: 28 } as DOMRect);
+      ({ left: 0, top: 0, width: 100, height: 28, right: 100, bottom: 28 }) as DOMRect;
 
     // start at 100%, drag left by 50px → alphaPercent=50
-    slider.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 100 }));
-    slider.dispatchEvent(new PointerEvent("pointerup",   { bubbles: true, clientX: 50  }));
+    slider.dispatchEvent(
+      new PointerEvent("pointerdown", { bubbles: true, clientX: 100 }),
+    );
+    slider.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, clientX: 50 }));
     await picker.updateComplete;
 
     expect(picker.value.length).toBe(9);
@@ -374,7 +394,9 @@ describe("hex input", () => {
     const hexInput = sr.querySelector<HTMLInputElement>(".hex-input")!;
 
     let changeFired = false;
-    picker.addEventListener("change", () => { changeFired = true; });
+    picker.addEventListener("change", () => {
+      changeFired = true;
+    });
 
     hexInput.value = "0000FF";
     hexInput.dispatchEvent(new Event("input", { bubbles: true }));
@@ -406,7 +428,9 @@ describe("hex input", () => {
     const hexInput = sr.querySelector<HTMLInputElement>(".hex-input")!;
 
     let changeFired = false;
-    picker.addEventListener("change", () => { changeFired = true; });
+    picker.addEventListener("change", () => {
+      changeFired = true;
+    });
 
     hexInput.value = "00FF00";
     hexInput.dispatchEvent(new Event("input", { bubbles: true }));
@@ -438,12 +462,17 @@ describe("palette presets", () => {
   });
 
   test("clicking a swatch updates the color and fires change", async () => {
-    const { root, picker } = await newPicker({ value: "#ff0000", palette: "#0000ff,#00ff00" });
+    const { root, picker } = await newPicker({
+      value: "#ff0000",
+      palette: "#0000ff,#00ff00",
+    });
     const sr = picker.shadowRoot!;
     const swatch = sr.querySelector<HTMLButtonElement>(".palette-swatch")!;
 
     let changeFired = false;
-    picker.addEventListener("change", () => { changeFired = true; });
+    picker.addEventListener("change", () => {
+      changeFired = true;
+    });
 
     swatch.click();
     await picker.updateComplete;
@@ -454,7 +483,10 @@ describe("palette presets", () => {
   });
 
   test("active swatch has data-selected attribute", async () => {
-    const { root, picker } = await newPicker({ value: "#0000ff", palette: "#ff0000,#0000ff" });
+    const { root, picker } = await newPicker({
+      value: "#0000ff",
+      palette: "#ff0000,#0000ff",
+    });
     const sr = picker.shadowRoot!;
     const swatches = sr.querySelectorAll<HTMLButtonElement>(".palette-swatch");
     expect(swatches[0]!.hasAttribute("data-selected")).toBe(false);
@@ -489,7 +521,10 @@ describe("disabled", () => {
   });
 
   test("palette swatches disabled when disabled=true", async () => {
-    const { root, picker } = await newPicker({ disabled: true, palette: "#ff0000,#00ff00" });
+    const { root, picker } = await newPicker({
+      disabled: true,
+      palette: "#ff0000,#00ff00",
+    });
     const sr = picker.shadowRoot!;
     for (const sw of sr.querySelectorAll<HTMLButtonElement>(".palette-swatch")) {
       expect(sw.disabled).toBe(true);
@@ -503,7 +538,9 @@ describe("disabled", () => {
     const field = sr.querySelector<HTMLElement>(".sv-field")!;
 
     let inputFired = false;
-    picker.addEventListener("input", () => { inputFired = true; });
+    picker.addEventListener("input", () => {
+      inputFired = true;
+    });
 
     field.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
     await picker.updateComplete;
@@ -531,10 +568,10 @@ describe("form integration", () => {
     const sr = picker.shadowRoot!;
     const slider = sr.querySelector<HTMLElement>("[part~='hue-slider']")!;
     slider.getBoundingClientRect = () =>
-      ({ left: 0, top: 0, width: 360, height: 28, right: 360, bottom: 28 } as DOMRect);
+      ({ left: 0, top: 0, width: 360, height: 28, right: 360, bottom: 28 }) as DOMRect;
 
     slider.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 0 }));
-    slider.dispatchEvent(new PointerEvent("pointerup",   { bubbles: true, clientX: 240 }));
+    slider.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, clientX: 240 }));
     await picker.updateComplete;
 
     const hidden = picker.querySelector<HTMLInputElement>('input[type="hidden"]')!;
@@ -547,12 +584,12 @@ describe("form integration", () => {
 
 describe("color math", () => {
   const cases: Array<{ hex: string; h: number; s: number; v: number }> = [
-    { hex: "#ff0000", h: 0,   s: 100, v: 100 },
+    { hex: "#ff0000", h: 0, s: 100, v: 100 },
     { hex: "#00ff00", h: 120, s: 100, v: 100 },
     { hex: "#0000ff", h: 240, s: 100, v: 100 },
-    { hex: "#ffffff", h: 0,   s: 0,   v: 100 },
-    { hex: "#000000", h: 0,   s: 0,   v: 0   },
-    { hex: "#808080", h: 0,   s: 0,   v: 50  },
+    { hex: "#ffffff", h: 0, s: 0, v: 100 },
+    { hex: "#000000", h: 0, s: 0, v: 0 },
+    { hex: "#808080", h: 0, s: 0, v: 50 },
   ];
 
   for (const { hex, s, v } of cases) {
@@ -569,11 +606,11 @@ describe("color math", () => {
     const sr = picker.shadowRoot!;
     const slider = sr.querySelector<HTMLElement>("[part~='hue-slider']")!;
     slider.getBoundingClientRect = () =>
-      ({ left: 0, top: 0, width: 360, height: 28, right: 360, bottom: 28 } as DOMRect);
+      ({ left: 0, top: 0, width: 360, height: 28, right: 360, bottom: 28 }) as DOMRect;
 
     // Drag 120px right on a 360px slider = +120°, landing on green
     slider.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 0 }));
-    slider.dispatchEvent(new PointerEvent("pointerup",   { bubbles: true, clientX: 120 }));
+    slider.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, clientX: 120 }));
     await picker.updateComplete;
 
     // h=120, s=100, v=100 → #00ff00

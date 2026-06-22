@@ -364,8 +364,8 @@ export class ColorPickerElement extends LitElement {
   // Internal HSV state; hue is preserved across achromatic moves so the
   // gradient doesn't snap to red when saturation or value hits 0.
   @state() accessor hue = 220;
-  @state() accessor svSat = 76;  // HSV saturation 0–100
-  @state() accessor svVal = 70;  // HSV value 0–100
+  @state() accessor svSat = 76; // HSV saturation 0–100
+  @state() accessor svVal = 70; // HSV value 0–100
   @state() accessor alphaPercent = 100;
 
   @state() accessor hexInput = "1D4ED8";
@@ -404,9 +404,7 @@ export class ColorPickerElement extends LitElement {
       this.svVal = v;
     }
     if (this.alpha && this.value.length === 9) {
-      this.alphaPercent = Math.round(
-        (parseInt(this.value.slice(7, 9), 16) / 255) * 100,
-      );
+      this.alphaPercent = Math.round((parseInt(this.value.slice(7, 9), 16) / 255) * 100);
     }
     this.hexInput = this.value.slice(1, 7).toUpperCase();
   }
@@ -501,11 +499,16 @@ export class ColorPickerElement extends LitElement {
     if (this.disabled) return;
     const step = e.shiftKey ? 10 : 1;
     let next = this.hue;
-    if (e.key === "ArrowLeft" || e.key === "ArrowDown") { next = Math.max(0, this.hue - step); }
-    else if (e.key === "ArrowRight" || e.key === "ArrowUp") { next = Math.min(360, this.hue + step); }
-    else return;
+    if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+      next = Math.max(0, this.hue - step);
+    } else if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+      next = Math.min(360, this.hue + step);
+    } else return;
     e.preventDefault();
-    if (next !== this.hue) { this.hue = next; this.commit("change"); }
+    if (next !== this.hue) {
+      this.hue = next;
+      this.commit("change");
+    }
   };
 
   // ── Alpha slider — delta-based drag + arrow keys ─────────────────────
@@ -547,11 +550,16 @@ export class ColorPickerElement extends LitElement {
     if (this.disabled) return;
     const step = e.shiftKey ? 10 : 1;
     let next = this.alphaPercent;
-    if (e.key === "ArrowLeft" || e.key === "ArrowDown") { next = Math.max(0, this.alphaPercent - step); }
-    else if (e.key === "ArrowRight" || e.key === "ArrowUp") { next = Math.min(100, this.alphaPercent + step); }
-    else return;
+    if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+      next = Math.max(0, this.alphaPercent - step);
+    } else if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+      next = Math.min(100, this.alphaPercent + step);
+    } else return;
     e.preventDefault();
-    if (next !== this.alphaPercent) { this.alphaPercent = next; this.commit("change"); }
+    if (next !== this.alphaPercent) {
+      this.alphaPercent = next;
+      this.commit("change");
+    }
   };
 
   // ── Hex input ─────────────────────────────────────────────────────────
@@ -559,7 +567,9 @@ export class ColorPickerElement extends LitElement {
   private onHexInput = (e: Event) => {
     this.hexInput = (e.target as HTMLInputElement).value.toUpperCase();
   };
-  private onHexFocus = () => { this.hexInputEditing = true; };
+  private onHexFocus = () => {
+    this.hexInputEditing = true;
+  };
   private onHexBlur = () => {
     this.hexInputEditing = false;
     this.applyHexInput();
@@ -597,7 +607,9 @@ export class ColorPickerElement extends LitElement {
       if (s > 0 && v > 0) this.hue = h;
       this.svSat = s;
       this.svVal = v;
-      this.hexInput = rgbToHex(...rgb).slice(1).toUpperCase();
+      this.hexInput = rgbToHex(...rgb)
+        .slice(1)
+        .toUpperCase();
       this.commit("change");
     } else {
       this.hexInput = this.value.slice(1, 7).toUpperCase();
@@ -636,7 +648,10 @@ export class ColorPickerElement extends LitElement {
 
   private get parsedPalette(): string[] {
     if (!this.palette) return [];
-    return this.palette.split(",").map((c) => c.trim().toLowerCase()).filter(Boolean);
+    return this.palette
+      .split(",")
+      .map((c) => c.trim().toLowerCase())
+      .filter(Boolean);
   }
 
   private isPresetSelected(hex: string): boolean {
@@ -697,7 +712,7 @@ export class ColorPickerElement extends LitElement {
       const [r, g, b] = hsvToRgb(hue, 100, 100);
       for (let row = 0; row < h; row++) {
         const i = (row * w + col) * 4;
-        d[i]     = r;
+        d[i] = r;
         d[i + 1] = g;
         d[i + 2] = b;
         d[i + 3] = 255;
@@ -720,12 +735,12 @@ export class ColorPickerElement extends LitElement {
     const img = ctx.createImageData(w, h);
     const d = img.data;
     for (let row = 0; row < h; row++) {
-      const v = (1 - row / (h - 1)) * 100;          // 100 at top → 0 at bottom
+      const v = (1 - row / (h - 1)) * 100; // 100 at top → 0 at bottom
       for (let col = 0; col < w; col++) {
-        const s = (col / (w - 1)) * 100;             // 0 at left → 100 at right
+        const s = (col / (w - 1)) * 100; // 0 at left → 100 at right
         const [r, g, b] = hsvToRgb(this.hue, s, v);
         const i = (row * w + col) * 4;
-        d[i]     = r;
+        d[i] = r;
         d[i + 1] = g;
         d[i + 2] = b;
         d[i + 3] = 255;
@@ -746,9 +761,12 @@ export class ColorPickerElement extends LitElement {
     return html`
       <div class="picker" part="picker">
 
-        ${presets.length > 0 ? html`
+        ${
+          presets.length > 0
+            ? html`
           <div class="palette" part="palette" role="group" aria-label="Color presets">
-            ${presets.map((color) => html`
+            ${presets.map(
+              (color) => html`
               <button
                 type="button"
                 class="palette-swatch"
@@ -760,9 +778,12 @@ export class ColorPickerElement extends LitElement {
                 aria-pressed=${this.isPresetSelected(color) ? "true" : "false"}
                 @click=${() => this.selectPreset(color)}
               ></button>
-            `)}
+            `,
+            )}
           </div>
-        ` : nothing}
+        `
+            : nothing
+        }
 
         <div
           class="sv-field"
@@ -790,7 +811,9 @@ export class ColorPickerElement extends LitElement {
         </div>
 
         <div class="controls" part="controls">
-          ${this.eyeDropperSupported ? html`
+          ${
+            this.eyeDropperSupported
+              ? html`
             <button
               type="button"
               class="eyedropper-btn"
@@ -803,7 +826,9 @@ export class ColorPickerElement extends LitElement {
                 <path d="M13.354.646a2.207 2.207 0 0 0-3.12 0l-1.586 1.586-.009-.009a.75.75 0 0 0-1.06 1.061l.008.009-5.96 5.96A2.25 2.25 0 0 0 1 10.843V13.5A1.5 1.5 0 0 0 2.5 15h2.657a2.25 2.25 0 0 0 1.59-.659l5.96-5.959.009.009a.75.75 0 0 0 1.06-1.061l-.009-.009 1.587-1.586a2.207 2.207 0 0 0 0-3.12zM4.687 13.28A.75.75 0 0 1 4.157 13.5H2.5v-1.657a.75.75 0 0 1 .22-.53l5.69-5.691 1.968 1.968z"/>
               </svg>
             </button>
-          ` : nothing}
+          `
+              : nothing
+          }
 
           <div class="slider-stack" part="slider-stack">
             <div
@@ -830,7 +855,9 @@ export class ColorPickerElement extends LitElement {
               <div class="hue-handle" part="hue-handle" aria-hidden="true"></div>
             </div>
 
-            ${this.alpha ? html`
+            ${
+              this.alpha
+                ? html`
               <div
                 class="alpha-slider"
                 part="alpha-slider"
@@ -852,7 +879,9 @@ export class ColorPickerElement extends LitElement {
                 <div class="alpha-track" part="alpha-track"></div>
                 <div class="alpha-handle" part="alpha-handle" aria-hidden="true"></div>
               </div>
-            ` : nothing}
+            `
+                : nothing
+            }
           </div>
         </div>
 
@@ -878,7 +907,9 @@ export class ColorPickerElement extends LitElement {
             />
           </div>
 
-          ${this.alpha ? html`
+          ${
+            this.alpha
+              ? html`
             <div class="opacity-wrap" part="opacity-wrap">
               <input
                 type="number"
@@ -893,7 +924,9 @@ export class ColorPickerElement extends LitElement {
               />
               <span class="opacity-suffix" aria-hidden="true">%</span>
             </div>
-          ` : nothing}
+          `
+              : nothing
+          }
         </div>
 
       </div>
@@ -912,15 +945,21 @@ function hsvToRgb(h: number, s: number, v: number): [number, number, number] {
   const q = v * (1 - f * s);
   const t = v * (1 - (1 - f) * s);
   const parts: Array<[number, number, number]> = [
-    [v, t, p], [q, v, p], [p, v, t],
-    [p, q, v], [t, p, v], [v, p, q],
+    [v, t, p],
+    [q, v, p],
+    [p, v, t],
+    [p, q, v],
+    [t, p, v],
+    [v, p, q],
   ];
   const [r, g, b] = parts[i]!;
   return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
 function rgbToHsv(r: number, g: number, b: number): [number, number, number] {
-  r /= 255; g /= 255; b /= 255;
+  r /= 255;
+  g /= 255;
+  b /= 255;
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
   const d = max - min;
