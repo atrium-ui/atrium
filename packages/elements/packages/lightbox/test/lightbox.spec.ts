@@ -111,6 +111,8 @@ test("closes from nested click inside close slot", async () => {
     throw new Error("failed to create nested close test");
   }
 
+  mockImagesReady(host);
+
   await lightbox.show();
   nested.click();
   await new Promise((resolve) => setTimeout(resolve, 0));
@@ -160,7 +162,26 @@ function createLightbox() {
       throw new Error("failed to create a-lightbox");
     }
 
+    mockImagesReady(host);
+
     await Promise.resolve();
     return lightbox;
   });
+}
+
+function mockImagesReady(root: ParentNode) {
+  for (const image of root.querySelectorAll("img")) {
+    Object.defineProperty(image, "complete", {
+      configurable: true,
+      value: true,
+    });
+    Object.defineProperty(image, "naturalWidth", {
+      configurable: true,
+      value: 100,
+    });
+    Object.defineProperty(image, "decode", {
+      configurable: true,
+      value: () => Promise.resolve(),
+    });
+  }
 }
