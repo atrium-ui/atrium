@@ -21,7 +21,7 @@ This project contains a collection of functional web primitives that can be used
 
 **Example:**
 ```ts
-import "@sv/animation";
+import "@atrium-ui/animation";
 ```
 ```html
 <a-animation
@@ -45,7 +45,7 @@ import "@sv/animation";
 
 **Example:**
 ```ts
-import "@sv/elements/box";
+import "@atrium-ui/elements/box";
 ```
 ```html
 <a-box retain>
@@ -64,7 +64,7 @@ import "@sv/elements/box";
 
 **Example:**
 ```ts
-import "@sv/elements/blur";
+import "@atrium-ui/elements/blur";
 ```
 ```html
 <a-blur style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
@@ -88,7 +88,7 @@ import "@sv/elements/blur";
 
 **Example:**
 ```ts
-import "@sv/charts";
+import "@atrium-ui/charts";
 ```
 ```html
 <a-chart
@@ -110,7 +110,7 @@ import "@sv/charts";
 
 **Example:**
 ```ts
-import "@sv/elements/expandable";
+import "@atrium-ui/elements/expandable";
 ```
 ```html
 <a-expandable opened direction="down">
@@ -134,7 +134,7 @@ import "@sv/elements/expandable";
 
 **Example:**
 ```ts
-import "@sv/elements/form";
+import "@atrium-ui/elements/form";
 ```
 ```html
 <form>
@@ -155,7 +155,7 @@ import "@sv/elements/form";
 
 **Example:**
 ```ts
-import "@sv/elements/list";
+import "@atrium-ui/elements/list";
 ```
 ```html
 <a-list>
@@ -184,7 +184,7 @@ import "@sv/elements/list";
 
 **Example:**
 ```ts
-import "@sv/elements/popover";
+import "@atrium-ui/elements/popover";
 ```
 ```html
 <a-popover-trigger showdelay="500" hidedelay="200">
@@ -208,7 +208,7 @@ import "@sv/elements/popover";
 
 **Example:**
 ```ts
-import "@sv/elements/portal";
+import "@atrium-ui/elements/portal";
 ```
 ```html
 <a-portal>
@@ -233,7 +233,7 @@ import "@sv/elements/portal";
 
 **Example:**
 ```ts
-import "@sv/elements/range";
+import "@atrium-ui/elements/range";
 ```
 ```html
 <a-range
@@ -252,7 +252,7 @@ import "@sv/elements/range";
 
 **Example:**
 ```ts
-import "@sv/elements/scroll";
+import "@atrium-ui/elements/scroll";
 ```
 ```html
 <a-scroll>
@@ -286,7 +286,7 @@ import "@sv/elements/scroll";
 
 **Example:**
 ```ts
-import "@sv/elements/select";
+import "@atrium-ui/elements/select";
 ```
 ```html
 <form onchange="console.log(event.target.value)">
@@ -318,7 +318,7 @@ import "@sv/elements/select";
 
 **Example:**
 ```ts
-import "@sv/elements/toast";
+import "@atrium-ui/elements/toast";
 ```
 ```html
 <a-portal>
@@ -350,7 +350,7 @@ import "@sv/elements/toast";
 
 **Example:**
 ```ts
-import "@sv/elements/toggle";
+import "@atrium-ui/elements/toggle";
 ```
 ```html
 <a-toggle
@@ -381,7 +381,7 @@ import "@sv/elements/toggle";
 
 **Example:**
 ```ts
-import "@sv/elements/track";
+import "@atrium-ui/elements/track";
 ```
 ```html
 <a-track snap loop align="center" class="flex w-full overflow-visible">
@@ -405,7 +405,7 @@ import "@sv/elements/track";
 
 **Example:**
 ```ts
-import "@sv/elements/transition";
+import "@atrium-ui/elements/transition";
 ```
 ```html
 <a-transition>
@@ -447,7 +447,7 @@ Common event patterns:
 ## Usage Pattern
 
 All elements follow a consistent pattern:
-1. Import the element: `import "@sv/elements/{element-name}"`
+1. Import the element: `import "@atrium-ui/elements/{element-name}"`
 2. Use as HTML: `<a-{element-name} properties...></a-{element-name}>`
 3. Style with CSS using custom properties and part selectors
 4. Listen for custom events for interaction handling

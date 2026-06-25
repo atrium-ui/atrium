@@ -1,5 +1,5 @@
 import react from "@astrojs/react";
-import { astroStories } from "@sv/astro-stories";
+import { astroStories } from "@atrium-ui/astro-stories";
 import { defineConfig } from "astro/config";
 
 export default defineConfig({

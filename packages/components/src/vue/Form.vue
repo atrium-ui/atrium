@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import "@sv/elements/transition";
-import "@sv/elements/form";
+import "@atrium-ui/elements/transition";
+import "@atrium-ui/elements/form";
 import Button from "./Button.vue";
 import { twMerge } from "tailwind-merge";
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { twMerge } from "tailwind-merge";
-import "@sv/svg-sprites/svg-icon";
+import "@atrium-ui/svg-sprites/svg-icon";
 
 const SHOW_THRESHOLD_SCREEN_HEIGHTS = 3;
 

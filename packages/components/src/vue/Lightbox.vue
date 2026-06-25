@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import "@sv/elements/lightbox";
+import "@atrium-ui/elements/lightbox";
 import Button from "./Button.vue";
 import Icon from "./Icon.vue";
 </script>

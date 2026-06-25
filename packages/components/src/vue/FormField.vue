@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import "@sv/elements/form";
+import "@atrium-ui/elements/form";
 
 defineProps<{
   field: {

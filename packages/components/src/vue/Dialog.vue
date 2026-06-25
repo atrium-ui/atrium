@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import "@sv/elements/blur";
-import "@sv/elements/portal";
+import "@atrium-ui/elements/blur";
+import "@atrium-ui/elements/portal";
 import Button from "./Button.vue";
 
 defineProps<{

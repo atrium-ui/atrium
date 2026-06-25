@@ -8,7 +8,7 @@ afterEach(() => {
 });
 
 test("import element", async () => {
-  const { Blur } = await import("@sv/elements/blur");
+  const { Blur } = await import("@atrium-ui/elements/blur");
   expect(Blur).toBeDefined();
 
   // is defined in custom element registry

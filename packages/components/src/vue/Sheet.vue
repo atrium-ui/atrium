@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import "@sv/elements/portal";
-import "@sv/elements/blur";
+import "@atrium-ui/elements/portal";
+import "@atrium-ui/elements/blur";
 
 defineProps<{
   enabled?: boolean;

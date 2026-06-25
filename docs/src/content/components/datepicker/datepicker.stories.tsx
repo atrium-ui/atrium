@@ -1,8 +1,8 @@
 /* @jsxImportSource vue */
-import type { Story } from "@sv/astro-stories";
+import type { Story } from "@atrium-ui/astro-stories";
 import Datepicker from "@components/src/vue/Datepicker.vue";
 import { ref } from "vue";
-import "@sv/elements/calendar";
+import "@atrium-ui/elements/calendar";
 
 export default {
   tags: ["public"],

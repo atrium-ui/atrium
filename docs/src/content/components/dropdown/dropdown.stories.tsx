@@ -1,8 +1,8 @@
 /* @jsxImportSource vue */
-import type { Story } from "@sv/astro-stories";
-import "@sv/elements/box";
-import "@sv/elements/list";
-import "@sv/elements/popover";
+import type { Story } from "@atrium-ui/astro-stories";
+import "@atrium-ui/elements/box";
+import "@atrium-ui/elements/list";
+import "@atrium-ui/elements/popover";
 
 export default {
   tags: ["public"],

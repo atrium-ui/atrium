@@ -1,4 +1,4 @@
-# @sv/components
+# @atrium-ui/components
 
 ## 1.11.0 (2026-05-27)
 

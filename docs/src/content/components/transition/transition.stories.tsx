@@ -1,8 +1,8 @@
 /* @jsxImportSource vue */
-import type { Story } from "@sv/astro-stories";
+import type { Story } from "@atrium-ui/astro-stories";
 import Button from "@components/src/vue/Button.vue";
 import { ref, computed } from "vue";
-import "@sv/elements/transition";
+import "@atrium-ui/elements/transition";
 
 export default {
   tags: ["public"],

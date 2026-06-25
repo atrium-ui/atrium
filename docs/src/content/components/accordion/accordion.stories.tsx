@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import type { Story } from "@sv/astro-stories";
+import type { Story } from "@atrium-ui/astro-stories";
 import Accordion from "@components/src/vue/Accordion.vue";
 import AccordionItem from "@components/src/vue/AccordionItem.vue";
 

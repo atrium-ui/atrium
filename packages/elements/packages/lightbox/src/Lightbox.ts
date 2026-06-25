@@ -1,10 +1,10 @@
-import "@sv/elements/blur";
-import "@sv/elements/portal";
+import "@atrium-ui/elements/blur";
+import "@atrium-ui/elements/portal";
 import { LitElement, css, html } from "lit";
 import { property, query, state } from "lit/decorators.js";
-import { Blur } from "@sv/elements/blur";
-import type { Portal } from "@sv/elements/portal";
-import { ScrollLock } from "@sv/scroll-lock";
+import { Blur } from "@atrium-ui/elements/blur";
+import type { Portal } from "@atrium-ui/elements/portal";
+import { ScrollLock } from "@atrium-ui/scroll-lock";
 
 declare global {
   interface HTMLElementTagNameMap {

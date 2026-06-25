@@ -11,7 +11,7 @@ async function buildLib(root: string, target: "node" | "browser") {
     external: [
       //
       "lit",
-      "@sv/svg-sprites/sheet",
+      "@atrium-ui/svg-sprites/sheet",
       "chokidar",
       "fast-glob",
       "svg-sprite",
@@ -27,7 +27,7 @@ async function buildLib(root: string, target: "node" | "browser") {
 
 await Promise.all([
   // "build:main": "tsup src/sprite-sheet.ts -d dist --format esm,cjs --dts",
-  // "build:component": "tsup src/component/Icon.ts -d dist --format esm,cjs --dts --external @sv/svg-sprites/sheet",
+  // "build:component": "tsup src/component/Icon.ts -d dist --format esm,cjs --dts --external @atrium-ui/svg-sprites/sheet",
   // "build:vite": "tsup src/plugin/vite-plugin.ts -d dist --format esm,cjs --dts --external chokidar",
   // "build:webpack": "tsup src/loader/webpack-loader.ts -d dist --format esm,cjs --dts"
 

@@ -1,8 +1,8 @@
 /* @jsxImportSource vue */
 import { html } from "lit";
 import "./FraportCarousel.js";
-import type { Story } from "@sv/astro-stories";
-import "@sv/elements/track";
+import type { Story } from "@atrium-ui/astro-stories";
+import "@atrium-ui/elements/track";
 import { Image } from "package:/components/Image";
 import Carousel from "@components/src/vue/Carousel.vue";
 

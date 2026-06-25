@@ -21,7 +21,7 @@ export interface Props {
 const props = Astro.props;
 
 function sourceToUrl(path: string, source) {
-  return `https://gitlab.s-v.de/svp/atrium/-/blob/main/rec/${path}/${source?.fileName}#L${source?.line}`;
+  return `https://github.com/atrium-ui/atrium/blob/main/${path}/${source?.fileName}#L${source?.line}`;
 }
 
 async function parse(options: { pkg: string; entry: string; config?: string }) {
@@ -218,7 +218,7 @@ const source = dec?.sources?.[0];
 ---
 
 <script>
-  import "@sv/elements/expandable";
+  import "@atrium-ui/elements/expandable";
 </script>
 
 <div class="markdown-content typedoc pb-12 pt-10">

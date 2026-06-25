@@ -1,4 +1,4 @@
-import type { PlaygroundFiles } from "@sv/playground";
+import type { PlaygroundFiles } from "@atrium-ui/playground";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,

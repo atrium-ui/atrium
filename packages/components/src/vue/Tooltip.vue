@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import "@sv/elements/popover";
+import "@atrium-ui/elements/popover";
 import Button from "./Button.vue";
 
 defineProps<{

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import "@sv/svg-sprites/svg-icon";
+import "@atrium-ui/svg-sprites/svg-icon";
 
 defineProps<{
   name?: string;

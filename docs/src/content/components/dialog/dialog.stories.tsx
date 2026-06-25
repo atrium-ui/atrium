@@ -1,9 +1,9 @@
 /* @jsxImportSource vue */
 
-import type { Story } from "@sv/astro-stories";
-import "@sv/elements/calendar";
-import "@sv/elements/list";
-import "@sv/elements/popover";
+import type { Story } from "@atrium-ui/astro-stories";
+import "@atrium-ui/elements/calendar";
+import "@atrium-ui/elements/list";
+import "@atrium-ui/elements/popover";
 import Button from "@components/src/vue/Button.vue";
 import Dialog from "@components/src/vue/Dialog.vue";
 import Input from "@components/src/vue/Input.vue";

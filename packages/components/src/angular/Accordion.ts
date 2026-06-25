@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import "@sv/elements/expandable";
-import "@sv/svg-sprites/svg-icon";
+import "@atrium-ui/elements/expandable";
+import "@atrium-ui/svg-sprites/svg-icon";
 
 @Component({
   selector: "fra-accordion",

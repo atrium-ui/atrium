@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import "@sv/elements/track";
-import type { Track } from "@sv/elements/track";
+import "@atrium-ui/elements/track";
+import type { Track } from "@atrium-ui/elements/track";
 import { twMerge } from "tailwind-merge";
 import { computed, onMounted, ref } from "vue";
 import Button from "./Button.vue";

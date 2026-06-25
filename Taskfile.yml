@@ -78,7 +78,7 @@ tasks:
     dir: "docs"
     deps: [setup]
     cmds:
-      - 'npx @sv/a11y ./a11y.json "task preview"'
+      - 'npx @atrium-ui/a11y ./a11y.json "task preview"'
 
   test:watch:
     desc: "Run tests on current packages (Run specific test: t test --  -t prettier)"
@@ -125,7 +125,6 @@ tasks:
       - git config user.name "CI"
       - git fetch --prune --prune-tags -f
       - knope -v release | tee .publish
-      - task notify || true
 
   release:preview:
     cmds:
@@ -155,15 +154,6 @@ tasks:
     cmds:
       - "echo Publish tag: $RELEASE_LABEL"
       - bun x npm publish --access public --tag $RELEASE_LABEL && echo info Publishing \"{{.NAME}}\" at \"{{.VERSION}}\" || true
-
-  notify:
-    silent: true
-    dir: "./"
-    cmds:
-      - bun ./scripts/generate-notify > .notify
-      - defer: rm .notify
-      - 'echo "$(cat .notify)"'
-      - 'curl -X POST -d "$(cat .notify)" $SLACK_WEBHOOK_URL'
 
   docker:build:
     desc: Build docker image, pass --push to push to registry

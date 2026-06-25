@@ -22,7 +22,7 @@
     "jsxImportSource": "react",
     "types": [
       "vite/client",
-      "@sv/elements"
+      "@atrium-ui/elements"
     ]
   }
 }

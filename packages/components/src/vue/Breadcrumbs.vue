@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import "@sv/elements/track";
+import "@atrium-ui/elements/track";
 import { twMerge } from "tailwind-merge";
 </script>
 

@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 
-import type { Story } from "@sv/astro-stories";
+import type { Story } from "@atrium-ui/astro-stories";
 import Icon from "@components/src/vue/Icon.vue";
 import Button from "@components/src/vue/Button.vue";
 

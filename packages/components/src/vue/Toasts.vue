@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import "@sv/elements/toast";
+import "@atrium-ui/elements/toast";
 </script>
 
 <script lang="ts">
-import { Toast, ToastFeed } from "@sv/elements/toast";
+import { Toast, ToastFeed } from "@atrium-ui/elements/toast";
 
 const TOAST_TYPE = {
   default: "default",

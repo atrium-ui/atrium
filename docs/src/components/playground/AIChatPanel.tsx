@@ -1,4 +1,4 @@
-import type { PlaygroundApi, PlaygroundFiles } from "@sv/playground";
+import type { PlaygroundApi, PlaygroundFiles } from "@atrium-ui/playground";
 import elementsDocs from "../../assets/llms.txt?raw";
 import systemPrompt from "./system-prompt.txt?raw";
 import {
@@ -255,7 +255,7 @@ function buildInitialConversation(history: ChatMessage[]): ProviderMessage[] {
   }));
 }
 
-const ELEMENTS_LIBRARY_SUMMARY = `Available Atrium custom elements from @sv/elements:
+const ELEMENTS_LIBRARY_SUMMARY = `Available Atrium custom elements from @atrium-ui/elements:
 - Layout and disclosure: a-box, a-expandable, a-list, a-list-item, a-tabs, a-tabs-list, a-tabs-tab, a-tabs-panel
 - Overlay and portal: a-popover, a-popover-trigger, a-popover-arrow, a-popover-portal, a-tooltip, a-portal, a-blur
 - Inputs and forms: a-toggle, a-range, a-select, a-option, a-form-field, a-form-field-error

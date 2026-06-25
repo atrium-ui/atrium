@@ -1,5 +1,5 @@
 {
-  "name": "@sv/playground",
+  "name": "@atrium-ui/playground",
   "version": "0.1.0",
   "author": "atrium",
   "description": "Reusable browser playground for Vue JSX experiments.",

@@ -1,4 +1,4 @@
-# `@sv/playground`
+# `@atrium-ui/playground`
 
 Reusable React playground component for editing `index.html` and `index.tsx` side by side and rendering the result into a configurable preview page.
 
@@ -9,7 +9,7 @@ import {
   PlaygroundEditorsPanel,
   PlaygroundPreviewPanel,
   PlaygroundProvider,
-} from "@sv/playground";
+} from "@atrium-ui/playground";
 
 export function App() {
   return (

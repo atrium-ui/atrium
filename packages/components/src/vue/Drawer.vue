@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick, watch } from "vue";
-import { Track, type InputState, type Easing, type Trait } from "@sv/elements/track";
+import { Track, type InputState, type Easing, type Trait } from "@atrium-ui/elements/track";
 import Button from "./Button.vue";
 import Icon from "./Icon.vue";
 

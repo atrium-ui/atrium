@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import "@sv/elements/expandable";
+import "@atrium-ui/elements/expandable";
 import { ListItemElement, ListElement } from "./List.js";
 
 if (!customElements.get("a-list")) {

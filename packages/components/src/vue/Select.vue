@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import "@sv/elements/select";
-import "@sv/elements/expandable";
+import "@atrium-ui/elements/select";
+import "@atrium-ui/elements/expandable";
 import { ref, watch } from "vue";
 import Button from "./Button.vue";
 

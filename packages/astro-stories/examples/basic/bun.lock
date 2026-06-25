@@ -3,10 +3,10 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "@sv/astro-stories-example-basic",
+      "name": "@atrium-ui/astro-stories-example-basic",
       "dependencies": {
         "@astrojs/react": "5.0.0-beta.3",
-        "@sv/astro-stories": "file:../..",
+        "@atrium-ui/astro-stories": "file:../..",
         "astro": "6.0.0-beta.5",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
@@ -260,7 +260,7 @@
 
     "@shikijs/vscode-textmate": ["@shikijs/vscode-textmate@10.0.2", "", {}, "sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg=="],
 
-    "@sv/astro-stories": ["@sv/astro-stories@file:../..", { "devDependencies": { "@types/bun": "^1.3.5" }, "peerDependencies": { "astro": "^6.0.0-beta.5", "lit": "^3.1.4", "react": "^19.0.0", "react-dom": "^19.0.0", "vue": "^3.5.13" } }],
+    "@atrium-ui/astro-stories": ["@atrium-ui/astro-stories@file:../..", { "devDependencies": { "@types/bun": "^1.3.5" }, "peerDependencies": { "astro": "^6.0.0-beta.5", "lit": "^3.1.4", "react": "^19.0.0", "react-dom": "^19.0.0", "vue": "^3.5.13" } }],
 
     "@types/babel__core": ["@types/babel__core@7.20.5", "", { "dependencies": { "@babel/parser": "^7.20.7", "@babel/types": "^7.20.7", "@types/babel__generator": "*", "@types/babel__template": "*", "@types/babel__traverse": "*" } }, "sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA=="],
 

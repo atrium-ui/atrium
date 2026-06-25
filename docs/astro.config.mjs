@@ -2,12 +2,12 @@ import react from "@astrojs/react";
 import solid from "@astrojs/solid-js";
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@astrojs/vue";
-import { astroStories } from "@sv/astro-stories";
+import { astroStories } from "@atrium-ui/astro-stories";
 import { defineConfig, fontProviders } from "astro/config";
 import rehypeShiftHeading from "rehype-shift-heading";
 import mdx from "@astrojs/mdx";
 import pagefind from "astro-pagefind";
-import svgSprite from "@sv/svg-sprites/vite";
+import svgSprite from "@atrium-ui/svg-sprites/vite";
 import { resolve } from "node:path";
 import sitemap from "@astrojs/sitemap";
 import remarkDirective from "remark-directive";
@@ -68,7 +68,7 @@ export default defineConfig({
     resolve: {
       alias: {
         "package:": "/src",
-        "@components": "@sv/components",
+        "@components": "@atrium-ui/components",
       },
     },
     server: {
@@ -77,10 +77,10 @@ export default defineConfig({
       },
     },
     optimizeDeps: {
-      exclude: ["@sv/elements"],
+      exclude: ["@atrium-ui/elements"],
     },
     ssr: {
-      external: ["@sv/elements"],
+      external: ["@atrium-ui/elements"],
     },
     plugins: [
       tailwindcss(),
@@ -88,7 +88,7 @@ export default defineConfig({
         dir: [
           //
           "src/assets/icons/**/*.svg",
-          `${resolve("../node_modules/@sv/icons/assets")}/*.svg`,
+          `${resolve("../node_modules/@atrium-ui/icons/assets")}/*.svg`,
         ],
         transform(code) {
           return code
@@ -125,7 +125,7 @@ export default defineConfig({
   },
   integrations: [
     astroStories({
-      imports: ["@tailwindcss/browser", "@sv/elements"],
+      imports: ["@tailwindcss/browser", "@atrium-ui/elements"],
       inlineStyles: storyStyles,
     }),
     {

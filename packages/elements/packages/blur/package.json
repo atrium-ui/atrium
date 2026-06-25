@@ -1,5 +1,5 @@
 {
-  "name": "@sv/blur",
+  "name": "@atrium-ui/blur",
   "author": "atrium",
   "contributors": [],
   "private": true,
@@ -8,6 +8,6 @@
   "main": "dist/index.js",
   "types": "src/index.ts",
   "dependencies": {
-    "@sv/scroll-lock": "workspace:*"
+    "@atrium-ui/scroll-lock": "workspace:*"
   }
 }

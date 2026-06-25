@@ -11,8 +11,8 @@ async function buildLib(root: string) {
     external: [
       "lit",
       "@rive-app/canvas-advanced-lite",
-      "@sv/elements",
-      "@sv/scroll-lock",
+      "@atrium-ui/elements",
+      "@atrium-ui/scroll-lock",
       "@floating-ui/dom",
       "chart.js",
     ],

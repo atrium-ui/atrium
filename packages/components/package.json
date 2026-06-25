@@ -1,5 +1,5 @@
 {
-  "name": "@sv/components",
+  "name": "@atrium-ui/components",
   "version": "1.11.0",
   "author": "atrium",
   "contributors": [
@@ -29,9 +29,9 @@
     "@angular/common": "^21.1.0",
     "@angular/core": "^21.1.0",
     "@rive-app/canvas-advanced-lite": "2.23.3",
-    "@sv/animation": "^0.2.0",
-    "@sv/elements": "^4.4.1",
-    "@sv/svg-sprites": "^0.5.3",
+    "@atrium-ui/animation": "^0.2.0",
+    "@atrium-ui/elements": "^4.4.1",
+    "@atrium-ui/svg-sprites": "^0.5.3",
     "lit": "^3.1.3",
     "react": "^18.3.1",
     "solid-js": "^1.8.17",

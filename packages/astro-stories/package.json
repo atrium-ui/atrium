@@ -1,5 +1,5 @@
 {
-  "name": "@sv/astro-stories",
+  "name": "@atrium-ui/astro-stories",
   "version": "0.1.0",
   "description": "Self-contained Astro stories runtime and integration",
   "type": "module",

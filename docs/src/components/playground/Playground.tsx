@@ -4,7 +4,7 @@ import {
   PlaygroundProvider,
   type PlaygroundApi,
   type PlaygroundFiles,
-} from "@sv/playground";
+} from "@atrium-ui/playground";
 import exampleCodeHtml from "./Examplecode.html.txt?raw";
 import exampleCodeTsx from "./Examplecode.tsx.txt?raw";
 import { useEffect, useRef, useState } from "react";

@@ -1,5 +1,5 @@
 /* @jsxImportSource vue */
-import type { Story } from "@sv/astro-stories";
+import type { Story } from "@atrium-ui/astro-stories";
 import Pager from "@components/src/vue/Pager.vue";
 
 export default {

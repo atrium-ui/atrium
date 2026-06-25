@@ -7,7 +7,7 @@
     "jsx": "preserve",
     "types": ["@types/bun"],
     "paths": {
-      "@sv/components": ["./"]
+      "@atrium-ui/components": ["./"]
     }
   },
   "exclude": [

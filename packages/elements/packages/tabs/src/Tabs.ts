@@ -2,7 +2,7 @@ import { LitElement, type TemplateResult, html, css } from "lit";
 import { property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { ref, createRef } from "lit/directives/ref.js";
-import type { Track } from "@sv/elements/track";
+import type { Track } from "@atrium-ui/elements/track";
 
 export const generateTabId = (index: number): string => {
   return `tab-${index}`;

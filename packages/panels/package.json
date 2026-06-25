@@ -1,5 +1,5 @@
 {
-  "name": "@sv/panels",
+  "name": "@atrium-ui/panels",
   "version": "0.1.0",
   "author": "Tim Havlicek",
   "description": "A simple panel layout framework based on css grid.",

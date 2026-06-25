@@ -1,7 +1,7 @@
 /* @jsxImportSource vue */
-import type { Story } from "@sv/astro-stories";
-import "@sv/elements/tabs";
-import "@sv/elements/track";
+import type { Story } from "@atrium-ui/astro-stories";
+import "@atrium-ui/elements/tabs";
+import "@atrium-ui/elements/track";
 
 export default {
   tags: ["public"],

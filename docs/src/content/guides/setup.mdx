@@ -7,14 +7,6 @@ title: "Setup"
 
 import { Command } from "../../components";
 
-## Configure package registry
-
-Configure your package manager to install packages from the Gitlab package registry. More information about all published Packages can be found [here](https://gitlab.s-v.de/svp/atrium/-/packages).
-
-Create a .npmrc file in the root of your package to configure the registry:
-
-<Command sh={'echo @sv:registry=https://gitlab.s-v.de/api/v4/projects/1560/packages/npm/ >> .npmrc'} />
-
 ## Usage
 
 Components require **tailwindcss** to be installed in the project. Here links for [NuxtJS](https://www.npmjs.com/package/@nuxtjs/tailwindcss), [Vite](https://tailwindcss.com/docs/guides/vite) or [Tailwind cli](https://tailwindcss.com/docs/installation).
@@ -22,9 +14,9 @@ Components require **tailwindcss** to be installed in the project. Here links fo
 ### Install the elements
 
     <Command
-      pnpm="pnpm add @sv/elements"
-      npm="npm i @sv/elements"
-      bun="bun add @sv/elements"
+      pnpm="pnpm add @atrium-ui/elements"
+      npm="npm i @atrium-ui/elements"
+      bun="bun add @atrium-ui/elements"
     />
 
 ### Copy a component into your project.
@@ -32,7 +24,7 @@ Components require **tailwindcss** to be installed in the project. Here links fo
     This **copies** a component template into your project.
 
     <Command
-      sh="npx @sv/components button"
+      sh="npx @atrium-ui/components button"
     />
 
 ### Change styling or behavior of the component in the copy inside your project.
@@ -73,7 +65,7 @@ Or optionally use the custom-elements directly for most compatibility with, or w
 
 ```tsx
 // src/App.tsx
-import "@sv/elements/a-expandable";
+import "@atrium-ui/elements/a-expandable";
 
 export function App() {
   return (

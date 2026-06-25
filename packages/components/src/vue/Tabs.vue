@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import "@sv/elements/track";
+import "@atrium-ui/elements/track";
 import Button from "./Button.vue";
 import { twMerge } from "tailwind-merge";
 import { ref, watch, useSlots } from "vue";
