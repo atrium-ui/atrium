@@ -319,16 +319,24 @@ describe("Track", () => {
   test(label("just snap"), async () => {
     const track = await trackWithChildren(10, { snap: true });
 
+    await track.updateComplete;
     expect(track.snap).toBe(true);
+    expect(track.findTrait("snap")).toBeDefined();
+
     track.setTarget(undefined);
+    track.startAnimate();
     track.inputForce.x += 100;
+    await wait(50);
+    const target = track.target?.clone();
+    expect(target).toBeDefined();
     await wait(track.transitionTime + 100);
-    expect(track.target).toBeDefined();
+    expect(track.position[0]).toBeCloseTo(target?.[0], -2);
   });
 
   test(label("drag with snap"), async () => {
     const track = await trackWithChildren(10, { snap: true, current: 2 });
 
+    await track.updateComplete;
     track.moveTo(4, "none");
     await wait(200);
 
@@ -336,7 +344,7 @@ describe("Track", () => {
 
     const start = [...track.position];
 
-    pointer([
+    await pointer([
       { keys: "[TouchA>]", target: track, coords: { x: 10, y: 10 } },
       { pointerName: "TouchA", target: track, coords: { x: 200, y: 10 } },
       { keys: "[/TouchA]", target: track },
@@ -359,9 +367,10 @@ describe("Track", () => {
   test(label("drag with snap negative"), async () => {
     const track = await trackWithChildren(10, { snap: true });
 
+    await track.updateComplete;
     const start = [...track.position];
 
-    pointer([
+    await pointer([
       { keys: "[TouchA>]", target: track, coords: { x: 10, y: 650 } },
       { pointerName: "TouchA", target: track, coords: { x: 10, y: 10 } },
       { keys: "[/TouchA]", target: track },
@@ -381,9 +390,10 @@ describe("Track", () => {
   test(label("drag with snap vertical"), async () => {
     const track = await trackWithChildren(10, { snap: true, current: 3, vertical: true });
 
+    await track.updateComplete;
     const start = [...track.position];
 
-    pointer([
+    await pointer([
       { keys: "[TouchA>]", target: track, coords: { x: 10, y: 650 } },
       { pointerName: "TouchA", target: track, coords: { x: 10, y: 10 } },
       { keys: "[/TouchA]", target: track },
@@ -395,7 +405,7 @@ describe("Track", () => {
 
     // target should be set by snap
     expect(track.target).toBeDefined();
-    expect(track.position[0]).toBeCloseTo(track.target?.[0], -2);
+    expect(track.position[1]).toBeCloseTo(track.target?.[1], -2);
   });
 
   test(label("stop when grabbing"), async () => {
@@ -782,7 +792,7 @@ async function trackWithChildren(
   document.body.append(div);
 
   if (track.vertical) {
-    track.position.y = random() * track.overflowWidth;
+    track.position.y = random() * track.overflowHeight;
   } else {
     track.position.x = random() * track.overflowWidth;
   }
