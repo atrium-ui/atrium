@@ -1,6 +1,6 @@
 {
   "name": "@atrium-ui/svg-sprites",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "description": "Utility to compile svgs from a directory to a spritesheet and make it available as text or blob.",
   "author": "atrium",
   "contributors": [

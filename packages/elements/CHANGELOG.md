@@ -1,5 +1,185 @@
 # @atrium-ui/elements
 
+## 5.0.0 (2026-06-25)
+
+### Breaking Changes
+
+- Change the blur to *not* scrollock by default (svp/atrium!22)
+- Track does not listen on touchend events (svp/atrium!54)
+
+### Features
+
+- use rive advanced api to better handle loading of wasm
+- advanced forms with selects and checkbox
+- add a-transition element
+- added a-select for select and combobox components
+- merge a-adaptive into a-transition
+- a-toggle: implement a-toggle
+- init a-chart element
+- a-chart: css styling
+- a-popover: real popover with top-level positioning
+- a-track: fix track reaching beyound end
+- a-toast-feed: add nice stack animation
+- a-select: handle blur and fix change events, add keyPressed for quicksearch
+- a-select: added internal selected vaule, documentation and fixed event names
+- a-select: arrow-down and up opens select when closed
+- renamed `input` slot to `trigger` for a-popover and a-select
+- a-chart: added line chart type
+- add form reset event handling for select and checkbox in a-form-field
+- a-track: added centered attribute and handling
+- a-expandable: add css part to expandable container
+- add option to add arrow to popover
+- Update rive for text and layout support (svp/atrium!21)
+- Remove arbitrary default time for toast
+- Expandable open on anchor link (svp/atrium!23)
+- Add a-box component (svp/atrium!26)
+- a-form-field: Add invalid prop for styling of invalid states (#4)
+- Multiple fixes for a-track and adds `initialfocus` ans `allowscroll` attributes to a-blur (svp/atrium!31)
+- Make `overflowscroll` default behaviour and add `overflow` attribute.
+- Several a-track improvements (svp/atrium!33)
+- Fix bugs in a-track, add a-list element (svp/atrium!34)
+- Customizable range slider (svp/atrium!42)
+- Fix a-blur expecting anchor without href to be focusable, Adds a-blur to be aware of slots, Adds a-transition animation with using FLIP (svp/atrium!44)
+- a-track: listen to touch events for better touch responsiveness (svp/atrium!45)
+- Adds a-list element, fixes a-blur finding tabindex=-1 elements as focusable (svp/atrium!47)
+- Set track slot element to all: inherit
+- refactor how items are counted, respecting the layout, when items are wrapped
+- Popover respects temporary portals
+- Popover variant for tooltips
+- a-track: Sets slot to `all: inherit`, a-popover-trigger: Renames `.close` of a-popover-trigger to `.hide` (svp/atrium!48)
+- Adds a-loader element for loading and error states (svp/atrium!51)
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Implement `itemsInView` getter, and snap without overflow
+- a-track: Move track to the end within bounds, if the last item is the target
+- a-track: Ignore snapping bounds if overflow=ignore
+- a-track: Dont clamp toTargetPositon index
+- a-track: Clamp to max-index or bounds on snapping
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: Fix itemsInView when track is smaller than one item
+- a-track: itemsInView off by one
+- a-expandable: support opening for native cmd+f search matches
+- Adds a-calendar to elements with docs (#7)
+- Add year-picker to a-calendar
+- Give option to define if start or end date is focused initially
+- a-blur: fix focus control in some edge-cases (svp/atrium!57)
+- Adds a-tabs elements
+- a-popover: Improve tooltip popover handling on touch devices
+- Adds a-pager element
+- Rewrite of a-transition element
+- Adds a-lightbox element
+- a-blur: Try to focus the first "autofocus" input element before falling back to the first focusable element
+- Use TC39 decorators instead of experimental typsecript decorators and fields
+- Set popover trigger width to popover content as variable
+- Added color-picker element
+
+### Fixes
+
+- fix bug where current item was not calculated correctly
+- a-track: calculate the item to snap to based on current velocity
+- a-track: fix wrong maxIndex
+- a-track optimize snap algorithm, added more documentation
+- a-track: include item after lastIndex in maxIndex
+- a-animation: fix access after dispose
+- a-animation: fix misc bugs from rewrite
+- a-animation: cleanup wasm instance after use
+- a-animation: fix out of memory error, do more cleanup
+- a-animation: manually cleanup instance cache
+- a-animation: fix recursion bug
+- a-animation: fix recursion
+- a-animation: fix default not loading
+- fix cant scroll inside blur content
+- a-select: input fixed to required
+- a-select: observe mutations for a-options
+- a-select: initial options not updated
+- a-scroll: add a histroy strategy to store scroll position per histroy state
+- a-chart: layouting improvements
+- a-chart: enabled tooltips
+- a-blur: to not set focus to children when using a mouse, to prevent safari outline
+- a-track: disable snap past maxIndex
+- a-select: initial value not set
+- a-select: inital value not set
+- improve testability of a-expandable
+- added chart element tests
+- added tests for blur element
+- a-expandable: change event not dispatched on attribute change, and added test
+- a-expandable: fix change event test
+- a-select: scroll into view on invalid
+- a-select: fix scrollIntoView on invalid, even if already in view
+- fix form fields validating on inputs
+- a-track: uses wrong item to center itself
+- a-track: first element not cetnered correctly when align=center
+- Make accordion content inert if closed
+- Do not move the focus automatically on invalid fields, just scroll to it
+- Fix expandable deeplink not working, if link is inside a slot
+- Expandable find deeplinks of direct children of slots
+- Find active element of trigger button, within a shadowDOM
+- a-blur: Find focusable elements within shadowRoots
+- a-transition: Animate size to 0
+- Rename blur event to "exit"
+- Fix popover-arrow double define exception
+- Popover blur listening on wrong event
+- Portal event proxy improvments
+- Dont use crypto api for portal ids
+- Fix portal proxied events being duplicated (svp/atrium!29)
+- a-track: Overflowscroll off by one error
+- a-track: Calculate maxIndex based on overflowWidth
+- a-track: Added `current` attribute to dynamically set current item
+- a-transition: Make transition timing configruable through css
+- Give `a-blur` the option to not inert when disabled
+- a-track: vertical track not interactable
+- a-track: Fix bug where inputs where skipping frames on high refreshrate displays
+- a-popover: set placement as data attribute for styling
+- Blur focus-trap not working in shadowDOM (svp/atrium!43)
+- Improve toast animations (svp/atrium!38)
+- Blur outside click should cancel click event propagation
+- Type fixes
+- Popover is not hidden when "exit" of blur is called
+- a-popover: emit events
+- Overrideable popover trigger selector
+- Transition behaviour
+- Overwriteable popover instance check for triggers
+- Dunamically check for show and hide functions in trigger
+- a-tooltip: Layout not working
+- a-track: Fix track not moving with darkreader
+- Exception when reattatching a popover
+- a-popover: Remove debug logs
+- a-track: role attribute is overwritten
+- a-transition: Observe attribute changes too
+- Solve for new tests
+- Solve for new tests
+- Moveing out of bounds wraps without loop enabled
+- Ensure TouchEvent class is defined.
+- Add shortcut element to package exports
+- a-blur: Captured exit event cant be prevented
+- a-blur: Captured exit event infinite loop
+- a-popover: Prevent exit event loop in popover
+- a-expandable: content still inert when open
+- a-calendar: improve range seelction preview
+- a-blur: findActiveElement fails to find document.activeElement in children, if element also has a shadowRoot
+- a-list: Listbox options are not recognized
+- a-list: uodate selected option on connected
+- a-popover: double dialog role
+- a-blur: focusable elements inside shadowRoot within slot not found
+- a-blur: traverseShadowRealm does not see shadowRoot of rootNode
+- a-blur: simplify finding focusable elements
+- a-blur: check for focus loss and reset
+- a-blur: Ignore focusable elements that are not visible
+- a-blur: Ignores buttons inside custom-elements shadowRoot
+- a-blur: isInert not actually working across shadow boundaries
+- Improve support for JAWS screenreader on windows
+- Expandable calls scrollIntoView on mount
+- Stale inert state in a-expandable
+- Improve transition element stability for test enviroment
+- Adds showToast function export to toast package
+- Check
+- Track assumes all items have the same top edge
+- a-track: Precision feedback loop
+- a-track: Overflow feedbackloop for sub-pixel difference
+- a-track: itemsInView should ignore zero-sized items
+- Improve screen reader accessibility for date selection
+- a-track layout thrashing while DOM construction
+
 ## 4.12.0 (2026-06-12)
 
 ### Features
