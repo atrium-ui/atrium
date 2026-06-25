@@ -1,0 +1,50 @@
+name: Publish packages
+
+on:
+  workflow_run:
+    workflows: ["Main workflow"]
+    branches: ["main"]
+    types: [completed]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish latest
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha }}
+          token: ${{ secrets.GIT_PUSH_TOKEN || github.token }}
+
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+        with:
+          install: true
+
+      - name: Setup Knope
+        uses: knope-dev/action@v2.0.0
+
+      - name: Setup npm registry
+        uses: actions/setup-node@v4
+        with:
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Publish packages
+        run: task release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Push release commit and tags
+        run: |
+          git push origin HEAD:${{ github.event.workflow_run.head_branch }}
+          git push origin --tags
