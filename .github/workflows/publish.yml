@@ -32,7 +32,9 @@ jobs:
           install: true
 
       - name: Setup Knope
-        uses: knope-dev/action@v2.0.0
+        uses: knope-dev/action@v2.1.2
+        with:
+          version: "0.23.0"
 
       - name: Setup npm registry
         uses: actions/setup-node@v4
