@@ -21,7 +21,9 @@ defineProps<{
       </div>
     </div>
 
-    <div class="col-span-6 col-start-6 md:col-span-4 md:pl-10 lg:col-span-3">
+    <div
+      class="col-span-6 col-start-5 md:col-span-4 md:col-start-7 md:pl-10 lg:col-span-3 lg:col-start-8 xl:col-start-6"
+    >
       <figure>
         <img
           class="h-auto w-full object-cover"

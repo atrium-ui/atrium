@@ -1,15 +1,73 @@
 ---
 title: Form
 image: "/components/form.png"
-description: A Form
-tags: [["Button", "components/button"], ["Input", "components/input"], ["Checkbox", "components/checkbox"], ["Select", "components/select"]]
+description: A composed Vue form with validation, field-level errors, and FormData submission.
+headline: Atrium // Components
+tags:
+  [
+    ["Button", "components/button"],
+    ["Input", "components/input"],
+    ["Checkbox", "components/checkbox"],
+    ["Select", "components/select"],
+  ]
 command: "npx @atrium-ui/components form"
+order: 0
 ---
 
 import SomeFormExample from "./SomeForm.jsx?raw";
 import { SomeForm } from "./SomeForm.jsx";
-import { Example, Atrium } from "package:/components";
+import { ContentTabs } from "package:/components/docs";
+import { Code } from "astro:components";
 
-<Example code={SomeFormExample}>
-  <SomeForm client:only="vue" />
-</Example>
+The Form component provides a practical foundation for building Vue forms from Atrium's input components and native HTML controls. It renders a native `form`, emits its values as [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData), and composes with `FormField` to display validation feedback next to each control.
+
+`FormField` is powered by the [`a-form-field`](/elements/a-form-field) element. It listens to native validation events from `input`, `textarea`, and `select` controls, reflects invalid state on the field wrapper, and renders the browser's validation message through `a-form-field-error`.
+
+## Example
+
+The example combines text inputs, the custom Select component, a native `select`, a textarea, and a required checkbox. Submit the empty form to see field-level validation.
+
+<ContentTabs labels={["Preview", "Code"]}>
+  <div class="not-content box flex w-full justify-center px-4 sm:px-8">
+    <SomeForm client:only="vue" />
+  </div>
+  <Code lang="tsx" code={SomeFormExample} class="max-h-[600px] overflow-auto" />
+</ContentTabs>
+
+## Guidelines
+
+- **Use one control per field.** A `FormField` represents one submitted value. Keep its `field.name` aligned with the control's `name`.
+- **Connect every label.** Set the control's `id` to the same value used by `field.name` so the generated label points to the correct control.
+- **Prefer native constraints.** Use attributes such as `required`, `type="email"`, `minlength`, and `pattern` before adding custom validation logic.
+- **Choose the simplest select.** Use a native `select` for straightforward option lists. Use Atrium's custom Select when its richer presentation or interaction is needed.
+
+The `submit` event receives the form's current `FormData`, so controls need a `name` to be included:
+
+```tsx
+<Form
+  onSubmit={data => {
+    const email = data.get("email");
+    console.info({ email });
+  }}
+>
+  <FormField field={{ name: "email", label: "Email address" }}>
+    <Input id="email" name="email" type="email" required />
+  </FormField>
+</Form>
+```
+
+## Accessibility
+
+- The wrapper renders a native `form`, preserving browser constraint-validation semantics while exposing submission data to Vue.
+- Labels must remain visible and programmatically associated with their controls. Do not use placeholder text as the only label.
+- Invalid native controls receive focus, and their validation message is displayed next to the corresponding field.
+- Required fields should be identified in visible text as well as with the native `required` attribute.
+- Test custom controls, including Select and Checkbox, with a keyboard and a screen reader in the context of the completed form.
+
+## References
+
+- [WAI Forms Tutorial](https://www.w3.org/WAI/tutorials/forms/)
+- [WAI: Labeling Controls](https://www.w3.org/WAI/tutorials/forms/labels/)
+- [WAI: Validating Input](https://www.w3.org/WAI/tutorials/forms/validation/)
+- [MDN: Constraint validation](https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Constraint_validation)
+- [MDN: FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData)

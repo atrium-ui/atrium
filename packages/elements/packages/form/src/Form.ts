@@ -73,7 +73,7 @@ export class FormFieldElement extends LitElement {
     this.setValid(false);
 
     this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
-    this.scrollIntoView({ block: "center" });
+    this.scrollIntoView({ block: "nearest" });
   };
 
   change = (e: Event) => {

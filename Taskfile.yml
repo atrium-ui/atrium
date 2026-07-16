@@ -8,7 +8,6 @@ vars:
   PACKAGES:
     [
       "packages/astro-stories",
-      "packages/a11y",
       "packages/components",
       "packages/elements",
       "packages/scroll-lock",
@@ -72,13 +71,6 @@ tasks:
     deps: [build]
     cmds:
       - bun x turbo test -- {{.CLI_ARGS}}
-
-  a11y:
-    desc: "Run a11y tests"
-    dir: "docs"
-    deps: [setup]
-    cmds:
-      - 'npx @atrium-ui/a11y ./a11y.json "task preview"'
 
   test:watch:
     desc: "Run tests on current packages (Run specific test: t test --  -t prettier)"

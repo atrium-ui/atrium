@@ -6,6 +6,7 @@
 @import "./theme/markdown.css";
 
 @source '../../packages/components/**/*.tsx';
+@source '../../packages/components/**/*.vue';
 
 /* Index page */
 
