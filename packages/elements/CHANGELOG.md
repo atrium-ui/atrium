@@ -1,5 +1,11 @@
 # @atrium-ui/elements
 
+## 5.2.0 (2026-07-16)
+
+### Features
+
+- Update formfield to not scroll, if the invaild field is already in view
+
 ## 5.1.0 (2026-07-16)
 
 ### Features
