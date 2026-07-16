@@ -7,21 +7,21 @@ import { Checkbox } from "@components/src/vue";
 export function SomeForm() {
   return (
     <Form
-      class="mx-auto my-8 w-full max-w-[38rem] rounded-2xl border border-zinc-200 bg-white p-5 text-base dark:border-zinc-800 dark:bg-zinc-950 sm:my-10 sm:p-8"
+      class="mx-auto my-8 w-full max-w-[38rem] rounded-2xl border border-zinc-200 bg-white p-5 text-base sm:my-10 sm:p-8 dark:border-zinc-800 dark:bg-zinc-950"
       submitLabel="Send project inquiry"
       submitClass="w-full justify-center bg-zinc-900 py-3 font-medium hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white"
-      onSubmit={data => {
+      onSubmit={(data) => {
         console.info("Submit:", [...data]);
       }}
     >
       <header class="pb-2">
-        <span class="inline-flex rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold tracking-wide text-zinc-600 uppercase dark:bg-zinc-800 dark:text-zinc-300">
+        <span class="inline-flex rounded-full bg-zinc-100 px-3 py-1 font-semibold text-xs text-zinc-600 uppercase tracking-wide dark:bg-zinc-800 dark:text-zinc-300">
           Project inquiry
         </span>
-        <h3 class="mt-4 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-white">
+        <h3 class="mt-4 font-semibold text-2xl text-zinc-950 tracking-tight dark:text-white">
           Tell us what you're building
         </h3>
-        <p class="mt-2 max-w-lg text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+        <p class="mt-2 max-w-lg text-sm text-zinc-600 leading-6 dark:text-zinc-400">
           Share a few details about your project. We’ll use them to bring the right people
           into the first conversation.
         </p>
@@ -30,7 +30,7 @@ export function SomeForm() {
       <div aria-hidden="true" class="h-px bg-zinc-200 dark:bg-zinc-800" />
 
       <div class="pt-2">
-        <p class="mb-3 text-xs font-semibold tracking-wide text-zinc-500 uppercase">
+        <p class="mb-3 font-semibold text-xs text-zinc-500 uppercase tracking-wide">
           Contact details
         </p>
 
@@ -72,7 +72,7 @@ export function SomeForm() {
       </div>
 
       <div class="pt-2">
-        <p class="mb-3 text-xs font-semibold tracking-wide text-zinc-500 uppercase">
+        <p class="mb-3 font-semibold text-xs text-zinc-500 uppercase tracking-wide">
           Project details
         </p>
 
@@ -110,7 +110,7 @@ export function SomeForm() {
                 id="country"
                 name="country"
                 required
-                class="w-full cursor-pointer appearance-none rounded-md border border-zinc-200 bg-zinc-100 px-3 py-2 pr-10 outline-hidden transition-colors hover:border-zinc-400 hover:bg-zinc-200 focus:border-zinc-500 focus:ring-2 focus:ring-zinc-400/30 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-zinc-500 dark:hover:bg-zinc-700 dark:focus:border-zinc-400"
+                class="w-full cursor-pointer appearance-none rounded-md border border-zinc-200 bg-zinc-100 px-3 py-2 pr-10 outline-hidden transition-colors hover:border-zinc-400 hover:bg-zinc-200 focus:border-zinc-500 focus:ring-2 focus:ring-zinc-400/30 dark:border-zinc-700 dark:bg-zinc-800 dark:focus:border-zinc-400 dark:hover:border-zinc-500 dark:hover:bg-zinc-700"
               >
                 <option value="">Select a country</option>
                 <option value="de">Germany</option>
@@ -123,7 +123,7 @@ export function SomeForm() {
                 viewBox="0 0 20 20"
                 fill="none"
                 stroke="currentColor"
-                class="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-zinc-500"
+                class="-translate-y-1/2 pointer-events-none absolute top-1/2 right-3 size-4 text-zinc-500"
               >
                 <path
                   d="m5 7.5 5 5 5-5"
