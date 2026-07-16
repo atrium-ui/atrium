@@ -1,5 +1,11 @@
 # @atrium-ui/elements
 
+## 5.1.0 (2026-07-16)
+
+### Features
+
+- Add suport for select in formfield
+
 ## 5.0.0 (2026-06-25)
 
 ### Breaking Changes
