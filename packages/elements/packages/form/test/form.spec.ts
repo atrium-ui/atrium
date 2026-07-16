@@ -82,6 +82,45 @@ test("invalid attribute", async () => {
   expect(input.reportValidity()).toBe(true);
 });
 
+test("native select", async () => {
+  const form = document.createElement("form");
+  form.innerHTML = `
+    <a-form-field>
+      <label for="select1">label top</label>
+      <select id="select1" name="test" required>
+        <option value="">Select an option</option>
+        <option value="one">One</option>
+      </select>
+      <a-form-field-error></a-form-field-error>
+    </a-form-field>
+  `;
+
+  const field = form.querySelector<FormFieldElement>("a-form-field");
+  const select = form.querySelector<HTMLSelectElement>("select");
+  if (!field || !select) throw new Error("select field not found");
+
+  document.body.append(form);
+
+  expect(field.getInput()).toBe(select);
+
+  select.dispatchEvent(new Event("change", { bubbles: true }));
+  await sleep();
+  expect(field.hasAttribute("invalid")).toBe(true);
+
+  select.value = "one";
+  select.dispatchEvent(new Event("change", { bubbles: true }));
+  await sleep();
+  expect(field.hasAttribute("invalid")).toBe(false);
+
+  let changedOnReset = false;
+  select.addEventListener("change", () => {
+    changedOnReset = true;
+  });
+  form.reset();
+  await sleep();
+  expect(changedOnReset).toBe(true);
+});
+
 // error reporting
 
 test("form field validation emits error", async () => {

@@ -33,9 +33,10 @@ export class FormFieldElement extends LitElement {
   }
 
   getInput() {
-    return this.querySelector("input, textarea") as
+    return this.querySelector("input, textarea, select") as
       | HTMLInputElement
       | HTMLTextAreaElement
+      | HTMLSelectElement
       | undefined;
   }
 
