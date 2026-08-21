@@ -1,5 +1,11 @@
 # @atrium-ui/elements
 
+## 5.3.0 (2026-08-21)
+
+### Features
+
+- Support css gaps and margin in a-track (#9)
+
 ## 5.2.0 (2026-07-16)
 
 ### Features
