@@ -450,72 +450,107 @@ export class Track extends LitElement {
   }
 
   private _itemRects: Vec2[] | undefined = undefined;
-  private get itemRects() {
-    if (this._itemRects === undefined) {
-      let rowBottom: number | undefined;
-      let colRight: number | undefined;
+  private _itemRectIndices: number[] | undefined = undefined;
 
-      let lastRight: number | undefined;
-      let lastBottom: number | undefined;
+  /**
+   * Measures all items and stores them interleaved: for every item, the gap in
+   * front of it, followed by its own size. `_itemRectIndices` maps an item index
+   * to the position of its size entry in `_itemRects`.
+   */
+  private updateItemRects() {
+    let rowBottom: number | undefined;
+    let colRight: number | undefined;
 
-      this._itemRects = this.items
-        .flatMap((item) => {
-          if (this.clones.includes(item)) return;
+    let lastRight: number | undefined;
+    let lastBottom: number | undefined;
 
-          const { width, height, top, left, right, bottom } =
-            item.getBoundingClientRect();
+    const rects: Vec2[] = [];
+    const indices: number[] = [];
 
-          if (this.vertical) {
-            if (colRight === undefined) {
-              colRight = left + width;
-            } else if (left >= colRight) {
-              return; // wrapped to new column
-            } else {
-              colRight = Math.max(colRight, left + width);
-            }
-          } else {
-            if (rowBottom === undefined) {
-              rowBottom = top + height;
-            } else if (top >= rowBottom) {
-              return; // wrapped to new row
-            } else {
-              rowBottom = Math.max(rowBottom, top + height);
-            }
-          }
+    for (const item of this.items) {
+      if (this.clones.includes(item)) continue;
 
-          const xGap = !this.vertical && lastRight ? left - lastRight : 0;
-          const yGap = this.vertical && lastBottom ? top - lastBottom : 0;
+      const { width, height, top, left, right, bottom } = item.getBoundingClientRect();
 
-          lastRight = right;
-          lastBottom = bottom;
+      if (this.vertical) {
+        if (colRight === undefined) {
+          colRight = left + width;
+        } else if (left >= colRight) {
+          continue; // wrapped to new column
+        } else {
+          colRight = Math.max(colRight, left + width);
+        }
+      } else {
+        if (rowBottom === undefined) {
+          rowBottom = top + height;
+        } else if (top >= rowBottom) {
+          continue; // wrapped to new row
+        } else {
+          rowBottom = Math.max(rowBottom, top + height);
+        }
+      }
 
-          return [new Vec2(xGap, yGap), new Vec2(width, height)];
-        })
-        .filter(Boolean);
+      const xGap = !this.vertical && lastRight !== undefined ? left - lastRight : 0;
+      const yGap = this.vertical && lastBottom !== undefined ? top - lastBottom : 0;
+
+      lastRight = right;
+      lastBottom = bottom;
+
+      rects.push(new Vec2(xGap, yGap));
+      indices.push(rects.length);
+      rects.push(new Vec2(width, height));
     }
+
+    this._itemRects = rects;
+    this._itemRectIndices = indices;
+    this._itemOffsets = undefined;
+  }
+
+  private get itemRects() {
+    if (this._itemRects === undefined) this.updateItemRects();
     return this._itemRects || [];
   }
 
-  private getItemRectIndex(index: number) {
-    const filteredRects = this.itemRects
-      .map((rect, i) => {
-        if (rect[0] !== 0 && rect[1] !== 0) return i;
-        return undefined;
-      })
-      .filter(Boolean);
+  /**
+   * Positions of the item size entries inside `itemRects`, by item index.
+   */
+  private get itemRectIndices() {
+    if (this._itemRectIndices === undefined) this.updateItemRects();
+    return this._itemRectIndices || [];
+  }
 
-    return filteredRects[index] || -1;
+  private _itemOffsets: number[] | undefined = undefined;
+  /**
+   * Position of every item along the current axis, gaps included.
+   */
+  private get itemOffsets() {
+    if (this._itemOffsets === undefined) {
+      const axis = this.currentAxis;
+      const rects = this.itemRects;
+      const offsets: number[] = [];
+
+      let position = 0;
+      let rectIndex = 0;
+      for (const index of this.itemRectIndices) {
+        // consume everything in front of the item (its gap)
+        while (rectIndex < index) {
+          position += rects[rectIndex++]?.[axis] ?? 0;
+        }
+        offsets.push(position);
+        position += rects[rectIndex++]?.[axis] ?? 0;
+      }
+
+      this._itemOffsets = offsets;
+    }
+    return this._itemOffsets;
   }
 
   private _itemWidths: number[] | undefined = undefined;
   private get itemWidths() {
     if (this._itemWidths === undefined) {
       // TODO: respect left children too
-      this._itemWidths = this.itemRects
-        .map((rect) => {
-          if (rect[0] !== 0 && rect[1] !== 0) return rect[0];
-        })
-        .filter(Boolean);
+      const rects = this.itemRects;
+      this._itemWidths = this.itemRectIndices.map((i) => rects[i]?.x ?? 0);
     }
     return this._itemWidths;
   }
@@ -524,11 +559,8 @@ export class Track extends LitElement {
   private get itemHeights() {
     if (this._itemHeights === undefined) {
       // TODO: respect left children too
-      this._itemHeights = this.itemRects
-        .map((rect) => {
-          if (rect[0] !== 0 && rect[1] !== 0) return rect[1];
-        })
-        .filter(Boolean);
+      const rects = this.itemRects;
+      this._itemHeights = this.itemRectIndices.map((i) => rects[i]?.y ?? 0);
     }
     return this._itemHeights;
   }
@@ -998,32 +1030,26 @@ export class Track extends LitElement {
       ? index
       : Math.min(Math.max(index, 0), this.itemCount - 1);
 
-    const rects = this.itemRects.map((rec) => {
-      return [rec.y, rec.x] as const;
-    });
+    const offsets = this.itemOffsets;
+    const sizes = this.vertical ? this.itemHeights : this.itemWidths;
 
     const pos = new Vec2();
 
+    // Normalize negative and out of range indices onto the actual items
+    const normalizedIndex =
+      offsets.length > 0
+        ? ((targetIndex % offsets.length) + offsets.length) % offsets.length
+        : 0;
+
     const findMinDistance = (
       originPoint: number,
-      targetIndex: number,
-      itemRects: (readonly [number, number])[],
+      itemIndex: number,
+      itemOffsets: number[],
       totalWidth: number,
       wrap: boolean,
     ) => {
-      // Normalize negative indices
-      const normalizedIndex =
-        ((targetIndex % itemRects.length) + itemRects.length) % itemRects.length;
-
-      // Calculate the base position of the target index
-      let basePosition = 0;
-      for (let i = 0; i < normalizedIndex; i++) {
-        const rect = itemRects[i];
-        if (rect === undefined) {
-          throw new Error("Item width is undefined");
-        }
-        basePosition += rect[this.currentAxis];
-      }
+      // The position of the target item, including the gaps in front of it
+      const basePosition = itemOffsets[itemIndex] ?? 0;
 
       // Consider three possible positions:
       // 1. The base position
@@ -1055,8 +1081,8 @@ export class Track extends LitElement {
 
     pos[this.currentAxis] = findMinDistance(
       this.position[this.currentAxis] - this.origin[this.currentAxis],
-      this.getItemRectIndex(targetIndex),
-      rects,
+      normalizedIndex,
+      offsets,
       this.trackSize,
       this.loop,
     );
@@ -1065,7 +1091,7 @@ export class Track extends LitElement {
 
     if (this.align === "center") {
       // adds half of the current item to the position to center it
-      pos[this.currentAxis] += (rects[targetIndex]?.[this.currentAxis] || 0) / 2;
+      pos[this.currentAxis] += (sizes[normalizedIndex] || 0) / 2;
     }
 
     return pos;
@@ -1406,12 +1432,14 @@ export class Track extends LitElement {
 
     let positionOffset = 0;
     const sizes = this.vertical ? this.itemHeights : this.itemWidths;
+    // item positions include the gaps, just like trackSize does
+    const offsets = this.itemOffsets;
 
     if (this.align === "center") {
       // adds half of the current item to the position to center it
       const index = findClosestItemIndex(
         this.position[this.currentAxis] - this.origin[this.currentAxis],
-        sizes,
+        offsets,
         this.trackSize,
         this.loop,
       );
@@ -1421,7 +1449,7 @@ export class Track extends LitElement {
 
     const index = findClosestItemIndex(
       this.position[this.currentAxis] - this.origin[this.currentAxis] - positionOffset,
-      sizes,
+      offsets,
       this.trackSize,
       this.loop,
     );
@@ -1439,43 +1467,49 @@ export class Track extends LitElement {
   public getItemAtPosition(pos: Vec2) {
     // TODO: dupliacte of getCurrentItem ?
     const rects = this.itemRects;
+    const indices = this.itemRectIndices;
+    const offset = Math.floor(pos[0] / this.trackWidth) * this.itemCount;
     let px = 0;
 
     if (pos[0] > 0) {
       let index = 0;
-      for (const item of rects) {
-        if (px + item.x > pos[0] % this.trackWidth) {
-          const offset = Math.floor(pos[0] / this.trackWidth) * this.itemCount;
+      for (let i = 0; i < rects.length; i++) {
+        const rect = rects[i];
+        if (rect === undefined) continue;
+
+        const isItem = indices[index] === i;
+        // gaps are only accumulated; a position inside a gap belongs to the item after it
+        if (isItem && px + rect.x > pos[0] % this.trackWidth) {
           return {
-            width: item.x,
-            height: item.y,
+            width: rect.x,
+            height: rect.y,
             domIndex: offset + index,
             index: index,
           };
         }
-        px += item.x;
 
-        if (item.x === 0 || item.y === 0) continue;
+        px += rect.x;
 
-        index += 1;
+        if (isItem) index += 1;
       }
     } else {
-      let index = 0;
-      for (const item of [...rects].reverse()) {
-        if (px - item.x < pos[0] % -this.trackWidth) {
-          const offset = Math.floor(pos[0] / this.trackWidth) * this.itemCount;
+      for (let index = indices.length - 1; index >= 0; index--) {
+        const rectIndex = indices[index] ?? -1;
+        const rect = rects[rectIndex];
+        if (rect === undefined) continue;
+
+        if (px - rect.x < pos[0] % -this.trackWidth) {
           return {
-            width: item.x,
-            height: item.y,
+            width: rect.x,
+            height: rect.y,
             domIndex: offset + index,
             index: index,
           };
         }
-        px -= item.x;
 
-        if (item.x === 0 || item.y === 0) continue;
-
-        index += 1;
+        // walk over the item and the gap in front of it
+        px -= rect.x;
+        px -= rects[rectIndex - 1]?.x ?? 0;
       }
     }
     return null;
@@ -1575,6 +1609,8 @@ export class Track extends LitElement {
     const lastHeights = this._itemHeights;
 
     this._itemRects = undefined;
+    this._itemRectIndices = undefined;
+    this._itemOffsets = undefined;
     this._width = undefined;
     this._height = undefined;
     this._itemWidths = undefined;
@@ -1863,19 +1899,10 @@ function diffArray(arr: number[]) {
 
 function findClosestItemIndex(
   point: number,
-  itemWidths: number[],
+  positions: number[],
   totalWidth: number,
   wrap: boolean,
 ): number {
-  // Calculate cumulative positions of items
-  const positions: number[] = [];
-  let currentPosition = 0;
-
-  for (const width of itemWidths) {
-    positions.push(currentPosition);
-    currentPosition += width;
-  }
-
   // Find the closest item
   let closestIndex = 0;
   let minDistance = Number.POSITIVE_INFINITY;
