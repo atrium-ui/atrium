@@ -400,13 +400,21 @@ describe("Track", () => {
       { keys: "[/TouchA]", target: track },
     ]);
 
-    await wait(200);
+    // A drag this long flings the track past the end of its bounds. Depending on
+    // the randomized track height the bounce either returns far enough inside
+    // the bounds for snap to pick up a target, or it decays onto the boundary
+    // from the outside - SnapTrait ignores positions that are not at least 1px
+    // inside the bounds, so no target is set in that case. Either way the track
+    // has to come to rest, at a snap target or at the end of the track.
+    await waitForRest(track, start);
 
     expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
 
-    // target should be set by snap
-    expect(track.target).toBeDefined();
-    expect(track.position[1]).toBeCloseTo(track.target?.[1], -2);
+    if (track.target) {
+      expect(track.position[1]).toBeCloseTo(track.target[1], -2);
+    } else {
+      expect(track.position[1]).toBeCloseTo(track.scrollBounds.bottom, -2);
+    }
   });
 
   test(label("stop when grabbing"), async () => {
@@ -845,6 +853,23 @@ describe("Track", () => {
     expect(at(-10)?.domIndex).toBe(0);
   });
 });
+
+/**
+ * Waits for the track to come to rest, so tests do not race the bounce back
+ * from an out-of-bounds overshoot.
+ */
+async function waitForRest(track: TrackElement, from: number[], timeout = 2000) {
+  const axis = track.vertical ? 1 : 0;
+  for (let waited = 0; waited < timeout; waited += 20) {
+    const target = track.target;
+    // the fling only registers a frame or two after the pointer events, so an
+    // untouched position means it has not started moving yet
+    const moved = track.position[axis] !== from[axis];
+    const atTarget = target ? Math.abs(track.position[axis] - target[axis]) < 1 : true;
+    if (moved && atTarget && Math.abs(track.velocity[axis]) < 0.1) return;
+    await wait(20);
+  }
+}
 
 async function trackWithChildren(
   itemCount = 10,
