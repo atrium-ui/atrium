@@ -229,3 +229,13 @@ export const LandingPage = {
     );
   },
 };
+
+export const Bento = {
+  render: () => (
+    <div class="flex h-full items-center justify-center px-6 py-7">
+      <div class="w-[250px] rounded-md border border-zinc-200 bg-white p-3">
+        <a-calendar value="2026-03-18" />
+      </div>
+    </div>
+  ),
+};
