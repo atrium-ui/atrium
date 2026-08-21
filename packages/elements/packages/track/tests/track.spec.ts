@@ -595,6 +595,52 @@ describe("Track", () => {
     expect(track.position[0]).toBe(targetPosition[0]);
   });
 
+  test(label("maxIndex stays within the scroll bounds"), async () => {
+    // 6 * 300 = 1800 wide track in a 900 wide viewport, so item 3 is the last item
+    // that can be aligned to the start without scrolling past the end.
+    const track = await trackWithChildren(6, { snap: true, width: 900, itemWidth: 300 });
+
+    expect(track.overflowWidth).toBe(900);
+    expect(track.maxIndex).toBe(3);
+    expect(track.getToItemPosition(track.maxIndex)[0]).toBeLessThanOrEqual(
+      track.scrollBounds.right + 3,
+    );
+  });
+
+  test(label("maxIndex is bounded with an empty align attribute"), async () => {
+    // anything but "center" aligns items at the start of the track
+    const track = await trackWithChildren(6, {
+      snap: true,
+      width: 900,
+      itemWidth: 300,
+      align: "",
+    });
+
+    expect(track.align).toBe("");
+    expect(track.maxIndex).toBe(3);
+  });
+
+  test(label("inertia does not snap past the end of the track"), async () => {
+    const track = await trackWithChildren(6, {
+      snap: true,
+      width: 900,
+      itemWidth: 300,
+      align: "",
+    });
+
+    track.moveTo(0, "none");
+    await wait(200);
+
+    // fling to the end with a lot of inertia
+    track.setTarget(undefined);
+    track.startAnimate();
+    track.inputForce.x += 800;
+    await wait(600);
+
+    expect(track.position[0]).toBeLessThanOrEqual(track.overflowWidth + 1);
+    expect(track.position[0]).toBeCloseTo(track.overflowWidth, -1);
+  });
+
   test(label("dont loop to aroung without loop enabled"), async () => {
     const track = await trackWithChildren(10, { snap: true, width: 800 });
 

@@ -707,20 +707,18 @@ export class Track extends LitElement {
       return this.itemCount - 1;
     }
 
-    if (this.align === "start") {
-      // get index of item at the end of the track
-      if (this.vertical) {
-        const lastItem = this.getItemAtPosition(
-          // adds a buffer of 3 for margin of error for layout
-          new Vec2(0, this.overflowHeight + 3 - this.origin.y),
-        );
-        if (lastItem) return lastItem.index;
-      } else {
-        const lastItem = this.getItemAtPosition(
-          // adds a buffer of 3 for margin of error for layout
-          new Vec2(this.overflowWidth + 3 - this.origin.x, 0),
-        );
-        if (lastItem) return lastItem.index;
+    // every alignment but "center" starts the items at the beginning of the track
+    if (this.align !== "center") {
+      // the last item that can be scrolled to without going past the end of the track
+      // (adds a buffer of 3 for margin of error for layout)
+      const maxPosition =
+        (this.vertical ? this.overflowHeight : this.overflowWidth) +
+        3 -
+        this.origin[this.currentAxis];
+
+      const offsets = this.itemOffsets;
+      for (let i = offsets.length - 1; i >= 0; i--) {
+        if ((offsets[i] ?? 0) <= maxPosition) return i;
       }
     }
 
