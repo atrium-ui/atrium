@@ -1,8 +1,8 @@
-import { Blur } from "@sv/elements/blur";
-import { Portal } from "@sv/elements/portal";
+import { Blur } from "@atrium-ui/elements/blur";
+import { Portal } from "@atrium-ui/elements/portal";
 import { css, html, LitElement } from "lit";
 import { property, query } from "lit/decorators.js";
-import { ScrollLock } from "@sv/scroll-lock";
+import { ScrollLock } from "@atrium-ui/scroll-lock";
 
 const overlayRegistry = new Map<string, OverlayElement>();
 
@@ -38,8 +38,8 @@ class OverlayBlurElement extends Blur {
     .container {
       transition: opacity 0.2s ease;
       opacity: 1;
-      background: rgba(0, 0, 28, 0.6);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 28, 0.4);
+      backdrop-filter: blur(4px);
       position: relative;
       width: 100%;
       height: 100%;

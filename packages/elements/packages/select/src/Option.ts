@@ -17,7 +17,7 @@ export class OptionElement extends LitElement {
   }
 
   @property({ type: String, reflect: true })
-  public value!: string;
+  public accessor value!: string;
 
   render() {
     return html`<slot></slot>`;

@@ -1,6 +1,9 @@
 import { css, html, LitElement, type PropertyValues } from "lit";
 import { property } from "lit/decorators/property.js";
 
+// ensure TouchEvent is defined
+const TouchEvent = globalThis.TouchEvent || class {};
+
 // import { DebugTrait } from "./debug.js";
 
 const defaultTraits = [
@@ -64,7 +67,7 @@ export type InputState = {
  * Or the Track class can be extended to override add new behaviours entirely.
  * @example
  * ```js
- * import { type InputState, Track, type Trait } from "@sv/elements/track";
+ * import { type InputState, Track, type Trait } from "@atrium-ui/elements/track";
  *
  * export class CustomTrack extends Track {
  *   public traits: Trait[] = [
@@ -254,8 +257,12 @@ export class Track extends LitElement {
 
     this.addEventListener("keydown", this.onKeyDown);
 
+    this.addEventListener("dragstart", this.onDragStart);
+
     this.addEventListener("pointerdown", this.onPointerDown);
-    this.addEventListener("touchstart", this.onPointerDown);
+    this.addEventListener("touchstart", this.onPointerDown, {
+      passive: true,
+    });
 
     this.addEventListener("pointerleave", () => {
       this.inputState.leave.value = true;
@@ -269,21 +276,25 @@ export class Track extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.updateItems();
-
     this.ariaRoleDescription = "carousel";
 
     this.role = this.role || "region"; // fallback to region if no role is set
 
-    this.listener(window, "pointermove", this.onPointerMove);
-    this.listener(window, "touchmove", this.onPointerMove);
-    this.listener(window, ["pointerup", "pointercancel"], this.onPointerUpOrCancel);
+    this.listener(window, ["pointermove", "touchmove"], this.onPointerMove);
+    this.listener(
+      window,
+      ["pointerup", "pointercancel", "touchend", "touchcancel"],
+      this.onPointerUpOrCancel,
+    );
 
     const intersectionObserver = new IntersectionObserver((intersections) => {
       for (const entry of intersections) {
         if (entry.isIntersecting) {
+          this.visible = true;
+          this.flushFormat();
           this.startAnimate();
         } else {
+          this.visible = false;
           this.stopAnimate();
         }
       }
@@ -305,11 +316,20 @@ export class Track extends LitElement {
       hostDisconnected: () => this.resizeObserver?.disconnect(),
     });
 
-    this.computeCurrentItem();
+    // Measuring children forces a synchronous reflow while the surrounding
+    // DOM may still be under construction (e.g. many tracks mounting in one
+    // pass). Defer the initial format until the track is visible; the lazy
+    // getters still measure on demand if queried earlier.
+    this.scheduleFormat();
   }
 
   disconnectedCallback(): void {
     this.stopAnimate();
+    if (this.formatRaf !== undefined) {
+      cancelAnimationFrame(this.formatRaf);
+      this.formatRaf = undefined;
+    }
+    this.visible = false;
     super.disconnectedCallback();
   }
 
@@ -348,15 +368,77 @@ export class Track extends LitElement {
   }
 
   private _children: Element[] = [];
+  private itemsDirty = true;
+  private formatPending = false;
+  private visible = false;
+  private formatRaf?: number;
 
   public get items() {
+    if (this.itemsDirty) {
+      this.syncItems();
+    }
     return this._children;
   }
 
-  private updateItems() {
+  /**
+   * Re-read children and keep aria roles and resize observation in sync.
+   * Reads computed styles, so it forces a style recalc — only called lazily
+   * or from flushFormat.
+   */
+  private syncItems() {
+    this.itemsDirty = false;
     this._children = getCSSChildren(this);
+
+    for (const node of this.observedChildren) {
+      if (node instanceof HTMLElement && !this._children.includes(node)) {
+        this.resizeObserver?.unobserve(node);
+        this.observedChildren.delete(node);
+      }
+    }
+
+    for (const node of this._children) {
+      if (node instanceof HTMLElement) {
+        node.ariaRoleDescription = "slide";
+      }
+
+      if (
+        this.resizeObserver &&
+        node instanceof HTMLElement &&
+        !this.observedChildren.has(node)
+      ) {
+        this.observedChildren.add(node);
+        this.resizeObserver.observe(node);
+      }
+    }
+  }
+
+  private updateItems() {
+    this.syncItems();
     this.updateLayout();
     this.onFormat();
+  }
+
+  /**
+   * Mark items dirty and schedule a re-format. Batched to the next animation
+   * frame while visible; deferred to the first intersection while hidden, so
+   * that mounting many tracks does not cause layout thrashing.
+   */
+  private scheduleFormat() {
+    this.itemsDirty = true;
+    this.formatPending = true;
+    if (!this.visible || this.formatRaf !== undefined) return;
+    this.formatRaf = requestAnimationFrame(() => {
+      this.formatRaf = undefined;
+      this.flushFormat();
+    });
+  }
+
+  private flushFormat() {
+    if (!this.formatPending) return;
+    this.formatPending = false;
+    this.itemsDirty = true;
+    this.updateItems();
+    this.computeCurrentItem();
   }
 
   public get itemCount() {
@@ -370,8 +452,8 @@ export class Track extends LitElement {
   private _itemRects: Vec2[] | undefined = undefined;
   private get itemRects() {
     if (this._itemRects === undefined) {
-      let topEdge: number | undefined;
-      let leftEdge: number | undefined;
+      let rowBottom: number | undefined;
+      let colRight: number | undefined;
 
       let lastRight: number | undefined;
       let lastBottom: number | undefined;
@@ -384,16 +466,20 @@ export class Track extends LitElement {
             item.getBoundingClientRect();
 
           if (this.vertical) {
-            if (!leftEdge) {
-              leftEdge = left;
-            } else if (left !== leftEdge) {
-              return;
+            if (colRight === undefined) {
+              colRight = left + width;
+            } else if (left >= colRight) {
+              return; // wrapped to new column
+            } else {
+              colRight = Math.max(colRight, left + width);
             }
           } else {
-            if (!topEdge) {
-              topEdge = top;
-            } else if (top !== topEdge) {
-              return;
+            if (rowBottom === undefined) {
+              rowBottom = top + height;
+            } else if (top >= rowBottom) {
+              return; // wrapped to new row
+            } else {
+              rowBottom = Math.max(rowBottom, top + height);
             }
           }
 
@@ -475,9 +561,11 @@ export class Track extends LitElement {
         const size = itemSizes[sizeIndex];
         if (size === undefined) break;
 
-        accumulatedSize += size;
-        if (accumulatedSize <= viewportSize) {
-          itemsInView++;
+        if (size > 0) {
+          accumulatedSize += size;
+          if (accumulatedSize <= viewportSize) {
+            itemsInView++;
+          }
         }
         itemIndex++;
 
@@ -537,7 +625,7 @@ export class Track extends LitElement {
   private _width;
   public get width() {
     if (this._width === undefined) {
-      this._width = this.offsetWidth;
+      this._width = this.getBoundingClientRect().width;
     }
     return this._width;
   }
@@ -545,7 +633,7 @@ export class Track extends LitElement {
   private _height;
   public get height() {
     if (this._height === undefined) {
-      this._height = this.offsetHeight;
+      this._height = this.getBoundingClientRect().height;
     }
     return this._height;
   }
@@ -564,9 +652,9 @@ export class Track extends LitElement {
 
   public get hasOverflow() {
     if (this.vertical) {
-      return this.overflowHeight > 0;
+      return this.overflowHeight > 1;
     }
-    return this.overflowWidth > 0;
+    return this.overflowWidth > 1;
   }
 
   public get currentIndex() {
@@ -802,28 +890,30 @@ export class Track extends LitElement {
   };
 
   /** The index of the current item. */
-  @property({ type: Number, reflect: true }) public current: number | undefined;
+  @property({ type: Number, reflect: true }) public accessor current: number | undefined =
+    undefined;
 
   /** Whether the track should scroll vertically, instead of horizontally. */
-  @property({ type: Boolean, reflect: true }) public vertical = false;
+  @property({ type: Boolean, reflect: true }) public accessor vertical = false;
 
   /** Whether the track should loop back to the start when reaching the end. */
-  @property({ type: Boolean, reflect: true }) public loop = false;
+  @property({ type: Boolean, reflect: true }) public accessor loop = false;
 
   /** Whether the track should snap to the closest child element. */
-  @property({ type: Boolean, reflect: true }) public snap = false;
+  @property({ type: Boolean, reflect: true }) public accessor snap = false;
 
   /** Item alignment in the track. "start" (left/top) or "center" */
-  @property({ type: String }) public align: "start" | "center" = "start";
+  @property({ type: String }) public accessor align: "start" | "center" = "start";
 
   /** Change the overflow behavior.
    * - "auto" - Only scrollable when necessary.
    * - "scroll" - Always scrollable.
    * - "ignore" - Ignore any overflow.
    */
-  @property({ type: String }) public overflow: "auto" | "scroll" | "ignore" = "auto";
+  @property({ type: String }) public accessor overflow: "auto" | "scroll" | "ignore" =
+    "auto";
 
-  @property({ type: Boolean }) public debug = false;
+  @property({ type: Boolean }) public accessor debug = false;
 
   private trait(callback: (t: Trait) => void) {
     for (const t of this.traits) {
@@ -858,25 +948,7 @@ export class Track extends LitElement {
   private observedChildren = new Set<Node>();
 
   private onSlotChange = () => {
-    this.updateItems();
-
-    for (const node of this.observedChildren) {
-      if (node instanceof HTMLElement && !this.items.includes(node)) {
-        this.resizeObserver?.unobserve(node);
-        this.observedChildren.delete(node);
-      }
-    }
-
-    for (const node of this.items) {
-      if (node instanceof HTMLElement) {
-        node.ariaRoleDescription = "slide";
-      }
-
-      if (node instanceof HTMLElement && !this.observedChildren.has(node)) {
-        this.observedChildren.add(node);
-        this.resizeObserver?.observe(node);
-      }
-    }
+    this.scheduleFormat();
   };
 
   /**
@@ -1200,7 +1272,7 @@ export class Track extends LitElement {
   }
 
   private updateTick(_ms = 0) {
-    const lastPosition = this.position.clone();
+    const _lastPosition = this.position.clone();
     const lastVelocity = this.velocity.clone();
 
     this.trait((t) => t.update?.(this));
@@ -1446,8 +1518,8 @@ export class Track extends LitElement {
             }
           } else {
             // TODO: generate ghots on the left side; need to be position with transforms
-            const child = this.items[item.domIndex];
-            const realChild = this.items[item.index];
+            const _child = this.items[item.domIndex];
+            const _realChild = this.items[item.index];
             // console.log(item.index);
 
             // if (!child && realChild) {
@@ -1658,6 +1730,13 @@ export class Track extends LitElement {
     }
   };
 
+  private onDragStart = (event: DragEvent) => {
+    if (this.hasOverflow) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+
   private onPointerDown = (pointerEvent: PointerEvent | TouchEvent) => {
     if (pointerEvent instanceof PointerEvent) {
       if (pointerEvent.button !== 0) return; // only left click
@@ -1673,8 +1752,10 @@ export class Track extends LitElement {
       this.mousePos.x = pointerEvent.clientX;
       this.mousePos.y = pointerEvent.clientY;
 
-      pointerEvent.preventDefault();
-      pointerEvent.stopPropagation();
+      if (this.overflow === "auto" && this.hasOverflow) {
+        pointerEvent.preventDefault();
+        pointerEvent.stopPropagation();
+      }
     } else if (pointerEvent instanceof TouchEvent) {
       this.mousePos.x = pointerEvent.touches[0]?.clientX || 0;
       this.mousePos.y = pointerEvent.touches[0]?.clientY || 0;
@@ -1713,7 +1794,9 @@ export class Track extends LitElement {
     const pos = new Vec2(x, y);
     const delta = Vec2.sub(pos, this.mousePos);
 
-    if (!this.canMove(delta)) return;
+    if (!this.canMove(delta)) {
+      return;
+    }
 
     if (!this.grabbing && delta.abs() > 3) {
       if (this.vertical && this.mousePos.y && Math.abs(delta.x) < Math.abs(delta.y)) {
@@ -1763,7 +1846,7 @@ function mod(a: number, n: number) {
   return a - Math.floor(a / n) * n;
 }
 
-function angleDist(a: number, b: number) {
+function _angleDist(a: number, b: number) {
   return mod(b - a + 180, 360) - 180;
 }
 

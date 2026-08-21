@@ -1,24 +1,41 @@
 /* @jsxImportSource vue */
-
-import type { Story } from "../../../components/stories/stories.js";
+import type { Story } from "@atrium-ui/astro-stories";
+import Pager from "@components/src/vue/Pager.vue";
 
 export default {
   tags: ["public"],
   args: {
-    count: 5,
+    count: 10,
   },
   argTypes: {
     count: {
-      description: "Number of slides",
+      description: "Total number of pages",
     },
-  },
-  render: (args) => {
-    return (
-      <div>
-        <span>tba</span>
-      </div>
-    );
   },
 } satisfies Story;
 
-export const Default = {};
+export const Default = {
+  render: (args) => (
+    <div class="flex min-h-[200px] items-center justify-center p-8">
+      <Pager count={args.count} page={5} />
+    </div>
+  ),
+};
+
+export const ManyPages = {
+  render: () => (
+    <div class="flex min-h-[200px] items-center justify-center p-8">
+      <Pager count={50} page={1} />
+    </div>
+  ),
+};
+
+export const LandingPage = {
+  render: () => (
+    <div class="flex h-full items-center justify-center p-3">
+      <div class="flex justify-center">
+        <Pager count={12} page={4} />
+      </div>
+    </div>
+  ),
+};

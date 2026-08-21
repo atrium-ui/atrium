@@ -6,10 +6,8 @@
 
 import { BoxElement } from "./Box.js";
 
-try {
+if ("customElements" in globalThis && !customElements.get("a-box")) {
   customElements.define("a-box", BoxElement);
-} catch (err) {
-  console.warn("a-box already defined");
 }
 
 export { BoxElement };

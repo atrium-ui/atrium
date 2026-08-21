@@ -1,7 +1,7 @@
 import { html } from "lit";
 import { css, LitElement, nothing } from "lit";
 import { state } from "lit/decorators.js";
-import type { Track } from "@sv/elements/track";
+import type { Track } from "@atrium-ui/elements/track";
 import { createRef, ref, type Ref } from "lit/directives/ref.js";
 
 class FraCarouselElement extends LitElement {

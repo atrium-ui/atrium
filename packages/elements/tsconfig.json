@@ -1,13 +1,17 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "useDefineForClassFields": false,
-    "experimentalDecorators": true,
+    "target": "ES2022",
     "plugins": [
       {
         "name": "ts-lit-plugin"
       }
-    ]
+    ],
+    "paths": {
+      "@atrium-ui/elements/*": [
+        "./packages/*/src/index.ts"
+      ]
+    }
   },
   "exclude": [
     "node_modules",

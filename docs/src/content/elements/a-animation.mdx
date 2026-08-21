@@ -1,7 +1,8 @@
 ---
 title: a-animation
 description: A wrapper element, which adapts its size to the size of its child.
-command: import "@sv/elements/animation";
+command: import "@atrium-ui/animation";
+order: 2
 ---
 
 import { TypeDoc, Lit, Rive } from "package:/components"
@@ -9,19 +10,19 @@ import { TypeDoc, Lit, Rive } from "package:/components"
 <div class="not-content box grid gap-4 grid-cols-3">
   <a-animation
     class="border"
-    src="/atrium/animation/loading.riv"
+    src="/animation/loading.riv"
   />
 </div>
 
 
-<TypeDoc source="../packages/elements/packages/animation" symbol="AnimationElement" />
+<TypeDoc source="../packages/animation" symbol="AnimationElement" />
 
 ## Examples
 
 Different example confugrations of rive animations.
 <br/>
 
-<a target="_blank" download="loading.riv" href="/atrium/animation/loading.riv">Doaload example riv</a>
+<a target="_blank" download="loading.riv" href="/animation/loading.riv">Doaload example riv</a>
 
 <br/>
 <br/>
@@ -36,7 +37,7 @@ Different example confugrations of rive animations.
       layout="cover"
       width="200"
       height="200"
-      src="/atrium/animation/loading.riv"
+      src="/animation/loading.riv"
     />
   </div>
 
@@ -48,7 +49,7 @@ Different example confugrations of rive animations.
       layout="fill"
       width="200"
       height="200"
-      src="/atrium/animation/loading.riv"
+      src="/animation/loading.riv"
     />
   </div>
 
@@ -60,7 +61,7 @@ Different example confugrations of rive animations.
       layout="contain"
       width="200"
       height="200"
-      src="/atrium/animation/loading.riv"
+      src="/animation/loading.riv"
     />
   </div>
 

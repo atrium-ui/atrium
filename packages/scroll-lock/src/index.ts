@@ -1,11 +1,14 @@
 const locks = new Set();
 
+// ensure TouchEvent is defined
+const TouchEvent = globalThis.TouchEvent || class {};
+
 /**
  * # scroll-lock
  *
  * @example
  * ```js
- * import { ScrollLock } from '@sv/scroll-lock';
+ * import { ScrollLock } from '@atrium-ui/scroll-lock';
  * const scrollLock = new ScrollLock();
  *
  * // lock page scrolling
@@ -29,9 +32,7 @@ export class ScrollLock {
     return document.body;
   }
 
-  constructor(options?: {
-    allowElements?: string[];
-  }) {
+  constructor(options?: { allowElements?: string[] }) {
     if (options) {
       this.options = {
         allowElements: options.allowElements

@@ -1,0 +1,179 @@
+---
+title: Atrium UI
+description: Copy-paste components you own. Framework-agnostic custom elements under the hood. No dependencies, no lock-in.
+---
+
+import { Code } from "astro:components";
+import { Command } from "../components";
+import LatestComponentsBento from "../components/home/LatestComponentsBento.astro";
+
+
+<section class="aspect-2/1 max-w-[1400px] mx-auto overflow-visible px-6 mt-module-2xl">
+
+  <div
+      class="aspect-4/1 relative flex justify-end items-center flex-col text-center pt-10"
+  >
+    <div class="absolute top-0 left-0 uppercase hidden md:block opacity-50 text-sm"> <span>An Atrium project</span> </div>
+    <div class="absolute top-0 right-0 uppercase hidden md:block text-left [writing-mode:vertical-rl] opacity-50 text-sm">
+      Made with love by<br/> luckydye
+    </div>
+
+    <div
+        class="flex items-center gap-2 border border-gray-200 rounded-full px-4 py-1.5 text-sm text-gray-600 mb-10"
+    >
+        <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
+        v4.10.0 — autofocus support in a-blur
+    </div>
+
+    <h1
+        class="text-9xl md:text-10xl font-black uppercase leading-none tracking-tight max-w-2xl -mb-[10px] text-black"
+    >
+      Build Better<br/>
+      Ship Faster
+    </h1>
+  </div>
+
+  <div
+    className="aspect-4/1 flex justify-start items-center flex-col text-center gap-10 py-10"
+  >
+    <div className="max-w-[500px]">
+      <p className="text-gray-500 text-lg">
+        Built on standard Custom-Elements.
+        Use the same component in React today, Vue tomorrow, vanilla next week.
+        A single dependency.
+      </p>
+    </div>
+
+    <div className="flex items-center gap-4">
+      <a href={`${import.meta.env.BASE_URL}guides/setup`} className="inline-flex items-center gap-2 rounded-lg bg-(--style-typography-body) text-white px-6 py-3 font-medium hover:opacity-90 transition-opacity">
+        Get Started →
+      </a>
+      <a href="https://github.com/atrium-ui/atrium" className="inline-flex items-center gap-2 rounded-lg border border-current px-6 py-3 font-medium hover:bg-(--style-typography-body) hover:text-white transition-colors">
+        View on GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<LatestComponentsBento />
+
+<section class="hidden" inert>
+  <article class="relative col-span-4 row-span-2 min-h-0 overflow-hidden bg-stone-950 text-stone-50">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(251,191,36,0.2),_transparent_34%),radial-gradient(circle_at_bottom_right,_rgba(245,245,244,0.14),_transparent_30%)]" />
+    <div class="relative flex h-full min-h-[28rem] flex-col justify-between p-10 xl:p-14">
+      <div class="max-w-3xl space-y-6">
+        <p class="text-sm font-medium uppercase tracking-[0.24em] text-stone-300">
+          New in Atrium
+        </p>
+        <div class="space-y-4">
+          <h3 class="max-w-4xl text-4xl font-medium leading-none text-balance xl:text-6xl">
+            Components that hold up when the layout gets messy.
+          </h3>
+          <p class="max-w-2xl text-base leading-7 text-stone-300 xl:text-lg">
+          A curated mix of dialogs, lightboxes, tabs, pagers and transitions built for production interfaces. Each component is designed to stay compact, accessible and easy to copy into real projects.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-3">
+        <a
+          href=""
+          class="inline-flex items-center justify-center border border-stone-50 bg-stone-50 px-5 py-2.5 text-sm font-medium text-stone-950 transition hover:bg-transparent hover:text-stone-50"
+        >
+          Compoennt
+        </a>
+        <a
+          href="asd"
+          class="inline-flex items-center justify-center border border-stone-700 px-5 py-2.5 text-sm font-medium text-stone-50 transition hover:border-stone-50"
+        >
+        Explore elements
+        </a>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section className="pb-module-8xl">
+  <h2 className="typo-title-2 text-center pb-module-3xl">Why Atrium?</h2>
+
+  <div className="flex flex-wrap gap-module-2xl lg:px-module-4xl">
+    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10 flex-1">
+      <h3 className="typo-headline pb-element-m">🔧 Framework Agnostic</h3>
+      Built on Custom-Elements, not adapters. Use the same component in React today, vanilla tomorrow. Works everywhere.
+    </div>
+    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10 flex-1">
+      <h3 className="typo-headline pb-element-m">♿ Accessible by Default</h3>
+      WAI-ARIA patterns, keyboard navigation, focus management — baked in, not optional. Accessibility isn't an afterthought.
+    </div>
+
+    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10 w-full">
+      <h3 className="typo-headline pb-element-m">🧩 Compose into anything</h3>
+      Components are composed from highly reusable custom-elements.
+
+      <Code lang="html" code={`<a-popover-trigger>
+    <!-- Use any component as a trigger -->
+    <button type="button" slot="trigger">
+      {{ label }}
+    </button>
+
+    <a-popover class="group">
+      <!-- Put anything in the popover -->
+      <div>
+        Lorem Ipsum
+      </div>
+    </a-popover>
+  </a-popover-trigger>`} />
+
+    </div>
+  </div>
+</section>
+
+<section className="pb-module-8xl lg:px-module-4xl">
+  <h2 className="typo-title-2 text-center pb-module-s">Get Started in Seconds</h2>
+
+  <div className="markdown-content max-w-[700px] mx-auto">
+    <p className="text-center pb-module-xl opacity-80">Install the elements package and copy your first component:</p>
+
+    <Command bun="bun add @atrium-ui/elements" />
+
+    <br/>
+
+    <Command sh="npx @atrium-ui/components button" />
+
+    <div className="text-right pt-module-xl">
+      <a href={`${import.meta.env.BASE_URL}guides/setup`} className="underline underline-offset-4 hover:opacity-80">
+        Read the full setup guide →
+      </a>
+    </div>
+  </div>
+</section>
+
+<section className="pb-module-6xl">
+  <h2 className="typo-title-2 text-center pb-module-4xl">Go deeper</h2>
+
+  <div className="markdown-content lg:px-module-4xl">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-module-2xl pb-module-2xl">
+      <div>
+        <h3 className="typo-headline pb-element-xs">Components</h3>
+        <p className="opacity-80">Pre-styled templates built with TailwindCSS. Copy them into your project, customize everything, ship immediately.</p>
+        <p className="pt-module-s">
+          <a href="https://github.com/atrium-ui/atrium" className="underline underline-offset-4 hover:opacity-80">GitHub →</a>
+        </p>
+      </div>
+      <div>
+        <h3 className="typo-headline pb-element-xs">Elements</h3>
+        <p className="opacity-80">Headless Custom-Elements that handle behavior and accessibility. Style them however you want.</p>
+        <p className="pt-module-s">
+          <a href={`${import.meta.env.BASE_URL}elements/a-expandable`} className="underline underline-offset-4 hover:opacity-80">Browse Elements →</a>
+        </p>
+      </div>
+      <div>
+        <h3 className="typo-headline pb-element-xs">Playground</h3>
+        <p className="opacity-80">Experiment with components live in the browser. No setup required.</p>
+        <p className="pt-module-s">
+          <a href={`${import.meta.env.BASE_URL}playground`} className="underline underline-offset-4 hover:opacity-80">Open Playground →</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

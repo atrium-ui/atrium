@@ -7,8 +7,8 @@ import {
   type ReactiveControllerHost,
 } from "lit";
 import { property, query } from "lit/decorators.js";
-import { Portal } from "@sv/elements/portal";
-import { Blur } from "@sv/elements/blur";
+import { Portal } from "@atrium-ui/elements/portal";
+import { Blur } from "@atrium-ui/elements/blur";
 import {
   computePosition,
   autoUpdate,
@@ -100,7 +100,7 @@ type Placements =
  * </a-popover>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-popover/
+ * @see https://atrium-ui.dev/elements/a-popover/
  */
 export class Popover extends Portal {
   static get observedAttributes() {
@@ -124,6 +124,9 @@ export class Popover extends Portal {
     const trigger = this.closest<PopoverTrigger>(this.triggerElementSelector);
     if (ev instanceof CustomEvent) {
       trigger?.hide();
+
+      // prevent event from propagating further
+      ev.preventDefault();
     }
   }
 
@@ -163,7 +166,11 @@ export class Popover extends Portal {
     if (!trigger || !content) return;
 
     this.cleanup = autoUpdate(trigger, content, () => {
-      if (content)
+      if (content) {
+        // expose the trigger's width to the content, so it can be used for styling
+        // (e.g. matching the popover width to the trigger). Kept in sync by autoUpdate.
+        content.style.setProperty("--trigger-width", `${trigger.offsetWidth}px`);
+
         computePosition(trigger, content, {
           middleware: [
             autoPlacement({
@@ -192,11 +199,8 @@ export class Popover extends Portal {
             }
           }
         });
+      }
     });
-
-    if (this.children[0]) {
-      this.children[0].role = "dialog";
-    }
 
     // waits for DOM mutations to finish, to start transitions no enable
     requestAnimationFrame(() => {
@@ -287,7 +291,7 @@ export class Tooltip extends Popover {
     ele.style.position = "fixed";
     ele.style.top = "0px";
     ele.style.left = "0px";
-    ele.style.zIndex = "10000000";
+    ele.style.zIndex = "40";
     ele.className = this.className;
     ele.dataset.portal = this.portalId;
     ele.setAttribute("tooltip", "");
@@ -326,26 +330,26 @@ export class Tooltip extends Popover {
  * </a-popover-trigger>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-popover/
+ * @see https://atrium-ui.dev/elements/a-popover/
  */
 export class PopoverTrigger extends LitElement {
   /**
    * Wether the content is shown or not.
    */
   @property({ type: Boolean, reflect: true })
-  public opened = false;
+  public accessor opened = false;
 
   /**
    * The time in milliseconds to wait before showing the popover.
    */
   @property({ type: Number })
-  public showdelay = 750;
+  public accessor showdelay = 550;
 
   /**
    * The time in milliseconds to wait before hiding the popover.
    */
   @property({ type: Number })
-  public hidedelay = 250;
+  public accessor hidedelay = 250;
 
   public static styles = css`
     :host {
@@ -355,11 +359,13 @@ export class PopoverTrigger extends LitElement {
 
     ::slotted([slot="trigger"]) {
       touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
   `;
 
-  @query(".trigger") input?: HTMLSlotElement;
-  @query(".content") contentSlot?: HTMLSlotElement;
+  @query(".trigger") accessor input: HTMLSlotElement | null = null;
+  @query(".content") accessor contentSlot: HTMLSlotElement | null = null;
 
   render(): HTMLTemplateResult {
     return html`
@@ -393,13 +399,25 @@ export class PopoverTrigger extends LitElement {
 
     let lastPointerType: string | undefined;
 
-    this.addEventListener("click", (e) => {
-      if (this.content instanceof Tooltip) return; // not tooltip
+    this.addEventListener(
+      "click",
+      (e) => {
+        if (this.content instanceof Tooltip) {
+          // prevent click event after a long-press (hoverTimeout)
+          if (lastPointerType !== "mouse" && this.hoverTimeout) {
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+          }
+          return;
+        }
 
-      if (this.trigger?.contains(e.target as Node)) {
-        this.toggle();
-      }
-    });
+        if (this.trigger?.contains(e.target as Node)) {
+          this.toggle();
+        }
+      },
+      { capture: true },
+    );
 
     // Tooltip integration
 
@@ -423,13 +441,45 @@ export class PopoverTrigger extends LitElement {
       this.onPointerEvent(e);
     });
 
-    this.addEventListener("contextmenu", (e) => {
-      // longpress to show tooltip
+    this.addEventListener("pointerdown", (e) => {
+      if (e.pointerType !== "touch") return;
+
+      if (!(this.content instanceof Tooltip)) return;
+
+      if (!this.opened) {
+        clearTimeout(this.hoverTimeout);
+        this.hoverTimeout = setTimeout(() => {
+          this.show();
+        }, this.showdelay);
+      }
+    });
+
+    this.addEventListener("pointerup", (e) => {
       if (lastPointerType !== "touch") return;
+
+      clearTimeout(this.hoverTimeout);
+      requestAnimationFrame(() => {
+        this.hoverTimeout = undefined;
+      });
+    });
+
+    this.addEventListener("pointercancel", () => {
+      if (lastPointerType !== "touch") return;
+
+      clearTimeout(this.hoverTimeout);
+      requestAnimationFrame(() => {
+        this.hoverTimeout = undefined;
+      });
+    });
+
+    this.addEventListener("contextmenu", (e) => {
+      if (!(this.content instanceof Tooltip)) return;
 
       e.preventDefault();
 
-      this.show();
+      if (lastPointerType !== "touch") {
+        this.show();
+      }
     });
 
     this.addEventListener(
@@ -455,9 +505,6 @@ export class PopoverTrigger extends LitElement {
     this.addEventListener(
       "blur",
       (e) => {
-        // ignore this on a touch device
-        if (lastPointerType === "touch") return;
-
         // this is only for the tooltip
         if (!(this.content instanceof Tooltip)) return;
 
@@ -529,6 +576,12 @@ export class PopoverTrigger extends LitElement {
     }
   };
 
+  private onDismiss = (e: PointerEvent) => {
+    if (!this.elementContains(e.target as HTMLElement)) {
+      this.hide();
+    }
+  };
+
   /**
    * Show the inner popover.
    */
@@ -542,6 +595,10 @@ export class PopoverTrigger extends LitElement {
 
     this.contentElement?.addEventListener("pointerover", this.onPointerEventContent);
     this.contentElement?.addEventListener("pointerleave", this.onPointerEventContent);
+
+    if (this.content instanceof Tooltip) {
+      window.addEventListener("pointerdown", this.onDismiss);
+    }
 
     this.trigger?.setAttribute("aria-haspopup", "dialog");
     this.trigger?.setAttribute("aria-expanded", "true");
@@ -559,6 +616,8 @@ export class PopoverTrigger extends LitElement {
 
     this.contentElement?.removeEventListener("pointerover", this.onPointerEventContent);
     this.contentElement?.removeEventListener("pointerleave", this.onPointerEventContent);
+
+    window.removeEventListener("pointerdown", this.onDismiss);
 
     this.trigger?.setAttribute("aria-haspopup", "dialog");
     this.trigger?.setAttribute("aria-expanded", "false");

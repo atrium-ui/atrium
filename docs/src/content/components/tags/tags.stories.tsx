@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 
-import type { Story } from "../../../components/stories/stories.js";
+import type { Story } from "@atrium-ui/astro-stories";
 
 export default {
   tags: ["public"],

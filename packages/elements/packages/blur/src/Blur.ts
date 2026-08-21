@@ -1,11 +1,6 @@
 import { LitElement, type PropertyValueMap, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
-import { ScrollLock } from "@sv/scroll-lock";
-
-const SELECTOR_CUSTOM_ELEMENT =
-  "*:not(br,span,script,slot,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)";
-
-const SELECTOR_FOCUSABLE = "button, a[href], input, select, textarea, [tabindex]";
+import { ScrollLock } from "@atrium-ui/scroll-lock";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -25,73 +20,99 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
   );
 
   document.addEventListener(
-    "pointerdown",
+    "pointerup",
     (event) => {
-      isKeyboard = false;
+      // Screenreaders like JAWS emulate a mouse click,
+      //  so setting this to isKeyboard=false too early will result in missing focus management.
+      setTimeout(() => {
+        isKeyboard = false;
+      }, 120);
     },
     true,
   );
 }
 
-function findActiveElement(element: Element | null) {
+function findActiveElement(element: Element | null, visited = new Set<Element>()) {
   if (element === null) return null;
 
+  // Prevent infinite recursion by tracking visited elements
+  if (visited.has(element)) return element;
+  visited.add(element);
+
   if (element.shadowRoot) {
-    return findActiveElement(element.shadowRoot.activeElement);
+    const activeElementInShadowRoot = findActiveElement(
+      element.shadowRoot.activeElement,
+      visited,
+    );
+    if (activeElementInShadowRoot) return activeElementInShadowRoot;
   }
   return element;
 }
 
-/**
- * Traverse DOM tree including shadowRoots.
- */
-function traverseShadowRealm(
-  rootNode: HTMLElement | ShadowRoot,
-  filter: (el: HTMLElement | ShadowRoot) => HTMLElement[],
-) {
-  const elements: HTMLElement[] = [];
-
-  elements.push(...filter(rootNode));
-
-  for (const el of rootNode.querySelectorAll<HTMLElement>(SELECTOR_CUSTOM_ELEMENT)) {
-    if (el.shadowRoot) {
-      // how to handle elements with a shadowRoot
-      elements.push(...traverseShadowRealm(el.shadowRoot, filter));
+function isInert(el: Element): boolean {
+  let current: Element | null = el;
+  while (current) {
+    if (current.closest("[inert]") !== null) {
+      return true;
+    }
+    const root = current.getRootNode();
+    if (root instanceof ShadowRoot) {
+      current = root.host;
+    } else {
+      break;
     }
   }
-
-  return elements;
+  return false;
 }
 
+const SELECTOR_CUSTOM_ELEMENTS = `*:not(nav,ul,li,path,a,br,span,script,slot,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)`;
+const SELECTOR_FOCUSABLE = `button, a[href], input, select, textarea, [tabindex]`;
+
+/**
+ * Find all focusable elements including those in:
+ * - body -> el -> button
+ * - body -> slot -> assignedElement -> button
+ * - body -> shadowRoot -> button
+ * - body -> slot -> assignedElement -> shadowRoot -> button
+ */
 const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
-  const children: HTMLElement[] = [];
+  const collectFocusable = (node: HTMLElement | ShadowRoot): HTMLElement[] => {
+    const focusable: HTMLElement[] = [];
 
-  if (
-    !(el instanceof ShadowRoot) &&
-    el.tabIndex >= 0 &&
-    el.matches?.(SELECTOR_FOCUSABLE)
-  ) {
-    children.push(el);
-  } else {
-    for (const element of el.querySelectorAll<HTMLElement>(SELECTOR_FOCUSABLE)) {
-      if (element.tabIndex >= 0) children.push(element);
-    }
-  }
+    if (node instanceof HTMLElement) {
+      if (node.tabIndex >= 0 && node.offsetWidth > 0 && !isInert(node)) {
+        // Find direct focusable elements in the current node
+        // return here, nested focusable elements are not allowed
+        return [node];
+      }
 
-  const slots = el.querySelectorAll<HTMLSlotElement>("slot");
+      if (node.shadowRoot) {
+        focusable.push(...collectFocusable(node.shadowRoot));
+        // Return here because shadow root handles all children via slots
+        return focusable;
+      }
 
-  for (const slot of slots) {
-    const assignedElements = slot.assignedElements({ flatten: true }) as HTMLElement[];
-    for (const assignedElement of assignedElements) {
-      for (const element of assignedElement.querySelectorAll<HTMLElement>(
-        SELECTOR_FOCUSABLE,
-      )) {
-        if (element.tabIndex >= 0) children.push(element);
+      if (node instanceof HTMLSlotElement) {
+        for (const assigned of node.assignedElements() as HTMLElement[]) {
+          if (isInert(assigned)) continue;
+          focusable.push(...collectFocusable(assigned));
+        }
       }
     }
-  }
 
-  return children;
+    // check all children
+    const children = node.querySelectorAll<HTMLElement>(
+      [SELECTOR_CUSTOM_ELEMENTS, SELECTOR_FOCUSABLE, "slot"].join(", "),
+    );
+
+    for (const element of children) {
+      focusable.push(...collectFocusable(element));
+    }
+
+    return focusable;
+  };
+
+  return collectFocusable(el);
 };
 
 /**
@@ -110,7 +131,7 @@ const findFocusableElements = (el: HTMLElement | ShadowRoot) => {
  * </a-blur>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-blur/
+ * @see https://atrium-ui.dev/elements/a-blur/
  */
 export class Blur extends LitElement {
   static styles = css`
@@ -134,34 +155,34 @@ export class Blur extends LitElement {
    * Whether the blur should be set to inert, when not enabled.
    */
   @property({ type: String })
-  public autoinert: "true" | "false" = "true";
+  public accessor autoinert: "true" | "false" = "true";
 
   /**
    * (experimental)
    * Whether the blur should set the focus to the first focusable element, when enabled.
    */
   @property({ type: String })
-  public initialfocus: "auto" | "false" = "auto";
+  public accessor initialfocus: "auto" | "false" = "auto";
 
   /**
    * (experimental)
    * Comma separated list of selectors to exclude from the scroll-lock.
    */
   @property({ type: String })
-  public allowscroll = "";
+  public accessor allowscroll = "";
 
   /**
    * The "enabled" will enable or disabled all functionality.
    * All other properties only apply, when the element is enabled.
    */
   @property({ type: Boolean, reflect: true })
-  public enabled = false;
+  public accessor enabled = false;
 
   /**
    * Whether the blur should lock scrolling, when enabled.
    */
   @property({ type: Boolean, reflect: true })
-  public scrolllock = false;
+  public accessor scrolllock = false;
 
   public lock: ScrollLock;
 
@@ -188,8 +209,13 @@ export class Blur extends LitElement {
       this.setAttribute("aria-hidden", "true");
     }
 
+    // Store the element to restore focus to before changing enabled state
+    const elementToFocus = this.lastActiveElement as HTMLElement;
+
     this.enabled = false;
-    (this.lastActiveElement as HTMLElement)?.focus();
+
+    // Restore focus after state change
+    elementToFocus?.focus();
   }
 
   /** Enable the blur element */
@@ -213,7 +239,8 @@ export class Blur extends LitElement {
     // TODO: idk
     if (isKeyboard && this.initialfocus === "auto") {
       const elements = this.focusableElements();
-      elements[0]?.focus();
+      const autofocusEl = elements.find((el) => el.hasAttribute("autofocus"));
+      (autofocusEl ?? elements[0])?.focus();
     }
   }
 
@@ -225,9 +252,7 @@ export class Blur extends LitElement {
   }
 
   private focusableElements() {
-    return traverseShadowRealm(this, findFocusableElements).filter(
-      (element) => element.offsetWidth > 0,
-    );
+    return findFocusableElements(this);
   }
 
   protected updated(changed: PropertyValueMap<any>): void {
@@ -287,8 +312,14 @@ export class Blur extends LitElement {
     // capture close events coming from inside the blur
     this.addEventListener(
       "exit",
-      () => {
-        this.disable();
+      (e) => {
+        if (e.target === this) {
+          return; // ignore own exit events
+        }
+
+        // bubble up a new exit event and cancel the captured one
+        this.tryBlur();
+        e.stopPropagation();
       },
       { capture: true },
     );
@@ -299,6 +330,7 @@ export class Blur extends LitElement {
 
     this.role = "dialog";
 
+    // Listen for keyboard events globally since they can be dispatched on window or document
     window.addEventListener("keydown", this.keyDownListener);
   }
 
@@ -308,8 +340,9 @@ export class Blur extends LitElement {
     //       it only disables when all are disabled.
     this.tryUnlock();
 
-    super.disconnectedCallback();
-
+    // Remove keyboard event listeners
     window.removeEventListener("keydown", this.keyDownListener);
+
+    super.disconnectedCallback();
   }
 }

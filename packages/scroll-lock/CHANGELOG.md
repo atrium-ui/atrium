@@ -1,4 +1,56 @@
-# @sv/scroll-lock
+# @atrium-ui/scroll-lock
+
+## 1.4.0 (2026-06-25)
+
+### Features
+
+- Use overflow clip for locking (svp/atrium!41)
+- Adds a-calendar to elements with docs (#7)
+- Use TC39 decorators instead of experimental typsecript decorators and fields
+
+### Fixes
+
+- allow elements option not working correctly
+- Make accordion content inert if closed
+- Use overflow-hidden for scroll-locking
+- Adds showToast function export to toast package
+- Check
+
+## 1.3.0 (2026-05-27)
+
+### Features
+
+- Use TC39 decorators instead of experimental typsecript decorators and fields
+
+## 1.2.2 (2026-04-15)
+
+### Fixes
+
+- Check
+
+## 1.2.1 (2026-03-07)
+
+### Fixes
+
+- Adds showToast function export to toast package
+
+## 1.2.0 (2026-01-08)
+
+### Features
+
+- Adds a-calendar to elements with docs (#7)
+
+## 0.1.0-dev.0 (2025-10-17)
+
+### Breaking Changes
+
+- Move chart and animation elemnts into own package
+
+## 2.0.0-dev.0 (2025-10-16)
+
+### Breaking Changes
+
+- Move chart and animation elemnts into own package
 
 ## 1.1.1 (2025-04-15)
 

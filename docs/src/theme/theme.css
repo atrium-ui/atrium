@@ -9,9 +9,6 @@
 
   /* fonts */
 
-  --font-sans: Roboto, sans-serif;
-  --font-sans-condensed: Roboto Condensed, sans-serif;
-
   --font-weight-thin: 200;
   --font-weight-light: 300;
   --font-weight-regular: 400;
@@ -37,6 +34,8 @@
   --text-6xl: 2rem; /* 6xl: 32px */
   --text-7xl: 2.25rem; /* 7xl: 36px */
   --text-8xl: 2.875rem; /* 8xl: 46px */
+  --text-9xl: 4.5rem; /* 9xl: 72px */
+  --text-10xl: 4.5rem; /* 10xl: 72px */
 
   --leading-8: 0.5rem; /* 8px */
   --leading-16: 1rem; /* 16px */
@@ -93,20 +92,20 @@
 
   /* colors */
 
-  --color-black: #000000;
+  --color-black: #121a26;
   --color-white: #ffffff;
 
-  --color-primary-50: oklch(0.969 0.015 12.422);
-  --color-primary-100: oklch(0.941 0.03 12.58);
-  --color-primary-200: oklch(0.892 0.058 10.001);
-  --color-primary-300: oklch(0.81 0.117 11.638);
-  --color-primary-400: oklch(0.712 0.194 13.428);
-  --color-primary-500: oklch(0.645 0.246 16.439);
-  --color-primary-600: oklch(0.586 0.253 17.585);
-  --color-primary-700: oklch(0.514 0.222 16.935);
-  --color-primary-800: oklch(0.455 0.188 13.697);
-  --color-primary-900: oklch(0.41 0.159 10.272);
-  --color-primary-950: oklch(0.271 0.105 12.094);
+  --color-primary-50: #d6cfe3;
+  --color-primary-100: #c0b5d6;
+  --color-primary-200: #a99ac9;
+  --color-primary-300: #927dbd;
+  --color-primary-400: #7b61b2;
+  --color-primary-500: #664aa1;
+  --color-primary-600: #533b86;
+  --color-primary-700: #412d69;
+  --color-primary-800: #2e204c;
+  --color-primary-900: #1c132f;
+  --color-primary-950: #0a0711;
 
   --color-secondary-50: oklch(0.984 0.014 180.72);
   --color-secondary-100: oklch(0.953 0.051 180.801);
@@ -120,17 +119,17 @@
   --color-secondary-900: oklch(0.386 0.063 188.416);
   --color-secondary-950: oklch(0.277 0.046 192.524);
 
-  --color-grey-50: #f2f2f2;
-  --color-grey-100: #e6e6e6;
-  --color-grey-200: #cfcfcf;
-  --color-grey-300: #b5b5b5;
-  --color-grey-400: #9a9a9d;
-  --color-grey-500: #808189;
-  --color-grey-600: #666770;
-  --color-grey-700: #4c4d57;
-  --color-grey-800: #34353e;
-  --color-grey-900: #1a1b1e;
-  --color-grey-950: #0f0f10;
+  --color-gray-50: #f2f2f2;
+  --color-gray-100: #e6e6e6;
+  --color-gray-200: #cfcfcf;
+  --color-gray-300: #b5b5b5;
+  --color-gray-400: #9a9a9d;
+  --color-gray-500: #808189;
+  --color-gray-600: #666770;
+  --color-gray-700: #4c4d57;
+  --color-gray-800: #34353e;
+  --color-gray-900: #1a1b1e;
+  --color-gray-950: #0f0f10;
 
   --color-red-50: #fff4f1;
   --color-red-100: #ffe9e0;
@@ -150,52 +149,52 @@
   --style-fill-primary-hover: var(--color-primary-900);
   --style-fill-primary-active: var(--color-primary-700);
   --style-fill-primary-subtle: var(--color-primary-200);
-  --style-fill-primary-disabled: var(--color-grey-300);
+  --style-fill-primary-disabled: var(--color-gray-300);
   --style-fill-primary-brighter: var(--color-primary-800);
   --style-contour-primary-default: var(--color-primary-900);
   --style-contour-primary-hover: var(--color-primary-900);
   --style-contour-primary-onclick: var(--color-primary-900);
   --style-contour-primary-active: var(--color-primary-700);
   --style-contour-primary-focus: var(--color-secondary-600);
-  --style-contour-primary-disabled: var(--color-grey-300);
+  --style-contour-primary-disabled: var(--color-gray-300);
   --style-contour-primary-button: var(--color-primary-900);
-  --style-contour-grey-default: var(--color-grey-800);
-  --style-contour-grey-hover: var(--color-grey-800);
-  --style-contour-grey-onclick: var(--color-grey-800);
-  --style-contour-grey-focus: var(--color-secondary-600);
-  --style-contour-grey-active: var(--color-primary-700);
-  --style-contour-grey-disabled: var(--color-grey-300);
-  --style-typography-title: var(--color-grey-800);
-  --style-icon-default: var(--color-grey-800);
-  --style-icon-hover: var(--color-grey-800);
-  --style-icon-onclick: var(--color-grey-800);
+  --style-contour-gray-default: var(--color-gray-800);
+  --style-contour-gray-hover: var(--color-gray-800);
+  --style-contour-gray-onclick: var(--color-gray-800);
+  --style-contour-gray-focus: var(--color-secondary-600);
+  --style-contour-gray-active: var(--color-primary-700);
+  --style-contour-gray-disabled: var(--color-gray-300);
+  --style-typography-title: var(--color-gray-800);
+  --style-icon-default: var(--color-gray-800);
+  --style-icon-hover: var(--color-gray-800);
+  --style-icon-onclick: var(--color-gray-800);
   --style-icon-active: var(--color-primary-700);
   --style-icon-subtle: var(--color-primary-200);
-  --style-icon-disabled: var(--color-grey-300);
-  --style-icon-negative: var(--color-grey-50);
-  --style-icon-button-primary: var(--color-grey-50);
-  --style-icon-button-secondary: var(--color-grey-800);
+  --style-icon-disabled: var(--color-gray-300);
+  --style-icon-negative: var(--color-gray-50);
+  --style-icon-button-primary: var(--color-gray-50);
+  --style-icon-button-secondary: var(--color-gray-800);
   --style-icon-error: var(--color-red-500);
-  --style-typography-body: var(--color-grey-800);
-  --style-typography-subtitle: var(--color-grey-800);
-  --style-typography-topline: var(--color-grey-800);
-  --style-typography-disabled: var(--color-grey-300);
+  --style-typography-body: var(--color-gray-800);
+  --style-typography-subtitle: var(--color-gray-800);
+  --style-typography-topline: var(--color-gray-800);
+  --style-typography-disabled: var(--color-gray-300);
   --style-typography-link: var(--color-primary-900);
-  --style-typography-hover: var(--color-grey-800);
-  --style-typography-onclick: var(--color-grey-800);
+  --style-typography-hover: var(--color-gray-800);
+  --style-typography-onclick: var(--color-gray-800);
   --style-typography-active: var(--color-primary-700);
   --style-typography-button-primary: var(--color-white);
-  --style-typography-button-secondary: var(--color-grey-800);
+  --style-typography-button-secondary: var(--color-gray-800);
   --style-black: var(--color-black);
   --style-white: var(--color-white);
-  --style-fill-grey-default: var(--color-grey-50);
+  --style-fill-gray-default: var(--color-gray-50);
   --style-fill-white-background: var(--color-white);
-  --style-fill-grey-hover: var(--color-grey-100);
-  --style-fill-grey-active: var(--color-grey-50);
-  --style-fill-grey-subtle: var(--color-grey-50);
-  --style-fill-grey-disabled: var(--color-grey-300);
-  --style-fill-grey-dark: var(--color-grey-800);
-  --style-fill-grey-background-overlay: var(--color-grey-50);
+  --style-fill-gray-hover: var(--color-gray-100);
+  --style-fill-gray-active: var(--color-gray-50);
+  --style-fill-gray-subtle: var(--color-gray-50);
+  --style-fill-gray-disabled: var(--color-gray-300);
+  --style-fill-gray-dark: var(--color-gray-800);
+  --style-fill-gray-background-overlay: var(--color-gray-50);
   --style-contour-error: var(--color-red-500);
   --style-typography-error: var(--color-red-500);
 
@@ -216,22 +215,22 @@
 /* Typography Styles */
 
 @utility typo-title-1 {
-  @apply font-sans-condensed font-bold uppercase;
+  @apply font-bold uppercase;
   @apply text-[4.5rem] -ml-[3px] -mt-[16px] -mb-[16px];
   @apply leading-[125%];
 }
 @utility typo-title-2 {
-  @apply font-sans-condensed font-bold;
+  @apply font-bold;
   @apply text-[3.75rem];
   @apply leading-[125%];
 }
 @utility typo-title-3 {
-  @apply font-sans-condensed font-bold;
+  @apply font-bold;
   @apply text-[3.625rem];
   @apply leading-[125%];
 }
 @utility typo-title-4 {
-  @apply font-sans-condensed font-bold;
+  @apply font-bold;
   @apply text-[2.5rem];
   @apply leading-[125%];
 }
@@ -353,63 +352,6 @@
     --module-8xl: 8rem; /* 128px */
     --module-9xl: 14.375rem; /* 230px */
   }
-}
-
-/* Color Styles */
-
-.mode-dark {
-  --style-fill-primary-default: var(--color-primary-400);
-  --style-fill-primary-hover: var(--color-primary-400);
-  --style-fill-primary-active: var(--color-primary-200);
-  --style-fill-primary-subtle: var(--color-primary-900);
-  --style-fill-primary-disabled: var(--color-grey-700);
-  --style-fill-primary-brighter: var(--color-primary-300);
-  --style-contour-primary-default: var(--color-primary-400);
-  --style-contour-primary-hover: var(--color-primary-400);
-  --style-contour-primary-onclick: var(--color-primary-400);
-  --style-contour-primary-active: var(--color-primary-700);
-  --style-contour-primary-focus: var(--color-secondary-600);
-  --style-contour-primary-disabled: var(--color-grey-700);
-  --style-contour-primary-button: var(--color-primary-400);
-  --style-contour-grey-default: var(--color-grey-50);
-  --style-contour-grey-hover: var(--color-grey-50);
-  --style-contour-grey-onclick: var(--color-grey-50);
-  --style-contour-grey-focus: var(--color-secondary-600);
-  --style-contour-grey-active: var(--color-primary-700);
-  --style-contour-grey-disabled: var(--color-grey-800);
-  --style-typography-title: var(--color-white);
-  --style-icon-default: var(--color-grey-50);
-  --style-icon-hover: var(--color-primary-50);
-  --style-icon-onclick: var(--color-primary-50);
-  --style-icon-active: #c8f8e2;
-  --style-icon-subtle: var(--color-primary-900);
-  --style-icon-disabled: var(--color-grey-700);
-  --style-icon-negative: var(--color-grey-800);
-  --style-icon-button-primary: var(--color-grey-800);
-  --style-icon-button-secondary: var(--color-primary-400);
-  --style-icon-error: var(--color-red-500);
-  --style-typography-body: var(--color-white);
-  --style-typography-subtitle: var(--color-white);
-  --style-typography-topline: var(--color-white);
-  --style-typography-disabled: var(--color-grey-700);
-  --style-typography-link: var(--color-primary-400);
-  --style-typography-hover: var(--color-white);
-  --style-typography-onclick: var(--color-white);
-  --style-typography-active: var(--color-primary-400);
-  --style-typography-button-primary: var(--color-grey-900);
-  --style-typography-button-secondary: var(--color-primary-400);
-  --style-black: var(--color-white);
-  --style-white: var(--color-black);
-  --style-fill-grey-default: var(--color-grey-800);
-  --style-fill-white-background: var(--color-grey-900);
-  --style-fill-grey-hover: var(--color-grey-800);
-  --style-fill-grey-active: var(--color-grey-800);
-  --style-fill-grey-subtle: var(--color-grey-800);
-  --style-fill-grey-disabled: var(--color-grey-700);
-  --style-fill-grey-dark: var(--color-grey-50);
-  --style-fill-grey-background-overlay: var(--color-grey-50);
-  --style-contour-error: var(--color-red-500);
-  --style-typography-error: var(--color-red-500);
 }
 
 /* Utilities */
@@ -538,9 +480,8 @@
   pointer-events: none;
   opacity: 0;
   transition:
-    width 0.175s ease-in-out,
-    transform 0.05s ease-out,
-    opacity 0.15s ease-in-out;
+    width 0.05s ease,
+    transform 0.05s ease;
 }
 
 .text-link span {

@@ -5,14 +5,14 @@ import { LitElement, css, html } from "lit";
  *
  * @example
  * ```tsx
- * import "@sv/elements/toast";
+ * import "@atrium-ui/elements/toast";
  *
  * <a-portal>
  *   <a-toast-feed class="fixed right-12 bottom-12 text-base" />
  * </a-portal>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-toast/
+ * @see https://atrium-ui.dev/elements/a-toast/
  */
 export class ToastFeed extends LitElement {
   static instance: ToastFeed | null = null;
@@ -76,7 +76,7 @@ export interface ToastOptions {
  *
  * @example
  * ```tsx
- * import "@sv/elements/toast";
+ * import "@atrium-ui/elements/toast";
  *
  * // create a toas and keep a reference to it
  * const toast = new Toast({ message: "A Message" });
@@ -89,7 +89,7 @@ export interface ToastOptions {
  * `;
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-toast/
+ * @see https://atrium-ui.dev/elements/a-toast/
  */
 export class Toast extends LitElement {
   static get styles() {
@@ -102,6 +102,13 @@ export class Toast extends LitElement {
         max-width: 500px;
         margin-top: 1rem;
         margin-bottom: 1rem;
+      }
+      /* default styling */
+      :host {
+        padding: 1rem 1.5rem;
+        border-radius: 0.25rem;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
     `;
   }

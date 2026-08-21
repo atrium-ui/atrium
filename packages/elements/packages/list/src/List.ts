@@ -38,27 +38,9 @@ export class SelectEvent extends CustomEvent<{ selected: ListItemElement }> {
  * </a-list>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-list/
+ * @see https://atrium-ui.dev/elements/a-list/
  */
 export class ListElement extends LitElement {
-  static get styles() {
-    return css`
-      :host {
-        display: block;
-      }
-    `;
-  }
-
-  render() {
-    return html`
-      <slot
-        @click=${(ev) => this.onOptionsClick(ev)}
-        @dblclick=${(ev) => this.onOptionsClick(ev)}
-        @slotchange=${this.onSlotChange}
-      ></slot>
-    `;
-  }
-
   private updateOptionsDOM() {
     const options = this.options;
     for (const option of options) {
@@ -83,34 +65,33 @@ export class ListElement extends LitElement {
   public selected?: string;
 
   protected updated(): void {
-    this.updateOptionsDOM();
-
     this.selected = this.value;
+    this.updateOptionsDOM();
   }
 
   /**
    * The selected option.
    */
   @property({ type: String })
-  public value?: string;
+  public accessor value: string | undefined = undefined;
 
   /**
    * Whether the dropdown is disabled.
    */
   @property({ type: Boolean, reflect: true })
-  public disabled = false;
+  public accessor disabled = false;
 
   /**
    * The name or key used in form data.
    */
   @property({ type: String, reflect: true })
-  public name?: string;
+  public accessor name: string | undefined = undefined;
 
   /**
    * Direction of the list.
    */
   @property({ type: String, reflect: true })
-  public direction: "up" | "down" = "up";
+  public accessor direction: "up" | "down" = "up";
 
   private options: ListItemElement[] = [];
 
@@ -119,19 +100,23 @@ export class ListElement extends LitElement {
 
     this.addEventListener("keydown", this.onKeyDown);
     this.addEventListener("keyup", this.onKeyUp);
+    this.addEventListener("click", (e) => this.onOptionsClick(e));
+    this.addEventListener("dblclick", (e) => this.onOptionsClick(e));
 
     this.observer.observe(this, {
       childList: true,
       subtree: true,
-      characterData: true,
     });
   }
 
   public connectedCallback(): void {
-    super.connectedCallback();
-
     this.role = "listbox";
     this.tabIndex = 0;
+
+    this.onSlotChange();
+
+    this.selected = this.value;
+    this.updateOptionsDOM();
   }
 
   private onKeyDown(event: KeyboardEvent) {
@@ -287,7 +272,7 @@ export class ListItemElement extends LitElement {
   }
 
   @property({ type: String })
-  public value!: string;
+  public accessor value!: string;
 
   render() {
     return html`<slot></slot>`;

@@ -7,11 +7,12 @@ interval: "50ms"
 vars:
   PACKAGES:
     [
-      "packages/a11y",
+      "packages/astro-stories",
       "packages/components",
       "packages/elements",
       "packages/scroll-lock",
       "packages/icons",
+      "packages/playground",
       "packages/svg-sprites",
     ]
 
@@ -28,14 +29,9 @@ tasks:
       - task -l --sort none
 
   setup:
-    desc: Install tools and dependencies
-    run: when_changed
-    sources:
-      - .mise.toml
-      - "package.json"
-      - "**/package.json"
+    desc: Install dependencies
     cmds:
-      - bun install
+      - bun install --linker=hoisted
 
   build:
     desc: Build all packages
@@ -75,13 +71,6 @@ tasks:
     deps: [build]
     cmds:
       - bun x turbo test -- {{.CLI_ARGS}}
-
-  a11y:
-    desc: "Run a11y tests"
-    dir: "docs"
-    deps: [setup]
-    cmds:
-      - 'npx @sv/a11y ./a11y.json "task preview"'
 
   test:watch:
     desc: "Run tests on current packages (Run specific test: t test --  -t prettier)"
@@ -127,8 +116,7 @@ tasks:
       - git config user.email "gitlab@s-v.de"
       - git config user.name "CI"
       - git fetch --prune --prune-tags -f
-      - knope -v release | tee .task/publish.txt
-      - task notify || true
+      - knope -v release | tee .publish
 
   release:preview:
     cmds:
@@ -158,15 +146,6 @@ tasks:
     cmds:
       - "echo Publish tag: $RELEASE_LABEL"
       - bun x npm publish --access public --tag $RELEASE_LABEL && echo info Publishing \"{{.NAME}}\" at \"{{.VERSION}}\" || true
-
-  notify:
-    silent: true
-    dir: "./"
-    cmds:
-      - bun ./scripts/generate-notify > .task/notify.txt
-      - defer: rm .task/notify.txt
-      - 'echo "$(cat .task/notify.txt)"'
-      - 'curl -X POST -d "$(cat .task/notify.txt)" $SLACK_WEBHOOK_URL'
 
   docker:build:
     desc: Build docker image, pass --push to push to registry

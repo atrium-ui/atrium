@@ -1,14 +1,10 @@
 {
-  "name": "@sv/portal",
+  "name": "@atrium-ui/portal",
   "author": "atrium",
   "contributors": [],
   "private": true,
   "description": "",
   "type": "module",
   "main": "dist/index.js",
-  "types": "src/index.ts",
-  "scripts": {
-    "build": "bun ./build.ts",
-    "dev": "bun --watch ./build.ts"
-  }
+  "types": "src/index.ts"
 }

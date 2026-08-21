@@ -5,16 +5,18 @@
     "useDefineForClassFields": false,
     "experimentalDecorators": true,
     "jsx": "preserve",
-    "types": [
-      "@types/bun",
-      "vite/client",
-      "@sv/elements"
-    ]
+    "types": ["@types/bun"],
+    "paths": {
+      "@atrium-ui/components": [
+        "./"
+      ]
+    }
   },
   "exclude": [
     "node_modules",
     "src/solid/*",
     "src/react/*",
+    "src/vue/*",
     "**/dist"
   ]
 }

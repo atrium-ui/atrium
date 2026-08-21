@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar Element Demo</title>
+
+    <script type="module">
+      import "./src/index";
+    </script>
+
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        padding: 2rem;
+        background: #f5f5f5;
+        color: #1a1a1a;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #1a1a1a;
+          color: #fff;
+        }
+      }
+
+      h2 {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        opacity: 0.7;
+      }
+
+      .demo-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+      }
+
+      .demo-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .demo-item label {
+        font-size: 0.875rem;
+        opacity: 0.6;
+      }
+
+      a-calendar {
+        width: 280px;
+        padding: 1rem;
+        background: #fff;
+        border-radius: 0.5rem;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        a-calendar {
+          background: #2a2a2a;
+        }
+      }
+
+      form {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #fff;
+        border-radius: 0.5rem;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        form {
+          background: #2a2a2a;
+        }
+      }
+
+      form output {
+        display: block;
+        margin-top: 0.5rem;
+        font-family: monospace;
+        font-size: 0.875rem;
+        color: #0066cc;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        form output {
+          color: #3b82f6;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Calendar Element</h1>
+
+    <h2>Single Date Selection</h2>
+    <div class="demo-grid">
+      <div class="demo-item">
+        <label>Default (browser locale)</label>
+        <a-calendar name="single-date" value="2024-03-15"></a-calendar>
+      </div>
+    </div>
+
+    <h2>Date Range Selection</h2>
+    <div class="demo-grid">
+      <div class="demo-item">
+        <label>Click two dates to select range</label>
+        <a-calendar
+          mode="range"
+          name="date-range"
+          value="2024-03-10/2024-03-20"
+        ></a-calendar>
+      </div>
+    </div>
+
+    <h2>Different Locales</h2>
+    <div class="demo-grid">
+      <div class="demo-item">
+        <label>German (week starts Monday)</label>
+        <a-calendar locale="de-DE"></a-calendar>
+      </div>
+
+      <div class="demo-item">
+        <label>French (week starts Monday)</label>
+        <a-calendar locale="fr-FR"></a-calendar>
+      </div>
+
+      <div class="demo-item">
+        <label>US English (week starts Sunday)</label>
+        <a-calendar locale="en-US"></a-calendar>
+      </div>
+
+      <div class="demo-item">
+        <label>Japanese (week starts Sunday)</label>
+        <a-calendar locale="ja-JP"></a-calendar>
+      </div>
+    </div>
+
+    <h2>Custom Week Start</h2>
+    <div class="demo-grid">
+      <div class="demo-item">
+        <label>Week starts Saturday (week-start="6")</label>
+        <a-calendar week-start="6"></a-calendar>
+      </div>
+    </div>
+
+    <h2>Highlighted Dates</h2>
+    <div class="demo-grid">
+      <div class="demo-item">
+        <label>Single highlighted date</label>
+        <a-calendar highlight="2024-03-15"></a-calendar>
+      </div>
+
+      <div class="demo-item">
+        <label>Highlighted range</label>
+        <a-calendar highlight="2024-03-10/2024-03-16"></a-calendar>
+      </div>
+
+      <div class="demo-item">
+        <label>Multiple highlights (dates + ranges)</label>
+        <a-calendar highlight="2024-03-05,2024-03-15/2024-03-18,2024-03-25"></a-calendar>
+      </div>
+    </div>
+
+    <h2>Unavailable Dates</h2>
+    <div class="demo-grid">
+      <div class="demo-item">
+        <label>Single unavailable date</label>
+        <a-calendar unavailable="2024-03-15"></a-calendar>
+      </div>
+
+      <div class="demo-item">
+        <label>Unavailable range</label>
+        <a-calendar unavailable="2024-03-10/2024-03-16"></a-calendar>
+      </div>
+
+      <div class="demo-item">
+        <label>Multiple unavailable (dates + ranges)</label>
+        <a-calendar
+          unavailable="2024-03-05,2024-03-15/2024-03-18,2024-03-25"
+        ></a-calendar>
+      </div>
+    </div>
+
+    <h2>Min/Max Constraints</h2>
+    <div class="demo-grid">
+      <div class="demo-item">
+        <label>Only dates in March 2024 (min/max)</label>
+        <a-calendar min="2024-03-01" max="2024-03-31" value="2024-03-15"></a-calendar>
+      </div>
+    </div>
+
+    <h2>Disabled State</h2>
+    <div class="demo-grid">
+      <div class="demo-item">
+        <label>Disabled calendar</label>
+        <a-calendar disabled value="2024-03-15"></a-calendar>
+      </div>
+    </div>
+
+    <h2>Form Integration</h2>
+    <form id="demo-form" onsubmit="event.preventDefault(); updateFormOutput();">
+      <div class="demo-grid">
+        <div class="demo-item">
+          <label>Single date field</label>
+          <a-calendar name="booking-date"></a-calendar>
+        </div>
+        <div class="demo-item">
+          <label>Range field</label>
+          <a-calendar mode="range" name="stay-range"></a-calendar>
+        </div>
+      </div>
+      <button
+        type="submit"
+        style="margin-top: 1rem; padding: 0.5rem 1rem; cursor: pointer;"
+      >
+        Submit Form
+      </button>
+      <output id="form-output"></output>
+    </form>
+
+    <script>
+      // Log change events
+      document.querySelectorAll('a-calendar').forEach(cal => {
+        cal.addEventListener('change', (e) => {
+          console.log('Calendar changed:', e.target.name || 'unnamed', '=', e.target.value);
+        });
+      });
+
+      function updateFormOutput() {
+        const form = document.getElementById('demo-form');
+        const output = document.getElementById('form-output');
+        const data = new FormData(form);
+        const entries = [...data.entries()].map(([k, v]) => `${k}: ${v}`).join('\n');
+        output.textContent = entries || '(no values)';
+      }
+    </script>
+  </body>
+</html>

@@ -39,7 +39,7 @@ export class SelectEvent extends CustomEvent<{ selected: OptionElement }> {
  *     <div class="w-[150px] text-left">Select</div>
  *   </button>
  *
- *   <div class="mt-1 border border-zinc-700 bg-zinc-800 p-1">
+ *   <div class="mt-1 border border-zinc-200 bg-zinc-800 p-1">
  *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-1">Option 1</a-option>
  *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-2">Option 2</a-option>
  *     <a-option class="block p-1 [&[selected]]:bg-zinc-700 active:bg-zinc-700 hover:bg-zinc-600" value="option-3">Option 3</a-option>
@@ -49,7 +49,7 @@ export class SelectEvent extends CustomEvent<{ selected: OptionElement }> {
  * </form>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-select/
+ * @see https://atrium-ui.dev/elements/a-select/
  */
 export class Select extends LitElement {
   static get styles() {
@@ -108,13 +108,13 @@ export class Select extends LitElement {
    * In what direction the dropdown openes.
    */
   @property({ type: String, reflect: true })
-  public direction: "up" | "down" = "down";
+  public accessor direction: "up" | "down" = "down";
 
   /**
    * The selected option.
    */
   @property({ type: String })
-  public value?: string;
+  public accessor value: string | undefined = undefined;
 
   public selected?: string;
 
@@ -122,28 +122,28 @@ export class Select extends LitElement {
    * Whether the dropdown is open.
    */
   @property({ type: Boolean, reflect: true })
-  public opened = false;
+  public accessor opened = false;
 
   /**
    * Whether the dropdown is disabled.
    */
   @property({ type: Boolean, reflect: true })
-  public disabled = false;
+  public accessor disabled = false;
 
   /**
    * Wether the input is required.
    */
   @property({ type: Boolean, reflect: true })
-  public required = false;
+  public accessor required = false;
 
   /**
    * The name or key used in form data.
    */
   @property({ type: String, reflect: true })
-  public name?: string;
+  public accessor name: string | undefined = undefined;
 
   @query(".dropdown")
-  public dropdown!: HTMLElement;
+  public accessor dropdown!: HTMLElement;
 
   private options: OptionElement[] = [];
 

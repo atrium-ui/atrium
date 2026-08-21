@@ -1,5 +1,5 @@
 {
-  "name": "@sv/test",
+  "name": "@atrium-ui/test",
   "author": "atrium",
   "version": "0.1.0",
   "private": true,
@@ -15,7 +15,7 @@
   "license": "MIT",
   "devDependencies": {
     "@testing-library/user-event": "^14.6.1",
-    "@happy-dom/global-registrator": "^18.0.1",
+    "@happy-dom/global-registrator": "^20.5.0",
     "intersection-observer": "^0.12.2",
     "rand-seed": "^2.1.7",
     "@types/bun": "^1.1.0"

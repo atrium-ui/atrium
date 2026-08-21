@@ -1,5 +1,5 @@
 import { userEvent } from "@testing-library/user-event";
-import { beforeEach, test, expect, describe } from "bun:test";
+import { beforeEach, afterEach, test, expect, describe } from "bun:test";
 import type { MoveEvent, Track } from "../src/Track.js";
 import type { Track as TrackElement } from "../src/Track.js";
 import {
@@ -11,8 +11,7 @@ import {
   press,
   setup,
   fakePointer,
-} from "@sv/test";
-import { afterEach } from "node:test";
+} from "@atrium-ui/test";
 
 describe("Track", () => {
   const { pointer } = userEvent.setup();
@@ -44,25 +43,27 @@ describe("Track", () => {
     }
   });
 
-  test(label("import track element"), async () => {
-    const { Track } = await import("../src/index.js");
-    expect(Track).toBeDefined();
-
-    // is defined in custom element registry
-    expect(customElements.get("a-track")).toBeDefined();
-  });
-
   test("construct track element", async () => {
-    const { Track } = await import("../src/index.js");
+    await import("../src/index.js");
 
-    // is constructable
-    expect(new Track()).toBeInstanceOf(Track);
+    const TrackConstructor = customElements.get("a-track");
+    expect(TrackConstructor).toBeDefined();
+
+    const track = document.createElement("a-track");
+    expect(track).toBeInstanceOf(TrackConstructor!);
 
     const html = "<a-track></a-track>";
     const ele = document.createElement("div");
     ele.innerHTML = html;
 
-    expect(ele.children[0]).toBeInstanceOf(Track);
+    expect(ele.children[0]).toBeInstanceOf(TrackConstructor!);
+  });
+
+  test(label("import track element"), async () => {
+    await import("../dist/index.js");
+
+    // is defined in custom element registry
+    expect(customElements.get("a-track")).toBeDefined();
   });
 
   test(label("deconstruct track element"), async () => {
@@ -80,6 +81,104 @@ describe("Track", () => {
   test(label("item count"), async () => {
     const track = await trackWithChildren(10);
     expect(track.itemCount).toBe(10);
+  });
+
+  test(label("wrapped items excluded from trackWidth"), async () => {
+    const track = await trackWithChildren(4);
+
+    // Simulate 4 items: 3 on first row, 1 wrapped to second row
+    // Items have varying heights (100, 150, 120, 100) but first 3 share the same row
+    const items = track.items as HTMLElement[];
+    const rects = [
+      { left: 0, top: 0, width: 100, height: 100 },
+      { left: 100, top: 0, width: 150, height: 150 }, // taller item, same row
+      { left: 250, top: 0, width: 120, height: 120 },
+      { left: 0, top: 150, width: 100, height: 100 }, // wrapped
+    ];
+
+    for (let i = 0; i < items.length; i++) {
+      const r = rects[i];
+      // @ts-ignore — property is writable after fixElementSizes
+      items[i].getBoundingClientRect = () => ({
+        ...r,
+        right: r.left + r.width,
+        bottom: r.top + r.height,
+      });
+    }
+
+    // @ts-ignore
+    track._itemRects = undefined;
+    // @ts-ignore
+    track._itemWidths = undefined;
+    // @ts-ignore
+    track._itemHeights = undefined;
+
+    // Only the 3 non-wrapped items should contribute: 100 + 150 + 120 = 370
+    expect(track.trackWidth).toBe(370);
+  });
+
+  test(label("items with different heights same row all counted"), async () => {
+    const track = await trackWithChildren(3);
+
+    const items = track.items as HTMLElement[];
+    const rects = [
+      { left: 0, top: 0, width: 100, height: 50 },
+      { left: 100, top: 0, width: 200, height: 200 }, // much taller
+      { left: 300, top: 0, width: 150, height: 80 },
+    ];
+
+    for (let i = 0; i < items.length; i++) {
+      const r = rects[i];
+      // @ts-ignore — property is writable after fixElementSizes
+      items[i].getBoundingClientRect = () => ({
+        ...r,
+        right: r.left + r.width,
+        bottom: r.top + r.height,
+      });
+    }
+
+    // @ts-ignore
+    track._itemRects = undefined;
+    // @ts-ignore
+    track._itemWidths = undefined;
+    // @ts-ignore
+    track._itemHeights = undefined;
+
+    // All 3 on same row: 100 + 200 + 150 = 450
+    expect(track.trackWidth).toBe(450);
+  });
+
+  test(label("vertical: wrapped items excluded from trackHeight"), async () => {
+    const track = await trackWithChildren(4, { vertical: true });
+
+    const items = track.items as HTMLElement[];
+    // 3 items in first column, 1 wrapped to second column
+    const rects = [
+      { left: 0, top: 0, width: 100, height: 100 },
+      { left: 0, top: 100, width: 150, height: 120 }, // wider item, same column
+      { left: 0, top: 220, width: 100, height: 80 },
+      { left: 150, top: 0, width: 100, height: 100 }, // wrapped to new column
+    ];
+
+    for (let i = 0; i < items.length; i++) {
+      const r = rects[i];
+      // @ts-ignore — property is writable after fixElementSizes
+      items[i].getBoundingClientRect = () => ({
+        ...r,
+        right: r.left + r.width,
+        bottom: r.top + r.height,
+      });
+    }
+
+    // @ts-ignore
+    track._itemRects = undefined;
+    // @ts-ignore
+    track._itemWidths = undefined;
+    // @ts-ignore
+    track._itemHeights = undefined;
+
+    // Only 3 non-wrapped items: 100 + 120 + 80 = 300
+    expect(track.trackHeight).toBe(300);
   });
 
   test(label("custom trait"), async () => {
@@ -220,16 +319,24 @@ describe("Track", () => {
   test(label("just snap"), async () => {
     const track = await trackWithChildren(10, { snap: true });
 
+    await track.updateComplete;
     expect(track.snap).toBe(true);
+    expect(track.findTrait("snap")).toBeDefined();
+
     track.setTarget(undefined);
+    track.startAnimate();
     track.inputForce.x += 100;
+    await wait(50);
+    const target = track.target?.clone();
+    expect(target).toBeDefined();
     await wait(track.transitionTime + 100);
-    expect(track.target).toBeDefined();
+    expect(track.position[0]).toBeCloseTo(target?.[0], -2);
   });
 
   test(label("drag with snap"), async () => {
     const track = await trackWithChildren(10, { snap: true, current: 2 });
 
+    await track.updateComplete;
     track.moveTo(4, "none");
     await wait(200);
 
@@ -237,7 +344,7 @@ describe("Track", () => {
 
     const start = [...track.position];
 
-    pointer([
+    await pointer([
       { keys: "[TouchA>]", target: track, coords: { x: 10, y: 10 } },
       { pointerName: "TouchA", target: track, coords: { x: 200, y: 10 } },
       { keys: "[/TouchA]", target: track },
@@ -260,9 +367,10 @@ describe("Track", () => {
   test(label("drag with snap negative"), async () => {
     const track = await trackWithChildren(10, { snap: true });
 
+    await track.updateComplete;
     const start = [...track.position];
 
-    pointer([
+    await pointer([
       { keys: "[TouchA>]", target: track, coords: { x: 10, y: 650 } },
       { pointerName: "TouchA", target: track, coords: { x: 10, y: 10 } },
       { keys: "[/TouchA]", target: track },
@@ -282,9 +390,10 @@ describe("Track", () => {
   test(label("drag with snap vertical"), async () => {
     const track = await trackWithChildren(10, { snap: true, current: 3, vertical: true });
 
+    await track.updateComplete;
     const start = [...track.position];
 
-    pointer([
+    await pointer([
       { keys: "[TouchA>]", target: track, coords: { x: 10, y: 650 } },
       { pointerName: "TouchA", target: track, coords: { x: 10, y: 10 } },
       { keys: "[/TouchA]", target: track },
@@ -296,7 +405,7 @@ describe("Track", () => {
 
     // target should be set by snap
     expect(track.target).toBeDefined();
-    expect(track.position[0]).toBeCloseTo(track.target?.[0], -2);
+    expect(track.position[1]).toBeCloseTo(track.target?.[1], -2);
   });
 
   test(label("stop when grabbing"), async () => {
@@ -378,6 +487,55 @@ describe("Track", () => {
     expect(track.itemsInView).toBeGreaterThan(0);
   });
 
+  test(label("itemsInView ignores zero-sized items"), async () => {
+    const track = await trackWithChildren(5);
+
+    const containerWidth = 600;
+    const itemHeight = 200;
+    // Items 1 and 3 are zero-width — should be skipped, not counted toward fit.
+    const widths = [200, 0, 200, 0, 200];
+
+    // @ts-ignore
+    track.getBoundingClientRect = () => ({
+      width: containerWidth,
+      height: itemHeight,
+      top: 0,
+      left: 0,
+      right: containerWidth,
+      bottom: itemHeight,
+    });
+
+    const items = track.items as HTMLElement[];
+    let acc = 0;
+    for (let i = 0; i < items.length; i++) {
+      const w = widths[i];
+      const left = acc;
+      acc += w;
+      // @ts-ignore
+      items[i].getBoundingClientRect = () => ({
+        left,
+        top: 0,
+        width: w,
+        height: itemHeight,
+        right: left + w,
+        bottom: itemHeight,
+      });
+    }
+
+    // @ts-ignore
+    track._width = undefined;
+    // @ts-ignore
+    track._itemRects = undefined;
+    // @ts-ignore
+    track._itemWidths = undefined;
+    // @ts-ignore
+    track._itemsInView = undefined;
+
+    // 3 real items of 200px each fit exactly in 600px. The two zero-sized
+    // items must not be counted, and must not cause an infinite loop.
+    expect(track.itemsInView).toBe(3);
+  });
+
   test(label("should snap to the end with overflow auto"), async () => {
     const track = await trackWithChildren(10, {
       snap: true,
@@ -423,7 +581,9 @@ describe("Track", () => {
   });
 
   test(label("snap to second last item works"), async () => {
-    const track = await trackWithChildren(6, { snap: true, width: 800 });
+    // itemWidth=350 ensures the last two items sum to 700 > 600 (track width), so item 4
+    // stays within maxIndex and moveTo doesn't clamp to overflowWidth instead.
+    const track = await trackWithChildren(6, { snap: true, width: 600, itemWidth: 350 });
 
     const secondLastItemIndex = track.itemCount - 2;
 
@@ -448,6 +608,127 @@ describe("Track", () => {
     expect(track.currentIndex).toBe(0);
   });
 
+  test(label("overflowWidth is stable with fractional track width"), async () => {
+    // Regression: when the track has a fractional CSS width (e.g. 315.5px), the old
+    // offsetWidth-based measurement rounds to an integer (315 or 316) while items are
+    // measured via getBoundingClientRect which returns fractional values. This caused
+    // overflowWidth to oscillate between a negative and a large positive value each
+    // time the ResizeObserver fired.
+    const track = await trackWithChildren(2);
+
+    const trackWidth = 315.5;
+    // Two items whose widths sum to more than the track, ensuring real overflow
+    const item0Width = 315.828125 / 2;
+    const item1Width = 315.828125 / 2;
+
+    // Mock the track's own getBoundingClientRect with the fractional width
+    // and offsetWidth with the integer-rounded value (the old bug source)
+    Object.defineProperty(track, "offsetWidth", { writable: true });
+    // @ts-ignore
+    track.offsetWidth = Math.round(trackWidth); // 316 — what the old code used
+    // @ts-ignore
+    track.getBoundingClientRect = () => ({
+      width: trackWidth,
+      height: 200,
+      top: 0,
+      left: 0,
+      right: trackWidth,
+      bottom: 200,
+    });
+
+    const items = track.items as HTMLElement[];
+    const rects = [
+      { left: 0, top: 0, width: item0Width, height: 200 },
+      { left: item0Width, top: 0, width: item1Width, height: 200 },
+    ];
+    for (let i = 0; i < items.length; i++) {
+      const r = rects[i];
+      // @ts-ignore
+      items[i].getBoundingClientRect = () => ({
+        ...r,
+        right: r.left + r.width,
+        bottom: r.top + r.height,
+      });
+    }
+
+    // @ts-ignore
+    track._width = undefined;
+    // @ts-ignore
+    track._itemRects = undefined;
+    // @ts-ignore
+    track._itemWidths = undefined;
+
+    const overflow1 = track.overflowWidth;
+
+    // Simulate a second ResizeObserver firing (clears cached values again)
+    // @ts-ignore
+    track._width = undefined;
+    // @ts-ignore
+    track._itemRects = undefined;
+    // @ts-ignore
+    track._itemWidths = undefined;
+
+    const overflow2 = track.overflowWidth;
+
+    // Both reads must agree — no oscillation
+    expect(overflow1).toBeCloseTo(overflow2, 5);
+    // And it must reflect the real fractional overflow: 315.828125 - 315.5 = 0.328125
+    expect(overflow1).toBeCloseTo(315.828125 - trackWidth, 5);
+  });
+
+  test(
+    label("hasOverflow is false when items match container within subpixel tolerance"),
+    async () => {
+      // Regression: when the summed item widths equal the container width but differ
+      // by a tiny subpixel amount (e.g. 0.5px from getBoundingClientRect rounding),
+      // hasOverflow flipped between true/false on every layout, causing a feedback
+      // loop between overflowing and not-overflowing states.
+      const track = await trackWithChildren(2);
+
+      const trackWidth = 600;
+      // Two items whose widths sum to *just barely* more than the container —
+      // the kind of sub-pixel drift you get when an item is sized to fill its parent.
+      const item0Width = 300.25;
+      const item1Width = 300.25;
+
+      // @ts-ignore
+      track.getBoundingClientRect = () => ({
+        width: trackWidth,
+        height: 200,
+        top: 0,
+        left: 0,
+        right: trackWidth,
+        bottom: 200,
+      });
+
+      const items = track.items as HTMLElement[];
+      const rects = [
+        { left: 0, top: 0, width: item0Width, height: 200 },
+        { left: item0Width, top: 0, width: item1Width, height: 200 },
+      ];
+      for (let i = 0; i < items.length; i++) {
+        const r = rects[i];
+        // @ts-ignore
+        items[i].getBoundingClientRect = () => ({
+          ...r,
+          right: r.left + r.width,
+          bottom: r.top + r.height,
+        });
+      }
+
+      // @ts-ignore
+      track._width = undefined;
+      // @ts-ignore
+      track._itemRects = undefined;
+      // @ts-ignore
+      track._itemWidths = undefined;
+
+      // 600.5 - 600 = 0.5px — not real overflow, just rounding noise.
+      expect(track.overflowWidth).toBeCloseTo(0.5, 5);
+      expect(track.hasOverflow).toBe(false);
+    },
+  );
+
   test(label("loop with snap"), async () => {
     const track = await trackWithChildren(10, { snap: true, width: 800, loop: true });
 
@@ -465,22 +746,26 @@ describe("Track", () => {
 
 async function trackWithChildren(
   itemCount = 10,
-  attributes: Record<string, string | boolean | number> = {},
+  attributes: Record<string, string | boolean | number> & { itemWidth?: number } = {},
 ) {
   await import("../src/index.js");
 
-  // TODO: track width should be an argument to this
+  const { itemWidth: fixedItemWidth, ...trackAttributes } = attributes;
 
   const widths = new Array<number>(itemCount)
     .fill(0)
-    .map(() => Math.floor(random() * 500 + 150));
+    .map(() => fixedItemWidth ?? Math.floor(random() * 500 + 150));
+
+  const totalSize = widths.reduce((acc, w) => acc + w, 0);
+  const width = +(trackAttributes.width || 0) || random() * (totalSize / 4);
+  const height = +(trackAttributes.height || 0) || random() * 800;
 
   console.info("items", widths);
 
   const div = document.createElement("div");
   const markup = `
-    <a-track id="track" class="outline-2 outline-red-500 overflow-visible w-[${attributes.width}px] h-[${attributes.height}px]" ${Object.entries(
-      attributes,
+    <a-track id="track" class="outline-2 outline-red-500 overflow-visible w-[${width}px] h-[${height}px]" ${Object.entries(
+      trackAttributes,
     )
       .map(([key, value]) => `${key}="${value}"`)
       .join(" ")}>
@@ -489,13 +774,8 @@ async function trackWithChildren(
   `;
   div.innerHTML = markup;
 
-  const totalSize = widths.reduce((acc, w) => acc + w, 0);
   const track = div.children[0] as TrackElement;
-  fixElementSizes(
-    track,
-    +(attributes.width || 0) || random() * (totalSize / 4),
-    +(attributes.height || 0) || random() * 800,
-  );
+  fixElementSizes(track, width, height);
 
   // increase animation speed for testing
   track.transitionTime = 100;
@@ -512,7 +792,7 @@ async function trackWithChildren(
   document.body.append(div);
 
   if (track.vertical) {
-    track.position.y = random() * track.overflowWidth;
+    track.position.y = random() * track.overflowHeight;
   } else {
     track.position.x = random() * track.overflowWidth;
   }

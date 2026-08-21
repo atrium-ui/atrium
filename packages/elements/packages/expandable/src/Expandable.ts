@@ -1,5 +1,6 @@
 import { type HTMLTemplateResult, LitElement, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -15,7 +16,18 @@ if (typeof window !== "undefined") {
   });
 }
 
-let accordionIncrement = 0;
+// Counter lives on globalThis so tests can reset it (and so multiple bundled
+// copies of this module share the same sequence).
+declare global {
+  // biome-ignore lint: global augmentation requires var
+  var __atriumExpandableIdCounter: number | undefined;
+}
+
+function nextExpandableId(): number {
+  const next = (globalThis.__atriumExpandableIdCounter ?? 0) + 1;
+  globalThis.__atriumExpandableIdCounter = next;
+  return next;
+}
 
 /**
  * A element that can collapse and expand its content with an animation.
@@ -33,7 +45,7 @@ let accordionIncrement = 0;
  *  </a-expandable>
  * ```
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-expandable/
+ * @see https://atrium-ui.dev/elements/a-expandable/
  */
 export class Expandable extends LitElement {
   public static get styles() {
@@ -49,9 +61,10 @@ export class Expandable extends LitElement {
         .container {
           display: grid;
           grid-template-rows: 0fr;
-					grid-template-columns: 100%;
+          grid-template-columns: 100%;
           overflow: hidden;
           transition: grid-template-rows var(--transition-speed) var(--animation-easing);
+          content-visibility: visible;
         }
 
         :host([opened]) .container {
@@ -78,10 +91,11 @@ export class Expandable extends LitElement {
   }
 
   /** Wether the eleemnt is open or not */
-  @property({ type: Boolean, reflect: true }) public opened = false;
+  @property({ type: Boolean, reflect: true }) public accessor opened = false;
 
   /** What direction to open */
-  @property({ type: String, reflect: true }) public direction: "down" | "up" = "down";
+  @property({ type: String, reflect: true }) public accessor direction: "down" | "up" =
+    "down";
 
   public close(): void {
     this.opened = false;
@@ -97,7 +111,7 @@ export class Expandable extends LitElement {
     this.opened ? this.close() : this.open();
   }
 
-  private onChange() {
+  updateAttributes() {
     const trigger = this.trigger;
     if (trigger) {
       this.trigger.setAttribute("aria-expanded", this.opened.toString());
@@ -106,7 +120,17 @@ export class Expandable extends LitElement {
     const content = this.content;
     if (content) {
       content.setAttribute("aria-hidden", String(!this.opened));
+
+      if (this.opened) {
+        content.removeAttribute("inert");
+      } else {
+        content.setAttribute("inert", "");
+      }
     }
+  }
+
+  onChange() {
+    this.updateAttributes();
 
     const ev = new CustomEvent("change", { bubbles: true, cancelable: true });
     this.dispatchEvent(ev);
@@ -120,7 +144,7 @@ export class Expandable extends LitElement {
     }
   }
 
-  private get content() {
+  get content() {
     for (const ele of this.children) {
       // default slot
       if (!ele.slot) return ele;
@@ -128,17 +152,22 @@ export class Expandable extends LitElement {
     return undefined;
   }
 
-  private get trigger() {
+  get trigger() {
     for (const ele of this.children) {
       if (ele.slot === "toggle") return ele;
     }
     return undefined;
   }
 
-  private _id_toggle = `expandable_toggle_${++accordionIncrement}`;
-  private _id_content = `expandable_content_${accordionIncrement}`;
+  _id = nextExpandableId();
+  _id_toggle = `expandable_toggle_${this._id}`;
+  _id_content = `expandable_content_${this._id}`;
 
-  private onSlotChange() {
+  updated() {
+    this.updateAttributes();
+  }
+
+  onSlotChange() {
     const trigger = this.trigger;
     if (trigger) {
       trigger.setAttribute("aria-controls", this._id_content);
@@ -151,20 +180,30 @@ export class Expandable extends LitElement {
       content.id = this._id_content;
       content.setAttribute("aria-labelledby", this._id_toggle);
     }
+
+    this.updateAttributes();
   }
 
-  private onClick(e: Event) {
+  onBeforeMatch() {
+    if (!this.opened) this.open();
+  }
+
+  onClick(e: Event) {
     if (this.trigger?.contains(e.target as HTMLElement)) this.toggle();
   }
 
-  private findDeeplink() {
+  findDeeplink() {
     if (!location.hash) {
       return undefined;
     }
 
-    const ele = this.querySelector<HTMLElement>(location.hash);
-    if (ele) {
-      return ele;
+    try {
+      const ele = this.querySelector<HTMLElement>(location.hash);
+      if (ele) {
+        return ele;
+      }
+    } catch (_err: unknown) {
+      // invalid selector or ele not found
     }
 
     const slots = this.querySelectorAll("slot");
@@ -172,17 +211,21 @@ export class Expandable extends LitElement {
       return undefined;
     }
 
-    const hash = location.hash.substring(1);
+    const hashId = location.hash.substring(1);
 
     for (const slot of slots) {
       for (const ele of slot.assignedElements()) {
-        if (ele.id === hash) {
+        if (ele.id === hashId) {
           return ele;
         }
 
-        const link = ele?.querySelector<HTMLElement>(`#${hash}`);
-        if (link) {
-          return link;
+        try {
+          const link = ele?.querySelector<HTMLElement>(`#${hashId}`);
+          if (link) {
+            return link;
+          }
+        } catch (_err: unknown) {
+          // invalid selector or ele not found
         }
       }
     }
@@ -190,7 +233,7 @@ export class Expandable extends LitElement {
     return undefined;
   }
 
-  private onDeeplink = () => {
+  onDeeplink = () => {
     if (!this.opened && this.findDeeplink()) {
       this.open();
     }
@@ -210,14 +253,23 @@ export class Expandable extends LitElement {
     window.removeEventListener("hashchange", this.onDeeplink);
   }
 
-  private renderToggle() {
-    return html`<slot name="toggle" @slotchange=${this.onSlotChange} @click=${this.onClick}></slot>`;
+  renderToggle() {
+    return html`<slot
+      name="toggle"
+      @slotchange=${this.onSlotChange}
+      @click=${this.onClick}
+    ></slot>`;
   }
 
   protected render(): HTMLTemplateResult {
     return html`
       ${this.direction === "down" ? this.renderToggle() : undefined}
-      <div class="container" part="container" ?inert=${!this.opened}>
+      <div
+        class="container"
+        part="container"
+        hidden=${ifDefined(!this.opened ? "until-found" : undefined)}
+        @beforematch=${this.onBeforeMatch}
+      >
         <slot @slotchange=${this.onSlotChange} class="content"></slot>
       </div>
       ${this.direction === "up" ? this.renderToggle() : undefined}

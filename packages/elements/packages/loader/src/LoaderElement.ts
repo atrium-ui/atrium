@@ -6,7 +6,7 @@ import { property } from "lit/decorators.js";
  * Its help with displaying a loading state of dynamic elements.
  * For example, a error state can be displayed to the user, using just css and this element.
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-loader/
+ * @see https://atrium-ui.dev/elements/a-loader/
  */
 export class LoaderElement extends LitElement {
   static styles = [
@@ -90,22 +90,22 @@ export class LoaderElement extends LitElement {
   /**
    * Set, if the child element is in an error state.
    */
-  @property({ type: Boolean, reflect: true }) public error = false;
+  @property({ type: Boolean, reflect: true }) public accessor error = false;
 
   /**
    * Set, if the child element is currently still loading.
    */
-  @property({ type: Boolean, reflect: true }) public loading = false;
+  @property({ type: Boolean, reflect: true }) public accessor loading = false;
 
   /**
    * Set, if the loader is visible.
    */
-  @property({ type: Boolean, reflect: true }) private visible = false;
+  @property({ type: Boolean, reflect: true }) private accessor visible = false;
 
   /**
    * The delay in ms, before the loader is shown.
    */
-  @property({ type: Number }) public delay = 300;
+  @property({ type: Number }) public accessor delay = 300;
 
   private timeoutId: ReturnType<typeof setTimeout> | undefined = undefined;
 

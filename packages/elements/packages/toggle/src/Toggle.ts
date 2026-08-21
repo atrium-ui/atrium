@@ -21,7 +21,7 @@ declare global {
  * @example
  * ```html
  * <a-toggle
- *   class="m-1 p-2 leading-none cursor-pointer border hover:border-zinc-600 border-zinc-700 bg-zinc-800 focus:ring-2 [&[value='true']]:bg-zinc-700"
+ *   class="m-1 p-2 leading-none cursor-pointer border hover:border-zinc-600 border-zinc-200 bg-zinc-800 focus:ring-2 [&[value='true']]:bg-zinc-700"
  *   name="true"
  *   value="true"
  * >
@@ -63,13 +63,13 @@ export class ToggleElement extends LitElement {
    * FormData name of the field.
    */
   @property({ type: String })
-  public name?: string;
+  public accessor name: string | undefined = undefined;
 
   /**
    * The value of the field, which is submitted with the form data.
    */
   @property({ type: String, reflect: true })
-  public value: string | boolean = "false";
+  public accessor value: string | boolean = "false";
 
   protected updated(_changedProperties: PropertyValues): void {
     if (_changedProperties.has("value")) {

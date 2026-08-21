@@ -13,11 +13,11 @@
 
 ## Packages
 
-### @sv/components
+### @atrium-ui/components
 
 This package contains all component templates and the cli for use.
 
-### @sv/elements
+### @atrium-ui/elements
 
 The elements package distributes all the custom-elements that are used in the components or external projects.
 All elements share the same dependencies from the packages/elements/package.json.
@@ -94,4 +94,4 @@ Scopes for each package are define in [./knope.toml](./knope.toml). Commits with
 
 To create a new version of multiple packages at once, run `task version` and follow the instructions of the cli to create a [Changeset](https://knope.tech/reference/concepts/changeset/).
 
-After all changes are committed and merged into main, the CI will automatically version and publish the package(s), as well as build and deployed docs to gitlab pages.
+After all changes are committed and merged into main, the CI will automatically version and publish the package(s), as well as build and deployed docs.

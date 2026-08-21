@@ -19,13 +19,13 @@ declare global {
  *   </a-form-field>
  * </form>
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-form-field/
+ * @see https://atrium-ui.dev/elements/a-form-field/
  */
 export class FormFieldElement extends LitElement {
   valid = true;
 
   @property({ type: Boolean, reflect: true })
-  invalid = false;
+  accessor invalid = false;
 
   setValid(valid: boolean) {
     this.valid = valid;
@@ -33,9 +33,10 @@ export class FormFieldElement extends LitElement {
   }
 
   getInput() {
-    return this.querySelector("input, textarea") as
+    return this.querySelector("input, textarea, select") as
       | HTMLInputElement
       | HTMLTextAreaElement
+      | HTMLSelectElement
       | undefined;
   }
 
@@ -72,7 +73,7 @@ export class FormFieldElement extends LitElement {
     this.setValid(false);
 
     this.dispatchEvent(new CustomEvent("field-state", { detail: this }));
-    this.scrollIntoView({ block: "center" });
+    this.scrollIntoView({ block: "nearest" });
   };
 
   change = (e: Event) => {
@@ -126,7 +127,7 @@ export class FormFieldElement extends LitElement {
  *   </a-form-field>
  * </form>
  *
- * @see https://svp.pages.s-v.de/atrium/elements/a-form-field/
+ * @see https://atrium-ui.dev/elements/a-form-field/
  */
 export class FormFieldErrorElement extends LitElement {
   static styles = [
@@ -138,7 +139,7 @@ export class FormFieldErrorElement extends LitElement {
   ];
 
   @state()
-  private _message: string | undefined;
+  private accessor _message: string | undefined = undefined;
 
   onState = (e) => {
     const field = e.detail as FormFieldElement;

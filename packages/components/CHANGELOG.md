@@ -1,4 +1,78 @@
-# @sv/components
+# @atrium-ui/components
+
+## 1.12.0 (2026-06-25)
+
+### Features
+
+- added a switch
+- update multiple components
+- update elements
+- Added more input types and updated Toasts
+- added datepicker example
+- display selected items in combobox
+- update components package
+- Minor fixes to component styling
+- Adds a-calendar to elements with docs (#7)
+- Remove air-datepicker dependency
+- Update icon component to use the icons package
+- Migrate vue components to single file components
+- Use TC39 decorators instead of experimental typsecript decorators and fields
+
+### Fixes
+
+- add toast function to component
+- update drawer component
+- make combobox filterable
+- peers are not copied
+- search input slots not working
+- Make accordion content inert if closed
+- Make slider buttons appear on hover
+- Adds showToast function export to toast package
+- Check
+
+## 1.11.0 (2026-05-27)
+
+### Features
+
+- Use TC39 decorators instead of experimental typsecript decorators and fields
+
+## 1.10.2 (2026-04-15)
+
+### Fixes
+
+- Check
+
+## 1.10.1 (2026-03-07)
+
+### Fixes
+
+- Adds showToast function export to toast package
+
+## 1.10.0 (2026-01-21)
+
+### Features
+
+- Update icon component to use the icons package
+- Migrate vue components to single file components
+
+## 1.9.0 (2026-01-08)
+
+### Features
+
+- Adds a-calendar to elements with docs (#7)
+- Remove air-datepicker dependency
+
+## 0.1.0-dev.1 (2025-10-17)
+
+### Breaking Changes
+
+- Move chart and animation elemnts into own package
+
+## 0.1.0-dev.0 (2025-10-16)
+
+### Breaking Changes
+
+- Move chart and animation elemnts into own package
 
 ## 1.8.1 (2025-03-01)
 
