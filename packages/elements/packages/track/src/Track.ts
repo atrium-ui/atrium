@@ -577,6 +577,9 @@ export class Track extends LitElement {
 
       const viewportSize = this.vertical ? this.height : this.width;
       const itemSizes = this.vertical ? this.itemHeights : this.itemWidths;
+      const axis = this.currentAxis;
+      const rects = this.itemRects;
+      const rectIndices = this.itemRectIndices;
 
       if (viewportSize <= 0 || itemSizes.length === 0) {
         this._itemsInView = 1;
@@ -586,12 +589,24 @@ export class Track extends LitElement {
       // Start from current item and calculate how many items fit in viewport
       let accumulatedSize = 0;
       let itemIndex = this.currentIndex;
+      let visitedItems = 0;
 
       // Count items forward from current item
       while (accumulatedSize < viewportSize) {
         const sizeIndex = itemIndex % this.itemCount;
         const size = itemSizes[sizeIndex];
         if (size === undefined) break;
+
+        if (visitedItems > 0) {
+          const rectIndex = rectIndices[sizeIndex];
+          const gap =
+            sizeIndex === 0
+              ? this.getLoopGap(axis)
+              : rectIndex === undefined
+                ? 0
+                : (rects[rectIndex - 1]?.[axis] ?? 0);
+          accumulatedSize += gap;
+        }
 
         if (size > 0) {
           accumulatedSize += size;
@@ -600,6 +615,7 @@ export class Track extends LitElement {
           }
         }
         itemIndex++;
+        visitedItems++;
 
         // If not looping and we've reached the end, break
         if (!this.loop && itemIndex >= this.itemCount) {

@@ -545,6 +545,55 @@ describe("Track", () => {
     expect(track.itemsInView).toBe(3);
   });
 
+  test(label("itemsInView includes horizontal gaps"), async () => {
+    const track = await trackWithChildren(3, { width: 250, itemWidth: 100 });
+    const items = track.items as HTMLElement[];
+
+    for (let i = 0; i < items.length; i++) {
+      const left = i * 200;
+      // @ts-ignore
+      items[i].getBoundingClientRect = () => ({
+        left,
+        top: 0,
+        width: 100,
+        height: 100,
+        right: left + 100,
+        bottom: 100,
+      });
+    }
+
+    track.currentItem = 0;
+    // @ts-ignore
+    track.updateLayout();
+
+    // Two 100px items alone would fit, but their 100px gap does not.
+    expect(track.itemsInView).toBe(1);
+  });
+
+  test(label("itemsInView includes vertical gaps"), async () => {
+    const track = await trackWithChildren(3, { vertical: true, height: 250 });
+    const items = track.items as HTMLElement[];
+
+    for (let i = 0; i < items.length; i++) {
+      const top = i * 200;
+      // @ts-ignore
+      items[i].getBoundingClientRect = () => ({
+        left: 0,
+        top,
+        width: 100,
+        height: 100,
+        right: 100,
+        bottom: top + 100,
+      });
+    }
+
+    track.currentItem = 0;
+    // @ts-ignore
+    track.updateLayout();
+
+    expect(track.itemsInView).toBe(1);
+  });
+
   test(label("should snap to the end with overflow auto"), async () => {
     const track = await trackWithChildren(10, {
       snap: true,
