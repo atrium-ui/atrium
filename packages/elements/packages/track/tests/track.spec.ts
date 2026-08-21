@@ -2,6 +2,7 @@ import { userEvent } from "@testing-library/user-event";
 import { beforeEach, afterEach, test, expect, describe } from "bun:test";
 import type { MoveEvent, Track } from "../src/Track.js";
 import type { Track as TrackElement } from "../src/Track.js";
+import { Vec2 } from "../src/Track.js";
 import {
   fixElementSizes,
   label,
@@ -399,13 +400,21 @@ describe("Track", () => {
       { keys: "[/TouchA]", target: track },
     ]);
 
-    await wait(200);
+    // A drag this long flings the track past the end of its bounds. Depending on
+    // the randomized track height the bounce either returns far enough inside
+    // the bounds for snap to pick up a target, or it decays onto the boundary
+    // from the outside - SnapTrait ignores positions that are not at least 1px
+    // inside the bounds, so no target is set in that case. Either way the track
+    // has to come to rest, at a snap target or at the end of the track.
+    await waitForRest(track, start);
 
     expect(track.position[0] !== start[0] || track.position[1] !== start[1]).toBeTrue();
 
-    // target should be set by snap
-    expect(track.target).toBeDefined();
-    expect(track.position[1]).toBeCloseTo(track.target?.[1], -2);
+    if (track.target) {
+      expect(track.position[1]).toBeCloseTo(track.target[1], -2);
+    } else {
+      expect(track.position[1]).toBeCloseTo(track.scrollBounds.bottom, -2);
+    }
   });
 
   test(label("stop when grabbing"), async () => {
@@ -536,6 +545,55 @@ describe("Track", () => {
     expect(track.itemsInView).toBe(3);
   });
 
+  test(label("itemsInView includes horizontal gaps"), async () => {
+    const track = await trackWithChildren(3, { width: 250, itemWidth: 100 });
+    const items = track.items as HTMLElement[];
+
+    for (let i = 0; i < items.length; i++) {
+      const left = i * 200;
+      // @ts-ignore
+      items[i].getBoundingClientRect = () => ({
+        left,
+        top: 0,
+        width: 100,
+        height: 100,
+        right: left + 100,
+        bottom: 100,
+      });
+    }
+
+    track.currentItem = 0;
+    // @ts-ignore
+    track.updateLayout();
+
+    // Two 100px items alone would fit, but their 100px gap does not.
+    expect(track.itemsInView).toBe(1);
+  });
+
+  test(label("itemsInView includes vertical gaps"), async () => {
+    const track = await trackWithChildren(3, { vertical: true, height: 250 });
+    const items = track.items as HTMLElement[];
+
+    for (let i = 0; i < items.length; i++) {
+      const top = i * 200;
+      // @ts-ignore
+      items[i].getBoundingClientRect = () => ({
+        left: 0,
+        top,
+        width: 100,
+        height: 100,
+        right: 100,
+        bottom: top + 100,
+      });
+    }
+
+    track.currentItem = 0;
+    // @ts-ignore
+    track.updateLayout();
+
+    expect(track.itemsInView).toBe(1);
+  });
+
   test(label("should snap to the end with overflow auto"), async () => {
     const track = await trackWithChildren(10, {
       snap: true,
@@ -593,6 +651,52 @@ describe("Track", () => {
     const targetPosition = track.getToItemPosition(secondLastItemIndex);
 
     expect(track.position[0]).toBe(targetPosition[0]);
+  });
+
+  test(label("maxIndex stays within the scroll bounds"), async () => {
+    // 6 * 300 = 1800 wide track in a 900 wide viewport, so item 3 is the last item
+    // that can be aligned to the start without scrolling past the end.
+    const track = await trackWithChildren(6, { snap: true, width: 900, itemWidth: 300 });
+
+    expect(track.overflowWidth).toBe(900);
+    expect(track.maxIndex).toBe(3);
+    expect(track.getToItemPosition(track.maxIndex)[0]).toBeLessThanOrEqual(
+      track.scrollBounds.right + 3,
+    );
+  });
+
+  test(label("maxIndex is bounded with an empty align attribute"), async () => {
+    // anything but "center" aligns items at the start of the track
+    const track = await trackWithChildren(6, {
+      snap: true,
+      width: 900,
+      itemWidth: 300,
+      align: "",
+    });
+
+    expect(track.align).toBe("");
+    expect(track.maxIndex).toBe(3);
+  });
+
+  test(label("inertia does not snap past the end of the track"), async () => {
+    const track = await trackWithChildren(6, {
+      snap: true,
+      width: 900,
+      itemWidth: 300,
+      align: "",
+    });
+
+    track.moveTo(0, "none");
+    await wait(200);
+
+    // fling to the end with a lot of inertia
+    track.setTarget(undefined);
+    track.startAnimate();
+    track.inputForce.x += 800;
+    await wait(600);
+
+    expect(track.position[0]).toBeLessThanOrEqual(track.overflowWidth + 1);
+    expect(track.position[0]).toBeCloseTo(track.overflowWidth, -1);
   });
 
   test(label("dont loop to aroung without loop enabled"), async () => {
@@ -742,7 +846,79 @@ describe("Track", () => {
 
     expect(track.loop).toBe(true);
   });
+
+  test(label("getItemAtPosition with gaps"), async () => {
+    const track = await trackWithChildren(3, {
+      width: 800,
+      loop: true,
+      itemWidth: 100,
+    });
+
+    // fixElementSizes reports left/right as 0, so lay the items out by hand to
+    // get a real 20px gap between them
+    const gap = 20;
+    const itemWidth = 100;
+    for (let i = 0; i < 3; i++) {
+      const child = track.children[i] as HTMLElement;
+      const left = i * (itemWidth + gap);
+      // @ts-ignore
+      child.getBoundingClientRect = () => ({
+        width: itemWidth,
+        height: 200,
+        top: 0,
+        left,
+        right: left + itemWidth,
+        bottom: 200,
+      });
+    }
+
+    // @ts-ignore
+    track.updateLayout();
+
+    // 3 items and 3 gaps, the last one sitting between the last item and the
+    // first clone
+    expect(track.trackWidth).toBe(3 * itemWidth + 3 * gap);
+
+    const at = (x: number) => track.getItemAtPosition(new Vec2(x, 0));
+
+    // item 0 [0, 100), gap, item 1 [120, 220), gap, item 2 [240, 340)
+    expect(at(0)?.index).toBe(0);
+    expect(at(99)?.index).toBe(0);
+    expect(at(110)?.index).toBe(1); // inside a gap, belongs to the item after it
+    expect(at(130)?.index).toBe(1);
+    expect(at(250)?.index).toBe(2);
+
+    // the trailing gap [340, 360) belongs to the first item of the next
+    // repetition, it must not resolve to null
+    expect(at(350)).not.toBeNull();
+    expect(at(350)?.index).toBe(0);
+    expect(at(350)?.domIndex).toBe(3);
+
+    // mirrored into negative space: item 2 sits at [-120, -20)
+    expect(at(-110)?.index).toBe(2);
+    expect(at(-110)?.domIndex).toBe(-1);
+    // and the gap in front of the first item is item 0 again
+    expect(at(-10)?.index).toBe(0);
+    expect(at(-10)?.domIndex).toBe(0);
+  });
 });
+
+/**
+ * Waits for the track to come to rest, so tests do not race the bounce back
+ * from an out-of-bounds overshoot.
+ */
+async function waitForRest(track: TrackElement, from: number[], timeout = 2000) {
+  const axis = track.vertical ? 1 : 0;
+  for (let waited = 0; waited < timeout; waited += 20) {
+    const target = track.target;
+    // the fling only registers a frame or two after the pointer events, so an
+    // untouched position means it has not started moving yet
+    const moved = track.position[axis] !== from[axis];
+    const atTarget = target ? Math.abs(track.position[axis] - target[axis]) < 1 : true;
+    if (moved && atTarget && Math.abs(track.velocity[axis]) < 0.1) return;
+    await wait(20);
+  }
+}
 
 async function trackWithChildren(
   itemCount = 10,
