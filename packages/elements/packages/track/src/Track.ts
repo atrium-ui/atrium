@@ -1493,51 +1493,48 @@ export class Track extends LitElement {
     // TODO: dupliacte of getCurrentItem ?
     const rects = this.itemRects;
     const indices = this.itemRectIndices;
-    const offset = Math.floor(pos[0] / this.trackWidth) * this.itemCount;
+    const trackWidth = this.trackWidth;
+    const firstIndex = indices[0];
+    const first = firstIndex !== undefined ? rects[firstIndex] : undefined;
+    if (!trackWidth || first === undefined) return null;
+
+    // normalize into a single repetition of the track, so positions before and
+    // after it are walked the same way; the repetition only shifts the dom index
+    const repetition = Math.floor(pos[0] / trackWidth);
+    const local = pos[0] - repetition * trackWidth;
+    const offset = repetition * this.itemCount;
+
     let px = 0;
+    for (let index = 0; index < indices.length; index++) {
+      const rectIndex = indices[index];
+      if (rectIndex === undefined) continue;
 
-    if (pos[0] > 0) {
-      let index = 0;
-      for (let i = 0; i < rects.length; i++) {
-        const rect = rects[i];
-        if (rect === undefined) continue;
+      const rect = rects[rectIndex];
+      if (rect === undefined) continue;
 
-        const isItem = indices[index] === i;
-        // gaps are only accumulated; a position inside a gap belongs to the item after it
-        if (isItem && px + rect.x > pos[0] % this.trackWidth) {
-          return {
-            width: rect.x,
-            height: rect.y,
-            domIndex: offset + index,
-            index: index,
-          };
-        }
+      // a position inside a gap belongs to the item after it, so the item owns
+      // the gap in front of it plus its own size
+      px += rects[rectIndex - 1]?.x ?? 0;
+      px += rect.x;
 
-        px += rect.x;
-
-        if (isItem) index += 1;
-      }
-    } else {
-      for (let index = indices.length - 1; index >= 0; index--) {
-        const rectIndex = indices[index] ?? -1;
-        const rect = rects[rectIndex];
-        if (rect === undefined) continue;
-
-        if (px - rect.x < pos[0] % -this.trackWidth) {
-          return {
-            width: rect.x,
-            height: rect.y,
-            domIndex: offset + index,
-            index: index,
-          };
-        }
-
-        // walk over the item and the gap in front of it
-        px -= rect.x;
-        px -= rects[rectIndex - 1]?.x ?? 0;
+      if (local < px) {
+        return {
+          width: rect.x,
+          height: rect.y,
+          domIndex: offset + index,
+          index: index,
+        };
       }
     }
-    return null;
+
+    // what is left of the track is the gap between the last item and the first
+    // clone, which belongs to the first item of the next repetition
+    return {
+      width: first.x,
+      height: first.y,
+      domIndex: offset + this.itemCount,
+      index: 0,
+    };
   }
 
   private clones: Element[] = [];

@@ -2,6 +2,7 @@ import { userEvent } from "@testing-library/user-event";
 import { beforeEach, afterEach, test, expect, describe } from "bun:test";
 import type { MoveEvent, Track } from "../src/Track.js";
 import type { Track as TrackElement } from "../src/Track.js";
+import { Vec2 } from "../src/Track.js";
 import {
   fixElementSizes,
   label,
@@ -787,6 +788,61 @@ describe("Track", () => {
     expect(track.currentIndex).toBe(1);
 
     expect(track.loop).toBe(true);
+  });
+
+  test(label("getItemAtPosition with gaps"), async () => {
+    const track = await trackWithChildren(3, {
+      width: 800,
+      loop: true,
+      itemWidth: 100,
+    });
+
+    // fixElementSizes reports left/right as 0, so lay the items out by hand to
+    // get a real 20px gap between them
+    const gap = 20;
+    const itemWidth = 100;
+    for (let i = 0; i < 3; i++) {
+      const child = track.children[i] as HTMLElement;
+      const left = i * (itemWidth + gap);
+      // @ts-ignore
+      child.getBoundingClientRect = () => ({
+        width: itemWidth,
+        height: 200,
+        top: 0,
+        left,
+        right: left + itemWidth,
+        bottom: 200,
+      });
+    }
+
+    // @ts-ignore
+    track.updateLayout();
+
+    // 3 items and 3 gaps, the last one sitting between the last item and the
+    // first clone
+    expect(track.trackWidth).toBe(3 * itemWidth + 3 * gap);
+
+    const at = (x: number) => track.getItemAtPosition(new Vec2(x, 0));
+
+    // item 0 [0, 100), gap, item 1 [120, 220), gap, item 2 [240, 340)
+    expect(at(0)?.index).toBe(0);
+    expect(at(99)?.index).toBe(0);
+    expect(at(110)?.index).toBe(1); // inside a gap, belongs to the item after it
+    expect(at(130)?.index).toBe(1);
+    expect(at(250)?.index).toBe(2);
+
+    // the trailing gap [340, 360) belongs to the first item of the next
+    // repetition, it must not resolve to null
+    expect(at(350)).not.toBeNull();
+    expect(at(350)?.index).toBe(0);
+    expect(at(350)?.domIndex).toBe(3);
+
+    // mirrored into negative space: item 2 sits at [-120, -20)
+    expect(at(-110)?.index).toBe(2);
+    expect(at(-110)?.domIndex).toBe(-1);
+    // and the gap in front of the first item is item 0 again
+    expect(at(-10)?.index).toBe(0);
+    expect(at(-10)?.domIndex).toBe(0);
   });
 });
 
