@@ -636,16 +636,37 @@ export class Track extends LitElement {
     return this._itemsInView;
   }
 
+  /**
+   * Items are measured with the gap in front of them, so the size of all items
+   * excludes the gap after the last one. When looping, that trailing gap is part
+   * of the track, because the clones appended after the last item are siblings
+   * and the layout puts a gap between them.
+   */
+  private getLoopGap(axis: 0 | 1) {
+    if (!this.loop) return 0;
+    const indices = this.itemRectIndices;
+    if (indices.length < 2) return 0;
+    const lastIndex = indices[indices.length - 1];
+    if (lastIndex === undefined) return 0;
+    // the gap in front of the last item; with a uniform gap this is the same
+    // gap that ends up between the last item and the first clone
+    return this.itemRects[lastIndex - 1]?.[axis] ?? 0;
+  }
+
   public get trackWidth() {
     if (!this.vertical) {
-      return this.itemRects.reduce((last, curr) => last + curr[0], 0);
+      return (
+        this.itemRects.reduce((last, curr) => last + curr[0], 0) + this.getLoopGap(0)
+      );
     }
     return this.width;
   }
 
   public get trackHeight() {
     if (this.vertical) {
-      return this.itemRects.reduce((last, curr) => last + curr[1], 0);
+      return (
+        this.itemRects.reduce((last, curr) => last + curr[1], 0) + this.getLoopGap(1)
+      );
     }
     return this.height;
   }
@@ -1422,10 +1443,16 @@ export class Track extends LitElement {
   private getCurrentItem() {
     if (this.debug) {
       // this is only for debug information
-      this.itemAngles = this.itemRects.reduce((acc, rect, i) => {
-        acc[i] = (rect[this.currentAxis] / this.trackSize) * PI2;
-        return acc;
-      }, [] as number[]);
+      const axis = this.currentAxis;
+      const rects = this.itemRects;
+      const trackSize = this.trackSize || 1;
+      // one angle per item, spanning the gap in front of it plus its own size,
+      // so accumulating them walks the track the same way itemOffsets does
+      this.itemAngles = this.itemRectIndices.map((index) => {
+        const gap = rects[index - 1]?.[axis] ?? 0;
+        const size = rects[index]?.[axis] ?? 0;
+        return ((gap + size) / trackSize) * PI2;
+      });
     }
 
     let positionOffset = 0;
