@@ -6,8 +6,5 @@
   "description": "",
   "type": "module",
   "main": "dist/index.js",
-  "types": "src/index.ts",
-  "dependencies": {
-    "@atrium-ui/scroll-lock": "workspace:*"
-  }
+  "types": "src/index.ts"
 }

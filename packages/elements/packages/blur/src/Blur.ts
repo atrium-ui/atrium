@@ -1,6 +1,6 @@
 import { LitElement, type PropertyValueMap, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
-import { ScrollLock } from "@atrium-ui/scroll-lock";
+import { ScrollLock } from "./ScrollLock.js";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -188,6 +188,7 @@ export class Blur extends LitElement {
 
   private tryLock() {
     if (this.scrolllock) {
+      this.lock.setAdditionalAllowElements(this.allowscroll.split(",").filter(Boolean));
       this.lock.enable();
     }
   }
@@ -346,3 +347,5 @@ export class Blur extends LitElement {
     super.disconnectedCallback();
   }
 }
+
+export { ScrollLock };

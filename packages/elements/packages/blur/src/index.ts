@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { Blur } from "./Blur.js";
+import { Blur, ScrollLock } from "./Blur.js";
 
 try {
   customElements.define("a-blur", Blur);
@@ -12,4 +12,4 @@ try {
   console.warn("a-blur already defined");
 }
 
-export { Blur };
+export { Blur, ScrollLock };

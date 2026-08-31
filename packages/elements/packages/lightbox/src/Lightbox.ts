@@ -2,9 +2,8 @@ import "@atrium-ui/elements/blur";
 import "@atrium-ui/elements/portal";
 import { LitElement, css, html } from "lit";
 import { property, query, state } from "lit/decorators.js";
-import { Blur } from "@atrium-ui/elements/blur";
+import { Blur, ScrollLock } from "@atrium-ui/elements/blur";
 import type { Portal } from "@atrium-ui/elements/portal";
-import { ScrollLock } from "@atrium-ui/scroll-lock";
 
 declare global {
   interface HTMLElementTagNameMap {

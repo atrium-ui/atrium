@@ -9,13 +9,7 @@ import {
 import { property, query } from "lit/decorators.js";
 import { Portal } from "@atrium-ui/elements/portal";
 import { Blur } from "@atrium-ui/elements/blur";
-import {
-  computePosition,
-  autoUpdate,
-  autoPlacement,
-  shift,
-  arrow,
-} from "@floating-ui/dom";
+import { observePosition, type Alignment, type Placement } from "./position.js";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -77,21 +71,10 @@ export class PopoverPortal extends Blur {
   `;
 }
 
-type Alignment = "start" | "end";
-type Placements =
-  | "top"
-  | "top-end"
-  | "top-start"
-  | "bottom"
-  | "bottom-start"
-  | "bottom-end"
-  | "left"
-  | "right";
-
 /**
  * A popover element.
- * It positions itself relative to the trigger element using
- * [Floating UI](https://floating-ui.com/), a-portal and a-blur for focus management.
+ * It positions itself relative to the trigger element and uses a-portal and a-blur
+ * for focus management.
  *
  * @example
  * ```html
@@ -145,9 +128,12 @@ export class Popover extends Portal {
     return undefined;
   }
 
-  public get allowedPlacements(): Placements[] {
+  public get allowedPlacements(): Placement[] {
     if (this.hasAttribute("placements")) {
-      return this.getAttribute("placements")?.split(",") as Placements[];
+      return this.getAttribute("placements")
+        ?.split(",")
+        .map((placement) => placement.trim())
+        .filter(Boolean) as Placement[];
     }
     return ["top", "bottom"];
   }
@@ -165,41 +151,11 @@ export class Popover extends Portal {
 
     if (!trigger || !content) return;
 
-    this.cleanup = autoUpdate(trigger, content, () => {
-      if (content) {
-        // expose the trigger's width to the content, so it can be used for styling
-        // (e.g. matching the popover width to the trigger). Kept in sync by autoUpdate.
-        content.style.setProperty("--trigger-width", `${trigger.offsetWidth}px`);
-
-        computePosition(trigger, content, {
-          middleware: [
-            autoPlacement({
-              alignment: this.alignment,
-              allowedPlacements: this.allowedPlacements,
-            }),
-            shift(),
-            this.arrowElement && arrow({ element: this.arrowElement }),
-          ],
-        }).then(({ x, y, middlewareData, placement }) => {
-          if (content) content.style.transform = `translate(${x}px, ${y}px)`;
-
-          // set placement data for styling purposes
-          content.dataset.placement = placement;
-
-          if (middlewareData.arrow) {
-            const { x, y } = middlewareData.arrow;
-
-            const arrow = this.arrowElement;
-            if (arrow) {
-              Object.assign(arrow.style, {
-                left: x != null ? `${x}px` : "",
-                top: placement === "top" ? (y != null ? `${y}px` : "") : "0",
-                bottom: placement === "top" ? "0" : "",
-              });
-            }
-          }
-        });
-      }
+    this.cleanup?.();
+    this.cleanup = observePosition(trigger, content, {
+      placements: this.allowedPlacements,
+      alignment: this.alignment,
+      arrow: this.arrowElement,
     });
 
     // waits for DOM mutations to finish, to start transitions no enable
@@ -228,6 +184,7 @@ export class Popover extends Portal {
   private onRemovePortal = () => {
     this.removePortal();
     this.cleanup?.();
+    this.cleanup = undefined;
 
     this.removeEventListener("transitionstart", this.onTransitionStart);
     this.removeEventListener("transitionend", this.onRemovePortal);
