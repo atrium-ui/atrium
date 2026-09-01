@@ -1,5 +1,11 @@
 # @atrium-ui/elements
 
+## 5.4.0 (2026-09-01)
+
+### Features
+
+- Adds RTL support for a-track
+
 ## 5.3.0 (2026-08-21)
 
 ### Features
