@@ -149,6 +149,40 @@ describe("Track", () => {
     expect(track.trackWidth).toBe(450);
   });
 
+  test(label("RTL items and gaps are measured in logical order"), async () => {
+    const track = await trackWithChildren(3, {
+      dir: "rtl",
+      width: 250,
+      itemWidth: 100,
+    });
+
+    const items = track.items as HTMLElement[];
+    const rects = [
+      { left: 240, top: 0, width: 100, height: 200 },
+      { left: 120, top: 0, width: 100, height: 200 },
+      { left: 0, top: 0, width: 100, height: 200 },
+    ];
+
+    for (let i = 0; i < items.length; i++) {
+      const rect = rects[i];
+      // @ts-ignore — property is writable after fixElementSizes
+      items[i].getBoundingClientRect = () => ({
+        ...rect,
+        right: rect.left + rect.width,
+        bottom: rect.top + rect.height,
+      });
+    }
+
+    track.position.x = 0;
+    // @ts-ignore
+    track.updateLayout();
+
+    expect(track.trackWidth).toBe(340);
+    expect(track.getToItemPosition(0).x).toBe(0);
+    expect(track.getToItemPosition(1).x).toBe(120);
+    expect(track.getToItemPosition(2).x).toBe(240);
+  });
+
   test(label("vertical: wrapped items excluded from trackHeight"), async () => {
     const track = await trackWithChildren(4, { vertical: true });
 
@@ -249,6 +283,78 @@ describe("Track", () => {
 
     expect(document.activeElement).toBe(track);
     expect(track.currentItem).toBe(1);
+  });
+
+  test(label("RTL arrow key navigation follows the visual direction"), async () => {
+    const track = await trackWithChildren(4, {
+      width: 100,
+      itemWidth: 100,
+    });
+    track.parentElement?.setAttribute("dir", "rtl");
+    track.tabIndex = 0;
+    track.focus();
+    track.moveTo(0, "none");
+    await wait(200);
+
+    press(track, "ArrowLeft");
+    await wait(track.transitionTime + 100);
+    expect(track.currentItem).toBe(1);
+
+    press(track, "ArrowRight");
+    await wait(track.transitionTime + 100);
+    expect(track.currentItem).toBe(0);
+  });
+
+  test(label("RTL uses negative native scrollLeft"), async () => {
+    const track = await trackWithChildren(4, {
+      dir: "rtl",
+      width: 100,
+      itemWidth: 100,
+    });
+    Object.defineProperty(track, "scrollWidth", { value: 400 });
+    track.position.x = 100;
+
+    // @ts-ignore
+    track.drawUpdate();
+
+    expect(track.scrollLeft).toBe(-100);
+    expect(track.slotElement?.style.transform).toBe("translateX(0px) translateY(0px)");
+  });
+
+  test(label("RTL horizontal wheel input advances in logical order"), async () => {
+    const track = await trackWithChildren(4, {
+      dir: "rtl",
+      width: 100,
+      itemWidth: 100,
+    });
+    track.position.x = 0;
+    track.inputForce.set(0);
+
+    track.dispatchEvent(
+      new WheelEvent("wheel", {
+        deltaX: -20,
+        cancelable: true,
+      }),
+    );
+
+    expect(track.inputForce.x).toBe(20);
+  });
+
+  test(label("RTL pointer drag is mapped to logical movement"), async () => {
+    const track = await trackWithChildren(4, {
+      dir: "rtl",
+      width: 100,
+      itemWidth: 100,
+    });
+
+    track.dispatchEvent(fakePointer("pointerdown", 100, 100));
+    window.dispatchEvent(fakePointer("pointermove", 120, 100));
+
+    // A physical drag to the right advances the content toward the next RTL item.
+    // @ts-ignore
+    expect(track.inputState.move.value.x).toBe(-20);
+
+    window.dispatchEvent(fakePointer("pointerup", 120, 100));
   });
 
   test(label("move event details"), async () => {

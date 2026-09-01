@@ -347,6 +347,38 @@ export class Track extends LitElement {
     return undefined;
   }
 
+  /** Whether the horizontal track flows from right to left. */
+  private get isRTL() {
+    if (this.vertical) return false;
+
+    // `:dir()` includes inherited direction and CSS overrides. happy-dom does
+    // not implement it yet, so the attribute walk keeps the same behavior in
+    // tests and in older browsers.
+    try {
+      if (this.matches(":dir(rtl)")) return true;
+      if (this.matches(":dir(ltr)")) return false;
+    } catch {
+      // Fall through to the compatible direction lookup below.
+    }
+
+    for (
+      let element: HTMLElement | null = this;
+      element;
+      element = element.parentElement
+    ) {
+      const direction = element.getAttribute("dir")?.toLowerCase();
+      if (direction === "rtl") return true;
+      if (direction === "ltr") return false;
+    }
+
+    return getComputedStyle(this).direction === "rtl";
+  }
+
+  /** Maps physical horizontal movement onto the logical item order. */
+  private get horizontalDirection() {
+    return this.isRTL ? -1 : 1;
+  }
+
   protected updated(_changedProperties: PropertyValues): void {
     if (_changedProperties.has("current") && this.current !== undefined) {
       this.setTarget(this.getToItemPosition(this.current), "ease");
@@ -461,6 +493,7 @@ export class Track extends LitElement {
     let rowBottom: number | undefined;
     let colRight: number | undefined;
 
+    let lastLeft: number | undefined;
     let lastRight: number | undefined;
     let lastBottom: number | undefined;
 
@@ -490,9 +523,15 @@ export class Track extends LitElement {
         }
       }
 
-      const xGap = !this.vertical && lastRight !== undefined ? left - lastRight : 0;
+      const xGap =
+        !this.vertical && lastRight !== undefined && lastLeft !== undefined
+          ? this.isRTL
+            ? lastLeft - right
+            : left - lastRight
+          : 0;
       const yGap = this.vertical && lastBottom !== undefined ? top - lastBottom : 0;
 
+      lastLeft = left;
       lastRight = right;
       lastBottom = bottom;
 
@@ -1556,14 +1595,18 @@ export class Track extends LitElement {
   private clones: Element[] = [];
 
   private drawUpdate() {
-    this.scrollLeft = Math.min(this.position.x, this.scrollWidth);
+    const horizontalPosition = Math.min(this.position.x, this.scrollWidth);
+    this.scrollLeft = horizontalPosition * this.horizontalDirection;
     this.scrollTop = Math.min(this.position.y, this.scrollHeight);
 
-    const scrollPos = new Vec2(this.scrollLeft, this.scrollTop);
+    const scrollPos = new Vec2(
+      this.scrollLeft * this.horizontalDirection,
+      this.scrollTop,
+    );
     const diff = Vec2.sub(scrollPos, this.position);
     if (this.slotElement) {
       if (diff.abs() > 1.5) {
-        this.slotElement.style.transform = `translateX(${diff.x}px) translateY(${diff.y}px)`;
+        this.slotElement.style.transform = `translateX(${diff.x * this.horizontalDirection}px) translateY(${diff.y}px)`;
       } else {
         this.slotElement.style.transform = "translateX(0px) translateY(0px)";
       }
@@ -1764,15 +1807,15 @@ export class Track extends LitElement {
       if (this.vertical) {
         this.inputForce.y = delta.y;
       } else {
-        this.inputForce.x = delta.x;
+        this.inputForce.x = delta.x * this.horizontalDirection;
       }
     }
   };
 
   private onKeyDown = (e: KeyboardEvent) => {
     const Key = {
-      prev: this.vertical ? "ArrowUp" : "ArrowLeft",
-      next: this.vertical ? "ArrowDown" : "ArrowRight",
+      prev: this.vertical ? "ArrowUp" : this.isRTL ? "ArrowRight" : "ArrowLeft",
+      next: this.vertical ? "ArrowDown" : this.isRTL ? "ArrowLeft" : "ArrowRight",
     };
 
     if (e.key === Key.prev) {
@@ -1883,7 +1926,9 @@ export class Track extends LitElement {
     }
 
     if (this.grabbing) {
-      this.inputState.move.value.add(delta.clone());
+      const logicalDelta = delta.clone();
+      logicalDelta.x *= this.horizontalDirection;
+      this.inputState.move.value.add(logicalDelta);
       this.mousePos.set(pos);
 
       pointerEvent.preventDefault();

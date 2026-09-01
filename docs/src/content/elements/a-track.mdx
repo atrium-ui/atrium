@@ -84,6 +84,49 @@ Add the `snap` attribute to enable snap-to-item behaviour:
 </a-track>
 ```
 
+### Right-to-left
+
+Horizontal tracks honor an explicit or inherited `dir="rtl"`. Item `0` is placed at the right-hand start edge, horizontal gestures and scrolling follow the RTL axis, and <kbd>Arrow Left</kbd> advances to the next item.
+
+```html
+<a-track dir="rtl" snap class="flex overflow-hidden">
+  <div class="flex-none w-full">الشريحة الأولى</div>
+  <div class="flex-none w-full">الشريحة الثانية</div>
+  <div class="flex-none w-full">الشريحة الثالثة</div>
+</a-track>
+```
+
+<div class="not-content box overflow-clip" dir="rtl">
+  <a-track snap tabindex="0" aria-label="أمثلة الشرائح" class="flex w-full gap-4 overflow-visible">
+    <div class="flex h-48 w-64 flex-none items-center justify-center bg-emerald-100 text-xl font-bold text-emerald-950">
+      الشريحة الأولى
+    </div>
+    <div class="flex h-48 w-64 flex-none items-center justify-center bg-sky-100 text-xl font-bold text-sky-950">
+      الشريحة الثانية
+    </div>
+    <div class="flex h-48 w-64 flex-none items-center justify-center bg-violet-100 text-xl font-bold text-violet-950">
+      الشريحة الثالثة
+    </div>
+    <div class="flex h-48 w-64 flex-none items-center justify-center bg-amber-100 text-xl font-bold text-amber-950">
+      الشريحة الرابعة
+    </div>
+    <div class="flex h-48 w-64 flex-none items-center justify-center bg-rose-100 text-xl font-bold text-rose-950">
+      الشريحة الخامسة
+    </div>
+    <div class="flex h-48 w-64 flex-none items-center justify-center bg-cyan-100 text-xl font-bold text-cyan-950">
+      الشريحة السادسة
+    </div>
+    <div class="flex h-48 w-64 flex-none items-center justify-center bg-lime-100 text-xl font-bold text-lime-950">
+      الشريحة السابعة
+    </div>
+    <div class="flex h-48 w-64 flex-none items-center justify-center bg-fuchsia-100 text-xl font-bold text-fuchsia-950">
+      الشريحة الثامنة
+    </div>
+  </a-track>
+</div>
+
+Programmatic indices remain in DOM order, so `moveTo(1)` selects the second child in both LTR and RTL.
+
 ### Programmatic Navigation
 
 ```ts
