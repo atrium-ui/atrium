@@ -1,0 +1,58 @@
+---
+import { Code } from "astro:components";
+
+const example = `<a-popover-trigger>
+  <button slot="trigger" type="button">
+    Open menu
+  </button>
+  <a-popover>
+    <p>Make yourself at home.</p>
+  </a-popover>
+</a-popover-trigger>`;
+---
+
+<section class="@container max-w-[58rem] mx-auto px-6 pb-32 text-(--style-typography-body) max-[700px]:px-2 max-[700px]:pb-20" aria-labelledby="why-atrium-title">
+  <header class="mb-8 text-center @min-[701px]:mb-12">
+    <p class="text-[.6875rem] font-semibold tracking-[.13em] uppercase leading-[1.6] mb-4 text-[#74716b]">Small pieces. More possibilities.</p>
+    <h2 class="text-[clamp(2.5rem,5vw,4rem)] font-[650] leading-[1.1] tracking-[-.045em]" id="why-atrium-title">Why Atrium?</h2>
+    <p class="mt-5 text-[1.0625rem] leading-[1.6] text-[#686760]">A foundation for your interface. The freedom to make it yours.</p>
+  </header>
+
+  <div class="grid grid-cols-1 gap-5 @min-[701px]:grid-cols-2">
+    <article class="overflow-hidden rounded-[1.25rem] border border-[#eeece7] bg-[#f2f2f2]">
+      <div class="flex h-36 items-center justify-center @min-[701px]:h-44 flex-col" aria-hidden="true">
+        <span class="rounded-lg border border-[#dbd3e6] bg-[#eae5f0] px-[1.15rem] py-[.8rem] font-mono text-sm leading-normal text-[#514764]">&lt;custom-element&gt;</span>
+        <div class="relative flex gap-2 pt-5 before:absolute before:top-0 before:left-1/2 before:h-5 before:w-px before:bg-[#d6d0df] before:content-['']"><span class="rounded-md border border-[#e4e0e9] bg-white px-[.9rem] py-[.35rem] text-xs text-[#68616e]">React</span><span class="rounded-md border border-[#e4e0e9] bg-white px-[.9rem] py-[.35rem] text-xs text-[#68616e]">Vue</span><span class="rounded-md border border-[#e4e0e9] bg-white px-[.9rem] py-[.35rem] text-xs text-[#68616e]">Vanilla</span></div>
+      </div>
+      <div class="px-6 pb-7 @min-[701px]:px-9 @min-[701px]:pb-9">
+        <p class="text-[.6875rem] font-semibold tracking-[.13em] uppercase leading-[1.6] mb-3 text-[#76736c]">01 / Works everywhere</p>
+        <h3 class="mb-4 text-[clamp(1.5rem,2.5vw,1.875rem)] font-[550] leading-[1.2] tracking-[-.035em]">Bring your framework.</h3>
+        <p class="max-w-[41ch] text-[.9375rem] leading-[1.75] text-[#686760]">Built on standard Custom Elements. Use the same component in React today, Vue tomorrow, or plain HTML whenever you like.</p>
+      </div>
+    </article>
+
+    <article class="overflow-hidden rounded-[1.25rem] border border-[#eeece7] bg-[#f2f2f2]">
+      <div class="flex h-36 items-center justify-center @min-[701px]:h-44 gap-2" aria-hidden="true">
+        <kbd class="flex min-w-10 shrink-0 items-center justify-center gap-[.8rem] whitespace-nowrap rounded-[.6rem] border border-b-[3px] border-[#ddd9d0] bg-[#fffefa] p-3 font-mono text-[.8125rem] leading-normal text-[#625e54] shadow-[0_3px_0_#e9e6df] mr-[.4rem] outline-2 outline-offset-4 outline-[#9585b1]">Tab <span class="text-[#928b7d]">↹</span></kbd><kbd class="flex min-w-10 shrink-0 items-center justify-center gap-[.8rem] whitespace-nowrap rounded-[.6rem] border border-b-[3px] border-[#ddd9d0] bg-[#fffefa] p-3 font-mono text-[.8125rem] leading-normal text-[#625e54] shadow-[0_3px_0_#e9e6df]">↑</kbd><kbd class="flex min-w-10 shrink-0 items-center justify-center gap-[.8rem] whitespace-nowrap rounded-[.6rem] border border-b-[3px] border-[#ddd9d0] bg-[#fffefa] p-3 font-mono text-[.8125rem] leading-normal text-[#625e54] shadow-[0_3px_0_#e9e6df]">↓</kbd><kbd class="flex min-w-10 shrink-0 items-center justify-center gap-[.8rem] whitespace-nowrap rounded-[.6rem] border border-b-[3px] border-[#ddd9d0] bg-[#fffefa] p-3 font-mono text-[.8125rem] leading-normal text-[#625e54] shadow-[0_3px_0_#e9e6df]">Enter <span class="text-[#928b7d]">↵</span></kbd>
+      </div>
+      <div class="px-6 pb-7 @min-[701px]:px-9 @min-[701px]:pb-9">
+        <p class="text-[.6875rem] font-semibold tracking-[.13em] uppercase leading-[1.6] mb-3 text-[#76736c]">02 / Accessible by default</p>
+        <h3 class="mb-4 text-[clamp(1.5rem,2.5vw,1.875rem)] font-[550] leading-[1.2] tracking-[-.035em]">Thoughtful from the start.</h3>
+        <p class="max-w-[41ch] text-[.9375rem] leading-[1.75] text-[#686760]">WAI-ARIA patterns, keyboard navigation, and focus management are built into the elements, right from the start.</p>
+      </div>
+    </article>
+
+    <article class="overflow-hidden rounded-[1.25rem] border border-[#eeece7] bg-[#f2f2f2] col-span-full grid grid-cols-1 items-center gap-7 p-6 @min-[701px]:grid-cols-[.9fr_1.1fr] @min-[701px]:gap-8 @min-[701px]:p-10">
+      <div>
+        <p class="text-[.6875rem] font-semibold tracking-[.13em] uppercase leading-[1.6] mb-3 text-[#76736c]">03 / Made to fit together</p>
+        <h3 class="mb-4 text-[clamp(1.5rem,2.5vw,1.875rem)] font-[550] leading-[1.2] tracking-[-.035em]">Small elements.<br />Endless combinations.</h3>
+        <p class="max-w-[41ch] text-[.9375rem] leading-[1.75] text-[#686760]">Reusable elements handle the behavior. Bring your own markup and styles to turn them into something that feels like you.</p>
+        <a class="mt-6 inline-flex items-center gap-3 text-sm font-[550] underline underline-offset-4 hover:text-[#664aa1] focus-visible:rounded-xs focus-visible:outline-2 focus-visible:outline-offset-[5px] focus-visible:outline-[#664aa1]" href={`${import.meta.env.BASE_URL}elements/a-popover`}>Explore the elements <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="min-w-0 overflow-hidden rounded-xl border border-[#33383f] bg-[#24292e] shadow-[0_12px_24px_-16px_#171c2850] [&_pre.astro-code]:m-0 [&_pre.astro-code]:overflow-x-auto [&_pre.astro-code]:rounded-none [&_pre.astro-code]:p-5 [&_pre.astro-code]:text-xs [&_pre.astro-code]:leading-[1.85]">
+        <div class="flex justify-between border-b border-white/7 px-5 py-[.9rem] font-mono text-[.6875rem] leading-normal text-[#b7bec8]"><span>popover.html</span><span class="text-[#929ba6]">HTML</span></div>
+        <Code lang="html" theme="github-dark" code={example} />
+      </div>
+    </article>
+  </div>
+</section>

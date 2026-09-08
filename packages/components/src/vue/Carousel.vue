@@ -3,7 +3,6 @@ import "@atrium-ui/elements/track";
 import type { Track } from "@atrium-ui/elements/track";
 import { twMerge } from "tailwind-merge";
 import { computed, onMounted, ref } from "vue";
-import Button from "./Button.vue";
 import Icon from "./Icon.vue";
 
 const props = defineProps<{
@@ -91,22 +90,24 @@ const progressBarClass = computed(() =>
       </a-track>
 
       <div>
-        <Button
+        <button
           :disabled="!showPrev"
-          class="-translate-y-1/2 absolute top-1/2 left-[12px] z-10 hidden transform text-black opacity-0 transition-opacity group-hover/slider:opacity-100 lg:block"
-          label="Previous page"
+          type="button"
+          class="absolute top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white/95 text-xl text-black shadow-sm backdrop-blur-sm opacity-0 transition-[color,background-color,border-color,opacity] group-hover/slider:opacity-100 focus-visible:opacity-100 hover:border-gray-300 hover:bg-gray-50 active:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gray-500 disabled:cursor-default disabled:group-hover/slider:opacity-35 disabled:shadow-none disabled:hover:border-gray-200 disabled:hover:bg-white/95 cursor-pointer left-3"
+          aria-label="Previous page"
           @click="prev"
         >
-          <Icon class="block drop-shadow-[2px_2px_6px_black]" name="arrow-left" />
-        </Button>
-        <Button
+          <Icon class="block" aria-hidden="true" name="arrow-left" />
+        </button>
+        <button
           :disabled="!showNext"
-          class="-translate-y-1/2 absolute top-1/2 right-[12px] z-10 hidden transform text-black opacity-0 transition-opacity group-hover/slider:opacity-100 lg:block"
-          label="Next page"
+          type="button"
+          class="absolute top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white/95 text-xl text-black shadow-sm backdrop-blur-sm opacity-0 transition-[color,background-color,border-color,opacity] group-hover/slider:opacity-100 focus-visible:opacity-100 hover:border-gray-300 hover:bg-gray-50 active:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gray-500 disabled:cursor-default disabled:group-hover/slider:opacity-35 disabled:shadow-none disabled:hover:border-gray-200 disabled:hover:bg-white/95 cursor-pointer right-3"
+          aria-label="Next page"
           @click="next"
         >
-          <Icon class="block drop-shadow-[2px_2px_6px_black]" name="arrow-right" />
-        </Button>
+          <Icon class="block" aria-hidden="true" name="arrow-right" />
+        </button>
       </div>
     </div>
 

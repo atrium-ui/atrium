@@ -3,9 +3,10 @@ title: Atrium UI
 description: Copy-paste components you own. Framework-agnostic custom elements under the hood. No dependencies, no lock-in.
 ---
 
-import { Code } from "astro:components";
 import { Command } from "../components";
+import { Link } from "@atrium-ui/components/src/react/Button";
 import LatestComponentsBento from "../components/home/LatestComponentsBento.astro";
+import WhyAtrium from "../components/home/WhyAtrium.astro";
 
 
 <section class="aspect-2/1 max-w-[1400px] mx-auto overflow-visible px-6 mt-module-2xl">
@@ -37,12 +38,12 @@ import LatestComponentsBento from "../components/home/LatestComponentsBento.astr
     </div>
 
     <div className="flex items-center gap-4">
-      <a href={`${import.meta.env.BASE_URL}guides/setup`} className="inline-flex items-center gap-2 rounded-lg bg-(--style-typography-body) text-white px-6 py-3 font-medium hover:opacity-90 transition-opacity">
+      <Link href={`${import.meta.env.BASE_URL}guides/setup`} variant="default">
         Get Started →
-      </a>
-      <a href="https://github.com/atrium-ui/atrium" className="inline-flex items-center gap-2 rounded-lg border border-current px-6 py-3 font-medium hover:bg-(--style-typography-body) hover:text-white transition-colors">
+      </Link>
+      <Link href="https://github.com/atrium-ui/atrium" variant="outline">
         View on GitHub
-      </a>
+      </Link>
     </div>
   </div>
 </section>
@@ -85,52 +86,15 @@ import LatestComponentsBento from "../components/home/LatestComponentsBento.astr
   </article>
 </section>
 
-<section className="pb-module-8xl">
-  <h2 className="typo-title-2 text-center pb-module-3xl">Why Atrium?</h2>
-
-  <div className="flex flex-wrap gap-module-2xl max-w-[56rem] mx-auto">
-    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10 flex-1">
-      <h3 className="typo-headline pb-element-m">🔧 Framework Agnostic</h3>
-      Built on Custom-Elements, not adapters. Use the same component in React today, vanilla tomorrow. Works everywhere.
-    </div>
-    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10 flex-1">
-      <h3 className="typo-headline pb-element-m">♿ Accessible by Default</h3>
-      WAI-ARIA patterns, keyboard navigation, focus management — baked in, not optional. Accessibility isn't an afterthought.
-    </div>
-
-    <div className="p-module-xl rounded-lg border border-(--style-typography-body)/10 w-full">
-      <h3 className="typo-headline pb-element-m">🧩 Compose into anything</h3>
-      Components are composed from highly reusable custom-elements.
-
-      <Code lang="html" code={`<a-popover-trigger>
-    <!-- Use any component as a trigger -->
-    <button type="button" slot="trigger">
-      {{ label }}
-    </button>
-
-    <a-popover class="group">
-      <!-- Put anything in the popover -->
-      <div>
-        Lorem Ipsum
-      </div>
-    </a-popover>
-  </a-popover-trigger>`} />
-
-    </div>
-  </div>
-</section>
+<WhyAtrium />
 
 <section className="pb-module-8xl lg:px-module-4xl">
   <h2 className="typo-title-2 text-center pb-module-s">Get Started in Seconds</h2>
 
-  <div className="markdown-content max-w-[56rem] mx-auto">
+  <div className="markdown-content max-w-[58rem] mx-auto">
     <p className="text-center pb-module-xl opacity-80">Install the elements package and copy your first component:</p>
 
     <Command bun="bun add @atrium-ui/elements" />
-
-    <br/>
-
-    <Command sh="npx @atrium-ui/components button" />
 
     <div className="text-right pt-module-xl">
       <a href={`${import.meta.env.BASE_URL}guides/setup`} className="underline underline-offset-4 hover:opacity-80">
@@ -144,7 +108,7 @@ import LatestComponentsBento from "../components/home/LatestComponentsBento.astr
   <h2 className="typo-title-2 text-center pb-module-4xl">Go deeper</h2>
 
   <div className="markdown-content lg:px-module-4xl">
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-module-2xl pb-module-2xl max-w-[56rem] mx-auto">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-module-2xl pb-module-2xl max-w-[58rem] mx-auto">
       <div>
         <h3 className="typo-headline pb-element-xs">Components</h3>
         <p className="opacity-80">Pre-styled templates built with TailwindCSS. Copy them into your project, customize everything, ship immediately.</p>

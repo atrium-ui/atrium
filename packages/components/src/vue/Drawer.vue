@@ -183,7 +183,7 @@ if (!customElements.get("drawer-track")) {
 </script>
 
 <template>
-  <div class="drawer group/blur -translate-x-1/2 pointer-events-none fixed top-0 left-1/2 z-50 block h-full w-full max-w-[56rem] overflow-hidden transition-all">
+  <div class="drawer group/blur -translate-x-1/2 pointer-events-none fixed top-0 left-1/2 z-50 block h-full w-full max-w-[58rem] overflow-hidden transition-all">
     <drawer-track
       ref="drawer"
       :contentheight="dynamicHeight ? drawerHeight : undefined"

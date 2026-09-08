@@ -4,25 +4,31 @@ import { twMerge } from "tailwind-merge";
 
 export const buttonVariants = {
   base: [
-    "flex cursor-pointer items-center gap-2 leading-normal",
-    "rounded-lg px-3 py-1 transition-all active:transition-none",
-    "outline-none focus:ring focus:ring-[currentColor]",
+    "inline-flex items-center gap-1 rounded-md font-sans",
+    "aria-disabled:pointer-events-none cursor-pointer",
+    "outline-none focus-visible:ring focus-visible:ring-current",
   ],
   default: [
-    "bg-[var(--theme-color,#bfa188)]",
-    "filter active:brightness-90 hover:brightness-110 active:contrast-125",
-    "border border-zinc-200",
+    "border-0 bg-gray-400 px-4 py-2 text-white transition-colors",
+    "hover:bg-gray-200 hover:text-white",
+    "active:bg-gray-300 active:transition-none",
+    "aria-disabled:bg-gray-100 aria-disabled:text-gray-300",
   ],
   outline: [
-    "bg-transparent hover:bg-[rgba(150,150,150,0.1)]",
-    "filter active:brightness-90 hover:brightness-110 active:contrast-125",
-    "border border-zinc-200",
+    "bg-transparent transition-colors",
+    "hover:bg-gray-200 hover:text-white",
+    "active:bg-gray-300 active:transition-none",
+    "border-1 border-gray-300 hover:border-gray-100 active:border-gray-300",
+    "aria-disabled:text-gray-300 aria-disabled:before:border-gray-200",
+    "py-[calc(0.5rem-1px)] px-[calc(1rem-1px)]",
   ],
   ghost: [
-    "bg-transparent active:bg-[rgba(150,150,150,0.1)]",
-    "filter hover:brightness-110",
+    "border-0 bg-gray-50 px-4 py-2 transition-colors",
+    "hover:bg-gray-200 hover:text-white",
+    "active:bg-gray-300 active:transition-none",
+    "aria-disabled:bg-gray-100 aria-disabled:text-gray-300",
   ],
-  disabled: ["cursor-not-allowed opacity-50"],
+  disabled: ["cursor-not-allowed"],
 };
 
 export function Button(
@@ -77,9 +83,8 @@ export function Link(
   return (
     <a
       className={twMerge(
-        "inline text-inherit no-underline",
-        "transition-all active:transition-none",
-        props.variant && buttonVariants.base,
+        "no-underline",
+        buttonVariants.base,
         buttonVariants[props.variant ?? "default"],
       )}
       href={props.href}
