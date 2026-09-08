@@ -9,8 +9,10 @@ const category = pathname.split("/").filter(Boolean)[0];
 const initialTab = category === "elements" ? "right" : "left";
 ---
 
+<div class="pt-8"></div>
+
 <SideMenu category="guides" headline="Getting Started" />
-<div class="pt-6"></div>
+<div class="pt-8"></div>
 
 <div>
   <MenuLink href={`${import.meta.env.BASE_URL}playground`}>Playground</MenuLink>
