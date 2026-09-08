@@ -208,37 +208,37 @@ export const landingpage = {
         <a href="#" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
-            class="aspect-square w-full object-cover rounded-lg"
+            class="aspect-square w-full rounded-lg object-cover"
           />
         </a>
         <a href="#" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
-            class="aspect-square w-full object-cover rounded-lg"
+            class="aspect-square w-full rounded-lg object-cover"
           />
         </a>
         <a href="#" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
-            class="aspect-square w-full object-cover rounded-lg"
+            class="aspect-square w-full rounded-lg object-cover"
           />
         </a>
         <a href="#" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
-            class="aspect-square w-full object-cover rounded-lg"
+            class="aspect-square w-full rounded-lg object-cover"
           />
         </a>
         <a href="#" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
-            class="aspect-square w-full object-cover rounded-lg"
+            class="aspect-square w-full rounded-lg object-cover"
           />
         </a>
         <a href="#" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
-            class="aspect-square w-full object-cover rounded-lg"
+            class="aspect-square w-full rounded-lg object-cover"
           />
         </a>
       </Carousel>
