@@ -21,6 +21,32 @@ Click the button to reveal the dropdown menu with selectable options.
   <Code lang="tsx" code={dropdownCode} class="max-h-[600px] overflow-auto" />
 </ContentTabs>
 
+## Menu
+
+`DropdownItem` takes an `icon` slot, a `shortcut` for keyboard hints and a `danger` flag for
+destructive actions. `DropdownSeparator` groups them.
+
+<Story id="dropdown--menu" />
+
+```vue
+<Dropdown label="Document" placements="bottom-start,top-start" width="260px">
+  <DropdownItem shortcut="⌘ L">
+    <template #icon><ClockIcon /></template>
+    Activity
+  </DropdownItem>
+
+  <DropdownSeparator />
+
+  <DropdownItem danger @click="archive">Archive Document</DropdownItem>
+</Dropdown>
+```
+
+### Props
+
+**Dropdown** — `label`, `placements`, `width`, `class`; slots `trigger` and default; emits `change`.
+
+**DropdownItem** — `href` (renders an anchor), `shortcut`, `danger`, `disabled`, `keepOpen`, `class`; slots `icon` and default; emits `click`. Clicking an item closes the dropdown unless `keepOpen` is set.
+
 ## Examples with context
 
 ### Settings Panel

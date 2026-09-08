@@ -3,6 +3,9 @@ import type { Story } from "@atrium-ui/astro-stories";
 import "@atrium-ui/elements/box";
 import "@atrium-ui/elements/list";
 import "@atrium-ui/elements/popover";
+import Dropdown from "@components/src/vue/Dropdown.vue";
+import DropdownItem from "@components/src/vue/DropdownItem.vue";
+import DropdownSeparator from "@components/src/vue/DropdownSeparator.vue";
 
 export default {
   tags: ["public"],
@@ -20,48 +23,81 @@ export const Default = {
   render: (args) => {
     return (
       <div class="flex max-w-full items-center justify-center pt-[50px] pb-[200px]">
-        <a-popover-trigger class="w-auto">
-          <button
-            slot="trigger"
-            type="button"
-            class="group w-full cursor-pointer rounded-md border border-gray-300 bg-white p-2 px-4 text-left text-gray-900 hover:bg-gray-200 sm:w-auto"
-          >
-            <a-box class="relative w-auto min-w-[180px] md:max-w-[300px]">
-              <span class="block flex-1">{args.label}</span>
-            </a-box>
-          </button>
+        <Dropdown label={args.label} placements="bottom-start,top-start">
+          {args.data?.map((item, index) => (
+            <DropdownItem key={index} href={item.url}>
+              {item.title}
+            </DropdownItem>
+          ))}
+        </Dropdown>
+      </div>
+    );
+  },
+};
 
-          <a-popover class="group">
-            <div class="group my-1 inline-block rounded-md border border-gray-300 bg-white opacity-0 shadow-lg transition-opacity duration-100 group-[&[enabled]]:opacity-100">
-              <a-list
-                style={`width: ${210}px`}
-                class="group scrollbar-thin scrollbar-transparent -translate-y-1 block max-h-[300px] w-auto overflow-auto overflow-hidden rounded-md bg-white transition-all duration-150 group-[&[enabled]]:translate-y-0"
-                onChange={(e: CustomEvent) => {
-                  const option = e.detail.selected;
-                  const link = option.querySelector("a[href]");
-                  link?.click();
-                }}
-              >
-                {args.data?.map((item, index) => {
-                  return (
-                    <a-list-item
-                      key={index}
-                      class="mb-1 last:mb-0 focus-within:bg-blue-100 group-focus-within:aria-selected:bg-blue-100"
-                    >
-                      <a
-                        tabindex="-1"
-                        href={item.url}
-                        class="block overflow-hidden text-ellipsis whitespace-nowrap px-4 py-2 text-gray-900 hover:bg-blue-100 active:bg-blue-200"
-                      >
-                        {item.title}
-                      </a>
-                    </a-list-item>
-                  );
-                })}
-              </a-list>
-            </div>
-          </a-popover>
-        </a-popover-trigger>
+const ICONS: Record<string, string> = {
+  share:
+    "M7 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM17 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM17 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM8.7 11 15.3 8M8.7 13l6.6 3",
+  activity: "M12 21a9 9 0 1 0-9-9M12 7v5l3 2M3 12l-2-2m2 2 2-2",
+  agent: "M4 6h16v10H4zM9 20h6M12 16v4M9 10h.01M15 10h.01",
+  duplicate: "M9 9h10v10H9zM5 15V5h10",
+  image: "M4 5h16v14H4zM4 15l4-4 5 5M14 13l2-2 4 4M15 9h.01",
+  mute: "M6 9a6 6 0 0 1 9-5M18 10v4l2 3H8M10 20h4M4 4l16 16",
+  print: "M7 9V4h10v5M7 17H5v-6h14v6h-2M8 14h8v6H8z",
+  archive: "M4 4h16v4H4zM6 8v12h12V8M10 12h4",
+};
+
+const MenuIcon = (props: { name: keyof typeof ICONS }) => (
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path
+      d={ICONS[props.name]}
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
+export const Menu = {
+  render: () => {
+    return (
+      <div class="flex max-w-full items-center justify-center pt-[50px] pb-[280px]">
+        <Dropdown label="Document" placements="bottom-start,top-start" width="260px">
+          <DropdownItem v-slots={{ icon: () => <MenuIcon name="share" /> }}>
+            Share
+          </DropdownItem>
+          <DropdownItem
+            shortcut="⌘ L"
+            v-slots={{ icon: () => <MenuIcon name="activity" /> }}
+          >
+            Activity
+          </DropdownItem>
+          <DropdownItem v-slots={{ icon: () => <MenuIcon name="agent" /> }}>
+            Agent
+          </DropdownItem>
+
+          <DropdownSeparator />
+
+          <DropdownItem v-slots={{ icon: () => <MenuIcon name="duplicate" /> }}>
+            Duplicate Document
+          </DropdownItem>
+          <DropdownItem v-slots={{ icon: () => <MenuIcon name="image" /> }}>
+            Add header image
+          </DropdownItem>
+          <DropdownItem v-slots={{ icon: () => <MenuIcon name="mute" /> }}>
+            Mute email notifications
+          </DropdownItem>
+          <DropdownItem v-slots={{ icon: () => <MenuIcon name="print" /> }}>
+            Print
+          </DropdownItem>
+
+          <DropdownSeparator />
+
+          <DropdownItem danger v-slots={{ icon: () => <MenuIcon name="archive" /> }}>
+            Archive Document
+          </DropdownItem>
+        </Dropdown>
       </div>
     );
   },

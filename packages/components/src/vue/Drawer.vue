@@ -216,7 +216,7 @@ if (!customElements.get("drawer-track")) {
         <Button
           v-if="!isOpen || disabled"
           variant="ghost"
-          class="absolute top-3 right-3 h-auto w-auto text-xs"
+          class="absolute top-3 right-3 flex size-9 items-center justify-center p-0 text-xl"
           @click="handleCloseClick"
         >
           <Icon name="close" />

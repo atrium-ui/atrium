@@ -18,15 +18,15 @@ The `a-tabs` element provides a complete tabs implementation with keyboard navig
     </a-tabs-list>
 
     <a-tabs-panel class="block">
-      <div class="p-6">Content for the first tab</div>
+      <div class="p-2 pt-4">Content for the first tab</div>
     </a-tabs-panel>
 
     <a-tabs-panel class="block">
-      <div class="p-6">Content for the second tab</div>
+      <div class="p-2 pt-4">Content for the second tab</div>
     </a-tabs-panel>
 
     <a-tabs-panel class="block">
-      <div class="p-6">Content for the third tab</div>
+      <div class="p-2 pt-4">Content for the third tab</div>
     </a-tabs-panel>
   </a-tabs>
 </div>
@@ -159,9 +159,51 @@ a-tabs-panel {
 }
 ```
 
+### Shadow Parts
+
+Internal elements expose `part` attributes, so they can be styled from outside the shadow DOM:
+
+| Part | Element |
+| --- | --- |
+| `container` | Wrapper around the track and the overflow arrows (`a-tabs-list`) |
+| `track` | The scrolling `a-track` (`a-tabs-list`) |
+| `list` | The `role="tablist"` element holding the tabs (`a-tabs-list`) |
+| `arrow`, `arrow-left`, `arrow-right` | The overflow arrow buttons (`a-tabs-list`) |
+| `arrow-container`, `arrow-container-left`, `arrow-container-right` | The area an arrow sits in, including the fade (`a-tabs-list`) |
+| `tab` | The button inside `a-tabs-tab` |
+| `panel` | The panel inside `a-tabs-panel` |
+
+```css
+a-tabs-list::part(arrow) {
+  border-radius: 999px;
+  background: #18181b;
+  color: white;
+}
+
+/* the fade behind an arrow */
+a-tabs-list::part(arrow-container)::before {
+  background-color: #f4f4f5;
+}
+```
+
 ### Scrollable Tabs
 
 The tabs-list can be __**optionaly**__ enhanced by importing `@atrium-ui/elements/track`, which will handle scrolling to selected tabs and handle overflow with arrow buttons automatically.
+
+The arrows can also be adjusted with custom properties:
+
+| Property | Default | Description |
+| --- | --- | --- |
+| `--tabs-arrow-fade` | `#fff` | Color the tabs fade into underneath an arrow — set this to the tab list background |
+| `--tabs-arrow-area` | `64px` | Width of the faded area on each side |
+| `--tabs-arrow-overhang` | `12px` | How far the fade extends past the track, to cover padding on the tab list |
+| `--tabs-arrow-size` | `28px` | Size of the arrow button |
+| `--tabs-arrow-radius` | `8px` | Corner radius of the arrow button |
+| `--tabs-arrow-color` | `currentColor` | Icon color |
+| `--tabs-arrow-background` | `#fff` | Arrow button background (`--tabs-arrow-background-hover`, `--tabs-arrow-background-active` for states) |
+| `--tabs-arrow-border` | `rgb(0 0 0 / 0.1)` | Arrow button border color |
+
+The icons themselves can be replaced through the `arrow-button-left` and `arrow-button-right` slots.
 
 ## Accessibility
 

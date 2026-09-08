@@ -1,5 +1,6 @@
 ---
 import SideMenu from "../components/SideMenu.astro";
+import MenuLink from "./MenuLink.astro";
 import ContentToggle from "../components/ContentToggle.vue";
 
 const pathname = Astro.url.pathname;
@@ -11,12 +12,9 @@ const initialTab = category === "elements" ? "right" : "left";
 <SideMenu category="guides" headline="Getting Started" />
 <div class="pt-6"></div>
 
-<a
-  class="text-link [&[aria-current]]:text-link-active font-medium w-full flex justify-between items-center"
-  href="/playground"
->
-  <span>Playground</span>
-</a>
+<div>
+  <MenuLink href={`${import.meta.env.BASE_URL}playground`}>Playground</MenuLink>
+</div>
 <div class="pt-10"></div>
 
 <ContentToggle

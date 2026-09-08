@@ -67,15 +67,15 @@ watch(
 
 <template>
     <div class="content-toggle-wrapper">
-        <div class="inline-flex bg-(--style-fill-gray-active) rounded-full p-1 md:-ml-2 cursor-pointer gap-1"
+        <div class="inline-flex gap-1 cursor-pointer rounded-xl bg-(--style-fill-gray-hover) p-1"
             @click="handleToggle">
             <input :id="`${id}-left`" type="radio" :name="id" :checked="selectedSide === 'left'"
                 class="peer/left hidden" />
             <label :for="`${id}-left`" :class="[
-                'px-2.5 py-1 text-xs font-medium rounded-full cursor-pointer transition-all whitespace-nowrap text-center',
+                'cursor-pointer whitespace-nowrap rounded-lg border border-transparent px-2.5 py-1 text-center text-sm font-medium transition-colors',
                 selectedSide === 'left'
-                    ? 'text-(--style-typography-body) bg-white shadow-sm'
-                    : 'text-(--style-typography-disabled) hover:bg-white/50'
+                    ? 'border-gray-200 bg-white text-(--style-typography-body) shadow-sm'
+                    : 'text-gray-400 hover:text-(--style-typography-body)'
             ]">
                 {{ leftLabel }}
             </label>
@@ -83,10 +83,10 @@ watch(
             <input :id="`${id}-right`" type="radio" :name="id" :checked="selectedSide === 'right'"
                 class="peer/right hidden" />
             <label :for="`${id}-right`" :class="[
-                'px-2.5 py-1 text-xs font-medium rounded-full cursor-pointer transition-all whitespace-nowrap text-center',
+                'cursor-pointer whitespace-nowrap rounded-lg border border-transparent px-2.5 py-1 text-center text-sm font-medium transition-colors',
                 selectedSide === 'right'
-                    ? 'text-(--style-typography-body) bg-white shadow-sm'
-                    : 'text-(--style-typography-disabled) hover:bg-white/50'
+                    ? 'border-gray-200 bg-white text-(--style-typography-body) shadow-sm'
+                    : 'text-gray-400 hover:text-(--style-typography-body)'
             ]">
                 {{ rightLabel }}
             </label>

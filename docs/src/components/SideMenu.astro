@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import MenuLink from "./MenuLink.astro";
 
 const { headline } = Astro.props;
 
@@ -7,22 +8,15 @@ const category = Astro.props.category || Astro.params.category;
 
 const base = import.meta.env.BASE_URL;
 
-const slug = Astro.url.pathname
-  .replace(base, "")
-  .split("/")
-  .filter((str) => str !== "/")
-  .filter(Boolean)
-  .join("/");
-
 const allDocs = await getCollection("docs");
 ---
 
-<div class="pb-module-xl typo-info text-gray-500">
+<div class="px-3 pb-3 typo-info text-gray-500">
   <span>{headline || category}</span>
 </div>
 
 <nav>
-  <ul class="gap-module-2xl">
+  <ul class="flex flex-col gap-1">
     {
       allDocs
         .filter(doc => {
@@ -41,14 +35,12 @@ const allDocs = await getCollection("docs");
         })
         .map(doc => {
           return (
-            <li class="mb-module-xs">
-              <a
-                class="text-link [&[aria-current]]:text-link-active font-medium w-full flex justify-between items-center"
+            <li>
+              <MenuLink
                 href={`/${[...base.split("/"), ...doc.id.split("/")].filter(Boolean).join("/")}`}
-                aria-current={doc.id === slug ? "page" : undefined}
               >
-                <span>{doc.data.title}</span>
-              </a>
+                {doc.data.title}
+              </MenuLink>
             </li>
           );
         })

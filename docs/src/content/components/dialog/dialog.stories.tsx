@@ -38,21 +38,26 @@ export const Default = {
 export const Confirmation = {
   render: () => (
     <div class="flex min-h-[300px] max-w-full items-center justify-center">
-      <Dialog label="Delete Item">
-        <h2 class="mb-2 text-2xl">Are you sure?</h2>
-        <p>This action cannot be undone. Do you want to proceed?</p>
-
-        <div class="mt-4 flex justify-end">
-          <Button
-            variant="outline"
-            onClick={(ev) => {
-              ev.target?.dispatchEvent(new CustomEvent("exit", { bubbles: true }));
-            }}
-          >
-            Cancel
-          </Button>
-          <Button class="ml-2 bg-red-600 text-white hover:bg-red-700">Delete</Button>
-        </div>
+      <Dialog
+        label="Delete Item"
+        v-slots={{
+          footer: () => (
+            <>
+              <Button
+                variant="outline"
+                onClick={(ev) => {
+                  ev.target?.dispatchEvent(new CustomEvent("exit", { bubbles: true }));
+                }}
+              >
+                Cancel
+              </Button>
+              <Button class="bg-red-600 text-white hover:bg-red-700">Delete</Button>
+            </>
+          ),
+        }}
+      >
+        <h2 class="mb-2 font-semibold text-lg">Are you sure?</h2>
+        <p class="text-zinc-600">This action cannot be undone. Do you want to proceed?</p>
       </Dialog>
     </div>
   ),

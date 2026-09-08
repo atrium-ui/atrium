@@ -183,11 +183,31 @@ export class TabsListElement extends LitElement {
         position: absolute;
         top: 0;
         height: 100%;
+        width: var(--tabs-arrow-area, 64px);
+        display: flex;
+        align-items: center;
+        padding: 0 2px;
+        box-sizing: border-box;
         pointer-events: none;
+      }
+
+      /* Fades the tabs out underneath the arrow, using the host background.
+         Overhangs the container, so tabs are still covered where the list
+         itself has padding or the track overflows. */
+      .arrow-container::before {
+        content: "";
+        position: absolute;
+        inset: calc(-1 * var(--tabs-arrow-overhang, 12px));
+        background-color: var(--tabs-arrow-fade, #fff);
       }
 
       .arrow-container.left {
         left: 0;
+      }
+
+      .arrow-container.left::before {
+        right: 0;
+        mask-image: linear-gradient(to right, #000 55%, transparent);
       }
 
       .arrow-container.right {
@@ -195,13 +215,46 @@ export class TabsListElement extends LitElement {
         justify-content: flex-end;
       }
 
+      .arrow-container.right::before {
+        left: 0;
+        mask-image: linear-gradient(to left, #000 55%, transparent);
+      }
+
       .arrow-button {
         all: unset;
-        display: block;
+        position: relative;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: var(--tabs-arrow-size, 28px);
+        height: var(--tabs-arrow-size, 28px);
+        border-radius: var(--tabs-arrow-radius, 8px);
+        color: var(--tabs-arrow-color, currentColor);
+        background: var(--tabs-arrow-background, #fff);
+        border: 1px solid var(--tabs-arrow-border, rgb(0 0 0 / 0.1));
+        box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
         pointer-events: auto;
-        width: 100%;
-        height: 100%;
         cursor: pointer;
+        transition: background-color 150ms, color 150ms, border-color 150ms;
+      }
+
+      .arrow-button:hover {
+        background: var(--tabs-arrow-background-hover, #f4f4f5);
+      }
+
+      .arrow-button:active {
+        background: var(--tabs-arrow-background-active, #e4e4e7);
+      }
+
+      .arrow-button svg {
+        display: block;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .arrow-button {
+          transition: none;
+        }
       }
     `;
   }
@@ -291,25 +344,27 @@ export class TabsListElement extends LitElement {
 
   protected render(): TemplateResult {
     return html`
-      <div class="tabs-list-container">
-        <a-track ${ref(this.trackRef)} class="tabs-track" @scroll="${this.onScroll}" @format="${this.onFormat}">
-          <div ${ref(this.innerTrackRef)} class="tabs-inner-track" role="tablist" aria-label="${ifDefined(this.label)}">
+      <div class="tabs-list-container" part="container">
+        <a-track ${ref(this.trackRef)} part="track" class="tabs-track" @scroll="${this.onScroll}" @format="${this.onFormat}">
+          <div ${ref(this.innerTrackRef)} part="list" class="tabs-inner-track" role="tablist" aria-label="${ifDefined(this.label)}">
             <slot></slot>
           </div>
         </a-track>
         ${
           this.showLeftArrow
             ? html`
-          <div class="arrow-container left">
+          <div class="arrow-container left" part="arrow-container arrow-container-left">
             <button
               type="button"
               tabindex="-1"
+              aria-label="Scroll tabs left"
               class="arrow-button left"
+              part="arrow arrow-left"
               @click="${this.onLeftArrowClick}"
             >
               <slot name="arrow-button-left">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15.4238 17.5761C15.6581 17.8104 15.6581 18.1895 15.4238 18.4238C15.1895 18.6581 14.8105 18.6581 14.5762 18.4238L8.57617 12.4238L8.15137 12L8.57617 11.5761L14.5762 5.57613C14.8105 5.34181 15.1895 5.34181 15.4238 5.57613C15.6581 5.81044 15.6581 6.18947 15.4238 6.42378L9.84766 12L15.4238 17.5761Z" fill="#000091"/>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15 5.5 8.5 12l6.5 6.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </slot>
             </button>
@@ -320,16 +375,18 @@ export class TabsListElement extends LitElement {
         ${
           this.showRightArrow
             ? html`
-          <div class="arrow-container right">
+          <div class="arrow-container right" part="arrow-container arrow-container-right">
             <button
               type="button"
               tabindex="-1"
+              aria-label="Scroll tabs right"
               class="arrow-button right"
+              part="arrow arrow-right"
               @click="${this.onRightArrowClick}"
             >
               <slot name="arrow-button-right">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M8.57613 6.42378C8.34181 6.18947 8.34181 5.81044 8.57613 5.57613C8.81044 5.34181 9.18947 5.34181 9.42378 5.57613L15.4238 11.5761L15.8486 12L15.4238 12.4238L9.42378 18.4238C9.18947 18.6581 8.81044 18.6581 8.57613 18.4238C8.34181 18.1895 8.34181 17.8104 8.57613 17.5761L14.1523 12L8.57613 6.42378Z" fill="#000091"/>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 5.5 15.5 12 9 18.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </slot>
             </button>
@@ -494,6 +551,7 @@ export class TabsPanelElement extends LitElement {
     return html`
       <div
         class="tabs-panel"
+        part="panel"
         hidden="${ifDefined(hiddenValue)}"
         tabindex="${!this.selected ? "-1" : ""}"
         aria-hidden="${!this.selected ? "true" : "false"}"
@@ -581,6 +639,7 @@ export class TabsTabElement extends LitElement {
     return html`
       <button
         ${ref(this.buttonRef)}
+        part="tab"
         id="${generateTabId(index)}"
         role="tab"
         type="button"
