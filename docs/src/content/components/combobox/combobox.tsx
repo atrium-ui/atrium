@@ -4,7 +4,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent(() => {
   return () => (
-    <div class="min-h-[200px] max-w-[700px]">
+    <div class="min-h-[200px] max-w-[56rem]">
       <Combobox
         name="combobox"
         placeholder="Select"
