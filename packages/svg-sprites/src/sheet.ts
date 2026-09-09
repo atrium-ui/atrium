@@ -76,6 +76,15 @@ export async function buildSheet(options: SVGSpriteOptions): Promise<string> {
     console.error("Could not generate types", e);
   }
 
+  // generate registry
+  try {
+    const registryCode = `const SvgIconNames = ${types.map((t) => `"${t}"`).join(", ")};`;
+
+    writeFile("./node_modules/.svg-sprites/icons.ts", registryCode);
+  } catch (e) {
+    console.error("Could not generate registry", e);
+  }
+
   const { result } = await spriter.compileAsync();
 
   if (process.env.EXPORT_SVG_SPRITE) {
