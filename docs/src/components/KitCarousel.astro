@@ -11,7 +11,7 @@
  * section's raw HTML via a Vite glob import keyed by file path.
  */
 import kitsIndex from "../../../packages/kits/src/basics/kit.json";
-import { kitPreviewDocument } from "./kit-preview-doc";
+import { kitPreviewDocument } from "./kit-preview-doc.js";
 
 export interface Props {
   kit?: string;
@@ -25,8 +25,9 @@ const kitJsonModules = import.meta.glob("../../../packages/kits/src/*/kit.json",
 }) as Record<string, string>;
 
 const kitJsonRaw =
-  Object.entries(kitJsonModules).find(([path]) => path.includes(`/kits/src/${kit}/`))?.[1] ??
-  JSON.stringify(kitsIndex);
+  Object.entries(kitJsonModules).find(([path]) =>
+    path.includes(`/kits/src/${kit}/`),
+  )?.[1] ?? JSON.stringify(kitsIndex);
 const kitJson = JSON.parse(kitJsonRaw) as typeof kitsIndex;
 
 const sectionFiles = import.meta.glob("../../../packages/kits/src/*/sections/*.html", {

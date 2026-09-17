@@ -1,36 +1,76 @@
 <!-- requires: @atrium-ui/elements/form (optional, for a-form-field validation) -->
 <!-- Built with Atrium UI — https://atrium-ui.dev/ -->
-<div class="w-full max-w-xl rounded-lg border border-white/10 bg-[#232428] p-4 text-[12px]">
+<div
+  class="w-full max-w-xl rounded-lg border border-white/10 bg-[#232428] p-4 text-[12px]"
+>
   <label class="relative block">
     <span class="sr-only">Filter assets</span>
-    <svg class="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-zinc-500" aria-hidden="true"><use href="#kit-icon-search"></use></svg>
-    <input type="search" placeholder="Name filter…" class="block w-full rounded-md border border-white/10 bg-[#1c1d20] py-1.5 pr-2 pl-8 text-zinc-200 placeholder:text-zinc-500 focus:border-primary-400 focus:outline-none" />
+    <svg
+      class="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-zinc-500"
+      aria-hidden="true"
+    >
+      <use href="#kit-icon-search"></use>
+    </svg>
+    <input
+      type="search"
+      placeholder="Name filter…"
+      class="block w-full rounded-md border border-white/10 bg-[#1c1d20] py-1.5 pr-2 pl-8 text-zinc-200 placeholder:text-zinc-500 focus:border-primary-400 focus:outline-none"
+    />
   </label>
   <form class="mt-3 grid gap-2.5" onsubmit="return false">
     <label class="block">
       <span class="mb-1 block font-medium text-zinc-300">Project path</span>
-      <input type="text" value="/Users/tihav/source/depot" class="block w-full rounded-md border border-white/10 bg-[#1c1d20] px-2 py-1.5 font-mono text-[11px] text-zinc-200 placeholder:text-zinc-500 focus:border-primary-400 focus:outline-none" />
+      <input
+        type="text"
+        value="/Users/tihav/source/depot"
+        class="block w-full rounded-md border border-white/10 bg-[#1c1d20] px-2 py-1.5 font-mono text-[11px] text-zinc-200 placeholder:text-zinc-500 focus:border-primary-400 focus:outline-none"
+      />
     </label>
     <label class="block">
       <span class="mb-1 block font-medium text-zinc-300">Contact email</span>
-      <input type="email" placeholder="pipeline@studio.example" autocomplete="email" class="block w-full rounded-md border border-white/10 bg-[#1c1d20] px-2 py-1.5 text-zinc-200 placeholder:text-zinc-500 focus:border-primary-400 focus:outline-none" />
+      <input
+        type="email"
+        placeholder="pipeline@studio.example"
+        autocomplete="email"
+        class="block w-full rounded-md border border-white/10 bg-[#1c1d20] px-2 py-1.5 text-zinc-200 placeholder:text-zinc-500 focus:border-primary-400 focus:outline-none"
+      />
     </label>
     <label class="block">
       <span class="mb-1 block font-medium text-zinc-300">Import log</span>
-      <textarea rows="2" placeholder="Last import output…" class="block w-full resize-y rounded-md border border-white/10 bg-[#1c1d20] px-2 py-1.5 font-mono text-[11px] text-zinc-200 placeholder:text-zinc-500 focus:border-primary-400 focus:outline-none"></textarea>
+      <textarea
+        rows="2"
+        placeholder="Last import output…"
+        class="block w-full resize-y rounded-md border border-white/10 bg-[#1c1d20] px-2 py-1.5 font-mono text-[11px] text-zinc-200 placeholder:text-zinc-500 focus:border-primary-400 focus:outline-none"
+      ></textarea>
     </label>
     <div class="grid grid-cols-2 gap-2">
       <label class="block">
         <span class="mb-1 block font-medium text-zinc-300">Draws</span>
-        <input type="number" value="3" min="0" class="block w-full rounded-md border border-white/10 bg-[#1c1d20] px-2 py-1.5 font-mono text-[11px] text-zinc-200 focus:border-primary-400 focus:outline-none" />
+        <input
+          type="number"
+          value="3"
+          min="0"
+          class="block w-full rounded-md border border-white/10 bg-[#1c1d20] px-2 py-1.5 font-mono text-[11px] text-zinc-200 focus:border-primary-400 focus:outline-none"
+        />
       </label>
       <label class="block">
         <span class="mb-1 block font-medium text-zinc-300">Stride</span>
-        <input type="text" value="64 B" class="block w-full rounded-md border border-white/10 bg-[#1c1d20] px-2 py-1.5 font-mono text-[11px] text-zinc-200 focus:border-primary-400 focus:outline-none" />
+        <input
+          type="text"
+          value="64 B"
+          class="block w-full rounded-md border border-white/10 bg-[#1c1d20] px-2 py-1.5 font-mono text-[11px] text-zinc-200 focus:border-primary-400 focus:outline-none"
+        />
       </label>
     </div>
   </form>
   <svg aria-hidden="true" style="display: none">
-    <symbol id="kit-icon-search" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.3639 5.1998C7.97826 5.1998 5.2457 7.9151 5.2457 11.2498C5.2457 14.5845 7.97826 17.2998 11.3639 17.2998C14.7495 17.2998 17.4821 14.5845 17.4821 11.2498C17.4821 7.9151 14.7495 5.1998 11.3639 5.1998ZM3.8457 11.2498C3.8457 7.12867 7.21836 3.7998 11.3639 3.7998C15.5094 3.7998 18.8821 7.12867 18.8821 11.2498C18.8821 13.248 18.0892 15.0599 16.7998 16.3964L20.1897 19.7523C20.4644 20.0243 20.4667 20.4675 20.1947 20.7423C19.9227 21.017 19.4795 21.0193 19.2047 20.7473L15.7347 17.3119C14.5022 18.1859 12.9927 18.6998 11.3639 18.6998C7.21836 18.6998 3.8457 15.3709 3.8457 11.2498Z" fill="currentColor" /></symbol>
+    <symbol id="kit-icon-search" viewBox="0 0 24 24">
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M11.3639 5.1998C7.97826 5.1998 5.2457 7.9151 5.2457 11.2498C5.2457 14.5845 7.97826 17.2998 11.3639 17.2998C14.7495 17.2998 17.4821 14.5845 17.4821 11.2498C17.4821 7.9151 14.7495 5.1998 11.3639 5.1998ZM3.8457 11.2498C3.8457 7.12867 7.21836 3.7998 11.3639 3.7998C15.5094 3.7998 18.8821 7.12867 18.8821 11.2498C18.8821 13.248 18.0892 15.0599 16.7998 16.3964L20.1897 19.7523C20.4644 20.0243 20.4667 20.4675 20.1947 20.7423C19.9227 21.017 19.4795 21.0193 19.2047 20.7473L15.7347 17.3119C14.5022 18.1859 12.9927 18.6998 11.3639 18.6998C7.21836 18.6998 3.8457 15.3709 3.8457 11.2498Z"
+        fill="currentColor"
+      />
+    </symbol>
   </svg>
 </div>

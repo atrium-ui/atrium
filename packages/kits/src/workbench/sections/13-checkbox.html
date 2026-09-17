@@ -4,28 +4,115 @@
   a native legend always straddles the fieldset's top border, which collides
   with this bordered card (heading half outside the panel, clipped in
   fixed-height carousel previews). Group semantics are preserved. -->
-<div role="group" aria-labelledby="wb-export-title" class="w-full max-w-xl rounded-lg border border-white/10 bg-[#232428] p-4 text-[12px]">
-  <p id="wb-export-title" class="mb-2 px-1 text-[11px] font-semibold tracking-wide text-zinc-500 uppercase">Export — one question, several answers</p>
+<div
+  role="group"
+  aria-labelledby="wb-export-title"
+  class="w-full max-w-xl rounded-lg border border-white/10 bg-[#232428] p-4 text-[12px]"
+>
+  <p
+    id="wb-export-title"
+    class="mb-2 px-1 text-[11px] font-semibold tracking-wide text-zinc-500 uppercase"
+  >
+    Export — one question, several answers
+  </p>
   <div class="grid gap-1.5">
-    <label class="flex cursor-pointer items-center gap-2.5 rounded-md border border-white/10 bg-white/[0.02] px-2.5 py-2 transition-colors has-checked:border-primary-400 has-checked:bg-primary-500/10">
-      <a-toggle name="exp-mesh" value="true" class="flex size-4 shrink-0 cursor-pointer items-center justify-center rounded border border-white/20 bg-[#1c1d20] transition-colors [&[value='true']]:border-primary-400 [&[value='true']]:bg-primary-500">
-        <svg slot="true" width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    <label
+      class="flex cursor-pointer items-center gap-2.5 rounded-md border border-white/10 bg-white/[0.02] px-2.5 py-2 transition-colors has-checked:border-primary-400 has-checked:bg-primary-500/10"
+    >
+      <a-toggle
+        name="exp-mesh"
+        value="true"
+        class="flex size-4 shrink-0 cursor-pointer items-center justify-center rounded border border-white/20 bg-[#1c1d20] transition-colors [&[value='true']]:border-primary-400 [&[value='true']]:bg-primary-500"
+      >
+        <svg
+          slot="true"
+          width="12"
+          height="12"
+          viewBox="0 0 16 16"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M3 8.5 6.5 12 13 4.5"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
       </a-toggle>
-      <span class="font-medium text-zinc-200">Mesh <span class="block text-[11px] font-normal text-zinc-500">.cheetmesh, 648 tris</span></span>
+      <span class="font-medium text-zinc-200"
+        >Mesh
+        <span class="block text-[11px] font-normal text-zinc-500"
+          >.cheetmesh, 648 tris</span
+        ></span
+      >
       <span class="ml-auto font-mono text-[11px] text-zinc-500">303 KiB</span>
     </label>
-    <label class="flex cursor-pointer items-center gap-2.5 rounded-md border border-white/10 bg-white/[0.02] px-2.5 py-2 transition-colors has-checked:border-primary-400 has-checked:bg-primary-500/10">
-      <a-toggle name="exp-clips" value="true" class="flex size-4 shrink-0 cursor-pointer items-center justify-center rounded border border-white/20 bg-[#1c1d20] transition-colors [&[value='true']]:border-primary-400 [&[value='true']]:bg-primary-500">
-        <svg slot="true" width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    <label
+      class="flex cursor-pointer items-center gap-2.5 rounded-md border border-white/10 bg-white/[0.02] px-2.5 py-2 transition-colors has-checked:border-primary-400 has-checked:bg-primary-500/10"
+    >
+      <a-toggle
+        name="exp-clips"
+        value="true"
+        class="flex size-4 shrink-0 cursor-pointer items-center justify-center rounded border border-white/20 bg-[#1c1d20] transition-colors [&[value='true']]:border-primary-400 [&[value='true']]:bg-primary-500"
+      >
+        <svg
+          slot="true"
+          width="12"
+          height="12"
+          viewBox="0 0 16 16"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M3 8.5 6.5 12 13 4.5"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
       </a-toggle>
-      <span class="font-medium text-zinc-200">Animation clips <span class="block text-[11px] font-normal text-zinc-500">2 clips, 16 s</span></span>
+      <span class="font-medium text-zinc-200"
+        >Animation clips
+        <span class="block text-[11px] font-normal text-zinc-500"
+          >2 clips, 16 s</span
+        ></span
+      >
       <span class="ml-auto font-mono text-[11px] text-zinc-500">2</span>
     </label>
-    <label class="flex cursor-pointer items-center gap-2.5 rounded-md border border-white/10 bg-white/[0.02] px-2.5 py-2 transition-colors has-checked:border-primary-400 has-checked:bg-primary-500/10">
-      <a-toggle name="exp-collision" value="false" class="flex size-4 shrink-0 cursor-pointer items-center justify-center rounded border border-white/20 bg-[#1c1d20] transition-colors [&[value='true']]:border-primary-400 [&[value='true']]:bg-primary-500">
-        <svg slot="true" width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    <label
+      class="flex cursor-pointer items-center gap-2.5 rounded-md border border-white/10 bg-white/[0.02] px-2.5 py-2 transition-colors has-checked:border-primary-400 has-checked:bg-primary-500/10"
+    >
+      <a-toggle
+        name="exp-collision"
+        value="false"
+        class="flex size-4 shrink-0 cursor-pointer items-center justify-center rounded border border-white/20 bg-[#1c1d20] transition-colors [&[value='true']]:border-primary-400 [&[value='true']]:bg-primary-500"
+      >
+        <svg
+          slot="true"
+          width="12"
+          height="12"
+          viewBox="0 0 16 16"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M3 8.5 6.5 12 13 4.5"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
       </a-toggle>
-      <span class="font-medium text-zinc-200">Collision boxes <span class="block text-[11px] font-normal text-zinc-500">convex hulls</span></span>
+      <span class="font-medium text-zinc-200"
+        >Collision boxes
+        <span class="block text-[11px] font-normal text-zinc-500"
+          >convex hulls</span
+        ></span
+      >
     </label>
   </div>
 </div>

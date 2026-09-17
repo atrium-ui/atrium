@@ -9,16 +9,36 @@
   position against the viewport instead of the card (clipped in carousels).
   Real modal usage via showModal() (:modal) is unaffected. -->
 <style>.wb-dialog-preview>dialog[open]:not(:modal){position:static}</style>
-<div class="wb-dialog-preview relative grid min-h-[220px] w-full max-w-xl place-items-center rounded-lg border border-white/10 bg-[#232428] p-4 text-[12px]">
-  <dialog id="wb-dialog" open class="m-auto w-full max-w-sm rounded-lg border border-white/10 bg-[#26272b] p-0 text-zinc-300 shadow-2xl backdrop:bg-black/60">
+<div
+  class="wb-dialog-preview relative grid min-h-[220px] w-full max-w-xl place-items-center rounded-lg border border-white/10 bg-[#232428] p-4 text-[12px]"
+>
+  <dialog
+    id="wb-dialog"
+    open
+    class="m-auto w-full max-w-sm rounded-lg border border-white/10 bg-[#26272b] p-0 text-zinc-300 shadow-2xl backdrop:bg-black/60"
+  >
     <form method="dialog">
       <div class="border-b border-white/10 px-4 py-3">
-        <h3 class="m-0 text-[13px] font-semibold text-zinc-100">Overwrite “chess-rook”?</h3>
-        <p class="mt-1 text-[12px] text-zinc-400">The existing .cheetmesh will be replaced. This cannot be undone.</p>
+        <h3 class="m-0 text-[13px] font-semibold text-zinc-100">
+          Overwrite “chess-rook”?
+        </h3>
+        <p class="mt-1 text-[12px] text-zinc-400">
+          The existing .cheetmesh will be replaced. This cannot be undone.
+        </p>
       </div>
       <div class="flex items-center justify-end gap-1.5 px-4 py-3">
-        <button value="cancel" class="cursor-pointer rounded-md border border-white/10 bg-white/5 px-3 py-1.5 font-medium text-zinc-200 hover:bg-white/10">Cancel</button>
-        <button value="confirm" class="cursor-pointer rounded-md border-0 bg-primary-500 px-3 py-1.5 font-medium text-white hover:bg-primary-400">Overwrite</button>
+        <button
+          value="cancel"
+          class="cursor-pointer rounded-md border border-white/10 bg-white/5 px-3 py-1.5 font-medium text-zinc-200 hover:bg-white/10"
+        >
+          Cancel
+        </button>
+        <button
+          value="confirm"
+          class="cursor-pointer rounded-md border-0 bg-primary-500 px-3 py-1.5 font-medium text-white hover:bg-primary-400"
+        >
+          Overwrite
+        </button>
       </div>
     </form>
   </dialog>

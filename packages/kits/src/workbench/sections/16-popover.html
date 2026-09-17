@@ -2,41 +2,133 @@
 <!-- Built with Atrium UI — https://atrium-ui.dev/ -->
 <!-- Click the trigger to open. Escape dismisses. The panel animates via the
      `enabled` attribute the element sets when open (group-[&[enabled]]:). -->
-<div class="flex w-full max-w-2xl flex-wrap items-start gap-6 rounded-lg border border-white/10 bg-[#232428] p-4 text-[12px]">
+<div
+  class="flex w-full max-w-2xl flex-wrap items-start gap-6 rounded-lg border border-white/10 bg-[#232428] p-4 text-[12px]"
+>
   <a-popover-trigger class="relative z-10 inline-block">
-    <button slot="trigger" type="button" aria-haspopup="menu" class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-3 py-1.5 font-medium text-zinc-200 transition-colors hover:bg-white/10">
+    <button
+      slot="trigger"
+      type="button"
+      aria-haspopup="menu"
+      class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-3 py-1.5 font-medium text-zinc-200 transition-colors hover:bg-white/10"
+    >
       Asset actions
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M6 9l6 6 6-6"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
     </button>
     <a-popover class="group">
-      <div class="w-[max-content] p-2 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100">
-        <div role="menu" class="min-w-[200px] scale-95 rounded-lg border border-white/10 bg-[#26272b] p-1 text-zinc-300 shadow-2xl transition-all duration-150 group-[&[enabled]]:scale-100">
-          <button type="button" role="menuitem" class="flex w-full cursor-pointer items-center justify-between rounded-md border-0 bg-transparent px-2.5 py-1.5 text-left transition-colors hover:bg-primary-500 hover:text-white">Open <kbd class="rounded border border-white/10 bg-black/30 px-1.5 font-mono text-[10px] opacity-70">O</kbd></button>
-          <button type="button" role="menuitem" class="flex w-full cursor-pointer items-center justify-between rounded-md border-0 bg-transparent px-2.5 py-1.5 text-left transition-colors hover:bg-primary-500 hover:text-white">Duplicate <kbd class="rounded border border-white/10 bg-black/30 px-1.5 font-mono text-[10px] opacity-70">D</kbd></button>
+      <div
+        class="w-[max-content] p-2 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100"
+      >
+        <div
+          role="menu"
+          class="min-w-[200px] scale-95 rounded-lg border border-white/10 bg-[#26272b] p-1 text-zinc-300 shadow-2xl transition-all duration-150 group-[&[enabled]]:scale-100"
+        >
+          <button
+            type="button"
+            role="menuitem"
+            class="flex w-full cursor-pointer items-center justify-between rounded-md border-0 bg-transparent px-2.5 py-1.5 text-left transition-colors hover:bg-primary-500 hover:text-white"
+          >
+            Open
+            <kbd
+              class="rounded border border-white/10 bg-black/30 px-1.5 font-mono text-[10px] opacity-70"
+            >
+              O
+            </kbd>
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            class="flex w-full cursor-pointer items-center justify-between rounded-md border-0 bg-transparent px-2.5 py-1.5 text-left transition-colors hover:bg-primary-500 hover:text-white"
+          >
+            Duplicate
+            <kbd
+              class="rounded border border-white/10 bg-black/30 px-1.5 font-mono text-[10px] opacity-70"
+            >
+              D
+            </kbd>
+          </button>
           <div role="separator" class="mx-2 my-1 border-t border-white/10"></div>
-          <button type="button" role="menuitem" class="flex w-full cursor-pointer items-center justify-between rounded-md border-0 bg-transparent px-2.5 py-1.5 text-left text-red-300 transition-colors hover:bg-red-500/20">Delete <kbd class="rounded border border-red-400/20 bg-red-500/10 px-1.5 font-mono text-[10px]">⌫</kbd></button>
+          <button
+            type="button"
+            role="menuitem"
+            class="flex w-full cursor-pointer items-center justify-between rounded-md border-0 bg-transparent px-2.5 py-1.5 text-left text-red-300 transition-colors hover:bg-red-500/20"
+          >
+            Delete
+            <kbd
+              class="rounded border border-red-400/20 bg-red-500/10 px-1.5 font-mono text-[10px]"
+            >
+              ⌫
+            </kbd>
+          </button>
         </div>
       </div>
     </a-popover>
   </a-popover-trigger>
   <a-popover-trigger class="relative z-10 inline-block">
-    <button slot="trigger" type="button" aria-describedby="wb-tip" class="flex size-7 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 font-semibold text-zinc-400 transition-colors hover:text-zinc-100">?</button>
+    <button
+      slot="trigger"
+      type="button"
+      aria-describedby="wb-tip"
+      class="flex size-7 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 font-semibold text-zinc-400 transition-colors hover:text-zinc-100"
+    >
+      ?
+    </button>
     <a-tooltip class="group">
-      <div class="pointer-events-auto w-[max-content] max-w-[240px] p-2 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100">
-        <p id="wb-tip" class="m-0 rounded-md border border-white/10 bg-black px-2.5 py-1.5 text-[11px] leading-5 text-zinc-200 shadow-xl">Stride must be a multiple of 16 bytes for GPU upload.</p>
+      <div
+        class="pointer-events-auto w-[max-content] max-w-[240px] p-2 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100"
+      >
+        <p
+          id="wb-tip"
+          class="m-0 rounded-md border border-white/10 bg-black px-2.5 py-1.5 text-[11px] leading-5 text-zinc-200 shadow-xl"
+        >
+          Stride must be a multiple of 16 bytes for GPU upload.
+        </p>
       </div>
     </a-tooltip>
   </a-popover-trigger>
   <a-popover-trigger class="relative z-10 block w-full max-w-xs">
-    <div slot="trigger" role="button" tabindex="0" class="cursor-pointer rounded-md border border-white/10 bg-[#1c1d20] px-2.5 py-2 transition-colors hover:border-primary-400/50">
-      <strong class="font-mono text-[11px] font-medium text-zinc-200">chess-rook.cheetmesh</strong>
+    <div
+      slot="trigger"
+      role="button"
+      tabindex="0"
+      class="cursor-pointer rounded-md border border-white/10 bg-[#1c1d20] px-2.5 py-2 transition-colors hover:border-primary-400/50"
+    >
+      <strong class="font-mono text-[11px] font-medium text-zinc-200"
+        >chess-rook.cheetmesh</strong
+      >
       <span class="block text-[11px] text-zinc-500">Click for row actions · 96 KiB</span>
     </div>
     <a-popover class="group">
-      <div class="w-[max-content] p-2 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100">
-        <div role="menu" aria-label="Row actions" class="min-w-[180px] scale-95 rounded-lg border border-white/10 bg-[#26272b] p-1 shadow-2xl transition-all duration-150 group-[&[enabled]]:scale-100">
-          <button type="button" role="menuitem" class="block w-full cursor-pointer rounded-md border-0 bg-transparent px-2.5 py-1.5 text-left text-zinc-300 transition-colors hover:bg-primary-500 hover:text-white">Frame asset</button>
-          <button type="button" role="menuitem" class="block w-full cursor-pointer rounded-md border-0 bg-transparent px-2.5 py-1.5 text-left text-zinc-300 transition-colors hover:bg-primary-500 hover:text-white">Copy path</button>
+      <div
+        class="w-[max-content] p-2 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100"
+      >
+        <div
+          role="menu"
+          aria-label="Row actions"
+          class="min-w-[180px] scale-95 rounded-lg border border-white/10 bg-[#26272b] p-1 shadow-2xl transition-all duration-150 group-[&[enabled]]:scale-100"
+        >
+          <button
+            type="button"
+            role="menuitem"
+            class="block w-full cursor-pointer rounded-md border-0 bg-transparent px-2.5 py-1.5 text-left text-zinc-300 transition-colors hover:bg-primary-500 hover:text-white"
+          >
+            Frame asset
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            class="block w-full cursor-pointer rounded-md border-0 bg-transparent px-2.5 py-1.5 text-left text-zinc-300 transition-colors hover:bg-primary-500 hover:text-white"
+          >
+            Copy path
+          </button>
         </div>
       </div>
     </a-popover>

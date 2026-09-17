@@ -5,7 +5,7 @@
  * into a generic admin UI.
  */
 import basicsDashboardHtml from "../../../packages/kits/src/basics/index.html?raw";
-import { kitPreviewDocument } from "./kit-preview-doc";
+import { kitPreviewDocument } from "./kit-preview-doc.js";
 
 export interface Props {
   kit?: string;
@@ -19,8 +19,9 @@ const dashboardFiles = import.meta.glob("../../../packages/kits/src/*/index.html
 }) as Record<string, string>;
 
 const dashboardHtml =
-  Object.entries(dashboardFiles).find(([path]) => path.includes(`/kits/src/${kit}/`))?.[1] ??
-  basicsDashboardHtml;
+  Object.entries(dashboardFiles).find(([path]) =>
+    path.includes(`/kits/src/${kit}/`),
+  )?.[1] ?? basicsDashboardHtml;
 
 const base = import.meta.env.BASE_URL;
 const body = dashboardHtml.match(/<body[^>]*>([\s\S]*)<\/body>/i)?.[1] ?? dashboardHtml;

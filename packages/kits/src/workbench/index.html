@@ -96,33 +96,123 @@
   </head>
   <body class="bg-background text-[12px] text-zinc-300 antialiased">
     <svg aria-hidden="true" style="display: none">
-      <symbol id="kit-icon-search" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.3639 5.1998C7.97826 5.1998 5.2457 7.9151 5.2457 11.2498C5.2457 14.5845 7.97826 17.2998 11.3639 17.2998C14.7495 17.2998 17.4821 14.5845 17.4821 11.2498C17.4821 7.9151 14.7495 5.1998 11.3639 5.1998ZM3.8457 11.2498C3.8457 7.12867 7.21836 3.7998 11.3639 3.7998C15.5094 3.7998 18.8821 7.12867 18.8821 11.2498C18.8821 13.248 18.0892 15.0599 16.7998 16.3964L20.1897 19.7523C20.4644 20.0243 20.4667 20.4675 20.1947 20.7423C19.9227 21.017 19.4795 21.0193 19.2047 20.7473L15.7347 17.3119C14.5022 18.1859 12.9927 18.6998 11.3639 18.6998C7.21836 18.6998 3.8457 15.3709 3.8457 11.2498Z" fill="currentColor" /></symbol>
-      <symbol id="kit-icon-chevron-down" viewBox="0 0 24 24"><path d="M17.5761 8.57613C17.8104 8.34181 18.1895 8.34181 18.4238 8.57613C18.6581 8.81044 18.6581 9.18947 18.4238 9.42378L12.4238 15.4238L12 15.8486L11.5761 15.4238L5.57613 9.42378C5.34181 9.18947 5.34181 8.81044 5.57613 8.57613C5.81044 8.34181 6.18947 8.34181 6.42378 8.57613L12 14.1523L17.5761 8.57613Z" fill="currentColor" /></symbol>
-      <symbol id="kit-icon-check" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.6874 5.51175C19.9845 5.75916 20.0247 6.20055 19.7773 6.49761L10.3229 17.8491L4.37824 13.2011C4.07368 12.9629 4.01983 12.523 4.25796 12.2185C4.49609 11.9139 4.93602 11.8601 5.24057 12.0982L10.1159 15.9101L18.7015 5.60164C18.9489 5.30458 19.3903 5.26434 19.6874 5.51175Z" fill="currentColor" /></symbol>
+      <symbol id="kit-icon-search" viewBox="0 0 24 24">
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M11.3639 5.1998C7.97826 5.1998 5.2457 7.9151 5.2457 11.2498C5.2457 14.5845 7.97826 17.2998 11.3639 17.2998C14.7495 17.2998 17.4821 14.5845 17.4821 11.2498C17.4821 7.9151 14.7495 5.1998 11.3639 5.1998ZM3.8457 11.2498C3.8457 7.12867 7.21836 3.7998 11.3639 3.7998C15.5094 3.7998 18.8821 7.12867 18.8821 11.2498C18.8821 13.248 18.0892 15.0599 16.7998 16.3964L20.1897 19.7523C20.4644 20.0243 20.4667 20.4675 20.1947 20.7423C19.9227 21.017 19.4795 21.0193 19.2047 20.7473L15.7347 17.3119C14.5022 18.1859 12.9927 18.6998 11.3639 18.6998C7.21836 18.6998 3.8457 15.3709 3.8457 11.2498Z"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol id="kit-icon-chevron-down" viewBox="0 0 24 24">
+        <path
+          d="M17.5761 8.57613C17.8104 8.34181 18.1895 8.34181 18.4238 8.57613C18.6581 8.81044 18.6581 9.18947 18.4238 9.42378L12.4238 15.4238L12 15.8486L11.5761 15.4238L5.57613 9.42378C5.34181 9.18947 5.34181 8.81044 5.57613 8.57613C5.81044 8.34181 6.18947 8.34181 6.42378 8.57613L12 14.1523L17.5761 8.57613Z"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol id="kit-icon-check" viewBox="0 0 24 24">
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M19.6874 5.51175C19.9845 5.75916 20.0247 6.20055 19.7773 6.49761L10.3229 17.8491L4.37824 13.2011C4.07368 12.9629 4.01983 12.523 4.25796 12.2185C4.49609 11.9139 4.93602 11.8601 5.24057 12.0982L10.1159 15.9101L18.7015 5.60164C18.9489 5.30458 19.3903 5.26434 19.6874 5.51175Z"
+          fill="currentColor"
+        />
+      </symbol>
     </svg>
 
     <div class="flex h-screen flex-col overflow-hidden">
       <!-- Top header: brand + file actions + viewport toggle pills + view actions.
         Single scrollable row — never wraps to a second line. -->
-      <header class="flex items-center gap-1.5 overflow-x-auto border-b border-white/10 bg-[#1c1d20] px-2 py-1.5 [&>*]:shrink-0">
-        <span class="px-1.5 text-[11px] font-bold tracking-wide"><span class="text-accent-400">CHEET</span> <span class="font-medium text-zinc-400">Asset Preview</span></span>
-        <button type="button" class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-medium text-zinc-200 transition-colors hover:border-white/20 hover:bg-white/10">Open mesh…</button>
-        <button type="button" class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border-0 bg-primary-500 px-2.5 py-1 font-medium text-white transition-colors hover:bg-primary-400 active:bg-primary-600">Export</button>
+      <header
+        class="flex items-center gap-1.5 overflow-x-auto border-b border-white/10 bg-[#1c1d20] px-2 py-1.5 [&>*]:shrink-0"
+      >
+        <span class="px-1.5 text-[11px] font-bold tracking-wide"
+          ><span class="text-accent-400">CHEET</span>
+          <span class="font-medium text-zinc-400">Asset Preview</span></span
+        >
+        <button
+          type="button"
+          class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-medium text-zinc-200 transition-colors hover:border-white/20 hover:bg-white/10"
+        >
+          Open mesh…
+        </button>
+        <button
+          type="button"
+          class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border-0 bg-primary-500 px-2.5 py-1 font-medium text-white transition-colors hover:bg-primary-400 active:bg-primary-600"
+        >
+          Export
+        </button>
         <span class="mx-1 h-4 w-px bg-white/10" aria-hidden="true"></span>
         <div class="flex items-center gap-1" role="group" aria-label="Viewport passes">
-          <button type="button" aria-pressed="true" class="cursor-pointer rounded-md border-0 bg-primary-500 px-2 py-1 font-medium text-white">Wind</button>
-          <button type="button" aria-pressed="true" class="cursor-pointer rounded-md border-0 bg-primary-500 px-2 py-1 font-medium text-white">Bloom</button>
-          <button type="button" aria-pressed="true" class="cursor-pointer rounded-md border-0 bg-primary-500 px-2 py-1 font-medium text-white">Occlusion</button>
-          <button type="button" aria-pressed="false" class="cursor-pointer rounded-md border border-white/10 bg-white/5 px-2 py-1 font-medium text-zinc-400 hover:text-zinc-200">Height fog</button>
-          <button type="button" aria-pressed="true" class="cursor-pointer rounded-md border-0 bg-primary-500 px-2 py-1 font-medium text-white">Local lights</button>
-          <button type="button" aria-pressed="false" class="cursor-pointer rounded-md border border-white/10 bg-white/5 px-2 py-1 font-medium text-zinc-400 hover:text-zinc-200">Bounce fill</button>
-          <button type="button" aria-pressed="true" class="cursor-pointer rounded-md border-0 bg-primary-500 px-2 py-1 font-medium text-white">Ground</button>
+          <button
+            type="button"
+            aria-pressed="true"
+            class="cursor-pointer rounded-md border-0 bg-primary-500 px-2 py-1 font-medium text-white"
+          >
+            Wind
+          </button>
+          <button
+            type="button"
+            aria-pressed="true"
+            class="cursor-pointer rounded-md border-0 bg-primary-500 px-2 py-1 font-medium text-white"
+          >
+            Bloom
+          </button>
+          <button
+            type="button"
+            aria-pressed="true"
+            class="cursor-pointer rounded-md border-0 bg-primary-500 px-2 py-1 font-medium text-white"
+          >
+            Occlusion
+          </button>
+          <button
+            type="button"
+            aria-pressed="false"
+            class="cursor-pointer rounded-md border border-white/10 bg-white/5 px-2 py-1 font-medium text-zinc-400 hover:text-zinc-200"
+          >
+            Height fog
+          </button>
+          <button
+            type="button"
+            aria-pressed="true"
+            class="cursor-pointer rounded-md border-0 bg-primary-500 px-2 py-1 font-medium text-white"
+          >
+            Local lights
+          </button>
+          <button
+            type="button"
+            aria-pressed="false"
+            class="cursor-pointer rounded-md border border-white/10 bg-white/5 px-2 py-1 font-medium text-zinc-400 hover:text-zinc-200"
+          >
+            Bounce fill
+          </button>
+          <button
+            type="button"
+            aria-pressed="true"
+            class="cursor-pointer rounded-md border-0 bg-primary-500 px-2 py-1 font-medium text-white"
+          >
+            Ground
+          </button>
         </div>
         <span class="mx-1 h-4 w-px bg-white/10" aria-hidden="true"></span>
-        <button type="button" class="cursor-pointer rounded-md border border-white/10 bg-white/5 px-2 py-1 font-medium text-zinc-300 hover:bg-white/10">Frame asset</button>
-        <button type="button" class="cursor-pointer rounded-md border-0 bg-transparent px-2 py-1 font-medium text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-100">Reset settings</button>
-        <span class="ml-auto hidden font-mono text-[11px] text-zinc-500 xl:block">animated-hatch.cheetmesh</span>
-        <span class="hidden text-[11px] text-zinc-600 xl:block">Drag to orbit · Scroll to zoom</span>
+        <button
+          type="button"
+          class="cursor-pointer rounded-md border border-white/10 bg-white/5 px-2 py-1 font-medium text-zinc-300 hover:bg-white/10"
+        >
+          Frame asset
+        </button>
+        <button
+          type="button"
+          class="cursor-pointer rounded-md border-0 bg-transparent px-2 py-1 font-medium text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-100"
+        >
+          Reset settings
+        </button>
+        <span class="ml-auto hidden font-mono text-[11px] text-zinc-500 xl:block"
+          >animated-hatch.cheetmesh</span
+        >
+        <span class="hidden text-[11px] text-zinc-600 xl:block"
+          >Drag to orbit · Scroll to zoom</span
+        >
       </header>
 
       <!-- Workstation: three resizable columns in a panel layout.
@@ -133,41 +223,119 @@
           <a-panel-group>
             <a-panel>
               <div class="flex h-full flex-col bg-[#1c1d20]">
-                <div class="flex items-center gap-2 border-b border-white/10 px-2.5 py-1.5">
-                  <span class="text-[11px] font-semibold tracking-wide text-zinc-500 uppercase">Assets</span>
+                <div
+                  class="flex items-center gap-2 border-b border-white/10 px-2.5 py-1.5"
+                >
+                  <span
+                    class="text-[11px] font-semibold tracking-wide text-zinc-500 uppercase"
+                    >Assets</span
+                  >
                   <span class="ml-auto font-mono text-[11px] text-zinc-500">36/36</span>
                 </div>
                 <div class="p-2">
                   <label class="relative block">
                     <span class="sr-only">Filter assets</span>
-                    <svg class="pointer-events-none absolute top-1/2 left-2 size-3.5 -translate-y-1/2 text-zinc-500" aria-hidden="true"><use href="#kit-icon-search"></use></svg>
-                    <input type="search" placeholder="Name filter…" class="block w-full rounded-md border border-white/10 bg-[#141518] py-1.5 pr-2 pl-7 text-zinc-200 placeholder:text-zinc-500 focus:border-primary-400 focus:outline-none" />
+                    <svg
+                      class="pointer-events-none absolute top-1/2 left-2 size-3.5 -translate-y-1/2 text-zinc-500"
+                      aria-hidden="true"
+                    >
+                      <use href="#kit-icon-search"></use>
+                    </svg>
+                    <input
+                      type="search"
+                      placeholder="Name filter…"
+                      class="block w-full rounded-md border border-white/10 bg-[#141518] py-1.5 pr-2 pl-7 text-zinc-200 placeholder:text-zinc-500 focus:border-primary-400 focus:outline-none"
+                    />
                   </label>
                 </div>
-                <a-list class="grid min-h-0 flex-1 grid-cols-2 content-start gap-1.5 overflow-y-auto p-2 pt-0" aria-label="Assets">
-                  <a-list-item selected class="cursor-pointer overflow-hidden rounded-md border border-primary-400 bg-[#141518]">
-                    <span class="flex aspect-square items-center justify-center bg-gradient-to-br from-amber-500/40 to-amber-900/40 text-lg" role="img" aria-label="animated hatch">▣</span>
-                    <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-200">animated-hatch…</span>
+                <a-list
+                  class="grid min-h-0 flex-1 grid-cols-2 content-start gap-1.5 overflow-y-auto p-2 pt-0"
+                  aria-label="Assets"
+                >
+                  <a-list-item
+                    selected
+                    class="cursor-pointer overflow-hidden rounded-md border border-primary-400 bg-[#141518]"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-amber-500/40 to-amber-900/40 text-lg"
+                      role="img"
+                      aria-label="animated hatch"
+                      >▣</span
+                    >
+                    <span
+                      class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-200"
+                      >animated-hatch…</span
+                    >
                   </a-list-item>
-                  <a-list-item class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25">
-                    <span class="flex aspect-square items-center justify-center bg-gradient-to-br from-orange-900/60 to-stone-800 text-lg text-orange-200/60" role="img" aria-label="cargo crate">▦</span>
-                    <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400">cargo-crate…</span>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-orange-900/60 to-stone-800 text-lg text-orange-200/60"
+                      role="img"
+                      aria-label="cargo crate"
+                      >▦</span
+                    >
+                    <span
+                      class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400"
+                      >cargo-crate…</span
+                    >
                   </a-list-item>
-                  <a-list-item class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25">
-                    <span class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-600 to-zinc-800 text-lg text-zinc-400" role="img" aria-label="chess bishop">♝</span>
-                    <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400">chess-bishop…</span>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-600 to-zinc-800 text-lg text-zinc-400"
+                      role="img"
+                      aria-label="chess bishop"
+                      >♝</span
+                    >
+                    <span
+                      class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400"
+                      >chess-bishop…</span
+                    >
                   </a-list-item>
-                  <a-list-item class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25">
-                    <span class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-500 to-zinc-700 text-lg text-zinc-300" role="img" aria-label="chess frame">⬢</span>
-                    <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400">chess-frame…</span>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-500 to-zinc-700 text-lg text-zinc-300"
+                      role="img"
+                      aria-label="chess frame"
+                      >⬢</span
+                    >
+                    <span
+                      class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400"
+                      >chess-frame…</span
+                    >
                   </a-list-item>
-                  <a-list-item class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25">
-                    <span class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-600 to-zinc-800 text-lg text-zinc-400" role="img" aria-label="chess king">♚</span>
-                    <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400">chess-king…</span>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-600 to-zinc-800 text-lg text-zinc-400"
+                      role="img"
+                      aria-label="chess king"
+                      >♚</span
+                    >
+                    <span
+                      class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400"
+                      >chess-king…</span
+                    >
                   </a-list-item>
-                  <a-list-item class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25">
-                    <span class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-600 to-zinc-800 text-lg text-zinc-400" role="img" aria-label="chess knight">♞</span>
-                    <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400">chess-knight…</span>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-600 to-zinc-800 text-lg text-zinc-400"
+                      role="img"
+                      aria-label="chess knight"
+                      >♞</span
+                    >
+                    <span
+                      class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400"
+                      >chess-knight…</span
+                    >
                   </a-list-item>
                 </a-list>
               </div>
@@ -181,18 +349,52 @@
               <div tab="Viewport" class="bg-[#101113]">
                 <div class="flex h-full flex-col">
                   <div class="flex min-h-0 flex-1 items-center justify-center">
-                    <p class="m-0 p-3 font-mono text-[11px] text-zinc-600">Viewport output goes here. Drag a tab to dock or split it into a new panel.</p>
+                    <p class="m-0 p-3 font-mono text-[11px] text-zinc-600">
+                      Viewport output goes here. Drag a tab to dock or split it into a new
+                      panel.
+                    </p>
                   </div>
                   <div class="border-t border-white/10 bg-[#1c1d20] px-2 pt-1.5 pb-2">
                     <div class="flex items-center gap-1.5">
-                      <span class="text-[11px] font-semibold tracking-wide text-zinc-500 uppercase">Timeline</span>
-                      <button type="button" class="cursor-pointer rounded border border-white/10 bg-white/5 px-2 py-0.5 font-medium text-zinc-200 hover:bg-white/10">Pause</button>
-                      <button type="button" class="cursor-pointer rounded border border-white/10 bg-white/5 px-2 py-0.5 font-medium text-zinc-200 hover:bg-white/10">Restart</button>
+                      <span
+                        class="text-[11px] font-semibold tracking-wide text-zinc-500 uppercase"
+                        >Timeline</span
+                      >
+                      <button
+                        type="button"
+                        class="cursor-pointer rounded border border-white/10 bg-white/5 px-2 py-0.5 font-medium text-zinc-200 hover:bg-white/10"
+                      >
+                        Pause
+                      </button>
+                      <button
+                        type="button"
+                        class="cursor-pointer rounded border border-white/10 bg-white/5 px-2 py-0.5 font-medium text-zinc-200 hover:bg-white/10"
+                      >
+                        Restart
+                      </button>
                     </div>
-                    <div class="mt-1.5 flex items-center gap-1" data-drag-number data-min="0" data-max="16" data-step="0.01" data-precision="2" data-value="9.02">
-                      <span class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white">Time</span>
-                      <span class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400">
-                        <input type="number" value="9.02" aria-label="Time" class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none" />
+                    <div
+                      class="mt-1.5 flex items-center gap-1"
+                      data-drag-number
+                      data-min="0"
+                      data-max="16"
+                      data-step="0.01"
+                      data-precision="2"
+                      data-value="9.02"
+                    >
+                      <span
+                        class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white"
+                        >Time</span
+                      >
+                      <span
+                        class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"
+                      >
+                        <input
+                          type="number"
+                          value="9.02"
+                          aria-label="Time"
+                          class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none"
+                        />
                         <span class="font-mono text-[11px] text-zinc-500">s</span>
                       </span>
                     </div>
@@ -201,33 +403,90 @@
               </div>
               <div tab="Training" class="overflow-y-auto bg-[#1c1d20] p-2">
                 <table class="w-full border-collapse rounded-md text-left">
-                  <caption class="px-1 py-1.5 text-left text-[11px] font-medium tracking-wide text-zinc-500 uppercase">Depot assets — 36 in cheet</caption>
+                  <caption
+                    class="px-1 py-1.5 text-left text-[11px] font-medium tracking-wide text-zinc-500 uppercase"
+                  >
+                    Depot assets — 36 in cheet
+                  </caption>
                   <thead>
                     <tr class="border-y border-white/10 bg-[#141518]">
-                      <th scope="col" class="px-2 py-1.5 font-semibold text-zinc-400">Asset</th>
-                      <th scope="col" class="px-2 py-1.5 font-semibold text-zinc-400">Verts</th>
-                      <th scope="col" class="px-2 py-1.5 font-semibold text-zinc-400">Draws</th>
-                      <th scope="col" class="px-2 py-1.5 text-right font-semibold text-zinc-400">Size</th>
+                      <th scope="col" class="px-2 py-1.5 font-semibold text-zinc-400">
+                        Asset
+                      </th>
+                      <th scope="col" class="px-2 py-1.5 font-semibold text-zinc-400">
+                        Verts
+                      </th>
+                      <th scope="col" class="px-2 py-1.5 font-semibold text-zinc-400">
+                        Draws
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-2 py-1.5 text-right font-semibold text-zinc-400"
+                      >
+                        Size
+                      </th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-white/5">
                     <tr class="bg-primary-500/25">
-                      <td class="px-2 py-1.5 font-mono text-[11px] text-zinc-100">animated-hatch</td>
-                      <td class="px-2 py-1.5 font-mono text-[11px] tabular-nums text-zinc-300">1,296</td>
-                      <td class="px-2 py-1.5 font-mono text-[11px] tabular-nums text-zinc-300">3</td>
-                      <td class="px-2 py-1.5 text-right font-mono text-[11px] tabular-nums text-zinc-300">303.3 KiB</td>
+                      <td class="px-2 py-1.5 font-mono text-[11px] text-zinc-100">
+                        animated-hatch
+                      </td>
+                      <td
+                        class="px-2 py-1.5 font-mono text-[11px] tabular-nums text-zinc-300"
+                      >
+                        1,296
+                      </td>
+                      <td
+                        class="px-2 py-1.5 font-mono text-[11px] tabular-nums text-zinc-300"
+                      >
+                        3
+                      </td>
+                      <td
+                        class="px-2 py-1.5 text-right font-mono text-[11px] tabular-nums text-zinc-300"
+                      >
+                        303.3 KiB
+                      </td>
                     </tr>
                     <tr>
-                      <td class="px-2 py-1.5 font-mono text-[11px] text-zinc-300">cargo-crate</td>
-                      <td class="px-2 py-1.5 font-mono text-[11px] tabular-nums text-zinc-400">2,048</td>
-                      <td class="px-2 py-1.5 font-mono text-[11px] tabular-nums text-zinc-400">2</td>
-                      <td class="px-2 py-1.5 text-right font-mono text-[11px] tabular-nums text-zinc-400">184.1 KiB</td>
+                      <td class="px-2 py-1.5 font-mono text-[11px] text-zinc-300">
+                        cargo-crate
+                      </td>
+                      <td
+                        class="px-2 py-1.5 font-mono text-[11px] tabular-nums text-zinc-400"
+                      >
+                        2,048
+                      </td>
+                      <td
+                        class="px-2 py-1.5 font-mono text-[11px] tabular-nums text-zinc-400"
+                      >
+                        2
+                      </td>
+                      <td
+                        class="px-2 py-1.5 text-right font-mono text-[11px] tabular-nums text-zinc-400"
+                      >
+                        184.1 KiB
+                      </td>
                     </tr>
                     <tr>
-                      <td class="px-2 py-1.5 font-mono text-[11px] text-zinc-300">chess-rook</td>
-                      <td class="px-2 py-1.5 font-mono text-[11px] tabular-nums text-zinc-400">864</td>
-                      <td class="px-2 py-1.5 font-mono text-[11px] tabular-nums text-zinc-400">1</td>
-                      <td class="px-2 py-1.5 text-right font-mono text-[11px] tabular-nums text-zinc-400">96.0 KiB</td>
+                      <td class="px-2 py-1.5 font-mono text-[11px] text-zinc-300">
+                        chess-rook
+                      </td>
+                      <td
+                        class="px-2 py-1.5 font-mono text-[11px] tabular-nums text-zinc-400"
+                      >
+                        864
+                      </td>
+                      <td
+                        class="px-2 py-1.5 font-mono text-[11px] tabular-nums text-zinc-400"
+                      >
+                        1
+                      </td>
+                      <td
+                        class="px-2 py-1.5 text-right font-mono text-[11px] tabular-nums text-zinc-400"
+                      >
+                        96.0 KiB
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -240,94 +499,389 @@
             <a-panel>
               <div class="h-full overflow-y-auto bg-[#1c1d20]">
                 <div class="flex items-center gap-2 border-b border-white/10 px-3 py-1.5">
-                  <span class="text-[11px] font-semibold tracking-wide text-zinc-500 uppercase">Inspector</span>
+                  <span
+                    class="text-[11px] font-semibold tracking-wide text-zinc-500 uppercase"
+                    >Inspector</span
+                  >
                 </div>
                 <a-expandable opened class="block border-b border-white/10">
-                  <button slot="toggle" type="button" class="flex w-full cursor-pointer items-center gap-1.5 px-3 py-2 text-left font-medium text-zinc-200 hover:bg-white/5">
-                    <svg class="size-3 text-zinc-500" aria-hidden="true"><use href="#kit-icon-chevron-down"></use></svg>
+                  <button
+                    slot="toggle"
+                    type="button"
+                    class="flex w-full cursor-pointer items-center gap-1.5 px-3 py-2 text-left font-medium text-zinc-200 hover:bg-white/5"
+                  >
+                    <svg class="size-3 text-zinc-500" aria-hidden="true">
+                      <use href="#kit-icon-chevron-down"></use>
+                    </svg>
                     Asset
                   </button>
                   <dl class="grid grid-cols-[110px_1fr] gap-y-1 px-3 pb-3">
-                    <dt class="text-zinc-500">Version</dt><dd class="m-0 text-right font-mono text-[11px] text-zinc-200">v2 · model v2</dd>
-                    <dt class="text-zinc-500">Nodes</dt><dd class="m-0 text-right font-mono text-[11px] text-zinc-200">10</dd>
-                    <dt class="text-zinc-500">Clips</dt><dd class="m-0 text-right font-mono text-[11px] text-zinc-200">2</dd>
-                    <dt class="text-zinc-500">Vertices</dt><dd class="m-0 text-right font-mono text-[11px] text-zinc-200">1,296</dd>
-                    <dt class="text-zinc-500">Triangles</dt><dd class="m-0 text-right font-mono text-[11px] text-zinc-200">648</dd>
-                    <dt class="text-zinc-500">Payload</dt><dd class="m-0 text-right font-mono text-[11px] text-zinc-200">303.3 KiB</dd>
+                    <dt class="text-zinc-500">Version</dt>
+                    <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">
+                      v2 · model v2
+                    </dd>
+                    <dt class="text-zinc-500">Nodes</dt>
+                    <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">10</dd>
+                    <dt class="text-zinc-500">Clips</dt>
+                    <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">2</dd>
+                    <dt class="text-zinc-500">Vertices</dt>
+                    <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">
+                      1,296
+                    </dd>
+                    <dt class="text-zinc-500">Triangles</dt>
+                    <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">
+                      648
+                    </dd>
+                    <dt class="text-zinc-500">Payload</dt>
+                    <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">
+                      303.3 KiB
+                    </dd>
                   </dl>
                 </a-expandable>
                 <a-expandable opened class="block border-b border-white/10">
-                  <button slot="toggle" type="button" class="flex w-full cursor-pointer items-center gap-1.5 px-3 py-2 text-left font-medium text-zinc-200 hover:bg-white/5">
-                    <svg class="size-3 text-zinc-500" aria-hidden="true"><use href="#kit-icon-chevron-down"></use></svg>
-                    Materials<span class="ml-auto font-mono text-[11px] font-normal text-zinc-500">3</span>
+                  <button
+                    slot="toggle"
+                    type="button"
+                    class="flex w-full cursor-pointer items-center gap-1.5 px-3 py-2 text-left font-medium text-zinc-200 hover:bg-white/5"
+                  >
+                    <svg class="size-3 text-zinc-500" aria-hidden="true">
+                      <use href="#kit-icon-chevron-down"></use>
+                    </svg>
+                    Materials<span
+                      class="ml-auto font-mono text-[11px] font-normal text-zinc-500"
+                      >3</span
+                    >
                   </button>
                   <div class="grid gap-2 px-3 pb-3">
-                    <section class="rounded-md border border-white/10 bg-[#141518] p-2" aria-label="Material 0">
-                      <p class="mb-1.5 flex items-center gap-1.5 font-medium text-zinc-200"><span class="size-2 rounded-full bg-slate-400" aria-hidden="true"></span>Material 0 <span class="font-normal text-zinc-500">untextured</span></p>
+                    <section
+                      class="rounded-md border border-white/10 bg-[#141518] p-2"
+                      aria-label="Material 0"
+                    >
+                      <p
+                        class="mb-1.5 flex items-center gap-1.5 font-medium text-zinc-200"
+                      >
+                        <span
+                          class="size-2 rounded-full bg-slate-400"
+                          aria-hidden="true"
+                        ></span>Material 0 <span class="font-normal text-zinc-500"
+                          >untextured</span
+                        >
+                      </p>
                       <div class="grid gap-1">
-                        <div class="flex items-center gap-1"><span class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white">Base color</span><label class="flex min-w-0 flex-1 cursor-pointer items-center gap-1.5 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"><input type="color" value="#8fa3b8" aria-label="Material 0 base color" data-hex="wb-mat0-hex" class="wb-swatch h-4 w-8 shrink-0" /><span id="wb-mat0-hex" class="ml-auto font-mono text-[11px] text-zinc-200">#8FA3B8</span></label></div>
-                        <div class="flex items-center gap-1" data-drag-number data-min="0" data-max="1" data-step="0.01" data-precision="2" data-value="0.38"><span class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white">Roughness</span><span class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"><input type="number" value="0.38" aria-label="Material 0 roughness" class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none" /></span></div>
-                        <div class="flex items-center gap-1" data-drag-number data-min="0" data-max="1" data-step="0.01" data-precision="2" data-value="0.65"><span class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white">Metallic</span><span class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"><input type="number" value="0.65" aria-label="Material 0 metallic" class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none" /></span></div>
+                        <div class="flex items-center gap-1">
+                          <span
+                            class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white"
+                            >Base color</span
+                          >
+                          <label
+                            class="flex min-w-0 flex-1 cursor-pointer items-center gap-1.5 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"
+                          >
+                            <input
+                              type="color"
+                              value="#8fa3b8"
+                              aria-label="Material 0 base color"
+                              data-hex="wb-mat0-hex"
+                              class="wb-swatch h-4 w-8 shrink-0"
+                            />
+                            <span
+                              id="wb-mat0-hex"
+                              class="ml-auto font-mono text-[11px] text-zinc-200"
+                              >#8FA3B8</span
+                            >
+                          </label>
+                        </div>
+                        <div
+                          class="flex items-center gap-1"
+                          data-drag-number
+                          data-min="0"
+                          data-max="1"
+                          data-step="0.01"
+                          data-precision="2"
+                          data-value="0.38"
+                        >
+                          <span
+                            class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white"
+                            >Roughness</span
+                          >
+                          <span
+                            class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"
+                            ><input
+                              type="number"
+                              value="0.38"
+                              aria-label="Material 0 roughness"
+                              class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none"
+                            /></span
+                          >
+                        </div>
+                        <div
+                          class="flex items-center gap-1"
+                          data-drag-number
+                          data-min="0"
+                          data-max="1"
+                          data-step="0.01"
+                          data-precision="2"
+                          data-value="0.65"
+                        >
+                          <span
+                            class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white"
+                            >Metallic</span
+                          >
+                          <span
+                            class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"
+                            ><input
+                              type="number"
+                              value="0.65"
+                              aria-label="Material 0 metallic"
+                              class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none"
+                            /></span
+                          >
+                        </div>
                       </div>
                     </section>
-                    <section class="rounded-md border border-white/10 bg-[#141518] p-2" aria-label="Material 1">
-                      <p class="mb-1.5 flex items-center gap-1.5 font-medium text-zinc-200"><span class="size-2 rounded-full bg-accent-400" aria-hidden="true"></span>Material 1 <span class="font-normal text-zinc-500">untextured</span></p>
+                    <section
+                      class="rounded-md border border-white/10 bg-[#141518] p-2"
+                      aria-label="Material 1"
+                    >
+                      <p
+                        class="mb-1.5 flex items-center gap-1.5 font-medium text-zinc-200"
+                      >
+                        <span
+                          class="size-2 rounded-full bg-accent-400"
+                          aria-hidden="true"
+                        ></span>Material 1 <span class="font-normal text-zinc-500"
+                          >untextured</span
+                        >
+                      </p>
                       <div class="grid gap-1">
-                        <div class="flex items-center gap-1"><span class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white">Base color</span><label class="flex min-w-0 flex-1 cursor-pointer items-center gap-1.5 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"><input type="color" value="#e8a33d" aria-label="Material 1 base color" data-hex="wb-mat1-hex" class="wb-swatch h-4 w-8 shrink-0" /><span id="wb-mat1-hex" class="ml-auto font-mono text-[11px] text-zinc-200">#E8A33D</span></label></div>
-                        <div class="flex items-center gap-1" data-drag-number data-min="0" data-max="1" data-step="0.01" data-precision="2" data-value="0.38"><span class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white">Roughness</span><span class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"><input type="number" value="0.38" aria-label="Material 1 roughness" class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none" /></span></div>
-                        <div class="flex items-center gap-1" data-drag-number data-min="0" data-max="1" data-step="0.01" data-precision="2" data-value="0.3"><span class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white">Metallic</span><span class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"><input type="number" value="0.30" aria-label="Material 1 metallic" class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none" /></span></div>
+                        <div class="flex items-center gap-1">
+                          <span
+                            class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white"
+                            >Base color</span
+                          >
+                          <label
+                            class="flex min-w-0 flex-1 cursor-pointer items-center gap-1.5 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"
+                          >
+                            <input
+                              type="color"
+                              value="#e8a33d"
+                              aria-label="Material 1 base color"
+                              data-hex="wb-mat1-hex"
+                              class="wb-swatch h-4 w-8 shrink-0"
+                            />
+                            <span
+                              id="wb-mat1-hex"
+                              class="ml-auto font-mono text-[11px] text-zinc-200"
+                              >#E8A33D</span
+                            >
+                          </label>
+                        </div>
+                        <div
+                          class="flex items-center gap-1"
+                          data-drag-number
+                          data-min="0"
+                          data-max="1"
+                          data-step="0.01"
+                          data-precision="2"
+                          data-value="0.38"
+                        >
+                          <span
+                            class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white"
+                            >Roughness</span
+                          >
+                          <span
+                            class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"
+                            ><input
+                              type="number"
+                              value="0.38"
+                              aria-label="Material 1 roughness"
+                              class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none"
+                            /></span
+                          >
+                        </div>
+                        <div
+                          class="flex items-center gap-1"
+                          data-drag-number
+                          data-min="0"
+                          data-max="1"
+                          data-step="0.01"
+                          data-precision="2"
+                          data-value="0.3"
+                        >
+                          <span
+                            class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white"
+                            >Metallic</span
+                          >
+                          <span
+                            class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"
+                            ><input
+                              type="number"
+                              value="0.30"
+                              aria-label="Material 1 metallic"
+                              class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none"
+                            /></span
+                          >
+                        </div>
                       </div>
                     </section>
-                    <div class="flex items-center gap-1 rounded-md border border-white/10 bg-[#141518] p-2" data-drag-number data-min="0" data-max="2" data-step="0.01" data-precision="2" data-value="1"><span class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white">Exposure</span><span class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"><input type="number" value="1.00" aria-label="Exposure" class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none" /></span></div>
+                    <div
+                      class="flex items-center gap-1 rounded-md border border-white/10 bg-[#141518] p-2"
+                      data-drag-number
+                      data-min="0"
+                      data-max="2"
+                      data-step="0.01"
+                      data-precision="2"
+                      data-value="1"
+                    >
+                      <span
+                        class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white"
+                        >Exposure</span
+                      >
+                      <span
+                        class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"
+                        ><input
+                          type="number"
+                          value="1.00"
+                          aria-label="Exposure"
+                          class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none"
+                        /></span
+                      >
+                    </div>
                   </div>
                 </a-expandable>
                 <a-expandable class="block border-b border-white/10">
-                  <button slot="toggle" type="button" class="flex w-full cursor-pointer items-center gap-1.5 px-3 py-2 text-left font-medium text-zinc-200 hover:bg-white/5">
-                    <svg class="size-3 -rotate-90 text-zinc-500" aria-hidden="true"><use href="#kit-icon-chevron-down"></use></svg>
-                    Textures<span class="ml-auto font-mono text-[11px] font-normal text-zinc-500">3</span>
+                  <button
+                    slot="toggle"
+                    type="button"
+                    class="flex w-full cursor-pointer items-center gap-1.5 px-3 py-2 text-left font-medium text-zinc-200 hover:bg-white/5"
+                  >
+                    <svg class="size-3 -rotate-90 text-zinc-500" aria-hidden="true">
+                      <use href="#kit-icon-chevron-down"></use>
+                    </svg>
+                    Textures<span
+                      class="ml-auto font-mono text-[11px] font-normal text-zinc-500"
+                      >3</span
+                    >
                   </button>
                   <div class="px-3 pb-3">
                     <a-list class="grid grid-cols-3 gap-1.5" aria-label="Texture sets">
-                      <a-list-item class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25">
-                        <span class="flex aspect-square items-center justify-center bg-gradient-to-br from-amber-500/40 to-amber-900/40 text-lg" aria-hidden="true">▣</span>
-                        <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400">hatch-albedo…</span>
+                      <a-list-item
+                        class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                      >
+                        <span
+                          class="flex aspect-square items-center justify-center bg-gradient-to-br from-amber-500/40 to-amber-900/40 text-lg"
+                          aria-hidden="true"
+                          >▣</span
+                        >
+                        <span
+                          class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400"
+                          >hatch-albedo…</span
+                        >
                       </a-list-item>
-                      <a-list-item class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25">
-                        <span class="flex aspect-square items-center justify-center bg-gradient-to-br from-sky-900/60 to-slate-800 text-lg text-sky-200/60" aria-hidden="true">▦</span>
-                        <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400">hatch-normal…</span>
+                      <a-list-item
+                        class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                      >
+                        <span
+                          class="flex aspect-square items-center justify-center bg-gradient-to-br from-sky-900/60 to-slate-800 text-lg text-sky-200/60"
+                          aria-hidden="true"
+                          >▦</span
+                        >
+                        <span
+                          class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400"
+                          >hatch-normal…</span
+                        >
                       </a-list-item>
-                      <a-list-item class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25">
-                        <span class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-600 to-zinc-800 text-lg text-zinc-400" aria-hidden="true">⬢</span>
-                        <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400">hatch-rough…</span>
+                      <a-list-item
+                        class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                      >
+                        <span
+                          class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-600 to-zinc-800 text-lg text-zinc-400"
+                          aria-hidden="true"
+                          >⬢</span
+                        >
+                        <span
+                          class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400"
+                          >hatch-rough…</span
+                        >
                       </a-list-item>
                     </a-list>
                   </div>
                 </a-expandable>
                 <a-expandable class="block">
-                  <button slot="toggle" type="button" class="flex w-full cursor-pointer items-center gap-1.5 px-3 py-2 text-left font-medium text-zinc-200 hover:bg-white/5">
-                    <svg class="size-3 -rotate-90 text-zinc-500" aria-hidden="true"><use href="#kit-icon-chevron-down"></use></svg>
+                  <button
+                    slot="toggle"
+                    type="button"
+                    class="flex w-full cursor-pointer items-center gap-1.5 px-3 py-2 text-left font-medium text-zinc-200 hover:bg-white/5"
+                  >
+                    <svg class="size-3 -rotate-90 text-zinc-500" aria-hidden="true">
+                      <use href="#kit-icon-chevron-down"></use>
+                    </svg>
                     Viewport
                   </button>
                   <div class="px-3 pb-3">
                     <label class="flex cursor-pointer items-center gap-3 py-1.5">
-                      <span class="text-zinc-200"><strong class="font-medium">Wind</strong><span class="block text-[11px] text-zinc-500">Vertex animation in preview.</span></span>
-                      <a-toggle name="wind" value="true" class="ml-auto inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full bg-white/10 px-0.5 transition-colors [&[value='true']]:bg-primary-500">
-                        <span slot="true" class="block size-4 translate-x-4 rounded-full bg-white shadow transition-transform"></span>
-                        <span slot="false" class="block size-4 rounded-full bg-white shadow transition-transform"></span>
+                      <span class="text-zinc-200"
+                        ><strong class="font-medium">Wind</strong>
+                        <span class="block text-[11px] text-zinc-500"
+                          >Vertex animation in preview.</span
+                        ></span
+                      >
+                      <a-toggle
+                        name="wind"
+                        value="true"
+                        class="ml-auto inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full bg-white/10 px-0.5 transition-colors [&[value='true']]:bg-primary-500"
+                      >
+                        <span
+                          slot="true"
+                          class="block size-4 translate-x-4 rounded-full bg-white shadow transition-transform"
+                        ></span>
+                        <span
+                          slot="false"
+                          class="block size-4 rounded-full bg-white shadow transition-transform"
+                        ></span>
                       </a-toggle>
                     </label>
                     <label class="flex cursor-pointer items-center gap-3 py-1.5">
-                      <span class="text-zinc-200"><strong class="font-medium">Bloom</strong><span class="block text-[11px] text-zinc-500">HDR glow pass.</span></span>
-                      <a-toggle name="bloom" value="true" class="ml-auto inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full bg-white/10 px-0.5 transition-colors [&[value='true']]:bg-primary-500">
-                        <span slot="true" class="block size-4 translate-x-4 rounded-full bg-white shadow transition-transform"></span>
-                        <span slot="false" class="block size-4 rounded-full bg-white shadow transition-transform"></span>
+                      <span class="text-zinc-200"
+                        ><strong class="font-medium">Bloom</strong>
+                        <span class="block text-[11px] text-zinc-500"
+                          >HDR glow pass.</span
+                        ></span
+                      >
+                      <a-toggle
+                        name="bloom"
+                        value="true"
+                        class="ml-auto inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full bg-white/10 px-0.5 transition-colors [&[value='true']]:bg-primary-500"
+                      >
+                        <span
+                          slot="true"
+                          class="block size-4 translate-x-4 rounded-full bg-white shadow transition-transform"
+                        ></span>
+                        <span
+                          slot="false"
+                          class="block size-4 rounded-full bg-white shadow transition-transform"
+                        ></span>
                       </a-toggle>
                     </label>
                     <label class="flex cursor-pointer items-center gap-3 py-1.5">
-                      <span class="text-zinc-200"><strong class="font-medium">Ground</strong><span class="block text-[11px] text-zinc-500">Shadow catcher plane.</span></span>
-                      <a-toggle name="ground" value="true" class="ml-auto inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full bg-white/10 px-0.5 transition-colors [&[value='true']]:bg-primary-500">
-                        <span slot="true" class="block size-4 translate-x-4 rounded-full bg-white shadow transition-transform"></span>
-                        <span slot="false" class="block size-4 rounded-full bg-white shadow transition-transform"></span>
+                      <span class="text-zinc-200"
+                        ><strong class="font-medium">Ground</strong>
+                        <span class="block text-[11px] text-zinc-500"
+                          >Shadow catcher plane.</span
+                        ></span
+                      >
+                      <a-toggle
+                        name="ground"
+                        value="true"
+                        class="ml-auto inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full bg-white/10 px-0.5 transition-colors [&[value='true']]:bg-primary-500"
+                      >
+                        <span
+                          slot="true"
+                          class="block size-4 translate-x-4 rounded-full bg-white shadow transition-transform"
+                        ></span>
+                        <span
+                          slot="false"
+                          class="block size-4 rounded-full bg-white shadow transition-transform"
+                        ></span>
                       </a-toggle>
                     </label>
                   </div>
@@ -339,8 +893,15 @@
       </main>
 
       <!-- Status bar -->
-      <footer class="flex items-center gap-2 border-t border-white/10 bg-[#1c1d20] px-2 py-1 font-mono text-[11px] text-zinc-500">
-        <span class="inline-flex items-center gap-1 text-emerald-300/80"><svg class="size-3" aria-hidden="true"><use href="#kit-icon-check"></use></svg>Loaded animated-hatch.cheetmesh</span>
+      <footer
+        class="flex items-center gap-2 border-t border-white/10 bg-[#1c1d20] px-2 py-1 font-mono text-[11px] text-zinc-500"
+      >
+        <span class="inline-flex items-center gap-1 text-emerald-300/80"
+          ><svg class="size-3" aria-hidden="true">
+            <use href="#kit-icon-check"></use>
+          </svg>
+          Loaded animated-hatch.cheetmesh</span
+        >
         <span class="ml-auto">CHEET · WebGPU</span>
       </footer>
     </div>

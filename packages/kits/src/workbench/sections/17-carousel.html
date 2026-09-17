@@ -1,30 +1,107 @@
 <!-- requires: @atrium-ui/elements/track -->
 <!-- Built with Atrium UI — https://atrium-ui.dev/ -->
-<div class="w-full max-w-xl rounded-lg border border-white/10 bg-[#232428] p-3 text-[12px]">
+<div
+  class="w-full max-w-xl rounded-lg border border-white/10 bg-[#232428] p-3 text-[12px]"
+>
   <div class="mb-2 flex items-center gap-1.5 px-1">
-    <span class="text-[11px] font-semibold tracking-wide text-zinc-500 uppercase">Recently modified</span>
+    <span class="text-[11px] font-semibold tracking-wide text-zinc-500 uppercase"
+      >Recently modified</span
+    >
     <span class="ml-auto flex items-center gap-1">
-      <button type="button" aria-label="Previous assets" onclick="document.getElementById('wb-recent').moveBy(-1)" class="flex size-6 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 text-zinc-400 hover:text-zinc-100"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
-      <button type="button" aria-label="Next assets" onclick="document.getElementById('wb-recent').moveBy(1)" class="flex size-6 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 text-zinc-400 hover:text-zinc-100"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
+      <button
+        type="button"
+        aria-label="Previous assets"
+        onclick="document.getElementById('wb-recent').moveBy(-1)"
+        class="flex size-6 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 text-zinc-400 hover:text-zinc-100"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M15 6l-6 6 6 6"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+      <button
+        type="button"
+        aria-label="Next assets"
+        onclick="document.getElementById('wb-recent').moveBy(1)"
+        class="flex size-6 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 text-zinc-400 hover:text-zinc-100"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M9 6l6 6-6 6"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
     </span>
   </div>
-  <a-track id="wb-recent" snap class="flex gap-1.5 overflow-x-auto" aria-label="Recently modified assets">
-    <div class="w-28 flex-none cursor-pointer overflow-hidden rounded-md border border-primary-400 bg-[#1c1d20]">
-      <span class="flex aspect-square items-center justify-center bg-gradient-to-br from-amber-500/40 to-amber-900/40 text-lg" role="img" aria-label="animated hatch">▣</span>
-      <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-200">animated-hatch</span>
+  <a-track
+    id="wb-recent"
+    snap
+    class="flex gap-1.5 overflow-x-auto"
+    aria-label="Recently modified assets"
+  >
+    <div
+      class="w-28 flex-none cursor-pointer overflow-hidden rounded-md border border-primary-400 bg-[#1c1d20]"
+    >
+      <span
+        class="flex aspect-square items-center justify-center bg-gradient-to-br from-amber-500/40 to-amber-900/40 text-lg"
+        role="img"
+        aria-label="animated hatch"
+        >▣</span
+      >
+      <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-200"
+        >animated-hatch</span
+      >
     </div>
-    <div class="w-28 flex-none cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#1c1d20] hover:border-white/25">
-      <span class="flex aspect-square items-center justify-center bg-gradient-to-br from-orange-900/60 to-stone-800 text-lg text-orange-200/60" role="img" aria-label="cargo crate">▦</span>
-      <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400">cargo-crate</span>
+    <div
+      class="w-28 flex-none cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#1c1d20] hover:border-white/25"
+    >
+      <span
+        class="flex aspect-square items-center justify-center bg-gradient-to-br from-orange-900/60 to-stone-800 text-lg text-orange-200/60"
+        role="img"
+        aria-label="cargo crate"
+        >▦</span
+      >
+      <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400"
+        >cargo-crate</span
+      >
     </div>
-    <div class="w-28 flex-none cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#1c1d20] hover:border-white/25">
-      <span class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-600 to-zinc-800 text-lg text-zinc-400" role="img" aria-label="chess bishop">♝</span>
-      <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400">chess-bishop</span>
+    <div
+      class="w-28 flex-none cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#1c1d20] hover:border-white/25"
+    >
+      <span
+        class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-600 to-zinc-800 text-lg text-zinc-400"
+        role="img"
+        aria-label="chess bishop"
+        >♝</span
+      >
+      <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400"
+        >chess-bishop</span
+      >
     </div>
-    <div class="w-28 flex-none cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#1c1d20] hover:border-white/25">
-      <span class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-500 to-zinc-700 text-lg text-zinc-300" role="img" aria-label="chess rook">♜</span>
-      <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400">chess-rook</span>
+    <div
+      class="w-28 flex-none cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#1c1d20] hover:border-white/25"
+    >
+      <span
+        class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-500 to-zinc-700 text-lg text-zinc-300"
+        role="img"
+        aria-label="chess rook"
+        >♜</span
+      >
+      <span class="block truncate px-1.5 py-1 font-mono text-[10px] text-zinc-400"
+        >chess-rook</span
+      >
     </div>
   </a-track>
-  <p class="mt-2 px-1 text-[11px] text-zinc-500">Never autoplay content users must read; every slide stays keyboard reachable.</p>
+  <p class="mt-2 px-1 text-[11px] text-zinc-500">
+    Never autoplay content users must read; every slide stays keyboard reachable.
+  </p>
 </div>
