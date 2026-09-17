@@ -1,0 +1,21 @@
+{
+  "name": "@atrium-ui/kits",
+  "version": "0.1.0",
+  "description": "Reusable, framework-agnostic UI kits built on @atrium-ui/elements + @atrium-ui/panels + Tailwind. Copy the kit folder into your project or download the zip from the docs.",
+  "type": "module",
+  "private": false,
+  "scripts": {
+    "build": "bun ./build.ts",
+    "check": "tsc --noEmit -p ./tsconfig.json"
+  },
+  "files": [
+    "src",
+    "dist",
+    "README.md"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

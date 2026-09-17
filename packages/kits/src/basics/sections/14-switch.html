@@ -1,0 +1,53 @@
+<!-- requires: @atrium-ui/elements/toggle -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<!-- a-toggle slots its content into a plain <button>, so the knob is moved
+     with translate-x, not ml-auto — there is no flex row to push against. -->
+<div class="grid max-w-xl gap-3">
+  <label
+    class="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-stone-200 bg-white px-4 py-3"
+  >
+    <span class="text-sm"
+      ><strong class="font-medium text-stone-900">Airplane mode</strong>
+      <br />
+      <span class="text-stone-600">Disable all radios.</span></span
+    >
+    <a-toggle
+      name="airplane"
+      value="false"
+      class="inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full bg-stone-200 px-0.5 transition-colors [&[value='true']]:bg-accent-500"
+    >
+      <span
+        slot="true"
+        class="block size-5 translate-x-5 rounded-full bg-white shadow transition-transform"
+      ></span>
+      <span
+        slot="false"
+        class="block size-5 rounded-full bg-white shadow transition-transform"
+      ></span>
+    </a-toggle>
+  </label>
+
+  <label
+    class="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-stone-200 bg-white px-4 py-3"
+  >
+    <span class="text-sm"
+      ><strong class="font-medium text-stone-900">Dark appearance</strong>
+      <br />
+      <span class="text-stone-600">Followed by all kit panels.</span></span
+    >
+    <a-toggle
+      name="dark"
+      value="true"
+      class="inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full bg-stone-200 px-0.5 transition-colors [&[value='true']]:bg-accent-500"
+    >
+      <span
+        slot="true"
+        class="block size-5 translate-x-5 rounded-full bg-white shadow transition-transform"
+      ></span>
+      <span
+        slot="false"
+        class="block size-5 rounded-full bg-white shadow transition-transform"
+      ></span>
+    </a-toggle>
+  </label>
+</div>

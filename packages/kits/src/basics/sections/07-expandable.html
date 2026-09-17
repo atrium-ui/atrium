@@ -1,0 +1,32 @@
+<!-- requires: @atrium-ui/elements/expandable -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<div class="grid max-w-xl gap-3">
+  <a-expandable class="rounded-xl border border-stone-200 bg-white">
+    <button
+      slot="toggle"
+      type="button"
+      class="flex w-full cursor-pointer items-center justify-between px-4 py-3 text-left text-sm font-medium text-stone-900"
+    >
+      Shipping details
+      <span aria-hidden="true" class="text-stone-400">+</span>
+    </button>
+    <div class="px-4 pb-4 text-sm leading-6 text-stone-600">
+      Free shipping over $50. Orders placed before 2pm ship the same day.
+    </div>
+  </a-expandable>
+
+  <a-expandable opened class="rounded-xl border border-stone-200 bg-white">
+    <button
+      slot="toggle"
+      type="button"
+      class="flex w-full cursor-pointer items-center justify-between px-4 py-3 text-left text-sm font-medium text-stone-900"
+    >
+      Return policy (open by default)
+      <span aria-hidden="true" class="text-stone-400">+</span>
+    </button>
+    <div class="px-4 pb-4 text-sm leading-6 text-stone-600">
+      30-day returns, no questions asked. Add the <code>opened</code>attribute to expand
+      by default.
+    </div>
+  </a-expandable>
+</div>

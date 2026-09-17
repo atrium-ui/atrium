@@ -22,6 +22,9 @@ node_modules
 
 dist
 
+# transient Tailwind CLI entry file from packages/kits/build.ts
+.tailwind-entry.*.css
+
 .turbo
 .task
 

@@ -89,6 +89,25 @@
     }
   }
 
+  /* Preflight strips list markers; ordered lists need them back for steps. */
+  & > ol:not(:where(.not-content *)) {
+    padding-left: 1.25rem;
+
+    li {
+      list-style-type: decimal;
+      margin-bottom: 1rem;
+    }
+
+    li::marker {
+      @apply text-gray-500;
+    }
+  }
+
+  /* Preflight's `bolder` lands at 400 against the light body weight. */
+  & :is(p, li, blockquote) strong {
+    @apply font-semibold text-black;
+  }
+
   & > .directive-dev::before {
     content: "For Developers";
     @apply block text-sm text-gray-500 font-medium mb-module-s;

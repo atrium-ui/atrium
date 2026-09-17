@@ -27,7 +27,7 @@
     "@atrium-ui/components": "workspace:*",
     "@atrium-ui/elements": "workspace:*",
     "@atrium-ui/icons": "workspace:*",
-    "@atrium-ui/playground": "workspace:*",
+    "@atrium-ui/panels": "workspace:*",
     "@atrium-ui/scroll-lock": "workspace:*",
     "@atrium-ui/svg-sprites": "workspace:*",
     "@tailwindcss/browser": "^4.0.15",

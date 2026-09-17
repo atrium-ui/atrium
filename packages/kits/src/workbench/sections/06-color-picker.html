@@ -1,0 +1,20 @@
+<!-- requires: @atrium-ui/elements/color-picker -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<div class="flex w-full max-w-xl flex-wrap items-start gap-4 rounded-lg border border-white/10 bg-[#232428] p-4 text-[12px]">
+  <div>
+    <p class="mb-2 font-medium text-zinc-300">Base color</p>
+    <div class="rounded-md border border-white/10 bg-[#1c1d20] p-2">
+      <a-color-picker name="base" value="#e8a33d"></a-color-picker>
+    </div>
+  </div>
+  <div>
+    <p class="mb-2 font-medium text-zinc-300">Emissive + palette</p>
+    <div class="rounded-md border border-white/10 bg-[#1c1d20] p-2">
+      <a-color-picker alpha name="emissive" value="#3b74d6cc" palette="#ed7836,#e8a33d,#3b74d6,#22c55e,#e11d48"></a-color-picker>
+    </div>
+  </div>
+  <div class="flex items-center gap-2 self-center rounded-md border border-white/10 bg-[#1c1d20] px-2 py-1.5">
+    <span aria-hidden="true" class="size-5 rounded border border-black/40" style="background: #e8a33d"></span>
+    <span class="font-mono text-[11px] text-zinc-300">#E8A33D</span>
+  </div>
+</div>

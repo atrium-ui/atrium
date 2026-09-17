@@ -1,0 +1,39 @@
+<!-- requires: @atrium-ui/elements/range -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<div class="grid max-w-xl gap-6">
+  <label class="block">
+    <span
+      class="mb-2 flex items-center justify-between text-sm font-medium text-stone-700"
+    >
+      Volume
+      <output
+        id="kit-volume-output"
+        class="rounded bg-stone-100 px-2 py-0.5 font-mono text-xs text-stone-600"
+      >
+        50
+      </output>
+    </span>
+    <a-range
+      class="block w-full"
+      value="0.5"
+      oninput="document.getElementById('kit-volume-output').textContent = Math.round(this.value * 100)"
+    ></a-range>
+  </label>
+
+  <label class="block">
+    <span
+      class="mb-2 flex items-center justify-between text-sm font-medium text-stone-700"
+    >
+      Brightness
+      <output class="rounded bg-stone-100 px-2 py-0.5 font-mono text-xs text-stone-600">
+        75%
+      </output>
+    </span>
+    <a-range class="block w-full" value="0.75"></a-range>
+  </label>
+
+  <p class="text-xs text-stone-500">
+    Themed via <code>--theme-color</code>in <code>theme.css</code>. Pair with an
+    <code>&lt;output&gt;</code>for numeric feedback.
+  </p>
+</div>

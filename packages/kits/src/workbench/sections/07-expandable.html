@@ -1,0 +1,33 @@
+<!-- requires: @atrium-ui/elements/expandable -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<div class="w-full max-w-xl overflow-hidden rounded-lg border border-white/10 bg-[#232428] text-[12px]">
+  <div class="border-b border-white/10 px-3 py-2">
+    <p class="text-[11px] font-semibold tracking-wide text-zinc-500 uppercase">Inspector panels — one item ships opened</p>
+  </div>
+  <a-expandable opened class="block border-b border-white/10">
+    <button slot="toggle" type="button" class="flex w-full cursor-pointer items-center gap-1.5 px-3 py-2 text-left font-medium text-zinc-200 hover:bg-white/5">
+      <svg class="size-3 text-zinc-500" aria-hidden="true"><use href="#kit-icon-chevron-down"></use></svg>
+      Asset
+      <span class="ml-auto font-mono text-[11px] font-normal text-zinc-500">10 nodes · 2 clips</span>
+    </button>
+    <div class="px-3 pb-3 text-zinc-400">Version, extents and payload summary live here. Content stays in the DOM when collapsed.</div>
+  </a-expandable>
+  <a-expandable class="block border-b border-white/10">
+    <button slot="toggle" type="button" class="flex w-full cursor-pointer items-center gap-1.5 px-3 py-2 text-left font-medium text-zinc-200 hover:bg-white/5">
+      <svg class="size-3 -rotate-90 text-zinc-500" aria-hidden="true"><use href="#kit-icon-chevron-down"></use></svg>
+      Transform
+      <span class="ml-auto rounded bg-white/5 px-1.5 py-0.5 font-mono text-[11px] font-normal text-zinc-500">XYZ Euler</span>
+    </button>
+    <div class="px-3 pb-3 text-zinc-400">Location, rotation and scale rows.</div>
+  </a-expandable>
+  <a-expandable class="block">
+    <button slot="toggle" type="button" class="flex w-full cursor-pointer items-center gap-1.5 px-3 py-2 text-left font-medium text-zinc-200 hover:bg-white/5">
+      <svg class="size-3 -rotate-90 text-zinc-500" aria-hidden="true"><use href="#kit-icon-chevron-down"></use></svg>
+      CHEET Assets
+    </button>
+    <div class="px-3 pb-3 text-zinc-400">Project asset list and import state.</div>
+  </a-expandable>
+  <svg aria-hidden="true" style="display: none">
+    <symbol id="kit-icon-chevron-down" viewBox="0 0 24 24"><path d="M17.5761 8.57613C17.8104 8.34181 18.1895 8.34181 18.4238 8.57613C18.6581 8.81044 18.6581 9.18947 18.4238 9.42378L12.4238 15.4238L12 15.8486L11.5761 15.4238L5.57613 9.42378C5.34181 9.18947 5.34181 8.81044 5.57613 8.57613C5.81044 8.34181 6.18947 8.34181 6.42378 8.57613L12 14.1523L17.5761 8.57613Z" fill="currentColor" /></symbol>
+  </svg>
+</div>

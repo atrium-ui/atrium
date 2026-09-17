@@ -1,0 +1,36 @@
+---
+/**
+ * Renders one framework-agnostic kit section (raw HTML string) inside an
+ * isolated iframe, plus the source code below.
+ */
+import { kitPreviewDocument } from "./kit-preview-doc";
+
+export interface Props {
+  title: string;
+  html: string;
+}
+
+const { title, html } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const srcdoc = kitPreviewDocument(html, `${base}kit-preview/elements.js`);
+---
+
+<!-- NOTE: plain <div> wrapper, not <section> — docs layout.css styles all
+  `section` elements globally (padding-inline + overflow), which would
+  indent and clip the preview. -->
+<div class="not-content mb-10">
+  <h3 class="typo-headline mb-3">{title}</h3>
+  <div class="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+    <iframe
+      title={`${title} preview`}
+      srcdoc={srcdoc}
+      loading="lazy"
+      sandbox="allow-scripts allow-forms"
+      class="block h-72 w-full border-0"
+    />
+  </div>
+  <details class="mt-2 rounded-xl border border-zinc-200 bg-zinc-50">
+    <summary class="cursor-pointer px-4 py-2 text-sm font-medium text-zinc-700">Show HTML</summary>
+    <pre class="overflow-x-auto border-t border-zinc-200 p-4 text-xs leading-5"><code>{html}</code></pre>
+  </details>
+</div>

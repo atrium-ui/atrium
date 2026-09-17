@@ -1,0 +1,1192 @@
+<!doctype html>
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Basics UI Kit — Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Kit tokens, inlined from theme.css (source of truth) so this preview
+      works without a build step. Keep in sync when tokens change. -->
+    <style type="text/tailwindcss">
+      @theme static {
+        --font-sans:
+          ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        --font-display:
+          Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+        --color-background: #ffffff;
+        --color-primary-50: #fff7ed;
+        --color-primary-100: #ffedd5;
+        --color-primary-200: #fed7aa;
+        --color-primary-300: #fdba74;
+        --color-primary-400: #fb923c;
+        --color-primary-500: #f97316;
+        --color-primary-600: #ea580c;
+        --color-primary-700: #c2410c;
+        --color-primary-800: #9a3412;
+        --color-primary-900: #7c2d12;
+        --color-primary-950: #431407;
+        --color-accent-50: #f0fdf4;
+        --color-accent-100: #dcfce7;
+        --color-accent-200: #bbf7d0;
+        --color-accent-300: #86efac;
+        --color-accent-400: #4ade80;
+        --color-accent-500: #22c55e;
+        --color-accent-600: #16a34a;
+        --color-accent-700: #15803d;
+        --color-accent-800: #166534;
+        --color-accent-900: #14532d;
+      }
+    </style>
+    <style>
+      a-range {
+        --theme-color: var(--color-primary-500);
+        --range-track-background: var(--color-primary-100);
+      }
+      a-color-picker {
+        --color-picker-focus-outline: var(--color-primary-500);
+      }
+      a-tabs-tab[selected] {
+        background: var(--color-primary-500);
+        color: #fff;
+      }
+      a-panel {
+        --tab-font-color: var(--color-stone-600);
+        --tab-active-background: #fff;
+      }
+      /* Hosts default to display:inline; block so utilities apply.
+         In @layer base so display utilities (grid/hidden) still win. */
+      @layer base {
+        a-list,
+        a-tabs-panel {
+          display: block;
+        }
+      }
+    </style>
+    <script type="module">
+      import "@atrium-ui/elements";
+    </script>
+    <style>
+      body {
+        font-family: ui-sans-serif, system-ui, sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-background text-stone-900">
+    <!-- Icon sprite: plain <symbol> defs, referenced below with
+      <svg><use href="#kit-icon-name" /></svg>. No icon runtime, no JS.
+      The full set ships as icons/sprite.html — paste it once per page. -->
+    <svg aria-hidden="true" style="display: none">
+      <symbol id="kit-icon-search" viewBox="0 0 24 24">
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M11.3639 5.1998C7.97826 5.1998 5.2457 7.9151 5.2457 11.2498C5.2457 14.5845 7.97826 17.2998 11.3639 17.2998C14.7495 17.2998 17.4821 14.5845 17.4821 11.2498C17.4821 7.9151 14.7495 5.1998 11.3639 5.1998ZM3.8457 11.2498C3.8457 7.12867 7.21836 3.7998 11.3639 3.7998C15.5094 3.7998 18.8821 7.12867 18.8821 11.2498C18.8821 13.248 18.0892 15.0599 16.7998 16.3964L20.1897 19.7523C20.4644 20.0243 20.4667 20.4675 20.1947 20.7423C19.9227 21.017 19.4795 21.0193 19.2047 20.7473L15.7347 17.3119C14.5022 18.1859 12.9927 18.6998 11.3639 18.6998C7.21836 18.6998 3.8457 15.3709 3.8457 11.2498Z"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol id="kit-icon-home" viewBox="0 0 24 24">
+        <path
+          d="M3.75 10.6 12 4l8.25 6.6V19a1.5 1.5 0 0 1-1.5 1.5h-3.9v-5.4H9.15v5.4h-3.9A1.5 1.5 0 0 1 3.75 19v-8.4Z"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linejoin="round"
+          fill="none"
+        />
+      </symbol>
+      <symbol id="kit-icon-settings" viewBox="0 0 24 24">
+        <path
+          d="M9.91 2.94 L14.09 2.94 L14.39 5.42 L14.96 5.66 L16.93 4.11 L19.89 7.07 L18.34 9.04 L18.58 9.61 L21.06 9.91 L21.06 14.09 L18.58 14.39 L18.34 14.96 L19.89 16.93 L16.93 19.89 L14.96 18.34 L14.39 18.58 L14.09 21.06 L9.91 21.06 L9.61 18.58 L9.04 18.34 L7.07 19.89 L4.11 16.93 L5.66 14.96 L5.42 14.39 L2.94 14.09 L2.94 9.91 L5.42 9.61 L5.66 9.04 L4.11 7.07 L7.07 4.11 L9.04 5.66 L9.61 5.42 Z"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linejoin="round"
+          fill="none"
+        />
+        <circle
+          cx="12"
+          cy="12"
+          r="3.1"
+          stroke="currentColor"
+          stroke-width="1.4"
+          fill="none"
+        />
+      </symbol>
+      <symbol id="kit-icon-chevron-down" viewBox="0 0 24 24">
+        <path
+          d="M17.5761 8.57613C17.8104 8.34181 18.1895 8.34181 18.4238 8.57613C18.6581 8.81044 18.6581 9.18947 18.4238 9.42378L12.4238 15.4238L12 15.8486L11.5761 15.4238L5.57613 9.42378C5.34181 9.18947 5.34181 8.81044 5.57613 8.57613C5.81044 8.34181 6.18947 8.34181 6.42378 8.57613L12 14.1523L17.5761 8.57613Z"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol id="kit-icon-arrow-right" viewBox="0 0 24 24">
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M12.084 6.67573C12.3574 6.40236 12.8006 6.40236 13.074 6.67573L17.934 11.5357C18.0652 11.667 18.139 11.8451 18.139 12.0307C18.139 12.2164 18.0652 12.3944 17.934 12.5257L13.074 17.3857C12.8006 17.659 12.3574 17.659 12.084 17.3857C11.8106 17.1123 11.8106 16.6691 12.084 16.3957L15.749 12.7307H6.65898C6.27239 12.7307 5.95898 12.4173 5.95898 12.0307C5.95898 11.6441 6.27239 11.3307 6.65898 11.3307H15.749L12.084 7.66568C11.8106 7.39231 11.8106 6.9491 12.084 6.67573Z"
+          fill="currentColor"
+        />
+      </symbol>
+    </svg>
+
+    <div class="flex">
+      <!-- Sidebar -->
+      <aside
+        class="relative z-20 hidden w-64 flex-none flex-col bg-stone-50 p-3 text-sm md:flex"
+      >
+        <div class="flex items-center gap-2.5 px-2 py-1">
+          <span
+            aria-hidden="true"
+            class="flex size-9 flex-none items-center justify-center rounded-xl bg-primary-500 text-lg font-black text-white"
+            >A</span
+          >
+          <span class="min-w-0">
+            <strong class="block truncate text-sm font-semibold leading-tight"
+              >Personal</strong
+            >
+            <span class="block text-xs text-stone-500">1 Member</span>
+          </span>
+        </div>
+
+        <!-- Filled field, no border: the sidebar is already a surface, a second
+          outline inside it only adds noise. -->
+        <label class="relative mt-3 block">
+          <span class="sr-only">Quick search</span>
+          <svg
+            class="pointer-events-none absolute left-3 top-1/2 aspect-square h-4 w-4 -translate-y-1/2 text-stone-400"
+            aria-hidden="true"
+          >
+            <use href="#kit-icon-search"></use>
+          </svg>
+          <input
+            type="search"
+            placeholder="Quick Search"
+            class="block w-full rounded-lg border-0 bg-stone-200/60 py-2 pl-9 pr-12 text-[13px] text-stone-800 placeholder:text-stone-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+          />
+          <kbd
+            class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-mono text-[11px] text-stone-400"
+          >
+            ⌘ K
+          </kbd>
+        </label>
+
+        <nav class="mt-4 grid gap-0.5" aria-label="Space">
+          <a
+            href="#"
+            class="flex items-center gap-2.5 rounded-lg bg-primary-100 px-3 py-2 font-medium text-primary-900 no-underline"
+          >
+            <svg class="aspect-square h-[18px] w-[18px]" aria-hidden="true">
+              <use href="#kit-icon-home"></use>
+            </svg>
+            Home
+          </a>
+          <a
+            href="#"
+            class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-stone-600 no-underline transition-colors hover:bg-stone-200/60 hover:text-stone-900"
+          >
+            <svg
+              class="aspect-square h-[18px] w-[18px] text-stone-400"
+              aria-hidden="true"
+            >
+              <use href="#kit-icon-settings"></use>
+            </svg>
+            Settings
+          </a>
+        </nav>
+
+        <div class="my-4 border-t border-stone-200"></div>
+
+        <p
+          class="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-stone-400"
+        >
+          Starred
+        </p>
+        <nav class="grid gap-0.5" aria-label="Starred">
+          <a
+            href="#"
+            class="rounded-lg px-3 py-1.5 text-stone-600 no-underline transition-colors hover:bg-stone-200/60 hover:text-stone-900"
+            >Calendar</a
+          >
+          <a
+            href="#"
+            class="rounded-lg px-3 py-1.5 text-stone-600 no-underline transition-colors hover:bg-stone-200/60 hover:text-stone-900"
+            >Scratchpad</a
+          >
+          <a
+            href="#"
+            class="rounded-lg px-3 py-1.5 text-stone-600 no-underline transition-colors hover:bg-stone-200/60 hover:text-stone-900"
+            >Tasks</a
+          >
+        </nav>
+
+        <div class="my-4 border-t border-stone-200"></div>
+
+        <!-- Collections: a colored initial instead of an icon, so a space with
+          dozens of them stays scannable. Children indent under the badge. -->
+        <nav class="grid gap-0.5" aria-label="Collections">
+          <a
+            href="#"
+            class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-stone-700 no-underline transition-colors hover:bg-stone-200/60 hover:text-stone-900"
+          >
+            <span
+              aria-hidden="true"
+              class="flex size-5 flex-none items-center justify-center rounded-md bg-rose-200 text-[10px] font-bold text-rose-900"
+              >N</span
+            >
+            Notes
+          </a>
+          <a
+            href="#"
+            class="rounded-lg py-1.5 pl-[42px] pr-3 text-[13px] text-stone-500 no-underline transition-colors hover:bg-stone-200/60 hover:text-stone-900"
+            >Screenshots</a
+          >
+          <a
+            href="#"
+            class="rounded-lg py-1.5 pl-[42px] pr-3 text-[13px] text-stone-500 no-underline transition-colors hover:bg-stone-200/60 hover:text-stone-900"
+            >Clippings</a
+          >
+          <a
+            href="#"
+            class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-stone-700 no-underline transition-colors hover:bg-stone-200/60 hover:text-stone-900"
+          >
+            <span
+              aria-hidden="true"
+              class="flex size-5 flex-none items-center justify-center rounded-md bg-teal-200 text-[10px] font-bold text-teal-900"
+              >K</span
+            >
+            Knowledge
+          </a>
+          <a
+            href="#"
+            class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-stone-700 no-underline transition-colors hover:bg-stone-200/60 hover:text-stone-900"
+          >
+            <span
+              aria-hidden="true"
+              class="flex size-5 flex-none items-center justify-center rounded-md bg-stone-900 text-[10px] font-bold text-white"
+              >P</span
+            >
+            Pages
+          </a>
+        </nav>
+
+        <a
+          href="#"
+          class="mt-auto flex items-center gap-2.5 rounded-lg px-3 py-2 no-underline transition-colors hover:bg-stone-200/60"
+        >
+          <span
+            aria-hidden="true"
+            class="flex size-7 flex-none items-center justify-center rounded-full bg-primary-200 text-[11px] font-bold text-primary-900"
+            >AL</span
+          >
+          <span class="text-[13px] text-stone-600">luckydye</span>
+        </a>
+      </aside>
+
+      <!-- Main (overflow-x-clip: the visible carousel track must never make
+        the page scroll horizontally; cards slide behind the sidebar) -->
+      <div class="min-w-0 flex-1 overflow-x-clip px-6 py-6 md:px-10">
+        <!-- Top bar -->
+        <div class="flex items-center gap-2">
+          <label class="relative block w-full max-w-xs md:hidden">
+            <span class="sr-only">Quick search</span>
+            <input
+              type="search"
+              placeholder="Quick Search"
+              class="block w-full rounded-lg border border-stone-200 bg-white py-1.5 px-3 text-[13px] placeholder:text-stone-400 focus:border-primary-400 focus:outline-none"
+            />
+          </label>
+          <div class="ml-auto flex items-center gap-2">
+            <a-popover-trigger class="relative z-10 inline-block">
+              <button
+                slot="trigger"
+                type="button"
+                class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-[13px] font-medium text-stone-700 transition-colors hover:border-stone-300"
+              >
+                Options
+                <svg class="aspect-square h-3.5 w-3.5" aria-hidden="true">
+                  <use href="#kit-icon-chevron-down"></use>
+                </svg>
+              </button>
+              <a-popover class="group">
+                <div
+                  class="w-[max-content] p-2 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100"
+                >
+                  <div
+                    role="menu"
+                    class="min-w-[180px] scale-95 rounded-xl border border-stone-200 bg-white p-1.5 text-sm shadow-lg transition-all duration-150 group-[&[enabled]]:scale-100"
+                  >
+                    <button
+                      type="button"
+                      role="menuitem"
+                      class="block w-full cursor-pointer rounded-lg border-0 bg-transparent px-3 py-2 text-left text-stone-700 transition-colors hover:bg-primary-50"
+                    >
+                      Rename
+                    </button>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      class="block w-full cursor-pointer rounded-lg border-0 bg-transparent px-3 py-2 text-left text-stone-700 transition-colors hover:bg-primary-50"
+                    >
+                      Duplicate
+                    </button>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      class="block w-full cursor-pointer rounded-lg border-0 bg-transparent px-3 py-2 text-left text-red-600 transition-colors hover:bg-red-50"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </a-popover>
+            </a-popover-trigger>
+            <button
+              type="button"
+              onclick="document.getElementById('kit-new-space').showModal()"
+              class="cursor-pointer rounded-lg border-0 bg-primary-500 px-3.5 py-1.5 text-[13px] font-medium text-white transition-colors hover:bg-primary-600"
+            >
+              New space
+            </button>
+          </div>
+        </div>
+
+        <!-- Greeting -->
+        <header>
+          <h1 class="mt-2 font-display text-5xl font-semibold tracking-tight">
+            Good afternoon.
+          </h1>
+          <p class="mt-2 max-w-prose text-sm text-stone-600">
+            Two documents changed in
+            <strong class="font-medium text-stone-900">Personal</strong>
+            since yesterday.
+          </p>
+        </header>
+
+        <!-- Section switcher: the whole space lives in one of these four views. -->
+        <a-tabs class="mt-8 block">
+          <a-tabs-list class="inline-flex max-w-full gap-1 rounded-xl bg-stone-100 p-1">
+            <a-tabs-tab
+              selected
+              class="cursor-pointer rounded-lg px-4 py-1.5 text-[13px] font-medium text-stone-500 transition-colors hover:text-stone-900"
+            >
+              Overview
+            </a-tabs-tab>
+            <a-tabs-tab
+              class="cursor-pointer rounded-lg px-4 py-1.5 text-[13px] font-medium text-stone-500 transition-colors hover:text-stone-900"
+            >
+              Settings
+            </a-tabs-tab>
+            <a-tabs-tab
+              class="cursor-pointer rounded-lg px-4 py-1.5 text-[13px] font-medium text-stone-500 transition-colors hover:text-stone-900"
+            >
+              Access
+            </a-tabs-tab>
+          </a-tabs-list>
+
+          <!-- Overview: what changed, newest first -->
+          <a-tabs-panel selected>
+            <!-- Recently modified -->
+            <div class="mt-8 flex items-baseline justify-between">
+              <h2 class="text-[17px] font-medium text-stone-500">Recently Modified</h2>
+              <div class="flex items-center gap-1">
+                <button
+                  type="button"
+                  aria-label="Previous documents"
+                  onclick="document.getElementById('kit-dash-recent').moveBy(-1)"
+                  class="flex size-7 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-800"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M15 6l-6 6 6 6"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  aria-label="Next documents"
+                  onclick="document.getElementById('kit-dash-recent').moveBy(1)"
+                  class="flex size-7 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-800"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M9 6l6 6-6 6"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+                <a
+                  href="#"
+                  class="ml-1 inline-flex items-center gap-1 text-[13px] text-stone-500 no-underline hover:text-stone-800"
+                >
+                  View all
+                  <svg class="aspect-square h-3.5 w-3.5" aria-hidden="true">
+                    <use href="#kit-icon-arrow-right"></use>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <a-track
+              id="kit-dash-recent"
+              snap
+              class="mt-4 flex gap-4 overflow-visible"
+              aria-label="Recently modified"
+            >
+              <div class="w-52 flex-none cursor-pointer">
+                <span
+                  class="flex aspect-[4/3] items-center justify-center rounded-xl bg-stone-200/80 text-stone-400"
+                  role="img"
+                  aria-label="Scratchpad document"
+                >
+                  <svg
+                    width="30"
+                    height="30"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M6 2h9l5 5v15H6V2Z M14 2v6h6"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M9 13h7M9 17h7"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </span>
+                <span class="mt-2 block text-xs text-stone-500">Today</span>
+                <span
+                  class="block font-display text-[15px] font-semibold italic text-primary-900"
+                  >Scratchpad</span
+                >
+              </div>
+              <div class="w-52 flex-none cursor-pointer">
+                <span
+                  class="flex aspect-[4/3] items-center justify-center rounded-xl bg-stone-200/80 text-stone-400"
+                  role="img"
+                  aria-label="Things to do document"
+                >
+                  <svg
+                    width="30"
+                    height="30"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M6 2h9l5 5v15H6V2Z M14 2v6h6"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M9 13h7M9 17h7"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </span>
+                <span class="mt-2 block text-xs text-stone-500">2 days ago</span>
+                <span
+                  class="block font-display text-[15px] font-semibold italic text-primary-900"
+                  >Things to do</span
+                >
+              </div>
+              <div class="w-52 flex-none cursor-pointer">
+                <span
+                  class="flex aspect-[4/3] items-center justify-center rounded-xl bg-stone-200/80 text-stone-400"
+                  role="img"
+                  aria-label="Piano document"
+                >
+                  <svg
+                    width="30"
+                    height="30"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M6 2h9l5 5v15H6V2Z M14 2v6h6"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M9 13h7M9 17h7"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </span>
+                <span class="mt-2 block text-xs text-stone-500">08/09/2026</span>
+                <span
+                  class="block font-display text-[15px] font-semibold italic text-primary-900"
+                  >Piano</span
+                >
+              </div>
+              <div class="w-52 flex-none cursor-pointer">
+                <span
+                  class="flex aspect-[4/3] items-center justify-center rounded-xl bg-stone-200/80 text-stone-400"
+                  role="img"
+                  aria-label="Blog posts document"
+                >
+                  <svg
+                    width="30"
+                    height="30"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M6 2h9l5 5v15H6V2Z M14 2v6h6"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M9 13h7M9 17h7"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </span>
+                <span class="mt-2 block text-xs text-stone-500">4 days ago</span>
+                <span
+                  class="block font-display text-[15px] font-semibold italic text-primary-900"
+                  >Blog Posts</span
+                >
+              </div>
+              <div class="hidden w-52 flex-none cursor-pointer sm:block">
+                <span
+                  class="flex aspect-[4/3] items-center justify-center rounded-xl bg-stone-200/80 text-stone-400"
+                  role="img"
+                  aria-label="Tasks document"
+                >
+                  <svg
+                    width="30"
+                    height="30"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M6 2h9l5 5v15H6V2Z M14 2v6h6"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M9 13h7M9 17h7"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </span>
+                <span class="mt-2 block text-xs text-stone-500">29/08/2026</span>
+                <span
+                  class="block font-display text-[15px] font-semibold italic text-primary-900"
+                  >Tasks</span
+                >
+              </div>
+            </a-track>
+
+            <!-- Space activity -->
+            <h2 class="mt-12 text-[17px] font-medium text-stone-500">Space Activity</h2>
+            <p class="mt-3 text-xs text-stone-500">55 minutes ago</p>
+            <a-list
+              class="mt-2 overflow-hidden rounded-xl border border-stone-200 bg-white"
+              aria-label="Activity"
+            >
+              <a-list-item
+                class="flex cursor-pointer items-center gap-3 border-b border-stone-100 px-4 py-3 transition-colors last:border-0 hover:bg-primary-50"
+              >
+                <span
+                  aria-hidden="true"
+                  class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary-200 text-[11px] font-bold text-primary-900"
+                  >AL</span
+                >
+                <span class="min-w-0 flex-1 text-[13px]">
+                  <strong class="font-medium text-stone-900">luckydye published</strong>
+                  <span class="block text-xs text-stone-500">3 changes</span>
+                </span>
+                <span
+                  class="hidden min-w-0 flex-1 items-center gap-2 text-[13px] text-stone-600 sm:flex"
+                >
+                  <svg
+                    class="aspect-square h-4 w-4 shrink-0 text-stone-400"
+                    aria-hidden="true"
+                  >
+                    <use href="#kit-icon-search"></use>
+                  </svg>
+                  <span class="truncate">Atrium | Blender like ui kit…</span>
+                </span>
+                <svg
+                  class="aspect-square h-4 w-4 -rotate-90 text-stone-400"
+                  aria-hidden="true"
+                >
+                  <use href="#kit-icon-chevron-down"></use>
+                </svg>
+              </a-list-item>
+              <a-list-item
+                class="flex cursor-pointer items-center gap-3 border-b border-stone-100 px-4 py-3 transition-colors last:border-0 hover:bg-primary-50"
+              >
+                <span
+                  aria-hidden="true"
+                  class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary-200 text-[11px] font-bold text-primary-900"
+                  >AL</span
+                >
+                <span class="min-w-0 flex-1 text-[13px]">
+                  <strong class="font-medium text-stone-900">luckydye edited</strong>
+                  <span class="block text-xs text-stone-500">4 changes</span>
+                </span>
+                <span
+                  class="hidden min-w-0 flex-1 items-center gap-2 text-[13px] text-stone-600 sm:flex"
+                >
+                  <svg
+                    class="aspect-square h-4 w-4 shrink-0 text-stone-400"
+                    aria-hidden="true"
+                  >
+                    <use href="#kit-icon-search"></use>
+                  </svg>
+                  <span class="truncate">ECU Firmware Spec</span>
+                </span>
+                <svg
+                  class="aspect-square h-4 w-4 -rotate-90 text-stone-400"
+                  aria-hidden="true"
+                >
+                  <use href="#kit-icon-chevron-down"></use>
+                </svg>
+              </a-list-item>
+            </a-list>
+          </a-tabs-panel>
+
+          <!-- Settings: space identity, then every knob that applies to it -->
+          <a-tabs-panel>
+            <h2 class="mt-8 font-display text-2xl font-semibold">Space Settings</h2>
+            <p class="mt-1 text-sm text-stone-600">
+              Personalize your space with settings and preferences.
+            </p>
+            <div class="mt-5 grid gap-6 sm:grid-cols-[260px_1fr]">
+              <div class="overflow-hidden rounded-2xl border border-stone-200">
+                <div
+                  class="flex h-28 items-end bg-gradient-to-br from-primary-400 to-primary-600 p-3"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="flex size-11 items-center justify-center rounded-xl bg-stone-950 text-lg font-black text-white"
+                    >A</span
+                  >
+                </div>
+                <div class="flex items-center gap-2 p-3">
+                  <div>
+                    <p class="m-0 text-sm font-semibold">Personal</p>
+                    <p class="m-0 font-mono text-xs text-stone-400">personal</p>
+                  </div>
+                  <button
+                    type="button"
+                    class="ml-auto cursor-pointer rounded-md border-0 bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 transition-colors hover:bg-red-100"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+
+              <form class="grid max-w-xl content-start gap-4" onsubmit="return false;">
+                <label class="block">
+                  <span class="mb-1 block text-[13px] font-medium text-stone-700"
+                    >Name</span
+                  >
+                  <input
+                    type="text"
+                    value="Personal"
+                    class="block w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  />
+                </label>
+                <label class="block">
+                  <span class="mb-1 block text-[13px] font-medium text-stone-700"
+                    >Description</span
+                  >
+                  <input
+                    type="text"
+                    placeholder="e.g., Engineering / Documentation"
+                    class="block w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm placeholder:text-stone-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  />
+                </label>
+                <div class="flex justify-end">
+                  <button
+                    type="button"
+                    class="cursor-pointer rounded-lg border-0 bg-primary-400 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-500"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- One row per preference: label left, control right. The knob moves
+              with a transform, not `ml-auto` — a-toggle slots its content into a
+              plain button, so margin tricks have nothing to push against. -->
+            <h3 class="mt-10 text-[17px] font-medium text-stone-500">Preferences</h3>
+            <div
+              class="mt-3 divide-y divide-stone-100 rounded-2xl border border-stone-200 bg-white"
+            >
+              <label
+                class="flex cursor-pointer items-center justify-between gap-4 px-5 py-4"
+              >
+                <span class="text-sm">
+                  <strong class="font-medium text-stone-900">Daily digest</strong>
+                  <span class="block text-stone-500"
+                    >A summary of changes, every morning.</span
+                  >
+                </span>
+                <a-toggle
+                  name="digest"
+                  value="true"
+                  class="inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full bg-stone-200 px-0.5 transition-colors [&[value='true']]:bg-accent-500"
+                >
+                  <span
+                    slot="true"
+                    class="block size-5 translate-x-5 rounded-full bg-white shadow transition-transform"
+                  ></span>
+                  <span
+                    slot="false"
+                    class="block size-5 rounded-full bg-white shadow transition-transform"
+                  ></span>
+                </a-toggle>
+              </label>
+              <label
+                class="flex cursor-pointer items-center justify-between gap-4 px-5 py-4"
+              >
+                <span class="text-sm">
+                  <strong class="font-medium text-stone-900">Repositories</strong>
+                  <span class="block text-stone-500"
+                    >Allow repository documents in this space.</span
+                  >
+                </span>
+                <a-toggle
+                  name="repos"
+                  value="false"
+                  class="inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full bg-stone-200 px-0.5 transition-colors [&[value='true']]:bg-accent-500"
+                >
+                  <span
+                    slot="true"
+                    class="block size-5 translate-x-5 rounded-full bg-white shadow transition-transform"
+                  ></span>
+                  <span
+                    slot="false"
+                    class="block size-5 rounded-full bg-white shadow transition-transform"
+                  ></span>
+                </a-toggle>
+              </label>
+              <label
+                class="flex cursor-pointer items-center justify-between gap-4 px-5 py-4"
+              >
+                <span class="text-sm">
+                  <strong class="font-medium text-stone-900">Email updates</strong>
+                  <span class="block text-stone-500"
+                    >Notify me when someone edits a shared page.</span
+                  >
+                </span>
+                <a-toggle
+                  name="notify"
+                  value="true"
+                  class="inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-md border border-stone-300 bg-white transition-colors [&[value='true']]:border-accent-500 [&[value='true']]:bg-accent-500"
+                >
+                  <svg
+                    slot="true"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M3 8.5 6.5 12 13 4.5"
+                      stroke="white"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a-toggle>
+              </label>
+              <!-- The picker is a big panel — it lives in a popover so the row
+                stays one line, like every other preference. -->
+              <div class="flex items-center justify-between gap-4 px-5 py-4">
+                <span class="text-sm">
+                  <strong class="font-medium text-stone-900">Accent color</strong>
+                  <span class="block text-stone-500"
+                    >Badges, toggles and highlights.</span
+                  >
+                </span>
+                <a-popover-trigger class="relative z-10 inline-block">
+                  <button
+                    slot="trigger"
+                    type="button"
+                    class="flex cursor-pointer items-center gap-2 rounded-lg border border-stone-200 bg-white py-1.5 pl-2 pr-3 transition-colors hover:border-stone-300"
+                  >
+                    <span
+                      id="kit-dash-accent-swatch"
+                      aria-hidden="true"
+                      class="size-5 rounded-md border border-black/10"
+                      style="background: #22c55e"
+                    ></span>
+                    <span
+                      id="kit-dash-accent-value"
+                      class="font-mono text-xs text-stone-600"
+                      >#22C55E</span
+                    >
+                  </button>
+                  <a-popover class="group">
+                    <div
+                      class="w-[max-content] p-2 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100"
+                    >
+                      <div
+                        class="scale-95 rounded-xl border border-stone-200 bg-white p-3 shadow-lg transition-transform duration-150 group-[&[enabled]]:scale-100"
+                      >
+                        <a-color-picker
+                          name="accent"
+                          value="#22c55e"
+                          palette="#f97316,#22c55e,#3b82f6,#a855f7,#e11d48"
+                          oninput="kitSyncAccent(this)"
+                          onchange="kitSyncAccent(this)"
+                        ></a-color-picker>
+                      </div>
+                    </div>
+                  </a-popover>
+                </a-popover-trigger>
+              </div>
+            </div>
+
+            <h3 class="mt-10 text-[17px] font-medium text-stone-500">Storage</h3>
+            <div class="mt-3 rounded-2xl border border-stone-200 bg-white p-5">
+              <label class="block">
+                <span
+                  class="mb-2 flex items-center justify-between text-[13px] font-medium text-stone-700"
+                >
+                  Storage used
+                  <output
+                    id="kit-dash-quota"
+                    class="rounded bg-stone-100 px-2 py-0.5 font-mono text-xs text-stone-600"
+                  >
+                    50 GB
+                  </output>
+                </span>
+                <a-range
+                  class="block w-full"
+                  value="0.5"
+                  oninput="
+                    document.getElementById('kit-dash-quota').textContent =
+                      Math.round(this.value * 100) + ' GB'
+                  "
+                ></a-range>
+              </label>
+              <dl class="mt-5 grid gap-3 sm:grid-cols-3">
+                <div class="rounded-xl bg-stone-50 px-4 py-3">
+                  <dt class="text-xs text-stone-500">Documents</dt>
+                  <dd class="m-0 mt-0.5 text-sm font-medium tabular-nums text-stone-900">
+                    21 GB
+                  </dd>
+                </div>
+                <div class="rounded-xl bg-stone-50 px-4 py-3">
+                  <dt class="text-xs text-stone-500">Media</dt>
+                  <dd class="m-0 mt-0.5 text-sm font-medium tabular-nums text-stone-900">
+                    24 GB
+                  </dd>
+                </div>
+                <div class="rounded-xl bg-stone-50 px-4 py-3">
+                  <dt class="text-xs text-stone-500">Other</dt>
+                  <dd class="m-0 mt-0.5 text-sm font-medium tabular-nums text-stone-900">
+                    5 GB
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            <h3 class="mt-10 text-[17px] font-medium text-stone-500">Archive</h3>
+            <p class="mt-1 text-sm text-stone-600">Nothing archived yet.</p>
+            <a-expandable class="mt-3 block rounded-xl border border-stone-200 bg-white">
+              <button
+                slot="toggle"
+                type="button"
+                class="flex w-full cursor-pointer items-center justify-between px-4 py-3 text-left text-sm font-medium text-stone-900"
+              >
+                What happens when I archive a space?
+                <span aria-hidden="true" class="text-stone-400">+</span>
+              </button>
+              <div class="px-4 pb-4 text-sm leading-6 text-stone-600">
+                Archived spaces stay searchable but drop out of the sidebar. Unarchive
+                anytime.
+              </div>
+            </a-expandable>
+          </a-tabs-panel>
+
+          <!-- Access: who and what can reach this space -->
+          <a-tabs-panel>
+            <h2 class="mt-8 font-display text-2xl font-semibold">Access</h2>
+            <p class="mt-1 text-sm text-stone-600">
+              Members and tokens with access to this space.
+            </p>
+            <div class="mt-3 overflow-x-auto rounded-xl border border-stone-200 bg-white">
+              <table class="w-full border-collapse text-left text-[13px]">
+                <thead>
+                  <tr class="border-b border-stone-200 bg-stone-50">
+                    <th
+                      scope="col"
+                      class="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-stone-500"
+                    >
+                      Member
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-stone-500"
+                    >
+                      Type
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-stone-500"
+                    >
+                      Access
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-stone-500"
+                    >
+                      Role
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-4 py-2.5 text-right text-[11px] font-semibold uppercase tracking-wide text-stone-500"
+                    >
+                      Details
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-stone-100">
+                  <tr class="transition-colors hover:bg-primary-50">
+                    <td class="px-4 py-3">
+                      <span class="flex items-center gap-2.5">
+                        <span
+                          aria-hidden="true"
+                          class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary-200 text-[11px] font-bold text-primary-900"
+                          >AL</span
+                        >
+                        <span>
+                          <strong class="block font-medium text-stone-900"
+                            >luckydye</strong
+                          >
+                          <span class="block text-xs text-stone-500"
+                            >tim.h4vlicek@gmail.com</span
+                          >
+                        </span>
+                      </span>
+                    </td>
+                    <td class="px-4 py-3 text-stone-600">User</td>
+                    <td class="px-4 py-3">
+                      <strong class="block font-medium text-stone-900"
+                        >Entire space</strong
+                      >
+                      <span class="block text-xs text-stone-500">Space-wide access</span>
+                    </td>
+                    <td class="px-4 py-3">
+                      <span
+                        class="inline-flex rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700"
+                        >owner</span
+                      >
+                    </td>
+                    <td class="px-4 py-3 text-right tabular-nums text-stone-500">
+                      142 grants
+                    </td>
+                  </tr>
+                  <tr class="transition-colors hover:bg-primary-50">
+                    <td class="px-4 py-3">
+                      <span class="flex items-center gap-2.5">
+                        <span
+                          aria-hidden="true"
+                          class="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent-100 text-[11px] font-bold text-accent-800"
+                          >LD</span
+                        >
+                        <span>
+                          <strong class="block font-medium text-stone-900"
+                            >luckydye.dev</strong
+                          >
+                          <span class="block text-xs text-stone-500"
+                            >Last used 14 Sept 2026</span
+                          >
+                        </span>
+                      </span>
+                    </td>
+                    <td class="px-4 py-3 text-stone-600">Token</td>
+                    <td class="px-4 py-3">
+                      <strong class="block font-medium text-stone-900"
+                        >Entire space</strong
+                      >
+                      <span class="block text-xs text-stone-500">Issued by luckydye</span>
+                    </td>
+                    <td class="px-4 py-3">
+                      <span
+                        class="inline-flex rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700"
+                        >editor</span
+                      >
+                    </td>
+                    <td class="px-4 py-3 text-right">
+                      <button
+                        type="button"
+                        class="cursor-pointer border-0 bg-transparent p-0 text-[13px] font-medium text-red-600 hover:underline"
+                      >
+                        Revoke
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div
+                class="flex items-center justify-between border-t border-stone-200 px-4 py-3"
+              >
+                <button
+                  type="button"
+                  class="cursor-pointer rounded-lg border-0 bg-transparent px-2 py-1 text-[13px] font-medium text-stone-600 transition-colors hover:bg-stone-100"
+                >
+                  + Add access
+                </button>
+                <button
+                  type="button"
+                  class="cursor-pointer rounded-lg border-0 bg-primary-200 px-4 py-2 text-[13px] font-medium text-primary-900 transition-colors hover:bg-primary-300"
+                >
+                  Save access
+                </button>
+              </div>
+            </div>
+          </a-tabs-panel>
+        </a-tabs>
+
+        <!-- Help: applies to every view, so it sits below the tabs -->
+        <footer class="mt-14 border-t border-stone-200 pt-8">
+          <h2 class="text-[17px] font-medium text-stone-500">Help</h2>
+          <div class="mt-3 grid gap-3 md:grid-cols-2">
+            <div>
+              <a-expandable class="rounded-xl border border-stone-200 bg-white">
+                <button
+                  slot="toggle"
+                  type="button"
+                  class="flex w-full cursor-pointer items-center justify-between px-4 py-3 text-left text-sm font-medium text-stone-900"
+                >
+                  How is usage billed?
+                  <span aria-hidden="true" class="text-stone-400">+</span>
+                </button>
+                <div class="px-4 pb-4 text-sm leading-6 text-stone-600">
+                  Per seat, monthly. Overage is metered daily.
+                </div>
+              </a-expandable>
+              <dl
+                class="mt-3 grid gap-1 rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm"
+              >
+                <div class="flex justify-between gap-4">
+                  <dt class="font-medium text-stone-900">Plan</dt>
+                  <dd class="m-0 text-stone-600">
+                    <dfn class="font-semibold not-italic text-stone-900">Pro</dfn>·
+                    unlimited spaces
+                  </dd>
+                </div>
+              </dl>
+            </div>
+            <a-popover-trigger class="relative z-10 inline-block self-start">
+              <button
+                slot="trigger"
+                type="button"
+                aria-describedby="kit-dash-seat-tip"
+                class="cursor-pointer rounded-lg border border-stone-200 bg-white px-4 py-2 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300"
+              >
+                What counts as a seat?
+              </button>
+              <a-tooltip class="group">
+                <div
+                  class="pointer-events-auto w-[max-content] max-w-[240px] p-2 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100"
+                >
+                  <p
+                    id="kit-dash-seat-tip"
+                    class="m-0 rounded-lg bg-stone-900 px-3 py-2 text-xs leading-5 text-white shadow-lg"
+                  >
+                    Anyone who signs in during the billing period.
+                  </p>
+                </div>
+              </a-tooltip>
+            </a-popover-trigger>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <dialog
+      id="kit-new-space"
+      class="m-auto w-full max-w-md rounded-2xl border border-stone-200 bg-white p-0 shadow-xl backdrop:bg-black/30"
+    >
+      <form method="dialog">
+        <div class="border-b border-stone-100 px-6 py-4">
+          <h3 class="m-0 font-display text-xl font-semibold">New space</h3>
+          <p class="mt-1 text-sm text-stone-600">Spaces group pages, tasks, and files.</p>
+        </div>
+        <div class="px-6 py-4">
+          <label class="block">
+            <span class="mb-1 block text-sm font-medium text-stone-700">Space name</span>
+            <input
+              type="text"
+              placeholder="e.g., Engineering"
+              class="block w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm placeholder:text-stone-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+            />
+          </label>
+        </div>
+        <div class="flex items-center justify-end gap-2 px-6 py-4">
+          <button
+            value="cancel"
+            class="cursor-pointer rounded-lg border border-stone-200 px-4 py-2 text-sm font-medium text-stone-700 hover:border-stone-300"
+          >
+            Cancel
+          </button>
+          <button
+            value="confirm"
+            class="cursor-pointer rounded-lg border-0 bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-600"
+          >
+            Create
+          </button>
+        </div>
+      </form>
+    </dialog>
+    <script>
+      // The picker fires `input` while dragging and `change` on commit — palette
+      // presets and the eyedropper only fire `change` — so both keep the row's
+      // swatch and hex label in sync.
+      function kitSyncAccent(picker) {
+        document.getElementById("kit-dash-accent-swatch").style.background = picker.value;
+        document.getElementById("kit-dash-accent-value").textContent =
+          picker.value.toUpperCase();
+      }
+    </script>
+  </body>
+</html>

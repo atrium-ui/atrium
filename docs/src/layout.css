@@ -5,6 +5,11 @@
 @import "./theme/theme.css";
 @import "./theme/markdown.css";
 
+/* Content pages use Tailwind classes too — without this, only classes that
+   happen to appear elsewhere in the app get generated. */
+@source './content/**/*.mdx';
+@source './content/**/*.md';
+
 @source '../../packages/components/**/*.tsx';
 @source '../../packages/components/**/*.vue';
 

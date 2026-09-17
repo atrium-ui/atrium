@@ -1,0 +1,99 @@
+{
+  "name": "Basics",
+  "slug": "basics",
+  "version": "0.1.0",
+  "description": "Warm personal-wiki style: paper background, serif display type, clay-orange primary with green accent, built on @atrium-ui/elements.",
+  "showcase": "index.html",
+  "sections": [
+    {
+      "id": "tabs",
+      "title": "Tabs",
+      "file": "sections/01-tabs.html"
+    },
+    {
+      "id": "buttons",
+      "title": "Buttons",
+      "file": "sections/02-buttons.html"
+    },
+    {
+      "id": "colors",
+      "title": "Colors",
+      "file": "sections/03-colors.html"
+    },
+    {
+      "id": "sliders-numeric",
+      "title": "Numeric sliders",
+      "file": "sections/04-sliders-numeric.html"
+    },
+    {
+      "id": "inputs-text",
+      "title": "Text inputs",
+      "file": "sections/05-inputs-text.html"
+    },
+    {
+      "id": "color-picker",
+      "title": "Color picker",
+      "file": "sections/06-color-picker.html"
+    },
+    {
+      "id": "expandable",
+      "title": "Detail expands",
+      "file": "sections/07-expandable.html"
+    },
+    {
+      "id": "definitions",
+      "title": "Text definitions",
+      "file": "sections/08-definitions.html"
+    },
+    {
+      "id": "tables",
+      "title": "Tables",
+      "file": "sections/09-tables.html"
+    },
+    {
+      "id": "dialogs",
+      "title": "Dialogs",
+      "file": "sections/10-dialogs.html"
+    },
+    {
+      "id": "lists",
+      "title": "Lists",
+      "file": "sections/11-lists.html"
+    },
+    {
+      "id": "gallery",
+      "title": "Gallery",
+      "file": "sections/12-gallery.html"
+    },
+    {
+      "id": "checkbox",
+      "title": "Checkbox",
+      "file": "sections/13-checkbox.html"
+    },
+    {
+      "id": "switch",
+      "title": "Switch",
+      "file": "sections/14-switch.html"
+    },
+    {
+      "id": "icons",
+      "title": "Icons",
+      "file": "sections/15-icons.html"
+    },
+    {
+      "id": "popover",
+      "title": "Popover / context menus",
+      "file": "sections/16-popover.html"
+    },
+    {
+      "id": "carousel",
+      "title": "Carousel",
+      "file": "sections/17-carousel.html"
+    },
+    {
+      "id": "teaser",
+      "title": "Teaser",
+      "file": "sections/18-teaser.html"
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+---
+title: "@atrium-ui/kits"
+description: Reusable, framework-agnostic UI kits — whole sets of styled components sharing one theme, distributed as zips you copy into your project.
+---
+
+import { Command } from "package:/components";
+
+UI Kits are the big sibling of components: instead of one template, a kit is a
+**whole set of ready-to-use UI components** (tabs, panels, buttons, colors,
+sliders, inputs, dialogs, lists, tables, ...) that share one Tailwind theme.
+
+- **No rendering framework.** Kit files are plain `.html` snippets. Behavior comes
+  from our headless custom elements (`@atrium-ui/elements`, plus
+  `@atrium-ui/panels` for tabbed panels), icons from a pre-built
+  inline SVG sprite (no icon runtime), styling from global Tailwind classes plus one
+  `theme.css` per kit.
+- **Yours to own.** Kits are not installed as dependencies — download the zip,
+  unzip it into your project, and customize everything.
+- **Previewed with a framework.** In the docs the same HTML is rendered inside
+  Astro so you see live examples.
+
+## Available kits
+
+- [Basics](/kits/basics) — warm wiki style (clay-orange primary, green accent).
+- [Workbench](/kits/workbench) — dense professional tool style (tool-blue primary, orange accent).
+
+## Installation (zip)
+
+Download the kit zip from its docs page (e.g. `/kits/basics.zip`) and unzip it,
+e.g. into `src/ui-kit/`. Then install the runtime deps:
+
+<Command
+  pnpm="pnpm add @atrium-ui/elements @atrium-ui/panels"
+  npm="npm i @atrium-ui/elements @atrium-ui/panels"
+  bun="bun add @atrium-ui/elements @atrium-ui/panels"
+/>
+
+Tailwind v4 is required for the utility classes. Import the theme once in your
+Tailwind v4 stylesheet (e.g. `src/index.css`) — do not `<link>` it in HTML,
+`@theme` tokens only register when compiled:
+
+```css
+@import "tailwindcss";
+@import "./ui-kit/theme.css";
+```
+
+Then import the elements once (global layout / entry):
+
+```html
+<script type="module">
+  import "@atrium-ui/elements";
+  import "@atrium-ui/panels"; // tabbed panels (only needed if you use the tabs section)
+</script>
+```
+
+Then copy any `sections/*.html` snippet into your pages. Each snippet starts with
+a `<!-- requires: ... -->` comment listing the element import it needs,
+followed by a `<!-- Built with Atrium UI — https://atrium-ui.dev/ -->`
+back-reference — please keep it when reusing kit markup.
+
+## Icons (no runtime)
+
+Icons are plain SVG. Every zip ships `icons/sprite.html` — one hidden `<svg>`
+holding a `<symbol id="kit-icon-…">` per icon, built from the kit's `icons/*.svg`
+with fills normalized to `currentColor`. Paste it once near the top of `<body>`:
+
+```html
+<svg class="h-4 w-4" aria-hidden="true"><use href="#kit-icon-search"></use></svg>
+```
+
+Size it with width/height utilities, color it with `color`. Each snippet also
+inlines the few symbols it uses, so snippets stay standalone. The raw
+`icons/*.svg` files are there if you'd rather inline one directly.
+
+## No-build install (pre-compiled CSS)
+
+No Tailwind v4 build step in your project? Every kit zip also ships a
+pre-compiled, minified `global.css` — base reset, only the utilities that
+kit's HTML uses, plus its theme tokens and element-theming rules, all in one
+file. Skip the `@import "tailwindcss"` step and just:
+
+```html
+<link rel="stylesheet" href="./ui-kit/global.css" />
+```
+
+This trades the ability to purge/extend with your own Tailwind config for zero
+build setup. If you already run Tailwind v4, prefer the `theme.css` import
+above instead — it stays tree-shaken to what your whole app uses.
+
+## Theming
+
+Change brand color in one place: the kit `theme.css` (`@theme` tokens
+`--color-primary-*`, `--color-accent-*`). Sections reference only those tokens
+via classes like `bg-primary-500` / `text-accent-600`.
+
+## Rebuilding the zips
+
+Kit sources live in `packages/kits/src/<kit>/`. Zips (and each kit's
+pre-compiled `global.css`) are built at build time and served statically from
+the docs:
+
+```bash
+cd packages/kits && bun run build
+# → dist/<kit>.zip (includes global.css)
+# → docs/assets/kits/<kit>.zip
+```
+
+## Authoring rules
+
+The full kit guide — what each of the 17 components is and the definition of
+done — lives in the
+[package README](https://github.com/atrium-ui/atrium/blob/main/packages/kits/README.md):
+
+- Pure HTML only — no framework syntax.
+- The only dependencies besides Tailwind are `@atrium-ui/elements` (and
+  `@atrium-ui/panels` for tabbed panels); icons are
+  `<symbol>` defs referenced with `<use>`, never an icon component.
+- No hardcoded brand hex in sections; all color via theme tokens.
+- Every section must be renderable standalone in the docs preview.
+- Every kit covers the full outline: tabs, buttons, colors,
+  numeric sliders, text inputs, color picker, detail expands,
+  text definitions, tables, dialogs, lists, gallery,
+  checkbox, switch, icons, popover / context menus, carousel, teaser.

@@ -1,0 +1,21 @@
+<!-- requires: @atrium-ui/panels -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<div class="w-full max-w-xl overflow-hidden rounded-lg border border-white/10 bg-[#232428] text-[12px] text-zinc-300">
+  <!-- Editor mode tabs: one panel, several views. Tabs come from the
+    `tab` attribute on each child — click to switch, drag a tab to dock or
+    split it into a new panel. `active-tab` picks the visible view. -->
+  <a-panel tabs active-tab="0" class="h-44">
+    <div tab="Layout" class="p-3 text-zinc-400">
+      <p class="m-0">Layout workspace. Tabs share one region — use them for views, never for sequential steps.</p>
+    </div>
+    <div tab="Modeling" class="p-3 text-zinc-400"><p class="m-0">Modeling tools go here.</p></div>
+    <div tab="Shading" class="p-3 text-zinc-400"><p class="m-0">Material graph goes here.</p></div>
+    <div tab="Animation" class="p-3 text-zinc-400"><p class="m-0">Timeline and clips go here.</p></div>
+  </a-panel>
+  <!-- Panel tabs: viewport / training / textures switcher -->
+  <a-panel tabs active-tab="0" class="h-28 border-t border-white/10">
+    <div tab="Viewport" class="p-3 text-zinc-400"><p class="m-0">Viewport output goes here.</p></div>
+    <div tab="Training" class="p-3 text-zinc-400"><p class="m-0">Training runs go here.</p></div>
+    <div tab="Textures" class="p-3 text-zinc-400"><p class="m-0">Texture sets go here.</p></div>
+  </a-panel>
+</div>

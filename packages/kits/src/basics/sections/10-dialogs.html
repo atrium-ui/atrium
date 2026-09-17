@@ -1,0 +1,47 @@
+<!-- requires: @atrium-ui/elements/portal + @atrium-ui/elements/blur -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<!-- Native <dialog> styled with kit tokens. No element required — but pair
+  with a-portal + a-blur if you need the Atrium dismiss/overlay behavior.
+  m-auto is required: Tailwind's preflight resets the UA margin: auto that
+  centers dialogs. Shown open for preview; close via form method="dialog",
+  reopen via dialog.showModal(). -->
+<div class="max-w-xl">
+  <dialog
+    id="kit-dialog"
+    open
+    class="m-auto w-full max-w-md rounded-2xl border border-stone-200 bg-white p-0 shadow-xl backdrop:bg-black/30"
+  >
+    <form method="dialog">
+      <div class="border-b border-stone-100 px-6 py-4">
+        <h3 class="m-0 text-base font-semibold text-stone-900">Delete project?</h3>
+        <p class="mt-1 text-sm text-stone-600">
+          This moves the project to trash for 30 days.
+        </p>
+      </div>
+      <div class="flex items-center justify-end gap-2 px-6 py-4">
+        <button
+          value="cancel"
+          class="cursor-pointer rounded-md border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:border-stone-400"
+        >
+          Cancel
+        </button>
+        <button
+          value="confirm"
+          class="cursor-pointer rounded-md bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-600"
+        >
+          Delete
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Atrium variant: behavior via elements, styling stays kit classes.
+  <a-portal>
+    <a-blur class="fixed inset-0 z-50 block h-full w-full">
+      <div role="dialog" aria-modal="true" class="fixed left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-stone-200 bg-white p-6 shadow-xl">
+        ...same inner markup...
+      </div>
+    </a-blur>
+  </a-portal>
+  -->
+</div>

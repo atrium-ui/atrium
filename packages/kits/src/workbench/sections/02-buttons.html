@@ -1,0 +1,30 @@
+<!-- requires: none (plain HTML + Tailwind) -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<div class="w-full max-w-xl rounded-lg border border-white/10 bg-[#232428] p-4 text-[12px]">
+  <p class="mb-3 text-[11px] font-semibold tracking-wide text-zinc-500 uppercase">Actions — primary is reserved for the single most important action</p>
+  <div class="flex flex-wrap items-center gap-2">
+    <button type="button" class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border-0 bg-primary-500 px-3 py-1.5 font-medium text-white transition-colors hover:bg-primary-400 active:bg-primary-600">Export</button>
+    <button type="button" class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-3 py-1.5 font-medium text-zinc-200 transition-colors hover:border-white/20 hover:bg-white/10">Open mesh…</button>
+    <button type="button" class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border-0 bg-transparent px-3 py-1.5 font-medium text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-100">Frame asset</button>
+    <button type="button" aria-disabled="true" class="inline-flex cursor-not-allowed items-center gap-1.5 rounded-md border border-white/5 bg-transparent px-3 py-1.5 font-medium text-zinc-600">Reset settings</button>
+    <button type="button" class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border-0 bg-red-500/15 px-3 py-1.5 font-medium text-red-300 transition-colors hover:bg-red-500/25">Delete</button>
+  </div>
+  <p class="mt-4 mb-2 text-[11px] font-semibold tracking-wide text-zinc-500 uppercase">Viewport toggles — pill switches with aria-pressed</p>
+  <div class="flex flex-wrap items-center gap-1.5">
+    <button type="button" aria-pressed="true" class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border-0 bg-primary-500 px-2.5 py-1 font-medium text-white">Wind</button>
+    <button type="button" aria-pressed="true" class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border-0 bg-primary-500 px-2.5 py-1 font-medium text-white">Bloom</button>
+    <button type="button" aria-pressed="false" class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-medium text-zinc-400 hover:text-zinc-200">Bounce fill</button>
+    <button type="button" aria-pressed="true" class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border-0 bg-primary-500 px-2.5 py-1 font-medium text-white">Ground</button>
+  </div>
+  <p class="mt-4 mb-2 text-[11px] font-semibold tracking-wide text-zinc-500 uppercase">Icon buttons</p>
+  <div class="flex items-center gap-1.5">
+    <button type="button" aria-label="Search" class="flex size-7 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10"><svg class="size-3.5" aria-hidden="true"><use href="#kit-icon-search"></use></svg></button>
+    <button type="button" aria-label="Reload" class="flex size-7 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10"><svg class="size-3.5" aria-hidden="true"><use href="#kit-icon-reload"></use></svg></button>
+    <button type="button" aria-label="Close" class="flex size-7 cursor-pointer items-center justify-center rounded-md border-0 bg-transparent text-zinc-500 hover:bg-white/5 hover:text-zinc-200"><svg class="size-3.5" aria-hidden="true"><use href="#kit-icon-close"></use></svg></button>
+  </div>
+  <svg aria-hidden="true" style="display: none">
+    <symbol id="kit-icon-search" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.3639 5.1998C7.97826 5.1998 5.2457 7.9151 5.2457 11.2498C5.2457 14.5845 7.97826 17.2998 11.3639 17.2998C14.7495 17.2998 17.4821 14.5845 17.4821 11.2498C17.4821 7.9151 14.7495 5.1998 11.3639 5.1998ZM3.8457 11.2498C3.8457 7.12867 7.21836 3.7998 11.3639 3.7998C15.5094 3.7998 18.8821 7.12867 18.8821 11.2498C18.8821 13.248 18.0892 15.0599 16.7998 16.3964L20.1897 19.7523C20.4644 20.0243 20.4667 20.4675 20.1947 20.7423C19.9227 21.017 19.4795 21.0193 19.2047 20.7473L15.7347 17.3119C14.5022 18.1859 12.9927 18.6998 11.3639 18.6998C7.21836 18.6998 3.8457 15.3709 3.8457 11.2498Z" fill="currentColor" /></symbol>
+    <symbol id="kit-icon-reload" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 4.86782C8.061 4.86782 4.86782 8.061 4.86782 12C4.86782 15.939 8.061 19.1322 12 19.1322C15.939 19.1322 19.1322 15.939 19.1322 12C19.1322 11.6223 19.4384 11.3161 19.8161 11.3161C20.1938 11.3161 20.5 11.6223 20.5 12C20.5 16.6944 16.6944 20.5 12 20.5C7.30558 20.5 3.5 16.6944 3.5 12C3.5 7.30558 7.30558 3.5 12 3.5C14.061 3.5 15.9523 4.23441 17.4238 5.45511C17.7145 5.69627 17.7547 6.12743 17.5135 6.41813C17.2724 6.70884 16.8412 6.749 16.5505 6.50785C15.3154 5.48323 13.7305 4.86782 12 4.86782Z" fill="currentColor" /></symbol>
+    <symbol id="kit-icon-close" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.19434 4.24854C4.46765 3.93377 4.92781 3.91554 5.22215 4.20783L19.7676 18.6523C20.0619 18.9446 20.079 19.4367 19.8057 19.7515C19.5324 20.0662 19.0722 20.0845 18.7779 19.7922L4.2324 5.34773C3.93807 5.05544 3.92102 4.56332 4.19434 4.24854Z" fill="currentColor" /><path fill-rule="evenodd" clip-rule="evenodd" d="M19.8057 4.24854C20.079 4.56332 20.0619 5.05544 19.7676 5.34773L5.22215 19.7922C4.92781 20.0845 4.46765 20.0662 4.19434 19.7515C3.92102 19.4367 3.93807 18.9446 4.2324 18.6523L18.7779 4.20783C19.0722 3.91554 19.5324 3.93377 19.8057 4.24854Z" fill="currentColor" /></symbol>
+  </svg>
+</div>

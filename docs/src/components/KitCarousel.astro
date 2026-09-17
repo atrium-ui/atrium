@@ -1,0 +1,133 @@
+---
+/**
+ * Horizontal carousel of every section in a kit — one slide per block
+ * (tabs, buttons, colors, ...), each in its own isolated iframe so you can
+ * scroll/step through the whole kit without one long stacked page.
+ * Built on `@atrium-ui/elements`' `a-track` (same primitive the kit's own
+ * carousel section demonstrates), not native scroll — snap, keyboard/drag
+ * navigation, and `moveBy(±1)` come from it for free.
+ *
+ * Reads the kit's `kit.json` for section order/titles and pulls each
+ * section's raw HTML via a Vite glob import keyed by file path.
+ */
+import kitsIndex from "../../../packages/kits/src/basics/kit.json";
+import { kitPreviewDocument } from "./kit-preview-doc";
+
+export interface Props {
+  kit?: string;
+}
+
+const { kit = "basics" } = Astro.props;
+
+const kitJsonModules = import.meta.glob("../../../packages/kits/src/*/kit.json", {
+  as: "raw",
+  eager: true,
+}) as Record<string, string>;
+
+const kitJsonRaw =
+  Object.entries(kitJsonModules).find(([path]) => path.includes(`/kits/src/${kit}/`))?.[1] ??
+  JSON.stringify(kitsIndex);
+const kitJson = JSON.parse(kitJsonRaw) as typeof kitsIndex;
+
+const sectionFiles = import.meta.glob("../../../packages/kits/src/*/sections/*.html", {
+  as: "raw",
+  eager: true,
+}) as Record<string, string>;
+
+const sectionPrefix = `/kits/src/${kit}/`;
+
+const base = import.meta.env.BASE_URL;
+
+const slides = kitJson.sections.map((section) => {
+  const match = Object.entries(sectionFiles).find(
+    ([path]) => path.includes(sectionPrefix) && path.endsWith(`/${section.file}`),
+  );
+  const html = match?.[1] ?? "";
+  return {
+    id: section.id,
+    title: section.title,
+    html,
+    srcdoc: kitPreviewDocument(html, `${base}kit-preview/elements.js`, kit),
+  };
+});
+
+const trackId = `kit-carousel-track-${kit}`;
+---
+
+<!-- NOTE: plain <div> wrapper, not <section> — docs layout.css styles all
+  `section` elements globally (padding-inline + overflow), which would
+  indent and clip the preview. -->
+<div class="not-content mb-10">
+  <div class="group relative">
+      <a-track id={trackId} class="flex w-full gap-6 rounded-2xl overflow-visible">
+      {
+        slides.map((slide) => (
+          <div class="w-[85%] max-w-xl flex-none sm:w-[60%] lg:w-[45%]">
+            <div class="flex h-80 flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+              <h3 class="typo-headline px-5 pt-4 opacity-50">{slide.title}</h3>
+              <iframe
+                title={`${slide.title} preview`}
+                srcdoc={slide.srcdoc}
+                loading="lazy"
+                sandbox="allow-scripts allow-forms"
+                scrolling="no"
+                tabindex="-1"
+                class="pointer-events-none block w-full flex-1 overflow-hidden border-0"
+              />
+            </div>
+          </div>
+        ))
+      }
+    </a-track>
+
+    <button
+      type="button"
+      aria-label="Previous section"
+      data-carousel-prev
+      class="absolute top-1/2 left-2 z-10 flex size-9 cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white/95 text-zinc-700 opacity-0 shadow-sm transition-[opacity,background-color,border-color,transform] group-hover:opacity-100 hover:border-zinc-300 hover:bg-white active:scale-90 active:bg-zinc-100 focus-visible:opacity-100"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M15 6l-6 6 6 6"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+    <button
+      type="button"
+      aria-label="Next section"
+      data-carousel-next
+      class="absolute top-1/2 right-2 z-10 flex size-9 cursor-pointer items-center justify-center rounded-full border border-zinc-200 bg-white/95 text-zinc-700 opacity-0 shadow-sm transition-[opacity,background-color,border-color,transform] group-hover:opacity-100 hover:border-zinc-300 hover:bg-white active:scale-90 active:bg-zinc-100 focus-visible:opacity-100"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M9 6l6 6-6 6"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script define:vars={{ trackId }}>
+  // `a-track` (from @atrium-ui/elements, loaded globally by the docs layout)
+  // does the scrolling/snapping itself — the buttons just step it by one item.
+  type TrackLike = HTMLElement & { moveBy(byItems: number): void };
+
+  const track = document.getElementById(trackId);
+  if (track && "moveBy" in track) {
+    const moveable = track as TrackLike;
+    track.parentElement
+      ?.querySelector("[data-carousel-prev]")
+      ?.addEventListener("click", () => moveable.moveBy(-1));
+    track.parentElement
+      ?.querySelector("[data-carousel-next]")
+      ?.addEventListener("click", () => moveable.moveBy(1));
+  }
+</script>

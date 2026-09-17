@@ -1,0 +1,34 @@
+<!-- requires: @atrium-ui/elements/portal + @atrium-ui/elements/blur -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<!-- Native <dialog> in workbench chrome. m-auto is required: Tailwind's
+  preflight resets the UA margin: auto that centers dialogs. Shown open for
+  preview; close via form method="dialog", reopen via dialog.showModal().
+  The wrapper has a fixed min-height and centers the dialog: a non-modal
+  <dialog open> is position: absolute by UA stylesheet, so without the
+  :not(:modal) guard below the wrapper would collapse and the dialog would
+  position against the viewport instead of the card (clipped in carousels).
+  Real modal usage via showModal() (:modal) is unaffected. -->
+<style>.wb-dialog-preview>dialog[open]:not(:modal){position:static}</style>
+<div class="wb-dialog-preview relative grid min-h-[220px] w-full max-w-xl place-items-center rounded-lg border border-white/10 bg-[#232428] p-4 text-[12px]">
+  <dialog id="wb-dialog" open class="m-auto w-full max-w-sm rounded-lg border border-white/10 bg-[#26272b] p-0 text-zinc-300 shadow-2xl backdrop:bg-black/60">
+    <form method="dialog">
+      <div class="border-b border-white/10 px-4 py-3">
+        <h3 class="m-0 text-[13px] font-semibold text-zinc-100">Overwrite “chess-rook”?</h3>
+        <p class="mt-1 text-[12px] text-zinc-400">The existing .cheetmesh will be replaced. This cannot be undone.</p>
+      </div>
+      <div class="flex items-center justify-end gap-1.5 px-4 py-3">
+        <button value="cancel" class="cursor-pointer rounded-md border border-white/10 bg-white/5 px-3 py-1.5 font-medium text-zinc-200 hover:bg-white/10">Cancel</button>
+        <button value="confirm" class="cursor-pointer rounded-md border-0 bg-primary-500 px-3 py-1.5 font-medium text-white hover:bg-primary-400">Overwrite</button>
+      </div>
+    </form>
+  </dialog>
+  <!-- Atrium variant: behavior via elements, styling stays kit classes.
+  <a-portal>
+    <a-blur class="fixed inset-0 z-50 block h-full w-full">
+      <div role="dialog" aria-modal="true" class="fixed left-1/2 top-1/2 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-lg border border-white/10 bg-[#26272b] p-0 shadow-2xl">
+        ...same inner markup...
+      </div>
+    </a-blur>
+  </a-portal>
+  -->
+</div>

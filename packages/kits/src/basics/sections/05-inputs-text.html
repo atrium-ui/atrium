@@ -1,0 +1,47 @@
+<!-- requires: @atrium-ui/elements/form (optional, for a-form-field validation) -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<form class="grid max-w-xl gap-4" onsubmit="return false">
+  <label class="block">
+    <span class="mb-1 block text-sm font-medium text-stone-700">Name</span>
+    <input
+      type="text"
+      name="name"
+      placeholder="Ada Lovelace"
+      autocomplete="name"
+      class="block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+    >
+  </label>
+
+  <label class="block">
+    <span class="mb-1 block text-sm font-medium text-stone-700">Email</span>
+    <input
+      type="email"
+      name="email"
+      placeholder="ada@example.com"
+      autocomplete="email"
+      class="block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+    >
+  </label>
+
+  <label class="block">
+    <span class="mb-1 block text-sm font-medium text-stone-700">Bio</span>
+    <textarea
+      name="bio"
+      rows="3"
+      placeholder="A few sentences about you…"
+      class="block w-full resize-y rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+    ></textarea>
+  </label>
+
+  <label class="block">
+    <span class="mb-1 block text-sm font-medium text-stone-700">Amount</span>
+    <input
+      type="number"
+      name="amount"
+      value="42"
+      min="0"
+      max="100"
+      class="block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+    >
+  </label>
+</form>

@@ -1,0 +1,96 @@
+<!-- requires: @atrium-ui/elements/list (optional; grid is pure Tailwind) -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<!-- Recently-modified cards: muted tile with a doc glyph, small date, and a
+  serif italic title — titles use font-display + primary-900 (rust). -->
+<a-list
+  class="grid w-full max-w-2xl grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3"
+  aria-label="Gallery"
+>
+  <a-list-item class="group cursor-pointer">
+    <span
+      class="flex aspect-[4/3] items-center justify-center rounded-xl bg-stone-200 text-stone-400 transition-colors group-hover:bg-stone-300"
+      role="img"
+      aria-label="Scratchpad document"
+    >
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M6 2h9l5 5v15H6V2Z M14 2v6h6"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M9 13h7M9 17h7"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </span>
+    <span
+      class="mt-2 block text-[11px] font-medium uppercase tracking-wide text-stone-500"
+      >Today</span
+    >
+    <span class="block font-display text-[15px] font-semibold italic text-primary-900"
+      >Scratchpad</span
+    >
+  </a-list-item>
+  <a-list-item class="group cursor-pointer">
+    <span
+      class="flex aspect-[4/3] items-center justify-center rounded-xl bg-stone-200 text-stone-400 transition-colors group-hover:bg-stone-300"
+      role="img"
+      aria-label="Things to do document"
+    >
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M6 2h9l5 5v15H6V2Z M14 2v6h6"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M9 13h7M9 17h7"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </span>
+    <span
+      class="mt-2 block text-[11px] font-medium uppercase tracking-wide text-stone-500"
+      >2 days ago</span
+    >
+    <span class="block font-display text-[15px] font-semibold italic text-primary-900"
+      >Things to do</span
+    >
+  </a-list-item>
+  <a-list-item class="group cursor-pointer">
+    <span
+      class="flex aspect-[4/3] items-center justify-center rounded-xl bg-stone-200 text-stone-400 transition-colors group-hover:bg-stone-300"
+      role="img"
+      aria-label="Piano document"
+    >
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M6 2h9l5 5v15H6V2Z M14 2v6h6"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M9 13h7M9 17h7"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </span>
+    <span
+      class="mt-2 block text-[11px] font-medium uppercase tracking-wide text-stone-500"
+      >4 days ago</span
+    >
+    <span class="block font-display text-[15px] font-semibold italic text-primary-900"
+      >Piano</span
+    >
+  </a-list-item>
+</a-list>

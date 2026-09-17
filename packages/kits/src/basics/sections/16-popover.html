@@ -1,0 +1,149 @@
+<!-- requires: @atrium-ui/elements/popover -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<!-- Click the trigger to open. Escape dismisses. The panel animates via the
+     `enabled` attribute the element sets when open (group-[&[enabled]]:). -->
+
+<div class="flex max-w-2xl flex-wrap items-start gap-8">
+  <!-- Popover menu -->
+  <a-popover-trigger class="relative z-10 inline-block">
+    <button
+      slot="trigger"
+      type="button"
+      class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-900"
+    >
+      Options
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M6 9l6 6 6-6"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+
+    <a-popover class="group">
+      <div
+        class="w-[max-content] p-2 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100"
+      >
+        <div
+          role="menu"
+          class="min-w-[200px] scale-95 rounded-xl border border-stone-950/10 bg-white p-1.5 text-sm shadow-[0_1px_2px_rgb(0_0_0/0.04),0_8px_24px_-4px_rgb(0_0_0/0.12)] transition-all duration-150 group-[&[enabled]]:scale-100"
+        >
+          <button
+            type="button"
+            role="menuitem"
+            class="flex w-full cursor-pointer items-center justify-between rounded-lg border-0 bg-transparent px-3 py-2 text-left text-stone-700 transition-colors hover:bg-primary-50 hover:text-stone-900"
+          >
+            Rename
+            <kbd
+              class="rounded border border-stone-200 bg-stone-50 px-1.5 font-mono text-[11px] text-stone-500"
+            >
+              R
+            </kbd>
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            class="flex w-full cursor-pointer items-center justify-between rounded-lg border-0 bg-transparent px-3 py-2 text-left text-stone-700 transition-colors hover:bg-primary-50 hover:text-stone-900"
+          >
+            Duplicate
+            <kbd
+              class="rounded border border-stone-200 bg-stone-50 px-1.5 font-mono text-[11px] text-stone-500"
+            >
+              D
+            </kbd>
+          </button>
+          <div role="separator" class="mx-2 my-1 border-t border-stone-100"></div>
+          <button
+            type="button"
+            role="menuitem"
+            class="flex w-full cursor-pointer items-center justify-between rounded-lg border-0 bg-transparent px-3 py-2 text-left text-red-600 transition-colors hover:bg-red-50"
+          >
+            Delete
+            <kbd
+              class="rounded border border-red-200 bg-red-50 px-1.5 font-mono text-[11px] text-red-500"
+            >
+              ⌫
+            </kbd>
+          </button>
+        </div>
+      </div>
+    </a-popover>
+  </a-popover-trigger>
+
+  <!-- Tooltip (hover / focus, also opens on right-click) -->
+  <a-popover-trigger class="relative z-10 inline-block">
+    <button
+      slot="trigger"
+      type="button"
+      aria-describedby="kit-tooltip"
+      class="flex size-8 cursor-pointer items-center justify-center rounded-full border border-stone-300 bg-white text-sm font-semibold text-stone-500 transition-colors hover:border-stone-400 hover:text-stone-900"
+    >
+      ?
+    </button>
+
+    <a-tooltip class="group">
+      <div
+        class="pointer-events-auto w-[max-content] max-w-[240px] p-2 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100"
+      >
+        <p
+          id="kit-tooltip"
+          class="m-0 rounded-lg bg-stone-900 px-3 py-2 text-xs leading-5 text-white shadow-lg"
+        >
+          Tooltips appear on hover, focus, or right-click. Keep them short — one line
+          ideally.
+        </p>
+      </div>
+    </a-tooltip>
+  </a-popover-trigger>
+
+  <!-- Context-menu style: menu on a content row -->
+  <a-popover-trigger class="relative z-10 block w-full max-w-xs">
+    <div
+      slot="trigger"
+      role="button"
+      tabindex="0"
+      class="cursor-pointer rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm transition-colors hover:border-primary-300 hover:bg-primary-50"
+    >
+      <strong class="font-medium text-stone-900">Q3-report.pdf</strong>
+      <br>
+      <span class="text-xs text-stone-500">Click for file actions · 2.4 MB</span>
+    </div>
+
+    <a-popover class="group">
+      <div
+        class="w-[max-content] p-2 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100"
+      >
+        <div
+          role="menu"
+          aria-label="File actions"
+          class="min-w-[200px] scale-95 rounded-xl border border-stone-950/10 bg-white p-1.5 text-sm shadow-[0_1px_2px_rgb(0_0_0/0.04),0_8px_24px_-4px_rgb(0_0_0/0.12)] transition-all duration-150 group-[&[enabled]]:scale-100"
+        >
+          <button
+            type="button"
+            role="menuitem"
+            class="block w-full cursor-pointer rounded-lg border-0 bg-transparent px-3 py-2 text-left text-stone-700 transition-colors hover:bg-primary-50 hover:text-stone-900"
+          >
+            Open
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            class="block w-full cursor-pointer rounded-lg border-0 bg-transparent px-3 py-2 text-left text-stone-700 transition-colors hover:bg-primary-50 hover:text-stone-900"
+          >
+            Download
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            class="block w-full cursor-pointer rounded-lg border-0 bg-transparent px-3 py-2 text-left text-stone-700 transition-colors hover:bg-primary-50 hover:text-stone-900"
+          >
+            Share link…
+          </button>
+        </div>
+      </div>
+    </a-popover>
+  </a-popover-trigger>
+</div>

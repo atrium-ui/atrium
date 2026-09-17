@@ -1,0 +1,40 @@
+<!-- requires: none (pure HTML + Tailwind) -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<!-- A teaser is a single content card: muted tile with a glyph, small date,
+  serif italic title. Used for recently-modified docs, search results, and
+  anywhere one item must invite a click. Tile and title are one link. -->
+<div class="max-w-2xl">
+  <a
+    href="#"
+    class="group block w-52 cursor-pointer no-underline"
+    aria-label="Open Scratchpad, modified today"
+  >
+    <span
+      class="flex aspect-[4/3] items-center justify-center rounded-xl bg-stone-200/80 text-stone-400 transition-colors group-hover:bg-stone-300"
+      aria-hidden="true"
+    >
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M6 2h9l5 5v15H6V2Z M14 2v6h6"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M9 13h7M9 17h7"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </span>
+    <span class="mt-2 block text-xs text-stone-500">Today</span>
+    <span class="block font-display text-[15px] font-semibold italic text-primary-900">Scratchpad</span>
+  </a>
+
+  <p class="mt-4 text-xs text-stone-500">
+    Tile, date, and title form one link with a single accessible name
+    (<code>aria-label</code> on the link, <code>aria-hidden</code> on the
+    decoration). Galleries and carousels are grids and tracks of teasers.
+  </p>
+</div>

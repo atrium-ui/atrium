@@ -1,0 +1,70 @@
+<!-- requires: @atrium-ui/elements/toggle -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<fieldset class="max-w-xl">
+  <legend class="mb-3 text-sm font-medium text-stone-900">Notifications</legend>
+  <div class="grid gap-3">
+    <label
+      class="flex cursor-pointer items-start gap-3 rounded-xl border border-stone-200 bg-white px-4 py-3 transition-colors has-checked:border-accent-500 has-checked:bg-accent-50"
+    >
+      <a-toggle
+        name="notify-email"
+        value="true"
+        class="mt-0.5 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-md border border-stone-300 bg-white transition-colors [&[value='true']]:border-accent-500 [&[value='true']]:bg-accent-500"
+      >
+        <svg
+          slot="true"
+          width="14"
+          height="14"
+          viewBox="0 0 16 16"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M3 8.5 6.5 12 13 4.5"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </a-toggle>
+      <span class="text-sm"
+        ><strong class="font-medium text-stone-900">Email updates</strong>
+        <br>
+        <span class="text-stone-600">Product news and changelogs.</span></span
+      >
+    </label>
+
+    <label
+      class="flex cursor-pointer items-start gap-3 rounded-xl border border-stone-200 bg-white px-4 py-3 transition-colors has-checked:border-accent-500 has-checked:bg-accent-50"
+    >
+      <a-toggle
+        name="notify-mentions"
+        value="false"
+        class="mt-0.5 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-md border border-stone-300 bg-white transition-colors [&[value='true']]:border-accent-500 [&[value='true']]:bg-accent-500"
+      >
+        <svg
+          slot="true"
+          width="14"
+          height="14"
+          viewBox="0 0 16 16"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M3 8.5 6.5 12 13 4.5"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </a-toggle>
+      <span class="text-sm"
+        ><strong class="font-medium text-stone-900">Mentions only</strong>
+        <br>
+        <span class="text-stone-600">Notify me when someone mentions me.</span></span
+      >
+    </label>
+  </div>
+</fieldset>

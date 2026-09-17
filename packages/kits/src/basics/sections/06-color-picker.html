@@ -1,0 +1,20 @@
+<!-- requires: @atrium-ui/elements/color-picker -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<div class="flex max-w-xl flex-wrap items-start gap-6">
+  <label class="block">
+    <span class="mb-2 block text-sm font-medium text-stone-700">Brand color</span>
+    <a-color-picker name="brand" value="#4f46e5"></a-color-picker>
+  </label>
+
+  <label class="block">
+    <span class="mb-2 block text-sm font-medium text-stone-700"
+      >With alpha + palette</span
+    >
+    <a-color-picker
+      alpha
+      name="highlight"
+      value="#f59e0bcc"
+      palette="#ef4444,#22c55e,#3b82f6,#f59e0b,#4f46e5"
+    ></a-color-picker>
+  </label>
+</div>

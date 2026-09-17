@@ -1,0 +1,79 @@
+/**
+ * NOTE: this file intentionally does NOT import the framework itself.
+ * The host must provide Tailwind v4 (your app CSS, or the preview shell):
+ *   @import "tailwindcss";
+ *   @import "./ui-kit/theme.css";
+ */
+
+/**
+ * Default kit theme (Tailwind v4), styled after a warm personal-wiki app:
+ * paper background, serif display type, clay-orange primary, green accent.
+ * Brand color goes through these tokens only — sections must not hardcode hex brand colors.
+ * Import this file once in your project, then use classes like
+ * `bg-primary-500`, `text-accent-700`, `font-display`.
+ *
+ * `static`: always emit the variables, even for tokens no utility currently
+ * uses. Element-theming rules below (a-range, a-tabs-tab, ...) reference
+ * these vars in plain CSS, which Tailwind's tree-shaking cannot see — without
+ * `static` they resolve to nothing and the styles silently break.
+ */
+@theme static {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+
+  /* Page background for the kit shell and docs previews */
+  --color-background: #ffffff;
+
+  /* Primary: clay orange (actions, active states) */
+  --color-primary-50: #fff7ed;
+  --color-primary-100: #ffedd5;
+  --color-primary-200: #fed7aa;
+  --color-primary-300: #fdba74;
+  --color-primary-400: #fb923c;
+  --color-primary-500: #f97316;
+  --color-primary-600: #ea580c;
+  --color-primary-700: #c2410c;
+  --color-primary-800: #9a3412;
+  --color-primary-900: #7c2d12;
+  --color-primary-950: #431407;
+
+  /* Accent: green (eyebrows, toggles, highlights) */
+  --color-accent-50: #f0fdf4;
+  --color-accent-100: #dcfce7;
+  --color-accent-200: #bbf7d0;
+  --color-accent-300: #86efac;
+  --color-accent-400: #4ade80;
+  --color-accent-500: #22c55e;
+  --color-accent-600: #16a34a;
+  --color-accent-700: #15803d;
+  --color-accent-800: #166534;
+  --color-accent-900: #14532d;
+}
+
+/* Kit element theming: map unstyled elements to theme tokens */
+a-range {
+  --theme-color: var(--color-primary-500);
+  --range-track-background: var(--color-primary-100);
+}
+
+a-color-picker {
+  --color-picker-focus-outline: var(--color-primary-500);
+}
+
+a-tabs-tab[selected] {
+  background: var(--color-primary-500);
+  color: #fff;
+}
+
+/* `a-list` and `a-tabs-panel` hosts default to `display: inline`, so border,
+   padding and rounding utilities on them render as inline fragments and
+   unselected panels leave stray line boxes. Make them block.
+   NOTE: kept in `@layer base` (not unlayered) so Tailwind `display`
+   utilities like `grid`/`hidden` on these hosts keep working — unlayered
+   author CSS beats everything Tailwind v4 puts in cascade layers. */
+@layer base {
+  a-list,
+  a-tabs-panel {
+    display: block;
+  }
+}

@@ -283,8 +283,6 @@ export default defineConfig({
       include: [
         //
         "**/react/*.{tsx}",
-        "**/playground/Playground.tsx",
-        "../packages/playground/src/**/*.tsx",
         "./src/pages/components/docs-editor.tsx",
         "**/stories/Controls.tsx",
         "**/stories/Frame.tsx",

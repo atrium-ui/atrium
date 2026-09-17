@@ -1,0 +1,34 @@
+<!-- requires: @atrium-ui/elements/tabs -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<a-tabs class="block w-full max-w-xl">
+  <a-tabs-list class="inline-flex max-w-full gap-1 rounded-xl bg-stone-100 p-1">
+    <a-tabs-tab
+      selected
+      class="cursor-pointer rounded-lg px-3 py-1.5 text-sm text-stone-500 transition-colors hover:text-stone-900"
+    >
+      Overview
+    </a-tabs-tab>
+    <a-tabs-tab
+      class="cursor-pointer rounded-lg px-3 py-1.5 text-sm text-stone-500 transition-colors hover:text-stone-900"
+    >
+      Details
+    </a-tabs-tab>
+    <a-tabs-tab
+      class="cursor-pointer rounded-lg px-3 py-1.5 text-sm text-stone-500 transition-colors hover:text-stone-900"
+    >
+      Activity
+    </a-tabs-tab>
+  </a-tabs-list>
+
+  <a-tabs-panel selected class="pt-4 text-sm text-stone-600">
+    <p class="m-0">
+      Overview content. Kit tabs are keyboard navigable (arrow keys, Home/End).
+    </p>
+  </a-tabs-panel>
+  <a-tabs-panel class="pt-4 text-sm text-stone-600">
+    <p class="m-0">Details content goes here.</p>
+  </a-tabs-panel>
+  <a-tabs-panel class="pt-4 text-sm text-stone-600">
+    <p class="m-0">Activity content goes here.</p>
+  </a-tabs-panel>
+</a-tabs>

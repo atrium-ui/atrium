@@ -187,11 +187,13 @@ export class Group extends Column {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (oldValue === newValue) return;
 
+    // Render first: rebuilding the tab bar drops `active` markers, so the
+    // selection must be applied afterwards (same order as slotChangeCallback).
+    this.renderTabs();
+
     if (name === "active-tab") {
       this.activeTab = +newValue;
     }
-
-    this.renderTabs();
   }
 
   connectedCallback() {
@@ -207,7 +209,17 @@ export class Group extends Column {
     super.slotChangeCallback();
 
     this.renderTabs();
-    this.setActiveTab(this.components.length - 1);
+
+    // Respect a declarative default: `active-tab` attribute first, then a
+    // child already flagged `active`. Otherwise activate the last tab, so a
+    // newly docked panel takes focus (browser-tab behavior).
+    if (this.hasAttribute("active-tab")) {
+      this.setActiveTab(this.activeTab);
+      return;
+    }
+
+    const flagged = this.components.findIndex((ele) => ele.hasAttribute("active"));
+    this.setActiveTab(flagged >= 0 ? flagged : this.components.length - 1);
   }
 
   insertPosition = 0;

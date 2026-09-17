@@ -1,0 +1,27 @@
+<!-- requires: none (semantic HTML + Tailwind) -->
+<!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<dl
+  class="max-w-xl divide-y divide-stone-200 rounded-2xl border border-stone-200 bg-white px-6"
+>
+  <div class="grid gap-1 py-4 sm:grid-cols-[160px_1fr] sm:gap-4">
+    <dt class="text-sm font-medium text-stone-900">Plan</dt>
+    <dd class="m-0 text-sm leading-6 text-stone-600">
+      The subscription tier.
+      <dfn class="font-semibold text-stone-900 not-italic">Pro</dfn>
+      includes unlimited projects.
+    </dd>
+  </div>
+  <div class="grid gap-1 py-4 sm:grid-cols-[160px_1fr] sm:gap-4">
+    <dt class="text-sm font-medium text-stone-900">Seat</dt>
+    <dd class="m-0 text-sm leading-6 text-stone-600">
+      One licensed user. Use <code>dl / dt / dd</code>so assistive tech announces
+      term–definition pairs.
+    </dd>
+  </div>
+  <div class="grid gap-1 py-4 sm:grid-cols-[160px_1fr] sm:gap-4">
+    <dt class="text-sm font-medium text-stone-900">Retention</dt>
+    <dd class="m-0 text-sm leading-6 text-stone-600">
+      How long data is kept. Default is 90 days, configurable per workspace.
+    </dd>
+  </div>
+</dl>
