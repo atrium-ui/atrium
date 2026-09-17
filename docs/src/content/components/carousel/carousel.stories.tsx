@@ -112,37 +112,37 @@ export const SomeSliderC = {
   render: () => (
     <div>
       <Carousel>
-        <a href="#" class="block w-full flex-none p-2 md:w-1/2 lg:w-1/3">
+        <a href="./" class="block w-full flex-none p-2 md:w-1/2 lg:w-1/3">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full object-cover"
           />
         </a>
-        <a href="#" class="block w-full flex-none p-2 md:w-1/2 lg:w-1/3">
+        <a href="./" class="block w-full flex-none p-2 md:w-1/2 lg:w-1/3">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full object-cover"
           />
         </a>
-        <a href="#" class="block w-full flex-none p-2 md:w-1/2 lg:w-1/3">
+        <a href="./" class="block w-full flex-none p-2 md:w-1/2 lg:w-1/3">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full object-cover"
           />
         </a>
-        <a href="#" class="block w-full flex-none p-2 md:w-1/2 lg:w-1/3">
+        <a href="./" class="block w-full flex-none p-2 md:w-1/2 lg:w-1/3">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full object-cover"
           />
         </a>
-        <a href="#" class="block w-full flex-none p-2 md:w-1/2 lg:w-1/3">
+        <a href="./" class="block w-full flex-none p-2 md:w-1/2 lg:w-1/3">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full object-cover"
           />
         </a>
-        <a href="#" class="block w-full flex-none p-2 md:w-1/2 lg:w-1/3">
+        <a href="./" class="block w-full flex-none p-2 md:w-1/2 lg:w-1/3">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full object-cover"
@@ -205,37 +205,37 @@ export const landingpage = {
   render: () => (
     <div class="flex h-full items-center justify-center p-4">
       <Carousel>
-        <a href="#" class="block w-1/3 flex-none p-2">
+        <a href="./" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full rounded-lg object-cover"
           />
         </a>
-        <a href="#" class="block w-1/3 flex-none p-2">
+        <a href="./" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full rounded-lg object-cover"
           />
         </a>
-        <a href="#" class="block w-1/3 flex-none p-2">
+        <a href="./" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full rounded-lg object-cover"
           />
         </a>
-        <a href="#" class="block w-1/3 flex-none p-2">
+        <a href="./" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full rounded-lg object-cover"
           />
         </a>
-        <a href="#" class="block w-1/3 flex-none p-2">
+        <a href="./" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full rounded-lg object-cover"
           />
         </a>
-        <a href="#" class="block w-1/3 flex-none p-2">
+        <a href="./" class="block w-1/3 flex-none p-2">
           <Image
             src={`${import.meta.env.BASE_URL}placeholder.svg`}
             class="aspect-square w-full rounded-lg object-cover"

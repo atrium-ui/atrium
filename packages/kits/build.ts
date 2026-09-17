@@ -27,7 +27,6 @@ import { $ } from "bun";
 const root = resolve(import.meta.dir);
 const srcDir = join(root, "src");
 const distDir = join(root, "dist");
-const tailwindBin = join(root, "node_modules", ".bin", "tailwindcss");
 const docsKitsDir = resolve(root, "../../docs/assets/kits");
 
 mkdirSync(distDir, { recursive: true });
@@ -46,6 +45,39 @@ if (kits.length === 0) {
   process.exit(1);
 }
 
+/**
+ * Resolve the Tailwind CLI entry script. `bun install --linker=hoisted`
+ * (used in CI via `task setup`) hoists binaries to the workspace root, so
+ * `packages/kits/node_modules/.bin/tailwindcss` may not exist. We check the
+ * package-local bin, then the hoisted root bin, and fall back to
+ * `bun x tailwindcss` which resolves the declared devDependency.
+ *
+ * The entry is always executed via `bun` explicitly so we don't depend on
+ * the exec bit / shebang handling of the `.bin` symlink on CI runners.
+ */
+function resolveTailwindArgs(): string[] {
+  const candidates = [
+    join(root, "node_modules", ".bin", "tailwindcss"),
+    resolve(root, "../../node_modules/.bin/tailwindcss"),
+  ];
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) return ["bun", candidate];
+  }
+  const onPath = Bun.which("tailwindcss");
+  if (onPath) return [onPath];
+  return ["bun", "x", "tailwindcss"];
+}
+
+async function runTailwind(entryPath: string, outCss: string): Promise<void> {
+  const bin = resolveTailwindArgs();
+  if (bin.length === 2) {
+    await $`bun ${bin[1]} -i ${entryPath} -o ${outCss} --minify`.quiet();
+  } else if (bin.length === 3) {
+    await $`bun x tailwindcss -i ${entryPath} -o ${outCss} --minify`.quiet();
+  } else {
+    await $`${bin[0]} -i ${entryPath} -o ${outCss} --minify`.quiet();
+  }
+}
 /**
  * Compile `<kitDir>/theme.css` + every section/index HTML into one
  * standalone, minified stylesheet at `outCss` — base reset, only the
@@ -67,7 +99,7 @@ async function compileGlobalCss(kitDir: string, outCss: string): Promise<void> {
   ].join("\n");
   writeFileSync(entryPath, entry);
   try {
-    await $`${tailwindBin} -i ${entryPath} -o ${outCss} --minify`.quiet();
+    await runTailwind(entryPath, outCss);
   } finally {
     rmSync(entryPath, { force: true });
   }
