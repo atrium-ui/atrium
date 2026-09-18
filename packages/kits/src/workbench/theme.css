@@ -75,7 +75,7 @@ a-panel {
   --tab-height: 1.35rem;
   --tab-background: transparent;
   --tab-hover-background: rgb(255 255 255 / 0.06);
-  --tab-active-background: var(--color-neutral-800);
+  --tab-active-background: rgb(255 255 255 / 0.06);
   --tab-font-color: #fff;
   --tab-font-size: 12px;
   --tab-border-radius: 6px;
@@ -86,7 +86,7 @@ a-panel::part(tabs) {
   gap: 2px;
   background: #1c1d20;
   border-bottom: 1px solid rgb(255 255 255 / 0.1);
-  padding: 4px 8px;
+  padding: 4px 8px 0 8px;
 }
 
 a-panel::part(tab) {

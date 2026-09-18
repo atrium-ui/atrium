@@ -737,6 +737,61 @@
                     class="block w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm placeholder:text-stone-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                   >
                 </label>
+                <label class="block">
+                  <span class="mb-1 block text-[13px] font-medium text-stone-700"
+                    >Visibility</span
+                  >
+                  <a-select
+                    name="visibility"
+                    value="private"
+                    class="relative inline-block w-full [&[opened]_.select-chevron]:rotate-180"
+                    onchange="const l=this.querySelector('[data-kit-select-label]');const o=event.detail.selected;if(l&&o)l.textContent=o.textContent.trim()"
+                  >
+                    <button
+                      slot="trigger"
+                      type="button"
+                      aria-haspopup="listbox"
+                      class="flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg border border-stone-200 bg-white px-3 py-2 text-left text-sm text-stone-900 transition-colors hover:border-stone-300 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                    >
+                      <span data-kit-select-label class="min-w-0 flex-1 truncate"
+                        >Private</span
+                      >
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        stroke="currentColor"
+                        class="select-chevron size-4 flex-none text-stone-500 transition-transform duration-150"
+                      >
+                        <path
+                          d="m5 7.5 5 5 5-5"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      class="mt-1 rounded-lg border border-stone-200 bg-white p-1 shadow-[0_8px_24px_-4px_rgb(0_0_0/0.12)]"
+                    >
+                      <a-option
+                        value="private"
+                        class="block cursor-pointer rounded-md px-3 py-2 text-sm text-stone-700 hover:bg-primary-50 [&[selected]]:bg-primary-50 [&[selected]]:font-medium [&[selected]]:text-primary-900"
+                        >Private</a-option
+                      >
+                      <a-option
+                        value="shared"
+                        class="block cursor-pointer rounded-md px-3 py-2 text-sm text-stone-700 hover:bg-primary-50 [&[selected]]:bg-primary-50 [&[selected]]:font-medium [&[selected]]:text-primary-900"
+                        >Shared with team</a-option
+                      >
+                      <a-option
+                        value="public"
+                        class="block cursor-pointer rounded-md px-3 py-2 text-sm text-stone-700 hover:bg-primary-50 [&[selected]]:bg-primary-50 [&[selected]]:font-medium [&[selected]]:text-primary-900"
+                        >Public</a-option
+                      >
+                    </div>
+                  </a-select>
+                </label>
                 <div class="flex justify-end">
                   <button
                     type="button"

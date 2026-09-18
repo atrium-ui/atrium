@@ -41,6 +41,7 @@ copy snippets individually.
       // or import only what you use:
       // import "@atrium-ui/elements/toggle";
      // import "@atrium-ui/elements/range";
+     // import "@atrium-ui/elements/select";
      // import "@atrium-ui/elements/color-picker";
      // import "@atrium-ui/elements/expandable";
      // import "@atrium-ui/elements/list";

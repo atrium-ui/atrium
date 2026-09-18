@@ -31,6 +31,11 @@
       "file": "sections/05-inputs-text.html"
     },
     {
+      "id": "select",
+      "title": "Select",
+      "file": "sections/19-select.html"
+    },
+    {
       "id": "color-picker",
       "title": "Color picker",
       "file": "sections/06-color-picker.html"

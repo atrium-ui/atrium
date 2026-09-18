@@ -37,13 +37,26 @@
       }
     </style>
     <style>
-      [data-drag-number] { cursor: ew-resize; touch-action: pan-y; }
+      [data-drag-number] {
+        cursor: ew-resize;
+        touch-action: pan-y;
+        background: linear-gradient(
+          to right,
+          var(--color-primary-600) 0%,
+          var(--color-primary-600) calc(var(--dn-fill, 0) * 100%),
+          rgb(255 255 255 / 0.08) calc(var(--dn-fill, 0) * 100%),
+          rgb(255 255 255 / 0.08) 100%
+        );
+      }
       [data-drag-number] input[type="number"] { cursor: text; }
       [data-drag-number] input[type="number"]::-webkit-outer-spin-button,
       [data-drag-number] input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
       [data-drag-number] input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
       [data-drag-number][data-dragging] { user-select: none; }
-      [data-drag-number][data-dragging] > span:first-child { background: var(--color-primary-500); }
+      [data-drag-number]:focus-within {
+        outline: 1px solid var(--color-primary-400);
+        outline-offset: 0;
+      }
       input[type="color"].wb-swatch { -webkit-appearance: none; appearance: none; background: transparent; border: none; padding: 0; cursor: pointer; }
       input[type="color"].wb-swatch::-webkit-color-swatch-wrapper { padding: 0; }
       input[type="color"].wb-swatch::-webkit-color-swatch { border: 1px solid rgb(0 0 0 / 0.4); border-radius: 4px; }
@@ -374,29 +387,24 @@
                       </button>
                     </div>
                     <div
-                      class="mt-1.5 flex items-center gap-1"
+                      class="mt-1.5 flex items-center gap-2 rounded px-2 py-1"
                       data-drag-number
+                      data-dn-track
                       data-min="0"
                       data-max="16"
                       data-step="0.01"
                       data-precision="2"
                       data-value="9.02"
+                      style="--dn-fill: 0.56375"
                     >
-                      <span
-                        class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white"
-                        >Time</span
+                      <span class="min-w-0 flex-1 truncate font-medium text-white">Time</span>
+                      <input
+                        type="number"
+                        value="9.02"
+                        aria-label="Time"
+                        class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
                       >
-                      <span
-                        class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"
-                      >
-                        <input
-                          type="number"
-                          value="9.02"
-                          aria-label="Time"
-                          class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none"
-                        >
-                        <span class="font-mono text-[11px] text-zinc-500">s</span>
-                      </span>
+                      <span class="font-mono text-[11px] text-white/60">s</span>
                     </div>
                   </div>
                 </div>
@@ -536,6 +544,59 @@
                     <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">
                       303.3 KiB
                     </dd>
+                    <dt class="flex items-center text-zinc-500">Format</dt>
+                    <dd class="m-0">
+                      <a-select
+                        name="format"
+                        value="gltf"
+                        class="relative block w-full [&[opened]_.select-chevron]:rotate-180"
+                        onchange="const l=this.querySelector('[data-kit-select-label]');const o=event.detail.selected;if(l&&o)l.textContent=o.textContent.trim()"
+                      >
+                        <button
+                          slot="trigger"
+                          type="button"
+                          aria-haspopup="listbox"
+                          class="flex w-full cursor-pointer items-center justify-end gap-1.5 rounded border border-transparent px-1.5 py-0.5 text-right font-mono text-[11px] text-zinc-200 hover:border-white/15 hover:bg-white/5 focus:border-primary-400 focus:outline-none"
+                        >
+                          <span data-kit-select-label class="min-w-0 truncate"
+                            >glTF 2.0</span
+                          >
+                          <svg
+                            aria-hidden="true"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            stroke="currentColor"
+                            class="select-chevron size-3 flex-none text-zinc-500 transition-transform duration-150"
+                          >
+                            <path
+                              d="m5 7.5 5 5 5-5"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        </button>
+                        <div
+                          class="mt-1 rounded-md border border-white/10 bg-[#141518] p-0.5 text-left shadow-[0_8px_24px_-4px_rgb(0_0_0/0.5)]"
+                        >
+                          <a-option
+                            value="gltf"
+                            class="block cursor-pointer rounded px-2 py-1 font-mono text-[11px] text-zinc-300 hover:bg-white/5 [&[selected]]:bg-primary-500/20 [&[selected]]:text-primary-200"
+                            >glTF 2.0</a-option
+                          >
+                          <a-option
+                            value="fbx"
+                            class="block cursor-pointer rounded px-2 py-1 font-mono text-[11px] text-zinc-300 hover:bg-white/5 [&[selected]]:bg-primary-500/20 [&[selected]]:text-primary-200"
+                            >FBX</a-option
+                          >
+                          <a-option
+                            value="usd"
+                            class="block cursor-pointer rounded px-2 py-1 font-mono text-[11px] text-zinc-300 hover:bg-white/5 [&[selected]]:bg-primary-500/20 [&[selected]]:text-primary-200"
+                            >USDZ</a-option
+                          >
+                        </div>
+                      </a-select>
+                    </dd>
                   </dl>
                 </a-expandable>
                 <a-expandable opened class="block border-b border-white/10">
@@ -591,49 +652,45 @@
                           </label>
                         </div>
                         <div
-                          class="flex items-center gap-1"
+                          class="flex items-center gap-2 rounded px-2 py-1"
                           data-drag-number
+                          data-dn-track
                           data-min="0"
                           data-max="1"
                           data-step="0.01"
                           data-precision="2"
                           data-value="0.38"
+                          style="--dn-fill: 0.38"
                         >
-                          <span
-                            class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white"
+                          <span class="min-w-0 flex-1 truncate font-medium text-white"
                             >Roughness</span
                           >
-                          <span
-                            class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"
-                            ><input
-                              type="number"
-                              value="0.38"
-                              aria-label="Material 0 roughness"
-                              class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none"
-                            ></span
+                          <input
+                            type="number"
+                            value="0.38"
+                            aria-label="Material 0 roughness"
+                            class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
                           >
                         </div>
                         <div
-                          class="flex items-center gap-1"
+                          class="flex items-center gap-2 rounded px-2 py-1"
                           data-drag-number
+                          data-dn-track
                           data-min="0"
                           data-max="1"
                           data-step="0.01"
                           data-precision="2"
                           data-value="0.65"
+                          style="--dn-fill: 0.65"
                         >
-                          <span
-                            class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white"
+                          <span class="min-w-0 flex-1 truncate font-medium text-white"
                             >Metallic</span
                           >
-                          <span
-                            class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"
-                            ><input
-                              type="number"
-                              value="0.65"
-                              aria-label="Material 0 metallic"
-                              class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none"
-                            ></span
+                          <input
+                            type="number"
+                            value="0.65"
+                            aria-label="Material 0 metallic"
+                            class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
                           >
                         </div>
                       </div>
@@ -676,74 +733,68 @@
                           </label>
                         </div>
                         <div
-                          class="flex items-center gap-1"
+                          class="flex items-center gap-2 rounded px-2 py-1"
                           data-drag-number
+                          data-dn-track
                           data-min="0"
                           data-max="1"
                           data-step="0.01"
                           data-precision="2"
                           data-value="0.38"
+                          style="--dn-fill: 0.38"
                         >
-                          <span
-                            class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white"
+                          <span class="min-w-0 flex-1 truncate font-medium text-white"
                             >Roughness</span
                           >
-                          <span
-                            class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"
-                            ><input
-                              type="number"
-                              value="0.38"
-                              aria-label="Material 1 roughness"
-                              class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none"
-                            ></span
+                          <input
+                            type="number"
+                            value="0.38"
+                            aria-label="Material 1 roughness"
+                            class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
                           >
                         </div>
                         <div
-                          class="flex items-center gap-1"
+                          class="flex items-center gap-2 rounded px-2 py-1"
                           data-drag-number
+                          data-dn-track
                           data-min="0"
                           data-max="1"
                           data-step="0.01"
                           data-precision="2"
                           data-value="0.3"
+                          style="--dn-fill: 0.3"
                         >
-                          <span
-                            class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white"
+                          <span class="min-w-0 flex-1 truncate font-medium text-white"
                             >Metallic</span
                           >
-                          <span
-                            class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"
-                            ><input
-                              type="number"
-                              value="0.30"
-                              aria-label="Material 1 metallic"
-                              class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none"
-                            ></span
+                          <input
+                            type="number"
+                            value="0.30"
+                            aria-label="Material 1 metallic"
+                            class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
                           >
                         </div>
                       </div>
                     </section>
                     <div
-                      class="flex items-center gap-1 rounded-md border border-white/10 bg-[#141518] p-2"
+                      class="flex items-center gap-2 rounded px-2 py-1"
                       data-drag-number
+                      data-dn-track
                       data-min="0"
                       data-max="2"
                       data-step="0.01"
                       data-precision="2"
                       data-value="1"
+                      style="--dn-fill: 0.5"
                     >
-                      <span
-                        class="w-24 shrink-0 truncate rounded bg-primary-500/80 px-1.5 py-1 font-medium text-white"
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
                         >Exposure</span
                       >
-                      <span
-                        class="flex min-w-0 flex-1 items-center gap-1 rounded border border-transparent bg-white/5 px-1.5 py-1 focus-within:border-primary-400"
-                        ><input
-                          type="number"
-                          value="1.00"
-                          aria-label="Exposure"
-                          class="w-full min-w-0 bg-transparent text-right font-mono text-[11px] text-zinc-200 focus:outline-none"
-                        ></span
+                      <input
+                        type="number"
+                        value="1.00"
+                        aria-label="Exposure"
+                        class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
                       >
                     </div>
                   </div>
@@ -920,16 +971,21 @@
           const precision = Number(root.dataset.precision ?? 2);
           const def = root.hasAttribute("data-value") ? Number(root.dataset.value) : null;
           const clamp = (v) => Math.min(max, Math.max(min, v));
-          const fmt = (v) => clamp(v).toFixed(precision);
+          const paint = (v) => {
+            const t = max === min ? 0 : (clamp(v) - min) / (max - min);
+            root.style.setProperty("--dn-fill", String(t));
+          };
           const commit = (v, fire = true) => {
-            input.value = fmt(v);
+            const c = clamp(v);
+            input.value = c.toFixed(precision);
+            paint(c);
             if (fire) {
               input.dispatchEvent(new Event("input", { bubbles: true }));
               input.dispatchEvent(new Event("change", { bubbles: true }));
             }
           };
           const start = Number(input.value);
-          input.value = fmt(Number.isNaN(start) ? (def ?? min) : start);
+          commit(Number.isNaN(start) ? (def ?? min) : start, false);
           let drag = null;
           root.addEventListener("pointerdown", (e) => {
             if (e.button !== 0) return;
@@ -939,6 +995,7 @@
             if (!drag || e.pointerId !== drag.id) return;
             const dx = e.clientX - drag.x;
             if (!drag.moved && Math.abs(dx) < 3) return;
+            if (!drag.moved) input.blur();
             drag.moved = true;
             try { root.setPointerCapture(e.pointerId); } catch {}
             window.getSelection()?.removeAllRanges();
@@ -960,11 +1017,15 @@
           }, { passive: false });
           input.addEventListener("keydown", (e) => {
             if (e.key === "Enter") { commit(Number(input.value)); input.blur(); }
-            if (e.key === "Escape") { input.value = fmt(Number(input.value)); input.blur(); }
+            if (e.key === "Escape") { commit(Number(input.value), false); input.blur(); }
+          });
+          input.addEventListener("input", () => {
+            const n = Number(input.value);
+            if (!Number.isNaN(n)) paint(n);
           });
           input.addEventListener("change", () => {
             const n = Number(input.value);
-            input.value = fmt(Number.isNaN(n) ? (def ?? min) : n);
+            commit(Number.isNaN(n) ? (def ?? min) : n, false);
           });
         };
         document.querySelectorAll("[data-drag-number]").forEach(setup);

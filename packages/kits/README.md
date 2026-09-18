@@ -15,7 +15,7 @@ Key properties:
 - **Previewed with a framework.** In the docs we render the same HTML inside Astro so
   you see live examples.
 
-Every kit is a contract: same 17 components, same theme tokens, same
+Every kit is a contract: same 19 components, same theme tokens, same
 framework-agnostic HTML. This guide defines what each block is and what "done"
 looks like, so kits stay interchangeable. For a live reference, see the
 [Basics kit](https://atrium-ui.dev/kits/basics) in the docs.
@@ -88,9 +88,9 @@ reset, the utilities the kit's HTML uses, and its theme tokens baked in. Regener
 
 - Pure HTML only. No framework syntax (`v-`, `:prop`, `{expr}`, JSX).
 - Only dependencies besides Tailwind are `@atrium-ui/elements` custom elements
-  (`a-tabs-*`, `a-toggle`, `a-range`, `a-color-picker`, `a-expandable`, `a-list*`,
-  `a-track` for carousels, `a-portal` + `a-blur` for dialogs,
-  `a-popover-*` + `a-tooltip` for popovers) and `@atrium-ui/panels`
+  (`a-tabs-*`, `a-toggle`, `a-range`, `a-select` / `a-option`, `a-color-picker`,
+  `a-expandable`, `a-list*`, `a-track` for carousels, `a-portal` + `a-blur` for
+  dialogs, `a-popover-*` + `a-tooltip` for popovers) and `@atrium-ui/panels`
   (`a-panel` for tabbed, dockable panels).
   Icons are plain `<symbol>` defs referenced with `<use>` — never an icon component.
 - All brand color goes through `theme.css` tokens (`--color-primary-*`,
@@ -101,7 +101,7 @@ reset, the utilities the kit's HTML uses, and its theme tokens baked in. Regener
   `<!-- Built with Atrium UI — https://atrium-ui.dev/ -->` back-reference
   comment. Keep the back-reference when copying or adding sections.
 
-## The 18 components (outline of contents — every kit must cover all of them)
+## The 19 components (outline of contents — every kit must cover all of them)
 
 ### Tabs
 
@@ -144,6 +144,16 @@ Labelled text, email, textarea, and number fields with placeholders, focus rings
 in primary, and consistent padding/borders. Optionally wires into
 `a-form-field` for validation. Every input has a real `<label>` — placeholders
 are hints, not labels.
+
+### Select
+
+Single-choice dropdowns built on `a-select` / `a-option`: a labelled trigger
+button with chevron, a list of options, and form association via `name`.
+Keyboard: arrows move highlight, Enter commits, Escape closes, typing jumps by
+initial. Use for fixed enums (locale, plan, sort order, shading mode); keep
+radios when every option must stay visible, and text inputs when the value is
+free-form. The trigger label is kit-owned UI — sync it from the `change` event
+(the element does not rewrite the slot).
 
 ### Color picker
 
@@ -244,7 +254,7 @@ always dismisses; triggers expose `aria-haspopup` / `aria-expanded`.
 
 ## Definition of done
 
-- [ ] All 18 snippets exist in `sections/` and are listed in `kit.json`.
+- [ ] All 19 snippets exist in `sections/` and are listed in `kit.json`.
 - [ ] `index.html` previews every section; `icons/` holds the raw set.
 - [ ] No hardcoded brand hex; `theme.css` is the only color source.
 - [ ] Each snippet names its `requires` imports; the kit installs with

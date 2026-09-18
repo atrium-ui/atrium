@@ -7,10 +7,13 @@
  * carousel section demonstrates), not native scroll — snap, keyboard/drag
  * navigation, and `moveBy(±1)` come from it for free.
  *
- * Reads the kit's `kit.json` for section order/titles and pulls each
- * section's raw HTML via a Vite glob import keyed by file path.
+ * Reads the kit's `kit.json` for section order/titles and each section's
+ * HTML from disk (not Vite glob) so newly added snippets show up without
+ * a docs-server restart.
  */
-import kitsIndex from "../../../packages/kits/src/basics/kit.json";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   isDarkColor,
   kitBackgroundColor,
@@ -25,31 +28,20 @@ const { kit = "basics" } = Astro.props;
 const cardBg = kitBackgroundColor(kit);
 const darkCard = isDarkColor(cardBg);
 
-const kitJsonModules = import.meta.glob("../../../packages/kits/src/*/kit.json", {
-  as: "raw",
-  eager: true,
-}) as Record<string, string>;
-
-const kitJsonRaw =
-  Object.entries(kitJsonModules).find(([path]) =>
-    path.includes(`/kits/src/${kit}/`),
-  )?.[1] ?? JSON.stringify(kitsIndex);
-const kitJson = JSON.parse(kitJsonRaw) as typeof kitsIndex;
-
-const sectionFiles = import.meta.glob("../../../packages/kits/src/*/sections/*.html", {
-  as: "raw",
-  eager: true,
-}) as Record<string, string>;
-
-const sectionPrefix = `/kits/src/${kit}/`;
+const kitsRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../../../packages/kits/src",
+);
+const kitJson = JSON.parse(
+  fs.readFileSync(path.join(kitsRoot, kit, "kit.json"), "utf8"),
+) as {
+  sections: { id: string; title: string; file: string }[];
+};
 
 const base = import.meta.env.BASE_URL;
 
 const slides = kitJson.sections.map((section) => {
-  const match = Object.entries(sectionFiles).find(
-    ([path]) => path.includes(sectionPrefix) && path.endsWith(`/${section.file}`),
-  );
-  const html = match?.[1] ?? "";
+  const html = fs.readFileSync(path.join(kitsRoot, kit, section.file), "utf8");
   return {
     id: section.id,
     title: section.title,
