@@ -9,77 +9,77 @@ const FINE_SCALE = 0.1;
 const DRAG_SLOP = 4;
 
 type NumberBounds = {
-	readonly min: number | null;
-	readonly max: number | null;
+  readonly min: number | null;
+  readonly max: number | null;
 
-	readonly step: number;
+  readonly step: number;
 };
 
 type NumberScale = "linear" | "logarithmic";
 
 export function positionOfValue(
-	value: number,
-	range: readonly [number, number],
-	scale: NumberScale,
+  value: number,
+  range: readonly [number, number],
+  scale: NumberScale,
 ): number {
-	const [min, max] = range;
-	if (scale === "logarithmic" && min > 0 && value > 0) {
-		return Math.log(value / min) / Math.log(max / min);
-	}
-	return (value - min) / (max - min);
+  const [min, max] = range;
+  if (scale === "logarithmic" && min > 0 && value > 0) {
+    return Math.log(value / min) / Math.log(max / min);
+  }
+  return (value - min) / (max - min);
 }
 
 export function valueAtPosition(
-	position: number,
-	range: readonly [number, number],
-	scale: NumberScale,
+  position: number,
+  range: readonly [number, number],
+  scale: NumberScale,
 ): number {
-	const [min, max] = range;
-	if (scale === "logarithmic" && min > 0) {
-		return min * (max / min) ** position;
-	}
-	return min + (max - min) * position;
+  const [min, max] = range;
+  if (scale === "logarithmic" && min > 0) {
+    return min * (max / min) ** position;
+  }
+  return min + (max - min) * position;
 }
 
 export function stepDecimals(step: number): number {
-	const fraction = String(step).split(".")[1];
-	return fraction ? fraction.length : 0;
+  const fraction = String(step).split(".")[1];
+  return fraction ? fraction.length : 0;
 }
 
 export function settleNumber(value: number, bounds: NumberBounds): number {
-	const { min, max, step } = bounds;
-	let settled = value;
-	if (step > 0) {
-		const from = min ?? 0;
-		const grid = from + Math.round((value - from) / step) * step;
+  const { min, max, step } = bounds;
+  let settled = value;
+  if (step > 0) {
+    const from = min ?? 0;
+    const grid = from + Math.round((value - from) / step) * step;
 
-		settled = Number(grid.toFixed(stepDecimals(step)));
-	}
-	if (min !== null && settled < min) return min;
-	if (max !== null && settled > max) return max;
-	return settled;
+    settled = Number(grid.toFixed(stepDecimals(step)));
+  }
+  if (min !== null && settled < min) return min;
+  if (max !== null && settled > max) return max;
+  return settled;
 }
 
 const claimTouch = (event: TouchEvent): void => {
-	event.preventDefault();
+  event.preventDefault();
 };
 
 type Drag = {
-	readonly pointer: number;
-	readonly startX: number;
+  readonly pointer: number;
+  readonly startX: number;
 
-	readonly startValue: number;
-	moved: boolean;
+  readonly startValue: number;
+  moved: boolean;
 };
 
 declare global {
-	interface HTMLElementEventMap {
-		"fluid-change": CustomEvent<number>;
-	}
+  interface HTMLElementEventMap {
+    "fluid-change": CustomEvent<number>;
+  }
 }
 
 export class FluidInputElement extends LitElement {
-	static override styles = css`
+  static override styles = css`
 		:host {
 			display: inline-flex;
 
@@ -234,218 +234,214 @@ export class FluidInputElement extends LitElement {
 		}
 	`;
 
-	static override properties = {
-		value: { type: Number },
-		min: { type: Number },
-		max: { type: Number },
-		step: { type: Number },
-		scale: { type: String },
-		suffix: { type: String },
-		disabled: { type: Boolean, reflect: true },
-		label: { type: String },
-		editing: { state: true },
-		hovered: { state: true },
-	};
+  static override properties = {
+    value: { type: Number },
+    min: { type: Number },
+    max: { type: Number },
+    step: { type: Number },
+    scale: { type: String },
+    suffix: { type: String },
+    disabled: { type: Boolean, reflect: true },
+    label: { type: String },
+    editing: { state: true },
+    hovered: { state: true },
+  };
 
-	declare value: number;
+  declare value: number;
 
-	declare min: number | null;
-	declare max: number | null;
+  declare min: number | null;
+  declare max: number | null;
 
-	declare step: number;
-	declare scale: NumberScale;
+  declare step: number;
+  declare scale: NumberScale;
 
-	declare suffix: string;
-	declare disabled: boolean;
+  declare suffix: string;
+  declare disabled: boolean;
 
-	declare label: string;
+  declare label: string;
 
-	declare editing: boolean;
+  declare editing: boolean;
 
-	declare hovered: boolean;
+  declare hovered: boolean;
 
-	private drag: Drag | null = null;
+  private drag: Drag | null = null;
 
-	private stepPointer: number | null = null;
+  private stepPointer: number | null = null;
 
-	private claimBoxTouch = (event: TouchEvent): void => {
-		if (this.disabled || this.editing) return;
-		claimTouch(event);
-	};
+  private claimBoxTouch = (event: TouchEvent): void => {
+    if (this.disabled || this.editing) return;
+    claimTouch(event);
+  };
 
-	constructor() {
-		super();
-		this.value = 0;
-		this.min = null;
-		this.max = null;
-		this.step = 1;
-		this.scale = "linear";
-		this.suffix = "";
-		this.disabled = false;
-		this.label = "";
-		this.editing = false;
-		this.hovered = false;
-	}
+  constructor() {
+    super();
+    this.value = 0;
+    this.min = null;
+    this.max = null;
+    this.step = 1;
+    this.scale = "linear";
+    this.suffix = "";
+    this.disabled = false;
+    this.label = "";
+    this.editing = false;
+    this.hovered = false;
+  }
 
-	private get range(): readonly [number, number] | null {
-		const { min, max } = this;
-		if (min === null || max === null || max <= min) return null;
-		return [min, max];
-	}
+  private get range(): readonly [number, number] | null {
+    const { min, max } = this;
+    if (min === null || max === null || max <= min) return null;
+    return [min, max];
+  }
 
-	private get text(): string {
-		return Number.isFinite(this.value)
-			? this.value.toFixed(stepDecimals(this.step))
-			: "";
-	}
+  private get text(): string {
+    return Number.isFinite(this.value) ? this.value.toFixed(stepDecimals(this.step)) : "";
+  }
 
-	private get field(): HTMLInputElement | null {
-		return this.renderRoot.querySelector<HTMLInputElement>(".number");
-	}
+  private get field(): HTMLInputElement | null {
+    return this.renderRoot.querySelector<HTMLInputElement>(".number");
+  }
 
-	private ask(value: number): void {
-		if (!Number.isFinite(value)) return;
-		const next = settleNumber(value, this);
-		if (next === this.value) return;
-		this.dispatchEvent(
-			new CustomEvent<number>("fluid-change", { detail: next }),
-		);
-	}
+  private ask(value: number): void {
+    if (!Number.isFinite(value)) return;
+    const next = settleNumber(value, this);
+    if (next === this.value) return;
+    this.dispatchEvent(new CustomEvent<number>("fluid-change", { detail: next }));
+  }
 
-	private draggedValue(start: number, pixels: number, fine: boolean): number {
-		const range = this.range;
-		const distance = pixels * (fine ? FINE_SCALE : 1);
-		if (!range) return start + (distance * this.step * SWEEP_STEPS) / SWEEP;
-		const position = positionOfValue(start, range, this.scale);
-		return valueAtPosition(position + distance / SWEEP, range, this.scale);
-	}
+  private draggedValue(start: number, pixels: number, fine: boolean): number {
+    const range = this.range;
+    const distance = pixels * (fine ? FINE_SCALE : 1);
+    if (!range) return start + (distance * this.step * SWEEP_STEPS) / SWEEP;
+    const position = positionOfValue(start, range, this.scale);
+    return valueAtPosition(position + distance / SWEEP, range, this.scale);
+  }
 
-	private onPointerEnter = (event: PointerEvent): void => {
-		if (this.disabled || event.pointerType === "touch") return;
-		this.hovered = true;
-	};
+  private onPointerEnter = (event: PointerEvent): void => {
+    if (this.disabled || event.pointerType === "touch") return;
+    this.hovered = true;
+  };
 
-	private onPointerLeave = (): void => {
-		this.hovered = false;
-	};
+  private onPointerLeave = (): void => {
+    this.hovered = false;
+  };
 
-	private onPointerDown = (event: PointerEvent): void => {
-		if (this.disabled || this.editing || event.button !== 0) return;
-		const box = event.currentTarget as HTMLElement;
-		box.setPointerCapture(event.pointerId);
-		this.drag = {
-			pointer: event.pointerId,
-			startX: event.clientX,
-			startValue: this.value,
-			moved: false,
-		};
-		this.requestUpdate();
+  private onPointerDown = (event: PointerEvent): void => {
+    if (this.disabled || this.editing || event.button !== 0) return;
+    const box = event.currentTarget as HTMLElement;
+    box.setPointerCapture(event.pointerId);
+    this.drag = {
+      pointer: event.pointerId,
+      startX: event.clientX,
+      startValue: this.value,
+      moved: false,
+    };
+    this.requestUpdate();
 
-		event.preventDefault();
-	};
+    event.preventDefault();
+  };
 
-	private onPointerMove = (event: PointerEvent): void => {
-		const drag = this.drag;
-		if (!drag || event.pointerId !== drag.pointer) return;
-		const alongX = event.clientX - drag.startX;
-		if (!drag.moved) {
-			if (Math.abs(alongX) < DRAG_SLOP) return;
-			drag.moved = true;
+  private onPointerMove = (event: PointerEvent): void => {
+    const drag = this.drag;
+    if (!drag || event.pointerId !== drag.pointer) return;
+    const alongX = event.clientX - drag.startX;
+    if (!drag.moved) {
+      if (Math.abs(alongX) < DRAG_SLOP) return;
+      drag.moved = true;
 
-			this.requestUpdate();
-		}
-		this.ask(this.draggedValue(drag.startValue, alongX, event.shiftKey));
-	};
+      this.requestUpdate();
+    }
+    this.ask(this.draggedValue(drag.startValue, alongX, event.shiftKey));
+  };
 
-	private onPointerUp = (event: PointerEvent): void => {
-		const drag = this.drag;
-		if (!drag || event.pointerId !== drag.pointer) return;
-		(event.currentTarget as HTMLElement).releasePointerCapture(event.pointerId);
-		this.drag = null;
-		this.requestUpdate();
+  private onPointerUp = (event: PointerEvent): void => {
+    const drag = this.drag;
+    if (!drag || event.pointerId !== drag.pointer) return;
+    (event.currentTarget as HTMLElement).releasePointerCapture(event.pointerId);
+    this.drag = null;
+    this.requestUpdate();
 
-		if (!drag.moved) this.beginEdit();
-	};
+    if (!drag.moved) this.beginEdit();
+  };
 
-	private onPointerCancel = (): void => {
-		this.drag = null;
-		this.requestUpdate();
-	};
+  private onPointerCancel = (): void => {
+    this.drag = null;
+    this.requestUpdate();
+  };
 
-	private beginEdit(): void {
-		if (this.disabled || this.editing) return;
-		this.editing = true;
-		this.updateComplete.then(() => {
-			const field = this.field;
-			if (!field) return;
-			field.focus();
-			field.select();
-		});
-	}
+  private beginEdit(): void {
+    if (this.disabled || this.editing) return;
+    this.editing = true;
+    this.updateComplete.then(() => {
+      const field = this.field;
+      if (!field) return;
+      field.focus();
+      field.select();
+    });
+  }
 
-	private commitEdit(): void {
-		if (!this.editing) return;
-		this.editing = false;
-		const field = this.field;
-		if (!field) return;
-		const typed = field.value.trim();
-		if (typed !== "") this.ask(Number(typed));
-		field.value = this.text;
-	}
+  private commitEdit(): void {
+    if (!this.editing) return;
+    this.editing = false;
+    const field = this.field;
+    if (!field) return;
+    const typed = field.value.trim();
+    if (typed !== "") this.ask(Number(typed));
+    field.value = this.text;
+  }
 
-	private cancelEdit(): void {
-		if (!this.editing) return;
-		this.editing = false;
-		const field = this.field;
-		if (!field) return;
-		field.value = this.text;
-		field.blur();
-	}
+  private cancelEdit(): void {
+    if (!this.editing) return;
+    this.editing = false;
+    const field = this.field;
+    if (!field) return;
+    field.value = this.text;
+    field.blur();
+  }
 
-	private onFieldKeyDown = (event: KeyboardEvent): void => {
-		switch (event.key) {
-			case "Enter":
-				this.commitEdit();
-				return;
-			case "Escape":
-				this.cancelEdit();
-				return;
+  private onFieldKeyDown = (event: KeyboardEvent): void => {
+    switch (event.key) {
+      case "Enter":
+        this.commitEdit();
+        return;
+      case "Escape":
+        this.cancelEdit();
+        return;
 
-			case "ArrowUp":
-			case "ArrowDown": {
-				if (this.editing) return;
-				event.preventDefault();
-				const way = event.key === "ArrowUp" ? 1 : -1;
-				this.ask(this.value + way * this.step);
-				return;
-			}
-			default:
-				return;
-		}
-	};
+      case "ArrowUp":
+      case "ArrowDown": {
+        if (this.editing) return;
+        event.preventDefault();
+        const way = event.key === "ArrowUp" ? 1 : -1;
+        this.ask(this.value + way * this.step);
+        return;
+      }
+      default:
+        return;
+    }
+  };
 
-	private onFieldInput = (event: Event): void => {
-		event.stopPropagation();
-	};
+  private onFieldInput = (event: Event): void => {
+    event.stopPropagation();
+  };
 
-	override render() {
-		const range = this.range;
-		const held = range
-			? Math.min(1, Math.max(0, positionOfValue(this.value, range, this.scale)))
-			: 0;
+  override render() {
+    const range = this.range;
+    const held = range
+      ? Math.min(1, Math.max(0, positionOfValue(this.value, range, this.scale)))
+      : 0;
 
-		const drag = this.drag;
+    const drag = this.drag;
 
-		const state = this.disabled
-			? ""
-			: drag
-				? drag.moved
-					? "is-dragging"
-					: "is-pressed"
-				: this.hovered
-					? "is-hovered"
-					: "";
-		return html`
+    const state = this.disabled
+      ? ""
+      : drag
+        ? drag.moved
+          ? "is-dragging"
+          : "is-pressed"
+        : this.hovered
+          ? "is-hovered"
+          : "";
+    return html`
 			<div
 				class="box ${state}"
 				style="--held: ${held}"
@@ -477,8 +473,8 @@ export class FluidInputElement extends LitElement {
 						aria-valuetext=${this.suffix ? `${this.text}${this.suffix}` : nothing}
 						@keydown=${this.onFieldKeyDown}
 						@blur=${() => {
-							this.commitEdit();
-						}}
+              this.commitEdit();
+            }}
 						@input=${this.onFieldInput}
 					/>
 					${this.suffix ? html`<span class="suffix">${this.suffix}</span>` : nothing}
@@ -486,10 +482,10 @@ export class FluidInputElement extends LitElement {
 				${this.stepper(1)}
 			</div>
 		`;
-	}
+  }
 
-	private stepper(way: -1 | 1) {
-		return html`
+  private stepper(way: -1 | 1) {
+    return html`
 			<button
 				class="step ${way < 0 ? "is-down" : "is-up"}"
 				type="button"
@@ -497,29 +493,29 @@ export class FluidInputElement extends LitElement {
 				aria-hidden="true"
 				@touchstart=${claimTouch}
 				@pointerdown=${(event: PointerEvent) => {
-					event.stopPropagation();
-					if (event.button === 0) this.stepPointer = event.pointerId;
-				}}
+          event.stopPropagation();
+          if (event.button === 0) this.stepPointer = event.pointerId;
+        }}
 				@pointerup=${(event: PointerEvent) => {
-					if (this.stepPointer !== event.pointerId) return;
-					this.stepPointer = null;
-					this.ask(this.value + way * this.step);
-				}}
+          if (this.stepPointer !== event.pointerId) return;
+          this.stepPointer = null;
+          this.ask(this.value + way * this.step);
+        }}
 				@pointercancel=${() => {
-					this.stepPointer = null;
-				}}
+          this.stepPointer = null;
+        }}
 				@pointerleave=${() => {
-					this.stepPointer = null;
-				}}
+          this.stepPointer = null;
+        }}
 			>
 				<svg class="chevron" viewBox="0 0 24 24">
 					<path d=${way < 0 ? "m14 6-6 6 6 6" : "m10 6 6 6-6 6"} />
 				</svg>
 			</button>
 		`;
-	}
+  }
 }
 
 if (!customElements.get("a-fluid-input")) {
-	customElements.define("a-fluid-input", FluidInputElement);
+  customElements.define("a-fluid-input", FluidInputElement);
 }
