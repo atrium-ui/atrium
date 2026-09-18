@@ -89,9 +89,20 @@ export class Panel extends HTMLElement {
     this.removeAttribute("drag-over");
   };
 
+  /**
+   * True once this panel has held a child. `removeOnEmtpy` exists to drop a
+   * column after its last tab is dragged away — but a panel is also empty
+   * while the parser is still working through its children, and self-removing
+   * then deletes an authored panel at random (which column loses the race
+   * varies per load). Only ever-filled panels may remove themselves.
+   */
+  hadChildren = false;
+
   slotChangeCallback() {
+    if (this.children.length > 0) this.hadChildren = true;
+
     requestAnimationFrame(() => {
-      if (this.removeOnEmtpy && this.children.length === 0) {
+      if (this.removeOnEmtpy && this.hadChildren && this.children.length === 0) {
         this.parentNode?.removeChild(this);
       }
     });

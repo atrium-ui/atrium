@@ -20,9 +20,10 @@
  */
 @theme static {
   --font-sans:
-    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-    sans-serif;
-  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono:
+    ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Primary: tool blue (actions, active states, selections) */
   --color-primary-50: #eef4ff;
@@ -61,6 +62,17 @@ a-range {
 
 a-color-picker {
   --color-picker-focus-outline: var(--color-primary-400);
+  /* Its default border is black at 15% — invisible on dark panels. */
+  --color-picker-border: rgb(255 255 255 / 0.15);
+}
+
+/* Toggle buttons: `a-toggle` renders its own <button> in shadow DOM, so a
+ * pill's inner layout (icon + label) is themed through that part. State lives
+ * on the host's `value` attribute — style it with `[&[value='true']]:…`. */
+a-toggle::part(button) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
 }
 
 a-tabs-tab[selected] {
@@ -86,7 +98,7 @@ a-panel::part(tabs) {
   gap: 2px;
   background: #1c1d20;
   border-bottom: 1px solid rgb(255 255 255 / 0.1);
-  padding: 4px 8px 0 8px;
+  padding: 3px 8px 0 8px;
 }
 
 a-panel::part(tab) {

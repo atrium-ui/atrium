@@ -1,7 +1,10 @@
 <!-- requires: @atrium-ui/elements/list -->
 <!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<!-- `@container` + `@…:` variants: the column count follows the panel this
+  grid is docked into, not the viewport — the same snippet works in a 240px
+  sidebar and a full-width asset browser. -->
 <div
-  class="w-full max-w-xl rounded-lg border border-white/10 bg-[#232428] p-3 text-[12px]"
+  class="@container w-full max-w-xl rounded-lg border border-white/10 bg-[#232428] p-3 text-[12px]"
 >
   <div class="mb-2 flex items-center gap-2 px-1">
     <span class="text-[11px] font-semibold tracking-wide text-zinc-500 uppercase"
@@ -9,7 +12,10 @@
     >
     <span class="ml-auto font-mono text-[11px] text-zinc-500">36/36</span>
   </div>
-  <a-list class="grid grid-cols-3 gap-1.5 sm:grid-cols-4" aria-label="Asset thumbnails">
+  <a-list
+    class="grid auto-rows-min grid-cols-2 gap-1.5 @2xs:grid-cols-3 @sm:grid-cols-4 @lg:grid-cols-5 @2xl:grid-cols-6"
+    aria-label="Asset thumbnails"
+  >
     <a-list-item
       selected
       class="cursor-pointer overflow-hidden rounded-md border border-primary-400 bg-[#1c1d20]"

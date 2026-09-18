@@ -28,10 +28,21 @@ const { kit = "basics" } = Astro.props;
 const cardBg = kitBackgroundColor(kit);
 const darkCard = isDarkColor(cardBg);
 
-const kitsRoot = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "../../../../packages/kits/src",
-);
+// Walk up from this module until `packages/kits/src` turns up. `import.meta.url`
+// points at the source file in `astro dev` but at a bundled chunk (one level
+// deeper) in `astro build`, so a fixed number of `..` segments can only ever be
+// right for one of the two.
+const kitsRoot = (() => {
+  let dir = path.dirname(fileURLToPath(import.meta.url));
+  for (let up = 0; up < 8; up++) {
+    const candidate = path.join(dir, "packages/kits/src");
+    if (fs.existsSync(candidate)) return candidate;
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  throw new Error("KitCarousel: could not locate packages/kits/src");
+})();
 const kitJson = JSON.parse(
   fs.readFileSync(path.join(kitsRoot, kit, "kit.json"), "utf8"),
 ) as {

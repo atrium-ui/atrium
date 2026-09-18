@@ -1,34 +1,70 @@
-<!-- requires: none (plain HTML + Tailwind) -->
+<!-- requires: @atrium-ui/elements/toggle (for the toggle buttons) -->
 <!-- Built with Atrium UI — https://atrium-ui.dev/ -->
 <div class="flex max-w-xl flex-wrap items-center gap-3">
   <button
     type="button"
-    class="inline-flex cursor-pointer items-center gap-1 rounded-md border-0 bg-primary-500 px-4 py-2 font-sans text-sm font-medium text-white transition-colors hover:bg-primary-600 active:bg-primary-700"
+    class="inline-flex cursor-pointer items-center gap-1 whitespace-nowrap rounded-md border border-transparent bg-primary-500 px-4 py-2 font-sans text-sm font-medium text-white transition-colors hover:bg-primary-600 active:bg-primary-700"
   >
     Primary
   </button>
   <button
     type="button"
-    class="inline-flex cursor-pointer items-center gap-1 rounded-md border border-stone-300 bg-transparent px-4 py-2 font-sans text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-900"
+    class="inline-flex cursor-pointer items-center gap-1 whitespace-nowrap rounded-md border border-stone-300 bg-transparent px-4 py-2 font-sans text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-900"
   >
     Outline
   </button>
   <button
     type="button"
-    class="inline-flex cursor-pointer items-center gap-1 rounded-md border-0 bg-stone-100 px-4 py-2 font-sans text-sm font-medium text-stone-700 transition-colors hover:bg-stone-200 hover:text-stone-900"
+    class="inline-flex cursor-pointer items-center gap-1 whitespace-nowrap rounded-md border border-transparent bg-stone-100 px-4 py-2 font-sans text-sm font-medium text-stone-700 transition-colors hover:bg-stone-200 hover:text-stone-900"
   >
     Ghost
   </button>
   <button
     type="button"
     aria-disabled="true"
-    class="inline-flex cursor-not-allowed items-center gap-1 rounded-md border-0 bg-stone-100 px-4 py-2 font-sans text-sm font-medium text-stone-400"
+    class="inline-flex cursor-not-allowed items-center gap-1 whitespace-nowrap rounded-md border border-transparent bg-stone-100 px-4 py-2 font-sans text-sm font-medium text-stone-400"
   >
     Disabled
   </button>
   <a
     href="./"
-    class="inline-flex items-center gap-1 rounded-md bg-accent-500 px-4 py-2 font-sans text-sm font-semibold text-white no-underline transition-colors hover:bg-accent-600"
+    class="inline-flex items-center gap-1 whitespace-nowrap rounded-md border border-transparent bg-accent-500 px-4 py-2 font-sans text-sm font-semibold text-white no-underline transition-colors hover:bg-accent-600"
     >Accent link</a
   >
+</div>
+
+<!-- Toggle buttons: `a-toggle` is the button — it flips `value` on
+  click/Enter/Space, mirrors it to `aria-pressed` on the button it renders, and
+  submits under `name` in a form. Style the on-state with the
+  `[&[value='true']]:…` variant; the tinted fill keeps label contrast above 4.5:1,
+  which white on `primary-500` would not. -->
+<div class="mt-3 flex max-w-xl flex-wrap items-center gap-3">
+  <a-toggle
+    name="grid"
+    value="true"
+    class="inline-flex cursor-pointer items-center whitespace-nowrap rounded-md border border-stone-300 bg-transparent px-4 py-2 font-sans text-sm font-medium text-stone-700 hover:border-stone-400 hover:text-stone-900 [&[value='true']]:border-primary-300 [&[value='true']]:bg-primary-100 [&[value='true']]:text-primary-800"
+  >
+    Grid
+  </a-toggle>
+  <a-toggle
+    name="snap"
+    value="true"
+    class="inline-flex cursor-pointer items-center whitespace-nowrap rounded-md border border-stone-300 bg-transparent px-4 py-2 font-sans text-sm font-medium text-stone-700 hover:border-stone-400 hover:text-stone-900 [&[value='true']]:border-primary-300 [&[value='true']]:bg-primary-100 [&[value='true']]:text-primary-800"
+  >
+    Snap
+  </a-toggle>
+  <a-toggle
+    name="rulers"
+    value="false"
+    class="inline-flex cursor-pointer items-center whitespace-nowrap rounded-md border border-stone-300 bg-transparent px-4 py-2 font-sans text-sm font-medium text-stone-700 hover:border-stone-400 hover:text-stone-900 [&[value='true']]:border-primary-300 [&[value='true']]:bg-primary-100 [&[value='true']]:text-primary-800"
+  >
+    Rulers
+  </a-toggle>
+  <a-toggle
+    name="preview"
+    value="true"
+    class="inline-flex cursor-pointer items-center whitespace-nowrap rounded-md border border-stone-300 bg-transparent px-4 py-2 font-sans text-sm font-medium text-stone-700 hover:border-stone-400 hover:text-stone-900 [&[value='true']]:border-primary-300 [&[value='true']]:bg-primary-100 [&[value='true']]:text-primary-800"
+  >
+    Live preview
+  </a-toggle>
 </div>

@@ -18,8 +18,10 @@
  * `static` they resolve to nothing and the styles silently break.
  */
 @theme static {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display:
+    Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
 
   /* Page background for the kit shell and docs previews */
   --color-background: #ffffff;
@@ -60,9 +62,22 @@ a-color-picker {
   --color-picker-focus-outline: var(--color-primary-500);
 }
 
+/* Toggle buttons: `a-toggle` renders its own <button> in shadow DOM, so a
+ * toggle button's inner layout (icon + label) is themed through that part.
+ * State lives on the host's `value` attribute — style it with
+ * `[&[value='true']]:…`. */
+a-toggle::part(button) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
 a-tabs-tab[selected] {
-  background: var(--color-primary-500);
-  color: #fff;
+  background: #fff;
+  color: #1c1917;
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.06),
+    0 1px 2px rgb(0 0 0 / 0.08);
 }
 
 /* `a-list` and `a-tabs-panel` hosts default to `display: inline`, so border,

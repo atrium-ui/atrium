@@ -1,4 +1,4 @@
-<!-- requires: none (plain HTML + Tailwind) -->
+<!-- requires: @atrium-ui/elements/toggle (for the pill toggles) -->
 <!-- Built with Atrium UI — https://atrium-ui.dev/ -->
 <div
   class="w-full max-w-xl rounded-lg border border-white/10 bg-[#232428] p-4 text-[12px]"
@@ -9,68 +9,72 @@
   <div class="flex flex-wrap items-center gap-2">
     <button
       type="button"
-      class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border-0 bg-primary-500 px-3 py-1.5 font-medium text-white transition-colors hover:bg-primary-400 active:bg-primary-600"
+      class="inline-flex cursor-default items-center gap-1.5 whitespace-nowrap rounded-md border border-transparent bg-primary-500 px-3 py-1.5 font-medium text-white hover:bg-primary-400 active:bg-primary-600"
     >
       Export
     </button>
     <button
       type="button"
-      class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-3 py-1.5 font-medium text-zinc-200 transition-colors hover:border-white/20 hover:bg-white/10"
+      class="inline-flex cursor-default items-center gap-1.5 whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-3 py-1.5 font-medium text-zinc-200 hover:border-white/20 hover:bg-white/10"
     >
       Open mesh…
     </button>
     <button
       type="button"
-      class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border-0 bg-transparent px-3 py-1.5 font-medium text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-100"
+      class="inline-flex cursor-default items-center gap-1.5 whitespace-nowrap rounded-md border border-transparent bg-transparent px-3 py-1.5 font-medium text-zinc-400 hover:bg-white/5 hover:text-zinc-100"
     >
       Frame asset
     </button>
     <button
       type="button"
       aria-disabled="true"
-      class="inline-flex cursor-not-allowed items-center gap-1.5 rounded-md border border-white/5 bg-transparent px-3 py-1.5 font-medium text-zinc-600"
+      class="inline-flex cursor-not-allowed items-center gap-1.5 whitespace-nowrap rounded-md border border-white/5 bg-transparent px-3 py-1.5 font-medium text-zinc-600"
     >
       Reset settings
     </button>
     <button
       type="button"
-      class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border-0 bg-red-500/15 px-3 py-1.5 font-medium text-red-300 transition-colors hover:bg-red-500/25"
+      class="inline-flex cursor-default items-center gap-1.5 whitespace-nowrap rounded-md border border-transparent bg-red-500/15 px-3 py-1.5 font-medium text-red-300 hover:bg-red-500/25"
     >
       Delete
     </button>
   </div>
   <p class="mt-4 mb-2 text-[11px] font-semibold tracking-wide text-zinc-500 uppercase">
-    Viewport toggles — pill switches with aria-pressed
+    Viewport toggles — a-toggle pills, state on the `value` attribute
   </p>
+  <!-- `a-toggle` is the button: it flips `value` on click/Enter/Space, mirrors
+    it to `aria-pressed` on the button it renders, and submits under `name` in a
+    form. Style the on-state with the `[&[value='true']]:…` variant. Inner
+    layout (icon + label) comes from `a-toggle::part(button)` in theme.css. -->
   <div class="flex flex-wrap items-center gap-1.5">
-    <button
-      type="button"
-      aria-pressed="true"
-      class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border-0 bg-primary-500 px-2.5 py-1 font-medium text-white"
+    <a-toggle
+      name="wind"
+      value="true"
+      class="inline-flex cursor-default items-center whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-medium text-zinc-400 hover:border-white/20 hover:text-zinc-200 [&[value='true']]:border-primary-600 [&[value='true']]:bg-primary-600 [&[value='true']]:text-white"
     >
       Wind
-    </button>
-    <button
-      type="button"
-      aria-pressed="true"
-      class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border-0 bg-primary-500 px-2.5 py-1 font-medium text-white"
+    </a-toggle>
+    <a-toggle
+      name="bloom"
+      value="true"
+      class="inline-flex cursor-default items-center whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-medium text-zinc-400 hover:border-white/20 hover:text-zinc-200 [&[value='true']]:border-primary-600 [&[value='true']]:bg-primary-600 [&[value='true']]:text-white"
     >
       Bloom
-    </button>
-    <button
-      type="button"
-      aria-pressed="false"
-      class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-medium text-zinc-400 hover:text-zinc-200"
+    </a-toggle>
+    <a-toggle
+      name="bounce-fill"
+      value="false"
+      class="inline-flex cursor-default items-center whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-medium text-zinc-400 hover:border-white/20 hover:text-zinc-200 [&[value='true']]:border-primary-600 [&[value='true']]:bg-primary-600 [&[value='true']]:text-white"
     >
       Bounce fill
-    </button>
-    <button
-      type="button"
-      aria-pressed="true"
-      class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border-0 bg-primary-500 px-2.5 py-1 font-medium text-white"
+    </a-toggle>
+    <a-toggle
+      name="ground"
+      value="true"
+      class="inline-flex cursor-default items-center whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-medium text-zinc-400 hover:border-white/20 hover:text-zinc-200 [&[value='true']]:border-primary-600 [&[value='true']]:bg-primary-600 [&[value='true']]:text-white"
     >
       Ground
-    </button>
+    </a-toggle>
   </div>
   <p class="mt-4 mb-2 text-[11px] font-semibold tracking-wide text-zinc-500 uppercase">
     Icon buttons
@@ -79,7 +83,7 @@
     <button
       type="button"
       aria-label="Search"
-      class="flex size-7 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10"
+      class="flex size-7 cursor-default items-center justify-center whitespace-nowrap rounded-md border border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10"
     >
       <svg class="size-3.5" aria-hidden="true">
         <use href="#kit-icon-search"></use>
@@ -88,7 +92,7 @@
     <button
       type="button"
       aria-label="Reload"
-      class="flex size-7 cursor-pointer items-center justify-center rounded-md border border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10"
+      class="flex size-7 cursor-default items-center justify-center whitespace-nowrap rounded-md border border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10"
     >
       <svg class="size-3.5" aria-hidden="true">
         <use href="#kit-icon-reload"></use>
@@ -97,7 +101,7 @@
     <button
       type="button"
       aria-label="Close"
-      class="flex size-7 cursor-pointer items-center justify-center rounded-md border-0 bg-transparent text-zinc-500 hover:bg-white/5 hover:text-zinc-200"
+      class="flex size-7 cursor-default items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-transparent text-zinc-500 hover:bg-white/5 hover:text-zinc-200"
     >
       <svg class="size-3.5" aria-hidden="true">
         <use href="#kit-icon-close"></use>

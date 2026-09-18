@@ -77,8 +77,9 @@ into an asset-preview workstation you can copy as a starting point.
   underlying custom elements (roving tabindex, `aria-selected`, form association).
   Panel tabs (`a-panel`) switch on click and dock/split on drag — they expose
   no tablist keyboard handling, so keep them pointer-driven.
-- Toggle pills expose `aria-pressed`; icon-only buttons always carry
-  `aria-label`.
+- Toggle pills are `a-toggle`: it owns the state on `value`, handles
+  click/Enter/Space, and mirrors `aria-pressed` onto the button it renders.
+  Icon-only buttons always carry `aria-label`.
 - Tables use real `th`/`scope`, a `caption`, and `tfoot` totals; definitions use
   semantic `dl`/`dt`/`dd` so term–definition pairs are announced correctly.
 - Dialogs use native `<dialog>` (focus trap + Esc included) or the

@@ -1,2 +1,1435 @@
 <!doctype html>
 <!-- Built with Atrium UI — https://atrium-ui.dev/ -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Workbench UI Kit — Asset Preview</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Kit tokens, inlined from theme.css (source of truth) so this preview
+      works without a build step. Keep in sync when tokens change. -->
+    <style type="text/tailwindcss">
+      @theme static {
+        --font-sans:
+          ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+        --color-background: #141518;
+        --color-primary-50: #eef4ff;
+        --color-primary-100: #d9e6ff;
+        --color-primary-200: #b3cdff;
+        --color-primary-300: #84adfa;
+        --color-primary-400: #5b8fe8;
+        --color-primary-500: #3b74d6;
+        --color-primary-600: #2f5cb0;
+        --color-primary-700: #2a4b8c;
+        --color-primary-800: #253f6f;
+        --color-primary-900: #212f52;
+        --color-primary-950: #141d33;
+        --color-accent-50: #fdf3ec;
+        --color-accent-100: #fae3d3;
+        --color-accent-200: #f4c5a5;
+        --color-accent-300: #eda172;
+        --color-accent-400: #ec7f45;
+        --color-accent-500: #ed7836;
+        --color-accent-600: #d95f1e;
+        --color-accent-700: #b44a1a;
+        --color-accent-800: #8d3d1d;
+        --color-accent-900: #71341b;
+      }
+    </style>
+    <style>
+      /* Drag-number fields (sections/04-sliders-numeric.html) */
+      [data-drag-number] {
+        cursor: ew-resize;
+        touch-action: pan-y;
+        background: linear-gradient(
+          to right,
+          var(--color-primary-600) 0%,
+          var(--color-primary-600) calc(var(--dn-fill, 0) * 100%),
+          rgb(255 255 255 / 0.08) calc(var(--dn-fill, 0) * 100%),
+          rgb(255 255 255 / 0.08) 100%
+        );
+      }
+      [data-drag-number] input[type="number"] {
+        cursor: text;
+      }
+      [data-drag-number] input[type="number"]::-webkit-outer-spin-button,
+      [data-drag-number] input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      [data-drag-number] input[type="number"] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+      }
+      [data-drag-number][data-dragging] {
+        user-select: none;
+      }
+      [data-drag-number]:focus-within {
+        outline: 1px solid var(--color-primary-400);
+        outline-offset: 0;
+      }
+      a-color-picker {
+        --color-picker-focus-outline: var(--color-primary-400);
+        /* Its default border is black at 15% — invisible on dark panels. */
+        --color-picker-border: rgb(255 255 255 / 0.15);
+      }
+      /* Toggle buttons: `a-toggle` renders its own <button>, so a pill's inner
+         layout (icon + label) is themed through that part. */
+      a-toggle::part(button) {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+      }
+
+      @layer base {
+        a-list {
+          display: block;
+        }
+      }
+      ::selection {
+        background: var(--color-primary-500);
+        color: #fff;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family: ui-sans-serif, system-ui, sans-serif;
+      }
+
+      /* Panel workstation chrome (from theme.css). The tab strip lives in
+        `a-panel` shadow DOM, themed via CSS vars + parts. */
+      a-panel {
+        --tab-height: 1.35rem;
+        --tab-background: transparent;
+        --tab-hover-background: rgb(255 255 255 / 0.06);
+        --tab-active-background: rgb(255 255 255 / 0.06);
+        --tab-font-color: #fff;
+        --tab-font-size: 12px;
+        --tab-border-radius: 6px;
+        --tab-padding: 4px 10px;
+      }
+      a-panel::part(tabs) {
+        gap: 2px;
+        background: #1c1d20;
+        border-bottom: 1px solid rgb(255 255 255 / 0.1);
+        padding: 3px 8px 0 8px;
+      }
+      a-panel::part(tab) {
+        font-weight: 500;
+        white-space: nowrap;
+      }
+      a-panel-layout {
+        --layout-grid-gap: 0px;
+        background: transparent;
+        grid-template-columns: 300px minmax(0, 1fr) 320px;
+      }
+      a-panel-group {
+        min-width: 0;
+        min-height: 0;
+      }
+      /* The layout rewrites its grid template to fr units from the rendered
+         widths, so the px columns above only set the initial ratio. These
+         floors keep the side panels legible when the shell gets narrow. */
+      a-panel-group:first-child {
+        min-width: 220px;
+      }
+      a-panel-group:last-child {
+        min-width: 260px;
+      }
+      a-panel-group + a-panel-group {
+        border-left: 1px solid rgb(255 255 255 / 0.1);
+      }
+    </style>
+    <script type="module">
+      import "@atrium-ui/elements";
+      import "@atrium-ui/panels";
+    </script>
+  </head>
+  <body class="bg-background text-[12px] text-zinc-300 antialiased">
+    <!-- Icon sprite: plain <symbol> defs, referenced below with
+      <svg><use href="#kit-icon-name" /></svg>. No icon runtime, no JS.
+      The full set ships as icons/*.svg — paste the ones a page uses. -->
+    <svg aria-hidden="true" style="display: none">
+      <symbol id="kit-icon-search" viewBox="0 0 24 24">
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M11.3639 5.1998C7.97826 5.1998 5.2457 7.9151 5.2457 11.2498C5.2457 14.5845 7.97826 17.2998 11.3639 17.2998C14.7495 17.2998 17.4821 14.5845 17.4821 11.2498C17.4821 7.9151 14.7495 5.1998 11.3639 5.1998ZM3.8457 11.2498C3.8457 7.12867 7.21836 3.7998 11.3639 3.7998C15.5094 3.7998 18.8821 7.12867 18.8821 11.2498C18.8821 13.248 18.0892 15.0599 16.7998 16.3964L20.1897 19.7523C20.4644 20.0243 20.4667 20.4675 20.1947 20.7423C19.9227 21.017 19.4795 21.0193 19.2047 20.7473L15.7347 17.3119C14.5022 18.1859 12.9927 18.6998 11.3639 18.6998C7.21836 18.6998 3.8457 15.3709 3.8457 11.2498Z"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol id="kit-icon-chevron-down" viewBox="0 0 24 24">
+        <path
+          d="M17.5761 8.57613C17.8104 8.34181 18.1895 8.34181 18.4238 8.57613C18.6581 8.81044 18.6581 9.18947 18.4238 9.42378L12.4238 15.4238L12 15.8486L11.5761 15.4238L5.57613 9.42378C5.34181 9.18947 5.34181 8.81044 5.57613 8.57613C5.81044 8.34181 6.18947 8.34181 6.42378 8.57613L12 14.1523L17.5761 8.57613Z"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol id="kit-icon-check" viewBox="0 0 24 24">
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M19.6874 5.51175C19.9845 5.75916 20.0247 6.20055 19.7773 6.49761L10.3229 17.8491L4.37824 13.2011C4.07368 12.9629 4.01983 12.523 4.25796 12.2185C4.49609 11.9139 4.93602 11.8601 5.24057 12.0982L10.1159 15.9101L18.7015 5.60164C18.9489 5.30458 19.3903 5.26434 19.6874 5.51175Z"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol id="kit-icon-reload" viewBox="0 0 24 24">
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M12 4.86782C8.061 4.86782 4.86782 8.061 4.86782 12C4.86782 15.939 8.061 19.1322 12 19.1322C15.939 19.1322 19.1322 15.939 19.1322 12C19.1322 11.6223 19.4384 11.3161 19.8161 11.3161C20.1938 11.3161 20.5 11.6223 20.5 12C20.5 16.6944 16.6944 20.5 12 20.5C7.30558 20.5 3.5 16.6944 3.5 12C3.5 7.30558 7.30558 3.5 12 3.5C14.061 3.5 15.9523 4.23441 17.4238 5.45511C17.7145 5.69627 17.7547 6.12743 17.5135 6.41813C17.2724 6.70884 16.8412 6.749 16.5505 6.50785C15.3154 5.48323 13.7305 4.86782 12 4.86782Z"
+          fill="currentColor"
+        />
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M16.8851 6.43103C17.0469 6.43103 17.1782 6.29981 17.1782 6.13793V4.18391C17.1782 3.8062 17.4844 3.5 17.8621 3.5C18.2398 3.5 18.546 3.8062 18.546 4.18391V6.13793C18.546 7.05523 17.8024 7.79885 16.8851 7.79885H14.931C14.5533 7.79885 14.2471 7.49265 14.2471 7.11494C14.2471 6.73723 14.5533 6.43103 14.931 6.43103H16.8851Z"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol id="kit-icon-settings" viewBox="0 0 24 24">
+        <path
+          d="M9.91 2.94 L14.09 2.94 L14.39 5.42 L14.96 5.66 L16.93 4.11 L19.89 7.07 L18.34 9.04 L18.58 9.61 L21.06 9.91 L21.06 14.09 L18.58 14.39 L18.34 14.96 L19.89 16.93 L16.93 19.89 L14.96 18.34 L14.39 18.58 L14.09 21.06 L9.91 21.06 L9.61 18.58 L9.04 18.34 L7.07 19.89 L4.11 16.93 L5.66 14.96 L5.42 14.39 L2.94 14.09 L2.94 9.91 L5.42 9.61 L5.66 9.04 L4.11 7.07 L7.07 4.11 L9.04 5.66 L9.61 5.42 Z"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linejoin="round"
+          fill="none"
+        />
+        <circle
+          cx="12"
+          cy="12"
+          r="3.1"
+          stroke="currentColor"
+          stroke-width="1.4"
+          fill="none"
+        />
+      </symbol>
+      <symbol id="kit-icon-menu" viewBox="0 0 24 24">
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M1.91992 6.61992C1.91992 6.23332 2.23332 5.91992 2.61992 5.91992H21.3799C21.7665 5.91992 22.0799 6.23332 22.0799 6.61992C22.0799 7.00652 21.7665 7.31992 21.3799 7.31992H2.61992C2.23332 7.31992 1.91992 7.00652 1.91992 6.61992ZM1.91992 11.9999C1.91992 11.6133 2.23332 11.2999 2.61992 11.2999H21.3799C21.7665 11.2999 22.0799 11.6133 22.0799 11.9999C22.0799 12.3865 21.7665 12.6999 21.3799 12.6999H2.61992C2.23332 12.6999 1.91992 12.3865 1.91992 11.9999ZM1.91992 17.3799C1.91992 16.9933 2.23332 16.6799 2.61992 16.6799H21.3799C21.7665 16.6799 22.0799 16.9933 22.0799 17.3799C22.0799 17.7665 21.7665 18.0799 21.3799 18.0799H2.61992C2.23332 18.0799 1.91992 17.7665 1.91992 17.3799Z"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol id="kit-icon-home" viewBox="0 0 24 24">
+        <path
+          d="M3.75 10.6 12 4l8.25 6.6V19a1.5 1.5 0 0 1-1.5 1.5h-3.9v-5.4H9.15v5.4h-3.9A1.5 1.5 0 0 1 3.75 19v-8.4Z"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linejoin="round"
+          fill="none"
+        />
+      </symbol>
+      <symbol id="kit-icon-external" viewBox="0 0 256 256">
+        <path
+          d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol id="kit-icon-source" viewBox="0 0 256 256">
+        <path
+          d="M232,64a32,32,0,1,0-40,31v17a8,8,0,0,1-8,8H96a23.84,23.84,0,0,0-8,1.38V95a32,32,0,1,0-16,0v66a32,32,0,1,0,16,0V144a8,8,0,0,1,8-8h88a24,24,0,0,0,24-24V95A32.06,32.06,0,0,0,232,64ZM64,64A16,16,0,1,1,80,80,16,16,0,0,1,64,64ZM96,192a16,16,0,1,1-16-16A16,16,0,0,1,96,192ZM200,80a16,16,0,1,1,16-16A16,16,0,0,1,200,80Z"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol id="kit-icon-expand" viewBox="0 0 24 24">
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M5.50581 8.50483C5.77917 8.23146 6.22239 8.23146 6.49576 8.50483L12.0008 14.0099L17.5058 8.50483C17.7792 8.23146 18.2224 8.23146 18.4958 8.50483C18.7691 8.7782 18.7691 9.22141 18.4958 9.49478L12.4958 15.4948C12.2224 15.7681 11.7792 15.7681 11.5058 15.4948L5.50581 9.49478C5.23244 9.22141 5.23244 8.7782 5.50581 8.50483Z"
+          fill="currentColor"
+        />
+      </symbol>
+    </svg>
+
+    <!-- Shell carries the kit's base type and surface itself (not just <body>),
+      so the workstation renders the same when dropped into any host page. -->
+    <div
+      class="flex h-screen flex-col overflow-hidden bg-background text-[12px] text-zinc-300 antialiased"
+    >
+      <!-- Title bar: brand left, open document right -->
+      <header
+        class="flex items-center gap-2 border-b border-white/10 bg-[#1c1d20] px-3 py-1.5"
+      >
+        <span class="text-[11px] font-bold tracking-wide"
+          ><span class="text-accent-400">Atrium</span>
+          <span class="font-medium text-zinc-400">Asset Preview</span></span
+        >
+        <span class="ml-auto truncate font-mono text-[11px] text-zinc-500"
+          >potted-ivy.mesh</span
+        >
+      </header>
+
+      <!-- Toolbar: file actions · viewport passes · view actions.
+        Single scrollable row — never wraps to a second line. -->
+      <div
+        class="flex items-center gap-1.5 overflow-x-auto border-b border-white/10 bg-[#1c1d20] px-2 py-1.5 [&>*]:shrink-0"
+      >
+        <button
+          type="button"
+          class="inline-flex cursor-default items-center gap-1.5 whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-medium text-zinc-200 hover:border-white/20 hover:bg-white/10"
+        >
+          <svg class="size-3.5 text-zinc-400" aria-hidden="true">
+            <use href="#kit-icon-home"></use>
+          </svg>
+          Open mesh…
+        </button>
+        <button
+          type="button"
+          class="inline-flex cursor-default items-center gap-1.5 whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-medium text-zinc-200 hover:border-white/20 hover:bg-white/10"
+        >
+          <svg class="size-3.5 text-zinc-400" aria-hidden="true">
+            <use href="#kit-icon-external"></use>
+          </svg>
+          Export
+        </button>
+        <span class="mx-1 h-4 w-px bg-white/10" aria-hidden="true"></span>
+        <!-- Viewport passes: toggle buttons. `a-toggle` owns the state (its
+          `value` attribute, mirrored to `aria-pressed` on the button it
+          renders) and submits with the surrounding form under `name`. -->
+        <div class="flex items-center gap-1" role="group" aria-label="Viewport passes">
+          <a-toggle
+            name="wind"
+            value="true"
+            class="inline-flex cursor-default items-center whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-2 py-1 font-medium text-zinc-400 hover:border-white/20 hover:text-zinc-200 [&[value='true']]:border-primary-600 [&[value='true']]:bg-primary-600 [&[value='true']]:text-white"
+          >
+            <svg class="size-3.5 opacity-80" aria-hidden="true">
+              <use href="#kit-icon-source"></use>
+            </svg>
+            Wind
+          </a-toggle>
+          <a-toggle
+            name="bloom"
+            value="true"
+            class="inline-flex cursor-default items-center whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-2 py-1 font-medium text-zinc-400 hover:border-white/20 hover:text-zinc-200 [&[value='true']]:border-primary-600 [&[value='true']]:bg-primary-600 [&[value='true']]:text-white"
+          >
+            <svg class="size-3.5 opacity-80" aria-hidden="true">
+              <use href="#kit-icon-settings"></use>
+            </svg>
+            Bloom
+          </a-toggle>
+          <a-toggle
+            name="occlusion"
+            value="true"
+            class="inline-flex cursor-default items-center whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-2 py-1 font-medium text-zinc-400 hover:border-white/20 hover:text-zinc-200 [&[value='true']]:border-primary-600 [&[value='true']]:bg-primary-600 [&[value='true']]:text-white"
+          >
+            <svg class="size-3.5 opacity-80" aria-hidden="true">
+              <use href="#kit-icon-settings"></use>
+            </svg>
+            Occlusion
+          </a-toggle>
+          <a-toggle
+            name="height-fog"
+            value="true"
+            class="inline-flex cursor-default items-center whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-2 py-1 font-medium text-zinc-400 hover:border-white/20 hover:text-zinc-200 [&[value='true']]:border-primary-600 [&[value='true']]:bg-primary-600 [&[value='true']]:text-white"
+          >
+            <svg class="size-3.5 opacity-80" aria-hidden="true">
+              <use href="#kit-icon-menu"></use>
+            </svg>
+            Height fog
+          </a-toggle>
+          <a-toggle
+            name="local-lights"
+            value="true"
+            class="inline-flex cursor-default items-center whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-2 py-1 font-medium text-zinc-400 hover:border-white/20 hover:text-zinc-200 [&[value='true']]:border-primary-600 [&[value='true']]:bg-primary-600 [&[value='true']]:text-white"
+          >
+            <svg class="size-3.5 opacity-80" aria-hidden="true">
+              <use href="#kit-icon-home"></use>
+            </svg>
+            Local lights
+          </a-toggle>
+          <a-toggle
+            name="bounce-fill"
+            value="true"
+            class="inline-flex cursor-default items-center whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-2 py-1 font-medium text-zinc-400 hover:border-white/20 hover:text-zinc-200 [&[value='true']]:border-primary-600 [&[value='true']]:bg-primary-600 [&[value='true']]:text-white"
+          >
+            <svg class="size-3.5 opacity-80" aria-hidden="true">
+              <use href="#kit-icon-expand"></use>
+            </svg>
+            Bounce fill
+          </a-toggle>
+          <a-toggle
+            name="ground"
+            value="true"
+            class="inline-flex cursor-default items-center whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-2 py-1 font-medium text-zinc-400 hover:border-white/20 hover:text-zinc-200 [&[value='true']]:border-primary-600 [&[value='true']]:bg-primary-600 [&[value='true']]:text-white"
+          >
+            <svg class="size-3.5 opacity-80" aria-hidden="true">
+              <use href="#kit-icon-source"></use>
+            </svg>
+            Ground
+          </a-toggle>
+        </div>
+        <span class="mx-1 h-4 w-px bg-white/10" aria-hidden="true"></span>
+        <button
+          type="button"
+          class="inline-flex cursor-default items-center gap-1.5 whitespace-nowrap rounded-md border border-white/10 bg-white/5 px-2 py-1 font-medium text-zinc-300 hover:bg-white/10"
+        >
+          <svg class="size-3.5 text-zinc-400" aria-hidden="true">
+            <use href="#kit-icon-expand"></use>
+          </svg>
+          Frame asset
+        </button>
+        <button
+          type="button"
+          class="inline-flex cursor-default items-center gap-1.5 whitespace-nowrap rounded-md border border-transparent bg-transparent px-2 py-1 font-medium text-zinc-400 hover:bg-white/5 hover:text-zinc-100"
+        >
+          <svg class="size-3.5" aria-hidden="true">
+            <use href="#kit-icon-reload"></use>
+          </svg>
+          Reset settings
+        </button>
+        <span class="ml-auto hidden pl-2 text-[11px] text-zinc-600 xl:block"
+          >Drag to orbit · Scroll to zoom</span
+        >
+      </div>
+
+      <!-- Workstation: three resizable columns — assets, viewport (tabbed), inspector. -->
+      <main class="min-h-0 flex-1">
+        <a-panel-layout style="height: 100%">
+          <!-- Left column: asset browser -->
+          <a-panel-group>
+            <a-panel>
+              <div class="@container flex h-full flex-col bg-[#1c1d20]">
+                <div
+                  class="flex items-center gap-2 border-b border-white/10 px-2.5 py-2"
+                >
+                  <span
+                    class="text-[11px] font-semibold tracking-wide text-zinc-500 uppercase"
+                    >Assets</span
+                  >
+                  <span class="ml-auto font-mono text-[11px] text-zinc-500">36/36</span>
+                </div>
+                <div class="p-2">
+                  <label class="relative block">
+                    <span class="sr-only">Filter assets</span>
+                    <svg
+                      class="pointer-events-none absolute top-1/2 left-2 size-3.5 -translate-y-1/2 text-zinc-500"
+                      aria-hidden="true"
+                    >
+                      <use href="#kit-icon-search"></use>
+                    </svg>
+                    <input
+                      type="search"
+                      placeholder="Name filter…"
+                      class="block w-full rounded-md border border-white/10 bg-[#141518] py-1.5 pr-2 pl-7 text-zinc-200 placeholder:text-zinc-500 focus:border-primary-400 focus:outline-none"
+                    />
+                  </label>
+                </div>
+                <!-- Thumbnail grid: `a-list` gives roving focus + selection.
+                  Columns follow the panel width via container queries, so the
+                  grid reflows when the column is dragged wider or narrower. -->
+                <a-list
+                  class="grid min-h-0 flex-1 auto-rows-min grid-cols-2 content-start gap-1.5 overflow-y-auto p-2 pt-0 @2xs:grid-cols-3 @sm:grid-cols-4 @lg:grid-cols-5 @2xl:grid-cols-6"
+                  aria-label="Assets"
+                >
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-600 to-zinc-800 text-lg text-zinc-300"
+                      role="img"
+                      aria-label="depot chess preview"
+                      >♟</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-ches…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-emerald-900/70 to-zinc-900 text-lg text-emerald-200/60"
+                      role="img"
+                      aria-label="depot foliage preview"
+                      >❋</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-foliag…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-sky-700/60 to-amber-700/50 text-lg text-amber-100/80"
+                      role="img"
+                      aria-label="depot lights preview"
+                      >✦</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-lights…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-900 text-lg text-zinc-500"
+                      role="img"
+                      aria-label="depot markings preview"
+                      >⌗</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-marki…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-300/80 to-zinc-600 text-lg text-zinc-700"
+                      role="img"
+                      aria-label="depot north hall preview"
+                      >▬</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-north…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-700 to-zinc-900 text-lg text-zinc-400"
+                      role="img"
+                      aria-label="depot perimeter preview"
+                      >│</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-perim…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-600 to-zinc-800 text-lg text-zinc-300"
+                      role="img"
+                      aria-label="depot perimeter post preview"
+                      >╎</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-perim…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-orange-900/60 to-stone-800 text-lg text-orange-200/60"
+                      role="img"
+                      aria-label="depot rust container preview"
+                      >▦</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-rust-…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-stone-400/70 to-stone-700 text-lg text-stone-800"
+                      role="img"
+                      aria-label="depot sign preview"
+                      >▮</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-sign-…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-300/70 to-zinc-600 text-lg text-zinc-700"
+                      role="img"
+                      aria-label="depot sign panel preview"
+                      >▯</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-sign-…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-slate-700 to-slate-900 text-lg text-slate-400"
+                      role="img"
+                      aria-label="depot sign beam preview"
+                      >╱</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-sign-…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-stone-300/70 to-stone-600 text-lg text-stone-700"
+                      role="img"
+                      aria-label="depot south hall preview"
+                      >▭</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-south…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-200/80 to-zinc-500 text-lg text-zinc-700"
+                      role="img"
+                      aria-label="depot warehouse preview"
+                      >▣</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-ware…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-200/80 to-zinc-500 text-lg text-zinc-700"
+                      role="img"
+                      aria-label="depot warehouse annex preview"
+                      >▤</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-ware…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-zinc-200/80 to-zinc-500 text-lg text-zinc-700"
+                      role="img"
+                      aria-label="depot warehouse dock preview"
+                      >▥</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >depot-ware…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-amber-600/50 to-sky-900/60 text-lg text-amber-100/70"
+                      role="img"
+                      aria-label="emission preview"
+                      >✸</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >emission.me…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-emerald-800/70 to-zinc-900 text-lg text-emerald-200/70"
+                      role="img"
+                      aria-label="foliage preview"
+                      >❦</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >foliage.mes…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-orange-800/60 to-teal-900/60 text-lg text-orange-200/70"
+                      role="img"
+                      aria-label="materials preview"
+                      >◍</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >materials.m…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    selected
+                    class="cursor-pointer overflow-hidden rounded-md border border-primary-400 bg-[#141518]"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-emerald-700/60 to-amber-900/50 text-lg text-emerald-100/80"
+                      role="img"
+                      aria-label="potted ivy preview"
+                      >❧</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-200"
+                      >potted-ivy.…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-teal-800/60 to-zinc-800 text-lg text-teal-100/70"
+                      role="img"
+                      aria-label="rigged armature preview"
+                      >⚘</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >rigged-arm.…</span
+                    >
+                  </a-list-item>
+                  <a-list-item
+                    class="cursor-pointer overflow-hidden rounded-md border border-white/10 bg-[#141518] hover:border-white/25"
+                  >
+                    <span
+                      class="flex aspect-square items-center justify-center bg-gradient-to-br from-stone-300/70 to-stone-600 text-lg text-stone-700"
+                      role="img"
+                      aria-label="vase preview"
+                      >⬢</span
+                    >
+                    <span
+                      class="block truncate px-1 py-1 font-mono text-[10px] text-zinc-400"
+                      >vase.mesh…</span
+                    >
+                  </a-list-item>
+                </a-list>
+              </div>
+            </a-panel>
+          </a-panel-group>
+
+          <!-- Middle column: viewport with Viewport / Training / Textures tabs.
+            Tabs come from the `tab` attribute on each child — drag one to dock
+            or split it into its own panel. -->
+          <a-panel-group>
+            <a-panel tabs active-tab="0">
+              <div tab="Viewport" class="relative h-full bg-[#0a0b0c]">
+                <!-- Frame stats overlay -->
+                <div
+                  class="pointer-events-none absolute top-2 left-2 z-10 font-mono text-[11px] leading-relaxed text-zinc-400"
+                >
+                  <p class="m-0">120.0 fps (8.33 ms)</p>
+                  <p class="m-0">Tris 11,036 · Verts 8,146 · Draws 5</p>
+                  <p class="m-0">Mtls 5 · Tex 1 · 1664.4 KiB</p>
+                </div>
+                <!-- Orientation gizmo -->
+                <div
+                  class="pointer-events-none absolute top-2 right-2 z-10"
+                  aria-hidden="true"
+                >
+                  <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+                    <circle cx="36" cy="36" r="27" fill="rgb(255 255 255 / 0.04)" />
+                    <line
+                      x1="36"
+                      y1="36"
+                      x2="58"
+                      y2="44"
+                      stroke="#ef4444"
+                      stroke-width="1.5"
+                    />
+                    <line
+                      x1="36"
+                      y1="36"
+                      x2="36"
+                      y2="13"
+                      stroke="#22c55e"
+                      stroke-width="1.5"
+                    />
+                    <line
+                      x1="36"
+                      y1="36"
+                      x2="16"
+                      y2="46"
+                      stroke="#3b82f6"
+                      stroke-width="1.5"
+                    />
+                    <circle cx="58" cy="44" r="3" fill="#ef4444" />
+                    <circle cx="36" cy="13" r="3" fill="#22c55e" />
+                    <circle cx="16" cy="46" r="3" fill="#3b82f6" />
+                  </svg>
+                </div>
+                <div class="flex h-full items-center justify-center">
+                  <p class="m-0 font-mono text-[11px] text-zinc-600">
+                    Viewport output goes here
+                  </p>
+                </div>
+              </div>
+              <div tab="Training" class="h-full overflow-y-auto bg-[#141518] p-3">
+                <p
+                  class="mb-2 text-[11px] font-semibold tracking-wide text-zinc-500 uppercase"
+                >
+                  Runs
+                </p>
+                <table class="w-full border-collapse text-left">
+                  <thead>
+                    <tr class="text-[11px] text-zinc-500">
+                      <th class="border-b border-white/10 px-2 py-1 font-medium">Run</th>
+                      <th class="border-b border-white/10 px-2 py-1 font-medium">
+                        Steps
+                      </th>
+                      <th
+                        class="border-b border-white/10 px-2 py-1 text-right font-medium"
+                      >
+                        Loss
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="font-mono text-[11px] text-zinc-300">
+                    <tr>
+                      <td class="border-b border-white/5 px-2 py-1">ivy-lod-a</td>
+                      <td class="border-b border-white/5 px-2 py-1">12,000</td>
+                      <td class="border-b border-white/5 px-2 py-1 text-right">0.0143</td>
+                    </tr>
+                    <tr>
+                      <td class="border-b border-white/5 px-2 py-1">ivy-lod-b</td>
+                      <td class="border-b border-white/5 px-2 py-1">8,400</td>
+                      <td class="border-b border-white/5 px-2 py-1 text-right">0.0217</td>
+                    </tr>
+                    <tr>
+                      <td class="px-2 py-1">ivy-wind</td>
+                      <td class="px-2 py-1">3,150</td>
+                      <td class="px-2 py-1 text-right">0.0408</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </a-panel>
+          </a-panel-group>
+
+          <!-- Right column: inspector — collapsible sections of property rows -->
+          <a-panel-group>
+            <a-panel>
+              <div class="h-full overflow-y-auto bg-[#1c1d20] pb-3">
+                <div class="flex items-center gap-2 border-b border-white/10 px-3 py-2">
+                  <span
+                    class="text-[11px] font-semibold tracking-wide text-zinc-500 uppercase"
+                    >Inspector</span
+                  >
+                </div>
+
+                <a-expandable opened class="block mt-2 mx-2 bg-white/10 rounded-lg">
+                  <button
+                    slot="toggle"
+                    type="button"
+                    class="flex w-full cursor-default items-center gap-1.5 px-2 py-1 text-left font-medium text-zinc-200 hover:bg-white/5 border border-transparent whitespace-nowrap"
+                  >
+                    <svg class="size-3 text-zinc-500" aria-hidden="true">
+                      <use href="#kit-icon-chevron-down"></use>
+                    </svg>
+                    Asset
+                  </button>
+                  <dl class="grid grid-cols-[120px_1fr] gap-y-1 px-3 pb-3">
+                    <dt class="text-zinc-500">Version</dt>
+                    <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">v2</dd>
+                    <dt class="text-zinc-500">Vertices</dt>
+                    <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">
+                      8,146
+                    </dd>
+                    <dt class="text-zinc-500">Triangles</dt>
+                    <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">
+                      11,036
+                    </dd>
+                    <dt class="text-zinc-500">Draw ranges</dt>
+                    <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">5</dd>
+                    <dt class="text-zinc-500">Collision boxes</dt>
+                    <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">0</dd>
+                    <dt class="text-zinc-500">Stride</dt>
+                    <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">
+                      64 B
+                    </dd>
+                    <dt class="text-zinc-500">Extent</dt>
+                    <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">
+                      0.95 × 0.75 × 0.76
+                    </dd>
+                    <dt class="text-zinc-500">Payload</dt>
+                    <dd class="m-0 text-right font-mono text-[11px] text-zinc-200">
+                      1664.4 KiB
+                    </dd>
+                  </dl>
+                </a-expandable>
+
+                <a-expandable class="block mt-2 mx-2 bg-white/10 rounded-lg">
+                  <button
+                    slot="toggle"
+                    type="button"
+                    class="flex w-full cursor-default items-center gap-1.5 px-2 py-1 text-left font-medium text-zinc-200 hover:bg-white/5 border border-transparent whitespace-nowrap"
+                  >
+                    <svg class="size-3 -rotate-90 text-zinc-500" aria-hidden="true">
+                      <use href="#kit-icon-chevron-down"></use>
+                    </svg>
+                    Materials
+                    <span class="ml-auto font-mono text-[11px] font-normal text-zinc-500"
+                      >5</span
+                    >
+                  </button>
+                  <div class="px-3 pb-3 text-[11px] text-zinc-500">
+                    Base color, roughness and emissive rows per material slot.
+                  </div>
+                </a-expandable>
+
+                <a-expandable opened class="block mt-2 mx-2 bg-white/10 rounded-lg">
+                  <button
+                    slot="toggle"
+                    type="button"
+                    class="flex w-full cursor-default items-center gap-1.5 px-2 py-1 text-left font-medium text-zinc-200 hover:bg-white/5 border border-transparent whitespace-nowrap"
+                  >
+                    <svg class="size-3 text-zinc-500" aria-hidden="true">
+                      <use href="#kit-icon-chevron-down"></use>
+                    </svg>
+                    Textures
+                    <span class="ml-auto font-mono text-[11px] font-normal text-zinc-500"
+                      >1 texture</span
+                    >
+                  </button>
+                  <div class="px-3 pb-3">
+                    <figure
+                      class="m-0 w-[84px] overflow-hidden rounded-md border border-primary-400"
+                    >
+                      <div
+                        class="aspect-square bg-gradient-to-br from-amber-200/80 via-emerald-800/70 to-zinc-900"
+                        role="img"
+                        aria-label="albedo atlas"
+                      ></div>
+                      <figcaption
+                        class="bg-[#141518] px-1.5 py-1 font-mono text-[10px] leading-tight text-zinc-300"
+                      >
+                        #0 ·<br />512×512
+                      </figcaption>
+                    </figure>
+                  </div>
+                </a-expandable>
+
+                <a-expandable opened class="block mt-2 mx-2 bg-white/10 rounded-lg">
+                  <button
+                    slot="toggle"
+                    type="button"
+                    class="flex w-full cursor-default items-center gap-1.5 px-2 py-1 text-left font-medium text-zinc-200 hover:bg-white/5 border border-transparent whitespace-nowrap"
+                  >
+                    <svg class="size-3 text-zinc-500" aria-hidden="true">
+                      <use href="#kit-icon-chevron-down"></use>
+                    </svg>
+                    Render
+                  </button>
+                  <div class="grid gap-1 px-2 pb-2">
+                    <div class="flex items-center gap-2 px-2 py-1">
+                      <span class="min-w-0 flex-1 truncate font-medium text-zinc-200"
+                        >Background</span
+                      >
+                      <!-- Swatch opens `a-color-picker` in a popover — the
+                        kit's own picker (field, hue/alpha sliders, hex input,
+                        presets), not the browser's native color dialog. -->
+                      <a-popover-trigger class="relative z-10 shrink-0">
+                        <button
+                          slot="trigger"
+                          type="button"
+                          aria-haspopup="dialog"
+                          aria-label="Background color"
+                          data-swatch-for="wb-bg"
+                          style="background: #e8e8ea"
+                          class="block h-4 w-10 cursor-default whitespace-nowrap rounded border border-white/25"
+                        ></button>
+                        <a-popover class="group">
+                          <div
+                            class="w-[max-content] p-1 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100"
+                          >
+                            <!-- The popover portals its panel out of the
+                              inspector, so it sets its own type colour instead
+                              of inheriting the shell's. -->
+                            <div
+                              class="rounded-lg border border-white/10 bg-[#26272b] p-2 text-[12px] text-zinc-200 shadow-2xl"
+                            >
+                              <a-color-picker
+                                id="wb-bg"
+                                name="background"
+                                value="#e8e8ea"
+                                palette="#e8e8ea,#141518,#3b74d6,#ed7836,#22c55e"
+                              ></a-color-picker>
+                            </div>
+                          </div>
+                        </a-popover>
+                      </a-popover-trigger>
+                      <span id="wb-bg-hex" class="sr-only">#E8E8EA</span>
+                    </div>
+                    <!-- Drag-number rows: drag to scrub, scroll to nudge, click to type -->
+                    <div
+                      data-drag-number
+                      data-min="0"
+                      data-max="1"
+                      data-step="0.01"
+                      data-precision="2"
+                      data-value="0.8"
+                      style="--dn-fill: 0.8"
+                      class="flex items-center gap-2 rounded px-2 py-1"
+                    >
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
+                        >Glow</span
+                      >
+                      <input
+                        type="number"
+                        value="0.80"
+                        aria-label="Glow"
+                        class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
+                      />
+                    </div>
+                    <div
+                      data-drag-number
+                      data-min="0"
+                      data-max="1"
+                      data-step="0.01"
+                      data-precision="2"
+                      data-value="0.5"
+                      style="--dn-fill: 0.5"
+                      class="flex items-center gap-2 rounded px-2 py-1"
+                    >
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
+                        >Glow threshold</span
+                      >
+                      <input
+                        type="number"
+                        value="0.50"
+                        aria-label="Glow threshold"
+                        class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
+                      />
+                    </div>
+                    <div
+                      data-drag-number
+                      data-min="-2"
+                      data-max="2"
+                      data-step="0.01"
+                      data-precision="2"
+                      data-value="0.3"
+                      style="--dn-fill: 0.575"
+                      class="flex items-center gap-2 rounded px-2 py-1"
+                    >
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
+                        >Exposure</span
+                      >
+                      <input
+                        type="number"
+                        value="0.30"
+                        aria-label="Exposure"
+                        class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
+                      />
+                    </div>
+                    <div
+                      data-drag-number
+                      data-min="10"
+                      data-max="120"
+                      data-step="1"
+                      data-precision="0"
+                      data-value="40"
+                      style="--dn-fill: 0.27"
+                      class="flex items-center gap-2 rounded px-2 py-1"
+                    >
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
+                        >Field of View</span
+                      >
+                      <input
+                        type="number"
+                        value="40"
+                        aria-label="Field of view"
+                        class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                </a-expandable>
+
+                <a-expandable opened class="block mt-2 mx-2 bg-white/10 rounded-lg">
+                  <button
+                    slot="toggle"
+                    type="button"
+                    class="flex w-full cursor-default items-center gap-1.5 px-2 py-1 text-left font-medium text-zinc-200 hover:bg-white/5 border border-transparent whitespace-nowrap"
+                  >
+                    <svg class="size-3 text-zinc-500" aria-hidden="true">
+                      <use href="#kit-icon-chevron-down"></use>
+                    </svg>
+                    Lighting
+                  </button>
+                  <div class="grid gap-1 px-2 pb-2">
+                    <div
+                      data-drag-number
+                      data-min="0"
+                      data-max="1"
+                      data-step="0.01"
+                      data-precision="2"
+                      data-value="0.7"
+                      style="--dn-fill: 0.7"
+                      class="flex items-center gap-2 rounded px-2 py-1"
+                    >
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
+                        >Ambient light</span
+                      >
+                      <input
+                        type="number"
+                        value="0.70"
+                        aria-label="Ambient light"
+                        class="w-14 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
+                      />
+                    </div>
+                    <div
+                      data-drag-number
+                      data-min="-180"
+                      data-max="180"
+                      data-step="0.1"
+                      data-precision="2"
+                      data-value="-23.3"
+                      style="--dn-fill: 0.435"
+                      class="flex items-center gap-2 rounded px-2 py-1"
+                    >
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
+                        >Sun azimuth °</span
+                      >
+                      <input
+                        type="number"
+                        value="-23.30"
+                        aria-label="Sun azimuth"
+                        class="w-14 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
+                      />
+                    </div>
+                    <div
+                      data-drag-number
+                      data-min="0"
+                      data-max="90"
+                      data-step="0.1"
+                      data-precision="2"
+                      data-value="25.4"
+                      style="--dn-fill: 0.282"
+                      class="flex items-center gap-2 rounded px-2 py-1"
+                    >
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
+                        >Sun elevation °</span
+                      >
+                      <input
+                        type="number"
+                        value="25.40"
+                        aria-label="Sun elevation"
+                        class="w-14 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
+                      />
+                    </div>
+                    <div
+                      data-drag-number
+                      data-min="0"
+                      data-max="5"
+                      data-step="0.01"
+                      data-precision="2"
+                      data-value="2.95"
+                      style="--dn-fill: 0.59"
+                      class="flex items-center gap-2 rounded px-2 py-1"
+                    >
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
+                        >Sun intensity</span
+                      >
+                      <input
+                        type="number"
+                        value="2.95"
+                        aria-label="Sun intensity"
+                        class="w-14 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                </a-expandable>
+
+                <a-expandable opened class="block mt-2 mx-2 bg-white/10 rounded-lg">
+                  <button
+                    slot="toggle"
+                    type="button"
+                    class="flex w-full cursor-default items-center gap-1.5 px-2 py-1 text-left font-medium text-zinc-200 hover:bg-white/5 border border-transparent whitespace-nowrap"
+                  >
+                    <svg class="size-3 text-zinc-500" aria-hidden="true">
+                      <use href="#kit-icon-chevron-down"></use>
+                    </svg>
+                    Color Grading
+                  </button>
+                  <div class="grid gap-1 px-2 pb-2">
+                    <div
+                      data-drag-number
+                      data-min="0"
+                      data-max="2"
+                      data-step="0.01"
+                      data-precision="2"
+                      data-value="1"
+                      style="--dn-fill: 0.5"
+                      class="flex items-center gap-2 rounded px-2 py-1"
+                    >
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
+                        >Saturation</span
+                      >
+                      <input
+                        type="number"
+                        value="1.00"
+                        aria-label="Saturation"
+                        class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
+                      />
+                    </div>
+                    <div
+                      data-drag-number
+                      data-min="0"
+                      data-max="2"
+                      data-step="0.01"
+                      data-precision="2"
+                      data-value="1.5"
+                      style="--dn-fill: 0.75"
+                      class="flex items-center gap-2 rounded px-2 py-1"
+                    >
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
+                        >Contrast</span
+                      >
+                      <input
+                        type="number"
+                        value="1.50"
+                        aria-label="Contrast"
+                        class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
+                      />
+                    </div>
+                    <div
+                      data-drag-number
+                      data-min="-1"
+                      data-max="1"
+                      data-step="0.01"
+                      data-precision="2"
+                      data-value="0.2"
+                      style="--dn-fill: 0.6"
+                      class="flex items-center gap-2 rounded px-2 py-1"
+                    >
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
+                        >Warmth</span
+                      >
+                      <input
+                        type="number"
+                        value="0.20"
+                        aria-label="Warmth"
+                        class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
+                      />
+                    </div>
+                    <div
+                      data-drag-number
+                      data-min="-1"
+                      data-max="1"
+                      data-step="0.01"
+                      data-precision="2"
+                      data-value="-0.15"
+                      style="--dn-fill: 0.425"
+                      class="flex items-center gap-2 rounded px-2 py-1"
+                    >
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
+                        >Tint</span
+                      >
+                      <input
+                        type="number"
+                        value="-0.15"
+                        aria-label="Tint"
+                        class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                </a-expandable>
+
+                <a-expandable opened class="block mt-2 mx-2 bg-white/10 rounded-lg">
+                  <button
+                    slot="toggle"
+                    type="button"
+                    class="flex w-full cursor-default items-center gap-1.5 px-2 py-1 text-left font-medium text-zinc-200 hover:bg-white/5 border border-transparent whitespace-nowrap"
+                  >
+                    <svg class="size-3 text-zinc-500" aria-hidden="true">
+                      <use href="#kit-icon-chevron-down"></use>
+                    </svg>
+                    Atmosphere
+                  </button>
+                  <div class="grid gap-1 px-2 pb-2">
+                    <div
+                      data-drag-number
+                      data-min="0"
+                      data-max="1"
+                      data-step="0.01"
+                      data-precision="2"
+                      data-value="0"
+                      style="--dn-fill: 0"
+                      class="flex items-center gap-2 rounded px-2 py-1"
+                    >
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
+                        >Density</span
+                      >
+                      <input
+                        type="number"
+                        value="0.00"
+                        aria-label="Fog density"
+                        class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
+                      />
+                    </div>
+                    <div
+                      data-drag-number
+                      data-min="0"
+                      data-max="20"
+                      data-step="0.1"
+                      data-precision="2"
+                      data-value="4"
+                      style="--dn-fill: 0.2"
+                      class="flex items-center gap-2 rounded px-2 py-1"
+                    >
+                      <span class="min-w-0 flex-1 truncate font-medium text-white"
+                        >Height</span
+                      >
+                      <input
+                        type="number"
+                        value="4.00"
+                        aria-label="Fog height"
+                        class="w-12 shrink-0 bg-transparent text-right font-mono text-[11px] text-white focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                </a-expandable>
+              </div>
+            </a-panel>
+          </a-panel-group>
+        </a-panel-layout>
+      </main>
+
+      <!-- Status bar -->
+      <footer
+        class="flex items-center gap-2 border-t border-white/10 bg-[#1c1d20] px-2 py-1 font-mono text-[11px] text-zinc-500"
+      >
+        <span class="inline-flex items-center gap-1 text-emerald-300/80"
+          ><svg class="size-3" aria-hidden="true">
+            <use href="#kit-icon-check"></use>
+          </svg>
+          Loaded potted-ivy.mesh</span
+        >
+        <span class="ml-auto">Atrium · WebGPU</span>
+      </footer>
+    </div>
+
+    <script>
+      (() => {
+        const PX_FOR_FULL_RANGE = 200;
+        const setup = root => {
+          if (root.dataset.dnInit) return;
+          root.dataset.dnInit = "true";
+          const input = root.querySelector('input[type="number"]');
+          if (!input) return;
+          const min = Number(root.dataset.min ?? input.min ?? 0);
+          const max = Number(root.dataset.max ?? input.max ?? 100);
+          const step = Number(root.dataset.step ?? input.step ?? 1);
+          const precision = Number(root.dataset.precision ?? 2);
+          const def = root.hasAttribute("data-value") ? Number(root.dataset.value) : null;
+          const clamp = v => Math.min(max, Math.max(min, v));
+          const paint = v => {
+            const t = max === min ? 0 : (clamp(v) - min) / (max - min);
+            root.style.setProperty("--dn-fill", String(t));
+          };
+          const commit = (v, fire = true) => {
+            const c = clamp(v);
+            input.value = c.toFixed(precision);
+            paint(c);
+            if (fire) {
+              input.dispatchEvent(new Event("input", { bubbles: true }));
+              input.dispatchEvent(new Event("change", { bubbles: true }));
+            }
+          };
+          const start = Number(input.value);
+          commit(Number.isNaN(start) ? (def ?? min) : start, false);
+          let drag = null;
+          root.addEventListener("pointerdown", e => {
+            if (e.button !== 0) return;
+            drag = {
+              x: e.clientX,
+              v: Number(input.value),
+              moved: false,
+              id: e.pointerId,
+            };
+          });
+          root.addEventListener("pointermove", e => {
+            if (!drag || e.pointerId !== drag.id) return;
+            const dx = e.clientX - drag.x;
+            if (!drag.moved && Math.abs(dx) < 3) return;
+            if (!drag.moved) input.blur();
+            drag.moved = true;
+            try {
+              root.setPointerCapture(e.pointerId);
+            } catch {}
+            window.getSelection()?.removeAllRanges();
+            root.dataset.dragging = "true";
+            commit(drag.v + (dx / PX_FOR_FULL_RANGE) * (max - min));
+          });
+          const end = () => {
+            if (!drag) return;
+            drag = null;
+            delete root.dataset.dragging;
+          };
+          root.addEventListener("pointerup", end);
+          root.addEventListener("pointercancel", end);
+          root.addEventListener("dblclick", () => {
+            if (def !== null && !Number.isNaN(def)) commit(def);
+          });
+          root.addEventListener(
+            "wheel",
+            e => {
+              e.preventDefault();
+              const dir = e.deltaY < 0 ? 1 : -1;
+              commit(Number(input.value) + dir * step * (e.shiftKey ? 10 : 1));
+            },
+            { passive: false },
+          );
+          input.addEventListener("keydown", e => {
+            if (e.key === "Enter") {
+              commit(Number(input.value));
+              input.blur();
+            }
+            if (e.key === "Escape") {
+              commit(Number(input.value), false);
+              input.blur();
+            }
+          });
+          input.addEventListener("input", () => {
+            const n = Number(input.value);
+            if (!Number.isNaN(n)) paint(n);
+          });
+          input.addEventListener("change", () => {
+            const n = Number(input.value);
+            commit(Number.isNaN(n) ? (def ?? min) : n, false);
+          });
+        };
+        document.querySelectorAll("[data-drag-number]").forEach(setup);
+        // Swatch + hex readout follow the picker (`input` while dragging,
+        // `change` on commit — both bubble out of the element).
+        document.querySelectorAll("[data-swatch-for]").forEach(swatch => {
+          const picker = document.getElementById(swatch.dataset.swatchFor);
+          if (!picker) return;
+          const out = document.getElementById(`${picker.id}-hex`);
+          const sync = () => {
+            swatch.style.background = picker.value;
+            if (out) out.textContent = picker.value.toUpperCase();
+          };
+          picker.addEventListener("input", sync);
+          picker.addEventListener("change", sync);
+        });
+      })();
+    </script>
+  </body>
+</html>

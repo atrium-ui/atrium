@@ -43,6 +43,12 @@ const styles = `
     padding: 3px 3px 0 3px;
   }
 
+  /* A panel without tabs renders no tab elements — the bar must not take up
+     space (or paint its host's styling) above the panel's content. */
+  [part="tabs"]:empty {
+    display: none;
+  }
+
 	.tab {
 		display: inline-flex;
 		align-items: center;

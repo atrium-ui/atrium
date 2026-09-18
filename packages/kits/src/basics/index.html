@@ -47,8 +47,11 @@
         --color-picker-focus-outline: var(--color-primary-500);
       }
       a-tabs-tab[selected] {
-        background: var(--color-primary-500);
-        color: #fff;
+        background: #fff;
+        color: #1c1917;
+        box-shadow:
+          0 0 0 1px rgb(0 0 0 / 0.06),
+          0 1px 2px rgb(0 0 0 / 0.08);
       }
       a-panel {
         --tab-font-color: var(--color-stone-600);
@@ -160,7 +163,7 @@
             type="search"
             placeholder="Quick Search"
             class="block w-full rounded-lg border-0 bg-stone-200/60 py-2 pl-9 pr-12 text-[13px] text-stone-800 placeholder:text-stone-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-          >
+          />
           <kbd
             class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-mono text-[11px] text-stone-400"
           >
@@ -291,14 +294,14 @@
               type="search"
               placeholder="Quick Search"
               class="block w-full rounded-lg border border-stone-200 bg-white py-1.5 px-3 text-[13px] placeholder:text-stone-400 focus:border-primary-400 focus:outline-none"
-            >
+            />
           </label>
           <div class="ml-auto flex items-center gap-2">
             <a-popover-trigger class="relative z-10 inline-block">
               <button
                 slot="trigger"
                 type="button"
-                class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-[13px] font-medium text-stone-700 transition-colors hover:border-stone-300"
+                class="inline-flex cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-[13px] font-medium text-stone-700 transition-colors hover:border-stone-300"
               >
                 Options
                 <svg class="aspect-square h-3.5 w-3.5" aria-hidden="true">
@@ -316,21 +319,21 @@
                     <button
                       type="button"
                       role="menuitem"
-                      class="block w-full cursor-pointer rounded-lg border-0 bg-transparent px-3 py-2 text-left text-stone-700 transition-colors hover:bg-primary-50"
+                      class="block w-full cursor-pointer whitespace-nowrap rounded-lg border border-transparent bg-transparent px-3 py-2 text-left text-stone-700 transition-colors hover:bg-primary-50"
                     >
                       Rename
                     </button>
                     <button
                       type="button"
                       role="menuitem"
-                      class="block w-full cursor-pointer rounded-lg border-0 bg-transparent px-3 py-2 text-left text-stone-700 transition-colors hover:bg-primary-50"
+                      class="block w-full cursor-pointer whitespace-nowrap rounded-lg border border-transparent bg-transparent px-3 py-2 text-left text-stone-700 transition-colors hover:bg-primary-50"
                     >
                       Duplicate
                     </button>
                     <button
                       type="button"
                       role="menuitem"
-                      class="block w-full cursor-pointer rounded-lg border-0 bg-transparent px-3 py-2 text-left text-red-600 transition-colors hover:bg-red-50"
+                      class="block w-full cursor-pointer whitespace-nowrap rounded-lg border border-transparent bg-transparent px-3 py-2 text-left text-red-600 transition-colors hover:bg-red-50"
                     >
                       Delete
                     </button>
@@ -341,7 +344,7 @@
             <button
               type="button"
               onclick="document.getElementById('kit-new-space').showModal()"
-              class="cursor-pointer rounded-lg border-0 bg-primary-500 px-3.5 py-1.5 text-[13px] font-medium text-white transition-colors hover:bg-primary-600"
+              class="cursor-pointer whitespace-nowrap rounded-lg border border-transparent bg-primary-500 px-3.5 py-1.5 text-[13px] font-medium text-white transition-colors hover:bg-primary-600"
             >
               New space
             </button>
@@ -391,7 +394,7 @@
                   type="button"
                   aria-label="Previous documents"
                   onclick="document.getElementById('kit-dash-recent').moveBy(-1)"
-                  class="flex size-7 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-800"
+                  class="flex size-7 cursor-pointer items-center justify-center whitespace-nowrap rounded-full border border-stone-200 bg-white text-stone-500 transition duration-150 ease-out hover:border-stone-300 hover:bg-stone-50 hover:text-stone-800 focus-visible:ring-2 focus-visible:ring-stone-300 focus-visible:outline-none active:scale-90 active:border-stone-300 active:bg-stone-100 active:text-stone-900"
                 >
                   <svg
                     width="14"
@@ -413,7 +416,7 @@
                   type="button"
                   aria-label="Next documents"
                   onclick="document.getElementById('kit-dash-recent').moveBy(1)"
-                  class="flex size-7 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-800"
+                  class="flex size-7 cursor-pointer items-center justify-center whitespace-nowrap rounded-full border border-stone-200 bg-white text-stone-500 transition duration-150 ease-out hover:border-stone-300 hover:bg-stone-50 hover:text-stone-800 focus-visible:ring-2 focus-visible:ring-stone-300 focus-visible:outline-none active:scale-90 active:border-stone-300 active:bg-stone-100 active:text-stone-900"
                 >
                   <svg
                     width="14"
@@ -709,7 +712,7 @@
                   </div>
                   <button
                     type="button"
-                    class="ml-auto cursor-pointer rounded-md border-0 bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 transition-colors hover:bg-red-100"
+                    class="ml-auto cursor-pointer whitespace-nowrap rounded-md border border-transparent bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 transition-colors hover:bg-red-100"
                   >
                     Remove
                   </button>
@@ -725,7 +728,7 @@
                     type="text"
                     value="Personal"
                     class="block w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-                  >
+                  />
                 </label>
                 <label class="block">
                   <span class="mb-1 block text-[13px] font-medium text-stone-700"
@@ -735,7 +738,7 @@
                     type="text"
                     placeholder="e.g., Engineering / Documentation"
                     class="block w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm placeholder:text-stone-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-                  >
+                  />
                 </label>
                 <label class="block">
                   <span class="mb-1 block text-[13px] font-medium text-stone-700"
@@ -745,13 +748,17 @@
                     name="visibility"
                     value="private"
                     class="relative inline-block w-full [&[opened]_.select-chevron]:rotate-180"
-                    onchange="const l=this.querySelector('[data-kit-select-label]');const o=event.detail.selected;if(l&&o)l.textContent=o.textContent.trim()"
+                    onchange="
+                      const l = this.querySelector('[data-kit-select-label]');
+                      const o = event.detail.selected;
+                      if (l && o) l.textContent = o.textContent.trim();
+                    "
                   >
                     <button
                       slot="trigger"
                       type="button"
                       aria-haspopup="listbox"
-                      class="flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg border border-stone-200 bg-white px-3 py-2 text-left text-sm text-stone-900 transition-colors hover:border-stone-300 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                      class="flex w-full cursor-pointer items-center justify-between gap-3 whitespace-nowrap rounded-lg border border-stone-200 bg-white px-3 py-2 text-left text-sm text-stone-900 transition-colors hover:border-stone-300 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                     >
                       <span data-kit-select-label class="min-w-0 flex-1 truncate"
                         >Private</span
@@ -798,7 +805,7 @@
                 <div class="flex justify-end">
                   <button
                     type="button"
-                    class="cursor-pointer rounded-lg border-0 bg-primary-400 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-500"
+                    class="cursor-pointer whitespace-nowrap rounded-lg border border-transparent bg-primary-400 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-500"
                   >
                     Save Changes
                   </button>
@@ -906,7 +913,7 @@
                   <button
                     slot="trigger"
                     type="button"
-                    class="flex cursor-pointer items-center gap-2 rounded-lg border border-stone-200 bg-white py-1.5 pl-2 pr-3 transition-colors hover:border-stone-300"
+                    class="flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-lg border border-stone-200 bg-white py-1.5 pl-2 pr-3 transition-colors hover:border-stone-300"
                   >
                     <span
                       id="kit-dash-accent-swatch"
@@ -992,7 +999,7 @@
               <button
                 slot="toggle"
                 type="button"
-                class="flex w-full cursor-pointer items-center justify-between px-4 py-3 text-left text-sm font-medium text-stone-900"
+                class="flex w-full cursor-pointer items-center justify-between px-4 py-3 text-left text-sm font-medium text-stone-900 border border-transparent whitespace-nowrap"
               >
                 What happens when I archive a space?
                 <span aria-hidden="true" class="text-stone-400">+</span>
@@ -1116,7 +1123,7 @@
                     <td class="px-4 py-3 text-right">
                       <button
                         type="button"
-                        class="cursor-pointer border-0 bg-transparent p-0 text-[13px] font-medium text-red-600 hover:underline"
+                        class="cursor-pointer border border-transparent bg-transparent p-0 text-[13px] font-medium text-red-600 hover:underline whitespace-nowrap"
                       >
                         Revoke
                       </button>
@@ -1129,13 +1136,13 @@
               >
                 <button
                   type="button"
-                  class="cursor-pointer rounded-lg border-0 bg-transparent px-2 py-1 text-[13px] font-medium text-stone-600 transition-colors hover:bg-stone-100"
+                  class="cursor-pointer whitespace-nowrap rounded-lg border border-transparent bg-transparent px-2 py-1 text-[13px] font-medium text-stone-600 transition-colors hover:bg-stone-100"
                 >
                   + Add access
                 </button>
                 <button
                   type="button"
-                  class="cursor-pointer rounded-lg border-0 bg-primary-200 px-4 py-2 text-[13px] font-medium text-primary-900 transition-colors hover:bg-primary-300"
+                  class="cursor-pointer whitespace-nowrap rounded-lg border border-transparent bg-primary-200 px-4 py-2 text-[13px] font-medium text-primary-900 transition-colors hover:bg-primary-300"
                 >
                   Save access
                 </button>
@@ -1153,7 +1160,7 @@
                 <button
                   slot="toggle"
                   type="button"
-                  class="flex w-full cursor-pointer items-center justify-between px-4 py-3 text-left text-sm font-medium text-stone-900"
+                  class="flex w-full cursor-pointer items-center justify-between px-4 py-3 text-left text-sm font-medium text-stone-900 border border-transparent whitespace-nowrap"
                 >
                   How is usage billed?
                   <span aria-hidden="true" class="text-stone-400">+</span>
@@ -1179,7 +1186,7 @@
                 slot="trigger"
                 type="button"
                 aria-describedby="kit-dash-seat-tip"
-                class="cursor-pointer rounded-lg border border-stone-200 bg-white px-4 py-2 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300"
+                class="cursor-pointer whitespace-nowrap rounded-lg border border-stone-200 bg-white px-4 py-2 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300"
               >
                 What counts as a seat?
               </button>
@@ -1217,19 +1224,19 @@
               type="text"
               placeholder="e.g., Engineering"
               class="block w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm placeholder:text-stone-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-            >
+            />
           </label>
         </div>
         <div class="flex items-center justify-end gap-2 px-6 py-4">
           <button
             value="cancel"
-            class="cursor-pointer rounded-lg border border-stone-200 px-4 py-2 text-sm font-medium text-stone-700 hover:border-stone-300"
+            class="cursor-pointer whitespace-nowrap rounded-lg border border-stone-200 px-4 py-2 text-sm font-medium text-stone-700 hover:border-stone-300"
           >
             Cancel
           </button>
           <button
             value="confirm"
-            class="cursor-pointer rounded-lg border-0 bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-600"
+            class="cursor-pointer whitespace-nowrap rounded-lg border border-transparent bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-600"
           >
             Create
           </button>
