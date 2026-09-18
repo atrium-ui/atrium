@@ -62,10 +62,6 @@ a-color-picker {
   --color-picker-focus-outline: var(--color-primary-500);
 }
 
-/* Toggle buttons: `a-toggle` renders its own <button> in shadow DOM, so a
- * toggle button's inner layout (icon + label) is themed through that part.
- * State lives on the host's `value` attribute — style it with
- * `[&[value='true']]:…`. */
 a-toggle::part(button) {
   display: inline-flex;
   align-items: center;

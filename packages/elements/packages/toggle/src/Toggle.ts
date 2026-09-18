@@ -52,9 +52,6 @@ export class ToggleElement extends LitElement {
       background: none;
       padding: 0;
       margin: 0;
-      /* Buttons do not inherit font or color from the page by default (the UA
-         sheet sets its own), which would render slotted labels at a different
-         size than the rest of the host's typography. */
       font: inherit;
       color: inherit;
       letter-spacing: inherit;

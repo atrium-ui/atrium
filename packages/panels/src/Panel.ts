@@ -7,7 +7,6 @@ const styles = `
 		position: relative;
 		overflow: hidden;
 		display: grid;
-		grid-gap: var(--layout-grid-gap);
     width: 100%;
     height: 100%;
 	}
@@ -89,13 +88,6 @@ export class Panel extends HTMLElement {
     this.removeAttribute("drag-over");
   };
 
-  /**
-   * True once this panel has held a child. `removeOnEmtpy` exists to drop a
-   * column after its last tab is dragged away — but a panel is also empty
-   * while the parser is still working through its children, and self-removing
-   * then deletes an authored panel at random (which column loses the race
-   * varies per load). Only ever-filled panels may remove themselves.
-   */
   hadChildren = false;
 
   slotChangeCallback() {
@@ -157,14 +149,18 @@ export class Panel extends HTMLElement {
     splitBar.className = "split-bar";
 
     const borderSizeVar = getComputedStyle(this).getPropertyValue("--layout-grid-gap");
-    const borderSize = Number.parseInt(borderSizeVar);
+    const borderSize = Number.parseInt(borderSizeVar) || 0;
+    const MIN_GRAB_SIZE = 4;
+    const grabSize = Math.max(borderSize, MIN_GRAB_SIZE);
 
     let pointerDownEvent: PointerEvent | null = null;
     let resizeAvailable = [0, 0];
+    let lastPointer: [number, number] | null = null;
+    let activeChild: number | null = null;
 
     const pointerMoveHandler = (e, index) => {
       // check if bounds needs update
-      if (this.boundsInvalid) {
+      if (this.boundsInvalid && !pointerDownEvent) {
         this.updateBounds();
       }
 
@@ -191,7 +187,11 @@ export class Panel extends HTMLElement {
 
       const mouse = [e.x, e.y];
 
-      const mouseDelta = [e.movementX, e.movementY];
+      const mouseDelta =
+        pointerDownEvent && lastPointer
+          ? [e.clientX - lastPointer[0], e.clientY - lastPointer[1]]
+          : [e.movementX, e.movementY];
+      if (pointerDownEvent) lastPointer = [e.clientX, e.clientY];
 
       const delta = [
         this.columns[index] + mouseDelta[0] / this.width > minElementFraction &&
@@ -207,14 +207,14 @@ export class Panel extends HTMLElement {
 
       const resizable = [
         this.resizableColumn &&
-          mouse[0] > borderX - borderSize &&
-          mouse[0] < borderX + borderSize &&
+          mouse[0] > borderX - grabSize &&
+          mouse[0] < borderX + grabSize &&
           mouse[1] < borderY &&
           mouse[1] > columnBounds.top,
 
         this.resizableRow &&
-          mouse[1] > borderY - borderSize &&
-          mouse[1] < borderY + borderSize &&
+          mouse[1] > borderY - grabSize &&
+          mouse[1] < borderY + grabSize &&
           mouse[0] < borderX &&
           mouse[0] > columnBounds.left,
       ];
@@ -250,7 +250,7 @@ export class Panel extends HTMLElement {
 
         if (resizeX) {
           splitBar.className = "split-bar vertical";
-          splitBar.style.setProperty("--size", borderSize);
+          splitBar.style.setProperty("--size", grabSize);
           splitBar.style.setProperty(
             "--x",
             pointerDownEvent ? borderX + delta[0] : borderX,
@@ -261,7 +261,7 @@ export class Panel extends HTMLElement {
 
         if (resizeY) {
           splitBar.className = "split-bar horizontal";
-          splitBar.style.setProperty("--size", borderSize);
+          splitBar.style.setProperty("--size", grabSize);
           splitBar.style.setProperty(
             "--y",
             pointerDownEvent ? borderY + delta[1] : borderY,
@@ -285,17 +285,19 @@ export class Panel extends HTMLElement {
       }
 
       pointerDownEvent = null;
+      lastPointer = null;
+      resizeAvailable = [0, 0];
+      activeChild = null;
       splitBar.removeAttribute("active");
     };
 
     const pointerDownHandler = (e) => {
       if (resizeAvailable[0] || resizeAvailable[1]) {
         pointerDownEvent = e;
+        lastPointer = [e.clientX, e.clientY];
         splitBar.setAttribute("active", "");
       }
     };
-
-    let activeChild: number | null = null;
 
     this.addEventListener("pointerdown", pointerDownHandler);
 

@@ -43,8 +43,6 @@ const styles = `
     padding: 3px 3px 0 3px;
   }
 
-  /* A panel without tabs renders no tab elements — the bar must not take up
-     space (or paint its host's styling) above the panel's content. */
   [part="tabs"]:empty {
     display: none;
   }
@@ -99,15 +97,9 @@ const styles = `
 
 	slot {
 		display: block;
-		position: absolute;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		right: 0;
-	}
-
-	:host([tabs]) slot {
-		top: calc(var(--tab-height) + 3px);
+		position: relative;
+		flex: 1 1 auto;
+		min-height: 0;
 	}
 
 	:host([drag-over]) {
@@ -302,6 +294,8 @@ export class Group extends Column {
 
     // apend inside
     if (this.insertPosition === 0) {
+      for (const child of this.components) child.removeAttribute("active");
+      component.setAttribute("active", "");
       this.appendChild(component);
     }
 

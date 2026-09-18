@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Workbench UI Kit — Asset Preview</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Kit tokens, inlined from theme.css (source of truth) so this preview
-      works without a build step. Keep in sync when tokens change. -->
     <style type="text/tailwindcss">
       @theme static {
         --font-sans:
@@ -38,7 +36,6 @@
       }
     </style>
     <style>
-      /* Drag-number fields (sections/04-sliders-numeric.html) */
       [data-drag-number] {
         cursor: ew-resize;
         touch-action: pan-y;
@@ -71,11 +68,8 @@
       }
       a-color-picker {
         --color-picker-focus-outline: var(--color-primary-400);
-        /* Its default border is black at 15% — invisible on dark panels. */
         --color-picker-border: rgb(255 255 255 / 0.15);
       }
-      /* Toggle buttons: `a-toggle` renders its own <button>, so a pill's inner
-         layout (icon + label) is themed through that part. */
       a-toggle::part(button) {
         display: inline-flex;
         align-items: center;
@@ -99,8 +93,6 @@
         font-family: ui-sans-serif, system-ui, sans-serif;
       }
 
-      /* Panel workstation chrome (from theme.css). The tab strip lives in
-        `a-panel` shadow DOM, themed via CSS vars + parts. */
       a-panel {
         --tab-height: 1.35rem;
         --tab-background: transparent;
@@ -122,25 +114,19 @@
         white-space: nowrap;
       }
       a-panel-layout {
-        --layout-grid-gap: 0px;
-        background: transparent;
+        --layout-grid-gap: 1px;
+        background: rgb(255 255 255 / 0.1);
         grid-template-columns: 300px minmax(0, 1fr) 320px;
       }
       a-panel-group {
         min-width: 0;
         min-height: 0;
       }
-      /* The layout rewrites its grid template to fr units from the rendered
-         widths, so the px columns above only set the initial ratio. These
-         floors keep the side panels legible when the shell gets narrow. */
       a-panel-group:first-child {
         min-width: 220px;
       }
       a-panel-group:last-child {
         min-width: 260px;
-      }
-      a-panel-group + a-panel-group {
-        border-left: 1px solid rgb(255 255 255 / 0.1);
       }
     </style>
     <script type="module">
@@ -149,9 +135,6 @@
     </script>
   </head>
   <body class="bg-background text-[12px] text-zinc-300 antialiased">
-    <!-- Icon sprite: plain <symbol> defs, referenced below with
-      <svg><use href="#kit-icon-name" /></svg>. No icon runtime, no JS.
-      The full set ships as icons/*.svg — paste the ones a page uses. -->
     <svg aria-hidden="true" style="display: none">
       <symbol id="kit-icon-search" viewBox="0 0 24 24">
         <path
@@ -245,12 +228,9 @@
       </symbol>
     </svg>
 
-    <!-- Shell carries the kit's base type and surface itself (not just <body>),
-      so the workstation renders the same when dropped into any host page. -->
     <div
       class="flex h-screen flex-col overflow-hidden bg-background text-[12px] text-zinc-300 antialiased"
     >
-      <!-- Title bar: brand left, open document right -->
       <header
         class="flex items-center gap-2 border-b border-white/10 bg-[#1c1d20] px-3 py-1.5"
       >
@@ -263,8 +243,6 @@
         >
       </header>
 
-      <!-- Toolbar: file actions · viewport passes · view actions.
-        Single scrollable row — never wraps to a second line. -->
       <div
         class="flex items-center gap-1.5 overflow-x-auto border-b border-white/10 bg-[#1c1d20] px-2 py-1.5 [&>*]:shrink-0"
       >
@@ -287,9 +265,6 @@
           Export
         </button>
         <span class="mx-1 h-4 w-px bg-white/10" aria-hidden="true"></span>
-        <!-- Viewport passes: toggle buttons. `a-toggle` owns the state (its
-          `value` attribute, mirrored to `aria-pressed` on the button it
-          renders) and submits with the surrounding form under `name`. -->
         <div class="flex items-center gap-1" role="group" aria-label="Viewport passes">
           <a-toggle
             name="wind"
@@ -386,16 +361,12 @@
         >
       </div>
 
-      <!-- Workstation: three resizable columns — assets, viewport (tabbed), inspector. -->
       <main class="min-h-0 flex-1">
         <a-panel-layout style="height: 100%">
-          <!-- Left column: asset browser -->
           <a-panel-group>
             <a-panel>
-              <div class="@container flex h-full flex-col bg-[#1c1d20]">
-                <div
-                  class="flex items-center gap-2 border-b border-white/10 px-2.5 py-2"
-                >
+              <div tab="Assets" class="@container flex h-full flex-col bg-[#1c1d20]">
+                <div class="flex items-center gap-2 border-b border-white/10 px-2.5 py-2">
                   <span
                     class="text-[11px] font-semibold tracking-wide text-zinc-500 uppercase"
                     >Assets</span
@@ -418,9 +389,6 @@
                     />
                   </label>
                 </div>
-                <!-- Thumbnail grid: `a-list` gives roving focus + selection.
-                  Columns follow the panel width via container queries, so the
-                  grid reflows when the column is dragged wider or narrower. -->
                 <a-list
                   class="grid min-h-0 flex-1 auto-rows-min grid-cols-2 content-start gap-1.5 overflow-y-auto p-2 pt-0 @2xs:grid-cols-3 @sm:grid-cols-4 @lg:grid-cols-5 @2xl:grid-cols-6"
                   aria-label="Assets"
@@ -725,13 +693,9 @@
             </a-panel>
           </a-panel-group>
 
-          <!-- Middle column: viewport with Viewport / Training / Textures tabs.
-            Tabs come from the `tab` attribute on each child — drag one to dock
-            or split it into its own panel. -->
           <a-panel-group>
             <a-panel tabs active-tab="0">
               <div tab="Viewport" class="relative h-full bg-[#0a0b0c]">
-                <!-- Frame stats overlay -->
                 <div
                   class="pointer-events-none absolute top-2 left-2 z-10 font-mono text-[11px] leading-relaxed text-zinc-400"
                 >
@@ -739,7 +703,6 @@
                   <p class="m-0">Tris 11,036 · Verts 8,146 · Draws 5</p>
                   <p class="m-0">Mtls 5 · Tex 1 · 1664.4 KiB</p>
                 </div>
-                <!-- Orientation gizmo -->
                 <div
                   class="pointer-events-none absolute top-2 right-2 z-10"
                   aria-hidden="true"
@@ -823,15 +786,98 @@
             </a-panel>
           </a-panel-group>
 
-          <!-- Right column: inspector — collapsible sections of property rows -->
           <a-panel-group>
             <a-panel>
-              <div class="h-full overflow-y-auto bg-[#1c1d20] pb-3">
+              <div tab="Inspector" class="h-full overflow-y-auto bg-[#1c1d20] pb-3">
                 <div class="flex items-center gap-2 border-b border-white/10 px-3 py-2">
                   <span
                     class="text-[11px] font-semibold tracking-wide text-zinc-500 uppercase"
                     >Inspector</span
                   >
+                </div>
+                <div class="grid gap-1 px-2 pt-2">
+                  <label class="flex items-center gap-2 px-2 py-1">
+                    <span class="w-20 shrink-0 font-medium text-zinc-200">Tone map</span>
+                    <a-select
+                      name="tonemap"
+                      value="filmic"
+                      class="relative z-10 min-w-0 flex-1 [&[opened]_.select-chevron]:rotate-180"
+                      onchange="
+                        const l = this.querySelector('[data-kit-select-label]');
+                        const o = event.detail.selected;
+                        if (l && o) l.textContent = o.textContent.trim();
+                      "
+                    >
+                      <button
+                        slot="trigger"
+                        type="button"
+                        aria-haspopup="listbox"
+                        class="flex w-full cursor-default items-center justify-between gap-2 whitespace-nowrap rounded-md border border-white/10 bg-[#1c1d20] px-2 py-1 text-left font-mono text-[11px] text-zinc-200 hover:border-white/25 focus:border-primary-400 focus:outline-none"
+                      >
+                        <span data-kit-select-label class="min-w-0 flex-1 truncate"
+                          >Filmic</span
+                        >
+                        <svg
+                          aria-hidden="true"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          stroke="currentColor"
+                          class="select-chevron size-3.5 flex-none text-zinc-500 transition-transform duration-150"
+                        >
+                          <path
+                            d="m5 7.5 5 5 5-5"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </button>
+                      <div
+                        class="mt-1 rounded-md border border-white/10 bg-[#1c1d20] p-0.5 text-[12px] shadow-[0_8px_24px_-4px_rgb(0_0_0/0.5)]"
+                      >
+                        <a-option
+                          value="filmic"
+                          class="block cursor-default rounded px-2 py-1 font-mono text-[11px] text-zinc-300 hover:bg-white/5 [&[selected]]:bg-primary-500/20 [&[selected]]:text-primary-200"
+                        >
+                          Filmic
+                        </a-option>
+                        <a-option
+                          value="aces"
+                          class="block cursor-default rounded px-2 py-1 font-mono text-[11px] text-zinc-300 hover:bg-white/5 [&[selected]]:bg-primary-500/20 [&[selected]]:text-primary-200"
+                        >
+                          ACES
+                        </a-option>
+                        <a-option
+                          value="neutral"
+                          class="block cursor-default rounded px-2 py-1 font-mono text-[11px] text-zinc-300 hover:bg-white/5 [&[selected]]:bg-primary-500/20 [&[selected]]:text-primary-200"
+                        >
+                          Neutral
+                        </a-option>
+                      </div>
+                    </a-select>
+                  </label>
+                  <label class="flex cursor-default items-center gap-3 px-2 py-1">
+                    <span class="text-zinc-200"
+                      ><strong class="font-medium">Wind</strong>
+                      <span class="block text-[11px] font-normal text-zinc-500"
+                        >Vertex animation in preview.</span
+                      ></span
+                    >
+                    <a-toggle
+                      name="wind-preview"
+                      value="true"
+                      class="ml-auto inline-flex h-5 w-9 shrink-0 cursor-default items-center rounded-full bg-white/10 px-0.5 transition-colors [&[value='true']]:bg-primary-600"
+                    >
+                      <span
+                        slot="true"
+                        class="block size-4 translate-x-4 rounded-full bg-white shadow transition-transform"
+                      ></span>
+                      <span
+                        slot="false"
+                        class="block size-4 rounded-full bg-white shadow transition-transform"
+                      ></span>
+                    </a-toggle>
+                  </label>
                 </div>
 
                 <a-expandable opened class="block mt-2 mx-2 bg-white/10 rounded-lg">
@@ -942,9 +988,6 @@
                       <span class="min-w-0 flex-1 truncate font-medium text-zinc-200"
                         >Background</span
                       >
-                      <!-- Swatch opens `a-color-picker` in a popover — the
-                        kit's own picker (field, hue/alpha sliders, hex input,
-                        presets), not the browser's native color dialog. -->
                       <a-popover-trigger class="relative z-10 shrink-0">
                         <button
                           slot="trigger"
@@ -959,9 +1002,6 @@
                           <div
                             class="w-[max-content] p-1 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100"
                           >
-                            <!-- The popover portals its panel out of the
-                              inspector, so it sets its own type colour instead
-                              of inheriting the shell's. -->
                             <div
                               class="rounded-lg border border-white/10 bg-[#26272b] p-2 text-[12px] text-zinc-200 shadow-2xl"
                             >
@@ -977,7 +1017,6 @@
                       </a-popover-trigger>
                       <span id="wb-bg-hex" class="sr-only">#E8E8EA</span>
                     </div>
-                    <!-- Drag-number rows: drag to scrub, scroll to nudge, click to type -->
                     <div
                       data-drag-number
                       data-min="0"
@@ -1311,7 +1350,6 @@
         </a-panel-layout>
       </main>
 
-      <!-- Status bar -->
       <footer
         class="flex items-center gap-2 border-t border-white/10 bg-[#1c1d20] px-2 py-1 font-mono text-[11px] text-zinc-500"
       >
@@ -1416,8 +1454,6 @@
           });
         };
         document.querySelectorAll("[data-drag-number]").forEach(setup);
-        // Swatch + hex readout follow the picker (`input` while dragging,
-        // `change` on commit — both bubble out of the element).
         document.querySelectorAll("[data-swatch-for]").forEach(swatch => {
           const picker = document.getElementById(swatch.dataset.swatchFor);
           if (!picker) return;
