@@ -153,6 +153,16 @@ export class Panel extends HTMLElement {
     const MIN_GRAB_SIZE = 4;
     const grabSize = Math.max(borderSize, MIN_GRAB_SIZE);
 
+    const clamp = (value: number, min: number, max: number) =>
+      Math.min(Math.max(value, min), max);
+
+    const room = (element: Panel, axis: "width" | "height") => {
+      const style = getComputedStyle(element);
+      const min = Number.parseFloat(axis === "width" ? style.minWidth : style.minHeight);
+      const size = element.getBoundingClientRect()[axis];
+      return Math.max(0, size - Math.max(Number.isNaN(min) ? 0 : min, MIN_GRAB_SIZE));
+    };
+
     let pointerDownEvent: PointerEvent | null = null;
     let resizeAvailable = [0, 0];
     let lastPointer: [number, number] | null = null;
@@ -172,18 +182,11 @@ export class Panel extends HTMLElement {
       }
 
       const column = children[index];
-      const columnBounds = column.boundingBox;
+      const next = children[index + 1];
+      const columnBounds = column.getBoundingClientRect();
 
-      const borderX =
-        columnBounds.left +
-        this.width * (this.columns[index] / children.length) +
-        borderSize / 2;
-      const borderY =
-        columnBounds.top +
-        this.height * (this.rows[index] / children.length) +
-        borderSize / 2;
-
-      const minElementFraction = 0.05;
+      const borderX = columnBounds.right + borderSize / 2;
+      const borderY = columnBounds.bottom + borderSize / 2;
 
       const mouse = [e.x, e.y];
 
@@ -194,15 +197,8 @@ export class Panel extends HTMLElement {
       if (pointerDownEvent) lastPointer = [e.clientX, e.clientY];
 
       const delta = [
-        this.columns[index] + mouseDelta[0] / this.width > minElementFraction &&
-        this.columns[index + 1] - mouseDelta[0] / this.width > minElementFraction
-          ? mouseDelta[0]
-          : 0,
-
-        this.rows[index] + mouseDelta[1] / this.height > minElementFraction &&
-        this.rows[index + 1] - mouseDelta[1] / this.height > minElementFraction
-          ? mouseDelta[1]
-          : 0,
+        clamp(mouseDelta[0], -room(column, "width"), room(next, "width")),
+        clamp(mouseDelta[1], -room(column, "height"), room(next, "height")),
       ];
 
       const resizable = [
@@ -255,8 +251,8 @@ export class Panel extends HTMLElement {
             "--x",
             pointerDownEvent ? borderX + delta[0] : borderX,
           );
-          splitBar.style.setProperty("--y", column.boundingBox.top);
-          splitBar.style.height = `${column.height}px`;
+          splitBar.style.setProperty("--y", columnBounds.top);
+          splitBar.style.height = `${columnBounds.height}px`;
         }
 
         if (resizeY) {
@@ -266,8 +262,8 @@ export class Panel extends HTMLElement {
             "--y",
             pointerDownEvent ? borderY + delta[1] : borderY,
           );
-          splitBar.style.setProperty("--x", column.boundingBox.left);
-          splitBar.style.width = `${column.width}px`;
+          splitBar.style.setProperty("--x", columnBounds.left);
+          splitBar.style.width = `${columnBounds.width}px`;
         }
       }
 
