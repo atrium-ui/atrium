@@ -72,10 +72,10 @@ a-tabs-tab[selected] {
  * shadow DOM, so it is themed through the package's CSS vars plus the
  * `tabs`/`tab` parts. Active tab carries the primary action color. */
 a-panel {
-  --tab-height: 28px;
+  --tab-height: 1.35rem;
   --tab-background: transparent;
   --tab-hover-background: rgb(255 255 255 / 0.06);
-  --tab-active-background: var(--color-primary-500);
+  --tab-active-background: var(--color-neutral-800);
   --tab-font-color: #fff;
   --tab-font-size: 12px;
   --tab-border-radius: 6px;

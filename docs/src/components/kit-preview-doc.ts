@@ -6,6 +6,22 @@ const themeCssByKit: Record<string, string> = {
   workbench: workbenchThemeCss,
 };
 
+/** Page background from a kit's theme.css (`--color-background`), or white. */
+export function kitBackgroundColor(kit = "basics"): string {
+  const themeCss = themeCssByKit[kit] ?? basicsThemeCss;
+  return themeCss.match(/--color-background:\s*([^;]+);/)?.[1]?.trim() ?? "#fff";
+}
+
+/** True when a hex color is dark enough that light chrome text/borders fit better. */
+export function isDarkColor(color: string): boolean {
+  const hex = color.trim().replace(/^#/, "");
+  if (hex.length !== 6) return false;
+  const r = Number.parseInt(hex.slice(0, 2), 16);
+  const g = Number.parseInt(hex.slice(2, 4), 16);
+  const b = Number.parseInt(hex.slice(4, 6), 16);
+  return (r * 299 + g * 587 + b * 114) / 1000 < 128;
+}
+
 /**
  * Builds the isolated preview document shown in kit iframes.
  * Kit snippets rely on Tailwind utilities + kit theme tokens, which the
@@ -32,11 +48,9 @@ export function kitPreviewDocument(
     .replace(/@theme[^{]*\{[\s\S]*?\n\}/, "")
     .trim();
 
-  // Body background comes from the kit itself (`--color-background` in its
-  // theme.css), so each kit's previews match its own shell. Falls back to
-  // white for kits that don't define the token.
-  const background =
-    themeCss.match(/--color-background:\s*([^;]+);/)?.[1]?.trim() ?? "#fff";
+  // Body background comes from the kit itself, so each kit's previews match
+  // its own shell.
+  const background = kitBackgroundColor(kit);
 
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"><\/script><style type="text/tailwindcss">${themeTokens}</style><style>${themePlainCss}
 /* Preview-only: a non-modal <dialog open> is position: absolute per UA

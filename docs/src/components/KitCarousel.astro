@@ -11,13 +11,19 @@
  * section's raw HTML via a Vite glob import keyed by file path.
  */
 import kitsIndex from "../../../packages/kits/src/basics/kit.json";
-import { kitPreviewDocument } from "./kit-preview-doc.js";
+import {
+  isDarkColor,
+  kitBackgroundColor,
+  kitPreviewDocument,
+} from "./kit-preview-doc.js";
 
 export interface Props {
   kit?: string;
 }
 
 const { kit = "basics" } = Astro.props;
+const cardBg = kitBackgroundColor(kit);
+const darkCard = isDarkColor(cardBg);
 
 const kitJsonModules = import.meta.glob("../../../packages/kits/src/*/kit.json", {
   as: "raw",
@@ -64,8 +70,21 @@ const trackId = `kit-carousel-track-${kit}`;
       {
         slides.map((slide) => (
           <div class="w-[85%] max-w-xl flex-none sm:w-[60%] lg:w-[45%]">
-            <div class="flex h-80 flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white">
-              <h3 class="typo-headline px-5 pt-4 opacity-50">{slide.title}</h3>
+            <div
+              class:list={[
+                "flex h-80 flex-col overflow-hidden rounded-2xl border",
+                darkCard ? "border-white/10" : "border-zinc-200",
+              ]}
+              style={`background:${cardBg}`}
+            >
+              <h3
+                class:list={[
+                  "typo-headline px-5 pt-4 opacity-50",
+                  darkCard && "text-white",
+                ]}
+              >
+                {slide.title}
+              </h3>
               <iframe
                 title={`${slide.title} preview`}
                 srcdoc={slide.srcdoc}
