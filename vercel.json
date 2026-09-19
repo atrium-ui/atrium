@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "bun install --linker=hoisted",
+  "buildCommand": "SITE=\"https://$VERCEL_PROJECT_PRODUCTION_URL\" bun x turbo build --filter \"./packages/**\" && cd docs && bun x astro build",
+  "outputDirectory": "docs/dist",
+  "framework": null
+}
