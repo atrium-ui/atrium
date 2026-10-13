@@ -1,6 +1,6 @@
 /* @jsxImportSource vue */
 import type { Story } from "@atrium-ui/astro-stories";
-import Map from "@components/src/vue/Map.vue";
+import MapView from "@components/src/vue/Map.vue";
 
 const token =
   "pk.eyJ1IjoibHVja3lkeWUiLCJhIjoiY21lenM4em1yMHAwczJscjF0eDA1ODB1ayJ9.bx7zYl1if-gzkmic9ZmEpg";
@@ -13,7 +13,7 @@ export default {
 export const Default = {
   render: () => (
     <div class="flex min-h-[520px] w-full items-center justify-center p-10">
-      <Map
+      <MapView
         class="max-w-md"
         accessToken={token}
         lat={52.5163}
@@ -40,7 +40,7 @@ export const Contact = {
           </address>
           <p class="mt-4 text-sm text-zinc-500">Mon – Fri, 9:00 – 18:00</p>
         </div>
-        <Map
+        <MapView
           class="aspect-[4/3]"
           accessToken={token}
           lat={52.5163}
@@ -57,7 +57,7 @@ export const Contact = {
 export const CustomMarker = {
   render: () => (
     <div class="flex min-h-[520px] w-full items-center justify-center p-10">
-      <Map
+      <MapView
         class="max-w-md"
         accessToken={token}
         lat={48.8584}
@@ -77,7 +77,7 @@ export const CustomMarker = {
             </div>
           ),
         }}
-      </Map>
+      </MapView>
     </div>
   ),
 };
