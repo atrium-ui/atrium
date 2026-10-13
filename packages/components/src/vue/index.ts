@@ -24,6 +24,7 @@ export { default as InputNumber } from "./InputNumber.vue";
 export { default as InputPassword } from "./InputPassword.vue";
 export { default as InputSearch } from "./InputSearch.vue";
 export { default as Lightbox } from "./Lightbox.vue";
+export { default as Map } from "./Map.vue";
 export { default as Pager } from "./Pager.vue";
 export { default as Popover } from "./Popover.vue";
 export { default as Select } from "./Select.vue";

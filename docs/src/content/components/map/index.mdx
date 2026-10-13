@@ -1,0 +1,59 @@
+---
+title: Map
+description: An interactive Mapbox map showing a location with an optional marker.
+headline: Atrium // Components
+tags: []
+command: "npx @atrium-ui/components map"
+order: 0
+---
+import { Story } from "package:/components/docs";
+
+The Map component renders an interactive [Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js/) map centered on a given location.
+It uses cooperative gestures, so the page keeps scrolling normally: zooming needs <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + scroll on desktop and two fingers on touch devices.
+Changing `lat`, `lng` or `zoom` animates the map to the new position.
+
+The zoom and recenter controls and the marker are our own markup, styled with Tailwind and Atrium icons instead of Mapbox's default UI.
+
+Requires the `mapbox-gl` package and a [Mapbox access token](https://docs.mapbox.com/help/getting-started/access-tokens/).
+
+## Examples
+
+### Default
+
+Pass `accessToken`, `lat`, `lng` and a descriptive `label`. Use `zoom` (default `15`) to set the detail level and `marker={false}` to hide the marker.
+
+<Story id="map--default" />
+
+### Contact
+
+A common use case: showing an address next to its location. `mapStyle` takes any Mapbox style URL, here a calmer `light-v11`.
+
+<Story id="map--contact" />
+
+### Custom Marker
+
+Replace the default pin through the `marker` slot. The marker is anchored at its bottom center.
+
+<Story id="map--custommarker" />
+
+## Guidelines
+
+- **Pair with an address**: Always show the address as text too. A map alone is hard to copy from and is not accessible to everyone.
+- **Attribution**: Mapbox's terms require their logo and attribution to stay visible. The component keeps them in a compact form.
+- **Client only**: Mapbox GL needs a browser. With SSR frameworks like Nuxt, render the component client-side only (e.g. inside `<ClientOnly>`).
+  Be careful with layout shifts: nothing is rendered on the server, so reserve the map's space with a placeholder of the same size (e.g. the `#fallback` slot of `<ClientOnly>`).
+- **Tokens**: Use a public (`pk.*`) token restricted to your domains. Never ship a secret token.
+- **Privacy**: The map loads data from Mapbox servers. Depending on your jurisdiction, you may need user consent before rendering it.
+
+## Accessibility
+
+- **Label**: The `label` prop labels the map region for screen readers. Describe what the map shows.
+- **Scroll safety**: Cooperative gestures prevent users from getting stuck in the map while scrolling the page.
+- **Controls**: Zoom and recenter are native buttons with accessible labels and visible focus outlines.
+- **Keyboard**: The map can be focused and panned with the arrow keys and zoomed with <kbd>+</kbd>/<kbd>-</kbd>.
+
+## References
+
+- [Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js/api/)
+- [Mapbox styles](https://docs.mapbox.com/api/maps/styles/)
+- [Access tokens](https://docs.mapbox.com/help/getting-started/access-tokens/)

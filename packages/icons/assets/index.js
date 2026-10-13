@@ -17,4 +17,7 @@ export const icons = [
   "unknown",
   "search",
   "menu",
+  "plus",
+  "minus",
+  "location",
 ];
