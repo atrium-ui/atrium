@@ -36,12 +36,19 @@ function connected<T>(controller: { value: T | undefined }): T {
  * so the text keeps its width while the time changes.
  */
 function formatTime(seconds: number, max: number) {
-  const units = (t: number) => [Math.floor(t / 3600), Math.floor((t / 60) % 60), Math.floor(t % 60)];
+  const units = (t: number) => [
+    Math.floor(t / 3600),
+    Math.floor((t / 60) % 60),
+    Math.floor(t % 60),
+  ];
   const [h = 0, m = 0, s = 0] = units(seconds);
   const [maxH = 0, maxM = 0] = units(max);
   const segments =
     maxH > 0
-      ? [h.toString().padStart(maxH.toString().length, "0"), m.toString().padStart(2, "0")]
+      ? [
+          h.toString().padStart(maxH.toString().length, "0"),
+          m.toString().padStart(2, "0"),
+        ]
       : [m.toString().padStart(maxM >= 10 ? 2 : 1, "0")];
   return [...segments, s.toString().padStart(2, "0")].join(":");
 }

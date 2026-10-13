@@ -18,10 +18,8 @@
  * `static` they resolve to nothing and the styles silently break.
  */
 @theme static {
-  --font-sans:
-    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display:
-    Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
 
   /* Page background for the kit shell and docs previews */
   --color-background: #ffffff;

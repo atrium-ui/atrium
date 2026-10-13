@@ -35,8 +35,8 @@ export const Feature = {
           <div class="text-xs text-zinc-500 uppercase tracking-[0.14em]">Showreel</div>
           <h3 class="mt-2 mb-4 text-2xl text-zinc-900">Made with Atrium</h3>
           <p class="text-zinc-600 leading-relaxed">
-            A short look at what we built this year. Press play, or focus the player and use
-            the keyboard.
+            A short look at what we built this year. Press play, or focus the player and
+            use the keyboard.
           </p>
         </div>
         <Video

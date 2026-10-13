@@ -27,7 +27,9 @@ const base = import.meta.env.BASE_URL;
 const body = dashboardHtml.match(/<body[^>]*>([\s\S]*)<\/body>/i)?.[1] ?? dashboardHtml;
 
 const head = dashboardHtml.match(/<head[^>]*>([\s\S]*?)<\/head>/i)?.[1] ?? "";
-const pageStyles = [...head.matchAll(/<style(?![^>]*text\/tailwindcss)[^>]*>[\s\S]*?<\/style>/gi)]
+const pageStyles = [
+  ...head.matchAll(/<style(?![^>]*text\/tailwindcss)[^>]*>[\s\S]*?<\/style>/gi),
+]
   .map((match) => match[0])
   .join("\n");
 
