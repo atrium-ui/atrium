@@ -1,6 +1,6 @@
 {
   "name": "@atrium-ui/panels",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Tim Havlicek",
   "description": "A simple panel layout framework based on css grid.",
   "license": "MIT",
@@ -17,8 +17,12 @@
     "vite": "^5.4.2"
   },
   "tsup": {
-    "entry": ["src/index.ts"],
-    "format": ["esm"],
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "esm"
+    ],
     "sourcemap": true,
     "clean": true
   }

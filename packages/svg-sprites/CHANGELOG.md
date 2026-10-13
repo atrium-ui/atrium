@@ -1,3 +1,9 @@
+## 0.5.9 (2026-10-13)
+
+### Fixes
+
+- Release panels pacakge
+
 ## 0.5.8 (2026-06-25)
 
 ### Features

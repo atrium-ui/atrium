@@ -1,5 +1,11 @@
 # @atrium-ui/scroll-lock
 
+## 1.4.1 (2026-10-13)
+
+### Fixes
+
+- Release panels pacakge
+
 ## 1.4.0 (2026-06-25)
 
 ### Features

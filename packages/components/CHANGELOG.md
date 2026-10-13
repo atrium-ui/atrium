@@ -1,5 +1,16 @@
 # @atrium-ui/components
 
+## 1.13.0 (2026-10-13)
+
+### Features
+
+- Redesign components a bit
+- Added map component
+
+### Fixes
+
+- Release panels pacakge
+
 ## 1.12.0 (2026-06-25)
 
 ### Features

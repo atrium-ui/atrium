@@ -1,5 +1,15 @@
 # @atrium-ui/elements
 
+## 5.5.0 (2026-10-13)
+
+### Features
+
+- Added video elements
+
+### Fixes
+
+- Release panels pacakge
+
 ## 5.4.0 (2026-09-01)
 
 ### Features
