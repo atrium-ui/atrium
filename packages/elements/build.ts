@@ -22,6 +22,7 @@ async function buildLib(root: string) {
       "@atrium-ui/elements",
       "@atrium-ui/scroll-lock",
       "@floating-ui/dom",
+      "@videojs/html",
     ],
     footer: { js: LICENSE },
     outfile: `${root}/dist/index.js`,
@@ -59,4 +60,5 @@ await Promise.all([
   buildLib("./packages/tabs"),
   buildLib("./packages/pager"),
   buildLib("./packages/color-picker"),
+  buildLib("./packages/video"),
 ]);

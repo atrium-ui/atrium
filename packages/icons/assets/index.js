@@ -20,4 +20,10 @@ export const icons = [
   "plus",
   "minus",
   "location",
+  "play",
+  "pause",
+  "volume",
+  "volume-off",
+  "fullscreen",
+  "fullscreen-exit",
 ];

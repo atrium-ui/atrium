@@ -1,0 +1,100 @@
+---
+title: a-video
+description: Unstyled control elements for a Video.js player.
+headline: Atrium // Elements
+command: import "@atrium-ui/elements/video";
+order: 0
+---
+
+import { TypeDoc } from "package:/components";
+
+The `a-video-*` elements are unstyled controls for a [Video.js](https://videojs.org/) player.
+Each element reads the player state and calls its actions through the Video.js `PlayerController`, so it only needs to be placed somewhere inside a `<video-player>`.
+They are used by the [Video](/components/video/) component.
+
+| Element | Description |
+|---------|-------------|
+| `a-video-play` | Toggles playback. Slots `play` and `pause`. |
+| `a-video-mute` | Toggles mute. Slots `mute` and `unmute`. |
+| `a-video-fullscreen` | Toggles fullscreen of the `<media-container>`. Slots `enter` and `exit`. |
+| `a-video-time` | Displays the `current`, `duration` or `remaining` time. |
+| `a-video-seek` | Seek slider, extends [`a-range`](/elements/a-range/). |
+| `a-video-volume` | Volume slider, extends [`a-range`](/elements/a-range/). |
+
+## Accessibility
+
+- **Buttons**: The button elements get `role="button"` and are focusable. They activate on click, <kbd>Enter</kbd> and <kbd>Space</kbd>. The accessible name comes from the content of the currently shown slot, so include text (visually hidden if needed).
+- **Sliders**: Seek and volume have `role="slider"`. Name them with the `label` attribute. <kbd>←</kbd>/<kbd>→</kbd> seek by `key-step` seconds (default 5) or change the volume by `key-step` (default 0.1).
+- **Hotkeys**: Key presses handled by the elements don't trigger Video.js `<media-hotkey>` bindings.
+
+## Usage
+
+Requires `@videojs/html`. Register a player and a container, then compose the controls:
+
+```ts
+import "@videojs/html/video/player";
+import "@videojs/html/ui/container";
+import "@atrium-ui/elements/video";
+```
+
+```html
+<video-player>
+  <media-container>
+    <video src="video.mp4" playsinline></video>
+
+    <a-video-play>
+      <span slot="play">Play</span>
+      <span slot="pause">Pause</span>
+    </a-video-play>
+
+    <a-video-time type="current"></a-video-time> / <a-video-time type="duration"></a-video-time>
+
+    <a-video-seek label="Seek"></a-video-seek>
+
+    <a-video-mute>
+      <span slot="mute">Mute</span>
+      <span slot="unmute">Unmute</span>
+    </a-video-mute>
+
+    <a-video-volume label="Volume"></a-video-volume>
+
+    <a-video-fullscreen>
+      <span slot="enter">Fullscreen</span>
+      <span slot="exit">Exit fullscreen</span>
+    </a-video-fullscreen>
+  </media-container>
+</video-player>
+```
+
+### Auto hiding controls
+
+Wrap the controls in Video.js `<media-controls>`. It gets a `data-visible` attribute while the controls should be shown:
+
+```ts
+import "@videojs/html/ui/controls";
+```
+
+```css
+media-controls:not([data-visible]) {
+  opacity: 0;
+}
+```
+
+## Customization
+
+- **Buttons**: Style the elements directly, they are the buttons. Use the slots to swap icons per state.
+- **Sliders**: Seek and volume use the [`a-range` custom properties and parts](/elements/a-range/#styling).
+- **Time**: `a-video-time` renders plain text with tabular numbers.
+
+<TypeDoc source="../packages/elements/packages/video" symbol="VideoPlayElement" />
+<TypeDoc source="../packages/elements/packages/video" symbol="VideoMuteElement" />
+<TypeDoc source="../packages/elements/packages/video" symbol="VideoFullscreenElement" />
+<TypeDoc source="../packages/elements/packages/video" symbol="VideoTimeElement" />
+<TypeDoc source="../packages/elements/packages/video" symbol="VideoSeekElement" />
+<TypeDoc source="../packages/elements/packages/video" symbol="VideoVolumeElement" />
+
+## References
+
+- [Video.js: Build your own component](https://videojs.org/docs/framework/html/guides/build-your-own-component)
+- [WAI-ARIA Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
+- [WAI-ARIA Slider Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/slider/)

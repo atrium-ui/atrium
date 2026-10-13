@@ -42,19 +42,21 @@ const storyStyles = `
     --color-gray-950: #0f0f10;
   }
 
-  svg-icon {
-    color: inherit;
-    display: inline-block;
-    height: 1em;
-    vertical-align: top;
-    width: 1em;
-  }
+  @layer base {
+    svg-icon {
+      color: inherit;
+      display: inline-block;
+      height: 1em;
+      vertical-align: top;
+      width: 1em;
+    }
 
-  svg-icon img,
-  svg-icon svg {
-    display: block;
-    height: inherit;
-    width: inherit;
+    svg-icon img,
+    svg-icon svg {
+      display: block;
+      height: inherit;
+      width: inherit;
+    }
   }
 `;
 

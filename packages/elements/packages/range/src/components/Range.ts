@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -124,10 +125,14 @@ export class Range extends LitElement {
   @property({ type: Boolean })
   public accessor disabled = false;
 
+  /** Accessible label of the slider. */
+  @property({ type: String })
+  public accessor label: string | undefined = undefined;
+
   @query(".progress")
   private accessor progressElement!: HTMLElement;
 
-  private dragStartPosition: number | undefined = 0;
+  public dragStartPosition: number | undefined = 0;
 
   private lastProgress = 0;
 
@@ -212,6 +217,7 @@ export class Range extends LitElement {
         style="--progress: ${this.progress}"
         class="range"
         role="slider"
+        aria-label=${ifDefined(this.label)}
         aria-valuemin=${this.min}
         aria-valuemax=${this.max}
         aria-valuenow="${this.value}"

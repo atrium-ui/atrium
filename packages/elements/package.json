@@ -29,10 +29,11 @@
     "@atrium-ui/scroll-lock": "^1.1.1"
   },
   "devDependencies": {
+    "@atrium-ui/test": "^0.1.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/user-event": "^14.6.1",
     "@types/bun": "^1.3.5",
-    "@atrium-ui/test": "^0.1.0",
+    "@videojs/html": "^10.0.1",
     "ts-lit-plugin": "^2.0.2"
   },
   "exports": {
@@ -152,6 +153,11 @@
       "types": "./packages/color-picker/src/index.ts",
       "import": "./packages/color-picker/dist/index.js",
       "require": "./packages/color-picker/dist/index.cjs"
+    },
+    "./video": {
+      "types": "./packages/video/src/index.ts",
+      "import": "./packages/video/dist/index.js",
+      "require": "./packages/video/dist/index.cjs"
     }
   }
 }

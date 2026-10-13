@@ -35,3 +35,4 @@ export { default as TabItem } from "./TabItem.vue";
 export { default as Tabs } from "./Tabs.vue";
 export { default as Toasts, toast, type ToastOptions } from "./Toasts.vue";
 export { default as Tooltip } from "./Tooltip.vue";
+export { default as Video } from "./Video.vue";

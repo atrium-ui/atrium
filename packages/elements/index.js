@@ -19,3 +19,4 @@ import "@atrium-ui/elements/loader";
 import "@atrium-ui/elements/calendar";
 import "@atrium-ui/elements/tabs";
 import "@atrium-ui/elements/color-picker";
+import "@atrium-ui/elements/video";

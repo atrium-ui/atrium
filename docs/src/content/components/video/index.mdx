@@ -1,0 +1,58 @@
+---
+title: Video
+description: A video player with custom controls, built on Video.js.
+headline: Atrium // Components
+tags: []
+command: "npx @atrium-ui/components video"
+order: 0
+---
+import { Story } from "package:/components/docs";
+
+The Video component plays a video file with our own controls: play/pause, time, a seek bar, mute, volume and fullscreen.
+State and media handling come from [Video.js](https://videojs.org/) (`<video-player>`, `<media-container>`), the controls are the unstyled [`a-video-*`](/elements/a-video/) elements, styled with Tailwind and Atrium icons.
+
+Controls hide while the video plays and the pointer is idle, and show again on pointer movement, focus or pause.
+
+Requires the `@videojs/html` package.
+
+## Examples
+
+### Default
+
+Pass a `src` and a descriptive `label`. Any children (`<source>`, `<track>`) are placed inside the `<video>` element.
+
+<Story id="video--default" />
+
+### Poster
+
+Use `poster` to show an image before playback starts.
+
+<Story id="video--poster" />
+
+### Feature
+
+A common use case: a video next to a short description. Class names on the component are merged into the player container, e.g. for rounding or shadows.
+
+<Story id="video--feature" />
+
+## Guidelines
+
+- **Don't autoplay with sound**: Browsers block it and it surprises users. If a video has to start on its own, it must be muted.
+- **Provide a poster**: It reserves the frame with meaningful content and avoids a black box before the first frame loads.
+- **Captions**: Add a `<track kind="captions">` for videos with speech.
+- **Layout shifts**: The player reserves its space with an aspect ratio (16/9 by default) before the video or the custom elements load, also when rendered on the server.
+  Match it to your video with a class like `aspect-square` or `aspect-[4/5]`, otherwise the video is letterboxed. Times are padded to the length of the duration, so the controls don't shift during playback.
+- **Streaming**: For HLS or DASH sources, use a Video.js media element like `<hlsjs-video>` instead of `<video>`.
+
+## Accessibility
+
+- **Label**: The `label` prop names the player for screen readers. Describe the content of the video.
+- **Controls**: All controls are focusable buttons and sliders with accessible names. Focusing a control keeps the controls visible.
+- **Keyboard**: When the player is focused, <kbd>Space</kbd>/<kbd>K</kbd> toggles playback, <kbd>M</kbd> mutes, <kbd>F</kbd> toggles fullscreen and <kbd>←</kbd>/<kbd>→</kbd> seek 5 seconds.
+- **Pointer**: Click the video to play or pause, double click to toggle fullscreen.
+
+## References
+
+- [Video.js](https://videojs.org/)
+- [Video.js UI components](https://videojs.org/docs/framework/html/guides/ui-components)
+- [WAI: Media accessibility](https://www.w3.org/WAI/media/av/)
