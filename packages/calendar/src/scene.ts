@@ -399,3 +399,33 @@ export function anchorOf(model: CalendarModel, scene: Scene, event: CalendarEven
   const y = model.rows.unitToPx(model.rows.unitOfWeek(week)) - geo.scrollTop;
   return { x: colX(geo, day - weekStart(week, model.firstDay)), y, w: geo.colWidth, h: 20 };
 }
+
+type Rect = { x: number; y: number; w: number; h: number };
+
+/**
+ * Position of the detail panel next to its anchor without covering it: right, left, below or above,
+ * whichever fits first. When none fits, the side that covers the least of the anchor wins.
+ */
+export function placePanel(geo: Geometry, anchor: Rect, width: number, height: number) {
+  const gap = 8;
+  const left = geo.gutter + 4;
+  const right = geo.width - geo.strip - 4;
+  const top = 4;
+  const bottom = geo.height - 4;
+  const clampX = (x: number) => Math.max(left, Math.min(x, right - width));
+  const clampY = (y: number) => Math.max(top, Math.min(y, bottom - height));
+  const sides = [
+    { x: anchor.x + anchor.w + gap, y: clampY(anchor.y) },
+    { x: anchor.x - gap - width, y: clampY(anchor.y) },
+    { x: clampX(anchor.x), y: anchor.y + anchor.h + gap },
+    { x: clampX(anchor.x), y: anchor.y - gap - height },
+  ];
+  const fits = (p: { x: number; y: number }) => p.x >= left && p.x + width <= right && p.y >= top && p.y + height <= bottom;
+  const covered = (p: { x: number; y: number }) =>
+    Math.max(0, Math.min(p.x + width, anchor.x + anchor.w) - Math.max(p.x, anchor.x)) *
+    Math.max(0, Math.min(p.y + height, anchor.y + anchor.h) - Math.max(p.y, anchor.y));
+  const fitting = sides.find(fits);
+  if (fitting) return fitting;
+  const clamped = sides.map((p) => ({ x: clampX(p.x), y: clampY(p.y) }));
+  return clamped.reduce((best, p) => (covered(p) < covered(best) ? p : best));
+}

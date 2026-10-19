@@ -418,6 +418,9 @@ export class PointerController {
   reset() {
     clearTimeout(this.longPress);
     this.state = { kind: "idle" };
+    this.view.dragImage.textContent = "";
+    this.view.dragImage.removeAttribute("data-outside");
+    this.view.dragImage.style.transform = "";
     this.view.canvas.draggable = false;
     if (this.model.preview || this.model.hiddenId || this.model.selectionRect) this.model.setPreview(null);
   }
@@ -461,8 +464,7 @@ export class PointerController {
     transfer.setData("text/plain", ics);
     transfer.setData("DownloadURL", `text/calendar:${icsFileName(event)}:data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`);
     transfer.effectAllowed = "copyMove";
-    this.view.dragImage.textContent = event.title || this.model.strings.untitled;
-    transfer.setDragImage(this.view.dragImage, 12, 12);
+    transfer.setDragImage(this.view.dragImage, 0, 0);
     const grab = locate(this.model, this.view.geo(), s.x, s.y);
     if (!grab) {
       e.preventDefault();
@@ -504,6 +506,16 @@ export class PointerController {
   dragEnd() {
     if (this.state.kind === "move" || this.state.kind === "press") this.reset();
     this.view.canvas.draggable = false;
+  }
+
+  /** Any drag over the page: outside of the calendar the moved event's title follows the cursor. */
+  dragAnywhere(e: DragEvent, outside: boolean) {
+    const s = this.state;
+    if (s.kind !== "move" || !s.native) return;
+    const label = this.view.dragImage;
+    label.textContent = outside ? s.event.title || this.model.strings.untitled : "";
+    label.toggleAttribute("data-outside", outside);
+    label.style.transform = outside ? `translate(${e.clientX}px, ${e.clientY}px)` : "";
   }
 
   // Touch: one finger pans, a long press starts the same interactions as the mouse, two fingers pinch

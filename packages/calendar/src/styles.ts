@@ -215,10 +215,15 @@ button, input, select, textarea { font: inherit; color: inherit; }
 [part~="body"][data-drop] [part~="drop-outline"] { display: block; }
 
 
-[part~="drag-image"] {
-  position: fixed; top: -6.25rem; left: 0;
+/*
+ * Empty and transparent when a drag starts, so the browser's drag image is invisible and the canvas draws the moved
+ * event. It needs a size, an image without one falls back to a snapshot. Outside the calendar it follows the cursor.
+ */
+[part~="drag-image"] { position: fixed; top: -6.25rem; left: 0; width: 1px; height: 1px; pointer-events: none; }
+[part~="drag-image"][data-outside] {
+  top: 0.75rem; left: 0.75rem; z-index: 2147483647; width: auto; height: auto;
   max-width: 15rem; padding: 0.25rem 0.625rem;
-  border-radius: 0.375rem; background: var(--cal-surface-raised); color: var(--cal-text);
+  border-radius: 0.375rem; background: var(--cal-surface-raised); color: var(--cal-text); box-shadow: var(--cal-shadow);
   font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 

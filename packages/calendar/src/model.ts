@@ -28,7 +28,8 @@ import type {
 
 export const MIN_ZOOM = 0.25;
 export const MAX_ZOOM = 8;
-export const TODAY_ZOOM = 1.5;
+/** Zoom of a single week that fills the view. */
+export const TODAY_ZOOM = 1;
 export const DEFAULT_ZOOM = 5;
 /** The all-day band never takes more than this share of a row. */
 const MAX_BAND_RATIO = 0.4;
@@ -599,9 +600,8 @@ export class CalendarModel {
     }
   }
 
-  /** The current week starts at the top of the view, the next one peeks in below. */
   goToday() {
-    this.animateTo(weekOf(dayOf(new Date()), this.firstDay) + TODAY_ZOOM / 2, TODAY_ZOOM);
+    this.zoomToWeek(weekOf(dayOf(new Date()), this.firstDay));
   }
 
   goMonth() {

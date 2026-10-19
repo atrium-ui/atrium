@@ -4,7 +4,7 @@ import { PointerController } from "./interactions.ts";
 import { type BusynessMode, CalendarModel, MAX_IMPORT_BYTES } from "./model.ts";
 import { defaultLayers, drawStrip, type Layer, type Paint } from "./paint.ts";
 import type { CalendarEventPanel } from "./panel.ts";
-import { anchorOf, buildScene, type Geometry, type Scene } from "./scene.ts";
+import { anchorOf, buildScene, type Geometry, placePanel, type Scene } from "./scene.ts";
 import { defaultStrings, type Strings } from "./strings.ts";
 import { styles } from "./styles.ts";
 import { readTheme, type Theme } from "./theme.ts";
@@ -334,6 +334,9 @@ export class CalendarView extends HTMLElement {
     listen("copy", this.copy);
     listen("paste", this.paste);
     listen("pointerdown", this.outsidePointer, true);
+    listen("dragover", (e) => this.pointer.dragAnywhere(e, !e.composedPath().includes(this)));
+    // No related target: the drag left the window, where the label can't follow.
+    listen("dragleave", (e) => e.relatedTarget || this.pointer.dragAnywhere(e, false));
 
     const media = matchMedia("(prefers-color-scheme: dark)");
     const onMedia = () => this.invalidateTheme();
@@ -653,14 +656,7 @@ export class CalendarView extends HTMLElement {
     }
     panel.hidden = false;
     const { geo } = scene;
-    const anchor = anchorOf(model, scene, event);
-    const width = panel.offsetWidth;
-    const height = panel.offsetHeight;
-    const right = geo.width - geo.strip;
-    let x = anchor.x + anchor.w + 8;
-    if (x + width > right - 4) x = anchor.x - 8 - width;
-    x = Math.max(geo.gutter + 4, Math.min(x, right - width - 4));
-    const y = clamp(anchor.y, 4, Math.max(4, geo.height - height - 4));
+    const { x, y } = placePanel(geo, anchorOf(model, scene, event), panel.offsetWidth, panel.offsetHeight);
     panel.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
   }
 
