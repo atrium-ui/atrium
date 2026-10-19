@@ -1,4 +1,4 @@
-import { h, isTyping, setText } from "./dom.ts";
+import { h, isTyping } from "./dom.ts";
 import { isCalendarData } from "./ics.ts";
 import { PointerController } from "./interactions.ts";
 import { BAND_RATIO, type BusynessMode, CalendarModel, MAX_IMPORT_BYTES } from "./model.ts";
@@ -30,15 +30,11 @@ const PROPERTIES = [
   "selection",
   "minDate",
   "maxDate",
+  "filter",
 ] as const;
 
 
 function buildUi() {
-  const button = (part: string, text = "") => h("button", { part: `button ${part}`, type: "button" }, text);
-  const today = button("today");
-  const month = h("span", { part: "month" });
-  const zoomLabel = h("span", { part: "zoom-label" });
-  const layers = h("div", { part: "layers" });
   const weekdayRow = h("div", { part: "weekday-row" });
   const weekdays = h("div", { part: "weekdays", "aria-hidden": "true" }, weekdayRow);
 
@@ -48,10 +44,6 @@ function buildUi() {
   panel.setAttribute("part", "panel");
   panel.hidden = true;
 
-  const back = button("icon back", "‹");
-  const forward = button("icon forward", "›");
-  const monthButton = button("month-button");
-  const filter = h("input", { part: "filter", type: "search" });
   const body = h("div", { part: "body" }, canvas, drop, panel);
 
   const dialogText = h("p", { part: "dialog-text" });
@@ -71,13 +63,6 @@ function buildUi() {
     h(
       "div",
       { part: "main" },
-      h(
-        "header",
-        { part: "toolbar" },
-        h("div", { part: "group" }, back, forward, today, monthButton),
-        h("div", { part: "title" }, month, zoomLabel),
-        h("div", { part: "group" }, layers, filter),
-      ),
       weekdays,
       body,
     ),
@@ -87,19 +72,11 @@ function buildUi() {
 
   return {
     root,
-    today,
-    month,
-    zoomLabel,
-    layers,
     weekdays,
     weekdayRow,
     body,
     canvas,
     panel,
-    back,
-    forward,
-    monthButton,
-    filter,
     dialog,
     dialogText,
     dialogCancel,
@@ -138,7 +115,7 @@ export class CalendarView extends HTMLElement {
   restored = false;
   gestureZoom = 1;
   cleanup: (() => void)[] = [];
-  applied = { strings: null as Strings | null, layers: null as Layer[] | null, weekdays: "", panel: -1, columns: 0 };
+  applied = { strings: null as Strings | null, weekdays: "", view: "", panel: -1, columns: 0 };
 
   constructor() {
     super();
@@ -239,6 +216,14 @@ export class CalendarView extends HTMLElement {
   }
   set strings(strings: Partial<Strings>) {
     this.model.setStrings({ ...defaultStrings, ...strings });
+  }
+
+  /** Only events whose title contains this text are shown, the weeks in between collapse. */
+  get filter(): string {
+    return this.model.filter;
+  }
+  set filter(text: string) {
+    this.model.setFilter(text);
   }
 
   /** First day that can be shown, `null` scrolls endlessly into the past. */
@@ -428,18 +413,6 @@ export class CalendarView extends HTMLElement {
       const gesture = e as GestureEvent;
       model.stopMotion();
       model.zoomAt(this.gestureZoom / gesture.scale, gesture.clientY - canvas.getBoundingClientRect().top);
-    });
-
-    ui.today.addEventListener("click", () => model.goToday());
-    ui.monthButton.addEventListener("click", () => model.goMonth());
-    ui.back.addEventListener("click", () => model.back());
-    ui.forward.addEventListener("click", () => model.forward());
-    ui.filter.addEventListener("input", () => model.setFilter(ui.filter.value));
-    ui.filter.addEventListener("keydown", (e) => {
-      if (e.key !== "Escape") return;
-      ui.filter.value = "";
-      model.setFilter("");
-      ui.filter.blur();
     });
 
     ui.panel.addEventListener("panel-change", (e) => {
@@ -677,7 +650,7 @@ export class CalendarView extends HTMLElement {
   syncChrome(scene: Scene) {
     const { model, ui } = this;
     const strings = model.strings;
-    if (this.applied.strings !== strings || this.applied.layers !== this.layerList) this.applyStrings();
+    if (this.applied.strings !== strings) this.applyStrings();
     const weekdays = `${model.locale}|${model.firstDay}`;
     if (this.applied.weekdays !== weekdays) this.renderWeekdays(weekdays);
     if (this.applied.columns !== model.colWidth) {
@@ -686,12 +659,12 @@ export class CalendarView extends HTMLElement {
     }
     ui.weekdayRow.style.transform = `translateX(${-model.scrollX}px)`;
 
-    setText(ui.month, model.formats.monthYear(dateOf(weekStart(Math.floor(model.centerWeek), model.firstDay) + 3)));
-    setText(ui.zoomLabel, strings.zoomLevels[model.zoomLevel]);
-    ui.back.disabled = !model.canBack;
-    ui.forward.disabled = !model.canForward;
-    for (const chip of ui.layers.querySelectorAll<HTMLElement>("[data-layer]")) {
-      chip.setAttribute("aria-pressed", String(!model.disabledLayers.has(chip.dataset.layer as string)));
+    // Thursday of the centre week, so the week belongs to the month most of its days are in.
+    const day = weekStart(Math.floor(model.centerWeek), model.firstDay) + 3;
+    const view = `${day}|${model.zoomLevel}|${model.canBack}|${model.canForward}`;
+    if (this.applied.view !== view) {
+      this.applied.view = view;
+      model.emit("view-change", { date: dateOf(day), zoomLevel: model.zoomLevel, canBack: model.canBack, canForward: model.canForward });
     }
 
     this.syncPanel(scene);
@@ -733,41 +706,9 @@ export class CalendarView extends HTMLElement {
   applyStrings() {
     const { ui, model } = this;
     const strings = model.strings;
-    ui.today.textContent = strings.today;
-    ui.monthButton.textContent = strings.month;
-    for (const [button, label] of [
-      [ui.back, strings.back],
-      [ui.forward, strings.forward],
-    ] as const) {
-      button.title = label;
-      button.setAttribute("aria-label", label);
-    }
-    ui.filter.placeholder = strings.filter;
-    ui.filter.setAttribute("aria-label", strings.filter);
-    ui.layers.replaceChildren(
-      ...this.layerList
-        .filter((layer) => layer.toggleable)
-        .map((layer) =>
-          h(
-            "button",
-            {
-              part: "layer",
-              type: "button",
-              "data-layer": layer.id,
-              style: `--dot: var(--cal-layer-${layer.id}, var(--cal-accent))`,
-              "aria-pressed": "true",
-              title: layer.label(strings),
-              "aria-label": layer.label(strings),
-              onclick: () => model.setLayer(layer.id, model.disabledLayers.has(layer.id)),
-            },
-            h("span", { part: "layer-label" }, layer.label(strings)),
-          ),
-        ),
-    );
     ui.dialogCancel.textContent = strings.cancel;
     ui.dialogOk.textContent = strings.delete;
     this.applied.strings = strings;
-    this.applied.layers = this.layerList;
   }
 
   renderWeekdays(key: string) {

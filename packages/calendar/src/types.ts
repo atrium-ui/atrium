@@ -71,4 +71,6 @@ export interface CalendarEventMap {
   "summary-request": { id: string; text: string };
   "summary-cancel": { id: string };
   "notify": { text: string };
+  /** The visible week or zoom level changed; `date` is in the month the view is showing. */
+  "view-change": { date: Date; zoomLevel: "week" | "month" | "quarter" | "year"; canBack: boolean; canForward: boolean };
 }

@@ -20,10 +20,6 @@ export function h<K extends keyof HTMLElementTagNameMap>(
   return element;
 }
 
-export function setText(element: Element, text: string) {
-  if (element.textContent !== text) element.textContent = text;
-}
-
 /** Whether a keyboard or clipboard event comes from a place where the user types. */
 export function isTyping(e: Event): boolean {
   const target = e.composedPath()[0];

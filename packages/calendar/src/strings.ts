@@ -5,12 +5,6 @@ import type { ResponseStatus } from "./types.ts";
  * they always come from `Intl` for the configured locale.
  */
 export const defaultStrings = {
-  today: "Today",
-  month: "Month",
-  back: "Back",
-  forward: "Forward",
-  filter: "Filter events…",
-  zoomLevels: { week: "Week", month: "Month", quarter: "Quarter", year: "Year" },
   layers: { grid: "Grid", "off-hours": "Off hours", busyness: "Busyness", events: "Events" },
   weekNumber: (n: number) => `W${n}`,
   more: (n: number) => `+${n} more`,

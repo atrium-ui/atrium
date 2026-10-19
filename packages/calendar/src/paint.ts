@@ -249,8 +249,8 @@ function drawGutter({ ctx, scene, theme, model }: Paint) {
       ctx.globalAlpha = (1 - hours) * fade;
       ctx.font = `${current ? 700 : 500} ${size}px ${theme.font}`;
       ctx.fillStyle = current ? theme.accent : theme.textFaint;
-      ctx.textAlign = "center";
-      ctx.fillText(model.strings.weekNumber(weekNumber(row.week, scene.firstDay)), geo.gutter / 2, row.top + row.height / 2);
+      ctx.textAlign = "right";
+      ctx.fillText(model.strings.weekNumber(weekNumber(row.week, scene.firstDay)), geo.gutter - 6, row.top + row.height / 2);
     }
     if (hours > 0 && row.expanded) {
       const perHour = row.timeHeight / 24;

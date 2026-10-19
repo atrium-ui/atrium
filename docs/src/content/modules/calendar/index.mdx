@@ -31,6 +31,7 @@ Drag on empty space to create an event, drag an event or its edges to move or re
 - **Give it a size.** The element fills its box, so set an explicit height on `calendar-view` or its container.
 - **Own the data.** Listen to `event-create`, `event-change` and `events-delete`, apply the change in your store, and assign a new `events` array.
 - **Register every calendar.** Each event's `calendarId` must exist in `calendars`. Use `lockedCalendars` for read-only sources like holidays.
+- **Build the toolbar.** The calendar has no navigation of its own. Wire buttons to `goToday()`, `goMonth()`, `back()` and `forward()`, a search field to `filter`, and show the month and back/forward state from `view-change`, as the example does.
 - **Set the locale.** Use the `locale` attribute or property so all generated text and the first day of the week match your users.
 
 ```html
@@ -65,10 +66,11 @@ Drag on empty space to create an event, drag an event or its edges to move or re
 | `workHours` | `[8, 18]`, used by the off-hours layer |
 | `busynessMode` | `"count"` or `"density"` |
 | `expandThreshold` | row height in px from which rows get an all-day band and a time area (90) |
+| `filter` | only events whose title contains this text are shown, the weeks in between collapse |
 | `layers` | drawing layers |
 | `selection` | selected event ids |
 
-Attributes: `storage-key` (where the view is remembered, default `calendar-view`), `hide-toolbar`.
+Attribute: `storage-key` (where the view is remembered, default `calendar-view`).
 
 ### Methods
 
@@ -89,6 +91,7 @@ All events are `CustomEvent`s that bubble out of the shadow root.
 | `range-select` | `{ from, to, columns, minutes }` |
 | `refresh-request` | `{}` |
 | `summary-request` / `summary-cancel` | `{ id, text }` / `{ id }` |
+| `view-change` | `{ date, zoomLevel, canBack, canForward }`, for a host toolbar; `date` is in the month shown |
 | `notify` | `{ text }`, feedback for the user like "3 events copied" or a failed import, to show in a toast or status bar |
 
 ### Styling
@@ -101,8 +104,8 @@ calendar-view {
   --cal-font: "Inter", sans-serif;
   --cal-event-radius: 2px;
 }
-calendar-view::part(toolbar) {
-  display: none;
+calendar-view::part(weekdays) {
+  text-transform: none;
 }
 ```
 
@@ -112,7 +115,7 @@ The `sidebar` slot holds anything you want next to the calendar.
 
 ### Layers
 
-The calendar is drawn in layers. Custom layers can be added next to the default ones, and every toggleable layer gets a chip in the header whose dot colour comes from `--cal-layer-<id>`.
+The calendar is drawn in layers. Custom layers can be added next to the default ones, and toggleable layers are switched with `setLayer(id, on)`. Use `layer.label(calendar.strings)` to name them in a host menu.
 
 ```ts
 import { defaultLayers, type Layer } from "@atrium-ui/calendar";
@@ -132,7 +135,8 @@ calendar.layers = [...defaultLayers, holidays];
 
 - All interactions have keyboard shortcuts: `T` jumps to today, `Esc` cancels or clears the selection, `Delete` removes the selection, `Ctrl/Cmd + C` copies it as iCalendar and `Ctrl/Cmd + Shift + R` requests a refresh.
 - The `high-contrast` theme is available for users who need stronger contrast, and all colours can be overridden through CSS variables.
-- Toolbar buttons, layer chips and the event panel controls are labelled, and toggles expose their state with `aria-pressed`. All UI text can be translated through `strings`.
+- The event panel controls are labelled, and toggles expose their state with `aria-pressed`. All UI text can be translated through `strings`.
+- The calendar has no toolbar of its own. Give the host's navigation buttons accessible labels and reflect `canBack`/`canForward` from `view-change` as `disabled`.
 - Touch input is supported: one finger scrolls, a long press then drag creates, moves or resizes, and two fingers zoom and pan.
 - The time grid is drawn on a canvas. Offer an alternative list of upcoming events where users depend on a screen reader.
 

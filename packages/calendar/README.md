@@ -43,11 +43,11 @@ bun run build  # dist/index.js
 | `workHours` | `[8, 18]`, used by the off-hours layer |
 | `busynessMode` | `"count"` or `"density"` |
 | `expandThreshold` | row height in px from which rows get an all-day band and a time area (90) |
+| `filter` | only events whose title contains this text are shown, the weeks in between collapse |
 | `layers` | drawing layers, see below |
 | `selection` | selected event ids |
 
-Attributes: `storage-key` (where the view is remembered, default `calendar-view`),
-`hide-toolbar`.
+Attribute: `storage-key` (where the view is remembered, default `calendar-view`).
 
 ### Methods
 
@@ -70,6 +70,7 @@ All are `CustomEvent`s that bubble out of the shadow root.
 | `range-select` | `{ from, to, columns, minutes }` |
 | `refresh-request` | `{}` |
 | `summary-request` / `summary-cancel` | `{ id, text }` / `{ id }` |
+| `view-change` | `{ date, zoomLevel, canBack, canForward }`, for a host toolbar; `date` is in the month shown |
 | `notify` | `{ text }`, feedback for the user like "3 events copied" or a failed import, to show in a toast or status bar |
 
 ## Styling
@@ -83,7 +84,7 @@ calendar-view {
   --cal-font: "Inter", sans-serif;
   --cal-event-radius: 2px;
 }
-calendar-view::part(toolbar) { display: none; }
+calendar-view::part(weekdays) { text-transform: none; }
 ```
 
 See `src/styles.ts` for all variables. A host-side theme change the element can't observe (for
@@ -107,8 +108,14 @@ const holidays: Layer = {
 calendar.layers = [...defaultLayers, holidays];
 ```
 
-A header chip appears for every toggleable layer. Its dot colour comes from
-`--cal-layer-<id>`.
+Toggle layers with `setLayer(id, on)`; `layer.label(calendar.strings)` names them for a host
+menu.
+
+## Toolbar
+
+The calendar has no toolbar. Navigation, the month title, filtering and layer toggles belong to
+the host: use `goToday()`, `goMonth()`, `back()`, `forward()`, the `filter` property and the
+`view-change` event.
 
 ## Input
 
