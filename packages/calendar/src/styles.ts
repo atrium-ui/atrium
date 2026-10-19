@@ -155,6 +155,9 @@ export const styles = `
   --cal-gutter-width: 48px;
   --cal-strip-width: 12px;
 }
+@media (max-width: 640px) {
+  :host { --cal-gutter-width: 0px; }
+}
 ${themeRules}
 
 :host {
@@ -191,7 +194,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   display: flex; overflow: hidden;
   padding: 0 var(--cal-strip-width) 0 var(--cal-gutter-width);
   background: var(--cal-surface);
-  border-bottom: 1px solid var(--cal-border);
 }
 [part~="weekday-row"] { display: flex; flex: none; will-change: transform; }
 [part~="weekday"] {

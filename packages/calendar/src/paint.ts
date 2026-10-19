@@ -233,6 +233,7 @@ function drawMonthHeadings(paint: Paint) {
 
 function drawGutter({ ctx, scene, theme, model }: Paint) {
   const { geo } = scene;
+  if (geo.gutter <= 0) return;
   ctx.fillStyle = theme.gutter;
   ctx.fillRect(0, 0, geo.gutter, geo.height);
   ctx.fillStyle = theme.line;

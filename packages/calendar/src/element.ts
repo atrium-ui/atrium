@@ -338,6 +338,8 @@ export class CalendarView extends HTMLElement {
     const media = matchMedia("(prefers-color-scheme: dark)");
     const onMedia = () => this.invalidateTheme();
     media.addEventListener("change", onMedia);
+    const narrow = matchMedia("(max-width: 640px)");
+    narrow.addEventListener("change", onMedia);
     const mutations = new MutationObserver(() => this.invalidateTheme());
     mutations.observe(document.documentElement, { attributes: true, attributeFilter: ["class", "style", "data-theme"] });
     mutations.observe(this, { attributes: true, attributeFilter: ["class", "style"] });
@@ -346,6 +348,7 @@ export class CalendarView extends HTMLElement {
     const clock = setInterval(() => this.tickClock(), 1000);
     this.cleanup.push(
       () => media.removeEventListener("change", onMedia),
+      () => narrow.removeEventListener("change", onMedia),
       () => mutations.disconnect(),
       () => resize.disconnect(),
       () => clearInterval(clock),
