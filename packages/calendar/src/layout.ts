@@ -48,11 +48,9 @@ interface Span {
   multi: boolean;
 }
 
-const DAY_MS = 86_400_000;
-
-/** All-day events and events lasting a day or longer live in the all-day band. */
+/** Only all-day events live in the all-day band, timed events show in the time area on every day they cover. */
 export function isBanded(event: CalendarEvent): boolean {
-  return event.allDay || event.end.getTime() - event.start.getTime() >= DAY_MS;
+  return event.allDay;
 }
 
 export function layoutWeek(events: readonly CalendarEvent[], firstDay: number): WeekLayout {
