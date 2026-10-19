@@ -70,4 +70,5 @@ export interface CalendarEventMap {
   "refresh-request": Record<string, never>;
   "summary-request": { id: string; text: string };
   "summary-cancel": { id: string };
+  "notify": { text: string };
 }

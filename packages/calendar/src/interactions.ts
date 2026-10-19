@@ -124,7 +124,6 @@ export class PointerController {
     if (e.pointerType === "touch") return this.touchMove(e, x, y);
     const mods = modsOf(e);
     this.last = { x, y, mods };
-    this.track(x, y);
     const s = this.state;
     if (s.kind === "idle") return this.hover(x, y, mods);
     if (s.kind === "press") {
@@ -161,7 +160,6 @@ export class PointerController {
   leave() {
     if (this.state.kind !== "idle") return;
     this.model.setHover(null);
-    this.model.setPointer(null);
   }
 
   /** Re-evaluates the interaction for a changed modifier key, e.g. Shift while creating. */
@@ -173,11 +171,6 @@ export class PointerController {
 
   capture(e: PointerEvent) {
     this.view.canvas.setPointerCapture(e.pointerId);
-  }
-
-  track(x: number, y: number) {
-    const loc = locate(this.model, this.view.geo(), x, y);
-    this.model.setPointer(loc ? { day: loc.day, minutes: loc.area === "time" ? loc.minutes : null } : null);
   }
 
   hover(x: number, y: number, mods: Mods) {

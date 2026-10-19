@@ -26,6 +26,8 @@ export interface SceneDay {
   weekday: number;
   today: boolean;
   weekend: boolean;
+  /** Outside of the date range, nothing can be placed here. */
+  outside: boolean;
 }
 
 export interface SceneRow {
@@ -43,7 +45,8 @@ export interface SceneRow {
   laneTop: number;
   laneHeight: number;
   lanesShown: number;
-  numberSize: number;
+  /** Opacity of the day numbers, they fade out instead of shrinking in short rows. */
+  numberAlpha: number;
   days: SceneDay[];
 }
 
@@ -103,9 +106,11 @@ const MIN_LANE = 4;
 const MAX_LANE = 18;
 const EDGE = 6;
 
-export function dayNumberSize(rowHeight: number) {
-  const size = Math.min(12, rowHeight * 0.3);
-  return size < 6 ? 0 : size;
+export const DAY_NUMBER_SIZE = 12;
+
+/** Text never scales: it fades out between 6px and its full `size` of available `space`. */
+export function textFade(space: number, size: number) {
+  return clamp((space - 6) / (size - 6), 0, 1);
 }
 
 export function buildScene(model: CalendarModel, geo: Geometry, now: Date): Scene {
@@ -145,6 +150,7 @@ export function buildScene(model: CalendarModel, geo: Geometry, now: Date): Scen
         weekday: weekdayOf(day),
         today: day === scene.today,
         weekend: isWeekend(day),
+        outside: !model.inRange(day),
       };
     });
     scene.rows.push(sceneRow);
@@ -156,7 +162,11 @@ export function buildScene(model: CalendarModel, geo: Geometry, now: Date): Scen
   if (rows.items) scene.strip = [0, Math.max(1, rows.items.length)];
   else {
     const weeks = model.derived.weeks;
-    scene.strip = [Math.min(top, weeks ? weeks[0] : top) - 1, Math.max(bottom, weeks ? weeks[1] + 1 : bottom) + 1];
+    const [firstWeek, endWeek] = model.weekBounds;
+    scene.strip = [
+      Math.max(firstWeek, Math.min(top, weeks ? weeks[0] : top) - 1),
+      Math.min(endWeek, Math.max(bottom, weeks ? weeks[1] + 1 : bottom) + 1),
+    ];
   }
   return scene;
 }
@@ -178,7 +188,7 @@ function rowGeometry(scene: Scene, index: number, top: number, height: number): 
     laneTop: top + PAD,
     laneHeight: MAX_LANE,
     lanesShown: 0,
-    numberSize: dayNumberSize(height),
+    numberAlpha: textFade(height * 0.3, DAY_NUMBER_SIZE),
     days: [],
   };
 }
@@ -187,7 +197,7 @@ function rowGeometry(scene: Scene, index: number, top: number, height: number): 
 function fitLanes(row: SceneRow, lanes: Lanes): number {
   const available = row.expanded
     ? row.timeTop - row.top - 2 * PAD
-    : row.height - 2 * PAD - (row.numberSize ? row.numberSize + 4 : 0);
+    : row.height - 2 * PAD - (row.numberAlpha ? DAY_NUMBER_SIZE + 4 : 0);
   row.laneHeight = clamp(available / Math.max(1, lanes.count), MIN_LANE, MAX_LANE);
   const capacity = Math.max(0, Math.floor(available / row.laneHeight + 1e-6));
   row.lanesShown = lanes.count > capacity ? Math.max(0, capacity - 1) : lanes.count;
@@ -305,12 +315,14 @@ export function locateUnit(model: CalendarModel, geo: Geometry, unit: number, cx
   if (row.kind !== "week") return null;
   const fraction = unit - i;
   const col = clamp(Math.floor(cx / geo.colWidth), 0, 6);
+  const day = weekStart(row.week, model.firstDay) + col;
+  if (!model.inRange(day)) return null;
   const expanded = rows.rowHeight >= geo.expandAt;
   const area: Area = !expanded ? "stack" : fraction < geo.bandRatio ? "band" : "time";
   return {
     week: row.week,
     col,
-    day: weekStart(row.week, model.firstDay) + col,
+    day,
     area,
     minutes: area === "time" ? clamp(((fraction - geo.bandRatio) / (1 - geo.bandRatio)) * 1440, 0, 1440) : 0,
   };

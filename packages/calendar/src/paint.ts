@@ -1,5 +1,5 @@
 import type { CalendarModel, Preview } from "./model.ts";
-import type { EventBox, MoreBox, Scene, SceneRow } from "./scene.ts";
+import { DAY_NUMBER_SIZE, type EventBox, type MoreBox, type Scene, type SceneRow, textFade } from "./scene.ts";
 import type { Strings } from "./strings.ts";
 import { contrastText, type Theme } from "./theme.ts";
 import { clamp, dateOf, weekNumber, weekOf } from "./time.ts";
@@ -116,8 +116,12 @@ function drawGap({ ctx, scene, theme, model }: Paint, row: SceneRow) {
 function drawCells({ ctx, scene, theme }: Paint, row: SceneRow) {
   const { colWidth } = scene.geo;
   for (const day of row.days) {
-    if (day.weekend) {
+    if (day.weekend || day.outside) {
       ctx.fillStyle = theme.weekend;
+      ctx.fillRect(day.x, row.top, colWidth, row.height);
+    }
+    if (day.outside) {
+      ctx.fillStyle = theme.stripe;
       ctx.fillRect(day.x, row.top, colWidth, row.height);
     }
     if (day.today) {
@@ -163,9 +167,11 @@ function drawLines({ ctx, scene, theme }: Paint, row: SceneRow) {
 }
 
 function drawDayNumbers({ ctx, theme, model }: Paint, row: SceneRow) {
-  const size = row.numberSize;
-  if (!size) return;
+  if (!row.numberAlpha) return;
+  const size = DAY_NUMBER_SIZE;
   const y = row.top + row.height - size - 7;
+  ctx.save();
+  ctx.globalAlpha = row.numberAlpha;
   for (const day of row.days) {
     const date = dateOf(day.day);
     const first = date.getDate() === 1;
@@ -178,6 +184,7 @@ function drawDayNumbers({ ctx, theme, model }: Paint, row: SceneRow) {
       ctx.fillText(text, day.x + 3 + size / 2, y + (size + 6) / 2 + 0.5);
     }
   }
+  ctx.restore();
 }
 
 function drawNow(paint: Paint) {
@@ -235,10 +242,11 @@ function drawGutter({ ctx, scene, theme, model }: Paint) {
   ctx.textBaseline = "middle";
   for (const row of scene.rows) {
     if (row.week === null) continue;
-    const size = Math.min(11, row.height * 0.6);
-    if (hours < 1 && size >= 6) {
+    const size = 11;
+    const fade = textFade(row.height * 0.6, size);
+    if (hours < 1 && fade > 0) {
       const current = row.week === thisWeek;
-      ctx.globalAlpha = 1 - hours;
+      ctx.globalAlpha = (1 - hours) * fade;
       ctx.font = `${current ? 700 : 500} ${size}px ${theme.font}`;
       ctx.fillStyle = current ? theme.accent : theme.textFaint;
       ctx.textAlign = "center";
@@ -435,10 +443,8 @@ function drawEventText({ ctx, theme, model }: Paint, box: EventBox, look: Look, 
   if (!box.label) return;
   const vertical = box.area === "time";
   const size = 12;
-  // The text keeps its size and fades out as the block gets too short for it.
-  const space = vertical ? box.h - 4 : box.h * 0.72;
-  const fade = Math.min(1, (space - 6) / (size - 6));
-  if (fade <= 0 || box.w < 18) return;
+  const fade = textFade(vertical ? box.h - 4 : box.h * 0.72, size);
+  if (!fade || box.w < 18) return;
   ctx.globalAlpha *= fade;
   const { event } = box;
   const title = look.dashed && label ? label : `${event.recurring ? "↻ " : ""}${event.title || model.strings.untitled}`;
@@ -462,18 +468,22 @@ function drawEventText({ ctx, theme, model }: Paint, box: EventBox, look: Look, 
 }
 
 function drawMore({ ctx, theme, model }: Paint, more: MoreBox) {
-  const size = Math.min(11, more.h * 0.8);
-  if (size < 6) {
+  const size = 11;
+  const fade = textFade(more.h * 0.8, size);
+  if (!fade) {
     ctx.fillStyle = theme.textFaint;
     ctx.fillRect(more.x + 2, more.y + more.h / 2 - 1, Math.min(more.w - 4, 14), 2);
     return;
   }
+  ctx.save();
+  ctx.globalAlpha = fade;
   ctx.font = `600 ${size}px ${theme.font}`;
   ctx.fillStyle = theme.textDim;
   ctx.textBaseline = "middle";
   const full = model.strings.more(more.count);
   const text = ctx.measureText(full).width <= more.w - 6 ? full : model.strings.moreShort(more.count);
   ctx.fillText(fit(ctx, text, more.w - 6), more.x + 3, more.y + more.h / 2 + 0.5);
+  ctx.restore();
 }
 
 export const eventsLayer: Layer = {

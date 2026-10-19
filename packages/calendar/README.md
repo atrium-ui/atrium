@@ -39,6 +39,7 @@ bun run build  # dist/index.js
 | `firstDayOfWeek` | 0 = Sunday, `null` = from the region (browsers without `Intl` week info use Monday) |
 | `theme` / `theme` attribute | `dark`, `light`, `solarized`, `high-contrast`, `auto`, or any name of your own |
 | `strings` | partial overrides of the UI text, see `src/strings.ts` |
+| `minDate`, `maxDate` | `Date` or `null`; limits the calendar to these days, e.g. a single week. Zoom is capped to the range and days outside it in the first and last week can't be used |
 | `workHours` | `[8, 18]`, used by the off-hours layer |
 | `busynessMode` | `"count"` or `"density"` |
 | `expandThreshold` | row height in px from which rows get an all-day band and a time area (90) |
@@ -46,7 +47,7 @@ bun run build  # dist/index.js
 | `selection` | selected event ids |
 
 Attributes: `storage-key` (where the view is remembered, default `calendar-view`),
-`hide-toolbar`, `hide-status`.
+`hide-toolbar`.
 
 ### Methods
 
@@ -69,6 +70,7 @@ All are `CustomEvent`s that bubble out of the shadow root.
 | `range-select` | `{ from, to, columns, minutes }` |
 | `refresh-request` | `{}` |
 | `summary-request` / `summary-cancel` | `{ id, text }` / `{ id }` |
+| `notify` | `{ text }`, feedback for the user like "3 events copied" or a failed import, to show in a toast or status bar |
 
 ## Styling
 

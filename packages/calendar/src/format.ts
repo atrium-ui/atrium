@@ -114,15 +114,6 @@ export class Formats {
     return format.format(value);
   }
 
-  duration(minutes: number) {
-    const hours = Math.floor(minutes / 60);
-    const rest = Math.round(minutes - hours * 60);
-    const parts: string[] = [];
-    if (hours) parts.push(this.unit(hours, "hour", "narrow"));
-    if (rest || !hours) parts.push(this.unit(rest, "minute", "narrow"));
-    return parts.join(" ");
-  }
-
   reminder(minutes: number, strings: Strings) {
     if (minutes === 0) return strings.atStart;
     if (minutes % 1440 === 0) return strings.before(this.unit(minutes / 1440, "day", "long"));

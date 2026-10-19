@@ -61,13 +61,14 @@ Drag on empty space to create an event, drag an event or its edges to move or re
 | `firstDayOfWeek` | 0 = Sunday, `null` = from the region |
 | `theme` | `dark`, `light`, `solarized`, `high-contrast`, `auto`, or a custom name |
 | `strings` | partial overrides of the UI text |
+| `minDate`, `maxDate` | `Date` or `null`; limits the calendar to these days, e.g. a single week. Zoom is capped to the range and days outside it in the first and last week can't be used |
 | `workHours` | `[8, 18]`, used by the off-hours layer |
 | `busynessMode` | `"count"` or `"density"` |
 | `expandThreshold` | row height in px from which rows get an all-day band and a time area (90) |
 | `layers` | drawing layers |
 | `selection` | selected event ids |
 
-Attributes: `storage-key` (where the view is remembered, default `calendar-view`), `hide-toolbar`, `hide-status`.
+Attributes: `storage-key` (where the view is remembered, default `calendar-view`), `hide-toolbar`.
 
 ### Methods
 
@@ -88,6 +89,7 @@ All events are `CustomEvent`s that bubble out of the shadow root.
 | `range-select` | `{ from, to, columns, minutes }` |
 | `refresh-request` | `{}` |
 | `summary-request` / `summary-cancel` | `{ id, text }` / `{ id }` |
+| `notify` | `{ text }`, feedback for the user like "3 events copied" or a failed import, to show in a toast or status bar |
 
 ### Styling
 

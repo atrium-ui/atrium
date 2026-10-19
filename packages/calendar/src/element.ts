@@ -1,12 +1,12 @@
 import { h, isTyping, setText } from "./dom.ts";
 import { isCalendarData } from "./ics.ts";
 import { PointerController } from "./interactions.ts";
-import { BAND_RATIO, type BusynessMode, CalendarModel, MAX_IMPORT_BYTES, MAX_ZOOM } from "./model.ts";
+import { BAND_RATIO, type BusynessMode, CalendarModel, MAX_IMPORT_BYTES } from "./model.ts";
 import { defaultLayers, drawStrip, type Layer, type Paint } from "./paint.ts";
 import type { CalendarEventPanel } from "./panel.ts";
 import { anchorOf, buildScene, type Geometry, type Scene } from "./scene.ts";
 import { defaultStrings, type Strings } from "./strings.ts";
-import { styles, themeNames } from "./styles.ts";
+import { styles } from "./styles.ts";
 import { readTheme, type Theme } from "./theme.ts";
 import { clamp, dateOf, isWeekend, weekStart } from "./time.ts";
 import type { CalendarEvent, CalendarEventMap, CalendarInfo, ResponseStatus } from "./types.ts";
@@ -28,10 +28,10 @@ const PROPERTIES = [
   "expandThreshold",
   "layers",
   "selection",
+  "minDate",
+  "maxDate",
 ] as const;
 
-const zoomToSlider = (zoom: number) => Math.round((Math.log(zoom) / Math.log(MAX_ZOOM)) * 1000);
-const sliderToZoom = (value: number) => Math.exp((value / 1000) * Math.log(MAX_ZOOM));
 
 function buildUi() {
   const button = (part: string, text = "") => h("button", { part: `button ${part}`, type: "button" }, text);
@@ -39,7 +39,6 @@ function buildUi() {
   const month = h("span", { part: "month" });
   const zoomLabel = h("span", { part: "zoom-label" });
   const layers = h("div", { part: "layers" });
-  const theme = h("select", { part: "select theme-select" });
   const weekdayRow = h("div", { part: "weekday-row" });
   const weekdays = h("div", { part: "weekdays", "aria-hidden": "true" }, weekdayRow);
 
@@ -52,33 +51,8 @@ function buildUi() {
   const back = button("icon back", "‹");
   const forward = button("icon forward", "›");
   const monthButton = button("month-button");
-  const zoomText = h("span");
-  const zoom = h("input", { part: "range zoom", type: "range", min: "0", max: "1000" });
-  const columnsText = h("span");
-  const columns = h("input", { part: "range column-width", type: "range", min: "0", max: "400", step: "10" });
   const filter = h("input", { part: "filter", type: "search" });
-  const toolbar = h(
-    "div",
-    { part: "toolbar" },
-    h("div", { part: "group" }, back, forward, monthButton),
-    h("label", { part: "slider" }, zoomText, zoom),
-    h("label", { part: "slider" }, columnsText, columns),
-    filter,
-  );
-  const body = h("div", { part: "body" }, canvas, drop, panel, toolbar);
-
-  const date = h("span", { part: "date" });
-  const time = h("span", { part: "time" });
-  const message = h("span", { part: "message", role: "status" });
-  const alt = h("span", { part: "badge alt", hidden: true });
-  const count = h("span", { part: "count" });
-  const pointer = h("span", { part: "pointer" });
-  const status = h(
-    "footer",
-    { part: "status" },
-    h("div", { part: "status-group status-left" }, date, time, message, alt),
-    h("div", { part: "status-group status-right" }, count, pointer),
-  );
+  const body = h("div", { part: "body" }, canvas, drop, panel);
 
   const dialogText = h("p", { part: "dialog-text" });
   const dialogCancel = h("button", { part: "button", value: "cancel" });
@@ -97,10 +71,15 @@ function buildUi() {
     h(
       "div",
       { part: "main" },
-      h("header", { part: "header" }, today, h("div", { part: "title" }, month, zoomLabel), layers, theme),
+      h(
+        "header",
+        { part: "toolbar" },
+        h("div", { part: "group" }, back, forward, today, monthButton),
+        h("div", { part: "title" }, month, zoomLabel),
+        h("div", { part: "group" }, layers, filter),
+      ),
       weekdays,
       body,
-      status,
     ),
     dialog,
     dragImage,
@@ -112,7 +91,6 @@ function buildUi() {
     month,
     zoomLabel,
     layers,
-    theme,
     weekdays,
     weekdayRow,
     body,
@@ -121,17 +99,7 @@ function buildUi() {
     back,
     forward,
     monthButton,
-    zoomText,
-    zoom,
-    columnsText,
-    columns,
     filter,
-    date,
-    time,
-    message,
-    alt,
-    count,
-    pointer,
     dialog,
     dialogText,
     dialogCancel,
@@ -170,7 +138,7 @@ export class CalendarView extends HTMLElement {
   restored = false;
   gestureZoom = 1;
   cleanup: (() => void)[] = [];
-  applied = { strings: null as Strings | null, layers: null as Layer[] | null, weekdays: "", panel: -1, message: 0, columns: 0 };
+  applied = { strings: null as Strings | null, layers: null as Layer[] | null, weekdays: "", panel: -1, columns: 0 };
 
   constructor() {
     super();
@@ -251,8 +219,8 @@ export class CalendarView extends HTMLElement {
     this.setAttribute("locale", locale);
   }
 
-  get theme(): string {
-    return this.model.theme;
+  get theme(): string | null {
+    return this.getAttribute("theme");
   }
   set theme(theme: string) {
     this.setAttribute("theme", theme);
@@ -271,6 +239,22 @@ export class CalendarView extends HTMLElement {
   }
   set strings(strings: Partial<Strings>) {
     this.model.setStrings({ ...defaultStrings, ...strings });
+  }
+
+  /** First day that can be shown, `null` scrolls endlessly into the past. */
+  get minDate(): Date | null {
+    return this.model.minDay === null ? null : dateOf(this.model.minDay);
+  }
+  set minDate(date: Date | null) {
+    this.model.setRange(date, this.maxDate);
+  }
+
+  /** Last day that can be shown, `null` scrolls endlessly into the future. */
+  get maxDate(): Date | null {
+    return this.model.maxDay === null ? null : dateOf(this.model.maxDay);
+  }
+  set maxDate(date: Date | null) {
+    this.model.setRange(this.minDate, date);
   }
 
   get workHours(): [number, number] {
@@ -368,7 +352,6 @@ export class CalendarView extends HTMLElement {
       model.restore();
       model.record();
     }
-    if (!this.hasAttribute("theme")) this.setAttribute("theme", model.theme);
 
     const listen = <K extends keyof WindowEventMap>(type: K, listener: (e: WindowEventMap[K]) => void, capture = false) => {
       window.addEventListener(type, listener, capture);
@@ -376,7 +359,6 @@ export class CalendarView extends HTMLElement {
     };
     listen("keydown", this.keyDown);
     listen("keyup", this.keyUp);
-    listen("blur", this.windowBlur);
     listen("copy", this.copy);
     listen("paste", this.paste);
     listen("pointerdown", this.outsidePointer, true);
@@ -409,10 +391,7 @@ export class CalendarView extends HTMLElement {
   }
 
   attributeChangedCallback(name: string, _old: string | null, value: string | null) {
-    if (name === "theme" && value !== null) {
-      this.model.setTheme(value);
-      this.invalidateTheme();
-    }
+    if (name === "theme") this.invalidateTheme();
     if (name === "locale") this.model.setLocale(value ?? navigator.language);
     if (name === "storage-key") this.model.storageKey = value;
   }
@@ -455,12 +434,6 @@ export class CalendarView extends HTMLElement {
     ui.monthButton.addEventListener("click", () => model.goMonth());
     ui.back.addEventListener("click", () => model.back());
     ui.forward.addEventListener("click", () => model.forward());
-    ui.zoom.addEventListener("input", () => {
-      model.stopMotion();
-      model.zoomAt(sliderToZoom(Number(ui.zoom.value)), model.height / 2);
-    });
-    ui.columns.addEventListener("input", () => model.setColumnWidth(Number(ui.columns.value)));
-    ui.theme.addEventListener("change", () => this.setAttribute("theme", ui.theme.value));
     ui.filter.addEventListener("input", () => model.setFilter(ui.filter.value));
     ui.filter.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;
@@ -487,7 +460,6 @@ export class CalendarView extends HTMLElement {
 
   keyDown = (e: KeyboardEvent) => {
     const model = this.model;
-    if (e.key === "Alt") model.setAlt(true);
     if (e.key === "Shift" || e.key === "Alt" || e.key === "Meta" || e.key === "Control") this.pointer.modifiers(e);
     if (this.ui.dialog.open || isTyping(e)) return;
     const mod = e.ctrlKey || e.metaKey;
@@ -509,12 +481,7 @@ export class CalendarView extends HTMLElement {
   };
 
   keyUp = (e: KeyboardEvent) => {
-    if (e.key === "Alt") this.model.setAlt(false);
     if (e.key === "Shift" || e.key === "Alt" || e.key === "Meta" || e.key === "Control") this.pointer.modifiers(e);
-  };
-
-  windowBlur = () => {
-    this.model.setAlt(false);
   };
 
   copy = (e: ClipboardEvent) => {
@@ -723,49 +690,11 @@ export class CalendarView extends HTMLElement {
     setText(ui.zoomLabel, strings.zoomLevels[model.zoomLevel]);
     ui.back.disabled = !model.canBack;
     ui.forward.disabled = !model.canForward;
-    const zoom = String(zoomToSlider(model.zoom));
-    if (ui.zoom.value !== zoom) ui.zoom.value = zoom;
-    const columns = String(model.columnWidth);
-    if (ui.columns.value !== columns) ui.columns.value = columns;
-    if (ui.theme.value !== model.theme) ui.theme.value = model.theme;
     for (const chip of ui.layers.querySelectorAll<HTMLElement>("[data-layer]")) {
       chip.setAttribute("aria-pressed", String(!model.disabledLayers.has(chip.dataset.layer as string)));
     }
 
-    ui.alt.hidden = !model.alt;
-    setText(
-      ui.count,
-      model.selection.size
-        ? strings.selected(model.selection.size, model.formats.duration(model.selectedMinutes()))
-        : strings.visibleEvents(scene.visible.size),
-    );
-    const pointer = model.pointer;
-    setText(
-      ui.pointer,
-      !pointer
-        ? ""
-        : pointer.minutes === null
-          ? model.formats.dayShort(dateOf(pointer.day))
-          : model.formats.dateTime(dateOf(pointer.day, Math.floor(pointer.minutes))),
-    );
-    this.tickClock();
-    this.syncMessage();
     this.syncPanel(scene);
-  }
-
-  syncMessage() {
-    const { message } = this.model;
-    const box = this.ui.message;
-    if (!message) {
-      if (box.firstChild) box.replaceChildren();
-      this.applied.message = 0;
-      return;
-    }
-    if (this.applied.message !== message.id) {
-      box.replaceChildren(h("span", {}, message.text));
-      this.applied.message = message.id;
-    }
-    (box.firstElementChild as HTMLElement).toggleAttribute("data-leaving", message.leaving);
   }
 
   syncPanel(scene: Scene) {
@@ -796,9 +725,6 @@ export class CalendarView extends HTMLElement {
 
   tickClock() {
     const now = new Date();
-    const formats = this.model.formats;
-    setText(this.ui.date, formats.dayLong(now));
-    setText(this.ui.time, formats.time(now));
     if (now.getMinutes() === this.minute) return;
     this.minute = now.getMinutes();
     this.requestFrame();
@@ -816,14 +742,8 @@ export class CalendarView extends HTMLElement {
       button.title = label;
       button.setAttribute("aria-label", label);
     }
-    ui.zoomText.textContent = strings.zoom;
-    ui.columnsText.textContent = strings.columnWidth;
     ui.filter.placeholder = strings.filter;
     ui.filter.setAttribute("aria-label", strings.filter);
-    ui.theme.title = strings.theme;
-    ui.theme.setAttribute("aria-label", strings.theme);
-    ui.theme.replaceChildren(...themeNames.map((name) => h("option", { value: name }, strings.themes[name])));
-    ui.theme.value = model.theme;
     ui.layers.replaceChildren(
       ...this.layerList
         .filter((layer) => layer.toggleable)
@@ -836,13 +756,14 @@ export class CalendarView extends HTMLElement {
               "data-layer": layer.id,
               style: `--dot: var(--cal-layer-${layer.id}, var(--cal-accent))`,
               "aria-pressed": "true",
+              title: layer.label(strings),
+              "aria-label": layer.label(strings),
               onclick: () => model.setLayer(layer.id, model.disabledLayers.has(layer.id)),
             },
-            layer.label(strings),
+            h("span", { part: "layer-label" }, layer.label(strings)),
           ),
         ),
     );
-    ui.alt.textContent = strings.altBadge;
     ui.dialogCancel.textContent = strings.cancel;
     ui.dialogOk.textContent = strings.delete;
     this.applied.strings = strings;

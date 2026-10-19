@@ -18,6 +18,8 @@ export class Rows {
     readonly items: Row[] | null,
     /** Week reported for any position when a filter matches nothing. */
     readonly origin: number,
+    /** First week and the week after the last one of the endless rows. */
+    readonly bounds: [number, number],
   ) {
     if (!items) return;
     let y = 0;
@@ -30,11 +32,11 @@ export class Rows {
   }
 
   get first() {
-    return this.items ? 0 : Number.NEGATIVE_INFINITY;
+    return this.items ? 0 : this.bounds[0];
   }
 
   get end() {
-    return this.items ? this.items.length : Number.POSITIVE_INFINITY;
+    return this.items ? this.items.length : this.bounds[1];
   }
 
   row(i: number): Row {
@@ -99,10 +101,15 @@ export class Rows {
   }
 }
 
-/** Rows for a filter: weeks with matches plus `context` weeks around them, gaps in between. */
-export function filterRows(weeks: Iterable<number>, context: number): Row[] {
+/**
+ * Rows for a filter: weeks with matches plus `context` weeks around them, gaps in between.
+ * Only weeks within `bounds` (first week, week after the last one) are kept.
+ */
+export function filterRows(weeks: Iterable<number>, context: number, bounds: [number, number]): Row[] {
   const visible = new Set<number>();
-  for (const week of weeks) for (let c = -context; c <= context; c++) visible.add(week + c);
+  for (const week of weeks) {
+    for (let c = -context; c <= context; c++) if (week + c >= bounds[0] && week + c < bounds[1]) visible.add(week + c);
+  }
   const sorted = [...visible].sort((a, b) => a - b);
   const rows: Row[] = [];
   sorted.forEach((week, i) => {

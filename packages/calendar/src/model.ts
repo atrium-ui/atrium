@@ -37,8 +37,6 @@ const GAP_HEIGHT = 24;
 const HISTORY_LIMIT = 50;
 const SETTLE_MS = 600;
 const ANIMATION_MS = 500;
-const MESSAGE_MS = 2000;
-const MESSAGE_FADE_MS = 250;
 const LAYOUT_CACHE_LIMIT = 4000;
 /** Events per day that count as fully busy. */
 const BUSY_COUNT = 6;
@@ -69,12 +67,6 @@ export interface SummaryState {
   text: string;
 }
 
-export interface Message {
-  id: number;
-  text: string;
-  leaving: boolean;
-}
-
 export interface StripMark {
   unit: number;
   span: number;
@@ -91,8 +83,6 @@ interface SavedState {
   date: string;
   offset: number;
   zoom: number;
-  columnWidth: number;
-  theme: string;
 }
 
 interface Derived {
@@ -130,8 +120,10 @@ export class CalendarModel {
   busynessMode: BusynessMode = "count";
   expandAt = 90;
   filter = "";
+  /** First and last day that can be shown, `null` is unbounded. */
+  minDay: number | null = null;
+  maxDay: number | null = null;
   disabledLayers = new Set<string>();
-  theme = "dark";
   storageKey: string | null = null;
 
   width = 0;
@@ -139,7 +131,6 @@ export class CalendarModel {
   zoom = DEFAULT_ZOOM;
   center = 0;
   scrollX = 0;
-  columnWidth = 0;
   animation: { t0: number; from: ViewEntry; to: ViewEntry } | null = null;
   velocity = 0;
   lastTick = 0;
@@ -153,13 +144,7 @@ export class CalendarModel {
   hiddenId: string | null = null;
   preview: Preview | null = null;
   selectionRect: Rect | null = null;
-  pointer: { day: number; minutes: number | null } | null = null;
-  alt = false;
   summary: SummaryState | null = null;
-  message: Message | null = null;
-  queue: string[] = [];
-  messageCount = 0;
-  messageTimer: ReturnType<typeof setTimeout> | undefined;
   settleTimer: ReturnType<typeof setTimeout> | undefined;
   /** Bumped whenever data shown in the detail panel may have changed. */
   version = 0;
@@ -187,6 +172,7 @@ export class CalendarModel {
     this.derivedCache = null;
     this.rowsCache = null;
     this.version++;
+    this.zoom = this.clampZoom(this.zoom);
     this.center = this.clampCenter(this.rows.unitOfWeek(week));
     this.changed();
   }
@@ -263,10 +249,25 @@ export class CalendarModel {
     this.changed();
   }
 
-  setTheme(theme: string) {
-    this.theme = theme;
-    this.save();
-    this.changed();
+  setRange(min: Date | null, max: Date | null) {
+    const minDay = min && dayOf(min);
+    const maxDay = max && dayOf(max);
+    if (minDay !== null && maxDay !== null && minDay > maxDay) throw new RangeError(`minDate ${min} is after maxDate ${max}`);
+    this.minDay = minDay;
+    this.maxDay = maxDay;
+    this.rebuild();
+  }
+
+  inRange(day: number): boolean {
+    return (this.minDay === null || day >= this.minDay) && (this.maxDay === null || day <= this.maxDay);
+  }
+
+  /** First week and the week after the last one that can be shown. */
+  get weekBounds(): [number, number] {
+    return [
+      this.minDay === null ? Number.NEGATIVE_INFINITY : weekOf(this.minDay, this.firstDay),
+      this.maxDay === null ? Number.POSITIVE_INFINITY : weekOf(this.maxDay, this.firstDay) + 1,
+    ];
   }
 
   setLayer(id: string, on: boolean) {
@@ -333,7 +334,7 @@ export class CalendarModel {
       busy,
       shown,
       weeks: shown.length ? [min, max] : null,
-      rows: query ? filterRows(byWeek.keys(), FILTER_CONTEXT) : null,
+      rows: query ? filterRows(byWeek.keys(), FILTER_CONTEXT, this.weekBounds) : null,
       layouts: new Map(),
       marks: null,
     };
@@ -445,7 +446,7 @@ export class CalendarModel {
 
   get rows(): Rows {
     if (!this.rowsCache) {
-      this.rowsCache = new Rows(this.rowHeight, GAP_HEIGHT, this.derived.rows, this.beforeFilter?.week ?? 0);
+      this.rowsCache = new Rows(this.rowHeight, GAP_HEIGHT, this.derived.rows, this.beforeFilter?.week ?? 0, this.weekBounds);
     }
     return this.rowsCache;
   }
@@ -459,7 +460,7 @@ export class CalendarModel {
   }
 
   get colWidth() {
-    return Math.max(this.columnWidth, this.width / 7);
+    return this.width / 7;
   }
 
   get maxScrollX() {
@@ -482,9 +483,20 @@ export class CalendarModel {
     return BAND_RATIO + ((1 - BAND_RATIO) * minutes) / 1440;
   }
 
-  clampCenter(unit: number) {
+  /** Keeps the view inside the rows; within a date range the viewport never shows weeks outside of it. */
+  clampCenter(unit: number, zoom = this.zoom) {
     const items = this.rows.items;
-    return items ? clamp(unit, 0, items.length) : unit;
+    if (items) return clamp(unit, 0, items.length);
+    const [first, end] = this.weekBounds;
+    const lo = first + zoom / 2;
+    const hi = end - zoom / 2;
+    return lo > hi ? (first + end) / 2 : clamp(unit, lo, hi);
+  }
+
+  /** At most as many weeks as the date range has. */
+  clampZoom(zoom: number) {
+    const [first, end] = this.weekBounds;
+    return clamp(zoom, MIN_ZOOM, Math.min(MAX_ZOOM, end - first));
   }
 
   setViewport(width: number, height: number) {
@@ -494,13 +506,6 @@ export class CalendarModel {
     this.rowsCache = null;
     this.scrollX = clamp(this.scrollX, 0, this.maxScrollX);
     this.changed();
-  }
-
-  setColumnWidth(px: number) {
-    const ratio = this.maxScrollX ? this.scrollX / this.maxScrollX : 0;
-    this.columnWidth = px;
-    this.scrollX = ratio * this.maxScrollX;
-    this.moved();
   }
 
   moved() {
@@ -517,7 +522,7 @@ export class CalendarModel {
 
   /** Zooms to `zoom` visible weeks, keeping the content at viewport height `y` in place. */
   zoomAt(zoom: number, y: number) {
-    const next = clamp(zoom, MIN_ZOOM, MAX_ZOOM);
+    const next = this.clampZoom(zoom);
     if (next === this.zoom) return;
     const anchor = this.rows.pxToUnit(this.scrollTop + y);
     this.zoom = next;
@@ -534,11 +539,12 @@ export class CalendarModel {
   }
 
   animateTo(week: number, zoom: number) {
+    const next = this.clampZoom(zoom);
     this.velocity = 0;
     this.animation = {
       t0: performance.now(),
       from: { week: this.center, zoom: this.zoom },
-      to: { week: this.clampCenter(this.rows.unitOfWeek(week)), zoom: clamp(zoom, MIN_ZOOM, MAX_ZOOM) },
+      to: { week: this.clampCenter(this.rows.unitOfWeek(week), next), zoom: next },
     };
     this.changed();
   }
@@ -564,8 +570,8 @@ export class CalendarModel {
       const progress = clamp((now - animation.t0) / ANIMATION_MS, 0, 1);
       const eased = 1 - (1 - progress) ** 3;
       this.zoom = animation.from.zoom * (animation.to.zoom / animation.from.zoom) ** eased;
-      this.center = animation.from.week + (animation.to.week - animation.from.week) * eased;
       this.rowsCache = null;
+      this.center = this.clampCenter(animation.from.week + (animation.to.week - animation.from.week) * eased);
       if (progress === 1) this.animation = null;
       this.scheduleSettle();
     }
@@ -657,8 +663,6 @@ export class CalendarModel {
       date: isoDate(dateOf(weekStart(week, this.firstDay))),
       offset: position - week,
       zoom: this.beforeFilter?.zoom ?? this.zoom,
-      columnWidth: this.columnWidth,
-      theme: this.theme,
     };
     localStorage.setItem(this.storageKey, JSON.stringify(state));
   }
@@ -668,17 +672,14 @@ export class CalendarModel {
     const raw = this.storageKey ? localStorage.getItem(this.storageKey) : null;
     if (!raw) return;
     const state = JSON.parse(raw) as SavedState;
-    this.zoom = clamp(state.zoom, MIN_ZOOM, MAX_ZOOM);
-    this.columnWidth = state.columnWidth;
-    this.theme = state.theme;
+    this.zoom = this.clampZoom(state.zoom);
     this.rowsCache = null;
-    this.center = weekOf(dayOf(parseIsoDate(state.date)), this.firstDay) + state.offset;
+    this.center = this.clampCenter(weekOf(dayOf(parseIsoDate(state.date)), this.firstDay) + state.offset);
     this.changed();
   }
 
   dispose() {
     clearTimeout(this.settleTimer);
-    clearTimeout(this.messageTimer);
     this.stopMotion();
   }
 
@@ -721,18 +722,6 @@ export class CalendarModel {
     this.changed();
   }
 
-  setPointer(pointer: { day: number; minutes: number | null } | null) {
-    if (this.pointer?.day === pointer?.day && this.pointer?.minutes === pointer?.minutes) return;
-    this.pointer = pointer;
-    this.changed();
-  }
-
-  setAlt(alt: boolean) {
-    if (this.alt === alt) return;
-    this.alt = alt;
-    this.changed();
-  }
-
   setPreview(preview: Preview | null, hiddenId: string | null = null, selectionRect: Rect | null = null) {
     this.preview = preview;
     this.hiddenId = hiddenId;
@@ -772,10 +761,6 @@ export class CalendarModel {
 
   get selectedEvents(): CalendarEvent[] {
     return [...this.selection].flatMap((id) => this.byId.get(id) ?? []);
-  }
-
-  selectedMinutes(): number {
-    return this.selectedEvents.reduce((sum, event) => sum + (event.end.getTime() - event.start.getTime()) / 60_000, 0);
   }
 
   // Requests to the host
@@ -846,24 +831,9 @@ export class CalendarModel {
     this.changed();
   }
 
-  // Status messages
-
+  /** Feedback for the user, e.g. after copying or a failed import. Shown by the host. */
   notify(text: string) {
-    this.queue.push(text);
-    if (!this.message) this.nextMessage();
-  }
-
-  nextMessage() {
-    const text = this.queue.shift();
-    this.message = text === undefined ? null : { id: ++this.messageCount, text, leaving: false };
-    this.changed();
-    if (!this.message) return;
-    const message = this.message;
-    this.messageTimer = setTimeout(() => {
-      this.message = { ...message, leaving: true };
-      this.changed();
-      this.messageTimer = setTimeout(() => this.nextMessage(), MESSAGE_FADE_MS);
-    }, MESSAGE_MS);
+    this.emit("notify", { text });
   }
 }
 

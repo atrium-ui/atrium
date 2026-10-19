@@ -139,7 +139,7 @@ export class CalendarEventPanel extends HTMLElement {
         data.canEdit && this.reminders(data),
         this.description(data),
       ),
-      data.invited && this.responses(data),
+      ...(data.invited ? [this.responses(data)] : []),
     );
     this.restoreFocus(focus);
   }

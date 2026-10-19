@@ -9,20 +9,14 @@ export const defaultStrings = {
   month: "Month",
   back: "Back",
   forward: "Forward",
-  zoom: "Zoom",
-  columnWidth: "Column width",
   filter: "Filter events…",
-  theme: "Theme",
   zoomLevels: { week: "Week", month: "Month", quarter: "Quarter", year: "Year" },
-  themes: { dark: "Dark", light: "Light", solarized: "Solarized", "high-contrast": "High contrast", auto: "Auto" },
   layers: { grid: "Grid", "off-hours": "Off hours", busyness: "Busyness", events: "Events" },
   weekNumber: (n: number) => `W${n}`,
   more: (n: number) => `+${n} more`,
   moreShort: (n: number) => `+${n}`,
   hiddenWeeks: (n: number) => (n === 1 ? "⋯ 1 week" : `⋯ ${n} weeks`),
   noMatches: "No matching events",
-  visibleEvents: (n: number) => (n === 1 ? "1 event" : `${n} events`),
-  selected: (n: number, duration: string) => `${n} selected · ${duration}`,
   copied: (n: number) => (n === 1 ? "Copied 1 event" : `Copied ${n} events`),
   creationCancelled: "Event creation cancelled",
   moveCancelled: "Move cancelled",
@@ -68,7 +62,6 @@ export const defaultStrings = {
     "needs-action": "Not answered",
     delegated: "Delegated",
   } satisfies Record<ResponseStatus, string>,
-  altBadge: "Alt",
 };
 
 export type Strings = typeof defaultStrings;
