@@ -182,9 +182,7 @@ export class PointerController {
           ? hit.box.area === "time"
             ? "ns-resize"
             : "ew-resize"
-          : this.model.canEdit(hit.box.event)
-            ? "grab"
-            : "pointer"
+          : "default"
         : hit.kind === "more" || hit.kind === "strip"
           ? "pointer"
           : hit.kind === "gutter"

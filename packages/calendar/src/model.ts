@@ -25,8 +25,8 @@ import type {
   ResponseStatus,
 } from "./types.ts";
 
-export const MIN_ZOOM = 1;
-export const MAX_ZOOM = 40;
+export const MIN_ZOOM = 0.25;
+export const MAX_ZOOM = 8;
 export const TODAY_ZOOM = 1.5;
 export const DEFAULT_ZOOM = 5;
 export const BAND_RATIO = 0.15;
@@ -118,7 +118,7 @@ export class CalendarModel {
   strings: Strings = defaultStrings;
   workHours: [number, number] = [8, 18];
   busynessMode: BusynessMode = "count";
-  expandAt = 90;
+  expandAt = 300;
   filter = "";
   /** First and last day that can be shown, `null` is unbounded. */
   minDay: number | null = null;
