@@ -734,7 +734,6 @@ export class CalendarModel {
     const ids = new Set(add ? this.selection : []);
     for (let week = weeks[0]; week <= weeks[1]; week++) {
       for (const event of this.derived.byWeek.get(week) ?? EMPTY) {
-        if (event.calendarId !== this.activeCalendar) continue;
         const first = dayOf(event.start);
         const last = lastDayOf(event);
         for (let col = cols[0]; col <= cols[1]; col++) {
