@@ -8,6 +8,8 @@ order: 1
 
 import CalendarExampleCode from "./CalendarExample.tsx?raw";
 import { CalendarExample } from "./CalendarExample.tsx";
+import WeekExampleCode from "./WeekExample.tsx?raw";
+import { WeekExample } from "./WeekExample.tsx";
 import { ContentTabs } from "package:/components/docs";
 import { Code } from "astro:components";
 
@@ -24,6 +26,17 @@ Drag on empty space to create an event, drag an event or its edges to move or re
     <CalendarExample client:only="vue" />
   </div>
   <Code lang="tsx" code={CalendarExampleCode} class="max-h-[600px] overflow-auto" />
+</ContentTabs>
+
+### Single week
+
+Set `minDate` and `maxDate` to limit the calendar to a fixed range, like the schedule of a conference. Zoom is capped to the range, so the week fills the whole view, and the weekend outside of it can't be used. Locking the calendar makes the schedule read-only.
+
+<ContentTabs labels={["Preview", "Code"]}>
+  <div class="not-content box flex w-full justify-center p-4">
+    <WeekExample client:only="vue" />
+  </div>
+  <Code lang="tsx" code={WeekExampleCode} class="max-h-[600px] overflow-auto" />
 </ContentTabs>
 
 ## Guidelines

@@ -106,10 +106,13 @@ const MAX_LANE = 18;
 const EDGE = 6;
 
 export const DAY_NUMBER_SIZE = 12;
+export const MONTH_HEADING_SIZE = 16;
+/** Strip at the top of a row that holds the day numbers and month headings, above the events of that week. */
+export const DAY_HEADER = MONTH_HEADING_SIZE + 10;
 
 /** Height of an all-day band with `lanes` lanes; an empty band keeps one lane to create events in. */
 export function bandHeight(lanes: number) {
-  return Math.max(1, lanes) * MAX_LANE + 2 * PAD;
+  return DAY_HEADER + Math.max(1, lanes) * MAX_LANE + 2 * PAD;
 }
 
 /** Text never scales: it fades out between 6px and its full `size` of available `space`. */
@@ -179,6 +182,7 @@ export function buildScene(model: CalendarModel, geo: Geometry, now: Date): Scen
 function rowGeometry(scene: Scene, index: number, top: number, height: number, bandHeight: number): SceneRow {
   const expanded = height >= scene.geo.expandAt;
   const band = expanded ? bandHeight : 0;
+  const numberAlpha = textFade(height * 0.3, DAY_NUMBER_SIZE);
   return {
     index,
     top,
@@ -189,19 +193,18 @@ function rowGeometry(scene: Scene, index: number, top: number, height: number, b
     expanded,
     timeTop: top + band,
     timeHeight: height - band,
-    laneTop: top + PAD,
+    // The header shrinks with the fading numbers, so short rows keep their room for events.
+    laneTop: top + numberAlpha * DAY_HEADER + PAD,
     laneHeight: MAX_LANE,
     lanesShown: 0,
-    numberAlpha: textFade(height * 0.3, DAY_NUMBER_SIZE),
+    numberAlpha,
     days: [],
   };
 }
 
 /** Fits a set of lanes into the row and returns how many lanes fit at all. */
 function fitLanes(row: SceneRow, lanes: Lanes): number {
-  const available = row.expanded
-    ? row.timeTop - row.top - 2 * PAD
-    : row.height - 2 * PAD - (row.numberAlpha ? DAY_NUMBER_SIZE + 4 : 0);
+  const available = (row.expanded ? row.timeTop : row.top + row.height) - row.laneTop - PAD;
   row.laneHeight = clamp(available / Math.max(1, lanes.count), MIN_LANE, MAX_LANE);
   const capacity = Math.max(0, Math.floor(available / row.laneHeight + 1e-6));
   row.lanesShown = lanes.count > capacity ? Math.max(0, capacity - 1) : lanes.count;

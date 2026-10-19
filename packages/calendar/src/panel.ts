@@ -184,9 +184,13 @@ export class CalendarEventPanel extends HTMLElement {
     const reminders = event.reminders ?? [];
     const save = (next: number[]) => this.send("panel-change", { id: event.id, changes: { reminders: next } });
     const unused = REMINDER_PRESETS.find((minutes) => !reminders.includes(minutes));
+    const add =
+      unused !== undefined &&
+      h("button", { part: "panel-add", type: "button", onclick: () => save([...reminders, unused]) }, `+ ${strings.addNotification}`);
+    // Without reminders the section is just its add button, a label and an empty state would only take space.
+    if (!reminders.length) return add;
     return this.section(
       strings.notifications,
-      reminders.length ? null : h("div", { part: "panel-empty" }, strings.noNotifications),
       ...reminders.map((minutes, i) =>
         h(
           "div",
@@ -215,12 +219,7 @@ export class CalendarEventPanel extends HTMLElement {
           ),
         ),
       ),
-      unused !== undefined &&
-        h(
-          "button",
-          { part: "panel-add", type: "button", onclick: () => save([...reminders, unused]) },
-          `+ ${strings.addNotification}`,
-        ),
+      add,
     );
   }
 
@@ -257,18 +256,20 @@ export class CalendarEventPanel extends HTMLElement {
     }
 
     if (data.canEdit && original) {
-      content.push(
-        h("textarea", {
-          part: "panel-description-input",
-          name: "description",
-          value: text,
-          rows: 4,
-          placeholder: strings.addDescription,
-          "aria-label": strings.description,
-          oninput: (e: Event) => this.queue({ description: (e.target as HTMLTextAreaElement).value }, false),
-          onblur: () => this.flush(),
-        }),
-      );
+      const input = h("textarea", {
+        part: "panel-description-input",
+        name: "description",
+        value: text,
+        // Grows with its content through `field-sizing`, rows only matter where that isn't supported.
+        rows: text ? 4 : 1,
+        placeholder: strings.addDescription,
+        "aria-label": strings.description,
+        oninput: (e: Event) => this.queue({ description: (e.target as HTMLTextAreaElement).value }, false),
+        onblur: () => this.flush(),
+      });
+      // An empty description is just its field, the placeholder already says what it is for.
+      if (!text && !content.length) return input;
+      content.push(input);
     } else if (original) {
       const long = text.length > LONG_DESCRIPTION || text.split("\n").length > LONG_LINES;
       content.push(h("div", { part: "panel-description", "data-clamped": long && !this.expanded }, text));

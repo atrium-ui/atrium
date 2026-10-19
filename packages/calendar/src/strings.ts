@@ -29,7 +29,6 @@ export const defaultStrings = {
   organizer: "Organizer",
   participants: "Participants",
   notifications: "Notifications",
-  noNotifications: "No notifications set",
   addNotification: "Add notification",
   removeNotification: "Remove notification",
   atStart: "At start of event",

@@ -1,5 +1,5 @@
 import type { CalendarModel, Preview } from "./model.ts";
-import { DAY_NUMBER_SIZE, type EventBox, type MoreBox, type Scene, type SceneRow, textFade } from "./scene.ts";
+import { DAY_HEADER, DAY_NUMBER_SIZE, type EventBox, MONTH_HEADING_SIZE, type MoreBox, type Scene, type SceneRow, textFade } from "./scene.ts";
 import type { Strings } from "./strings.ts";
 import { contrastText, type Theme } from "./theme.ts";
 import { clamp, dateOf, weekNumber, weekOf } from "./time.ts";
@@ -166,10 +166,11 @@ function drawLines({ ctx, scene, theme }: Paint, row: SceneRow) {
   ctx.stroke();
 }
 
-function drawDayNumbers({ ctx, theme, model }: Paint, row: SceneRow) {
+/** Right aligned in the header of the row, so they don't collide with the month heading on the left. */
+function drawDayNumbers({ ctx, scene, theme, model }: Paint, row: SceneRow) {
   if (!row.numberAlpha) return;
   const size = DAY_NUMBER_SIZE;
-  const y = row.top + row.height - size - 7;
+  const y = row.top + (DAY_HEADER - size - 6) / 2;
   ctx.save();
   ctx.globalAlpha = row.numberAlpha;
   for (const day of row.days) {
@@ -177,11 +178,12 @@ function drawDayNumbers({ ctx, theme, model }: Paint, row: SceneRow) {
     const first = date.getDate() === 1;
     const text = first ? model.formats.monthDay(date) : model.formats.dayNumber(date);
     ctx.font = `${first || day.today ? 700 : 500} ${size}px ${theme.font}`;
-    if (day.today) pill(ctx, text, day.x + 3, y, size, theme.accent, theme.accentText);
+    const x = day.x + scene.geo.colWidth - 3 - ctx.measureText(text).width - size;
+    if (day.today) pill(ctx, text, x, y, size, theme.accent, theme.accentText);
     else {
       ctx.fillStyle = first ? theme.text : theme.textDim;
       ctx.textBaseline = "middle";
-      ctx.fillText(text, day.x + 3 + size / 2, y + (size + 6) / 2 + 0.5);
+      ctx.fillText(text, x + size / 2, y + (size + 6) / 2 + 0.5);
     }
   }
   ctx.restore();
@@ -209,14 +211,18 @@ function drawNow(paint: Paint) {
   }
 }
 
-/** The month heading of the top row sticks until the next month's heading pushes it away. */
+/**
+ * The month heading of the top row sticks until the next month's heading pushes it away. It is
+ * centered in the day header and fully covers the day numbers below it.
+ */
 function drawMonthHeadings(paint: Paint) {
   const { ctx, scene, theme, model } = paint;
   const rows = scene.rows.filter((row) => row.week !== null);
   const top = rows[0];
   if (!top) return;
-  const size = 11;
+  const size = MONTH_HEADING_SIZE;
   const height = size + 6;
+  const inset = (DAY_HEADER - height) / 2;
   const marks = rows.flatMap((row) =>
     row.days.filter((day) => dateOf(day.day).getDate() === 1 && row.top > 0).map((day) => ({ y: row.top, day: day.day })),
   );
@@ -224,9 +230,9 @@ function drawMonthHeadings(paint: Paint) {
   const sticky = { y: Math.min(0, next ? next.y - height - 8 : 0), day: top.start + 6 };
   ctx.save();
   clipColumns(paint);
-  ctx.font = `600 ${size}px ${theme.font}`;
+  ctx.font = `700 ${size}px ${theme.font}`;
   for (const mark of [sticky, ...marks]) {
-    pill(ctx, model.formats.monthYear(dateOf(mark.day)), scene.geo.gutter + 6, mark.y + 4, size, theme.headingBg, theme.text);
+    pill(ctx, model.formats.monthYear(dateOf(mark.day)), scene.geo.gutter + 3, mark.y + inset, size, theme.headingBg, theme.text);
   }
   ctx.restore();
 }

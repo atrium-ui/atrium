@@ -65,7 +65,7 @@ export const CalendarExample = defineComponent(() => {
   };
 
   return () => (
-    <div class="w-full overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
+    <div class="w-full overflow-hidden rounded-xl border border-zinc-200 text-zinc-900 dark:border-zinc-800 dark:text-zinc-100">
       <div class="flex flex-wrap items-center gap-2 border-zinc-200 border-b bg-zinc-50 px-3 py-2 dark:border-zinc-800 dark:bg-zinc-900">
         <button
           type="button"
@@ -97,7 +97,7 @@ export const CalendarExample = defineComponent(() => {
           type="search"
           placeholder="Filter events…"
           aria-label="Filter events"
-          class="h-8 w-40 rounded-md border border-zinc-200 bg-white px-3 text-sm dark:border-zinc-700 dark:bg-zinc-800"
+          class="h-8 w-40 rounded-md border border-zinc-200 bg-white px-3 text-sm placeholder:text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800 dark:placeholder:text-zinc-500"
           onInput={(e: Event) => {
             if (calendar.value) calendar.value.filter = (e.target as HTMLInputElement).value;
           }}

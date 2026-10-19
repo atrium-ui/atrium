@@ -275,7 +275,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   flex: 1; height: 28px; padding: 0 6px;
   border: 1px solid var(--cal-border); border-radius: 6px; background: var(--cal-surface);
 }
-[part~="panel-empty"], [part~="panel-notice"] { font-size: 12px; color: var(--cal-text-dim); }
+[part~="panel-notice"] { font-size: 12px; color: var(--cal-text-dim); }
 [part~="panel-notice"] { padding: 6px 8px; border-radius: 6px; background: var(--cal-surface); }
 [part~="panel-add"] {
   align-self: flex-start; padding: 2px 0;
@@ -287,7 +287,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 6; line-clamp: 6; overflow: hidden;
 }
 [part~="panel-description-input"] {
-  width: 100%; min-height: 80px; padding: 6px 8px; resize: vertical;
+  width: 100%; padding: 6px 8px; resize: vertical;
   border: 1px solid var(--cal-border); border-radius: 6px; background: var(--cal-surface);
   field-sizing: content; max-height: 260px;
 }
