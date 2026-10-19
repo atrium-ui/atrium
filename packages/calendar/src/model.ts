@@ -3,6 +3,7 @@ import { isCalendarData, toICS } from "./ics.ts";
 import { isBanded, layoutWeek, type WeekLayout } from "./layout.ts";
 import type { PanelData } from "./panel.ts";
 import { filterRows, type Row, Rows } from "./rows.ts";
+import { bandHeight } from "./scene.ts";
 import { defaultStrings, type Strings } from "./strings.ts";
 import {
   clamp,
@@ -29,7 +30,8 @@ export const MIN_ZOOM = 0.25;
 export const MAX_ZOOM = 8;
 export const TODAY_ZOOM = 1.5;
 export const DEFAULT_ZOOM = 5;
-export const BAND_RATIO = 0.15;
+/** The all-day band never takes more than this share of a row. */
+const MAX_BAND_RATIO = 0.4;
 export const SNAP_MINUTES = 15;
 export const MAX_IMPORT_BYTES = 10 * 1024 * 1024;
 const FILTER_CONTEXT = 2;
@@ -478,9 +480,16 @@ export class CalendarModel {
     return this.animation !== null || this.velocity !== 0;
   }
 
-  /** Fraction of an expanded row at a time of day. */
-  rowFraction(minutes: number) {
-    return BAND_RATIO + ((1 - BAND_RATIO) * minutes) / 1440;
+  /** Pixel height of the all-day band of an expanded row, as tall as the lanes of its week need. */
+  bandHeight(week: number, rowHeight = this.rowHeight) {
+    return Math.min(bandHeight(this.layout(week).band.count), rowHeight * MAX_BAND_RATIO);
+  }
+
+  /** Fraction of an expanded row at a time of day, at `zoom`. */
+  rowFraction(week: number, minutes: number, zoom: number) {
+    const height = Math.max(1, this.height / zoom);
+    const band = this.bandHeight(week, height);
+    return (band + ((height - band) * minutes) / 1440) / height;
   }
 
   /** Keeps the view inside the rows; within a date range the viewport never shows weeks outside of it. */
@@ -584,7 +593,8 @@ export class CalendarModel {
 
   goToday() {
     const now = new Date();
-    this.animateTo(weekOf(dayOf(now), this.firstDay) + this.rowFraction(minutesOf(now)), TODAY_ZOOM);
+    const week = weekOf(dayOf(now), this.firstDay);
+    this.animateTo(week + this.rowFraction(week, minutesOf(now), TODAY_ZOOM), TODAY_ZOOM);
   }
 
   goMonth() {
@@ -596,7 +606,8 @@ export class CalendarModel {
   }
 
   goTo(date: Date) {
-    this.animateTo(weekOf(dayOf(date), this.firstDay) + this.rowFraction(minutesOf(date)), this.zoom);
+    const week = weekOf(dayOf(date), this.firstDay);
+    this.animateTo(week + this.rowFraction(week, minutesOf(date), this.zoom), this.zoom);
   }
 
   zoomToWeek(week: number) {

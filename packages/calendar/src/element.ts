@@ -1,7 +1,7 @@
 import { h, isTyping } from "./dom.ts";
 import { isCalendarData } from "./ics.ts";
 import { PointerController } from "./interactions.ts";
-import { BAND_RATIO, type BusynessMode, CalendarModel, MAX_IMPORT_BYTES } from "./model.ts";
+import { type BusynessMode, CalendarModel, MAX_IMPORT_BYTES } from "./model.ts";
 import { defaultLayers, drawStrip, type Layer, type Paint } from "./paint.ts";
 import type { CalendarEventPanel } from "./panel.ts";
 import { anchorOf, buildScene, type Geometry, type Scene } from "./scene.ts";
@@ -560,7 +560,6 @@ export class CalendarView extends HTMLElement {
       colsX: theme.gutterWidth - model.scrollX,
       scrollTop: model.scrollTop,
       expandAt: model.expandAt,
-      bandRatio: BAND_RATIO,
     };
   }
 

@@ -14,7 +14,6 @@ export interface Geometry {
   colsX: number;
   scrollTop: number;
   expandAt: number;
-  bandRatio: number;
 }
 
 export type Area = "band" | "time" | "stack";
@@ -108,6 +107,11 @@ const EDGE = 6;
 
 export const DAY_NUMBER_SIZE = 12;
 
+/** Height of an all-day band with `lanes` lanes; an empty band keeps one lane to create events in. */
+export function bandHeight(lanes: number) {
+  return Math.max(1, lanes) * MAX_LANE + 2 * PAD;
+}
+
 /** Text never scales: it fades out between 6px and its full `size` of available `space`. */
 export function textFade(space: number, size: number) {
   return clamp((space - 6) / (size - 6), 0, 1);
@@ -133,7 +137,8 @@ export function buildScene(model: CalendarModel, geo: Geometry, now: Date): Scen
   const end = Math.min(rows.end, Math.ceil(bottom));
   for (let i = first; i < end; i++) {
     const row = rows.row(i);
-    const sceneRow = rowGeometry(scene, i, rows.unitToPx(i) - geo.scrollTop, rows.heightOf(i));
+    const band = row.kind === "week" ? model.bandHeight(row.week) : 0;
+    const sceneRow = rowGeometry(scene, i, rows.unitToPx(i) - geo.scrollTop, rows.heightOf(i), band);
     if (row.kind === "gap") {
       sceneRow.gapWeeks = row.weeks;
       scene.rows.push(sceneRow);
@@ -171,10 +176,9 @@ export function buildScene(model: CalendarModel, geo: Geometry, now: Date): Scen
   return scene;
 }
 
-function rowGeometry(scene: Scene, index: number, top: number, height: number): SceneRow {
-  const { geo } = scene;
-  const expanded = height >= geo.expandAt;
-  const band = expanded ? height * geo.bandRatio : 0;
+function rowGeometry(scene: Scene, index: number, top: number, height: number, bandHeight: number): SceneRow {
+  const expanded = height >= scene.geo.expandAt;
+  const band = expanded ? bandHeight : 0;
   return {
     index,
     top,
@@ -318,13 +322,14 @@ export function locateUnit(model: CalendarModel, geo: Geometry, unit: number, cx
   const day = weekStart(row.week, model.firstDay) + col;
   if (!model.inRange(day)) return null;
   const expanded = rows.rowHeight >= geo.expandAt;
-  const area: Area = !expanded ? "stack" : fraction < geo.bandRatio ? "band" : "time";
+  const band = model.bandHeight(row.week) / rows.rowHeight;
+  const area: Area = !expanded ? "stack" : fraction < band ? "band" : "time";
   return {
     week: row.week,
     col,
     day,
     area,
-    minutes: area === "time" ? clamp(((fraction - geo.bandRatio) / (1 - geo.bandRatio)) * 1440, 0, 1440) : 0,
+    minutes: area === "time" ? clamp(((fraction - band) / (1 - band)) * 1440, 0, 1440) : 0,
   };
 }
 
