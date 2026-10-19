@@ -16,6 +16,7 @@
     "@astrojs/tailwind": "^6.0.2",
     "@astrojs/vue": "6.0.0-beta.0",
     "@atrium-ui/animation": "workspace:*",
+    "@atrium-ui/calendar": "workspace:*",
     "@atrium-ui/astro-stories": "workspace:*",
     "@atrium-ui/components": "workspace:*",
     "@atrium-ui/elements": "workspace:*",

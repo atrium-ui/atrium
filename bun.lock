@@ -28,6 +28,7 @@
         "@astrojs/vue": "6.0.0-beta.0",
         "@atrium-ui/animation": "workspace:*",
         "@atrium-ui/astro-stories": "workspace:*",
+        "@atrium-ui/calendar": "workspace:*",
         "@atrium-ui/components": "workspace:*",
         "@atrium-ui/elements": "workspace:*",
         "@atrium-ui/icons": "workspace:*",
@@ -74,7 +75,7 @@
     },
     "packages/animation": {
       "name": "@atrium-ui/animation",
-      "version": "0.2.5",
+      "version": "0.2.6",
       "dependencies": {
         "@rive-app/canvas-advanced-lite": "2.23.3",
         "lit": "^3.1.3",
@@ -94,9 +95,13 @@
         "vue": "^3.5.13",
       },
     },
+    "packages/calendar": {
+      "name": "@atrium-ui/calendar",
+      "version": "0.1.0",
+    },
     "packages/charts": {
       "name": "@atrium-ui/charts",
-      "version": "0.2.5",
+      "version": "0.2.6",
       "dependencies": {
         "chart.js": "^4.4.3",
         "lit": "^3.1.3",
@@ -104,7 +109,7 @@
     },
     "packages/components": {
       "name": "@atrium-ui/components",
-      "version": "1.12.0",
+      "version": "1.13.0",
       "bin": "./bin/cli.js",
       "dependencies": {
         "chalk": "^5.3.0",
@@ -129,7 +134,7 @@
     },
     "packages/elements": {
       "name": "@atrium-ui/elements",
-      "version": "5.4.0",
+      "version": "5.5.0",
       "dependencies": {
         "@atrium-ui/scroll-lock": "^1.1.1",
         "@floating-ui/dom": "^1.6.7",
@@ -146,7 +151,7 @@
     },
     "packages/icons": {
       "name": "@atrium-ui/icons",
-      "version": "1.4.0",
+      "version": "1.4.1",
     },
     "packages/kits": {
       "name": "@atrium-ui/kits",
@@ -158,7 +163,7 @@
     },
     "packages/panels": {
       "name": "@atrium-ui/panels",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "devDependencies": {
         "tsup": "^8.2.4",
         "typescript": "^5.5.4",
@@ -189,11 +194,11 @@
     },
     "packages/scroll-lock": {
       "name": "@atrium-ui/scroll-lock",
-      "version": "1.4.0",
+      "version": "1.4.1",
     },
     "packages/svg-sprites": {
       "name": "@atrium-ui/svg-sprites",
-      "version": "0.5.8",
+      "version": "0.5.9",
       "dependencies": {
         "chokidar": "^4.0.3",
         "fast-glob": "^3.3.2",
@@ -258,6 +263,8 @@
     "@atrium-ui/animation": ["@atrium-ui/animation@workspace:packages/animation"],
 
     "@atrium-ui/astro-stories": ["@atrium-ui/astro-stories@workspace:packages/astro-stories"],
+
+    "@atrium-ui/calendar": ["@atrium-ui/calendar@workspace:packages/calendar"],
 
     "@atrium-ui/charts": ["@atrium-ui/charts@workspace:packages/charts"],
 
