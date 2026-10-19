@@ -1,6 +1,6 @@
 import { isBanded, type Lanes, layoutWeek } from "./layout.ts";
 import type { CalendarModel } from "./model.ts";
-import { clamp, dayOf, isWeekend, lastDayOf, minutesOf, weekdayOf, weekOf, weekStart } from "./time.ts";
+import { clamp, dateOf, dayOf, isWeekend, lastDayOf, minutesOf, weekdayOf, weekOf, weekStart } from "./time.ts";
 import type { CalendarEvent } from "./types.ts";
 
 /** Screen geometry of the calendar body for one frame. */
@@ -14,6 +14,8 @@ export interface Geometry {
   colsX: number;
   scrollTop: number;
   expandAt: number;
+  /** Root font size in px. */
+  rem: number;
 }
 
 export type Area = "band" | "time" | "stack";
@@ -44,6 +46,8 @@ export interface SceneRow {
   laneTop: number;
   laneHeight: number;
   lanesShown: number;
+  /** Bottom of the strip with the day numbers: the end of the all-day band, or of a collapsed row. */
+  numbersBottom: number;
   /** Opacity of the day numbers, they fade out instead of shrinking in short rows. */
   numberAlpha: number;
   days: SceneDay[];
@@ -102,20 +106,28 @@ export type Hit =
 
 const PAD = 2;
 const MIN_LANE = 4;
-const MAX_LANE = 18;
 const EDGE = 6;
 
-export const DAY_NUMBER_SIZE = 12;
-export const MONTH_HEADING_SIZE = 16;
-/** Strip at the top of a row that holds the day numbers and month headings, above the events of that week. */
-export const DAY_HEADER = MONTH_HEADING_SIZE + 10;
+// Sizes of text and the space that holds it are in rem, so they follow the user's font size.
+const MAX_LANE = 1.125;
+export const DAY_NUMBER_SIZE = 0.75;
+export const MONTH_HEADING_SIZE = 1;
+/** Strip below the events of a week that holds its day numbers, right above the days' time area. */
+export const DAY_NUMBERS = DAY_NUMBER_SIZE + 0.75;
+/** Strip above the events of a week that starts a month, it holds the month heading. */
+export const MONTH_HEADER = MONTH_HEADING_SIZE + 1;
 
-/** Height of an all-day band with `lanes` lanes; an empty band keeps one lane to create events in. */
-export function bandHeight(lanes: number) {
-  return DAY_HEADER + Math.max(1, lanes) * MAX_LANE + 2 * PAD;
+/** Height in px of an all-day band with `lanes` lanes; an empty band keeps one lane to create events in. */
+export function bandHeight(lanes: number, monthStart: boolean, rem: number) {
+  return ((monthStart ? MONTH_HEADER : 0) + Math.max(1, lanes) * MAX_LANE + DAY_NUMBERS) * rem + 2 * PAD;
 }
 
-/** Text never scales: it fades out between 6px and its full `size` of available `space`. */
+/** The week starting on `firstDay` contains the first day of a month. */
+export function startsMonth(firstDay: number) {
+  return Array.from({ length: 7 }, (_, col) => dateOf(firstDay + col).getDate()).includes(1);
+}
+
+/** Text never scales with the zoom: it fades out between 6px and its full `size` of available `space`. */
 export function textFade(space: number, size: number) {
   return clamp((space - 6) / (size - 6), 0, 1);
 }
@@ -140,15 +152,17 @@ export function buildScene(model: CalendarModel, geo: Geometry, now: Date): Scen
   const end = Math.min(rows.end, Math.ceil(bottom));
   for (let i = first; i < end; i++) {
     const row = rows.row(i);
-    const band = row.kind === "week" ? model.bandHeight(row.week) : 0;
-    const sceneRow = rowGeometry(scene, i, rows.unitToPx(i) - geo.scrollTop, rows.heightOf(i), band);
+    const top = rows.unitToPx(i) - geo.scrollTop;
     if (row.kind === "gap") {
+      const sceneRow = rowGeometry(scene, i, top, rows.heightOf(i), 0, false);
       sceneRow.gapWeeks = row.weeks;
       scene.rows.push(sceneRow);
       continue;
     }
+    const start = weekStart(row.week, model.firstDay);
+    const sceneRow = rowGeometry(scene, i, top, rows.heightOf(i), model.bandHeight(row.week), startsMonth(start));
     sceneRow.week = row.week;
-    sceneRow.start = weekStart(row.week, model.firstDay);
+    sceneRow.start = start;
     sceneRow.days = Array.from({ length: 7 }, (_, col) => {
       const day = sceneRow.start + col;
       return {
@@ -179,10 +193,13 @@ export function buildScene(model: CalendarModel, geo: Geometry, now: Date): Scen
   return scene;
 }
 
-function rowGeometry(scene: Scene, index: number, top: number, height: number, bandHeight: number): SceneRow {
+function rowGeometry(scene: Scene, index: number, top: number, height: number, bandHeight: number, monthStart: boolean): SceneRow {
+  const { rem } = scene.geo;
   const expanded = height >= scene.geo.expandAt;
   const band = expanded ? bandHeight : 0;
-  const numberAlpha = textFade(height * 0.3, DAY_NUMBER_SIZE);
+  const numberAlpha = textFade(height * 0.3, DAY_NUMBER_SIZE * rem);
+  // The strips shrink with the fading numbers, so short rows keep their room for events.
+  const header = monthStart ? numberAlpha * MONTH_HEADER * rem : 0;
   return {
     index,
     top,
@@ -193,19 +210,19 @@ function rowGeometry(scene: Scene, index: number, top: number, height: number, b
     expanded,
     timeTop: top + band,
     timeHeight: height - band,
-    // The header shrinks with the fading numbers, so short rows keep their room for events.
-    laneTop: top + numberAlpha * DAY_HEADER + PAD,
-    laneHeight: MAX_LANE,
+    laneTop: top + header + PAD,
+    laneHeight: MAX_LANE * rem,
     lanesShown: 0,
+    numbersBottom: expanded ? top + band : top + height,
     numberAlpha,
     days: [],
   };
 }
 
 /** Fits a set of lanes into the row and returns how many lanes fit at all. */
-function fitLanes(row: SceneRow, lanes: Lanes): number {
-  const available = (row.expanded ? row.timeTop : row.top + row.height) - row.laneTop - PAD;
-  row.laneHeight = clamp(available / Math.max(1, lanes.count), MIN_LANE, MAX_LANE);
+function fitLanes(row: SceneRow, lanes: Lanes, rem: number): number {
+  const available = row.numbersBottom - row.numberAlpha * DAY_NUMBERS * rem - row.laneTop - PAD;
+  row.laneHeight = clamp(available / Math.max(1, lanes.count), MIN_LANE, MAX_LANE * rem);
   const capacity = Math.max(0, Math.floor(available / row.laneHeight + 1e-6));
   row.lanesShown = lanes.count > capacity ? Math.max(0, capacity - 1) : lanes.count;
   return capacity;
@@ -236,7 +253,7 @@ function addEvents(model: CalendarModel, scene: Scene, row: SceneRow) {
   const layout = model.layout(week);
   const lanes = row.expanded ? layout.band : layout.stack;
   const area: Area = row.expanded ? "band" : "stack";
-  const capacity = fitLanes(row, lanes);
+  const capacity = fitLanes(row, lanes, geo.rem);
   const hidden = [0, 0, 0, 0, 0, 0, 0];
 
   for (const bar of lanes.bars) scene.visible.add(bar.event.id);

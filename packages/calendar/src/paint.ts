@@ -1,5 +1,5 @@
 import type { CalendarModel, Preview } from "./model.ts";
-import { DAY_HEADER, DAY_NUMBER_SIZE, type EventBox, MONTH_HEADING_SIZE, type MoreBox, type Scene, type SceneRow, textFade } from "./scene.ts";
+import { DAY_NUMBER_SIZE, DAY_NUMBERS, type EventBox, MONTH_HEADER, MONTH_HEADING_SIZE, type MoreBox, type Scene, type SceneRow, textFade } from "./scene.ts";
 import type { Strings } from "./strings.ts";
 import { contrastText, type Theme } from "./theme.ts";
 import { clamp, dateOf, weekNumber, weekOf } from "./time.ts";
@@ -41,6 +41,9 @@ const crisp = (v: number) => Math.round(v) + 0.5;
 const hourStep = (perHour: number, gap: number, steps: number[]) => steps.find((step) => step * perHour >= gap) ?? 6;
 const LINE_STEPS = [1, 2, 4, 6];
 const LABEL_STEPS = [1, 2, 3, 6];
+
+/** 0 while rows are collapsed, 1 once they are tall enough to show their hours. */
+const hoursAlpha = ({ scene, model }: Paint) => clamp((model.rowHeight - scene.geo.expandAt) / (scene.geo.expandAt * 0.8), 0, 1);
 
 const fitted = new Map<string, string>();
 
@@ -102,7 +105,7 @@ function drawGap({ ctx, scene, theme, model }: Paint, row: SceneRow) {
   hline(ctx, geo.gutter, geo.width - geo.strip, y);
   ctx.stroke();
   ctx.setLineDash([]);
-  ctx.font = `500 11px ${theme.font}`;
+  ctx.font = `500 ${0.6875 * geo.rem}px ${theme.font}`;
   const text = model.strings.hiddenWeeks(row.gapWeeks);
   const w = ctx.measureText(text).width + 16;
   const x = geo.gutter + (geo.width - geo.gutter - geo.strip - w) / 2;
@@ -150,11 +153,8 @@ function drawLines({ ctx, scene, theme }: Paint, row: SceneRow) {
     ctx.beginPath();
     hline(ctx, left, right, row.timeTop + 12 * perHour);
     ctx.stroke();
-    ctx.strokeStyle = theme.bandLine;
-    ctx.beginPath();
-    hline(ctx, left, right, row.timeTop);
-    ctx.stroke();
   }
+  // The band and the time area of a week only get a faint divider, the weeks are set apart by a stronger line.
   ctx.strokeStyle = theme.line;
   ctx.beginPath();
   for (let col = 1; col < 7; col++) {
@@ -162,15 +162,24 @@ function drawLines({ ctx, scene, theme }: Paint, row: SceneRow) {
     ctx.moveTo(x, row.top);
     ctx.lineTo(x, row.top + row.height);
   }
-  hline(ctx, left, right, row.top + row.height - 1);
+  if (row.expanded) hline(ctx, left, right, row.timeTop);
+  else hline(ctx, left, right, row.top + row.height - 1);
   ctx.stroke();
+  if (row.expanded) {
+    ctx.strokeStyle = theme.bandLine;
+    ctx.beginPath();
+    hline(ctx, left, right, row.top + row.height - 1);
+    ctx.stroke();
+  }
 }
 
-/** Right aligned in the header of the row, so they don't collide with the month heading on the left. */
+/** Bottom right of the week's events, right above the time area of the days and clear of the month heading. */
 function drawDayNumbers({ ctx, scene, theme, model }: Paint, row: SceneRow) {
   if (!row.numberAlpha) return;
-  const size = DAY_NUMBER_SIZE;
-  const y = row.top + (DAY_HEADER - size - 6) / 2;
+  const size = DAY_NUMBER_SIZE * scene.geo.rem;
+  const strip = DAY_NUMBERS * scene.geo.rem;
+  // Sits at the top of its strip, the rest is room to the line below.
+  const y = row.numbersBottom - strip + 2;
   ctx.save();
   ctx.globalAlpha = row.numberAlpha;
   for (const day of row.days) {
@@ -212,17 +221,18 @@ function drawNow(paint: Paint) {
 }
 
 /**
- * The month heading of the top row sticks until the next month's heading pushes it away. It is
- * centered in the day header and fully covers the day numbers below it.
+ * The month heading of the top row sticks until the next month's heading pushes it away. Weeks that
+ * start a month reserve a header for it above their events. The sticky one has no space of its own,
+ * so it fades out while the hours fade in, where it would only cover them.
  */
 function drawMonthHeadings(paint: Paint) {
   const { ctx, scene, theme, model } = paint;
   const rows = scene.rows.filter((row) => row.week !== null);
   const top = rows[0];
   if (!top) return;
-  const size = MONTH_HEADING_SIZE;
+  const size = MONTH_HEADING_SIZE * scene.geo.rem;
   const height = size + 6;
-  const inset = (DAY_HEADER - height) / 2;
+  const inset = (MONTH_HEADER * scene.geo.rem - height) / 2;
   const marks = rows.flatMap((row) =>
     row.days.filter((day) => dateOf(day.day).getDate() === 1 && row.top > 0).map((day) => ({ y: row.top, day: day.day })),
   );
@@ -231,25 +241,30 @@ function drawMonthHeadings(paint: Paint) {
   ctx.save();
   clipColumns(paint);
   ctx.font = `700 ${size}px ${theme.font}`;
-  for (const mark of [sticky, ...marks]) {
-    pill(ctx, model.formats.monthYear(dateOf(mark.day)), scene.geo.gutter + 3, mark.y + inset, size, theme.headingBg, theme.text);
-  }
+  // Only the sticky heading floats over events and needs a backdrop, the others sit in their own header.
+  const draw = (mark: { y: number; day: number }, backdrop: string) =>
+    pill(ctx, model.formats.monthYear(dateOf(mark.day)), scene.geo.gutter + 3, mark.y + inset, size, backdrop, theme.text);
+  ctx.globalAlpha = 1 - hoursAlpha(paint);
+  if (ctx.globalAlpha) draw(sticky, theme.headingBg);
+  ctx.globalAlpha = 1;
+  for (const mark of marks) draw(mark, "transparent");
   ctx.restore();
 }
 
-function drawGutter({ ctx, scene, theme, model }: Paint) {
+function drawGutter(paint: Paint) {
+  const { ctx, scene, theme, model } = paint;
   const { geo } = scene;
   if (geo.gutter <= 0) return;
   ctx.fillStyle = theme.gutter;
   ctx.fillRect(0, 0, geo.gutter, geo.height);
   ctx.fillStyle = theme.line;
   ctx.fillRect(geo.gutter - 1, 0, 1, geo.height);
-  const hours = clamp((model.rowHeight - geo.expandAt) / (geo.expandAt * 0.8), 0, 1);
+  const hours = hoursAlpha(paint);
   const thisWeek = weekOf(scene.today, scene.firstDay);
   ctx.textBaseline = "middle";
   for (const row of scene.rows) {
     if (row.week === null) continue;
-    const size = 11;
+    const size = 0.6875 * geo.rem;
     const fade = textFade(row.height * 0.6, size);
     if (hours < 1 && fade > 0) {
       const current = row.week === thisWeek;
@@ -261,23 +276,24 @@ function drawGutter({ ctx, scene, theme, model }: Paint) {
     }
     if (hours > 0 && row.expanded) {
       const perHour = row.timeHeight / 24;
-      const step = hourStep(perHour, 16, LABEL_STEPS);
+      const step = hourStep(perHour, geo.rem, LABEL_STEPS);
       const nowY = row.days.some((day) => day.today) ? row.timeTop + (scene.nowMinutes / 1440) * row.timeHeight : null;
       ctx.globalAlpha = hours;
-      ctx.font = `500 10px ${theme.font}`;
+      ctx.font = `500 ${0.625 * geo.rem}px ${theme.font}`;
       ctx.fillStyle = theme.textFaint;
       ctx.textAlign = "right";
       for (let hour = step; hour < 24; hour += step) {
         const y = row.timeTop + hour * perHour;
-        if (nowY !== null && Math.abs(nowY - y) < 10) continue;
+        if (nowY !== null && Math.abs(nowY - y) < 0.625 * geo.rem) continue;
         ctx.fillText(model.formats.hour(hour), geo.gutter - 6, y);
       }
       if (nowY !== null) {
-        ctx.font = `700 10px ${theme.font}`;
+        ctx.font = `700 ${0.625 * geo.rem}px ${theme.font}`;
         ctx.textAlign = "left";
         const text = model.formats.time(new Date());
-        const w = ctx.measureText(text).width + 8;
-        pill(ctx, text, Math.max(2, geo.gutter - w - 3), nowY - 8, 8, theme.now, theme.bg);
+        const size = 0.5 * geo.rem;
+        const w = ctx.measureText(text).width + size;
+        pill(ctx, text, Math.max(2, geo.gutter - w - 3), nowY - (size + 6) / 2, size, theme.now, theme.bg);
       }
     }
   }
@@ -301,7 +317,7 @@ export const gridLayer: Layer = {
     }
     if (!paint.scene.rows.length && paint.model.filter) {
       const { ctx, scene, theme, model } = paint;
-      ctx.font = `500 13px ${theme.font}`;
+      ctx.font = `500 ${0.8125 * scene.geo.rem}px ${theme.font}`;
       ctx.fillStyle = theme.textDim;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
@@ -446,10 +462,10 @@ function drawEvent(paint: Paint, box: EventBox, look: Look, label: string | null
   ctx.restore();
 }
 
-function drawEventText({ ctx, theme, model }: Paint, box: EventBox, look: Look, label: string | null) {
+function drawEventText({ ctx, scene, theme, model }: Paint, box: EventBox, look: Look, label: string | null) {
   if (!box.label) return;
   const vertical = box.area === "time";
-  const size = 12;
+  const size = 0.75 * scene.geo.rem;
   const fade = textFade(vertical ? box.h - 4 : box.h * 0.72, size);
   if (!fade || box.w < 18) return;
   ctx.globalAlpha *= fade;
@@ -474,8 +490,8 @@ function drawEventText({ ctx, theme, model }: Paint, box: EventBox, look: Look, 
   ctx.fillText(fit(ctx, second, max), x, box.y + 5 + size);
 }
 
-function drawMore({ ctx, theme, model }: Paint, more: MoreBox) {
-  const size = 11;
+function drawMore({ ctx, scene, theme, model }: Paint, more: MoreBox) {
+  const size = 0.6875 * scene.geo.rem;
   const fade = textFade(more.h * 0.8, size);
   if (!fade) {
     ctx.fillStyle = theme.textFaint;

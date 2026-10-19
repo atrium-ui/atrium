@@ -28,13 +28,21 @@ const COLORS = {
 const NUMBERS = {
   eventAlpha: "--cal-event-alpha",
   busyAlpha: "--cal-busy-alpha",
+} as const;
+
+/** Lengths in `rem` or `px`, read in px for the canvas. */
+const LENGTHS = {
   eventRadius: "--cal-event-radius",
   gutterWidth: "--cal-gutter-width",
   stripWidth: "--cal-strip-width",
 } as const;
 
 export type Theme = Record<keyof typeof COLORS, string> &
-  Record<keyof typeof NUMBERS, number> & { stripe: CanvasPattern };
+  Record<keyof typeof NUMBERS | keyof typeof LENGTHS, number> & {
+    stripe: CanvasPattern;
+    /** Root font size in px, all text and the space it needs is sized in multiples of it. */
+    rem: number;
+  };
 
 /** Reads the theme tokens of the element so the canvas follows the same CSS variables as the DOM. */
 export function readTheme(element: Element): Theme {
@@ -44,14 +52,22 @@ export function readTheme(element: Element): Theme {
     if (!value) throw new Error(`calendar: CSS variable ${name} is not set`);
     return value;
   };
+  const number = (name: string, value: string) => {
+    const result = Number.parseFloat(value);
+    if (Number.isNaN(result)) throw new Error(`calendar: CSS variable ${name} is not a number`);
+    return result;
+  };
+  const rem = number("font-size", getComputedStyle(document.documentElement).fontSize);
   const theme = {} as Record<string, string | number>;
   for (const [key, name] of Object.entries(COLORS)) theme[key] = read(name);
-  for (const [key, name] of Object.entries(NUMBERS)) {
-    const value = Number.parseFloat(read(name));
-    if (Number.isNaN(value)) throw new Error(`calendar: CSS variable ${name} is not a number`);
-    theme[key] = value;
+  for (const [key, name] of Object.entries(NUMBERS)) theme[key] = number(name, read(name));
+  for (const [key, name] of Object.entries(LENGTHS)) {
+    const value = read(name);
+    if (value.endsWith("rem")) theme[key] = number(name, value) * rem;
+    else if (value.endsWith("px") || value === "0") theme[key] = number(name, value);
+    else throw new Error(`calendar: CSS variable ${name} must be a length in rem or px`);
   }
-  return { ...(theme as Omit<Theme, "stripe">), stripe: stripes(theme.stripeColor as string) };
+  return { ...(theme as Omit<Theme, "stripe" | "rem">), stripe: stripes(theme.stripeColor as string), rem };
 }
 
 function stripes(color: string): CanvasPattern {

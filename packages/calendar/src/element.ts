@@ -338,7 +338,7 @@ export class CalendarView extends HTMLElement {
     const media = matchMedia("(prefers-color-scheme: dark)");
     const onMedia = () => this.invalidateTheme();
     media.addEventListener("change", onMedia);
-    const narrow = matchMedia("(max-width: 640px)");
+    const narrow = matchMedia("(max-width: 40rem)");
     narrow.addEventListener("change", onMedia);
     const mutations = new MutationObserver(() => this.invalidateTheme());
     mutations.observe(document.documentElement, { attributes: true, attributeFilter: ["class", "style", "data-theme"] });
@@ -544,6 +544,7 @@ export class CalendarView extends HTMLElement {
     const { clientWidth, clientHeight } = this.ui.body;
     const theme = this.themeTokens();
     this.size = { width: clientWidth, height: clientHeight };
+    this.model.setRem(theme.rem);
     this.model.setViewport(Math.max(0, clientWidth - theme.gutterWidth - theme.stripWidth), clientHeight);
     this.requestFrame();
   }
@@ -560,6 +561,7 @@ export class CalendarView extends HTMLElement {
       colsX: theme.gutterWidth - model.scrollX,
       scrollTop: model.scrollTop,
       expandAt: model.expandAt,
+      rem: model.rem,
     };
   }
 

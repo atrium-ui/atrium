@@ -82,7 +82,7 @@ Everything is themed through CSS variables on the element, and every piece of th
 calendar-view {
   --cal-accent: hotpink;
   --cal-font: "Inter", sans-serif;
-  --cal-event-radius: 2px;
+  --cal-event-radius: 0.125rem;
 }
 calendar-view::part(weekdays) { text-transform: none; }
 ```

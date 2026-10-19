@@ -3,7 +3,7 @@ import { isCalendarData, toICS } from "./ics.ts";
 import { isBanded, layoutWeek, type WeekLayout } from "./layout.ts";
 import type { PanelData } from "./panel.ts";
 import { filterRows, type Row, Rows } from "./rows.ts";
-import { bandHeight } from "./scene.ts";
+import { bandHeight, startsMonth } from "./scene.ts";
 import { defaultStrings, type Strings } from "./strings.ts";
 import {
   clamp,
@@ -121,6 +121,8 @@ export class CalendarModel {
   workHours: [number, number] = [8, 18];
   busynessMode: BusynessMode = "count";
   expandAt = 300;
+  /** Root font size in px, set from the theme. */
+  rem = 16;
   filter = "";
   /** First and last day that can be shown, `null` is unbounded. */
   minDay: number | null = null;
@@ -243,6 +245,12 @@ export class CalendarModel {
 
   setBusynessMode(mode: BusynessMode) {
     this.busynessMode = mode;
+    this.changed();
+  }
+
+  setRem(rem: number) {
+    if (rem === this.rem) return;
+    this.rem = rem;
     this.changed();
   }
 
@@ -482,7 +490,7 @@ export class CalendarModel {
 
   /** Pixel height of the all-day band of an expanded row, as tall as the lanes of its week need. */
   bandHeight(week: number, rowHeight = this.rowHeight) {
-    return Math.min(bandHeight(this.layout(week).band.count), rowHeight * MAX_BAND_RATIO);
+    return Math.min(bandHeight(this.layout(week).band.count, startsMonth(weekStart(week, this.firstDay)), this.rem), rowHeight * MAX_BAND_RATIO);
   }
 
   /** Fraction of an expanded row at a time of day, at `zoom`. */
@@ -591,10 +599,9 @@ export class CalendarModel {
     }
   }
 
+  /** The current week starts at the top of the view, the next one peeks in below. */
   goToday() {
-    const now = new Date();
-    const week = weekOf(dayOf(now), this.firstDay);
-    this.animateTo(week + this.rowFraction(week, minutesOf(now), TODAY_ZOOM), TODAY_ZOOM);
+    this.animateTo(weekOf(dayOf(new Date()), this.firstDay) + TODAY_ZOOM / 2, TODAY_ZOOM);
   }
 
   goMonth() {
