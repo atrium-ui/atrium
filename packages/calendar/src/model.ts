@@ -3,7 +3,7 @@ import { isCalendarData, toICS } from "./ics.ts";
 import { isBanded, layoutWeek, type WeekLayout } from "./layout.ts";
 import type { PanelData } from "./panel.ts";
 import { filterRows, type Row, Rows } from "./rows.ts";
-import { bandHeight, startsMonth } from "./scene.ts";
+import { bandHeight, DAY_NUMBERS, startsMonth } from "./scene.ts";
 import { defaultStrings, type Strings } from "./strings.ts";
 import {
   clamp,
@@ -498,7 +498,8 @@ export class CalendarModel {
   rowFraction(week: number, minutes: number, zoom: number) {
     const height = Math.max(1, this.height / zoom);
     const band = this.bandHeight(week, height);
-    return (band + ((height - band) * minutes) / 1440) / height;
+    const time = height - band - DAY_NUMBERS * this.rem;
+    return (band + (time * minutes) / 1440) / height;
   }
 
   /** Keeps the view inside the rows; within a date range the viewport never shows weeks outside of it. */

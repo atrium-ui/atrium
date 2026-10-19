@@ -46,8 +46,6 @@ export interface SceneRow {
   laneTop: number;
   laneHeight: number;
   lanesShown: number;
-  /** Bottom of the strip with the day numbers: the end of the all-day band, or of a collapsed row. */
-  numbersBottom: number;
   /** Opacity of the day numbers, they fade out instead of shrinking in short rows. */
   numberAlpha: number;
   days: SceneDay[];
@@ -109,17 +107,17 @@ const MIN_LANE = 4;
 const EDGE = 6;
 
 // Sizes of text and the space that holds it are in rem, so they follow the user's font size.
-const MAX_LANE = 1.125;
+const MAX_LANE = 1.375;
 export const DAY_NUMBER_SIZE = 0.75;
 export const MONTH_HEADING_SIZE = 1;
-/** Strip below the events of a week that holds its day numbers, right above the days' time area. */
+/** Strip at the bottom of a week that holds its day numbers, below its events or its time area. */
 export const DAY_NUMBERS = DAY_NUMBER_SIZE + 0.75;
 /** Strip above the events of a week that starts a month, it holds the month heading. */
 export const MONTH_HEADER = MONTH_HEADING_SIZE + 1;
 
 /** Height in px of an all-day band with `lanes` lanes; an empty band keeps one lane to create events in. */
 export function bandHeight(lanes: number, monthStart: boolean, rem: number) {
-  return ((monthStart ? MONTH_HEADER : 0) + Math.max(1, lanes) * MAX_LANE + DAY_NUMBERS) * rem + 2 * PAD;
+  return ((monthStart ? MONTH_HEADER : 0) + Math.max(1, lanes) * MAX_LANE) * rem + 2 * PAD;
 }
 
 /** The week starting on `firstDay` contains the first day of a month. */
@@ -200,6 +198,7 @@ function rowGeometry(scene: Scene, index: number, top: number, height: number, b
   const numberAlpha = textFade(height * 0.3, DAY_NUMBER_SIZE * rem);
   // The strips shrink with the fading numbers, so short rows keep their room for events.
   const header = monthStart ? numberAlpha * MONTH_HEADER * rem : 0;
+  const footer = numberAlpha * DAY_NUMBERS * rem;
   return {
     index,
     top,
@@ -209,11 +208,10 @@ function rowGeometry(scene: Scene, index: number, top: number, height: number, b
     start: 0,
     expanded,
     timeTop: top + band,
-    timeHeight: height - band,
+    timeHeight: expanded ? height - band - footer : 0,
     laneTop: top + header + PAD,
     laneHeight: MAX_LANE * rem,
     lanesShown: 0,
-    numbersBottom: expanded ? top + band : top + height,
     numberAlpha,
     days: [],
   };
@@ -221,7 +219,8 @@ function rowGeometry(scene: Scene, index: number, top: number, height: number, b
 
 /** Fits a set of lanes into the row and returns how many lanes fit at all. */
 function fitLanes(row: SceneRow, lanes: Lanes, rem: number): number {
-  const available = row.numbersBottom - row.numberAlpha * DAY_NUMBERS * rem - row.laneTop - PAD;
+  const end = row.expanded ? row.timeTop : row.top + row.height - row.numberAlpha * DAY_NUMBERS * rem;
+  const available = end - row.laneTop - PAD;
   row.laneHeight = clamp(available / Math.max(1, lanes.count), MIN_LANE, MAX_LANE * rem);
   const capacity = Math.max(0, Math.floor(available / row.laneHeight + 1e-6));
   row.lanesShown = lanes.count > capacity ? Math.max(0, capacity - 1) : lanes.count;
@@ -343,13 +342,14 @@ export function locateUnit(model: CalendarModel, geo: Geometry, unit: number, cx
   if (!model.inRange(day)) return null;
   const expanded = rows.rowHeight >= geo.expandAt;
   const band = model.bandHeight(row.week) / rows.rowHeight;
+  const footer = (DAY_NUMBERS * model.rem) / rows.rowHeight;
   const area: Area = !expanded ? "stack" : fraction < band ? "band" : "time";
   return {
     week: row.week,
     col,
     day,
     area,
-    minutes: area === "time" ? clamp(((fraction - band) / (1 - band)) * 1440, 0, 1440) : 0,
+    minutes: area === "time" ? clamp(((fraction - band) / (1 - band - footer)) * 1440, 0, 1440) : 0,
   };
 }
 

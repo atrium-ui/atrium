@@ -173,13 +173,13 @@ function drawLines({ ctx, scene, theme }: Paint, row: SceneRow) {
   }
 }
 
-/** Bottom right of the week's events, right above the time area of the days and clear of the month heading. */
+/** Bottom right of the week, below its events or its time area and clear of the month heading. */
 function drawDayNumbers({ ctx, scene, theme, model }: Paint, row: SceneRow) {
   if (!row.numberAlpha) return;
   const size = DAY_NUMBER_SIZE * scene.geo.rem;
   const strip = DAY_NUMBERS * scene.geo.rem;
   // Sits at the top of its strip, the rest is room to the line below.
-  const y = row.numbersBottom - strip + 2;
+  const y = row.top + row.height - strip + 2;
   ctx.save();
   ctx.globalAlpha = row.numberAlpha;
   for (const day of row.days) {
