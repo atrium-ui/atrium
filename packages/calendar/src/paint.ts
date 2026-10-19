@@ -332,47 +332,6 @@ export const gridLayer: Layer = {
   },
 };
 
-// Off hours
-
-export const offHoursLayer: Layer = {
-  id: "off-hours",
-  toggleable: true,
-  label: (strings) => strings.layers["off-hours"],
-  draw({ ctx, scene, theme, model }) {
-    const [from, to] = model.workHours;
-    ctx.fillStyle = theme.offHours;
-    for (const row of scene.rows) {
-      if (!row.expanded) continue;
-      const perHour = row.timeHeight / 24;
-      for (const day of row.days) {
-        if (day.weekend) continue;
-        ctx.fillRect(day.x, row.timeTop, scene.geo.colWidth, from * perHour);
-        ctx.fillRect(day.x, row.timeTop + to * perHour, scene.geo.colWidth, (24 - to) * perHour);
-      }
-    }
-  },
-};
-
-// Busyness
-
-export const busynessLayer: Layer = {
-  id: "busyness",
-  toggleable: true,
-  label: (strings) => strings.layers.busyness,
-  draw({ ctx, scene, theme, model }) {
-    ctx.fillStyle = theme.busy;
-    for (const row of scene.rows) {
-      for (const day of row.days) {
-        const value = model.busyness(day.day);
-        if (!value) continue;
-        ctx.globalAlpha = value * theme.busyAlpha;
-        ctx.fillRect(day.x, row.top, scene.geo.colWidth, row.height);
-      }
-    }
-    ctx.globalAlpha = 1;
-  },
-};
-
 // Events
 
 function lookOf(model: CalendarModel, theme: Theme, box: EventBox): Look {
@@ -545,7 +504,7 @@ export const interactionLayer: Layer = {
   },
 };
 
-export const defaultLayers: Layer[] = [gridLayer, offHoursLayer, busynessLayer, eventsLayer, interactionLayer];
+export const defaultLayers: Layer[] = [gridLayer, eventsLayer, interactionLayer];
 
 /** Overview of all loaded weeks with the visible part boxed. */
 export function drawStrip({ ctx, scene, theme, model }: Paint) {

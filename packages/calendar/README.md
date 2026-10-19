@@ -40,8 +40,6 @@ bun run build  # dist/index.js
 | `theme` / `theme` attribute | `dark`, `light`, `solarized`, `high-contrast`, `auto`, or any name of your own |
 | `strings` | partial overrides of the UI text, see `src/strings.ts` |
 | `minDate`, `maxDate` | `Date` or `null`; limits the calendar to these days, e.g. a single week. Zoom is capped to the range and days outside it in the first and last week can't be used |
-| `workHours` | `[8, 18]`, used by the off-hours layer |
-| `busynessMode` | `"count"` or `"density"` |
 | `expandThreshold` | row height in px from which rows get an all-day band and a time area (300) |
 | `filter` | only events whose title contains this text are shown, the weeks in between collapse |
 | `layers` | drawing layers, see below |

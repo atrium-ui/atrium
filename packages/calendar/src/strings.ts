@@ -5,7 +5,7 @@ import type { ResponseStatus } from "./types.ts";
  * they always come from `Intl` for the configured locale.
  */
 export const defaultStrings = {
-  layers: { grid: "Grid", "off-hours": "Off hours", busyness: "Busyness", events: "Events" },
+  layers: { grid: "Grid", events: "Events" },
   weekNumber: (n: number) => `W${n}`,
   more: (n: number) => `+${n} more`,
   moreShort: (n: number) => `+${n}`,

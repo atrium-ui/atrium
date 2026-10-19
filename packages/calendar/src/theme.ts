@@ -14,8 +14,6 @@ const COLORS = {
   weekend: "--cal-weekend",
   todayBg: "--cal-today-bg",
   todayBorder: "--cal-today-border",
-  offHours: "--cal-off-hours",
-  busy: "--cal-busy",
   eventText: "--cal-event-text",
   stripeColor: "--cal-stripe",
   selection: "--cal-selection",
@@ -27,7 +25,6 @@ const COLORS = {
 
 const NUMBERS = {
   eventAlpha: "--cal-event-alpha",
-  busyAlpha: "--cal-busy-alpha",
 } as const;
 
 /** Lengths in `rem` or `px`, read in px for the canvas. */

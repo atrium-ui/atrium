@@ -5,13 +5,11 @@ export { CalendarView } from "./element.ts";
 export { isCalendarData, toICS } from "./ics.ts";
 export { CalendarModel } from "./model.ts";
 export {
-  busynessLayer,
   defaultLayers,
   eventsLayer,
   gridLayer,
   interactionLayer,
   type Layer,
-  offHoursLayer,
   type Paint,
 } from "./paint.ts";
 export { CalendarEventPanel, type PanelData } from "./panel.ts";

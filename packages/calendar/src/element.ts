@@ -1,7 +1,7 @@
 import { h, isTyping } from "./dom.ts";
 import { isCalendarData } from "./ics.ts";
 import { PointerController } from "./interactions.ts";
-import { type BusynessMode, CalendarModel, MAX_IMPORT_BYTES } from "./model.ts";
+import { CalendarModel, MAX_IMPORT_BYTES } from "./model.ts";
 import { defaultLayers, drawStrip, type Layer, type Paint } from "./paint.ts";
 import type { CalendarEventPanel } from "./panel.ts";
 import { anchorOf, buildScene, type Geometry, placePanel, type Scene } from "./scene.ts";
@@ -23,8 +23,6 @@ const PROPERTIES = [
   "theme",
   "firstDayOfWeek",
   "strings",
-  "workHours",
-  "busynessMode",
   "expandThreshold",
   "layers",
   "selection",
@@ -227,20 +225,6 @@ export class CalendarView extends HTMLElement {
   }
   set maxDate(date: Date | null) {
     this.model.setRange(this.minDate, date);
-  }
-
-  get workHours(): [number, number] {
-    return this.model.workHours;
-  }
-  set workHours(hours: [number, number]) {
-    this.model.setWorkHours(hours);
-  }
-
-  get busynessMode(): BusynessMode {
-    return this.model.busynessMode;
-  }
-  set busynessMode(mode: BusynessMode) {
-    this.model.setBusynessMode(mode);
   }
 
   /** Row height in px from which rows split into an all-day band and a time area. */

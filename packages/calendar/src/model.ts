@@ -41,11 +41,8 @@ const HISTORY_LIMIT = 50;
 const SETTLE_MS = 600;
 const ANIMATION_MS = 500;
 const LAYOUT_CACHE_LIMIT = 4000;
-/** Events per day that count as fully busy. */
-const BUSY_COUNT = 6;
 
 export type Emit = <K extends keyof CalendarEventMap>(type: K, detail: CalendarEventMap[K]) => void;
-export type BusynessMode = "count" | "density";
 export type ZoomLevel = "week" | "month" | "quarter" | "year";
 
 export interface Rect {
@@ -90,7 +87,6 @@ interface SavedState {
 
 interface Derived {
   byWeek: Map<number, CalendarEvent[]>;
-  busy: Map<number, { count: number; minutes: number }>;
   shown: CalendarEvent[];
   weeks: [number, number] | null;
   rows: Row[] | null;
@@ -119,8 +115,6 @@ export class CalendarModel {
   explicitFirstDay: number | null = null;
   firstDay: number;
   strings: Strings = defaultStrings;
-  workHours: [number, number] = [8, 18];
-  busynessMode: BusynessMode = "count";
   expandAt = 300;
   /** Root font size in px, set from the theme. */
   rem = 16;
@@ -238,17 +232,6 @@ export class CalendarModel {
     this.changed();
   }
 
-  setWorkHours(hours: [number, number]) {
-    if (!(hours[0] >= 0 && hours[0] < hours[1] && hours[1] <= 24)) throw new RangeError(`Invalid work hours ${hours}`);
-    this.workHours = hours;
-    this.changed();
-  }
-
-  setBusynessMode(mode: BusynessMode) {
-    this.busynessMode = mode;
-    this.changed();
-  }
-
   setRem(rem: number) {
     if (rem === this.rem) return;
     this.rem = rem;
@@ -312,7 +295,6 @@ export class CalendarModel {
     if (this.derivedCache) return this.derivedCache;
     const query = this.filter.trim().toLowerCase();
     const byWeek = new Map<number, CalendarEvent[]>();
-    const busy = new Map<number, { count: number; minutes: number }>();
     const shown: CalendarEvent[] = [];
     let min = Number.POSITIVE_INFINITY;
     let max = Number.NEGATIVE_INFINITY;
@@ -321,14 +303,6 @@ export class CalendarModel {
       if (query && !event.title.toLowerCase().includes(query)) continue;
       const first = dayOf(event.start);
       const last = lastDayOf(event);
-      for (let day = first; day <= last; day++) {
-        const stats = busy.get(day) ?? { count: 0, minutes: 0 };
-        const [start, end] = minutesOn(event, day, first, last);
-        stats.count++;
-        stats.minutes += event.allDay ? 0 : end - start;
-        busy.set(day, stats);
-      }
-      if (event.busyOnly) continue;
       shown.push(event);
       const w0 = weekOf(first, this.firstDay);
       const w1 = weekOf(last, this.firstDay);
@@ -342,7 +316,6 @@ export class CalendarModel {
     }
     this.derivedCache = {
       byWeek,
-      busy,
       shown,
       weeks: shown.length ? [min, max] : null,
       rows: query ? filterRows(byWeek.keys(), FILTER_CONTEXT, this.weekBounds) : null,
@@ -361,14 +334,6 @@ export class CalendarModel {
       layouts.set(week, layout);
     }
     return layout;
-  }
-
-  /** 0..1 */
-  busyness(day: number): number {
-    const stats = this.derived.busy.get(day);
-    if (!stats) return 0;
-    if (this.busynessMode === "count") return Math.min(1, stats.count / BUSY_COUNT);
-    return Math.min(1, stats.minutes / ((this.workHours[1] - this.workHours[0]) * 60));
   }
 
   /** Overview strip marks, positioned in row units which don't depend on the zoom. */

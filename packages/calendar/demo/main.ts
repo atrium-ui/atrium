@@ -99,9 +99,6 @@ function sampleEvents(): CalendarEvent[] {
         description: "Monthly sync. Agenda will be shared beforehand.\nhttps://zoom.us/j/123456789",
       });
     }
-    if (random() < 0.15) {
-      add({ calendarId: "shared", title: "Busy", start: at(d, 11), end: at(d, 15), allDay: false, busyOnly: true });
-    }
   }
   for (let w = -26; w <= 26; w += 5) {
     const start = w * 7 + 2;

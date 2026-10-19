@@ -33,8 +33,6 @@ export interface CalendarEvent {
   /** Minutes before the start. */
   reminders?: number[];
   readOnly?: boolean;
-  /** Only counts towards the busyness layer, never drawn as a block. */
-  busyOnly?: boolean;
 }
 
 export interface EventChanges {
