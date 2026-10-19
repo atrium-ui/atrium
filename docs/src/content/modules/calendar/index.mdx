@@ -1,0 +1,151 @@
+---
+title: Calendar
+description: An endless, zoomable week-row calendar as a dependency-free custom element.
+headline: Atrium // Modules
+command: "bun add @atrium-ui/calendar"
+order: 1
+---
+
+import CalendarExampleCode from "./CalendarExample.tsx?raw";
+import { CalendarExample } from "./CalendarExample.tsx";
+import { ContentTabs } from "package:/components/docs";
+import { Code } from "astro:components";
+
+The Calendar module provides `calendar-view`, an endless, zoomable calendar shipped as a dependency-free custom element. Every row is a week. Zooming goes continuously from about 40 weeks (a year) down to a single week (a day planner), and rows get an all-day band and a time area once they are tall enough.
+
+The calendar only shows the events it is given and reports what the user wants to change through DOM events. It never changes events itself, so the host application stays the single source of truth.
+
+## Example
+
+Drag on empty space to create an event, drag an event or its edges to move or resize it, and use Ctrl/Cmd + wheel or pinch to zoom.
+
+<ContentTabs labels={["Preview", "Code"]}>
+  <div class="not-content box flex w-full justify-center p-4">
+    <CalendarExample client:only="vue" />
+  </div>
+  <Code lang="tsx" code={CalendarExampleCode} class="max-h-[600px] overflow-auto" />
+</ContentTabs>
+
+## Guidelines
+
+- **Give it a size.** The element fills its box, so set an explicit height on `calendar-view` or its container.
+- **Own the data.** Listen to `event-create`, `event-change` and `events-delete`, apply the change in your store, and assign a new `events` array.
+- **Register every calendar.** Each event's `calendarId` must exist in `calendars`. Use `lockedCalendars` for read-only sources like holidays.
+- **Set the locale.** Use the `locale` attribute or property so all generated text and the first day of the week match your users.
+
+```html
+<calendar-view storage-key="my-calendar" theme="auto" locale="de-DE"></calendar-view>
+<script type="module">
+  import "@atrium-ui/calendar";
+
+  const calendar = document.querySelector("calendar-view");
+  calendar.calendars = [{ id: "work", name: "Work", color: "#5b8def" }];
+  calendar.activeCalendar = "work";
+  calendar.events = [
+    { id: "1", calendarId: "work", title: "Review", start, end, allDay: false },
+  ];
+  calendar.addEventListener("event-change", (e) => save(e.detail.id, e.detail.changes));
+</script>
+```
+
+### Properties
+
+| Property | |
+|---|---|
+| `events` | `CalendarEvent[]` to display |
+| `calendars` | `{ id, name, color }[]`, every event's `calendarId` must be in here |
+| `activeCalendar` | where new, duplicated and imported events go |
+| `hiddenCalendars`, `lockedCalendars` | ids; locked calendars are read-only |
+| `userEmail` | recognises the user's invitations |
+| `locale` | language and region of all generated text |
+| `firstDayOfWeek` | 0 = Sunday, `null` = from the region |
+| `theme` | `dark`, `light`, `solarized`, `high-contrast`, `auto`, or a custom name |
+| `strings` | partial overrides of the UI text |
+| `workHours` | `[8, 18]`, used by the off-hours layer |
+| `busynessMode` | `"count"` or `"density"` |
+| `expandThreshold` | row height in px from which rows get an all-day band and a time area (90) |
+| `layers` | drawing layers |
+| `selection` | selected event ids |
+
+Attributes: `storage-key` (where the view is remembered, default `calendar-view`), `hide-toolbar`, `hide-status`.
+
+### Methods
+
+`goTo(date)`, `goToday()`, `goMonth()`, `back()`, `forward()`, `setLayer(id, on)`, `cancelInteraction()`, `appendSummary(id, chunk)`, `finishSummary(id)`, `failSummary(id)`, `refreshTheme()`.
+
+### Events
+
+All events are `CustomEvent`s that bubble out of the shadow root.
+
+| Event | `detail` |
+|---|---|
+| `event-create` | `{ start, end, allDay, calendarId, duplicateOf? }` |
+| `event-change` | `{ id, changes: { start?, end?, title?, description?, reminders?, response? } }` |
+| `events-delete` | `{ ids }` |
+| `calendar-import` | `{ data, fileName, calendarId }`, data is already checked to look like iCalendar |
+| `selection-change` | `{ ids }` |
+| `event-click` | `{ id }` |
+| `range-select` | `{ from, to, columns, minutes }` |
+| `refresh-request` | `{}` |
+| `summary-request` / `summary-cancel` | `{ id, text }` / `{ id }` |
+
+### Styling
+
+Everything is themed through CSS variables on the element, and every piece of the UI is exposed as a `::part`. The canvas reads the same variables, so overrides apply to the drawn parts too.
+
+```css
+calendar-view {
+  --cal-accent: hotpink;
+  --cal-font: "Inter", sans-serif;
+  --cal-event-radius: 2px;
+}
+calendar-view::part(toolbar) {
+  display: none;
+}
+```
+
+Changes to the `theme` attribute, the system colour scheme, and `class`/`style`/`data-theme` on `<html>` or the element are picked up automatically. Other host-side theme changes, like a stylesheet swap, need a call to `refreshTheme()`.
+
+The `sidebar` slot holds anything you want next to the calendar.
+
+### Layers
+
+The calendar is drawn in layers. Custom layers can be added next to the default ones, and every toggleable layer gets a chip in the header whose dot colour comes from `--cal-layer-<id>`.
+
+```ts
+import { defaultLayers, type Layer } from "@atrium-ui/calendar";
+
+const holidays: Layer = {
+  id: "holidays",
+  toggleable: true,
+  label: () => "Holidays",
+  draw({ ctx, scene, theme, model }) {
+    /* draw inside the day columns */
+  },
+};
+calendar.layers = [...defaultLayers, holidays];
+```
+
+## Accessibility
+
+- All interactions have keyboard shortcuts: `T` jumps to today, `Esc` cancels or clears the selection, `Delete` removes the selection, `Ctrl/Cmd + C` copies it as iCalendar and `Ctrl/Cmd + Shift + R` requests a refresh.
+- The `high-contrast` theme is available for users who need stronger contrast, and all colours can be overridden through CSS variables.
+- Toolbar buttons, layer chips and the event panel controls are labelled, and toggles expose their state with `aria-pressed`. All UI text can be translated through `strings`.
+- Touch input is supported: one finger scrolls, a long press then drag creates, moves or resizes, and two fingers zoom and pan.
+- The time grid is drawn on a canvas. Offer an alternative list of upcoming events where users depend on a screen reader.
+
+| Input | Action |
+|---|---|
+| Wheel, trackpad, touch | scroll; middle-mouse drag pans |
+| Ctrl/Cmd + wheel, pinch | zoom around the pointer |
+| Drag in the gutter, Ctrl/Cmd + Alt + vertical drag | zoom |
+| Drag on empty space | create; Shift freezes the length, Esc cancels |
+| Drag an event / its edges | move / resize; Alt or Cmd while dragging duplicates; dragging out of the browser exports an `.ics` |
+| Ctrl/Cmd + drag on empty space | box select; add Shift to add to the selection |
+| Alt held | draw over existing events |
+
+## References
+
+- [MDN: Using custom elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements)
+- [MDN: ::part()](https://developer.mozilla.org/en-US/docs/Web/CSS/::part)
+- [RFC 5545: iCalendar](https://datatracker.ietf.org/doc/html/rfc5545)
