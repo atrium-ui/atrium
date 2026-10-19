@@ -777,10 +777,6 @@ export class CalendarModel {
     this.close();
   }
 
-  deletable(): CalendarEvent[] {
-    return this.selectedEvents.filter((event) => this.canEdit(event));
-  }
-
   delete(ids: string[]) {
     this.emit("events-delete", { ids });
     if (this.openId && ids.includes(this.openId)) this.close();

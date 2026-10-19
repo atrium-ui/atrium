@@ -220,16 +220,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-[part~="dialog"] {
-  min-width: 260px; padding: 18px;
-  border: 1px solid var(--cal-border); border-radius: var(--cal-radius);
-  background: var(--cal-surface-raised); color: var(--cal-text);
-  box-shadow: var(--cal-shadow);
-}
-[part~="dialog"]::backdrop { background: rgba(0,0,0,.35); }
-[part~="dialog-text"] { margin: 0 0 16px; font-size: 14px; font-weight: 600; }
-[part~="dialog-actions"] { display: flex; justify-content: flex-end; gap: 8px; }
-[part~="danger"] { background: var(--cal-busy); border-color: var(--cal-busy); color: #fff; }
 
 [part~="panel"] {
   position: absolute; left: 0; top: 0; z-index: 2;

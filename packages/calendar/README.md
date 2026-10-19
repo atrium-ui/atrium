@@ -63,7 +63,7 @@ All are `CustomEvent`s that bubble out of the shadow root.
 |---|---|
 | `event-create` | `{ start, end, allDay, calendarId, duplicateOf? }` |
 | `event-change` | `{ id, changes: { start?, end?, title?, description?, reminders?, response? } }` |
-| `events-delete` | `{ ids }` |
+| `events-delete` | `{ ids }`, all selected events on Delete/Backspace; confirming and checking permissions is up to the host |
 | `calendar-import` | `{ data, fileName, calendarId }`, data is already checked to look like iCalendar |
 | `selection-change` | `{ ids }` |
 | `event-click` | `{ id }` |

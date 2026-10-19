@@ -46,14 +46,6 @@ function buildUi() {
 
   const body = h("div", { part: "body" }, canvas, drop, panel);
 
-  const dialogText = h("p", { part: "dialog-text" });
-  const dialogCancel = h("button", { part: "button", value: "cancel" });
-  const dialogOk = h("button", { part: "button danger", value: "ok", autofocus: true });
-  const dialog = h(
-    "dialog",
-    { part: "dialog" },
-    h("form", { method: "dialog" }, dialogText, h("div", { part: "dialog-actions" }, dialogCancel, dialogOk)),
-  );
   const dragImage = h("div", { part: "drag-image" });
 
   const root = h(
@@ -66,7 +58,6 @@ function buildUi() {
       weekdays,
       body,
     ),
-    dialog,
     dragImage,
   );
 
@@ -77,10 +68,6 @@ function buildUi() {
     body,
     canvas,
     panel,
-    dialog,
-    dialogText,
-    dialogCancel,
-    dialogOk,
     dragImage,
   };
 }
@@ -115,7 +102,7 @@ export class CalendarView extends HTMLElement {
   restored = false;
   gestureZoom = 1;
   cleanup: (() => void)[] = [];
-  applied = { strings: null as Strings | null, weekdays: "", view: "", panel: -1, columns: 0 };
+  applied = { weekdays: "", view: "", panel: -1, columns: 0 };
 
   constructor() {
     super();
@@ -425,16 +412,12 @@ export class CalendarView extends HTMLElement {
       const event = model.openEvent;
       if (event) model.respond(event.id, (e as CustomEvent<ResponseStatus>).detail);
     });
-
-    ui.dialog.addEventListener("click", (e) => {
-      if (e.target === ui.dialog) ui.dialog.close("cancel");
-    });
   }
 
   keyDown = (e: KeyboardEvent) => {
     const model = this.model;
     if (e.key === "Shift" || e.key === "Alt" || e.key === "Meta" || e.key === "Control") this.pointer.modifiers(e);
-    if (this.ui.dialog.open || isTyping(e)) return;
+    if (isTyping(e)) return;
     const mod = e.ctrlKey || e.metaKey;
     if (e.key === "Escape") {
       if (this.pointer.cancel()) return;
@@ -449,7 +432,7 @@ export class CalendarView extends HTMLElement {
       model.goToday();
     } else if ((e.key === "Delete" || e.key === "Backspace") && model.selection.size) {
       e.preventDefault();
-      void this.confirmDelete();
+      model.delete([...model.selection]);
     }
   };
 
@@ -458,7 +441,7 @@ export class CalendarView extends HTMLElement {
   };
 
   copy = (e: ClipboardEvent) => {
-    if (this.ui.dialog.open || isTyping(e) || getSelection()?.toString()) return;
+    if (isTyping(e) || getSelection()?.toString()) return;
     const ics = this.model.copy();
     if (!ics || !e.clipboardData) return;
     e.clipboardData.setData("text/calendar", ics);
@@ -467,7 +450,7 @@ export class CalendarView extends HTMLElement {
   };
 
   paste = (e: ClipboardEvent) => {
-    if (this.ui.dialog.open || isTyping(e) || !e.clipboardData) return;
+    if (isTyping(e) || !e.clipboardData) return;
     const files = [...e.clipboardData.files];
     if (files.length) {
       e.preventDefault();
@@ -484,7 +467,7 @@ export class CalendarView extends HTMLElement {
   outsidePointer = (e: PointerEvent) => {
     if (!this.model.openId) return;
     const path = e.composedPath();
-    if (path.includes(this.ui.panel) || path.includes(this.ui.canvas) || path.includes(this.ui.dialog)) return;
+    if (path.includes(this.ui.panel) || path.includes(this.ui.canvas)) return;
     this.model.close();
   };
 
@@ -541,23 +524,6 @@ export class CalendarView extends HTMLElement {
     }
   }
 
-  async confirmDelete() {
-    const model = this.model;
-    const events = model.deletable();
-    if (!events.length) return model.notify(model.strings.nothingToDelete);
-    if (await this.confirm(model.strings.confirmDelete(events.length))) model.delete(events.map((event) => event.id));
-  }
-
-  confirm(text: string): Promise<boolean> {
-    const { dialog, dialogText, dialogOk } = this.ui;
-    dialogText.textContent = text;
-    dialog.returnValue = "";
-    dialog.showModal();
-    dialogOk.focus();
-    return new Promise((resolve) => {
-      dialog.addEventListener("close", () => resolve(dialog.returnValue === "ok"), { once: true });
-    });
-  }
 
   // Rendering
 
@@ -649,8 +615,6 @@ export class CalendarView extends HTMLElement {
 
   syncChrome(scene: Scene) {
     const { model, ui } = this;
-    const strings = model.strings;
-    if (this.applied.strings !== strings) this.applyStrings();
     const weekdays = `${model.locale}|${model.firstDay}`;
     if (this.applied.weekdays !== weekdays) this.renderWeekdays(weekdays);
     if (this.applied.columns !== model.colWidth) {
@@ -701,14 +665,6 @@ export class CalendarView extends HTMLElement {
     if (now.getMinutes() === this.minute) return;
     this.minute = now.getMinutes();
     this.requestFrame();
-  }
-
-  applyStrings() {
-    const { ui, model } = this;
-    const strings = model.strings;
-    ui.dialogCancel.textContent = strings.cancel;
-    ui.dialogOk.textContent = strings.delete;
-    this.applied.strings = strings;
   }
 
   renderWeekdays(key: string) {

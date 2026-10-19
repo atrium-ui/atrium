@@ -16,8 +16,6 @@ export const defaultStrings = {
   moveCancelled: "Move cancelled",
   resizeCancelled: "Resize cancelled",
   noWritableCalendar: "The active calendar is read-only",
-  nothingToDelete: "None of the selected events can be deleted",
-  confirmDelete: (n: number) => (n === 1 ? "Delete event?" : `Delete ${n} events?`),
   delete: "Delete",
   cancel: "Cancel",
   clipboard: "clipboard",
