@@ -108,6 +108,8 @@ const EDGE = 6;
 
 // Sizes of text and the space that holds it are in rem, so they follow the user's font size.
 const MAX_LANE = 1.375;
+/** The lowest lane whose title is still fully drawn (see `drawEvent`'s text fade). */
+const READABLE_LANE = 1.125;
 export const DAY_NUMBER_SIZE = 0.75;
 export const MONTH_HEADING_SIZE = 1;
 /** Strip at the bottom of a week that holds its day numbers, below its events or its time area. */
@@ -221,7 +223,10 @@ function rowGeometry(scene: Scene, index: number, top: number, height: number, b
 function fitLanes(row: SceneRow, lanes: Lanes, rem: number): number {
   const end = row.expanded ? row.timeTop : row.top + row.height - row.numberAlpha * DAY_NUMBERS * rem;
   const available = end - row.laneTop - PAD;
-  row.laneHeight = clamp(available / Math.max(1, lanes.count), MIN_LANE, MAX_LANE * rem);
+  // Lanes stay readable and the rest goes to "+N more". Only a row too short for two readable
+  // lanes, zoomed out to the year, squeezes them all in as a coloured overview.
+  const floor = available >= 2 * READABLE_LANE * rem ? READABLE_LANE * rem : MIN_LANE;
+  row.laneHeight = clamp(available / Math.max(1, lanes.count), floor, MAX_LANE * rem);
   const capacity = Math.max(0, Math.floor(available / row.laneHeight + 1e-6));
   row.lanesShown = lanes.count > capacity ? Math.max(0, capacity - 1) : lanes.count;
   return capacity;
