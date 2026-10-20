@@ -65,7 +65,9 @@ export class CalendarEventPanel extends HTMLElement {
     Object.assign(this.pending, changes);
     clearTimeout(this.saveTimer);
     if (immediate) this.flush();
-    else this.saveTimer = setTimeout(() => this.flush(), SAVE_DELAY);
+    // A change to an occurrence of a repeating event may split it off into an event of its own, which
+    // closes the panel, so it saves on blur or Enter rather than mid-typing.
+    else if (!this.data?.event.recurring) this.saveTimer = setTimeout(() => this.flush(), SAVE_DELAY);
   }
 
   flush() {
