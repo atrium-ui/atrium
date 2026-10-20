@@ -136,6 +136,7 @@ export class CalendarEventPanel extends HTMLElement {
             h("div", { part: "panel-person", title: event.organizer.email }, event.organizer.name || event.organizer.email),
           ),
         this.participants(data),
+        event.rruleEditable && this.repeat(data),
         data.canEdit && this.reminders(data),
         this.description(data),
       ),
@@ -176,6 +177,25 @@ export class CalendarEventPanel extends HTMLElement {
             h("span", { part: "panel-response" }, strings.responses[participant.status]),
           ),
         ),
+      ),
+    );
+  }
+
+  repeat({ event, strings }: PanelData) {
+    const current = event.rrule ?? "";
+    const rules = Object.keys(strings.repeats);
+    if (!rules.includes(current)) rules.push(current);
+    return this.section(
+      strings.repeat,
+      h(
+        "select",
+        {
+          part: "panel-select",
+          "aria-label": strings.repeat,
+          onchange: (e: Event) =>
+            this.send("panel-change", { id: event.id, changes: { rrule: (e.target as HTMLSelectElement).value } }),
+        },
+        ...rules.map((rule) => h("option", { value: rule, selected: rule === current }, strings.repeats[rule] ?? rule)),
       ),
     );
   }

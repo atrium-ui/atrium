@@ -28,6 +28,16 @@ export const defaultStrings = {
   link: "Link",
   organizer: "Organizer",
   participants: "Participants",
+  repeat: "Repeat",
+  /** Labels of the repeat presets, by RRULE. A rule not in here is listed as itself. */
+  repeats: {
+    "": "Does not repeat",
+    "FREQ=DAILY": "Daily",
+    "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR": "Every weekday",
+    "FREQ=WEEKLY": "Weekly",
+    "FREQ=MONTHLY": "Monthly",
+    "FREQ=YEARLY": "Yearly",
+  } as Record<string, string>,
   notifications: "Notifications",
   addNotification: "Add notification",
   removeNotification: "Remove notification",

@@ -27,6 +27,13 @@ export interface CalendarEvent {
   location?: string;
   url?: string;
   recurring?: boolean;
+  /** The RRULE it repeats by, without `RRULE:`; empty when it doesn't repeat. */
+  rrule?: string;
+  /**
+   * Whether the panel offers to change `rrule`. Separate from `readOnly`, so an occurrence that
+   * can't be moved on its own can still change how its series repeats.
+   */
+  rruleEditable?: boolean;
   organizer?: Person;
   participants?: Participant[];
   tentative?: boolean;
@@ -42,6 +49,8 @@ export interface EventChanges {
   title?: string;
   description?: string;
   reminders?: number[];
+  /** Empty stops it repeating. */
+  rrule?: string;
   response?: ResponseStatus;
 }
 

@@ -343,7 +343,7 @@ function lookOf(model: CalendarModel, theme: Theme, box: EventBox): Look {
   return {
     color,
     solid,
-    alpha: model.canEdit(event) ? 1 : 0.5,
+    alpha: 1,
     glow: hovered && !selected,
     outline: selected,
     stripes: model.unconfirmed(event),

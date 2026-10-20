@@ -60,7 +60,7 @@ All are `CustomEvent`s that bubble out of the shadow root.
 | Event | `detail` |
 |---|---|
 | `event-create` | `{ start, end, allDay, calendarId, duplicateOf? }` |
-| `event-change` | `{ id, changes: { start?, end?, title?, description?, reminders?, response? } }` |
+| `event-change` | `{ id, changes: { start?, end?, title?, description?, reminders?, rrule?, response? } }`; `rrule` comes from the panel's Repeat field, shown for events with `rruleEditable` |
 | `events-delete` | `{ ids }`, all selected events on Delete/Backspace; confirming and checking permissions is up to the host |
 | `calendar-import` | `{ data, fileName, calendarId }`, data is already checked to look like iCalendar |
 | `selection-change` | `{ ids }` |
