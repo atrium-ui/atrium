@@ -1,6 +1,16 @@
 import { isBanded, type Lanes, layoutWeek } from "./layout.ts";
 import type { CalendarModel } from "./model.ts";
-import { clamp, dateOf, dayOf, isWeekend, lastDayOf, minutesOf, weekdayOf, weekOf, weekStart } from "./time.ts";
+import {
+  clamp,
+  dateOf,
+  dayOf,
+  isWeekend,
+  lastDayOf,
+  minutesOf,
+  weekdayOf,
+  weekOf,
+  weekStart,
+} from "./time.ts";
 import type { CalendarEvent } from "./types.ts";
 
 /** Screen geometry of the calendar body for one frame. */
@@ -119,12 +129,16 @@ export const MONTH_HEADER = MONTH_HEADING_SIZE + 1;
 
 /** Height in px of an all-day band with `lanes` lanes; an empty band keeps one lane to create events in. */
 export function bandHeight(lanes: number, monthStart: boolean, rem: number) {
-  return ((monthStart ? MONTH_HEADER : 0) + Math.max(1, lanes) * MAX_LANE) * rem + 2 * PAD;
+  return (
+    ((monthStart ? MONTH_HEADER : 0) + Math.max(1, lanes) * MAX_LANE) * rem + 2 * PAD
+  );
 }
 
 /** The week starting on `firstDay` contains the first day of a month. */
 export function startsMonth(firstDay: number) {
-  return Array.from({ length: 7 }, (_, col) => dateOf(firstDay + col).getDate()).includes(1);
+  return Array.from({ length: 7 }, (_, col) => dateOf(firstDay + col).getDate()).includes(
+    1,
+  );
 }
 
 /** Text never scales with the zoom: it fades out between 6px and its full `size` of available `space`. */
@@ -160,7 +174,14 @@ export function buildScene(model: CalendarModel, geo: Geometry, now: Date): Scen
       continue;
     }
     const start = weekStart(row.week, model.firstDay);
-    const sceneRow = rowGeometry(scene, i, top, rows.heightOf(i), model.bandHeight(row.week), startsMonth(start));
+    const sceneRow = rowGeometry(
+      scene,
+      i,
+      top,
+      rows.heightOf(i),
+      model.bandHeight(row.week),
+      startsMonth(start),
+    );
     sceneRow.week = row.week;
     sceneRow.start = start;
     sceneRow.days = Array.from({ length: 7 }, (_, col) => {
@@ -193,7 +214,14 @@ export function buildScene(model: CalendarModel, geo: Geometry, now: Date): Scen
   return scene;
 }
 
-function rowGeometry(scene: Scene, index: number, top: number, height: number, bandHeight: number, monthStart: boolean): SceneRow {
+function rowGeometry(
+  scene: Scene,
+  index: number,
+  top: number,
+  height: number,
+  bandHeight: number,
+  monthStart: boolean,
+): SceneRow {
   const { rem } = scene.geo;
   const expanded = height >= scene.geo.expandAt;
   const band = expanded ? bandHeight : 0;
@@ -221,7 +249,9 @@ function rowGeometry(scene: Scene, index: number, top: number, height: number, b
 
 /** Fits a set of lanes into the row and returns how many lanes fit at all. */
 function fitLanes(row: SceneRow, lanes: Lanes, rem: number): number {
-  const end = row.expanded ? row.timeTop : row.top + row.height - row.numberAlpha * DAY_NUMBERS * rem;
+  const end = row.expanded
+    ? row.timeTop
+    : row.top + row.height - row.numberAlpha * DAY_NUMBERS * rem;
   const available = end - row.laneTop - PAD;
   // Lanes stay readable and the rest goes to "+N more". Only a row too short for two readable
   // lanes, zoomed out to the year, squeezes them all in as a coloured overview.
@@ -236,7 +266,13 @@ function colX(geo: Geometry, col: number) {
   return geo.colsX + col * geo.colWidth;
 }
 
-function barBox(geo: Geometry, row: SceneRow, area: Area, event: CalendarEvent, bar: { col0: number; col1: number; lane: number; isStart: boolean; isEnd: boolean }): EventBox {
+function barBox(
+  geo: Geometry,
+  row: SceneRow,
+  area: Area,
+  event: CalendarEvent,
+  bar: { col0: number; col1: number; lane: number; isStart: boolean; isEnd: boolean },
+): EventBox {
   const x = colX(geo, bar.col0) + (bar.isStart ? PAD : 0);
   return {
     event,
@@ -262,7 +298,8 @@ function addEvents(model: CalendarModel, scene: Scene, row: SceneRow) {
 
   for (const bar of lanes.bars) scene.visible.add(bar.event.id);
   for (const bar of lanes.bars) {
-    if (bar.lane < row.lanesShown) scene.boxes.push(barBox(geo, row, area, bar.event, bar));
+    if (bar.lane < row.lanesShown)
+      scene.boxes.push(barBox(geo, row, area, bar.event, bar));
     else for (let col = bar.col0; col <= bar.col1; col++) hidden[col]++;
   }
   if (capacity > 0) {
@@ -300,7 +337,12 @@ function addEvents(model: CalendarModel, scene: Scene, row: SceneRow) {
 }
 
 /** Boxes for an event that isn't part of the data yet, drawn over everything else. */
-function addPreview(model: CalendarModel, scene: Scene, event: CalendarEvent, laneOf: string | null) {
+function addPreview(
+  model: CalendarModel,
+  scene: Scene,
+  event: CalendarEvent,
+  laneOf: string | null,
+) {
   const { geo } = scene;
   const first = dayOf(event.start);
   const last = lastDayOf(event);
@@ -327,15 +369,24 @@ function addPreview(model: CalendarModel, scene: Scene, event: CalendarEvent, la
     if (!bar) continue;
     const existing = model.layout(row.week);
     const original = laneOf
-      ? (row.expanded ? existing.band : existing.stack).bars.find((b) => b.event.id === laneOf)
+      ? (row.expanded ? existing.band : existing.stack).bars.find(
+          (b) => b.event.id === laneOf,
+        )
       : undefined;
     const lane = original && original.lane < row.lanesShown ? original.lane : 0;
-    scene.preview.push(barBox(geo, row, row.expanded ? "band" : "stack", event, { ...bar, lane }));
+    scene.preview.push(
+      barBox(geo, row, row.expanded ? "band" : "stack", event, { ...bar, lane }),
+    );
   }
 }
 
 /** Calendar position of content unit `unit` at content x `cx` (relative to the first column). */
-export function locateUnit(model: CalendarModel, geo: Geometry, unit: number, cx: number): Location | null {
+export function locateUnit(
+  model: CalendarModel,
+  geo: Geometry,
+  unit: number,
+  cx: number,
+): Location | null {
   const rows = model.rows;
   const i = Math.floor(unit);
   if (i < rows.first || i >= rows.end) return null;
@@ -354,20 +405,37 @@ export function locateUnit(model: CalendarModel, geo: Geometry, unit: number, cx
     col,
     day,
     area,
-    minutes: area === "time" ? clamp(((fraction - band) / (1 - band - footer)) * 1440, 0, 1440) : 0,
+    minutes:
+      area === "time"
+        ? clamp(((fraction - band) / (1 - band - footer)) * 1440, 0, 1440)
+        : 0,
   };
 }
 
 /** Calendar position under a screen point; points outside the body are clamped into it. */
-export function locate(model: CalendarModel, geo: Geometry, x: number, y: number): Location | null {
+export function locate(
+  model: CalendarModel,
+  geo: Geometry,
+  x: number,
+  y: number,
+): Location | null {
   const unit = model.rows.pxToUnit(geo.scrollTop + clamp(y, 0, geo.height - 1));
   return locateUnit(model, geo, unit, x - geo.colsX);
 }
 
-const inside = (r: { x: number; y: number; w: number; h: number }, x: number, y: number) =>
-  x >= r.x && x < r.x + r.w && y >= r.y && y < r.y + r.h;
+const inside = (
+  r: { x: number; y: number; w: number; h: number },
+  x: number,
+  y: number,
+) => x >= r.x && x < r.x + r.w && y >= r.y && y < r.y + r.h;
 
-export function hitTest(model: CalendarModel, scene: Scene, x: number, y: number, events: boolean): Hit {
+export function hitTest(
+  model: CalendarModel,
+  scene: Scene,
+  x: number,
+  y: number,
+  events: boolean,
+): Hit {
   const { geo } = scene;
   if (x >= geo.width - geo.strip) return { kind: "strip" };
   if (x < geo.gutter) return { kind: "gutter" };
@@ -377,7 +445,11 @@ export function hitTest(model: CalendarModel, scene: Scene, x: number, y: number
     for (let i = scene.boxes.length - 1; i >= 0; i--) {
       const box = scene.boxes[i] as EventBox;
       if (box.event.id === model.hiddenId || !inside(box, x, y)) continue;
-      return { kind: "event", box, edge: model.canEdit(box.event) ? edgeAt(box, x, y) : null };
+      return {
+        kind: "event",
+        box,
+        edge: model.canEdit(box.event) ? edgeAt(box, x, y) : null,
+      };
     }
   }
   return { kind: "empty", loc: locate(model, geo, x, y) };
@@ -396,13 +468,19 @@ function edgeAt(box: EventBox, x: number, y: number): "start" | "end" | null {
 /** Where the detail panel should attach: the event's box, or its row when it's off screen. */
 export function anchorOf(model: CalendarModel, scene: Scene, event: CalendarEvent) {
   const box =
-    scene.boxes.find((b) => b.event.id === event.id && b.label) ?? scene.boxes.find((b) => b.event.id === event.id);
+    scene.boxes.find((b) => b.event.id === event.id && b.label) ??
+    scene.boxes.find((b) => b.event.id === event.id);
   if (box) return box;
   const { geo } = scene;
   const day = dayOf(event.start);
   const week = weekOf(day, model.firstDay);
   const y = model.rows.unitToPx(model.rows.unitOfWeek(week)) - geo.scrollTop;
-  return { x: colX(geo, day - weekStart(week, model.firstDay)), y, w: geo.colWidth, h: 20 };
+  return {
+    x: colX(geo, day - weekStart(week, model.firstDay)),
+    y,
+    w: geo.colWidth,
+    h: 20,
+  };
 }
 
 type Rect = { x: number; y: number; w: number; h: number };
@@ -425,7 +503,8 @@ export function placePanel(geo: Geometry, anchor: Rect, width: number, height: n
     { x: clampX(anchor.x), y: anchor.y + anchor.h + gap },
     { x: clampX(anchor.x), y: anchor.y - gap - height },
   ];
-  const fits = (p: { x: number; y: number }) => p.x >= left && p.x + width <= right && p.y >= top && p.y + height <= bottom;
+  const fits = (p: { x: number; y: number }) =>
+    p.x >= left && p.x + width <= right && p.y >= top && p.y + height <= bottom;
   const covered = (p: { x: number; y: number }) =>
     Math.max(0, Math.min(p.x + width, anchor.x + anchor.w) - Math.max(p.x, anchor.x)) *
     Math.max(0, Math.min(p.y + height, anchor.y + anchor.h) - Math.max(p.y, anchor.y));

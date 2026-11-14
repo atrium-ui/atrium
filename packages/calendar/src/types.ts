@@ -1,4 +1,9 @@
-export type ResponseStatus = "accepted" | "tentative" | "declined" | "needs-action" | "delegated";
+export type ResponseStatus =
+  | "accepted"
+  | "tentative"
+  | "declined"
+  | "needs-action"
+  | "delegated";
 
 export interface Person {
   email: string;
@@ -67,7 +72,13 @@ export interface RangeSelection {
 
 /** Events the calendar dispatches on its element. */
 export interface CalendarEventMap {
-  "event-create": { start: Date; end: Date; allDay: boolean; calendarId: string; duplicateOf?: string };
+  "event-create": {
+    start: Date;
+    end: Date;
+    allDay: boolean;
+    calendarId: string;
+    duplicateOf?: string;
+  };
   "event-change": { id: string; changes: EventChanges };
   "events-delete": { ids: string[] };
   "calendar-import": { data: string; fileName: string | null; calendarId: string };
@@ -77,7 +88,12 @@ export interface CalendarEventMap {
   "refresh-request": Record<string, never>;
   "summary-request": { id: string; text: string };
   "summary-cancel": { id: string };
-  "notify": { text: string };
+  notify: { text: string };
   /** The visible week or zoom level changed; `date` is in the month the view is showing. */
-  "view-change": { date: Date; zoomLevel: "week" | "month" | "quarter" | "year"; canBack: boolean; canForward: boolean };
+  "view-change": {
+    date: Date;
+    zoomLevel: "week" | "month" | "quarter" | "year";
+    canBack: boolean;
+    canForward: boolean;
+  };
 }

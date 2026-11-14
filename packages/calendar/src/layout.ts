@@ -53,7 +53,10 @@ export function isBanded(event: CalendarEvent): boolean {
   return event.allDay;
 }
 
-export function layoutWeek(events: readonly CalendarEvent[], firstDay: number): WeekLayout {
+export function layoutWeek(
+  events: readonly CalendarEvent[],
+  firstDay: number,
+): WeekLayout {
   const spans: Span[] = events.map((event) => {
     const first = dayOf(event.start);
     const last = lastDayOf(event);
@@ -85,7 +88,8 @@ export function layoutWeek(events: readonly CalendarEvent[], firstDay: number): 
       });
     }
   }
-  for (let col = 0; col < 7; col++) assignColumns(pieces.filter((piece) => piece.col === col));
+  for (let col = 0; col < 7; col++)
+    assignColumns(pieces.filter((piece) => piece.col === col));
 
   return {
     band: assignLanes(
@@ -101,9 +105,15 @@ export function layoutWeek(events: readonly CalendarEvent[], firstDay: number): 
 function compareSpans(a: Span, b: Span): number {
   if (a.multi !== b.multi) return a.multi ? -1 : 1;
   if (a.multi) {
-    return a.first - b.first || b.last - b.first - (a.last - a.first) || compareEvents(a.event, b.event);
+    return (
+      a.first - b.first ||
+      b.last - b.first - (a.last - a.first) ||
+      compareEvents(a.event, b.event)
+    );
   }
-  return Number(b.event.allDay) - Number(a.event.allDay) || compareEvents(a.event, b.event);
+  return (
+    Number(b.event.allDay) - Number(a.event.allDay) || compareEvents(a.event, b.event)
+  );
 }
 
 function compareEvents(a: CalendarEvent, b: CalendarEvent): number {
@@ -121,7 +131,8 @@ function assignLanes(spans: Span[], firstDay: number): Lanes {
   const bars = [...spans].sort(compareSpans).map((span): Bar => {
     let lane = 0;
     while (taken.slice(span.col0, span.col1 + 1).some((lanes) => lanes[lane])) lane++;
-    for (let col = span.col0; col <= span.col1; col++) (taken[col] as boolean[])[lane] = true;
+    for (let col = span.col0; col <= span.col1; col++)
+      (taken[col] as boolean[])[lane] = true;
     count = Math.max(count, lane + 1);
     return {
       event: span.event,

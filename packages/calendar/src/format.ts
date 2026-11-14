@@ -23,7 +23,8 @@ export class Formats {
   readonly eventTimes = new WeakMap<CalendarEvent, string>();
 
   constructor(readonly locale: string) {
-    const cycle = new Intl.DateTimeFormat(locale, { hour: "numeric" }).resolvedOptions().hourCycle;
+    const cycle = new Intl.DateTimeFormat(locale, { hour: "numeric" }).resolvedOptions()
+      .hourCycle;
     this.hour12 = cycle === "h11" || cycle === "h12";
   }
 
@@ -70,11 +71,19 @@ export class Formats {
   }
 
   dayRange(first: Date, last: Date) {
-    return this.dtf({ weekday: "short", month: "short", day: "numeric" }).formatRange(first, last);
+    return this.dtf({ weekday: "short", month: "short", day: "numeric" }).formatRange(
+      first,
+      last,
+    );
   }
 
   dayLong(date: Date) {
-    return this.dtf({ weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(date);
+    return this.dtf({
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(date);
   }
 
   dayShort(date: Date) {
@@ -82,7 +91,13 @@ export class Formats {
   }
 
   dateTime(date: Date) {
-    return this.dtf({ weekday: "short", day: "numeric", month: "short", hour: "numeric", minute: "2-digit" }).format(date);
+    return this.dtf({
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      hour: "numeric",
+      minute: "2-digit",
+    }).format(date);
   }
 
   /** Time range of a timed event, cached per event object. */
@@ -99,8 +114,12 @@ export class Formats {
   when(event: CalendarEvent): string[] {
     const first = dayOf(event.start);
     const last = lastDayOf(event);
-    if (event.allDay) return first === last ? [this.dayLong(event.start)] : [this.dayLong(event.start), this.dayLong(dateOf(last))];
-    if (first === last) return [this.dayLong(event.start), this.timeRange(event.start, event.end)];
+    if (event.allDay)
+      return first === last
+        ? [this.dayLong(event.start)]
+        : [this.dayLong(event.start), this.dayLong(dateOf(last))];
+    if (first === last)
+      return [this.dayLong(event.start), this.timeRange(event.start, event.end)];
     return [this.dateTime(event.start), this.dateTime(event.end)];
   }
 
@@ -108,7 +127,11 @@ export class Formats {
     const key = `${unit}:${display}`;
     let format = this.units.get(key);
     if (!format) {
-      format = new Intl.NumberFormat(this.locale, { style: "unit", unit, unitDisplay: display });
+      format = new Intl.NumberFormat(this.locale, {
+        style: "unit",
+        unit,
+        unitDisplay: display,
+      });
       this.units.set(key, format);
     }
     return format.format(value);
@@ -116,8 +139,10 @@ export class Formats {
 
   reminder(minutes: number, strings: Strings) {
     if (minutes === 0) return strings.atStart;
-    if (minutes % 1440 === 0) return strings.before(this.unit(minutes / 1440, "day", "long"));
-    if (minutes % 60 === 0) return strings.before(this.unit(minutes / 60, "hour", "long"));
+    if (minutes % 1440 === 0)
+      return strings.before(this.unit(minutes / 1440, "day", "long"));
+    if (minutes % 60 === 0)
+      return strings.before(this.unit(minutes / 60, "hour", "long"));
     return strings.before(this.unit(minutes, "minute", "long"));
   }
 }

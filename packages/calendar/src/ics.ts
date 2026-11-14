@@ -8,7 +8,11 @@ const utc = (d: Date) =>
 const date = (d: Date) => `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
 
 const text = (value: string) =>
-  value.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
+  value
+    .replace(/\\/g, "\\\\")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,")
+    .replace(/\r?\n/g, "\\n");
 
 const param = (value: string) => `"${value.replace(/"/g, "'")}"`;
 
@@ -35,10 +39,19 @@ function fold(line: string): string {
 /** Serialises events as an iCalendar document. */
 export function toICS(events: readonly CalendarEvent[]): string {
   const stamp = utc(new Date());
-  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//luckydye//calendar//EN", "CALSCALE:GREGORIAN"];
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//luckydye//calendar//EN",
+    "CALSCALE:GREGORIAN",
+  ];
   for (const event of events) {
     lines.push("BEGIN:VEVENT", `UID:${event.id}`, `DTSTAMP:${stamp}`);
-    if (event.allDay) lines.push(`DTSTART;VALUE=DATE:${date(event.start)}`, `DTEND;VALUE=DATE:${date(event.end)}`);
+    if (event.allDay)
+      lines.push(
+        `DTSTART;VALUE=DATE:${date(event.start)}`,
+        `DTEND;VALUE=DATE:${date(event.end)}`,
+      );
     else lines.push(`DTSTART:${utc(event.start)}`, `DTEND:${utc(event.end)}`);
     lines.push(`SUMMARY:${text(event.title)}`);
     if (event.description) lines.push(`DESCRIPTION:${text(event.description)}`);
@@ -51,10 +64,18 @@ export function toICS(events: readonly CalendarEvent[]): string {
     }
     for (const participant of event.participants ?? []) {
       const name = participant.name ? `;CN=${param(participant.name)}` : "";
-      lines.push(`ATTENDEE${name};PARTSTAT=${participant.status.toUpperCase()}:mailto:${participant.email}`);
+      lines.push(
+        `ATTENDEE${name};PARTSTAT=${participant.status.toUpperCase()}:mailto:${participant.email}`,
+      );
     }
     for (const minutes of event.reminders ?? []) {
-      lines.push("BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${text(event.title)}`, `TRIGGER:-PT${minutes}M`, "END:VALARM");
+      lines.push(
+        "BEGIN:VALARM",
+        "ACTION:DISPLAY",
+        `DESCRIPTION:${text(event.title)}`,
+        `TRIGGER:-PT${minutes}M`,
+        "END:VALARM",
+      );
     }
     lines.push("END:VEVENT");
   }

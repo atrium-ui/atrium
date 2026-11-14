@@ -49,13 +49,20 @@ const people: Participant[] = [
 
 function sampleEvents(): CalendarEvent[] {
   const events: CalendarEvent[] = [];
-  const add = (event: Omit<CalendarEvent, "id">) => events.push({ id: nextId(), ...event });
+  const add = (event: Omit<CalendarEvent, "id">) =>
+    events.push({ id: nextId(), ...event });
   for (let d = -180; d <= 180; d++) {
     const weekday = at(d, 0).getDay();
     if (weekday === 0 || weekday === 6) {
       if (random() < 0.35) {
         const hour = 10 + Math.floor(random() * 8);
-        add({ calendarId: "personal", title: pick(["Climbing", "Brunch", "Farmers market", "Cinema", "Long run"]), start: at(d, hour), end: at(d, hour + 2), allDay: false });
+        add({
+          calendarId: "personal",
+          title: pick(["Climbing", "Brunch", "Farmers market", "Cinema", "Long run"]),
+          start: at(d, hour),
+          end: at(d, hour + 2),
+          allDay: false,
+        });
       }
       continue;
     }
@@ -67,11 +74,22 @@ function sampleEvents(): CalendarEvent[] {
       allDay: false,
       recurring: true,
       organizer: { email: "lead@example.com", name: "Alex Lead" },
-      participants: [{ email: ME, name: "Me", status: "accepted" }, ...people.slice(0, 2)],
+      participants: [
+        { email: ME, name: "Me", status: "accepted" },
+        ...people.slice(0, 2),
+      ],
       reminders: [5],
     });
     if (weekday === 4) {
-      add({ calendarId: "work", title: "1:1 with Alex", start: at(d, 14), end: at(d, 14, 30), allDay: false, recurring: true, reminders: [10] });
+      add({
+        calendarId: "work",
+        title: "1:1 with Alex",
+        start: at(d, 14),
+        end: at(d, 14, 30),
+        allDay: false,
+        recurring: true,
+        reminders: [10],
+      });
     }
     const meetings = Math.floor(random() * 4);
     for (let m = 0; m < meetings; m++) {
@@ -80,11 +98,21 @@ function sampleEvents(): CalendarEvent[] {
       const length = pick([30, 45, 60, 90]);
       add({
         calendarId: pick(["work", "work", "team"]),
-        title: pick(["Design review", "Sprint planning", "Customer call", "Interview", "Architecture sync", "Retro", "Pairing", "Budget review"]),
+        title: pick([
+          "Design review",
+          "Sprint planning",
+          "Customer call",
+          "Interview",
+          "Architecture sync",
+          "Retro",
+          "Pairing",
+          "Budget review",
+        ]),
         start: at(d, hour, minutes),
         end: at(d, hour, minutes + length),
         allDay: false,
-        location: random() < 0.3 ? pick(["Room Ada", "Room Turing", "Cafeteria"]) : undefined,
+        location:
+          random() < 0.3 ? pick(["Room Ada", "Room Turing", "Cafeteria"]) : undefined,
       });
     }
     if (random() < 0.12) {
@@ -95,21 +123,58 @@ function sampleEvents(): CalendarEvent[] {
         end: at(d, 17),
         allDay: false,
         organizer: { email: "partner@example.org", name: "Jordan Partner" },
-        participants: [{ email: ME, name: "Me", status: pick(["needs-action", "tentative"]) }, ...people],
-        description: "Monthly sync. Agenda will be shared beforehand.\nhttps://zoom.us/j/123456789",
+        participants: [
+          { email: ME, name: "Me", status: pick(["needs-action", "tentative"]) },
+          ...people,
+        ],
+        description:
+          "Monthly sync. Agenda will be shared beforehand.\nhttps://zoom.us/j/123456789",
       });
     }
   }
   for (let w = -26; w <= 26; w += 5) {
     const start = w * 7 + 2;
-    add({ calendarId: "personal", title: pick(["Trip to Lisbon", "Family visit", "Hiking week"]), start: at(start, 0), end: at(start + 3 + Math.floor(random() * 4), 0), allDay: true });
+    add({
+      calendarId: "personal",
+      title: pick(["Trip to Lisbon", "Family visit", "Hiking week"]),
+      start: at(start, 0),
+      end: at(start + 3 + Math.floor(random() * 4), 0),
+      allDay: true,
+    });
   }
   for (let w = -24; w <= 24; w += 8) {
-    add({ calendarId: "holidays", title: pick(["Public holiday", "Bank holiday", "Company day off"]), start: at(w * 7 + 1, 0), end: at(w * 7 + 2, 0), allDay: true, readOnly: true });
+    add({
+      calendarId: "holidays",
+      title: pick(["Public holiday", "Bank holiday", "Company day off"]),
+      start: at(w * 7 + 1, 0),
+      end: at(w * 7 + 2, 0),
+      allDay: true,
+      readOnly: true,
+    });
   }
-  add({ calendarId: "work", title: "Conference", start: at(9, 9), end: at(11, 17), allDay: false, location: "Berlin" });
-  add({ calendarId: "personal", title: "Night train", start: at(3, 22), end: at(4, 6, 30), allDay: false });
-  add({ calendarId: "work", title: "Release day", start: at(1, 0), end: at(2, 0), allDay: true, tentative: true });
+  add({
+    calendarId: "work",
+    title: "Conference",
+    start: at(9, 9),
+    end: at(11, 17),
+    allDay: false,
+    location: "Berlin",
+  });
+  add({
+    calendarId: "personal",
+    title: "Night train",
+    start: at(3, 22),
+    end: at(4, 6, 30),
+    allDay: false,
+  });
+  add({
+    calendarId: "work",
+    title: "Release day",
+    start: at(1, 0),
+    end: at(2, 0),
+    allDay: true,
+    tentative: true,
+  });
   add({
     calendarId: "work",
     title: "Quarterly planning",
@@ -127,7 +192,9 @@ function sampleEvents(): CalendarEvent[] {
 }
 
 let events = sampleEvents();
-const view = document.querySelector("calendar-view") as HTMLElementTagNameMap["calendar-view"];
+const view = document.querySelector(
+  "calendar-view",
+) as HTMLElementTagNameMap["calendar-view"];
 const sidebar = view.querySelector("nav") as HTMLElement;
 
 function render() {
@@ -177,7 +244,9 @@ function renderSidebar() {
 view.userEmail = ME;
 
 view.addEventListener("event-create", ({ detail }) => {
-  const source = detail.duplicateOf ? events.find((event) => event.id === detail.duplicateOf) : undefined;
+  const source = detail.duplicateOf
+    ? events.find((event) => event.id === detail.duplicateOf)
+    : undefined;
   const created: CalendarEvent = {
     ...source,
     id: nextId(),
@@ -220,7 +289,9 @@ view.addEventListener("refresh-request", () => render());
 const summaries = new Map<string, ReturnType<typeof setInterval>>();
 view.addEventListener("summary-request", ({ detail }) => {
   const words =
-    "The platform team reviews last quarter, open incidents and capacity, then decides on three proposals: the event bus replacement, the design system refresh and API versioning. Read the planning document and bring estimates.".split(" ");
+    "The platform team reviews last quarter, open incidents and capacity, then decides on three proposals: the event bus replacement, the design system refresh and API versioning. Read the planning document and bring estimates.".split(
+      " ",
+    );
   let i = 0;
   summaries.set(
     detail.id,
@@ -245,10 +316,19 @@ function parseICS(data: string, calendarId: string): CalendarEvent[] {
   const lines = data.replace(/\r?\n[ \t]/g, "").split(/\r?\n/);
   const parsed: CalendarEvent[] = [];
   let current: Record<string, string> | null = null;
-  const unescape = (value: string) => value.replace(/\\n/gi, "\n").replace(/\\([,;\\])/g, "$1");
+  const unescapeText = (value: string) =>
+    value.replace(/\\n/gi, "\n").replace(/\\([,;\\])/g, "$1");
   const toDate = (value: string) => {
-    const [, y, mo, d, h = "0", mi = "0", s = "0", z] = value.match(/(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})(Z)?)?/) ?? [];
-    const parts = [Number(y), Number(mo) - 1, Number(d), Number(h), Number(mi), Number(s)] as const;
+    const [, y, mo, d, h = "0", mi = "0", s = "0", z] =
+      value.match(/(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})(Z)?)?/) ?? [];
+    const parts = [
+      Number(y),
+      Number(mo) - 1,
+      Number(d),
+      Number(h),
+      Number(mi),
+      Number(s),
+    ] as const;
     return z ? new Date(Date.UTC(...parts)) : new Date(...parts);
   };
   for (const line of lines) {
@@ -256,13 +336,15 @@ function parseICS(data: string, calendarId: string): CalendarEvent[] {
     else if (line === "END:VEVENT" && current) {
       const allDay = /^\d{8}$/.test(current.DTSTART ?? "");
       const start = toDate(current.DTSTART ?? "");
-      const end = current.DTEND ? toDate(current.DTEND) : new Date(start.getTime() + (allDay ? 86_400_000 : 3_600_000));
+      const end = current.DTEND
+        ? toDate(current.DTEND)
+        : new Date(start.getTime() + (allDay ? 86_400_000 : 3_600_000));
       parsed.push({
         id: nextId(),
         calendarId,
-        title: unescape(current.SUMMARY ?? ""),
-        description: current.DESCRIPTION && unescape(current.DESCRIPTION),
-        location: current.LOCATION && unescape(current.LOCATION),
+        title: unescapeText(current.SUMMARY ?? ""),
+        description: current.DESCRIPTION && unescapeText(current.DESCRIPTION),
+        location: current.LOCATION && unescapeText(current.LOCATION),
         start,
         end,
         allDay,

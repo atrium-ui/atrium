@@ -134,7 +134,9 @@ const vars = (palette: Palette) =>
 
 const themeRules = [
   `:host{${vars(dark)}}`,
-  ...Object.entries(themes).map(([name, palette]) => `:host([theme="${name}"]){${vars(palette)}}`),
+  ...Object.entries(themes).map(
+    ([name, palette]) => `:host([theme="${name}"]){${vars(palette)}}`,
+  ),
   `:host([theme="auto"]){${vars(dark)}}`,
   `@media (prefers-color-scheme: light){:host([theme="auto"]){${vars(light)}}}`,
 ].join("\n");

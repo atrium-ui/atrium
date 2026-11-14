@@ -51,20 +51,26 @@ export function readTheme(element: Element): Theme {
   };
   const number = (name: string, value: string) => {
     const result = Number.parseFloat(value);
-    if (Number.isNaN(result)) throw new Error(`calendar: CSS variable ${name} is not a number`);
+    if (Number.isNaN(result))
+      throw new Error(`calendar: CSS variable ${name} is not a number`);
     return result;
   };
   const rem = number("font-size", getComputedStyle(document.documentElement).fontSize);
   const theme = {} as Record<string, string | number>;
   for (const [key, name] of Object.entries(COLORS)) theme[key] = read(name);
-  for (const [key, name] of Object.entries(NUMBERS)) theme[key] = number(name, read(name));
+  for (const [key, name] of Object.entries(NUMBERS))
+    theme[key] = number(name, read(name));
   for (const [key, name] of Object.entries(LENGTHS)) {
     const value = read(name);
     if (value.endsWith("rem")) theme[key] = number(name, value) * rem;
     else if (value.endsWith("px") || value === "0") theme[key] = number(name, value);
     else throw new Error(`calendar: CSS variable ${name} must be a length in rem or px`);
   }
-  return { ...(theme as Omit<Theme, "stripe" | "rem">), stripe: stripes(theme.stripeColor as string), rem };
+  return {
+    ...(theme as Omit<Theme, "stripe" | "rem">),
+    stripe: stripes(theme.stripeColor as string),
+    rem,
+  };
 }
 
 function stripes(color: string): CanvasPattern {
@@ -91,11 +97,17 @@ let probe: CanvasRenderingContext2D | null = null;
 export function contrastText(color: string): string {
   let text = contrast.get(color);
   if (text) return text;
-  probe ??= document.createElement("canvas").getContext("2d", { willReadFrequently: true }) as CanvasRenderingContext2D;
+  probe ??= document
+    .createElement("canvas")
+    .getContext("2d", { willReadFrequently: true }) as CanvasRenderingContext2D;
   probe.clearRect(0, 0, 1, 1);
   probe.fillStyle = color;
   probe.fillRect(0, 0, 1, 1);
-  const [r, g, b] = probe.getImageData(0, 0, 1, 1).data as unknown as [number, number, number];
+  const [r, g, b] = probe.getImageData(0, 0, 1, 1).data as unknown as [
+    number,
+    number,
+    number,
+  ];
   const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
   text = luminance > 0.6 ? "#111" : "#fff";
   contrast.set(color, text);

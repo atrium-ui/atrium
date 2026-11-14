@@ -105,16 +105,22 @@ export class Rows {
  * Rows for a filter: weeks with matches plus `context` weeks around them, gaps in between.
  * Only weeks within `bounds` (first week, week after the last one) are kept.
  */
-export function filterRows(weeks: Iterable<number>, context: number, bounds: [number, number]): Row[] {
+export function filterRows(
+  weeks: Iterable<number>,
+  context: number,
+  bounds: [number, number],
+): Row[] {
   const visible = new Set<number>();
   for (const week of weeks) {
-    for (let c = -context; c <= context; c++) if (week + c >= bounds[0] && week + c < bounds[1]) visible.add(week + c);
+    for (let c = -context; c <= context; c++)
+      if (week + c >= bounds[0] && week + c < bounds[1]) visible.add(week + c);
   }
   const sorted = [...visible].sort((a, b) => a - b);
   const rows: Row[] = [];
   sorted.forEach((week, i) => {
     const previous = sorted[i - 1];
-    if (previous !== undefined && week - previous > 1) rows.push({ kind: "gap", weeks: week - previous - 1 });
+    if (previous !== undefined && week - previous > 1)
+      rows.push({ kind: "gap", weeks: week - previous - 1 });
     rows.push({ kind: "week", week });
   });
   return rows;

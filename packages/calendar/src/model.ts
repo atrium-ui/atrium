@@ -42,7 +42,10 @@ const SETTLE_MS = 600;
 const ANIMATION_MS = 500;
 const LAYOUT_CACHE_LIMIT = 4000;
 
-export type Emit = <K extends keyof CalendarEventMap>(type: K, detail: CalendarEventMap[K]) => void;
+export type Emit = <K extends keyof CalendarEventMap>(
+  type: K,
+  detail: CalendarEventMap[K],
+) => void;
 export type ZoomLevel = "week" | "month" | "quarter" | "year";
 
 export interface Rect {
@@ -96,7 +99,8 @@ interface Derived {
 
 const EMPTY: CalendarEvent[] = [];
 
-const sameEmail = (a: string | undefined, b: string) => !!a && !!b && a.toLowerCase() === b.toLowerCase();
+const sameEmail = (a: string | undefined, b: string) =>
+  !!a && !!b && a.toLowerCase() === b.toLowerCase();
 
 /**
  * Everything the calendar knows and decides, without any DOM. The element renders it and feeds
@@ -246,21 +250,29 @@ export class CalendarModel {
   setRange(min: Date | null, max: Date | null) {
     const minDay = min && dayOf(min);
     const maxDay = max && dayOf(max);
-    if (minDay !== null && maxDay !== null && minDay > maxDay) throw new RangeError(`minDate ${min} is after maxDate ${max}`);
+    if (minDay !== null && maxDay !== null && minDay > maxDay)
+      throw new RangeError(`minDate ${min} is after maxDate ${max}`);
     this.minDay = minDay;
     this.maxDay = maxDay;
     this.rebuild();
   }
 
   inRange(day: number): boolean {
-    return (this.minDay === null || day >= this.minDay) && (this.maxDay === null || day <= this.maxDay);
+    return (
+      (this.minDay === null || day >= this.minDay) &&
+      (this.maxDay === null || day <= this.maxDay)
+    );
   }
 
   /** First week and the week after the last one that can be shown. */
   get weekBounds(): [number, number] {
     return [
-      this.minDay === null ? Number.NEGATIVE_INFINITY : weekOf(this.minDay, this.firstDay),
-      this.maxDay === null ? Number.POSITIVE_INFINITY : weekOf(this.maxDay, this.firstDay) + 1,
+      this.minDay === null
+        ? Number.NEGATIVE_INFINITY
+        : weekOf(this.minDay, this.firstDay),
+      this.maxDay === null
+        ? Number.POSITIVE_INFINITY
+        : weekOf(this.maxDay, this.firstDay) + 1,
     ];
   }
 
@@ -361,7 +373,8 @@ export class CalendarModel {
 
   calendarOf(event: CalendarEvent): CalendarInfo {
     const calendar = this.calendars.get(event.calendarId);
-    if (!calendar) throw new Error(`Unknown calendar "${event.calendarId}" for event "${event.id}"`);
+    if (!calendar)
+      throw new Error(`Unknown calendar "${event.calendarId}" for event "${event.id}"`);
     return calendar;
   }
 
@@ -374,11 +387,16 @@ export class CalendarModel {
   }
 
   canEditTitle(event: CalendarEvent): boolean {
-    return this.canEdit(event) && (!event.organizer || sameEmail(event.organizer.email, this.userEmail));
+    return (
+      this.canEdit(event) &&
+      (!event.organizer || sameEmail(event.organizer.email, this.userEmail))
+    );
   }
 
   myself(event: CalendarEvent): Participant | undefined {
-    return event.participants?.find((participant) => sameEmail(participant.email, this.userEmail));
+    return event.participants?.find((participant) =>
+      sameEmail(participant.email, this.userEmail),
+    );
   }
 
   invited(event: CalendarEvent): boolean {
@@ -392,7 +410,9 @@ export class CalendarModel {
   }
 
   get canCreate(): boolean {
-    return this.calendars.has(this.activeCalendar) && !this.locked.has(this.activeCalendar);
+    return (
+      this.calendars.has(this.activeCalendar) && !this.locked.has(this.activeCalendar)
+    );
   }
 
   get openEvent(): CalendarEvent | null {
@@ -422,7 +442,13 @@ export class CalendarModel {
 
   get rows(): Rows {
     if (!this.rowsCache) {
-      this.rowsCache = new Rows(this.rowHeight, GAP_HEIGHT, this.derived.rows, this.beforeFilter?.week ?? 0, this.weekBounds);
+      this.rowsCache = new Rows(
+        this.rowHeight,
+        GAP_HEIGHT,
+        this.derived.rows,
+        this.beforeFilter?.week ?? 0,
+        this.weekBounds,
+      );
     }
     return this.rowsCache;
   }
@@ -456,7 +482,14 @@ export class CalendarModel {
 
   /** Pixel height of the all-day band of an expanded row, as tall as the lanes of its week need. */
   bandHeight(week: number, rowHeight = this.rowHeight) {
-    return Math.min(bandHeight(this.layout(week).band.count, startsMonth(weekStart(week, this.firstDay)), this.rem), rowHeight * MAX_BAND_RATIO);
+    return Math.min(
+      bandHeight(
+        this.layout(week).band.count,
+        startsMonth(weekStart(week, this.firstDay)),
+        this.rem,
+      ),
+      rowHeight * MAX_BAND_RATIO,
+    );
   }
 
   /** Fraction of an expanded row at a time of day, at `zoom`. */
@@ -512,7 +545,9 @@ export class CalendarModel {
     this.zoom = next;
     this.rowsCache = null;
     const rows = this.rows;
-    this.center = this.clampCenter(rows.pxToUnit(rows.unitToPx(anchor) - y + this.height / 2));
+    this.center = this.clampCenter(
+      rows.pxToUnit(rows.unitToPx(anchor) - y + this.height / 2),
+    );
     this.moved();
   }
 
@@ -553,9 +588,12 @@ export class CalendarModel {
     if (animation) {
       const progress = clamp((now - animation.t0) / ANIMATION_MS, 0, 1);
       const eased = 1 - (1 - progress) ** 3;
-      this.zoom = animation.from.zoom * (animation.to.zoom / animation.from.zoom) ** eased;
+      this.zoom =
+        animation.from.zoom * (animation.to.zoom / animation.from.zoom) ** eased;
       this.rowsCache = null;
-      this.center = this.clampCenter(animation.from.week + (animation.to.week - animation.from.week) * eased);
+      this.center = this.clampCenter(
+        animation.from.week + (animation.to.week - animation.from.week) * eased,
+      );
       if (progress === 1) this.animation = null;
       this.scheduleSettle();
     }
@@ -572,8 +610,14 @@ export class CalendarModel {
 
   goMonth() {
     const now = new Date();
-    const w0 = weekOf(dayOf(new Date(now.getFullYear(), now.getMonth(), 1)), this.firstDay);
-    const w1 = weekOf(dayOf(new Date(now.getFullYear(), now.getMonth() + 1, 0)), this.firstDay);
+    const w0 = weekOf(
+      dayOf(new Date(now.getFullYear(), now.getMonth(), 1)),
+      this.firstDay,
+    );
+    const w1 = weekOf(
+      dayOf(new Date(now.getFullYear(), now.getMonth() + 1, 0)),
+      this.firstDay,
+    );
     const weeks = w1 - w0 + 1;
     this.animateTo(w0 + weeks / 2, weeks);
   }
@@ -634,7 +678,9 @@ export class CalendarModel {
       this.history[this.historyIndex] = entry;
       return;
     }
-    this.history = [...this.history.slice(0, this.historyIndex + 1), entry].slice(-HISTORY_LIMIT);
+    this.history = [...this.history.slice(0, this.historyIndex + 1), entry].slice(
+      -HISTORY_LIMIT,
+    );
     this.historyIndex = this.history.length - 1;
     this.changed();
   }
@@ -658,7 +704,9 @@ export class CalendarModel {
     const state = JSON.parse(raw) as SavedState;
     this.zoom = this.clampZoom(state.zoom);
     this.rowsCache = null;
-    this.center = this.clampCenter(weekOf(dayOf(parseIsoDate(state.date)), this.firstDay) + state.offset);
+    this.center = this.clampCenter(
+      weekOf(dayOf(parseIsoDate(state.date)), this.firstDay) + state.offset,
+    );
     this.changed();
   }
 
@@ -671,7 +719,11 @@ export class CalendarModel {
 
   setSelection(ids: Iterable<string>) {
     const next = new Set(ids);
-    if (next.size === this.selection.size && [...next].every((id) => this.selection.has(id))) return;
+    if (
+      next.size === this.selection.size &&
+      [...next].every((id) => this.selection.has(id))
+    )
+      return;
     this.selection = next;
     this.emit("selection-change", { ids: [...next] });
     this.changed();
@@ -706,7 +758,11 @@ export class CalendarModel {
     this.changed();
   }
 
-  setPreview(preview: Preview | null, hiddenId: string | null = null, selectionRect: Rect | null = null) {
+  setPreview(
+    preview: Preview | null,
+    hiddenId: string | null = null,
+    selectionRect: Rect | null = null,
+  ) {
     this.preview = preview;
     this.hiddenId = hiddenId;
     this.selectionRect = selectionRect;
@@ -714,7 +770,12 @@ export class CalendarModel {
   }
 
   /** Selects events of the active calendar inside a block of days, optionally limited to a time of day. */
-  boxSelect(weeks: [number, number], cols: [number, number], minutes: [number, number] | null, add: boolean) {
+  boxSelect(
+    weeks: [number, number],
+    cols: [number, number],
+    minutes: [number, number] | null,
+    add: boolean,
+  ) {
     const ids = new Set(add ? this.selection : []);
     for (let week = weeks[0]; week <= weeks[1]; week++) {
       for (const event of this.derived.byWeek.get(week) ?? EMPTY) {
@@ -749,7 +810,13 @@ export class CalendarModel {
   // Requests to the host
 
   create(start: Date, end: Date, allDay: boolean, duplicateOf?: string) {
-    this.emit("event-create", { start, end, allDay, calendarId: this.activeCalendar, duplicateOf });
+    this.emit("event-create", {
+      start,
+      end,
+      allDay,
+      calendarId: this.activeCalendar,
+      duplicateOf,
+    });
   }
 
   change(id: string, changes: EventChanges) {
@@ -798,7 +865,8 @@ export class CalendarModel {
   }
 
   cancelSummary() {
-    if (this.summary?.status === "streaming") this.emit("summary-cancel", { id: this.summary.id });
+    if (this.summary?.status === "streaming")
+      this.emit("summary-cancel", { id: this.summary.id });
     this.summary = null;
   }
 

@@ -14,10 +14,38 @@ const at = (days: number, hours: number) =>
   new Date(today.getFullYear(), today.getMonth(), today.getDate() + days, hours);
 
 const initialEvents: CalendarEvent[] = [
-  { id: "1", calendarId: "work", title: "Standup", start: at(0, 9), end: at(0, 10), allDay: false },
-  { id: "2", calendarId: "work", title: "Design review", start: at(1, 14), end: at(1, 16), allDay: false },
-  { id: "3", calendarId: "personal", title: "Climbing", start: at(2, 18), end: at(2, 20), allDay: false },
-  { id: "4", calendarId: "personal", title: "Vacation", start: at(7, 0), end: at(12, 0), allDay: true },
+  {
+    id: "1",
+    calendarId: "work",
+    title: "Standup",
+    start: at(0, 9),
+    end: at(0, 10),
+    allDay: false,
+  },
+  {
+    id: "2",
+    calendarId: "work",
+    title: "Design review",
+    start: at(1, 14),
+    end: at(1, 16),
+    allDay: false,
+  },
+  {
+    id: "3",
+    calendarId: "personal",
+    title: "Climbing",
+    start: at(2, 18),
+    end: at(2, 20),
+    allDay: false,
+  },
+  {
+    id: "4",
+    calendarId: "personal",
+    title: "Vacation",
+    start: at(7, 0),
+    end: at(12, 0),
+    allDay: true,
+  },
 ];
 
 async function setup(calendar: CalendarView | null, onView: (view: View) => void) {
@@ -27,20 +55,29 @@ async function setup(calendar: CalendarView | null, onView: (view: View) => void
   await import("@atrium-ui/calendar");
   if (calendar.calendars.length) return;
 
-  calendar.addEventListener("view-change", (e) => onView((e as CustomEvent<View>).detail));
+  calendar.addEventListener("view-change", (e) =>
+    onView((e as CustomEvent<View>).detail),
+  );
   calendar.calendars = calendars;
   calendar.activeCalendar = "work";
   calendar.events = initialEvents;
 
   calendar.addEventListener("event-create", (e) => {
-    const { start, end, allDay, calendarId } = (e as CustomEvent<CalendarEventMap["event-create"]>).detail;
+    const { start, end, allDay, calendarId } = (
+      e as CustomEvent<CalendarEventMap["event-create"]>
+    ).detail;
     const id = crypto.randomUUID();
-    calendar.events = [...calendar.events, { id, calendarId, title: "New event", start, end, allDay }];
+    calendar.events = [
+      ...calendar.events,
+      { id, calendarId, title: "New event", start, end, allDay },
+    ];
   });
 
   calendar.addEventListener("event-change", (e) => {
     const { id, changes } = (e as CustomEvent<CalendarEventMap["event-change"]>).detail;
-    calendar.events = calendar.events.map((event) => (event.id === id ? { ...event, ...changes } : event));
+    calendar.events = calendar.events.map((event) =>
+      event.id === id ? { ...event, ...changes } : event,
+    );
   });
 
   calendar.addEventListener("events-delete", (e) => {
@@ -92,18 +129,26 @@ export const CalendarExample = defineComponent(() => {
         >
           Today
         </button>
-        <span class="flex-1 truncate text-center font-semibold">{monthTitle(view.value)}</span>
+        <span class="flex-1 truncate text-center font-semibold">
+          {monthTitle(view.value)}
+        </span>
         <input
           type="search"
           placeholder="Filter events…"
           aria-label="Filter events"
           class="h-8 w-40 rounded-md border border-zinc-200 bg-white px-3 text-sm placeholder:text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800 dark:placeholder:text-zinc-500"
           onInput={(e: Event) => {
-            if (calendar.value) calendar.value.filter = (e.target as HTMLInputElement).value;
+            if (calendar.value)
+              calendar.value.filter = (e.target as HTMLInputElement).value;
           }}
         />
       </div>
-      <calendar-view ref={mount} storage-key="atrium-docs-calendar" theme="auto" class="block h-[600px] w-full" />
+      <calendar-view
+        ref={mount}
+        storage-key="atrium-docs-calendar"
+        theme="auto"
+        class="block h-[600px] w-full"
+      />
     </div>
   );
 });

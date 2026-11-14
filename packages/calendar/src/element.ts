@@ -9,7 +9,12 @@ import { defaultStrings, type Strings } from "./strings.ts";
 import { styles } from "./styles.ts";
 import { readTheme, type Theme } from "./theme.ts";
 import { clamp, dateOf, isWeekend, weekStart } from "./time.ts";
-import type { CalendarEvent, CalendarEventMap, CalendarInfo, ResponseStatus } from "./types.ts";
+import type {
+  CalendarEvent,
+  CalendarEventMap,
+  CalendarInfo,
+  ResponseStatus,
+} from "./types.ts";
 
 /** Properties a host may set before the element is upgraded. */
 const PROPERTIES = [
@@ -31,7 +36,6 @@ const PROPERTIES = [
   "filter",
 ] as const;
 
-
 function buildUi() {
   const weekdayRow = h("div", { part: "weekday-row" });
   const weekdays = h("div", { part: "weekdays", "aria-hidden": "true" }, weekdayRow);
@@ -50,12 +54,7 @@ function buildUi() {
     "div",
     { part: "root" },
     h("slot", { name: "sidebar" }),
-    h(
-      "div",
-      { part: "main" },
-      weekdays,
-      body,
-    ),
+    h("div", { part: "main" }, weekdays, body),
     dragImage,
   );
 
@@ -76,13 +75,18 @@ export interface CalendarView {
     listener: (event: CustomEvent<CalendarEventMap[K]>) => void,
     options?: boolean | AddEventListenerOptions,
   ): void;
-  addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+  addEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | AddEventListenerOptions,
+  ): void;
 }
 
 /**
  * `<calendar-view>`: an endless, zoomable list of week rows. It shows the events it is given and
  * reports what the user wants to change as events; it never changes events itself.
  */
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: typed event listener overloads
 export class CalendarView extends HTMLElement {
   static observedAttributes = ["theme", "locale", "storage-key"];
 
@@ -105,7 +109,10 @@ export class CalendarView extends HTMLElement {
   constructor() {
     super();
     this.model = new CalendarModel(
-      (type, detail) => this.dispatchEvent(new CustomEvent(type, { detail, bubbles: true, composed: true })),
+      (type, detail) =>
+        this.dispatchEvent(
+          new CustomEvent(type, { detail, bubbles: true, composed: true }),
+        ),
       () => this.requestFrame(),
       navigator.language,
     );
@@ -114,7 +121,10 @@ export class CalendarView extends HTMLElement {
     this.ctx = this.ui.canvas.getContext("2d") as CanvasRenderingContext2D;
     this.pointer = new PointerController(this.model, {
       geo: () => this.geometry(),
-      scene: () => (this.scene ??= buildScene(this.model, this.geometry(), new Date())),
+      scene: () => {
+        this.scene ??= buildScene(this.model, this.geometry(), new Date());
+        return this.scene;
+      },
       canvas: this.ui.canvas,
       dragImage: this.ui.dragImage,
     });
@@ -282,7 +292,10 @@ export class CalendarView extends HTMLElement {
   }
 
   appendSummary(id: string, chunk: string) {
-    this.model.updateSummary(id, (summary) => ({ ...summary, text: summary.text + chunk }));
+    this.model.updateSummary(id, (summary) => ({
+      ...summary,
+      text: summary.text + chunk,
+    }));
   }
 
   finishSummary(id: string) {
@@ -309,7 +322,11 @@ export class CalendarView extends HTMLElement {
       model.record();
     }
 
-    const listen = <K extends keyof WindowEventMap>(type: K, listener: (e: WindowEventMap[K]) => void, capture = false) => {
+    const listen = <K extends keyof WindowEventMap>(
+      type: K,
+      listener: (e: WindowEventMap[K]) => void,
+      capture = false,
+    ) => {
       window.addEventListener(type, listener, capture);
       this.cleanup.push(() => window.removeEventListener(type, listener, capture));
     };
@@ -318,7 +335,9 @@ export class CalendarView extends HTMLElement {
     listen("copy", this.copy);
     listen("paste", this.paste);
     listen("pointerdown", this.outsidePointer, true);
-    listen("dragover", (e) => this.pointer.dragAnywhere(e, !e.composedPath().includes(this)));
+    listen("dragover", (e) =>
+      this.pointer.dragAnywhere(e, !e.composedPath().includes(this)),
+    );
     // No related target: the drag left the window, where the label can't follow.
     listen("dragleave", (e) => e.relatedTarget || this.pointer.dragAnywhere(e, false));
 
@@ -328,7 +347,10 @@ export class CalendarView extends HTMLElement {
     const narrow = matchMedia("(max-width: 40rem)");
     narrow.addEventListener("change", onMedia);
     const mutations = new MutationObserver(() => this.invalidateTheme());
-    mutations.observe(document.documentElement, { attributes: true, attributeFilter: ["class", "style", "data-theme"] });
+    mutations.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "style", "data-theme"],
+    });
     mutations.observe(this, { attributes: true, attributeFilter: ["class", "style"] });
     const resize = new ResizeObserver(() => this.resize());
     resize.observe(this.ui.body);
@@ -389,7 +411,10 @@ export class CalendarView extends HTMLElement {
       e.preventDefault();
       const gesture = e as GestureEvent;
       model.stopMotion();
-      model.zoomAt(this.gestureZoom / gesture.scale, gesture.clientY - canvas.getBoundingClientRect().top);
+      model.zoomAt(
+        this.gestureZoom / gesture.scale,
+        gesture.clientY - canvas.getBoundingClientRect().top,
+      );
     });
 
     ui.panel.addEventListener("panel-change", (e) => {
@@ -406,7 +431,8 @@ export class CalendarView extends HTMLElement {
 
   keyDown = (e: KeyboardEvent) => {
     const model = this.model;
-    if (e.key === "Shift" || e.key === "Alt" || e.key === "Meta" || e.key === "Control") this.pointer.modifiers(e);
+    if (e.key === "Shift" || e.key === "Alt" || e.key === "Meta" || e.key === "Control")
+      this.pointer.modifiers(e);
     if (isTyping(e)) return;
     const mod = e.ctrlKey || e.metaKey;
     if (e.key === "Escape") {
@@ -427,7 +453,8 @@ export class CalendarView extends HTMLElement {
   };
 
   keyUp = (e: KeyboardEvent) => {
-    if (e.key === "Shift" || e.key === "Alt" || e.key === "Meta" || e.key === "Control") this.pointer.modifiers(e);
+    if (e.key === "Shift" || e.key === "Alt" || e.key === "Meta" || e.key === "Control")
+      this.pointer.modifiers(e);
   };
 
   copy = (e: ClipboardEvent) => {
@@ -447,7 +474,8 @@ export class CalendarView extends HTMLElement {
       this.importFiles(files);
       return;
     }
-    const text = e.clipboardData.getData("text/calendar") || e.clipboardData.getData("text/plain");
+    const text =
+      e.clipboardData.getData("text/calendar") || e.clipboardData.getData("text/plain");
     if (!isCalendarData(text)) return;
     e.preventDefault();
     this.model.importData(text, null);
@@ -514,7 +542,6 @@ export class CalendarView extends HTMLElement {
     }
   }
 
-
   // Rendering
 
   themeTokens(): Theme {
@@ -532,7 +559,10 @@ export class CalendarView extends HTMLElement {
     const theme = this.themeTokens();
     this.size = { width: clientWidth, height: clientHeight };
     this.model.setRem(theme.rem);
-    this.model.setViewport(Math.max(0, clientWidth - theme.gutterWidth - theme.stripWidth), clientHeight);
+    this.model.setViewport(
+      Math.max(0, clientWidth - theme.gutterWidth - theme.stripWidth),
+      clientHeight,
+    );
     this.requestFrame();
   }
 
@@ -581,7 +611,9 @@ export class CalendarView extends HTMLElement {
     ctx.fillRect(0, 0, geo.width, geo.height);
 
     const paint: Paint = { ctx, scene, theme, model };
-    const layers = this.layerList.filter((layer) => !layer.toggleable || !model.disabledLayers.has(layer.id));
+    const layers = this.layerList.filter(
+      (layer) => !layer.toggleable || !model.disabledLayers.has(layer.id),
+    );
     ctx.save();
     ctx.beginPath();
     ctx.rect(geo.gutter, 0, geo.width - geo.gutter - geo.strip, geo.height);
@@ -619,7 +651,12 @@ export class CalendarView extends HTMLElement {
     const view = `${day}|${model.zoomLevel}|${model.canBack}|${model.canForward}`;
     if (this.applied.view !== view) {
       this.applied.view = view;
-      model.emit("view-change", { date: dateOf(day), zoomLevel: model.zoomLevel, canBack: model.canBack, canForward: model.canForward });
+      model.emit("view-change", {
+        date: dateOf(day),
+        zoomLevel: model.zoomLevel,
+        canBack: model.canBack,
+        canForward: model.canForward,
+      });
     }
 
     this.syncPanel(scene);
@@ -640,7 +677,12 @@ export class CalendarView extends HTMLElement {
     }
     panel.hidden = false;
     const { geo } = scene;
-    const { x, y } = placePanel(geo, anchorOf(model, scene, event), panel.offsetWidth, panel.offsetHeight);
+    const { x, y } = placePanel(
+      geo,
+      anchorOf(model, scene, event),
+      panel.offsetWidth,
+      panel.offsetHeight,
+    );
     panel.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
   }
 

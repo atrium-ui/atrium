@@ -1,12 +1,15 @@
 const DAY_MS = 86_400_000;
 export const DAY_MINUTES = 1440;
 
-export const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+export const clamp = (value: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, value));
 export const mod = (value: number, n: number) => ((value % n) + n) % n;
 
 /** Local calendar day as an integer: days since 1970-01-01. Immune to DST. */
 export function dayOf(date: Date): number {
-  return Math.round(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / DAY_MS);
+  return Math.round(
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / DAY_MS,
+  );
 }
 
 /** Local date `minutes` after midnight of `day`. */
@@ -66,7 +69,8 @@ export function minutesOn(
   last: number,
 ): [number, number] {
   const start = day === first ? minutesOf(event.start) : 0;
-  const end = day === last && dayOf(event.end) === last ? minutesOf(event.end) : DAY_MINUTES;
+  const end =
+    day === last && dayOf(event.end) === last ? minutesOf(event.end) : DAY_MINUTES;
   return [start, Math.max(start, end)];
 }
 
@@ -75,7 +79,10 @@ export function weekNumber(week: number, firstDay: number): number {
   const start = weekStart(week, firstDay);
   if (firstDay === 1) {
     const thursday = start + 3;
-    return Math.floor((thursday - dayOf(new Date(dateOf(thursday).getFullYear(), 0, 1))) / 7) + 1;
+    return (
+      Math.floor((thursday - dayOf(new Date(dateOf(thursday).getFullYear(), 0, 1))) / 7) +
+      1
+    );
   }
   const jan1 = dayOf(new Date(dateOf(start + 6).getFullYear(), 0, 1));
   return week - weekOf(jan1, firstDay) + 1;

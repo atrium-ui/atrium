@@ -1,7 +1,15 @@
 import { icsFileName, toICS } from "./ics.ts";
 import { isBanded } from "./layout.ts";
 import { type CalendarModel, SNAP_MINUTES } from "./model.ts";
-import { type Geometry, type Hit, hitTest, type Location, locate, locateUnit, type Scene } from "./scene.ts";
+import {
+  type Geometry,
+  type Hit,
+  hitTest,
+  type Location,
+  locate,
+  locateUnit,
+  type Scene,
+} from "./scene.ts";
 import { dateOf, dayOf, lastDayOf, minutesOf, shift } from "./time.ts";
 import type { CalendarEvent } from "./types.ts";
 
@@ -28,10 +36,31 @@ type State =
       end: number;
       frozen: { length: number; offset: number } | null;
     }
-  | { kind: "move"; event: CalendarEvent; grab: Location; duplicate: boolean; native: boolean; start: Date; end: Date }
-  | { kind: "resize"; event: CalendarEvent; edge: "start" | "end"; vertical: boolean; start: Date; end: Date }
+  | {
+      kind: "move";
+      event: CalendarEvent;
+      grab: Location;
+      duplicate: boolean;
+      native: boolean;
+      start: Date;
+      end: Date;
+    }
+  | {
+      kind: "resize";
+      event: CalendarEvent;
+      edge: "start" | "end";
+      vertical: boolean;
+      start: Date;
+      end: Date;
+    }
   | { kind: "box"; unit: number; cx: number; add: boolean }
-  | { kind: "pan"; x: number; y: number; samples: { t: number; y: number }[]; fling: boolean }
+  | {
+      kind: "pan";
+      x: number;
+      y: number;
+      samples: { t: number; y: number }[];
+      fling: boolean;
+    }
   | { kind: "zoom"; y0: number; zoom0: number; anchor: number }
   | { kind: "pinch"; distance: number; zoom0: number; mid: { x: number; y: number } }
   | { kind: "strip"; range: [number, number] };
@@ -56,7 +85,11 @@ const fromAbsolute = (minutes: number) => {
   const day = Math.floor(minutes / DAY);
   return dateOf(day, minutes - day * DAY);
 };
-const modsOf = (e: MouseEvent): Mods => ({ ctrl: e.ctrlKey || e.metaKey, shift: e.shiftKey, alt: e.altKey });
+const modsOf = (e: MouseEvent): Mods => ({
+  ctrl: e.ctrlKey || e.metaKey,
+  shift: e.shiftKey,
+  alt: e.altKey,
+});
 const noMods: Mods = { ctrl: false, shift: false, alt: false };
 
 /**
@@ -114,7 +147,8 @@ export class PointerController {
       this.state = { kind: "zoom", y0: y, zoom0: this.model.zoom, anchor: y };
       return;
     }
-    if (hit.kind === "event" && !hit.edge && !mods.ctrl) this.view.canvas.draggable = true;
+    if (hit.kind === "event" && !hit.edge && !mods.ctrl)
+      this.view.canvas.draggable = true;
     else this.capture(e);
     this.state = { kind: "press", x, y, hit, mods, touch: false };
   }
@@ -136,7 +170,8 @@ export class PointerController {
       s.y = y;
       return;
     }
-    if (s.kind === "zoom") return this.model.zoomAt(s.zoom0 * Math.exp((s.y0 - y) * 0.01), s.anchor);
+    if (s.kind === "zoom")
+      return this.model.zoomAt(s.zoom0 * Math.exp((s.y0 - y) * 0.01), s.anchor);
     if (s.kind === "strip") return this.strip(y);
     this.update();
   }
@@ -153,7 +188,8 @@ export class PointerController {
       if (!this.touches.size) this.reset();
       return;
     }
-    if (this.view.canvas.draggable || (this.state.kind === "move" && this.state.native)) return;
+    if (this.view.canvas.draggable || (this.state.kind === "move" && this.state.native))
+      return;
     this.reset();
   }
 
@@ -205,11 +241,26 @@ export class PointerController {
     if (hit.kind === "event") {
       const event = hit.box.event;
       if (hit.edge) {
-        this.state = { kind: "resize", event, edge: hit.edge, vertical: hit.box.area === "time", start: event.start, end: event.end };
+        this.state = {
+          kind: "resize",
+          event,
+          edge: hit.edge,
+          vertical: hit.box.area === "time",
+          start: event.start,
+          end: event.end,
+        };
       } else if (press.touch && model.canEdit(event)) {
         const grab = locate(model, this.view.geo(), press.x, press.y);
         if (!grab) return this.reset();
-        this.state = { kind: "move", event, grab, duplicate: false, native: false, start: event.start, end: event.end };
+        this.state = {
+          kind: "move",
+          event,
+          grab,
+          duplicate: false,
+          native: false,
+          start: event.start,
+          end: event.end,
+        };
       }
       // Mouse moves are handed to native drag and drop.
       return;
@@ -232,7 +283,14 @@ export class PointerController {
     }
     const allDay = loc.area !== "time";
     const anchor = allDay ? loc.day : snap(loc.day * DAY + loc.minutes);
-    this.state = { kind: "create", allDay, anchor, start: anchor, end: anchor, frozen: null };
+    this.state = {
+      kind: "create",
+      allDay,
+      anchor,
+      start: anchor,
+      end: anchor,
+      frozen: null,
+    };
     this.update();
   }
 
@@ -246,7 +304,12 @@ export class PointerController {
     if (s.kind === "box") {
       const y0 = model.rows.unitToPx(s.unit) - geo.scrollTop;
       const x0 = s.cx + geo.colsX;
-      const rect = { x: Math.min(x0, point.x), y: Math.min(y0, point.y), w: Math.abs(point.x - x0), h: Math.abs(point.y - y0) };
+      const rect = {
+        x: Math.min(x0, point.x),
+        y: Math.min(y0, point.y),
+        w: Math.abs(point.x - x0),
+        h: Math.abs(point.y - y0),
+      };
       return model.setPreview(null, null, rect);
     }
     const loc = locate(model, geo, point.x, point.y);
@@ -282,7 +345,14 @@ export class PointerController {
         ? model.formats.dayShort(start)
         : model.formats.dayRange(start, dateOf(s.end))
       : model.formats.timeRange(start, end);
-    const event: CalendarEvent = { id: "", calendarId: model.activeCalendar, title: "", start, end, allDay: s.allDay };
+    const event: CalendarEvent = {
+      id: "",
+      calendarId: model.activeCalendar,
+      title: "",
+      start,
+      end,
+      allDay: s.allDay,
+    };
     model.setPreview({ event, style: "create", label, laneOf: null });
   }
 
@@ -316,17 +386,24 @@ export class PointerController {
     const min = SNAP_MINUTES * 60_000;
     if (s.vertical) {
       const minutes = snap(loc.day * DAY + loc.minutes);
-      if (s.edge === "start") s.start = fromAbsolute(Math.min(minutes, absolute(event.end) - SNAP_MINUTES));
+      if (s.edge === "start")
+        s.start = fromAbsolute(Math.min(minutes, absolute(event.end) - SNAP_MINUTES));
       else s.end = fromAbsolute(Math.max(minutes, absolute(event.start) + SNAP_MINUTES));
     } else if (event.allDay) {
       if (s.edge === "start") s.start = dateOf(Math.min(loc.day, lastDayOf(event)));
       else s.end = dateOf(Math.max(loc.day, dayOf(event.start)) + 1);
     } else if (s.edge === "start") {
       const start = shift(event.start, loc.day - dayOf(event.start));
-      s.start = start.getTime() <= event.end.getTime() - min ? start : new Date(event.end.getTime() - min);
+      s.start =
+        start.getTime() <= event.end.getTime() - min
+          ? start
+          : new Date(event.end.getTime() - min);
     } else {
       const end = shift(event.end, loc.day - lastDayOf(event));
-      s.end = end.getTime() >= event.start.getTime() + min ? end : new Date(event.start.getTime() + min);
+      s.end =
+        end.getTime() >= event.start.getTime() + min
+          ? end
+          : new Date(event.start.getTime() + min);
     }
     this.model.setPreview(
       {
@@ -353,7 +430,10 @@ export class PointerController {
     }
     if (s.kind === "move") return this.commitMove(s);
     if (s.kind === "resize") {
-      if (s.start.getTime() !== s.event.start.getTime() || s.end.getTime() !== s.event.end.getTime()) {
+      if (
+        s.start.getTime() !== s.event.start.getTime() ||
+        s.end.getTime() !== s.event.end.getTime()
+      ) {
         model.change(s.event.id, { start: s.start, end: s.end });
       }
       return;
@@ -365,7 +445,10 @@ export class PointerController {
       if (!a || !b) return;
       const minutes =
         a.area === "time" && b.area === "time"
-          ? ([snap(Math.min(a.minutes, b.minutes)), snap(Math.max(a.minutes, b.minutes))] as [number, number])
+          ? ([
+              snap(Math.min(a.minutes, b.minutes)),
+              snap(Math.max(a.minutes, b.minutes)),
+            ] as [number, number])
           : null;
       model.boxSelect(
         [Math.min(a.week, b.week), Math.max(a.week, b.week)],
@@ -379,7 +462,8 @@ export class PointerController {
   commitMove(s: Extract<State, { kind: "move" }>) {
     const { event } = s;
     if (s.duplicate) {
-      if (!this.model.canCreate) return this.model.notify(this.model.strings.noWritableCalendar);
+      if (!this.model.canCreate)
+        return this.model.notify(this.model.strings.noWritableCalendar);
       return this.model.create(s.start, s.end, event.allDay, event.id);
     }
     if (!this.model.canEdit(event)) return;
@@ -422,7 +506,8 @@ export class PointerController {
     this.view.dragImage.removeAttribute("data-outside");
     this.view.dragImage.style.transform = "";
     this.view.canvas.draggable = false;
-    if (this.model.preview || this.model.hiddenId || this.model.selectionRect) this.model.setPreview(null);
+    if (this.model.preview || this.model.hiddenId || this.model.selectionRect)
+      this.model.setPreview(null);
   }
 
   /** Per frame: scrolls while dragging near the top or bottom edge. Returns whether it scrolled. */
@@ -437,7 +522,10 @@ export class PointerController {
           ? ((y - height + AUTOSCROLL_EDGE) / AUTOSCROLL_EDGE) * AUTOSCROLL_SPEED
           : 0;
     if (!speed) return false;
-    this.model.scrollBy(0, Math.max(-AUTOSCROLL_SPEED, Math.min(AUTOSCROLL_SPEED, speed)));
+    this.model.scrollBy(
+      0,
+      Math.max(-AUTOSCROLL_SPEED, Math.min(AUTOSCROLL_SPEED, speed)),
+    );
     return true;
   }
 
@@ -462,7 +550,10 @@ export class PointerController {
     const ics = toICS([event]);
     transfer.setData("text/calendar", ics);
     transfer.setData("text/plain", ics);
-    transfer.setData("DownloadURL", `text/calendar:${icsFileName(event)}:data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`);
+    transfer.setData(
+      "DownloadURL",
+      `text/calendar:${icsFileName(event)}:data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`,
+    );
     transfer.effectAllowed = "copyMove";
     transfer.setDragImage(this.view.dragImage, 0, 0);
     const grab = locate(this.model, this.view.geo(), s.x, s.y);
@@ -470,7 +561,15 @@ export class PointerController {
       e.preventDefault();
       return this.reset();
     }
-    this.state = { kind: "move", event, grab, duplicate: false, native: true, start: event.start, end: event.end };
+    this.state = {
+      kind: "move",
+      event,
+      grab,
+      duplicate: false,
+      native: true,
+      start: event.start,
+      end: event.end,
+    };
     this.model.setHover(null);
   }
 
@@ -483,7 +582,8 @@ export class PointerController {
     this.last = { x, y, mods: modsOf(e) };
     s.duplicate = e.altKey || e.metaKey;
     const editable = this.model.canEdit(s.event);
-    if (e.dataTransfer) e.dataTransfer.dropEffect = s.duplicate ? "copy" : editable ? "move" : "none";
+    if (e.dataTransfer)
+      e.dataTransfer.dropEffect = s.duplicate ? "copy" : editable ? "move" : "none";
     this.update();
     return true;
   }
@@ -541,7 +641,10 @@ export class PointerController {
     }
     if (this.touches.size === 2) {
       this.reset();
-      const [a, b] = [...this.touches.values()] as [{ x: number; y: number }, { x: number; y: number }];
+      const [a, b] = [...this.touches.values()] as [
+        { x: number; y: number },
+        { x: number; y: number },
+      ];
       this.state = {
         kind: "pinch",
         distance: Math.hypot(a.x - b.x, a.y - b.y),
@@ -556,9 +659,15 @@ export class PointerController {
     this.touches.set(e.pointerId, { x, y });
     const s = this.state;
     if (s.kind === "pinch") {
-      const [a, b] = [...this.touches.values()] as [{ x: number; y: number }, { x: number; y: number }];
+      const [a, b] = [...this.touches.values()] as [
+        { x: number; y: number },
+        { x: number; y: number },
+      ];
       const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
-      this.model.zoomAt((s.zoom0 * s.distance) / Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)), mid.y);
+      this.model.zoomAt(
+        (s.zoom0 * s.distance) / Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)),
+        mid.y,
+      );
       this.model.scrollBy(s.mid.x - mid.x, s.mid.y - mid.y);
       s.mid = mid;
       return;
@@ -587,7 +696,9 @@ export class PointerController {
     const s = this.state;
     if (s.kind === "pinch") {
       const rest = [...this.touches.values()][0];
-      this.state = rest ? { kind: "pan", x: rest.x, y: rest.y, samples: [], fling: true } : { kind: "idle" };
+      this.state = rest
+        ? { kind: "pan", x: rest.x, y: rest.y, samples: [], fling: true }
+        : { kind: "idle" };
       return;
     }
     if (!this.touches.size) this.finish();

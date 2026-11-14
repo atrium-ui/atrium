@@ -1,5 +1,15 @@
 import type { CalendarModel, Preview } from "./model.ts";
-import { DAY_NUMBER_SIZE, DAY_NUMBERS, type EventBox, MONTH_HEADER, MONTH_HEADING_SIZE, type MoreBox, type Scene, type SceneRow, textFade } from "./scene.ts";
+import {
+  DAY_NUMBER_SIZE,
+  DAY_NUMBERS,
+  type EventBox,
+  MONTH_HEADER,
+  MONTH_HEADING_SIZE,
+  type MoreBox,
+  type Scene,
+  type SceneRow,
+  textFade,
+} from "./scene.ts";
 import type { Strings } from "./strings.ts";
 import { contrastText, type Theme } from "./theme.ts";
 import { clamp, dateOf, weekNumber, weekOf } from "./time.ts";
@@ -38,12 +48,14 @@ interface Look {
 const crisp = (v: number) => Math.round(v) + 0.5;
 
 /** Finest hour step whose spacing is at least `gap` pixels; all steps divide 12 so noon is always on it. */
-const hourStep = (perHour: number, gap: number, steps: number[]) => steps.find((step) => step * perHour >= gap) ?? 6;
+const hourStep = (perHour: number, gap: number, steps: number[]) =>
+  steps.find((step) => step * perHour >= gap) ?? 6;
 const LINE_STEPS = [1, 2, 4, 6];
 const LABEL_STEPS = [1, 2, 3, 6];
 
 /** 0 while rows are collapsed, 1 once they are tall enough to show their hours. */
-const hoursAlpha = ({ scene, model }: Paint) => clamp((model.rowHeight - scene.geo.expandAt) / (scene.geo.expandAt * 0.8), 0, 1);
+const hoursAlpha = ({ scene, model }: Paint) =>
+  clamp((model.rowHeight - scene.geo.expandAt) / (scene.geo.expandAt * 0.8), 0, 1);
 
 const fitted = new Map<string, string>();
 
@@ -74,7 +86,15 @@ function hline(ctx: CanvasRenderingContext2D, x0: number, x1: number, y: number)
   ctx.lineTo(x1, crisp(y));
 }
 
-function pill(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, size: number, bg: string, fg: string) {
+function pill(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  x: number,
+  y: number,
+  size: number,
+  bg: string,
+  fg: string,
+) {
   const w = ctx.measureText(text).width + size;
   const h = size + 6;
   ctx.fillStyle = bg;
@@ -132,7 +152,12 @@ function drawCells({ ctx, scene, theme }: Paint, row: SceneRow) {
       ctx.fillRect(day.x, row.top, colWidth, row.height);
       ctx.strokeStyle = theme.todayBorder;
       ctx.lineWidth = 1;
-      ctx.strokeRect(crisp(day.x), crisp(row.top), Math.round(colWidth) - 1, Math.round(row.height) - 1);
+      ctx.strokeRect(
+        crisp(day.x),
+        crisp(row.top),
+        Math.round(colWidth) - 1,
+        Math.round(row.height) - 1,
+      );
     }
   }
 }
@@ -147,7 +172,8 @@ function drawLines({ ctx, scene, theme }: Paint, row: SceneRow) {
     const step = hourStep(perHour, 12, LINE_STEPS);
     ctx.strokeStyle = theme.hourLine;
     ctx.beginPath();
-    for (let hour = step; hour < 24; hour += step) if (hour !== 12) hline(ctx, left, right, row.timeTop + hour * perHour);
+    for (let hour = step; hour < 24; hour += step)
+      if (hour !== 12) hline(ctx, left, right, row.timeTop + hour * perHour);
     ctx.stroke();
     ctx.strokeStyle = theme.noonLine;
     ctx.beginPath();
@@ -234,7 +260,9 @@ function drawMonthHeadings(paint: Paint) {
   const height = size + 6;
   const inset = (MONTH_HEADER * scene.geo.rem - height) / 2;
   const marks = rows.flatMap((row) =>
-    row.days.filter((day) => dateOf(day.day).getDate() === 1 && row.top > 0).map((day) => ({ y: row.top, day: day.day })),
+    row.days
+      .filter((day) => dateOf(day.day).getDate() === 1 && row.top > 0)
+      .map((day) => ({ y: row.top, day: day.day })),
   );
   const next = marks[0];
   const sticky = { y: Math.min(0, next ? next.y - height - 8 : 0), day: top.start + 6 };
@@ -243,7 +271,15 @@ function drawMonthHeadings(paint: Paint) {
   ctx.font = `700 ${size}px ${theme.font}`;
   // Only the sticky heading floats over events and needs a backdrop, the others sit in their own header.
   const draw = (mark: { y: number; day: number }, backdrop: string) =>
-    pill(ctx, model.formats.monthYear(dateOf(mark.day)), scene.geo.gutter + 3, mark.y + inset, size, backdrop, theme.text);
+    pill(
+      ctx,
+      model.formats.monthYear(dateOf(mark.day)),
+      scene.geo.gutter + 3,
+      mark.y + inset,
+      size,
+      backdrop,
+      theme.text,
+    );
   ctx.globalAlpha = 1 - hoursAlpha(paint);
   if (ctx.globalAlpha) draw(sticky, theme.headingBg);
   ctx.globalAlpha = 1;
@@ -272,12 +308,18 @@ function drawGutter(paint: Paint) {
       ctx.font = `${current ? 700 : 500} ${size}px ${theme.font}`;
       ctx.fillStyle = current ? theme.accent : theme.textFaint;
       ctx.textAlign = "right";
-      ctx.fillText(model.strings.weekNumber(weekNumber(row.week, scene.firstDay)), geo.gutter - 6, row.top + row.height / 2);
+      ctx.fillText(
+        model.strings.weekNumber(weekNumber(row.week, scene.firstDay)),
+        geo.gutter - 6,
+        row.top + row.height / 2,
+      );
     }
     if (hours > 0 && row.expanded) {
       const perHour = row.timeHeight / 24;
       const step = hourStep(perHour, geo.rem, LABEL_STEPS);
-      const nowY = row.days.some((day) => day.today) ? row.timeTop + (scene.nowMinutes / 1440) * row.timeHeight : null;
+      const nowY = row.days.some((day) => day.today)
+        ? row.timeTop + (scene.nowMinutes / 1440) * row.timeHeight
+        : null;
       ctx.globalAlpha = hours;
       ctx.font = `500 ${0.625 * geo.rem}px ${theme.font}`;
       ctx.fillStyle = theme.textFaint;
@@ -293,7 +335,15 @@ function drawGutter(paint: Paint) {
         const text = model.formats.time(new Date());
         const size = 0.5 * geo.rem;
         const w = ctx.measureText(text).width + size;
-        pill(ctx, text, Math.max(2, geo.gutter - w - 3), nowY - (size + 6) / 2, size, theme.now, theme.bg);
+        pill(
+          ctx,
+          text,
+          Math.max(2, geo.gutter - w - 3),
+          nowY - (size + 6) / 2,
+          size,
+          theme.now,
+          theme.bg,
+        );
       }
     }
   }
@@ -321,7 +371,11 @@ export const gridLayer: Layer = {
       ctx.fillStyle = theme.textDim;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(model.strings.noMatches, (scene.geo.gutter + scene.geo.width - scene.geo.strip) / 2, scene.geo.height / 2);
+      ctx.fillText(
+        model.strings.noMatches,
+        (scene.geo.gutter + scene.geo.width - scene.geo.strip) / 2,
+        scene.geo.height / 2,
+      );
       ctx.textAlign = "left";
     }
   },
@@ -355,13 +409,23 @@ function lookOf(model: CalendarModel, theme: Theme, box: EventBox): Look {
 function previewLook(model: CalendarModel, theme: Theme, preview: Preview): Look {
   const { style, event } = preview;
   const color = style === "copy" ? theme.accent : model.colorOf(event);
-  const base = { color, solid: false, glow: false, outline: false, stripes: false, dashed: false, text: theme.eventText };
+  const base = {
+    color,
+    solid: false,
+    glow: false,
+    outline: false,
+    stripes: false,
+    dashed: false,
+    text: theme.eventText,
+  };
   if (style === "create") return { ...base, alpha: 1, dashed: true, text: theme.text };
-  if (style === "live") return { ...base, alpha: 1, solid: true, glow: true, text: contrastText(color) };
+  if (style === "live")
+    return { ...base, alpha: 1, solid: true, glow: true, text: contrastText(color) };
   return { ...base, alpha: 0.6 };
 }
 
-const hasLine = (box: EventBox, look: Look) => !look.dashed && (box.area === "time" || box.isStart);
+const hasLine = (box: EventBox, look: Look) =>
+  !look.dashed && (box.area === "time" || box.isStart);
 
 function drawEvent(paint: Paint, box: EventBox, look: Look, label: string | null) {
   const { ctx, theme } = paint;
@@ -371,7 +435,13 @@ function drawEvent(paint: Paint, box: EventBox, look: Look, label: string | null
   const endR = box.isEnd ? r : 0;
   ctx.save();
   ctx.beginPath();
-  ctx.roundRect(box.x, box.y, box.w, box.h, vertical ? [startR, startR, endR, endR] : [startR, endR, endR, startR]);
+  ctx.roundRect(
+    box.x,
+    box.y,
+    box.w,
+    box.h,
+    vertical ? [startR, startR, endR, endR] : [startR, endR, endR, startR],
+  );
   ctx.fillStyle = look.color;
   if (look.glow) {
     // Faint pass that only contributes the shadow; the real fill below covers the block itself.
@@ -421,7 +491,12 @@ function drawEvent(paint: Paint, box: EventBox, look: Look, label: string | null
   ctx.restore();
 }
 
-function drawEventText({ ctx, scene, theme, model }: Paint, box: EventBox, look: Look, label: string | null) {
+function drawEventText(
+  { ctx, scene, theme, model }: Paint,
+  box: EventBox,
+  look: Look,
+  label: string | null,
+) {
   if (!box.label) return;
   const vertical = box.area === "time";
   const size = 0.75 * scene.geo.rem;
@@ -429,7 +504,10 @@ function drawEventText({ ctx, scene, theme, model }: Paint, box: EventBox, look:
   if (!fade || box.w < 18) return;
   ctx.globalAlpha *= fade;
   const { event } = box;
-  const title = look.dashed && label ? label : `${event.recurring ? "↻ " : ""}${event.title || model.strings.untitled}`;
+  const title =
+    look.dashed && label
+      ? label
+      : `${event.recurring ? "↻ " : ""}${event.title || model.strings.untitled}`;
   const x = box.x + (hasLine(box, look) ? 9 : 6);
   const max = box.x + box.w - x - 3;
   ctx.fillStyle = look.text;
@@ -463,7 +541,10 @@ function drawMore({ ctx, scene, theme, model }: Paint, more: MoreBox) {
   ctx.fillStyle = theme.textDim;
   ctx.textBaseline = "middle";
   const full = model.strings.more(more.count);
-  const text = ctx.measureText(full).width <= more.w - 6 ? full : model.strings.moreShort(more.count);
+  const text =
+    ctx.measureText(full).width <= more.w - 6
+      ? full
+      : model.strings.moreShort(more.count);
   ctx.fillText(fit(ctx, text, more.w - 6), more.x + 3, more.y + more.h / 2 + 0.5);
   ctx.restore();
 }
@@ -475,7 +556,8 @@ export const eventsLayer: Layer = {
   draw(paint) {
     const { scene, theme, model } = paint;
     for (const box of scene.boxes) {
-      if (box.event.id !== model.hiddenId) drawEvent(paint, box, lookOf(model, theme, box), null);
+      if (box.event.id !== model.hiddenId)
+        drawEvent(paint, box, lookOf(model, theme, box), null);
     }
     for (const more of scene.more) drawMore(paint, more);
     const preview = model.preview;
@@ -533,5 +615,10 @@ export function drawStrip({ ctx, scene, theme, model }: Paint) {
   ctx.fillRect(x + 1, top, geo.strip - 1, Math.max(3, bottom - top));
   ctx.strokeStyle = theme.accent;
   ctx.lineWidth = 1;
-  ctx.strokeRect(x + 1.5, crisp(top), geo.strip - 2, Math.max(3, Math.round(bottom - top)));
+  ctx.strokeRect(
+    x + 1.5,
+    crisp(top),
+    geo.strip - 2,
+    Math.max(3, Math.round(bottom - top)),
+  );
 }
