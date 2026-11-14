@@ -2,16 +2,11 @@ import { Blur } from "@atrium-ui/elements/blur";
 import { Portal } from "@atrium-ui/elements/portal";
 import { css, html, LitElement } from "lit";
 import { property, query } from "lit/decorators.js";
-import { ScrollLock } from "@atrium-ui/scroll-lock";
 
 const overlayRegistry = new Map<string, OverlayElement>();
 
 class OverlayBlurElement extends Blur {
   public override scrolllock = true;
-
-  public override lock = new ScrollLock({
-    allowElements: ["a-overlay-blur *"],
-  });
 
   static override styles = css`
     :host {

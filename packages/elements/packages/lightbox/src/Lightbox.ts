@@ -4,7 +4,6 @@ import { LitElement, css, html } from "lit";
 import { property, query, state } from "lit/decorators.js";
 import { Blur } from "@atrium-ui/elements/blur";
 import type { Portal } from "@atrium-ui/elements/portal";
-import { ScrollLock } from "@atrium-ui/scroll-lock";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -15,10 +14,6 @@ declare global {
 let lightboxId = 0;
 
 class LightboxBlur extends Blur {
-  public override lock = new ScrollLock({
-    allowElements: ["a-lightbox-blur *"],
-  });
-
   public constructor() {
     super();
     this.scrolllock = true;

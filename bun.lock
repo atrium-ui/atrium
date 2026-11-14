@@ -134,9 +134,8 @@
     },
     "packages/elements": {
       "name": "@atrium-ui/elements",
-      "version": "5.5.0",
+      "version": "5.6.0",
       "dependencies": {
-        "@atrium-ui/scroll-lock": "^1.1.1",
         "@floating-ui/dom": "^1.6.7",
         "lit": "^3.1.3",
       },

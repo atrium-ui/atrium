@@ -54,8 +54,7 @@ test("popover no scrolllock", async () => {
   const btn = popover.querySelector("button");
   btn.click();
 
-  const content = document.querySelector("a-popover-portal");
-  expect(content.lock.enabled).toBe(false);
+  expect(document.documentElement.style.overflow).toBe("");
 });
 
 test("reattach", async () => {

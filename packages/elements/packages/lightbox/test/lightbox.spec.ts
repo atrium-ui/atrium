@@ -20,8 +20,6 @@ afterAll(() => {
 
 afterEach(() => {
   document.body.innerHTML = "";
-  document.body.style.overflow = "";
-  document.body.style.scrollbarGutter = "";
 });
 
 test("import element", async () => {
@@ -38,13 +36,13 @@ test("opens and closes through the public api", async () => {
 
   await lightbox.show();
   expect(lightbox.opened).toBe(true);
-  expect(document.body.style.overflow).toBe("hidden");
+  expect(document.documentElement.style.overflow).toBe("hidden");
   expect(lightbox.portalElement).toBeDefined();
 
   await lightbox.hide();
   await lightbox.updateComplete;
   expect(lightbox.opened).toBe(false);
-  expect(document.body.style.overflow).toBe("");
+  expect(document.documentElement.style.overflow).toBe("");
   expect(lightbox.portalElement).toBeNull();
 
   await lightbox.show();

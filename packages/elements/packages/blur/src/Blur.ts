@@ -1,6 +1,5 @@
 import { LitElement, type PropertyValueMap, css, html } from "lit";
 import { property } from "lit/decorators/property.js";
-import { ScrollLock } from "@atrium-ui/scroll-lock";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -63,6 +62,34 @@ function isInert(el: Element): boolean {
     }
   }
   return false;
+}
+
+/**
+ * Minimal stacked scroll-lock. Elements that need a scroll-lock copy this snippet.
+ *
+ * All lock owners share one Set on globalThis (keyed via Symbol.for),
+ * so locks stack correctly across independently bundled copies.
+ * The page is unlocked once the last owner released its lock.
+ */
+const SCROLL_LOCKS = Symbol.for("atrium-ui.scroll-locks");
+
+function scrollLocks(): Set<object> {
+  const store = globalThis as { [SCROLL_LOCKS]?: Set<object> };
+  store[SCROLL_LOCKS] ??= new Set();
+  return store[SCROLL_LOCKS];
+}
+
+function lockScroll(owner: object) {
+  scrollLocks().add(owner);
+  document.documentElement.style.overflow = "hidden";
+  document.documentElement.style.scrollbarGutter = "stable";
+}
+
+function unlockScroll(owner: object) {
+  const locks = scrollLocks();
+  if (!locks.delete(owner) || locks.size > 0) return;
+  document.documentElement.style.overflow = "";
+  document.documentElement.style.scrollbarGutter = "";
 }
 
 const SELECTOR_CUSTOM_ELEMENTS = `*:not(nav,ul,li,path,a,br,span,script,slot,p,style,div,pre,h1,h2,h3,h4,h5,img,svg)`;
@@ -165,8 +192,8 @@ export class Blur extends LitElement {
   public accessor initialfocus: "auto" | "false" = "auto";
 
   /**
-   * (experimental)
-   * Comma separated list of selectors to exclude from the scroll-lock.
+   * @deprecated Has no effect. The scroll-lock only locks the page scroll,
+   * scroll containers inside the page always stay scrollable.
    */
   @property({ type: String })
   public accessor allowscroll = "";
@@ -184,18 +211,15 @@ export class Blur extends LitElement {
   @property({ type: Boolean, reflect: true })
   public accessor scrolllock = false;
 
-  public lock: ScrollLock;
-
   private tryLock() {
-    if (this.scrolllock) {
-      this.lock.enable();
+    // enable() can run from an async update after the element was disconnected
+    if (this.scrolllock && this.isConnected) {
+      lockScroll(this);
     }
   }
 
   private tryUnlock() {
-    if (this.scrolllock) {
-      this.lock.disable();
-    }
+    unlockScroll(this);
   }
 
   private lastActiveElement: Element | null | undefined = null;
@@ -295,10 +319,6 @@ export class Blur extends LitElement {
   constructor() {
     super();
 
-    this.lock = new ScrollLock({
-      allowElements: ["a-blur *", ...this.allowscroll.split(",").filter(Boolean)],
-    });
-
     this.addEventListener("click", (e: MouseEvent) => {
       if (!this.shouldBlur(e)) return;
       this.tryBlur();
@@ -335,9 +355,6 @@ export class Blur extends LitElement {
   }
 
   public disconnectedCallback(): void {
-    // TODO: This call should be on a stack.
-    //			 So that if multiple blur elements are enabled,
-    //       it only disables when all are disabled.
     this.tryUnlock();
 
     // Remove keyboard event listeners

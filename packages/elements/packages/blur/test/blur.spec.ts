@@ -84,16 +84,33 @@ test("scroll lock", async () => {
   blur.enable();
 
   // blur is scroll locked
-  expect(blur.lock.enabled).toBe(true);
+  expect(document.documentElement.style.overflow).toBe("hidden");
 
   blur.disable();
-  expect(blur.lock.enabled).toBe(false);
+  expect(document.documentElement.style.overflow).toBe("");
 
   // disable scroll lock
   blur.removeAttribute("scrolllock");
 
   blur.enable();
-  expect(blur.lock.enabled).toBe(false);
+  expect(document.documentElement.style.overflow).toBe("");
+});
+
+test("stacked scroll locks", async () => {
+  const first = (await createBlur()).querySelector("a-blur");
+  const second = (await createBlur()).querySelector("a-blur");
+  first.setAttribute("scrolllock", "");
+  second.setAttribute("scrolllock", "");
+
+  first.enable();
+  second.enable();
+
+  // page stays locked until the last lock is released
+  first.disable();
+  expect(document.documentElement.style.overflow).toBe("hidden");
+
+  second.remove();
+  expect(document.documentElement.style.overflow).toBe("");
 });
 
 test("aria attributes", async () => {
@@ -109,22 +126,6 @@ test("aria attributes", async () => {
   blur.disable();
   expect(blur.hasAttribute("inert")).toBe(true);
   expect(blur.hasAttribute("aria-hidden")).toBe(true);
-});
-
-test("allowed scroll elements match content", async () => {
-  const root = await createBlur();
-  const blur = root.querySelector("a-blur");
-  const content = blur.querySelector("div");
-
-  let matched = false;
-  for (const selector of blur.lock.options.allowElements) {
-    if (content.matches(selector)) {
-      matched = true;
-      break;
-    }
-  }
-
-  expect(matched).toBe(true);
 });
 
 function press(ele: HTMLElement, key: string) {

@@ -68,13 +68,14 @@ blur.addEventListener('exit', (event) => {
 });
 ```
 
-### Allow Scrolling on Specific Elements
+### Scroll Lock
 
-When using scroll lock, you can allow scrolling on specific elements:
+With `scrolllock`, the page scroll is locked while the blur is enabled. Scroll containers inside the blur stay scrollable.
+Multiple enabled blurs stack their locks, the page is unlocked once the last one is disabled or removed.
 
 ```html
-<a-blur enabled scrolllock allowscroll=".scrollable-area, .another-scrollable">
-  <div class="scrollable-area" style="overflow: auto; max-height: 300px;">
+<a-blur enabled scrolllock>
+  <div style="overflow: auto; max-height: 300px;">
     <!-- This area remains scrollable -->
   </div>
 </a-blur>
