@@ -63,12 +63,12 @@ export class CalendarElement extends LitElement {
       align-items: center;
       justify-content: space-between;
       gap: 0.5rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.25rem;
     }
 
     .header-title {
-      min-width: 2.5rem;
-      min-height: 2.5rem;
+      min-width: 2rem;
+      min-height: 2rem;
       font-weight: 600;
       cursor: pointer;
       padding: 0.25rem 0.5rem;
@@ -81,6 +81,12 @@ export class CalendarElement extends LitElement {
 
     .header-title:hover {
       background: var(--_hover-bg);
+    }
+
+    .back-icon {
+      display: block;
+      width: 1.25rem;
+      height: 1.25rem;
     }
 
     .nav-buttons {
@@ -131,8 +137,8 @@ export class CalendarElement extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 2.5rem;
-      min-height: 2.5rem;
+      min-width: 2rem;
+      min-height: 2rem;
       background: none;
       border: none;
       border-radius: 0.25rem;
@@ -1178,7 +1184,13 @@ export class CalendarElement extends LitElement {
           ?disabled=${this.disabled}
           aria-label=${this.yearPickerOpen ? "Back to calendar" : "Select year"}
         >
-          ${this.yearPickerOpen ? "‹" : this.getMonthYearString()}
+          ${
+            this.yearPickerOpen
+              ? html`<svg class="back-icon" part="back-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>`
+              : this.getMonthYearString()
+          }
         </button>
         ${
           this.yearPickerOpen
