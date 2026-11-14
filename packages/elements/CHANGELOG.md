@@ -1,5 +1,11 @@
 # @atrium-ui/elements
 
+## 5.6.0 (2026-11-14)
+
+### Features
+
+- Week numbers
+
 ## 5.5.0 (2026-10-13)
 
 ### Features
