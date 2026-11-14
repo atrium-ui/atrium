@@ -67,6 +67,8 @@ export class CalendarElement extends LitElement {
     }
 
     .header-title {
+      min-width: 2.5rem;
+      min-height: 2.5rem;
       font-weight: 600;
       cursor: pointer;
       padding: 0.25rem 0.5rem;
@@ -126,16 +128,22 @@ export class CalendarElement extends LitElement {
     }
 
     .nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.5rem;
+      min-height: 2.5rem;
       background: none;
       border: none;
+      border-radius: 0.25rem;
       cursor: pointer;
-      padding: 0.25rem 0.5rem;
-      font-size: 1rem;
+      padding: 0;
+      font-size: 1.25rem;
       color: inherit;
     }
 
-    .nav-btn:hover {
-      opacity: 0.7;
+    .nav-btn:hover:not(:disabled) {
+      background: var(--_hover-bg);
     }
 
     .nav-btn:disabled {
@@ -154,6 +162,19 @@ export class CalendarElement extends LitElement {
 
     .weekday {
       padding: 0.25rem;
+    }
+
+    :host([week-numbers]) .weekdays,
+    :host([week-numbers]) .week {
+      grid-template-columns: 2rem repeat(7, 1fr);
+    }
+
+    .week-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      opacity: 0.6;
     }
 
     .days {
@@ -306,6 +327,13 @@ export class CalendarElement extends LitElement {
   accessor weekStart: number | undefined = undefined;
 
   /**
+   * Show the week number in front of each week row.
+   * ISO 8601 week numbers when weeks start on Monday, otherwise the week containing January 1st is week 1.
+   */
+  @property({ type: Boolean, reflect: true, attribute: "week-numbers" })
+  accessor weekNumbers = false;
+
+  /**
    * Minimum selectable date (YYYY-MM-DD).
    */
   @property({ type: String })
@@ -455,6 +483,28 @@ export class CalendarElement extends LitElement {
       return 0;
     }
     return 1;
+  }
+
+  /**
+   * Week number of the week starting on `weekStart`.
+   * ISO 8601 week numbers when weeks start on Monday, otherwise the week containing January 1st is week 1.
+   */
+  getWeekNumber(weekStart: Date): number {
+    const dayOf = (date: Date) =>
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86_400_000;
+    const offset = (days: number) =>
+      new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + days);
+
+    if (this.effectiveWeekStart === 1) {
+      const thursday = offset(3);
+      const jan1 = new Date(thursday.getFullYear(), 0, 1);
+      return Math.floor((dayOf(thursday) - dayOf(jan1)) / 7) + 1;
+    }
+
+    const jan1 = new Date(offset(6).getFullYear(), 0, 1);
+    const firstWeekStart =
+      dayOf(jan1) - ((jan1.getDay() - this.effectiveWeekStart + 7) % 7);
+    return (dayOf(weekStart) - firstWeekStart) / 7 + 1;
   }
 
   /**
@@ -1128,7 +1178,7 @@ export class CalendarElement extends LitElement {
           ?disabled=${this.disabled}
           aria-label=${this.yearPickerOpen ? "Back to calendar" : "Select year"}
         >
-          ${this.yearPickerOpen ? currentYear : this.getMonthYearString()}
+          ${this.yearPickerOpen ? "‹" : this.getMonthYearString()}
         </button>
         ${
           this.yearPickerOpen
@@ -1164,6 +1214,7 @@ export class CalendarElement extends LitElement {
 
       <div class="body" part="body">
         <div class="weekdays" part="weekdays" aria-hidden="true">
+          ${this.weekNumbers ? html`<span class="weekday"></span>` : nothing}
           ${weekdays.map((name) => html`<span class="weekday">${name}</span>`)}
         </div>
 
@@ -1177,6 +1228,11 @@ export class CalendarElement extends LitElement {
               ${weeks.map(
                 (week) => html`
                   <div class="week" part="week">
+                    ${
+                      this.weekNumbers
+                        ? html`<span class="week-number" part="week-number" aria-hidden="true">${this.getWeekNumber(week[0]!.date)}</span>`
+                        : nothing
+                    }
                     ${week.map(({ dateStr, isOtherMonth }) => {
                       const disabled = this.isDateDisabled(dateStr);
                       const selected = this.isSelected(dateStr);

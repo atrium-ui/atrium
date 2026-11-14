@@ -3,6 +3,10 @@ import "@atrium-ui/elements/popover";
 import { ref } from "vue";
 import Input from "./Input.vue";
 
+defineProps<{
+  weekNumbers?: boolean;
+}>();
+
 const emit = defineEmits<{
   change: [value: CustomEvent<{ date: Date }>];
 }>();
@@ -27,7 +31,7 @@ function handleChange(ev: Event) {
     <a-popover class="group" placements="bottom">
       <div class="w-[max-content] p-3 opacity-0 transition-opacity duration-100 group-[&[enabled]]:opacity-100">
         <div class="min-w-[100px] scale-95 rounded-md bg-white p-1 shadow-lg transition-all duration-150 group-[&[enabled]]:scale-100">
-          <a-calendar @change="handleChange" />
+          <a-calendar :week-numbers="weekNumbers || undefined" @change="handleChange" />
         </div>
       </div>
     </a-popover>
