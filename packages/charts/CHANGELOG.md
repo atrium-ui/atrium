@@ -1,3 +1,9 @@
+## 0.2.7 (2026-11-14)
+
+### Features
+
+- Decouple elements from scroll-lock
+
 ## 0.2.6 (2026-10-13)
 
 ### Fixes

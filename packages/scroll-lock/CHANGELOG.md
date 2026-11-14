@@ -1,5 +1,11 @@
 # @atrium-ui/scroll-lock
 
+## 1.5.0 (2026-11-14)
+
+### Features
+
+- Decouple elements from scroll-lock
+
 ## 1.4.1 (2026-10-13)
 
 ### Fixes
