@@ -37,10 +37,14 @@ declare global {
  * </a-media>
  * ```
  */
-export class MediaElement extends HTMLElement {
+export class MediaElement extends LitElement {
   /** The controlled media element. */
   get media(): HTMLMediaElement | null {
     return this.querySelector("audio, video");
+  }
+
+  render() {
+    return html`<slot></slot>`;
   }
 }
 
