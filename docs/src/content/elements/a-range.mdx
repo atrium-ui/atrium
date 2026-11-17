@@ -77,6 +77,14 @@ console.log(range.value); // 0.5
   <a-range class="w-[400px] opacity-50" disabled value="0.5"></a-range>
 </div>
 
+### Buffer
+
+Use `buffer` to show a secondary progress from 0 to 1 behind the value, like the loaded part of a media file. It is used by [`a-media-seek`](/elements/a-media/).
+
+```html
+<a-range value="0.3" buffer="0.6"></a-range>
+```
+
 ## Styling
 
 The range slider is fully customisable via CSS custom properties:
@@ -94,6 +102,9 @@ a-range {
   --range-track-background: #e5e7eb;
   --range-track-height: 0.25rem;
   --range-track-padding: 0.5rem 0;
+
+  /* Buffer (secondary progress), defaults to the track background */
+  --range-buffer-background: #d1d5db;
 
   /* Focus state */
   --range-outline-color: #3b82f6;
@@ -149,6 +160,7 @@ a-range::part(handle) {
 | Part | Description |
 |------|-------------|
 | `track` | The background track element |
+| `buffer` | The secondary progress inside the track |
 | `handle` | The draggable handle/thumb |
 
 ## Accessibility

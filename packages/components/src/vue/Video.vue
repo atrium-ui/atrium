@@ -3,6 +3,7 @@ import "@atrium-ui/elements/media";
 import "@videojs/html/video/player";
 import "@videojs/html/ui/container";
 import "@videojs/html/ui/controls";
+import "@videojs/html/ui/fullscreen-button";
 import "@videojs/html/ui/gesture";
 import "@videojs/html/ui/hotkey";
 import "@videojs/html/ui/status-indicator";
@@ -19,15 +20,16 @@ const props = defineProps<{
 
 <template>
   <video-player class="contents">
-    <a-media
-      :class="
-        twMerge(
-          'relative block aspect-video w-full overflow-hidden rounded-md bg-black font-sans text-white has-[media-container:focus-visible]:outline-2 has-[media-container:focus-visible]:outline-zinc-900 has-[media-container:focus-visible]:outline-offset-2',
-          props.class,
-        )
-      "
-    >
-      <media-container :aria-label="label" class="absolute inset-0 block outline-none">
+    <a-media class="contents">
+      <media-container
+        :aria-label="label"
+        :class="
+          twMerge(
+            'relative block aspect-video w-full overflow-hidden rounded-md bg-black font-sans text-white focus-visible:outline-2 focus-visible:outline-zinc-900 focus-visible:outline-offset-2',
+            props.class,
+          )
+        "
+      >
         <video
           :src="src"
           :poster="poster"
@@ -91,10 +93,10 @@ const props = defineProps<{
                 <a-media-time type="duration" class="text-white/60" />
               </div>
 
-              <a-media-fullscreen class="ml-auto grid h-9 w-9 flex-none place-items-center rounded-md transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-white focus-visible:-outline-offset-2 active:bg-white/25 active:transition-none [&>span]:flex">
-                <span slot="enter"><Icon name="fullscreen" /><span class="sr-only">Enter fullscreen</span></span>
-                <span slot="exit"><Icon name="fullscreen-exit" /><span class="sr-only">Exit fullscreen</span></span>
-              </a-media-fullscreen>
+              <media-fullscreen-button class="group/fullscreen ml-auto grid h-9 w-9 flex-none place-items-center rounded-md transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-white focus-visible:-outline-offset-2 active:bg-white/25 active:transition-none [&[hidden]]:hidden">
+                <Icon name="fullscreen" class="group-data-fullscreen/fullscreen:hidden" />
+                <Icon name="fullscreen-exit" class="hidden group-data-fullscreen/fullscreen:block" />
+              </media-fullscreen-button>
             </div>
           </div>
         </media-controls>

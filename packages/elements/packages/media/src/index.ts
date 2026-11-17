@@ -6,7 +6,6 @@
 
 import {
   MediaElement,
-  MediaFullscreenElement,
   MediaMuteElement,
   MediaPlayElement,
   MediaRateElement,
@@ -23,7 +22,6 @@ const elements = {
   "a-media-mute": MediaMuteElement,
   "a-media-skip": MediaSkipElement,
   "a-media-rate": MediaRateElement,
-  "a-media-fullscreen": MediaFullscreenElement,
   "a-media-time": MediaTimeElement,
   "a-media-seek": MediaSeekElement,
   "a-media-volume": MediaVolumeElement,
@@ -39,7 +37,6 @@ for (const [name, element] of Object.entries(elements)) {
 
 export {
   MediaElement,
-  MediaFullscreenElement,
   MediaMuteElement,
   MediaPlayElement,
   MediaRateElement,

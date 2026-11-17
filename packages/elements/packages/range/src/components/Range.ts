@@ -33,6 +33,7 @@ export class Range extends LitElement {
         --range-track-height: 0.125rem;
         --range-track-padding: 0.25rem 0;
         --range-handle-size: 0.625rem;
+        --range-buffer-background: var(--range-track-background);
       }
 
       .range {
@@ -80,6 +81,17 @@ export class Range extends LitElement {
         top: 0;
       }
 
+      .buffer {
+        width: calc((var(--buffer) * 100%) + var(--range-handle-size));
+        pointer-events: none;
+        height: 100%;
+        background: var(--range-buffer-background);
+        border-radius: 1rem;
+        margin: 0 calc(var(--range-handle-size) / -2px);
+        position: absolute;
+        top: 0;
+      }
+
       .handle {
         width: var(--range-handle-size);
         height: var(--range-handle-size);
@@ -121,6 +133,10 @@ export class Range extends LitElement {
   @property({ type: Number })
   public accessor step = 0.01;
 
+  /** Secondary progress from 0 to 1 behind the value, like the buffered part of a video. */
+  @property({ type: Number })
+  public accessor buffer = 0;
+
   /** Disabled state of the range. */
   @property({ type: Boolean })
   public accessor disabled = false;
@@ -131,6 +147,11 @@ export class Range extends LitElement {
 
   @query(".progress")
   private accessor progressElement!: HTMLElement;
+
+  /** Human readable value for assistive technology, like "1:30 of 9:12". */
+  public get valueText(): string | undefined {
+    return undefined;
+  }
 
   public dragStartPosition: number | undefined = 0;
 
@@ -214,19 +235,22 @@ export class Range extends LitElement {
   render() {
     return html`
       <div
-        style="--progress: ${this.progress}"
+        style="--progress: ${this.progress}; --buffer: ${this.buffer}"
         class="range"
         role="slider"
         aria-label=${ifDefined(this.label)}
         aria-valuemin=${this.min}
         aria-valuemax=${this.max}
         aria-valuenow="${this.value}"
+        aria-valuetext=${ifDefined(this.valueText)}
         aria-orientation="horizontal"
         aria-disabled="${this.disabled}"
         tabindex="0"
         @mousedown="${(e) => this.onProgressClick(e)}"
       >
-        <div part="track" class="progress"></div>
+        <div part="track" class="progress">
+          <div part="buffer" class="buffer"></div>
+        </div>
         <div part="handle" class="handle" @pointerdown="${(e) => this.onHandleMouseDown(e)}"></div>
       </div>
     `;

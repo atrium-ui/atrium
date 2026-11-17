@@ -30,11 +30,11 @@ const props = defineProps<{
       <span slot="pause"><Icon name="pause" /><span class="sr-only">Pause</span></span>
     </a-media-play>
 
-    <a-media-skip :seconds="-15" class="hidden h-9 w-9 flex-none place-items-center rounded-md transition-colors hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-zinc-900 focus-visible:-outline-offset-2 active:bg-zinc-200 active:transition-none sm:grid [&>span]:flex">
+    <a-media-skip :seconds="-15" class="hidden h-9 w-9 flex-none place-items-center rounded-md transition-colors hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-zinc-900 focus-visible:-outline-offset-2 active:bg-zinc-200 active:transition-none aria-disabled:pointer-events-none aria-disabled:opacity-40 sm:grid [&>span]:flex">
       <span><Icon name="reload" class="-scale-x-100" /><span class="sr-only">Back 15 seconds</span></span>
     </a-media-skip>
 
-    <a-media-skip :seconds="30" class="hidden h-9 w-9 flex-none place-items-center rounded-md transition-colors hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-zinc-900 focus-visible:-outline-offset-2 active:bg-zinc-200 active:transition-none sm:grid [&>span]:flex">
+    <a-media-skip :seconds="30" class="hidden h-9 w-9 flex-none place-items-center rounded-md transition-colors hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-zinc-900 focus-visible:-outline-offset-2 active:bg-zinc-200 active:transition-none aria-disabled:pointer-events-none aria-disabled:opacity-40 sm:grid [&>span]:flex">
       <span><Icon name="reload" /><span class="sr-only">Forward 30 seconds</span></span>
     </a-media-skip>
 

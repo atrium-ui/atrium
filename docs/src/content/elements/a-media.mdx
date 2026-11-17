@@ -19,7 +19,6 @@ They are used by the [Audio](/components/audio/) and [Video](/components/video/)
 | `a-media-mute` | Toggles mute. Slots `mute` and `unmute`. |
 | `a-media-skip` | Skips by `seconds`, negative values skip backward. |
 | `a-media-rate` | Cycles through playback `rates` and renders the current rate. |
-| `a-media-fullscreen` | Toggles fullscreen of the `<a-media>`. Slots `enter` and `exit`. |
 | `a-media-time` | Displays the `current`, `duration` or `remaining` time. |
 | `a-media-seek` | Seek slider, extends [`a-range`](/elements/a-range/). |
 | `a-media-volume` | Volume slider, extends [`a-range`](/elements/a-range/). |
@@ -27,7 +26,10 @@ They are used by the [Audio](/components/audio/) and [Video](/components/video/)
 ## Accessibility
 
 - **Buttons**: The button elements get `role="button"` and are focusable. They activate on click, <kbd>Enter</kbd> and <kbd>Space</kbd>. The accessible name comes from the slotted content, so include text (visually hidden if needed).
-- **Sliders**: Seek and volume have `role="slider"`. Name them with the `label` attribute. <kbd>←</kbd>/<kbd>→</kbd> seek by `key-step` seconds (default 5) or change the volume by `key-step` (default 0.1).
+- **Sliders**: Seek and volume have `role="slider"` and a readable `aria-valuetext`, like "1:30 of 9:12" or "50%". Name them with the `label` attribute.
+- **Keyboard**: On the seek slider <kbd>←</kbd>/<kbd>→</kbd> seek by `key-step` seconds (default 5), <kbd>Home</kbd>/<kbd>End</kbd> jump to the start or end. On the volume slider the arrow keys change the volume by `key-step` (default 0.1).
+- **Disabled state**: `a-media-skip` gets `aria-disabled="true"` and the seek slider is disabled while the duration is unknown.
+- **Volume**: `a-media-volume` is hidden on platforms that don't allow changing the volume, like iOS. Muting still works there.
 - **Group**: Give the `<a-media>` container `role="group"` and an `aria-label`, so the controls are announced together.
 
 ## Usage
@@ -67,11 +69,10 @@ import "@atrium-ui/elements/media";
 
 ### Video
 
-The same controls work with a `<video>`. Add `a-media-fullscreen` to show the `<a-media>` container in fullscreen.
-On iPhone, where only video elements can be shown in fullscreen, the native video player is used.
+The same controls work with a `<video>`. For fullscreen, gestures, hotkeys or auto hiding controls, combine them with a [Video.js](https://videojs.org/) player, like the [Video](/components/video/) component does.
 
 ```html
-<a-media class="relative block">
+<a-media>
   <video src="video.mp4" playsinline></video>
 
   <a-media-play>
@@ -79,20 +80,15 @@ On iPhone, where only video elements can be shown in fullscreen, the native vide
     <span slot="pause">Pause</span>
   </a-media-play>
 
-  <a-media-fullscreen>
-    <span slot="enter">Fullscreen</span>
-    <span slot="exit">Exit fullscreen</span>
-  </a-media-fullscreen>
+  <a-media-seek label="Seek"></a-media-seek>
 </a-media>
 ```
-
-The elements work alongside a [Video.js](https://videojs.org/) player for gestures, hotkeys or auto hiding controls, like in the Video component.
 
 ## Customization
 
 - **Container**: `<a-media>` has no styles of its own, it is an inline element by default.
 - **Buttons**: Style the elements directly, they are the buttons. Use the slots to swap icons per state.
-- **Sliders**: Seek and volume use the [`a-range` custom properties and parts](/elements/a-range/#styling).
+- **Sliders**: Seek and volume use the [`a-range` custom properties and parts](/elements/a-range/#styling). The seek slider shows the buffered part of the media from the current time, styled with `--range-buffer-background` or `::part(buffer)`.
 - **Time and rate**: `a-media-time` renders plain text with tabular numbers, `a-media-rate` renders the rate as text like `1.5×`.
 
 <TypeDoc source="../packages/elements/packages/media" symbol="MediaElement" />
@@ -100,7 +96,6 @@ The elements work alongside a [Video.js](https://videojs.org/) player for gestur
 <TypeDoc source="../packages/elements/packages/media" symbol="MediaMuteElement" />
 <TypeDoc source="../packages/elements/packages/media" symbol="MediaSkipElement" />
 <TypeDoc source="../packages/elements/packages/media" symbol="MediaRateElement" />
-<TypeDoc source="../packages/elements/packages/media" symbol="MediaFullscreenElement" />
 <TypeDoc source="../packages/elements/packages/media" symbol="MediaTimeElement" />
 <TypeDoc source="../packages/elements/packages/media" symbol="MediaSeekElement" />
 <TypeDoc source="../packages/elements/packages/media" symbol="MediaVolumeElement" />

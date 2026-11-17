@@ -16,7 +16,6 @@ declare global {
     "a-media-mute": MediaMuteElement;
     "a-media-skip": MediaSkipElement;
     "a-media-rate": MediaRateElement;
-    "a-media-fullscreen": MediaFullscreenElement;
     "a-media-time": MediaTimeElement;
     "a-media-seek": MediaSeekElement;
     "a-media-volume": MediaVolumeElement;
@@ -26,7 +25,6 @@ declare global {
 /**
  * Container for an `<audio>` or `<video>` element and its controls.
  * Controls placed anywhere inside of it control the first media element.
- * It is also the element that `<a-media-fullscreen>` shows in fullscreen.
  *
  * @example
  * ```html
@@ -46,29 +44,19 @@ export class MediaElement extends HTMLElement {
   }
 }
 
-/** Media events that change the state shown by the controls. */
-const MEDIA_EVENTS = [
-  "play",
-  "pause",
-  "ended",
-  "emptied",
-  "timeupdate",
-  "durationchange",
-  "loadedmetadata",
-  "volumechange",
-  "ratechange",
-];
-
 /**
- * Connects a control element to the media element of its closest `<a-media>` and updates the host on media events.
+ * Connects a control element to the media element of its closest `<a-media>`.
+ * Updates the host only on the given media events, so controls don't re-render on unrelated changes.
  * Media events don't bubble, so they are captured on the `<a-media>` container.
  */
 export class MediaController implements ReactiveController {
   host: ReactiveControllerHost & HTMLElement;
+  events: string[];
   player: MediaElement | undefined;
 
-  constructor(host: ReactiveControllerHost & HTMLElement) {
+  constructor(host: ReactiveControllerHost & HTMLElement, events: string[]) {
     this.host = host;
+    this.events = events;
     host.addController(this);
   }
 
@@ -80,13 +68,13 @@ export class MediaController implements ReactiveController {
       throw new Error("Media element has to be placed inside an <a-media>");
     }
     this.player = player;
-    for (const type of MEDIA_EVENTS) {
+    for (const type of this.events) {
       player.addEventListener(type, this.onMediaEvent, true);
     }
   }
 
   hostDisconnected() {
-    for (const type of MEDIA_EVENTS) {
+    for (const type of this.events) {
       this.player?.removeEventListener(type, this.onMediaEvent, true);
     }
     this.player = undefined;
@@ -97,6 +85,9 @@ export class MediaController implements ReactiveController {
     return this.player?.media ?? undefined;
   }
 }
+
+/** Events that change the playback position or duration. */
+const TIME_EVENTS = ["timeupdate", "durationchange", "emptied"];
 
 /**
  * Returns the media element of the controller, throws if there is none.
@@ -139,6 +130,28 @@ function duration(media: HTMLMediaElement | undefined) {
 }
 
 /**
+ * End of the buffered range at the current time in seconds, 0 if the current time is not buffered.
+ */
+function bufferedEnd(media: HTMLMediaElement) {
+  for (let i = 0; i < media.buffered.length; i++) {
+    const end = media.buffered.end(i);
+    if (media.buffered.start(i) <= media.currentTime && media.currentTime <= end) {
+      return end;
+    }
+  }
+  return 0;
+}
+
+/**
+ * Whether the volume can be changed. iOS ignores volume changes, only muting works there.
+ */
+function canSetVolume() {
+  const audio = document.createElement("audio");
+  audio.volume = 0.5;
+  return audio.volume === 0.5;
+}
+
+/**
  * Base for media control buttons. The host element acts as the button.
  * The accessible name comes from the slotted content.
  */
@@ -153,23 +166,35 @@ export abstract class MediaButtonElement extends LitElement {
       -webkit-user-select: none;
     }
 
+    :host([aria-disabled="true"]) {
+      cursor: default;
+    }
+
     /* The host has to be the event target, so gesture handlers recognize it as interactive */
     ::slotted(*) {
       pointer-events: none;
     }
   `;
 
-  controller = new MediaController(this);
+  abstract controller: MediaController;
 
   abstract activate(): void;
 
   onClick = () => this.activate();
 
+  // ARIA button pattern: Enter activates on keydown, Space on keyup
   onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
+    if (e.key === "Enter") {
       e.preventDefault();
       this.activate();
+    } else if (e.key === " ") {
+      // prevent page scroll
+      e.preventDefault();
     }
+  };
+
+  onKeyUp = (e: KeyboardEvent) => {
+    if (e.key === " ") this.activate();
   };
 
   connectedCallback() {
@@ -178,11 +203,13 @@ export abstract class MediaButtonElement extends LitElement {
     this.tabIndex = 0;
     this.addEventListener("click", this.onClick);
     this.addEventListener("keydown", this.onKeyDown);
+    this.addEventListener("keyup", this.onKeyUp);
   }
 
   disconnectedCallback() {
     this.removeEventListener("click", this.onClick);
     this.removeEventListener("keydown", this.onKeyDown);
+    this.removeEventListener("keyup", this.onKeyUp);
     super.disconnectedCallback();
   }
 }
@@ -199,6 +226,8 @@ export abstract class MediaButtonElement extends LitElement {
  * ```
  */
 export class MediaPlayElement extends MediaButtonElement {
+  controller = new MediaController(this, ["play", "pause", "emptied"]);
+
   activate() {
     const media = connected(this.controller);
     if (media.paused) media.play();
@@ -222,6 +251,8 @@ export class MediaPlayElement extends MediaButtonElement {
  * ```
  */
 export class MediaMuteElement extends MediaButtonElement {
+  controller = new MediaController(this, ["volumechange"]);
+
   activate() {
     const media = connected(this.controller);
     media.muted = !media.muted;
@@ -233,7 +264,7 @@ export class MediaMuteElement extends MediaButtonElement {
 }
 
 /**
- * Skips forward or backward by a number of seconds.
+ * Skips forward or backward by a number of seconds. Disabled while the duration is unknown.
  *
  * @example
  * ```html
@@ -246,15 +277,28 @@ export class MediaSkipElement extends MediaButtonElement {
   @property({ type: Number })
   public accessor seconds = 15;
 
+  controller = new MediaController(this, ["durationchange", "emptied"]);
+
+  get disabled() {
+    return duration(this.controller.media) === 0;
+  }
+
   activate() {
     if (typeof this.seconds !== "number") {
       throw new Error("<a-media-skip> seconds has to be a number");
     }
+    if (this.disabled) return;
+
     const media = connected(this.controller);
     media.currentTime = Math.min(
       Math.max(media.currentTime + this.seconds, 0),
       duration(media),
     );
+  }
+
+  protected willUpdate(changed: PropertyValues) {
+    super.willUpdate(changed);
+    this.ariaDisabled = String(this.disabled);
   }
 
   render() {
@@ -277,6 +321,8 @@ export class MediaRateElement extends MediaButtonElement {
   @property({ type: Array })
   public accessor rates = [1, 1.25, 1.5, 2];
 
+  controller = new MediaController(this, ["ratechange"]);
+
   activate() {
     const media = connected(this.controller);
     const index = this.rates.indexOf(media.playbackRate);
@@ -289,62 +335,6 @@ export class MediaRateElement extends MediaButtonElement {
 
   render() {
     return html`<slot></slot>${this.controller.media?.playbackRate ?? 1}×`;
-  }
-}
-
-/**
- * Toggles fullscreen of the closest `<a-media>`. Shows the "enter" or "exit" slot.
- *
- * @example
- * ```html
- * <a-media-fullscreen>
- *   <span slot="enter">Fullscreen</span>
- *   <span slot="exit">Exit fullscreen</span>
- * </a-media-fullscreen>
- * ```
- */
-export class MediaFullscreenElement extends MediaButtonElement {
-  onFullscreenChange = () => this.requestUpdate();
-
-  /** Whether the `<a-media>` or an element inside of it is in fullscreen. */
-  get isFullscreen() {
-    const element = document.fullscreenElement;
-    return element !== null && this.controller.player?.contains(element) === true;
-  }
-
-  activate() {
-    if (this.isFullscreen) {
-      document.exitFullscreen();
-      return;
-    }
-
-    if (document.fullscreenEnabled) {
-      this.controller.player?.requestFullscreen();
-      return;
-    }
-
-    // iPhone Safari can only show video elements in fullscreen
-    const media = connected(this.controller) as HTMLMediaElement & {
-      webkitEnterFullscreen?: () => void;
-    };
-    if (!media.webkitEnterFullscreen) {
-      throw new Error("Fullscreen is not supported");
-    }
-    media.webkitEnterFullscreen();
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    document.addEventListener("fullscreenchange", this.onFullscreenChange);
-  }
-
-  disconnectedCallback() {
-    document.removeEventListener("fullscreenchange", this.onFullscreenChange);
-    super.disconnectedCallback();
-  }
-
-  render() {
-    return html`<slot name=${this.isFullscreen ? "exit" : "enter"}></slot>`;
   }
 }
 
@@ -368,7 +358,7 @@ export class MediaTimeElement extends LitElement {
   @property({ type: String })
   public accessor type: "current" | "duration" | "remaining" = "current";
 
-  controller = new MediaController(this);
+  controller = new MediaController(this, TIME_EVENTS);
 
   render() {
     const media = this.controller.media;
@@ -387,7 +377,8 @@ export class MediaTimeElement extends LitElement {
 }
 
 /**
- * Seek slider for the media timeline. The value is the progress from 0 to 1.
+ * Seek slider for the media timeline. The value is the progress from 0 to 1,
+ * the buffer shows how far the media is loaded from the current time.
  * Styled like `<a-range>` through its css custom properties and parts.
  *
  * @example
@@ -400,21 +391,30 @@ export class MediaSeekElement extends Range {
   @property({ type: Number, attribute: "key-step" })
   public accessor keyStep = 5;
 
-  controller = new MediaController(this);
+  controller = new MediaController(this, [...TIME_EVENTS, "progress"]);
 
   constructor() {
     super();
     this.step = 0.0001;
   }
 
+  get valueText() {
+    const total = duration(this.controller.media);
+    return `${formatTime(this.value * total, total)} of ${formatTime(total, total)}`;
+  }
+
   protected willUpdate(changed: PropertyValues) {
     super.willUpdate(changed);
 
-    const total = duration(this.controller.media);
+    const media = this.controller.media;
+    const total = duration(media);
     this.disabled = total === 0;
+    if (!media || total === 0) return;
+
+    this.buffer = bufferedEnd(media) / total;
     // the user is dragging the handle, don't move it
-    if (!this.dragStartPosition && total > 0) {
-      this.value = (this.controller.media?.currentTime ?? 0) / total;
+    if (!this.dragStartPosition) {
+      this.value = media.currentTime / total;
     }
   }
 
@@ -425,20 +425,26 @@ export class MediaSeekElement extends Range {
   }
 
   protected onKeyDown(e: KeyboardEvent) {
-    const direction = { ArrowLeft: -1, ArrowRight: 1 }[e.key];
-    if (!direction) return;
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
+
+    const media = connected(this.controller);
+    const total = duration(media);
+    const time = {
+      ArrowLeft: media.currentTime - this.keyStep,
+      ArrowRight: media.currentTime + this.keyStep,
+      Home: 0,
+      End: total,
+    }[e.key];
+    if (time === undefined) return;
 
     e.preventDefault();
-    const media = connected(this.controller);
-    media.currentTime = Math.min(
-      Math.max(media.currentTime + direction * this.keyStep, 0),
-      duration(media),
-    );
+    media.currentTime = Math.min(Math.max(time, 0), total);
   }
 }
 
 /**
  * Volume slider from 0 to 1. Shows 0 while muted and unmutes when changed.
+ * Hidden on platforms that don't allow changing the volume, like iOS.
  * Styled like `<a-range>` through its css custom properties and parts.
  *
  * @example
@@ -447,11 +453,31 @@ export class MediaSeekElement extends Range {
  * ```
  */
 export class MediaVolumeElement extends Range {
+  static get styles() {
+    return [
+      super.styles,
+      css`
+        :host([hidden]) {
+          display: none;
+        }
+      `,
+    ];
+  }
+
   /** Volume change with the arrow keys. */
   @property({ type: Number, attribute: "key-step" })
   public accessor keyStep = 0.1;
 
-  controller = new MediaController(this);
+  controller = new MediaController(this, ["volumechange"]);
+
+  get valueText() {
+    return `${Math.round(this.value * 100)}%`;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.hidden = !canSetVolume();
+  }
 
   protected willUpdate(changed: PropertyValues) {
     super.willUpdate(changed);
