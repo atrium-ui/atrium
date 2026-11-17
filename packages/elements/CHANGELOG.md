@@ -1,5 +1,20 @@
 # @atrium-ui/elements
 
+## 6.0.0 (2026-11-17)
+
+### Breaking Changes
+
+- Removed @atrium-ui/elements/video and the a-video-* elements, use @atrium-ui/elements/media and the a-media-* elements instead.
+
+### Features
+
+- Added audio component and shared media elements
+- Optimised media controls and added range buffer
+
+### Fixes
+
+- a-media breaking docs prerendering
+
 ## 5.7.0 (2026-11-14)
 
 ### Features
