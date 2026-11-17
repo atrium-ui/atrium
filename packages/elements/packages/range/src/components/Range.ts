@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { type CSSResultGroup, LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
@@ -22,7 +22,7 @@ declare global {
  * @see https://atrium-ui.dev/elements/a-select/
  */
 export class Range extends LitElement {
-  static get styles() {
+  static get styles(): CSSResultGroup {
     return css`
       :host {
         display: inline-block;

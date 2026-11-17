@@ -455,7 +455,7 @@ export class MediaSeekElement extends Range {
 export class MediaVolumeElement extends Range {
   static get styles() {
     return [
-      super.styles,
+      Range.styles,
       css`
         :host([hidden]) {
           display: none;
