@@ -32,7 +32,6 @@
     "@testing-library/dom": "^10.4.1",
     "@testing-library/user-event": "^14.6.1",
     "@types/bun": "^1.3.5",
-    "@videojs/html": "^10.0.1",
     "ts-lit-plugin": "^2.0.2"
   },
   "exports": {
@@ -153,10 +152,10 @@
       "import": "./packages/color-picker/dist/index.js",
       "require": "./packages/color-picker/dist/index.cjs"
     },
-    "./video": {
-      "types": "./packages/video/src/index.ts",
-      "import": "./packages/video/dist/index.js",
-      "require": "./packages/video/dist/index.cjs"
+    "./media": {
+      "types": "./packages/media/src/index.ts",
+      "import": "./packages/media/dist/index.js",
+      "require": "./packages/media/dist/index.cjs"
     }
   }
 }

@@ -1,0 +1,46 @@
+---
+title: Audio
+description: An audio player with custom controls for podcasts, interviews and other recordings.
+headline: Atrium // Components
+tags: []
+command: "npx @atrium-ui/components audio"
+order: 0
+---
+import { Story } from "package:/components/docs";
+
+The Audio component plays an audio file with our own controls: play/pause, skip back 15 and forward 30 seconds, time, a seek bar, playback speed, mute and volume.
+It uses a native `<audio>` element and the unstyled [`a-media-*`](/elements/a-media/) elements, styled with Tailwind and Atrium icons. No player library is required.
+
+## Examples
+
+### Default
+
+Pass a `src` and a descriptive `label`. Any children (`<source>`, `<track>`) are placed inside the `<audio>` element.
+
+<Story id="audio--default" />
+
+### Podcast
+
+A common use case: an episode with artwork and details. Class names on the component are merged into the player, e.g. to change the background or border.
+
+<Story id="audio--podcast" />
+
+## Guidelines
+
+- **Don't autoplay**: Browsers block it and it surprises users. Let them start playback.
+- **Provide context**: Show what is playing next to the player, like a title, date and length of an episode.
+- **Transcripts**: Link a transcript for recordings with speech, audio has no visible captions.
+- **Small screens**: Skip and volume controls are hidden below the `sm` breakpoint, devices have hardware volume controls.
+  Times are padded to the length of the duration, so the controls don't shift during playback.
+
+## Accessibility
+
+- **Label**: The `label` prop names the player group for screen readers. Describe the content of the recording.
+- **Controls**: All controls are focusable buttons and sliders with accessible names.
+- **Keyboard**: <kbd>Enter</kbd>/<kbd>Space</kbd> activate buttons. On the seek bar <kbd>←</kbd>/<kbd>→</kbd> seek 5 seconds, on the volume slider the arrow keys change the volume.
+
+## References
+
+- [MDN: The audio element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio)
+- [WAI: Media accessibility](https://www.w3.org/WAI/media/av/)
+- [WAI: Transcripts](https://www.w3.org/WAI/media/av/transcripts/)

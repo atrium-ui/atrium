@@ -1,0 +1,112 @@
+---
+title: a-media
+description: Unstyled control elements for native audio and video elements.
+headline: Atrium // Elements
+command: import "@atrium-ui/elements/media";
+order: 0
+---
+
+import { TypeDoc } from "package:/components";
+
+The `a-media-*` elements are unstyled controls for a native `<audio>` or `<video>` element.
+Place the media element and any controls inside an `<a-media>` container. The controls read the state of the media element and update on its media events, no player library is needed.
+They are used by the [Audio](/components/audio/) and [Video](/components/video/) components.
+
+| Element | Description |
+|---------|-------------|
+| `a-media` | Container. Controls inside of it control its `<audio>` or `<video>` element. |
+| `a-media-play` | Toggles playback. Slots `play` and `pause`. |
+| `a-media-mute` | Toggles mute. Slots `mute` and `unmute`. |
+| `a-media-skip` | Skips by `seconds`, negative values skip backward. |
+| `a-media-rate` | Cycles through playback `rates` and renders the current rate. |
+| `a-media-fullscreen` | Toggles fullscreen of the `<a-media>`. Slots `enter` and `exit`. |
+| `a-media-time` | Displays the `current`, `duration` or `remaining` time. |
+| `a-media-seek` | Seek slider, extends [`a-range`](/elements/a-range/). |
+| `a-media-volume` | Volume slider, extends [`a-range`](/elements/a-range/). |
+
+## Accessibility
+
+- **Buttons**: The button elements get `role="button"` and are focusable. They activate on click, <kbd>Enter</kbd> and <kbd>Space</kbd>. The accessible name comes from the slotted content, so include text (visually hidden if needed).
+- **Sliders**: Seek and volume have `role="slider"`. Name them with the `label` attribute. <kbd>←</kbd>/<kbd>→</kbd> seek by `key-step` seconds (default 5) or change the volume by `key-step` (default 0.1).
+- **Group**: Give the `<a-media>` container `role="group"` and an `aria-label`, so the controls are announced together.
+
+## Usage
+
+```ts
+import "@atrium-ui/elements/media";
+```
+
+```html
+<a-media role="group" aria-label="Episode 12">
+  <audio src="episode.mp3" preload="metadata"></audio>
+
+  <a-media-play>
+    <span slot="play">Play</span>
+    <span slot="pause">Pause</span>
+  </a-media-play>
+
+  <a-media-skip seconds="-15">Back 15 seconds</a-media-skip>
+  <a-media-skip seconds="30">Forward 30 seconds</a-media-skip>
+
+  <a-media-time type="current"></a-media-time> / <a-media-time type="duration"></a-media-time>
+
+  <a-media-seek label="Seek"></a-media-seek>
+
+  <a-media-rate rates="[1, 1.5, 2]">
+    <span class="sr-only">Playback speed</span>
+  </a-media-rate>
+
+  <a-media-mute>
+    <span slot="mute">Mute</span>
+    <span slot="unmute">Unmute</span>
+  </a-media-mute>
+
+  <a-media-volume label="Volume"></a-media-volume>
+</a-media>
+```
+
+### Video
+
+The same controls work with a `<video>`. Add `a-media-fullscreen` to show the `<a-media>` container in fullscreen.
+On iPhone, where only video elements can be shown in fullscreen, the native video player is used.
+
+```html
+<a-media class="relative block">
+  <video src="video.mp4" playsinline></video>
+
+  <a-media-play>
+    <span slot="play">Play</span>
+    <span slot="pause">Pause</span>
+  </a-media-play>
+
+  <a-media-fullscreen>
+    <span slot="enter">Fullscreen</span>
+    <span slot="exit">Exit fullscreen</span>
+  </a-media-fullscreen>
+</a-media>
+```
+
+The elements work alongside a [Video.js](https://videojs.org/) player for gestures, hotkeys or auto hiding controls, like in the Video component.
+
+## Customization
+
+- **Container**: `<a-media>` has no styles of its own, it is an inline element by default.
+- **Buttons**: Style the elements directly, they are the buttons. Use the slots to swap icons per state.
+- **Sliders**: Seek and volume use the [`a-range` custom properties and parts](/elements/a-range/#styling).
+- **Time and rate**: `a-media-time` renders plain text with tabular numbers, `a-media-rate` renders the rate as text like `1.5×`.
+
+<TypeDoc source="../packages/elements/packages/media" symbol="MediaElement" />
+<TypeDoc source="../packages/elements/packages/media" symbol="MediaPlayElement" />
+<TypeDoc source="../packages/elements/packages/media" symbol="MediaMuteElement" />
+<TypeDoc source="../packages/elements/packages/media" symbol="MediaSkipElement" />
+<TypeDoc source="../packages/elements/packages/media" symbol="MediaRateElement" />
+<TypeDoc source="../packages/elements/packages/media" symbol="MediaFullscreenElement" />
+<TypeDoc source="../packages/elements/packages/media" symbol="MediaTimeElement" />
+<TypeDoc source="../packages/elements/packages/media" symbol="MediaSeekElement" />
+<TypeDoc source="../packages/elements/packages/media" symbol="MediaVolumeElement" />
+
+## References
+
+- [MDN: HTMLMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement)
+- [WAI-ARIA Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/)
+- [WAI-ARIA Slider Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/slider/)

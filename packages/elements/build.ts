@@ -17,7 +17,7 @@ const LICENSE = `/**
 async function buildLib(root: string) {
   await esbuild.build({
     entryPoints: [`${root}/src/index.ts`],
-    external: ["lit", "@atrium-ui/elements", "@floating-ui/dom", "@videojs/html"],
+    external: ["lit", "@atrium-ui/elements", "@floating-ui/dom"],
     footer: { js: LICENSE },
     outfile: `${root}/dist/index.js`,
     format: "esm",
@@ -54,5 +54,5 @@ await Promise.all([
   buildLib("./packages/tabs"),
   buildLib("./packages/pager"),
   buildLib("./packages/color-picker"),
-  buildLib("./packages/video"),
+  buildLib("./packages/media"),
 ]);

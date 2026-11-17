@@ -1,6 +1,7 @@
 export { default as Accordion } from "./Accordion.vue";
 export { default as AccordionItem } from "./AccordionItem.vue";
 export { default as Animation } from "./Animation.vue";
+export { default as Audio } from "./Audio.vue";
 export { default as BackToTop } from "./BackToTop.vue";
 export { default as Breadcrumbs } from "./Breadcrumbs.vue";
 export { default as Button } from "./Button.vue";
