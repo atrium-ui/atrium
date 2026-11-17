@@ -1,22 +1,44 @@
 ---
+import { Code } from "astro:components";
 import Example from "./Example.astro";
 import "./Story.css";
 import { route } from "virtual:astro-stories/config";
 
-const { id } = Astro.props;
+const { id, code, lang = "vue-html" } = Astro.props;
 const uid = `story-${id.replace(/[^a-z0-9_-]/gi, "-")}-${crypto.randomUUID()}`;
 const base = import.meta.env.BASE_URL;
 const src = `${base}${route.replace(/^\//, "")}?id=${id}`;
 
+const views = code ? [{ label: "Code", lang, code }] : [];
+
 export interface Props {
+  id: string;
   title?: string;
+  /** Usage code of the example, adds a "Code" view to the switch. */
   code?: string;
+  /** Language of the usage code. */
+  lang?: string;
 }
 ---
 
 <Example>
-  <div class="docs-story-canvas">
-    <div class="astro-stories-canvas">
+  <div class="docs-story-canvas" data-story={uid}>
+    {
+      views.length > 0 && (
+        <div class="docs-story-switch" role="group" aria-label="View">
+          <button type="button" data-view="preview" aria-pressed="true">
+            Preview
+          </button>
+          {views.map((view, i) => (
+            <button type="button" data-view={i} aria-pressed="false">
+              {view.label}
+            </button>
+          ))}
+        </div>
+      )
+    }
+
+    <div class="astro-stories-canvas" data-panel="preview">
       <div class="astro-stories-canvas-frame">
         <iframe
           id={uid}
@@ -27,6 +49,14 @@ export interface Props {
         />
       </div>
     </div>
+
+    {
+      views.map((view, i) => (
+        <div class="docs-story-code" data-panel={i} hidden>
+          <Code lang={view.lang} code={view.code} />
+        </div>
+      ))
+    }
 
     <div class="docs-story-canvas-actions">
       <a
@@ -59,5 +89,19 @@ export interface Props {
     };
 
     window.addEventListener("message", handleMessage);
+
+    const canvas = document.querySelector(`[data-story="${uid}"]`);
+    const buttons = canvas.querySelectorAll(".docs-story-switch button");
+    const panels = canvas.querySelectorAll("[data-panel]");
+    for (const button of buttons) {
+      button.addEventListener("click", () => {
+        for (const other of buttons) {
+          other.setAttribute("aria-pressed", String(other === button));
+        }
+        for (const panel of panels) {
+          panel.hidden = panel.dataset.panel !== button.dataset.view;
+        }
+      });
+    }
   </script>
 </Example>

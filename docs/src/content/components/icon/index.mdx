@@ -7,10 +7,12 @@ command: "npx @atrium-ui/components icon"
 order: 1
 ---
 
-import { Story, ContentTabs } from "package:/components/docs";
+import { Story, ContentTabs, Source } from "package:/components/docs";
 import { Icon } from "@components/src/vue";
 import { Example, Atrium } from "package:/components";
 import * as IconSet from "@atrium-ui/icons";
+
+<Source files={["../packages/components/src/vue/Icon.vue"]} />
 
 <Example code={`
 ---

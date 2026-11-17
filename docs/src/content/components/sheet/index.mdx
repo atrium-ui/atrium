@@ -6,11 +6,13 @@ tags: [["a-blur", "elements/a-blur"], ["Button", "components/button"]]
 command: "npx @atrium-ui/components sheet"
 order: 0
 ---
-import { Story, ContentTabs } from "package:/components/docs";
+import { Story, ContentTabs, Source } from "package:/components/docs";
 import { Code } from "astro:components";
 import sheetCode from "@components/src/vue/Sheet.vue?raw";
 
 A sheet is a panel that slides in from the edge of the screen, commonly used for mobile navigation menus or filter panels. It uses [a-blur](/elements/a-blur) for the overlay backdrop.
+
+<Source files={["../packages/components/src/vue/Sheet.vue"]} />
 
 ## Example
 

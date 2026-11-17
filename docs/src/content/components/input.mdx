@@ -6,12 +6,15 @@ headline: Atrium // Components
 command: "npx @atrium-ui/components input"
 order: 1
 ---
+import { Source } from "package:/components/docs";
 import { Input } from "@components/src/vue";
 import { InputEmail } from "@components/src/vue";
 import { InputPassword } from "@components/src/vue";
 import { InputSearch } from "@components/src/vue";
 import { InputNumber } from "@components/src/vue";
 import { Example, Atrium } from "package:/components";
+
+<Source files={["../packages/components/src/vue/Input.vue", "../packages/components/src/vue/InputEmail.vue", "../packages/components/src/vue/InputNumber.vue", "../packages/components/src/vue/InputPassword.vue", "../packages/components/src/vue/InputSearch.vue"]} />
 
 <Example title="Text" code={`
 ---

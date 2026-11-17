@@ -7,9 +7,12 @@ tags: [["a-select", "elements/select"], ["Button", "components/button"]]
 command: "npx @atrium-ui/components select"
 order: 2
 ---
+import { Source } from "package:/components/docs";
 import SelectDemoRaw from "./select/select?raw";
 import SelectDemo from "./select/select";
 import { Example, Atrium } from "package:/components";
+
+<Source files={["../packages/components/src/vue/Select.vue", "../packages/components/src/vue/SelectItem.vue"]} />
 
 <Example code={SelectDemoRaw}>
   <SelectDemo client:only="vue"/>

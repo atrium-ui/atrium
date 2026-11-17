@@ -1,0 +1,41 @@
+---
+import { Code } from "astro:components";
+import fs from "node:fs";
+
+export interface Props {
+  /** Paths to the source files, relative to the docs folder. Each file gets its own expandable row. */
+  files: string[];
+}
+
+const sources = Astro.props.files.map((file) => ({
+  name: file.split("/").pop(),
+  lang: file.split(".").pop(),
+  code: fs.readFileSync(file, "utf-8"),
+}));
+---
+
+<div class="not-content my-6 divide-y divide-gray-200 overflow-hidden rounded-md border border-gray-200">
+  {
+    sources.map((source) => (
+      <a-expandable class="group block">
+        <button
+          slot="toggle"
+          type="button"
+          class="flex w-full cursor-pointer items-center gap-3 bg-transparent px-4 py-3 text-left text-sm transition-colors hover:bg-gray-50"
+        >
+          <svg-icon name="source" class="block text-gray-500" />
+          <span class="font-medium">{source.name}</span>
+          <span class="text-gray-500">Component source</span>
+          <svg-icon
+            name="chevron-down"
+            class="ml-auto block text-gray-500 transition-transform group-[&[opened]]:rotate-180"
+          />
+        </button>
+
+        <div class="border-t border-gray-200 [&_pre]:m-0 [&_pre]:max-h-[600px] [&_pre]:overflow-auto [&_pre]:rounded-none [&_pre]:p-5 [&_pre]:text-[0.8125rem] [&_pre]:leading-relaxed">
+          <Code lang={source.lang} code={source.code} />
+        </div>
+      </a-expandable>
+    ))
+  }
+</div>

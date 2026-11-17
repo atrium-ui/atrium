@@ -9,9 +9,11 @@ order: 0
 ---
 
 import { Example } from "package:/components";
-import { Story } from "package:/components/docs";
+import { Story, Source } from "package:/components/docs";
 
 When the accordion is opened or closed, the component makes sure it does not slip out of the viewport by srolling into the viewport.
+
+<Source files={["../packages/components/src/vue/Accordion.vue", "../packages/components/src/vue/AccordionItem.vue"]} />
 
 <Story id="accordion--default" />
 

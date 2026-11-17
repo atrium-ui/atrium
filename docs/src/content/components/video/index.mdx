@@ -6,7 +6,7 @@ tags: []
 command: "npx @atrium-ui/components video"
 order: 0
 ---
-import { Story } from "package:/components/docs";
+import { Story, Source } from "package:/components/docs";
 
 The Video component plays a video file with our own controls: play/pause, time, a seek bar, mute, volume and fullscreen.
 The controls are the unstyled [`a-media-*`](/elements/a-media/) elements, styled with Tailwind and Atrium icons. [Video.js](https://videojs.org/) (`<video-player>`, `<media-container>`) adds fullscreen, gestures, hotkeys and auto hiding controls.
@@ -15,25 +15,36 @@ Controls hide while the video plays and the pointer is idle, and show again on p
 
 Requires the `@videojs/html` package.
 
+<Source files={["../packages/components/src/vue/Video.vue"]} />
+
 ## Examples
 
 ### Default
 
 Pass a `src` and a descriptive `label`. Any children (`<source>`, `<track>`) are placed inside the `<video>` element.
 
-<Story id="video--default" />
+<Story id="video--default" code={`<Video class="max-w-2xl" src="/video.mp4" label="Sample video" />`} />
 
 ### Poster
 
 Use `poster` to show an image before playback starts.
 
-<Story id="video--poster" />
+<Story id="video--poster" code={`<Video class="max-w-2xl" src="/video.mp4" poster="/poster.webp" label="Sample video" />`} />
 
 ### Feature
 
 A common use case: a video next to a short description. Class names on the component are merged into the player container, e.g. for rounding or shadows.
 
-<Story id="video--feature" />
+<Story id="video--feature" code={`<div class="grid w-full max-w-4xl items-center gap-8 md:grid-cols-[1fr_1.6fr]">
+  <div class="font-sans">
+    <div class="text-xs text-zinc-500 uppercase tracking-[0.14em]">Showreel</div>
+    <h3 class="mt-2 mb-4 text-2xl text-zinc-900">Made with Atrium</h3>
+    <p class="text-zinc-600 leading-relaxed">
+      A short look at what we built this year. Press play, or focus the player and use the keyboard.
+    </p>
+  </div>
+  <Video class="rounded-xl shadow-xl" src="/showreel.mp4" poster="/showreel.webp" label="Atrium showreel" />
+</div>`} />
 
 ## Guidelines
 

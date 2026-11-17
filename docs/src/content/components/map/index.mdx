@@ -6,7 +6,7 @@ tags: []
 command: "npx @atrium-ui/components map"
 order: 0
 ---
-import { Story } from "package:/components/docs";
+import { Story, Source } from "package:/components/docs";
 
 The Map component renders an interactive [Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js/) map centered on a given location.
 It uses cooperative gestures, so the page keeps scrolling normally: zooming needs <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + scroll on desktop and two fingers on touch devices.
@@ -15,6 +15,8 @@ Changing `lat`, `lng` or `zoom` animates the map to the new position.
 The zoom and recenter controls and the marker are our own markup, styled with Tailwind and Atrium icons instead of Mapbox's default UI.
 
 Requires the `mapbox-gl` package and a [Mapbox access token](https://docs.mapbox.com/help/getting-started/access-tokens/).
+
+<Source files={["../packages/components/src/vue/Map.vue"]} />
 
 ## Examples
 

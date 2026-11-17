@@ -7,9 +7,12 @@ tags: [["a-select", "elements/select"], ["Button", "components/button"]]
 command: "npx @atrium-ui/components combobox"
 order: 1
 ---
+import { Source } from "package:/components/docs";
 import ComboboxDemoRaw from "./combobox.tsx?raw";
 import ComboboxDemo from "./combobox";
 import { Example, Atrium } from "package:/components";
+
+<Source files={["../packages/components/src/vue/Combobox.vue", "../packages/components/src/vue/ComboboxItem.vue"]} />
 
 <Example code={ComboboxDemoRaw}>
   <ComboboxDemo client:only="vue"/>
